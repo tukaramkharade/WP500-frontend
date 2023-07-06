@@ -8,8 +8,9 @@
 </head>
 <body>
 	<header>
-		<img src="images/tasLogo.jpg" style="height: 75px; width: 150px;">
-	</header>
+ <div style="width: 100%;height:10%;background-color: #f1f2f6;">
+	<img src="images/tasLogo.jpg" style="height: 40px; width: 80px; margin-left: 5px;margin-top: 5px;background-color: #f1f2f6;">
+    </div>	</header>
 	<div class="container">
 		<div class="sidebar">
 			<%@ include file="common.jsp"%>

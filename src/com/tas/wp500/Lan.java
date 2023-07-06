@@ -40,6 +40,7 @@ public class Lan extends HttpServlet {
 			String respStr = client.sendMessage(json.toString());
 			
 			System.out.println("res " + new JSONObject(respStr));
+			logger.info("res " + new JSONObject(respStr));
 			JSONObject result = new JSONObject(respStr);
 		
 			
@@ -107,7 +108,46 @@ public class Lan extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+	//	doGet(request, response);
+		
+		logger.info("In lan dhcp settings !");
+		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
+
+		
+		logger.info("Ethernet Type: "+eth_type);
+		
+		try {
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+
+			
+			json.put("operation", "get_dhcp_setting");
+		
+			json.put("eth_type", eth_type);
+			String respStr = client.sendMessage(json.toString());
+			
+			
+			System.out.println("res " + new JSONObject(respStr).getString("msg"));
+			logger.info("res " + new JSONObject(respStr).getString("msg"));
+			
+			String message_dhcp = new JSONObject(respStr).getString("msg");
+			JSONObject jsonObject = new JSONObject();
+		    jsonObject.put("message_dhcp", message_dhcp);
+		    
+		    // Set the content type of the response to application/json
+		    response.setContentType("application/json");
+		    
+		    // Get the response PrintWriter
+		    PrintWriter out = response.getWriter();
+		    
+		    // Write the JSON object to the response
+		    out.print(jsonObject.toString());
+		    out.flush();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

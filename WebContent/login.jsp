@@ -10,14 +10,16 @@
             background-color: #f2f2f2;
         }
         
-        .container {
+       .container {
             max-width: 400px;
-            margin: 0 auto;
+            margin-top: 15%;
+            margin-left:35%;
             padding: 20px;
-            background-color: #fff;
+            background-color: #cdd1ef;           
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
+        
         
         h1 {
             text-align: center;

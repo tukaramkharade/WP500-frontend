@@ -22,11 +22,13 @@
     position: fixed;
             left: 0;
             bottom: 0;
-            width: 100%;
+            width: 16%;
             background-color: #f7f7f7;
             padding: 10px;
             text-align: left;
-            height: 15px;
+            height: 10px;
+            font-size:12px;
+         
   }
 </style>
 
