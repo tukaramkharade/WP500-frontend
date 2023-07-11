@@ -112,7 +112,6 @@ public class Lan extends HttpServlet {
 		
 		logger.info("In lan dhcp settings !");
 		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
-
 		
 		logger.info("Ethernet Type: "+eth_type);
 		
@@ -124,6 +123,8 @@ public class Lan extends HttpServlet {
 			json.put("operation", "get_dhcp_setting");
 		
 			json.put("eth_type", eth_type);
+			
+		
 			String respStr = client.sendMessage(json.toString());
 			
 			
@@ -131,8 +132,23 @@ public class Lan extends HttpServlet {
 			logger.info("res " + new JSONObject(respStr).getString("msg"));
 			
 			String message_dhcp = new JSONObject(respStr).getString("msg");
+			
+			int eth1_dhcp = new JSONObject(respStr).getInt("eth1_dhcp");
+		    logger.info("Eth1 dhcp : "+eth1_dhcp);
+		    
+		    String eth1_subnet = new JSONObject(respStr).getString("eth1_subnet");
+		    logger.info("eth1 subnet : "+eth1_subnet);
+		    
+		    String eth1_ipaddr = new JSONObject(respStr).getString("eth1_ipaddr");
+		    logger.info("eth1 ip addr : "+eth1_ipaddr);
+		    
 			JSONObject jsonObject = new JSONObject();
 		    jsonObject.put("message_dhcp", message_dhcp);
+		    jsonObject.put("eth1_dhcp", eth1_dhcp);
+		    jsonObject.put("eth1_subnet", eth1_subnet);
+		    jsonObject.put("eth1_ipaddr", eth1_ipaddr);
+		    
+		    
 		    
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");

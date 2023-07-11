@@ -377,7 +377,7 @@
 <style>
 table {
 	border-collapse: collapse;
-	width: 100%;
+	width: 98%;
 }
 
 th, td {

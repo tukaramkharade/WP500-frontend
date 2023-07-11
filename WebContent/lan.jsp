@@ -258,9 +258,11 @@ th, td {
 	border-bottom: 1px solid #ddd;
 }
 
-.content table tr th {
+ tr th {
 	background-color: #e2e6f9;
 	color: #283587;
+	
+	
 }
 
 h2 {
@@ -276,8 +278,7 @@ h2 {
 	display: block;
 	width: 55px;
 	height: 25px;
-	padding: 3px;
-	
+	padding: 3px;	
 	border-radius: 50px;
 	cursor: pointer;
 }
@@ -374,6 +375,7 @@ color:white;
 border: none;
 width: 100px;
 height: 25px;
+cursor: pointer;
 }
 </style>
 <link rel="stylesheet" type="text/css" href="user_styles.css">
@@ -388,7 +390,7 @@ height: 25px;
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
-				alert(data.eth0_ipaddr + " " + data.eth0_subnet);
+				//alert(data.eth0_ipaddr + " " + data.eth0_subnet);
 
 				//$('#dhcp_dis_1').val(data.eth0_dhcp);
 				$('#ip_addr_dis_0').val(data.eth0_ipaddr);
@@ -407,15 +409,81 @@ height: 25px;
 		});
 	}
 	
-	function loadLanDHCPSettings(lanId) {
+	
+	//eth_type = 0
+	function loadLanDHCPSettings0(eth_type) {
+		var eth_type = 0;
+		//alert(eth_type)
+		
 		$.ajax({
 			url : 'lan',
 			type : 'POST',
-			dataType : {
-				eth_type : lanId
+			data : {
+				eth_type : eth_type
 			},
 			success : function(data) {
-				alert(data.message_dhcp);
+				
+				/* alert(data.message_dhcp);
+				alert(data.eth1_dhcp);
+				alert(data.eth1_subnet);
+				alert(data.eth1_ipaddr); */
+
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
+			}
+		});
+	}
+	
+	//eth_type = 1
+	function loadLanDHCPSettings1(eth_type) {
+		var eth_type = 1;
+		//alert(eth_type)
+		
+		$.ajax({
+			url : 'lan',
+			type : 'POST',
+			data : {
+				eth_type : eth_type
+			},
+			success : function(data) {
+				
+				if(data.eth1_dhcp == 1){
+					$('#ip_addr_1').prop('disabled', true); 
+					$('#subnet_mask_1').prop('disabled', true);
+					
+					$('#ip_addr_1').val(data.eth1_ipaddr);
+					$('#subnet_mask_1').val(data.eth1_subnet);
+					
+					$('#checkbox1').prop('disabled', true);
+				}
+
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
+			}
+		});
+	}
+	
+	//eth_type = 2
+	function loadLanDHCPSettings2(eth_type) {
+		var eth_type = 2;
+		//alert(eth_type)
+		
+		$.ajax({
+			url : 'lan',
+			type : 'POST',
+			data : {
+				eth_type : eth_type
+			},
+			success : function(data) {
+				
+				/* alert(data.message_dhcp);
+				alert(data.eth1_dhcp);
+				alert(data.eth1_subnet);
+				alert(data.eth1_ipaddr); */
 
 			},
 			error : function(xhr, status, error) {
@@ -429,9 +497,22 @@ height: 25px;
 	$(document).ready(function() {
 
 		loadLanSettings();
-		loadLanDHCPSettings(lanId);
+		 $('#get_dhcp_0').click(function(){		
+				loadLanDHCPSettings0(0);
 
-		$('#checkbox0').click(function() {
+		 });	
+		 
+		 $('#get_dhcp_1').click(function(){		
+				loadLanDHCPSettings1(1);
+
+		 });
+		 
+		 $('#get_dhcp_2').click(function(){		
+				loadLanDHCPSettings2(2);
+
+		 });
+			
+		/* $('#checkbox0').click(function() {
 
 			if (this.checked) {
 				$('#ip_addr_0').prop('disabled', true); // If checked disable item
@@ -472,7 +553,7 @@ height: 25px;
 				$('#subnet_mask_2').prop('disabled', false); // If checked disable item
 			}
 
-		});
+		}); */
 
 	});
 </script>
@@ -499,7 +580,7 @@ height: 25px;
 							type="checkbox" id="checkbox0"> <span class="toggle-label"
 							data-off="OFF" data-on="ON"></span> <span class="toggle-handle"></span>
 					</label></td>
-					<td><input type="button" value="DHCP IP" class="dhcp_btn">
+					<td><input type="button" value="DHCP IP 0" class="dhcp_btn" id="get_dhcp_0">
 					
 					</td>
 
@@ -539,7 +620,7 @@ height: 25px;
 							type="checkbox" id="checkbox1"> <span class="toggle-label"
 							data-off="OFF" data-on="ON"></span> <span class="toggle-handle"></span>
 					</label></td>
-					<td><input type="button" value="DHCP IP" class="dhcp_btn"></td>
+					<td><input type="button" value="DHCP IP 1" class="dhcp_btn" id="get_dhcp_1"></td>
 				</tr>
 
 				<tr>
@@ -576,7 +657,7 @@ height: 25px;
 							type="checkbox" id="checkbox2"> <span class="toggle-label"
 							data-off="OFF" data-on="ON"></span> <span class="toggle-handle"></span>
 					</label></td>
-					<td><input type="button" class="dhcp_btn" value="DHCP IP"></td>
+					<td><input type="button" class="dhcp_btn" value="DHCP IP 2" id="get_dhcp_2"></td>
 				</tr>
 
 				<tr>

@@ -134,7 +134,7 @@
 </head>
 <body>
 	<div class="container">
-		<div class="sidenav">
+		<div class="sidebar">
 			<%@ include file="common.jsp"%>
 		</div>
 		<div class="content">
@@ -412,7 +412,7 @@ pageEncoding="ISO-8859-1"%>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-    <title>Insert title here</title>
+    <title>Firewall</title>
 
     <link rel="stylesheet" type="text/css" href="user_styles.css" />
     <%@ include file="header.jsp"%>
@@ -554,19 +554,32 @@ pageEncoding="ISO-8859-1"%>
 
       .container {
         display: flex;
+        
+      
       }
       h2 {
         color: #283587;
       }
-      th {
-        background-color: #e2e6f9;
-        color: #283587;
-      }
-      .content1 {
-      
+      table {
+	border-collapse: collapse;
+	width: 98%;
+}
+
+th, td {
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #e2e6f9;
+	color: #283587;
+}
+      .content1 {      
         display: flex;
         justify-content: left;
       }
+      
       .text {
         margin-left: 5px;
         height: 30px;

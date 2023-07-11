@@ -83,7 +83,7 @@
     }
     .navigation {
       position: fixed;
-      width: 17%;
+      width: 230px;
       height: 100%;
     
       background: var(--blue);
@@ -133,7 +133,7 @@
 				<li><a href="#"> <span class="icon"><i
 							class="fa fa-info"></i></span> <span class="title">STATUS </span></a>
 					<ul class="submenu">
-						<li><a href="#">LOGS</a></li>
+						<li><a href="logs.jsp">LOGS</a></li>
 					</ul></li>
 				<li><a href="#"> <span class="icon"><i
 							class="fa fa-wifi"></i></span> <span class="title">LAN SETTINGS</span>
@@ -161,11 +161,9 @@
 						<li><a href="#">LICENSE</a></li>
 						<li><a href="#">BACKUP</a></li>
 						<li><a href="#">REBOOT</a></li>
-						<li><a href="#">CERTIFICATES</a></li>
+						<li><a href="certificates.jsp">CERTIFICATES</a></li>
 					</ul></li>
 
-				<li><a href="#"> <span class="icon"><i
-							class="fa fa-user"></i></span> <span class="title">Contact</span></a></li>
 			</ul>
 		</div>
 	</div>
