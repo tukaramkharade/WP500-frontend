@@ -42,7 +42,7 @@ public class FirewallData extends HttpServlet {
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 
-		// {"operation": "get_ip_tables"}
+		
 
 		try {
 			json.put("operation", "get_ip_tables");
