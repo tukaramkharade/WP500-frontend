@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Certificates</title>
-<link rel="stylesheet" type="text/css" href="user_styles.css" />
+<link rel="stylesheet" type="text/css" href="nav-bar.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<%@ include file="header.jsp"%>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style type="text/css">
@@ -95,6 +95,10 @@ h2 {
 			<%@ include file="common.jsp"%></div>
 
 	</div>
+	
+	<div class="header">
+		<%@ include file="header.jsp"%>
+	  </div>
 
 	<div class="content">
 		<h2>Certificates</h2>
@@ -362,7 +366,9 @@ h2 {
         </table>
 		</div>
 	</div>
-	<%@ include file="footer.jsp"%>
+	<div class="footer">
+			<%@ include file="footer.jsp"%>
+		  </div>
 
 	<script>
 		function openCity(evt, cityName) {

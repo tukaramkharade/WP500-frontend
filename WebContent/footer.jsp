@@ -1,19 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<!-- footer.jsp -->
-
-<footer>
-	<p>TAS INDIA PVT LTD @copyright 2023</p>
-</footer>
- --%>
- 
- 
- 
- 
-<!--  -------------------------------------------------------------------------------------- -->
-
-<!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%-- <!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <!-- footer.jsp -->
@@ -35,3 +20,16 @@
 <footer>
   <p>TAS INDIA PVT LTD @copyright 2023</p>
 </footer>
+ --%>
+ 
+ 
+<!--  ------------------------------------------------------------------------ -->
+
+<!DOCTYPE html>
+    <html>
+      <body>
+        <footer>
+            <span>COPYRIGHT © TAS INDIA PVT LTD, 2023</span>
+          </footer>
+      </body>
+    </html>

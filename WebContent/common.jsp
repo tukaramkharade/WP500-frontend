@@ -1,170 +1,301 @@
+<%-- 
+<!-- ----------------------------------------------------------------------------------------------- -->
+
 <!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <head>
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<style>
-@charset "ISO-8859-1";
-/* Global styles */
- body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-     
-    }
-
-    .container {
-      display: flex;
-    }
-
- 
-
-    .menu {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .menu li {
-      position: relative;
-    }
-
-    .menu a {
-      display: block;
-      padding: 10px 20px;
-      color: #333;
-      text-decoration: none;
-    }
-
-    .menu a:hover {
-      background-color: #ccc;
-    }
-
-    .submenu {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 100%;
-      background-color: #f1f1f1;
-      width: 200px;
-    }
-
-    .menu li:hover .submenu {
-      display: block;
-    }
-
-    .submenu li {
-      position: relative;
-    }
-
-    .submenu a {
-      padding: 8px 16px;
-      color: #333;
-    }
-
-    .submenu a:hover {
-      background-color: #ccc;
-    }
-
-    :root {
-      --blue: #2a2185;
-      --white: #fff;
-      --grey: #f5f5f5;
-      --black1: #222;
-      --black2: #999;
-    }
-  
-    .container {
-      width: 100%;
-      position: relative;
-    }
-    .navigation {
-      position: fixed;
-      width: 230px;
-      height: 100%;
-    
-      background: var(--blue);
-    }
-
-    .navigation ul li a {
-      position: relative;
-      width: 80%;
-      display: flex;
-      text-decoration: none;
-      color: var(--white);
-      display: block;
-    }
-
-    .navigation .menu ul li a {
-      color: var(--blue);
-    }
-    .navigation .menu ul li a:hover {
-      background-color: var(--blue);
-      color: var(--white);
-      width: auto;
-    }
-    .navigation .menu li a {
-    
-      position: relative;
-      display: flex;
-      align-items: center;
-     
-    }
-    .navigation .menu li a .icon {
-      width: 50px;
-    }
-    .navigation .menu li a .title {
-      justify-content: left;
-      width: 200px;
-      padding: 0 10px;
-    
-    }
-</style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="nav-bar.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-	<div class="container">
-		<div class="navigation">
-			<ul class="menu">
-				<li><a href="overview.jsp"> <span class="icon"><i
-							class="fa fa-file"></i></span> <span class="title">OVERVIEW</span></a></li>
-				<li><a href="#"> <span class="icon"><i
-							class="fa fa-info"></i></span> <span class="title">STATUS </span></a>
-					<ul class="submenu">
-						<li><a href="logs.jsp">LOGS</a></li>
-					</ul></li>
-				<li><a href="#"> <span class="icon"><i
-							class="fa fa-wifi"></i></span> <span class="title">LAN SETTINGS</span>
-				</a>
-					<ul class="submenu">
-						<li><a href="lan.jsp">LAN</a></li>
-					</ul></li>
-				<li><a href="#"> <span class="icon"><i
-							class="fa fa-link"></i></span> <span class="title">SERVICES</span></a>
-					<ul class="submenu">
-						<li><a href="firewall.jsp">FIREWALL</a></li>
-						<li><a href="#">WEB SERVICES</a></li>
-					</ul></li>
-				<li><a href="#"> <span class="icon"><i
-							class="fa fa-code"></i></span> <span class="title">STRATON</span></a>
-					<ul class="submenu">
-						<li><a href="#">APPLICATION</a></li>
-						<li><a href="#">QUICK CLIENT</a></li>
-					</ul></li>
-				<li><a href="#"> <span class="icon"><i
-							class="fa fa-dollar-sign"></i></span> <span class="title">ADMINISTRATION</span></a>
-					<ul class="submenu">
-						<li><a href="user.jsp">USER SETTINGS</a></li>
-						<li><a href="#">FIRMWARE</a></li>
-						<li><a href="#">LICENSE</a></li>
-						<li><a href="#">BACKUP</a></li>
-						<li><a href="#">REBOOT</a></li>
-						<li><a href="certificates.jsp">CERTIFICATES</a></li>
-					</ul></li>
-
-			</ul>
-		</div>
-	</div>
+  <section class="app">
+    <aside class="sidebar">
+      <header>
+        <img src="images/tasLogo.jpg" width="70%" />
+      </header>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="overview.jsp"><i class="fa fa-file"></i> <span>OVERVIEW</span></a>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa fa-sliders"></i> <span class="">STATUS</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="logs.jsp"><i class="fa fa-bars"></i>LOGS</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa fa-cogs"></i>
+              <span class="">LAN SETTINGS</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="lan.jsp"><i class="fa fa-rss"></i>LAN</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa fa-link"></i>
+              <span class="">SERVICES</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="firewall.jsp"><i class="ion-ios-timer-outline"></i>FIREWALL</a>
+              </li>
+              <li>
+                <a href="ntp.jsp"><i class="ion-arrow-graph-down-left"></i>NTP</a>
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fa fa-cloud"></i>WEB SERVICES</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="ion-ios-paper-outline"></i>
+              <span class="">STRATON</span></a>
+            <ul class="nav-flyout">
+              <li>
+                <a href="#"
+                  ><i class="ion-ios-filing-outline"></i>APPLICATION</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fa fa-quora"></i>QUICK CLIENT</a
+                >
+              </li>
+            </ul>
+          </li>
+          
+          <li>
+            <a href="#"
+              ><i class="ion-ios-paper-outline"></i>
+              <span class="">ADVAIT</span></a>
+            <ul class="nav-flyout">
+              <li>
+                <a href="mqtt.jsp"
+                  ><i class="ion-ios-filing-outline"></i>IIOT CONNEX</a
+                >
+              </li>
+              <li>
+                <a href="jsonbuilder.jsp"
+                  ><i class="fa fa-quora"></i>JSON BUILDER</a
+                >
+              </li>
+            </ul>
+          </li>
+          
+          <li>
+            <a href="#"
+              ><i class="fa fa-university"></i>
+              <span class="">ADMINISTRATION</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="user.jsp"
+                  ><i class="fa fa-user-secret"></i>USER SETTINGS</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="ion-ios-lightbulb-outline"></i>FIRMWARE</a
+                >
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-id-card"></i>LICENSE</a>
+              </li>
+              <li>
+                <a href="#"><i class="ion-ios-locked-outline"></i>BACKUP</a>
+              </li>
+              <li>
+                <a href="#"><i class="ion-ios-navigate-outline"></i>REBOOT</a>
+              </li>
+              <li>
+                <a href="certificates.jsp"
+                  ><i class="fa fa-certificate"></i>CERTIFICATES</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </section>
 </body>
+</html> --%>
+
+
+
+<!-- -----------------------------------------------------------------------------------------------------------
+ -->
+ 
+ <!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%> -->
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="nav-bar.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+ 
+  <section class="app">
+    <aside class="sidebar">
+      <header>
+        <img src="images/tasLogo.jpg" width="70%" />
+      </header>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="overview.jsp"><i class="fa fa-file"></i> <span>Overview</span></a>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa fa-sliders"></i> <span class="">Status</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="logs.jsp"><i class="fa fa-bars"></i>Logs</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa fa-cogs"></i>
+              <span class="">Lan Settings</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="lan.jsp"><i class="fa fa-rss"></i>Lan</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="fa fa-link"></i>
+              <span class="">Services</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="firewall.jsp"><i class="ion-ios-timer-outline"></i>Firewall</a>
+              </li>
+              <li>
+                <a href="ntp.jsp"><i class="ion-arrow-graph-down-left"></i>Ntp</a>
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fa fa-cloud"></i>Web Services</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#"
+              ><i class="ion-ios-paper-outline"></i>
+              <span class="">Straton</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="#"
+                  ><i class="ion-ios-filing-outline"></i>Application</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fa fa-quora"></i>Quick Client</a
+                >
+              </li>
+            </ul>
+          </li>
+          
+          <li>
+            <a href="#"
+              ><i class="ion-ios-paper-outline"></i>
+              <span class="">Advait</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="mqtt.jsp"
+                  ><i class="ion-ios-filing-outline"></i>IIOT Connex</a
+                >
+              </li>
+              <li>
+                <a href="jsonbuilder.jsp"
+                  ><i class="fa fa-quora"></i>JSON Builder</a
+                >
+              </li>
+            </ul>
+          </li>
+          
+          <li>
+            <a href="#"
+              ><i class="fa fa-university"></i>
+              <span class="">Administration</span></a
+            >
+            <ul class="nav-flyout">
+              <li>
+                <a href="user.jsp"
+                  ><i class="fa fa-user-secret"></i>User Settings</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="ion-ios-lightbulb-outline"></i>Firmware</a
+                >
+              </li>
+              <li>
+                <a href="#"><i class="fa fa-id-card"></i>License</a>
+              </li>
+              <li>
+                <a href="#"><i class="ion-ios-locked-outline"></i>Backup</a>
+              </li>
+              <li>
+                <a href="#"><i class="ion-ios-navigate-outline"></i>Reboot</a>
+              </li>
+              <li>
+                <a href="certificates.jsp"
+                  ><i class="fa fa-certificate"></i>Certificates</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </section>
+  
+</body>
+ 

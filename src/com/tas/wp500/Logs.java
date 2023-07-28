@@ -76,6 +76,39 @@ public class Logs extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	//	doGet(request, response);
+		String fileName = request.getParameter("log_file");
+		String log_type = "application";
+		TCPClient client = new TCPClient();
+		JSONObject json = new JSONObject();
+		
+		try{
+			json.put("operation", "get_log_file_data");
+			json.put("log_type", log_type);
+			json.put("file_name", fileName);
+			
+			String respStr = client.sendMessage(json.toString());
+			
+			System.out.println("res " + new JSONObject(respStr));
+			logger.info("res " + new JSONObject(respStr));
+			
+			JSONObject result = new JSONObject(respStr);
+			
+			JSONArray log_file_result= result.getJSONArray("result");
+			
+			JSONObject jsonObject = new JSONObject();
+		    jsonObject.put("log_file_data", log_file_result);
+			// Set the content type of the response to application/json
+		    response.setContentType("application/json");
+		    
+		    // Get the response PrintWriter
+		    PrintWriter out = response.getWriter();
+		    
+		    // Write the JSON object to the response
+		    out.print(jsonObject.toString());
+		    out.flush();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 }

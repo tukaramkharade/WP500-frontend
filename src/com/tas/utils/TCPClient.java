@@ -22,7 +22,7 @@ public class TCPClient {
 
 			logger.info("Connecting.......");
 			System.out.println("Connecting..");
-			s = new Socket("127.0.0.1",6801);// new
+			s = new Socket("192.168.1.124", 6801);// new
 																			// Socket("192.168.1.149",
 																			// 6881);
 			// Step 1 read length
@@ -43,7 +43,7 @@ public class TCPClient {
 					if (response != null) {
 						return new String(response);
 					} 
-					logger.error("response is null:");
+			//		logger.error("response is null:");
 //					else {
 //						return new String("Ok");
 //					}
