@@ -367,7 +367,8 @@ h2 {
 
                 // Loop through the log data and add rows to the table
                 data.log_file_data.forEach(function (log) {
-                  var sub_log1 = log.substring(0, 24);
+                	
+                  /* var sub_log1 = log.substring(0, 24);
                   var sub_log2 = log.substring(24, 33);
 
                   var sub_log3 = log.substring(48);
@@ -380,11 +381,24 @@ h2 {
                     //	console.log(true)
                     sub_log3 = log.substring(50);
                   }
+ */
 
+ 			//let text = "How are you doing today?";
+ 			var myArray = log.split(",");
+ 				var split_log0 = myArray[0];
+ 				var split_log1 = myArray[1];
+ 				var split_log2 = myArray[2];
+ 				var split_log4 = myArray[4];
+ 				var split_log5 = myArray[5];
+ 				
                   var row = $("<tr>").append(
-                    $("<td>").text(sub_log1),
-                    $("<td>").text(sub_log2),
-                    $("<td>").text(sub_log3)
+                    $("<td>").text(split_log0),
+                    $("<td>").text(split_log1),
+                    $("<td>").text(split_log2),
+                    $("<td>").text(split_log4),
+                    $("<td>").text(split_log5)
+                   /*  $("<td>").text(sub_log2),
+                    $("<td>").text(sub_log3) */
                   );
                   tableBody.append(row);
                 });
@@ -442,9 +456,12 @@ h2 {
         <table id="log_table">
           <thead>
             <tr>
-              <th style="width: 30%">Date and Time</th>
-              <th style="width: 20%">Log Level</th>
-              <th>Message</th>
+              <th style="width: 15%">Date and Time</th>
+              <th style="width: 5%">Log Type</th>
+             <th>Line Number</th>
+              <th>Class</th>
+              <th style="width: 55%">Message</th>
+              
             </tr>
           </thead>
           <tbody id="log_table_body"></tbody>

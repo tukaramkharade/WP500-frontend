@@ -21,8 +21,36 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+function loadBrokerIPList() {
+    $.ajax({
+      url: "jsonBuilderData",
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        if (data.broker_ip_result && Array.isArray(data.broker_ip_result)) {
+          var selectElement = $("#broker_name");
+          // Clear any existing options
+          selectElement.empty();
+
+          // Loop through the data and add options to the select element
+          data.broker_ip_result.forEach(function (filename) {
+            var option = $("<option>", {
+              value: filename,
+              text: filename,
+            });
+            selectElement.append(option);
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("Error showing broker ip : " + error);
+      },
+    });
+  }
+  
 	// Function to load user data and populate the user list table
-	function loadUserList() {
+	function loadJsonBuilderList() {
 		$.ajax({
 			url : 'data',
 			type : 'GET',
@@ -63,7 +91,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 		});
 	}
 
-	function settUser(userId) {
+	function settJsonStringName(jsonBuilderId) {
 		// Make an AJAX GET request to retrieve user details for editing
 
 		$('#firstName').val(userId);
@@ -72,7 +100,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 	}
 
 	// Function to handle deleting a user
-	function deleteUser(userId) {
+	function deleteJsonBuilder(userId) {
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
@@ -132,28 +160,49 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 	}
 
 	// Function to handle form submission and add a new user
-	function addUser() {
-		var firstName = $('#firstName').val();
-		var password = $('#password').val();
+	function addJsonBuilder() {
+		var jsonStringName = $('#jsonStringName').val();
+		var jsonInterval = $('#jsonInterval').val();
+		var broker_type = $('#broker_type').find(":selected").val();
+		var broker_name = $('#broker_name').find(":selected").val();
+		var publishTopic = $('#publishTopic').val();
+		var publishStatus = $('#publishStatus').val();		
+		var storeAndForward = $('#storeAndForward').find(":selected").val();
+		var json_string_text = $('#json_string_text').val();
+		
 
 		$.ajax({
-			url : 'data',
+			url : 'jsonBuilderData',
 			type : 'POST',
 			data : {
-				firstName : firstName,
-				password : password
+				jsonStringName : jsonStringName,
+				jsonInterval : jsonInterval,
+				broker_type : broker_type,
+				broker_name : broker_name,
+				publishTopic : publishTopic,
+				publishStatus : publishStatus,
+				storeAndForward : storeAndForward,
+				json_string_text : json_string_text
 			},
 			success : function(data) {
 				// Display the registration status message
 				alert(data.message);
-				loadUserList();
+				loadJsonBuilderList();
 
 				// Clear form fields
-				$('#firstName').val('');
-				$('#password').val('');
+				
+				
+				$('#jsonStringName').val('');
+				$('#jsonInterval').val('');
+				$('#broker_type').val('');
+				$('#broker_name').val('');
+				$('#publishTopic').val('');
+				$('#publishStatus').val('');		
+				$('#storeAndForward').val('');
+				$('#json_string_text').val('');
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding user: ' + error);
+				console.log('Error adding json builder: ' + error);
 			}
 		});
 
@@ -163,19 +212,19 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 	// Function to execute on page load
 	$(document).ready(function() {
 		// Load user list
-		loadUserList();
+		loadBrokerIPList();
 
 		// Handle form submission
-		$('#jsonBuilderForm').submit(function(event) {
+		 $('#jsonBuilderForm').submit(function(event) {
 			event.preventDefault();
 			var buttonText = $('#registerBtn').val();
 
 			if (buttonText == 'Add') {
-				addUser();
+				addJsonBuilder();
 			} else {
-				editUser();
+				editJsonBuilder();
 			}
-		});
+		}); 
 
 	});
 </script>
@@ -234,9 +283,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 						<div class="col-75">
 
 							<select class="textBox" id="broker_name" name="broker_name">
-								<option id=""></option>
-								<option id=""></option>
-
+								<option value="">Select Broker IP</option>
+								
 							</select>
 						</div>
 						</div>
@@ -256,7 +304,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 					  <label for="pubStatus">Publishing Status</label>
 					</div>
 					<div class="col-75">
-						<input type="text" id="pubStatus" name="pubStatus" placeholder="Publishing Status"
+						<input type="text" id="publishStatus" name="publishStatus" placeholder="Publishing Status"
 						required>
 					</div>
 				  </div>

@@ -9,24 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
 /**
- * Servlet implementation class MQTTData
+ * Servlet implementation class MQTTDeleteServlet
  */
-@WebServlet("/mqttAddData")
-public class MQTTAddData extends HttpServlet {
+@WebServlet("/mqttDeleteServlet")
+public class MQTTDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(MQTTAddData.class);
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MQTTAddData() {
+    public MQTTDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,8 +34,6 @@ public class MQTTAddData extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	//	response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-	
 	}
 
 	/**
@@ -46,42 +41,23 @@ public class MQTTAddData extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String broker_ip_address = request.getParameter("broker_ip_address");
-		String port_number = request.getParameter("port_number");
-		String username = request.getParameter("username");
-		
-		String password = request.getParameter("password");
-		String sub_topic = request.getParameter("sub_topic");
-		String pub_topic = request.getParameter("pub_topic");
+		//doGet(request, response);
 		
 		String prefix = request.getParameter("prefix");
-		String file_type = request.getParameter("file_type");
-		String enable = request.getParameter("enable");
-
-		//System.out.println(firstName + " " + password);
-
-		try {
+		
+		try{
 			
-			System.out.println("In mqtt...");
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			
-			System.out.println("broker ip addr :"+broker_ip_address);
 			json.put("operation", "protocol");
-			json.put("protocol_type","mqtt");
-			json.put("operation_type","add_query");
-			json.put("broker_ip_address",broker_ip_address);
-			json.put("port_number",port_number);
-			json.put("username",username);
-			json.put("password",password);
-			json.put("subscribe_topic",sub_topic);
-			json.put("publish_topic",pub_topic);
-			json.put("prefix",prefix);
-			json.put("file_type",file_type);
-			json.put("enable",enable);
-			
+			json.put("protocol_type", "mqtt");
+			json.put("operation_type", "delete_query");
+		
+			json.put("prefix", prefix);
 			String respStr = client.sendMessage(json.toString());
+			
 			
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));
 			
@@ -99,11 +75,9 @@ public class MQTTAddData extends HttpServlet {
 		    out.print(jsonObject.toString());
 		    out.flush();
 			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}catch(Exception e){
+		e.printStackTrace();
 		}
-	//	doGet(request, response);
-	}
 
+}
 }

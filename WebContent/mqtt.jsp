@@ -530,6 +530,22 @@ input[type="submit"] {
 					row.append($('<td>').text(mqtt.prefix + ""));
 					row.append($('<td>').text(mqtt.file_type + ""));
 					row.append($('<td>').text(mqtt.enable + ""));
+					
+					var actions = $('<td>');
+					var editButton = $('<button>').text('Edit').click(
+							function() {
+								setMqtt(mqtt.prefixs);
+
+							});
+					var deleteButton = $('<button style="background-color: red;">').text('Delete').click(
+							function() {
+								deleteMqtt(mqtt.prefix);
+							});
+
+					actions.append(editButton);
+					actions.append(deleteButton);
+
+					row.append(actions);
 
 					mqttTable.append(row);
 
@@ -541,38 +557,38 @@ input[type="submit"] {
 		});
 	}
 
-	function setMqtt(userId) {
+	function setMqtt(mqttId) {
 		// Make an AJAX GET request to retrieve user details for editing
 
-		$('#firstName').val(userId);
+		$('#prefix').val(mqttId);
 		$('#registerBtn').val('Edit');
 
 	}
 
 	// Function to handle deleting a user
-	function deleteMqttSettings(userId) {
+	function deleteMqtt(mqttId) {
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
-		alert(userId)
-		var confirmation = confirm('Are you sure you want to delete this user?');
+		alert(mqttId)
+		var confirmation = confirm('Are you sure you want to delete this mqtt?');
 		if (confirmation) {
 			$.ajax({
-				url : 'UserDeleteServlet',
+				url : 'mqttDeleteServlet',
 				type : 'POST',
 				data : {
-					firstName : userId
+					prefix : mqttId
 				},
 				success : function(data) {
 					// Display the registration status message
 					alert(data.message);
 
 					// Refresh the user list
-					loadUserList();
+					loadMqttList();
 				},
 				error : function(xhr, status, error) {
 					// Handle the error response, if needed
-					console.log('Error deleting user: ' + error);
+					console.log('Error deleting mqtt settings: ' + error);
 				}
 			});
 		}
@@ -582,27 +598,53 @@ input[type="submit"] {
 
 		var confirmation = confirm('Are you sure you want to edit this mqtt settings?');
 
-		var firstName = $('#firstName').val();
+		var broker_ip_address = $('#broker_ip_address').val();
+		var port_number = $('#port_number').val();
+		var username = $('#username').val();
 		var password = $('#password').val();
+		var pub_topic = $('#pub_topic').val();
+		var sub_topic = $('#sub_topic').val();
+		var prefix = $('#prefix').val();
+		var file_type = $('#file_type').find(":selected").val();
+		
+		if($('#enable').is(':checked')){
+			var enable = "true";
+		}else{
+			var enable = "false";
+		}
 
 		$.ajax({
-			url : 'UserEditServlet',
+			url : 'mqttEditServlet',
 			type : 'POST',
 			data : {
-				firstName : firstName,
-				password : password
+				broker_ip_address : broker_ip_address,
+				port_number : port_number,
+				username : username,
+				password : password,
+				pub_topic : pub_topic,
+				sub_topic : sub_topic,
+				prefix : prefix,
+				file_type : file_type,
+				enable : enable
 			},
 			success : function(data) {
 				// Display the registration status message
 				alert(data.message);
-				loadUserList();
+				loadMqttList();
 
 				// Clear form fields
-				$('#firstName').val('');
+				$('#broker_ip_address').val('');
+				$('#port_number').val('');
+				$('#username').val('');
 				$('#password').val('');
+				$('#pub_topic').val('');
+				$('#sub_topic').val('');
+				$('#prefix').val('');
+				$('#file_type').val('');
+				$('#enable').val('');
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding user: ' + error);
+				console.log('Error adding mqtt: ' + error);
 			}
 		});
 
@@ -806,11 +848,10 @@ input[type="submit"] {
 					
 
 					<div class="row">
-						<input style="margin-top: 2%;" type="submit" value="Add"
-							id="registerBtn" /> <input style="margin-top: 2%;"
-							type="submit" value="Update" id="updateBtn" /> <input
-							style="margin-top: 2%; background-color: red" type="submit"
-							value="Delete" id="deleteBtn" />
+						<input style="margin-top: 2%;" type="submit" value="Add" id="registerBtn" /> 
+							<!-- <input style="margin-top: 2%;" type="submit" value="Update" id="updateBtn" /> 
+							<input style="margin-top: 2%; background-color: red" type="submit"
+							value="Delete" id="deleteBtn" /> -->
 					</div>
 
 				</form>
@@ -831,6 +872,7 @@ input[type="submit"] {
 							<th>Prefix</th>
 							<th>File Type</th>
 							<th>Enable</th>
+							<th>Actions</th>
 
 						</tr>
 					</thead>
