@@ -277,7 +277,7 @@ th {
               row.append($("<td>").text(firewall.destination + ""));
 
               var actions = $("<td>");
-              var deleteButton = $("<button>")
+              var deleteButton = $('<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
                 .text("Delete")
                 .click(function () {
                   deleteFirewall(firewall.lineNumber);

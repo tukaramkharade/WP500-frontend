@@ -497,7 +497,7 @@ input[type="submit"] {
 
 <!DOCTYPE html>
 <html>
-<title>IIOT Connex</title>
+<title>MQTT Server Settings</title>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -508,6 +508,46 @@ input[type="submit"] {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	// Function to load user data and populate the user list table
+
+	function loadCrtFilesList() {
+		$.ajax({
+			url : "mqttAddData",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+				if (data.crt_files_result
+						&& Array.isArray(data.crt_files_result)) {
+					
+					
+					var selectElement = $("#crt_file");
+					// Clear any existing options
+					selectElement.empty();
+
+					// Loop through the data and add options to the select element
+					data.crt_files_result.forEach(function(filename) {
+						var option = $("<option>", {
+							value : filename,
+							text : filename,
+						});
+						selectElement.append(option);
+					});
+					
+					/* var file_type = $('#file_type').find(":selected").val();
+					
+					alert("File type is: "+file_type);
+					if(file_type == 'SSL' || file_type == 'ssl'){
+					      $("#crt_file").prop("disabled", false);
+					   } else if(file_type == 'TCP' || file_type == 'tcp'){
+					      $("#crt_file").prop("disabled", true);  
+					   } */
+				}
+			},
+			error : function(xhr, status, error) {
+				console.log("Error showing crt files list : " + error);
+			},
+		});
+	}
+
 	function loadMqttList() {
 		$.ajax({
 			url : 'mqttData',
@@ -530,17 +570,18 @@ input[type="submit"] {
 					row.append($('<td>').text(mqtt.prefix + ""));
 					row.append($('<td>').text(mqtt.file_type + ""));
 					row.append($('<td>').text(mqtt.enable + ""));
-					
+
 					var actions = $('<td>');
-					var editButton = $('<button>').text('Edit').click(
+					var editButton = $('<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">').text('Edit').click(
 							function() {
 								setMqtt(mqtt.prefixs);
 
 							});
-					var deleteButton = $('<button style="background-color: red;">').text('Delete').click(
-							function() {
-								deleteMqtt(mqtt.prefix);
-							});
+					var deleteButton = $(
+							'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">').text(
+							'Delete').click(function() {
+						deleteMqtt(mqtt.prefix);
+					});
 
 					actions.append(editButton);
 					actions.append(deleteButton);
@@ -606,10 +647,10 @@ input[type="submit"] {
 		var sub_topic = $('#sub_topic').val();
 		var prefix = $('#prefix').val();
 		var file_type = $('#file_type').find(":selected").val();
-		
-		if($('#enable').is(':checked')){
+
+		if ($('#enable').is(':checked')) {
 			var enable = "true";
-		}else{
+		} else {
 			var enable = "false";
 		}
 
@@ -661,13 +702,12 @@ input[type="submit"] {
 		var pub_topic = $('#pub_topic').val();
 		var sub_topic = $('#sub_topic').val();
 		var prefix = $('#prefix').val();
-	
-		
+
 		var file_type = $('#file_type').find(":selected").val();
-	
-		if($('#enable').is(':checked')){
+
+		if ($('#enable').is(':checked')) {
 			var enable = "true";
-		}else{
+		} else {
 			var enable = "false";
 		}
 
@@ -691,7 +731,7 @@ input[type="submit"] {
 				loadMqttList();
 
 				// Clear form fields
-				
+
 				$('#broker_ip_address').val('');
 				$('#port_number').val('');
 				$('#username').val('');
@@ -713,9 +753,20 @@ input[type="submit"] {
 	// Function to execute on page load
 	$(document).ready(function() {
 		// Load user list
-		
-		
+
 		loadMqttList();
+		loadCrtFilesList();
+		
+		$("#file_type").change(function (event) {
+       //     alert("You have Selected  :: "+$(this).val());
+            
+            if($(this).val() == 'SSL' || $(this).val() == 'ssl'){
+            	$("#crt_file").prop("disabled", false);
+            }else if($(this).val() == 'TCP' || $(this).val() == 'tcp'){
+            	$("#crt_file").prop("disabled", true);
+            }
+        });
+		
 
 		// Handle form submission
 		$('#mqttForm').submit(function(event) {
@@ -748,108 +799,123 @@ input[type="submit"] {
 			<div class="container">
 				<form id="mqttForm">
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="broker_ip_address">Broker IP Address</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-1" style="width: 170px; margin-top: -20px;">
 							<input type="text" id="broker_ip_address"
 								name="broker_ip_address" placeholder="Broker IP Address"
-								required />
+								required style="font-size: 15px;" />
 
 						</div>
 
 					</div>
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="port_number">Port Number</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-2" style="width: 140px; margin-top: -35px; margin-left: 180px;">
 							<input type="text" id="port_number" name="port_number"
-								placeholder="Port Number" required>
+								placeholder="Port Number" required style="font-size: 15px;">
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="username">Username</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-3" style="width: 170px; margin-top: -35px; margin-left: 330px;">
 							<input type="text" id="username" name="username"
-								placeholder="Username" required />
+								placeholder="Username" required style="font-size: 15px;"/>
 
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="password">Password</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-4" style="width: 170px; margin-top: -35px; margin-left: 510px;">
 							<input type="password" id="password" name="password"
-								placeholder="Password" required>
+								placeholder="Password" required style="font-size: 15px;">
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="pub_topic">Published Topic</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-5" style="width: 170px; margin-top: -35px; margin-left: 690px;">
 							<input type="text" id="pub_topic" name="pub_topic"
-								placeholder="Published Topic" required />
+								placeholder="Published Topic" required style="font-size: 15px;"/>
 
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="sub_topic">Subscribed Topic</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-6" style="width: 170px; margin-top: -35px; margin-left: 870px;">
 							<input type="text" id="sub_topic" name="sub_topic"
-								placeholder="Subscribed Topic" required>
+								placeholder="Subscribed Topic" required style="font-size: 15px;">
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="prefix">Prefix</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-7" style="width: 170px; margin-top: 10px;">
 							<input type="text" id="prefix" name="prefix" placeholder="Prefix"
-								required />
+								required style="font-size: 15px;"/>
 
 						</div>
 					</div>
 
 
 					<div class="row">
-						<div class="col-25">
+						<!-- <div class="col-25">
 							<label for="fileType">File Type</label>
-						</div>
-						<div class="col-75">
+						</div> -->
+						<div class="col-75-8" style="width: 140px; margin-left: 180px; margin-top: -34px;">
 
-							<select class="textBox" id="file_type" name="file_type">
-								<option id="ssl">SSL</option>
-								<option id="tcp">TCP</option>
+							<select class="textBox" id="file_type" name="file_type" style="font-size: 15px; height: 35px;">
+							<option value="">Select file type</option>
+								<option>SSL</option>
+								<option>TCP</option>
 
 							</select>
 						</div>
 						</div>
-
+						
 						<div class="row">
+						<!-- div class="col-25">
+								<label for="fileType"> File </label>
+							</div> -->
+						<div class="col-75-9" style="width: 170px; margin-left: 330px; margin-top: -35px;">
+							
+							<select class="textBox" id="crt_file" name="crt_file" style="height: 35px; font-size: 15px;">
+								<option value="">Select crt file...</option>
 
-							<div class="col-25">
-								<label for="enable">Enable</label>
-							</div>
-							<div class="col-75">
-								<input type="checkbox" class="enable" id="enable" name="enable">
+							</select>
 
-							</div>
 						</div>
-					
+					</div>
+					<div class="row">
+
+						<div class="col-25-1" style="margin-left: 510px; margin-top: -40px;">
+							<label for="enable" style="font-size: 15px;">Enable</label>
+						</div>
+						<div class="col-75-10" style="margin-left: 510px; margin-top: -10px;">
+							<input type="checkbox" class="enable" id="enable" name="enable">
+
+						</div>
+					</div>
+
 
 					<div class="row">
-						<input style="margin-top: 2%;" type="submit" value="Add" id="registerBtn" /> 
-							<!-- <input style="margin-top: 2%;" type="submit" value="Update" id="updateBtn" /> 
+						<input style="margin-top: 2%;" type="submit" value="Add"
+							id="registerBtn" />
+						<!-- <input style="margin-top: 2%;" type="submit" value="Update" id="updateBtn" /> 
 							<input style="margin-top: 2%; background-color: red" type="submit"
 							value="Delete" id="deleteBtn" /> -->
 					</div>

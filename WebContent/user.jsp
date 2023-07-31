@@ -288,12 +288,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 					row.append($('<td>').text(user.firstName));
 
 					var actions = $('<td>');
-					var editButton = $('<button>').text('Edit').click(
+					var editButton = $('<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">').text('Edit').click(
 							function() {
 								settUser(user.firstName);
 
 							});
-					var deleteButton = $('<button>').text('Delete').click(
+					var deleteButton = $('<button style="background-color:red; border: none; border-radius: 5px; margin-left: 5px; color: white">').text('Delete').click(
 							function() {
 								deleteUser(user.firstName);
 							});

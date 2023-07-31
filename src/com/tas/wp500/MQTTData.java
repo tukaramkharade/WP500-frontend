@@ -54,7 +54,7 @@ public class MQTTData extends HttpServlet {
 
 			JSONArray resJsonArray = new JSONArray();
 
-			logger.info("Firewall response : " + respJson.toString());
+			logger.info("MQTT response : " + respJson.toString());
 
 			JSONArray resultArr = respJson.getJSONArray("result");
 						
