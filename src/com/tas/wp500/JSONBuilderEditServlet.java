@@ -24,7 +24,7 @@ import com.tas.utils.TCPClient;
 @WebServlet("/jsonBuilderEditServlet")
 public class JSONBuilderEditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(MQTTData.class);
+	final static Logger logger = Logger.getLogger(JSONBuilderEditServlet.class);
 
        
     /**
@@ -86,8 +86,8 @@ public class JSONBuilderEditServlet extends HttpServlet {
 				String publishing_status = jsObj.getString("publishing_status");
 				logger.info("publishing_status : " + publishing_status);
 				
-//				String store_n_forward = jsObj.getString("store_n_forward");
-//				logger.info("store_n_forward : " + store_n_forward);
+				String store_n_forward = jsObj.getString("store_n_forward");
+				logger.info("store_n_forward : " + store_n_forward);
 				
 				String json_string = jsObj.getString("json_string");
 				logger.info("json_string : " + json_string);
@@ -102,7 +102,7 @@ public class JSONBuilderEditServlet extends HttpServlet {
 					jsonBuilderObj.put("broker_ip_address", broker_ip_address);
 					jsonBuilderObj.put("publish_topic_name", publish_topic_name);
 					jsonBuilderObj.put("publishing_status", publishing_status);
-				//	jsonBuilderObj.put("store_n_forward", store_n_forward);
+					jsonBuilderObj.put("store_n_forward", store_n_forward);
 					jsonBuilderObj.put("json_string", json_string);
 					
 					resJsonArray.put(jsonBuilderObj);
@@ -132,10 +132,10 @@ public class JSONBuilderEditServlet extends HttpServlet {
 	//	doGet(request, response);
 		
 		String json_string_name = request.getParameter("json_string_name");
-		String jsonInterval = request.getParameter("jsonInterval");
+		String jsonInterval = request.getParameter("json_interval");
 		String broker_type = request.getParameter("broker_type");
 		String broker_name = request.getParameter("broker_name");
-		String publishTopic = request.getParameter("publishTopic");
+		String publishTopic = request.getParameter("publish_topic");
 		String publishStatus = request.getParameter("publishing_status");
 		String storeAndForward = request.getParameter("storeAndForward");
 		String json_string_text = request.getParameter("json_string_text");

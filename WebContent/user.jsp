@@ -440,31 +440,31 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
   </div>
   <div class="content">
 	<section style="margin-left: 1em">
-			<h3>Add User</h3><hr>
+			<h3>ADD USER</h3><hr>
 
 			<div class="container">
 				<form id="userForm">
 				  <div class="row">
-					<div class="col-25">
+					<!-- <div class="col-25">
 					  <label for="username">Username</label>
-					</div>
-					<div class="col-75">
+					</div> -->
+					<div class="col-75-1" style="width: 20%; margin-top: -20px;">
 					  <input type="text" id="firstName" name="firstName" placeholder="Username" required/>
 					  
 					</div>
 				  </div>
 				  <div class="row">
-					<div class="col-25">
+					<!-- <div class="col-25">
 					  <label for="password">Password</label>
-					</div>
-					<div class="col-75">
+					</div> -->
+					<div class="col-75-2" style="width: 20%; margin-left: 20%; margin-top: -32px;">
 						<input type="password" id="password" name="password" placeholder="Password"
 						required>
 					</div>
 				  </div>
 
 				  <div class="row">
-					<input style="margin-top: 2%;"
+					<input style="margin-top: -50%; "
 					  type="submit"
 					  value="Add"
 					  id="registerBtn"
@@ -473,7 +473,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 				</form>
 			  </div>
 
-			<h3>User List</h3><hr>
+			<h3>USER LIST</h3><hr>
 			<div class="container">
 			<table id="userListTable">
 				<thead>

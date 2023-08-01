@@ -47,7 +47,8 @@ public class JSONBuilderData extends HttpServlet {
 		
 		try{
 			
-			System.out.println("In json builder...");
+			//System.out.println("In json builder...");
+			
 			json.put("operation", "protocol");
 			json.put("protocol_type", "json_builder");
 			json.put("operation_type", "get_broker_ip");
@@ -87,10 +88,10 @@ public class JSONBuilderData extends HttpServlet {
 	//	doGet(request, response);
 		
 		String json_string_name = request.getParameter("json_string_name");
-		String jsonInterval = request.getParameter("jsonInterval");
+		String jsonInterval = request.getParameter("json_interval");
 		String broker_type = request.getParameter("broker_type");
 		String broker_name = request.getParameter("broker_name");
-		String publishTopic = request.getParameter("publishTopic");
+		String publishTopic = request.getParameter("publish_topic");
 		String publishStatus = request.getParameter("publishing_status");
 		String storeAndForward = request.getParameter("storeAndForward");
 		String json_string_text = request.getParameter("json_string_text");

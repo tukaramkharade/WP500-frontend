@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
@@ -19,6 +20,7 @@ import com.tas.utils.TCPClient;
 @WebServlet("/jsonBuilderDeleteServlet")
 public class JSONBuilderDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	final static Logger logger = Logger.getLogger(JSONBuilderDeleteServlet.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()

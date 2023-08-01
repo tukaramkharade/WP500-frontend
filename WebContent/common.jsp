@@ -183,7 +183,7 @@
   <section class="app">
     <aside class="sidebar">
       <header>
-        <img src="images/tasLogo.jpg" width="70%" />
+        <img src="tasm2m.png" width="70%" />
       </header>
       <nav class="sidebar-nav">
         <ul id="tabs">
@@ -195,6 +195,10 @@
               </div>
             </a>
             <ul id="tabs1" class="nav-flyout">
+            
+            <li class="nav-item">
+                <a href="overview.jsp">Overview</a>
+              </li>
               <li class="nav-item">
                 <a href="user.jsp">User Settings</a>
               </li>
@@ -225,7 +229,7 @@
             </a>
             <ul class="nav-flyout">
               <li class="nav-item">
-                <a href="lan.jsp">Lan</a>
+                <a href="lan.jsp">LAN</a>
               </li>
               <li class="nav-item">
                 <a href="#">Application</a>
@@ -233,6 +237,16 @@
               <li class="nav-item">
                 <a href="#">Quick Client</a>
               </li>
+              <li class="nav-item">
+                <a href="firewall.jsp">Firewall</a>
+              </li>
+              <li class="nav-item">
+                <a href="ntp.jsp">NTP</a>
+              </li>
+              
+              
+              
+             
             </ul>
           </li>
 
@@ -244,12 +258,7 @@
               </div>
             </a>
             <ul class="nav-flyout">
-              <li class="nav-item">
-                <a href="firewall.jsp">Firewall</a>
-              </li>
-              <li class="nav-item">
-                <a href="ntp.jsp">Ntp</a>
-              </li>
+              
               <li class="nav-item">
                 <a href="#">Web Services</a>
               </li>
@@ -258,6 +267,10 @@
               </li>
               <li class="nav-item">
                 <a href="jsonbuilder.jsp">JSON Builder</a>
+              </li>
+              <li class="nav-item">
+                <!-- <a href="http://192.168.1.102:8081/webmon/index.html" target="_blank">Straton</a> -->
+                <a onclick="openExtLink()">Straton</a>
               </li>
             </ul>
           </li>
@@ -288,6 +301,14 @@
   </section> -->
 
   <script>
+  
+  function openExtLink() {
+
+	  let url = window.location.protocol + "//" + window.location.host+"/webmon/index.html";
+
+      window.open(url, '_blank').focus();
+    }
+  
     $(document).ready(function () {
       $("ul li > a").on("click", function () {
         $("ul").find(".active").removeClass("active");

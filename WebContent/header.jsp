@@ -1,28 +1,13 @@
-<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-    
-<header>
-    <div style="width: 100%;height:7%;background-color: #f1f2f6;position:fixed;margin-top:-2px;">
-	<img src="images/tasLogo.jpg" style="height: 40px; width: 80px; margin-left: 5px;margin-top: 5px;background-color: #f1f2f6;">
-    </div>
 
-</header>
-</head>
-<body>
+ <!DOCTYPE html>
+<html><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-</body>
-</html> --%>
-
-
-<!-- --------------------------------------------------------------------------------------------------------------- -->
-
-
-<!DOCTYPE html>
-<html>
   <body>
-    <header></header>
+    <header>
+      <div style="margin-left: 190px; margin-top: 5%;">
+        <span style="margin-right: 3%;">ADMIN </span>
+        <span><i class="fa fa-sign-out" style="font-size:20px"></i></span>
+      </div>
+    </header>
   </body>
 </html>

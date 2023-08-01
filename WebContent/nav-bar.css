@@ -66,7 +66,7 @@ a:hover {
 
 
 .header {
-  height: 5.1em;
+  height: 3.9em;
   margin-left: 13em;
   padding: 0.27em;
   background-color: #f7f7f7;
@@ -79,8 +79,8 @@ a:hover {
 div.content {
   margin-left: 13em;
   height: 100%;
-  margin-top: 6.5em;
-  font-size: medium;
+  margin-top: 4.6em;
+  font-size: small;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -114,13 +114,13 @@ Sidebar Nav
   background-color: #2b3991;
   height: 100%;
 
-  font-weight: bold;
   font-size: 1.2em;
   overflow: auto;
   padding-bottom: 6em;
   z-index: 9;
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   /* -------------
   Chev elements
   ----------------*/
@@ -144,6 +144,7 @@ Sidebar Nav
   padding-left: 0;
   display: inline-block;
   width: 100%;
+  
   /* -------------
   Sidebar: icons
   ----------------*/
@@ -195,6 +196,7 @@ Sidebar Nav
   /* margin-left: -5px; */
   text-align: center;
   width: 4em;
+  font-weight: bold;
 }
 
 .sidebar-nav .nav-flyout {
@@ -240,7 +242,7 @@ h2 {
 h3 {
   margin-bottom: 5px;
   color: #2b3990;
-  font-size: large;
+  font-size: medium;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -256,7 +258,7 @@ h3 {
   margin-bottom: 20px;
 } */
 form {
-  width: 50%;
+  width: 100%;
   text-align: center;
 }
 
@@ -270,7 +272,7 @@ option {
   border: 1px solid #ccc;
   border-radius: 10px;
   resize: vertical;
-  font-size: medium;
+  font-size: small;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -284,13 +286,13 @@ input[type="submit"],
 input[type="button"] {
   background-color: #2b3991;
   color: white;
-  padding: 6px 15px;
+  padding: 4px 10px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   float: center;
   cursor: pointer;
-  font-size: medium;
+  font-size: small;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -322,8 +324,9 @@ table {
   border-collapse: collapse;
   width: 100%;
   border: 1;
-  font-size: medium;
+  font-size: small;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  margin-bottom: 50px;
 }
 
 th,
@@ -336,7 +339,6 @@ td {
 th {
   background-color: #e2e6f9;
   color: #283587;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 /* Error message styles */
@@ -347,16 +349,19 @@ th {
 
 form {
   margin-top: 20px;
+  font-size: small;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .toggle {
   position: relative;
   display: block;
-  width: 55px;
-  height: 25px;
+  width: 49px;
+  height: 20px;
   padding: 3px;
   border-radius: 50px;
   cursor: pointer;
+  font-size: small;
 }
 
 .toggle-input {
@@ -370,7 +375,7 @@ form {
   position: relative;
   display: block;
   height: inherit;
-  font-size: 12px;
+  font-size: small;
   background: red;
   border-radius: inherit;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 3px rgba(0, 0, 0, 0.15);
@@ -390,6 +395,7 @@ form {
   right: 5px;
   color: #fff;
   text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  font-size: small;
 }
 
 .toggle-label:after {
@@ -398,6 +404,7 @@ form {
   color: #fff;
   text-shadow: 0 1px rgba(0, 0, 0, 0.2);
   opacity: 0;
+  font-size: small;
 }
 
 .toggle-input:checked~.toggle-label {
@@ -413,13 +420,13 @@ form {
 }
 
 .toggle-handle {
-  position: absolute;
-  top: 4px;
-  left: 2px;
-  width: 25px;
-  height: 25px;
-  background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
-  border-radius: 50%;
+	position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 19px;
+    height: 18px;
+    background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+    border-radius: 50%;
 }
 
 .toggle-handle:before {
@@ -443,4 +450,12 @@ form {
   -webkit-transition: All 0.3s ease;
   -moz-transition: All 0.3s ease;
   -o-transition: All 0.3s ease;
+}
+
+textarea
+{
+  border:1px solid #999999;
+  width:100%;
+  margin:5px 0;
+  padding:3px;
 }

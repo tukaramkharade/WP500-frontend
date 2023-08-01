@@ -414,28 +414,28 @@ th {
         <div class="container">
           <form id="firewallForm" method="post">
             <div class="row">
-              <div class="col-25">
+              <!-- <div class="col-25">
                 <label for="port_number">Port Number</label>
-              </div>
-              <div class="col-75">
-                <input type="text" id="portNumber" name="portNumber" />
+              </div> -->
+              <div class="col-75-1" style="width: 20%; margin-top: -20px;">
+                <input type="text" id="portNumber" name="portNumber" placeholder="Port Number" />
               </div>
             </div>
             <div class="row">
-              <div class="col-25">
+              <!-- <div class="col-25">
                 <label for="protocol">Protocol</label>
-              </div>
-              <div class="col-75">
-                <input type="text" id="protocol" name="protocol" />
+              </div> -->
+              <div class="col-75-2" style="width: 20%; margin-left: 20%; margin-top: -32px;">
+                <input type="text" id="protocol" name="protocol" placeholder="Protocol"/>
               </div>
             </div>
             <div class="row">
-              <div class="col-25">
+              <!-- <div class="col-25">
                 <label for="ip_addr">IP Address</label>
-              </div>
+              </div> -->
 
-              <div class="col-75">
-                <input type="text" id="ip_addr" name="ip_addr" />
+              <div class="col-75-3" style="width: 20%; margin-left: 40%; margin-top: -32px;">
+                <input type="text" id="ip_addr" name="ip_addr" placeholder="IP Address"/>
               </div>
             </div>
             

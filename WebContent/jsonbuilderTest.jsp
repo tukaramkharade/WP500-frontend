@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-	/* function loadBrokerIPList() {
+	function loadBrokerIPList() {
 		$.ajax({
 			url : "jsonBuilderData",
 			type : "GET",
@@ -41,42 +41,9 @@
 			},
 		});
 	}
- */
- 
- 
- function loadBrokerIPList() {
-		$.ajax({
-			url : "jsonBuilderData",
-			type : "GET",
-			dataType : "json",
-			success : function(data) {
-				if (data.broker_ip_result
-						&& Array.isArray(data.broker_ip_result)) {
-					
-					
-					var selectElement = $("#broker_name");
-					// Clear any existing options
-					selectElement.empty();
 
-					// Loop through the data and add options to the select element
-					data.broker_ip_result.forEach(function(filename) {
-						var option = $("<option>", {
-							value : filename,
-							text : filename,
-						});
-						selectElement.append(option);
-					});
-					
-				}
-			},
-			error : function(xhr, status, error) {
-				console.log("Error showing broker ip list : " + error);
-			},
-		});
-	}
- 
 	// Function to load user data and populate the user list table
-	function loadJsonBuilderList() {
+	/* function loadJsonBuilderList() {
 		$
 				.ajax({
 					url : 'jsonBuilderEditServlet',
@@ -113,7 +80,7 @@
 													.append($('<td>')
 															.text(
 																	jsonBuilder.publishing_status));
-											/* row.append($('<td>').text(jsonBuilder.store_n_forward)); */
+											row.append($('<td>').text(jsonBuilder.store_n_forward)); 
 											row.append($('<td>').text(
 													jsonBuilder.json_string));
 
@@ -150,7 +117,7 @@
 					}
 				});
 	}
-
+ */
 	function setJsonBuilder(jsonBuilderId) {
 		// Make an AJAX GET request to retrieve user details for editing
 
@@ -161,7 +128,7 @@
 	}
 
 	// Function to handle deleting a user
-	function deleteJsonBuilder(jsonBuilderId) {
+	/* function deleteJsonBuilder(jsonBuilderId) {
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
@@ -188,9 +155,9 @@
 				}
 			});
 		}
-	}
+	} */
 
-	function editJsonBuilder() {
+	/* function editJsonBuilder() {
 
 		var confirmation = confirm('Are you sure you want to edit this json builder settings?');
 
@@ -198,7 +165,7 @@
 		var jsonInterval = $('#jsonInterval').find(":selected").val();
 		var broker_type = $('#broker_type').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
-		var publishTopic = $('#publish_topic').val();
+		var publishTopic = $('#publishTopic').val();
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		var json_string_text = $('#json_string_text').val();
@@ -223,7 +190,7 @@
 
 				// Clear form fields
 
-				$('#json_string_name').val('');
+				$('#jsonStringName').val('');
 				$('#jsonInterval').val('');
 				$('#broker_type').val('');
 				$('#broker_name').val('');
@@ -238,13 +205,14 @@
 		});
 
 		$('#registerBtn').val('Add');
-	}
+	} */
 
 	// Function to handle form submission and add a new user
 	function addJsonBuilder() {
 
 		var json_string_name = $('#json_string_name').val();
-		var json_interval = $('#json_interval').find(":selected").val();
+		var json_interval = $('#json_interval').val();
+		//var json_interval = $('#json_interval').find(":selected").val();
 		var broker_type = $('#broker_type').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
 		var publish_topic = $('#publish_topic').val();
@@ -252,10 +220,6 @@
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		var json_string_text = $('#json_string_text').val();
 
-		  
- 		
-			
-			
 		$.ajax({
 			url : 'jsonBuilderData',
 			type : 'POST',
@@ -272,21 +236,18 @@
 			success : function(data) {
 				// Display the registration status message
 				alert(data.message);
-				loadJsonBuilderList();
-				
-				
-				
+				//loadJsonBuilderList();
+
 				// Clear form fields
 
 				$('#json_string_name').val('');
 				$('#json_interval').val('');
 				$('#broker_type').val('');
 				$('#broker_name').val('');
-				$('#publish_topic').val('');
+				$('#publishTopic').val('');
 				$('#publishing_status').val('');
 				$('#storeAndForward').val('');
 				$('#json_string_text').val('');
-				$('#json_string_validate').val('');
 			},
 			error : function(xhr, status, error) {
 				console.log('Error adding json builder: ' + error);
@@ -296,42 +257,11 @@
 		$('#registerBtn').val('Add');
 	}
 
-	function validateJSON(){
-		$('#json_string_text').val('');
-		
-		alert("Json string text:" + json_string_text);
-		
-		   var res = isJsonString(json_string_text);
-			alert(res)
-		 
-		 if(res == true){
-			alert('success')
-			$('#json_string_validate').val(json_string_text);
-			
-		}   
-		
-	}
-	
-	function isJsonString(str) {
-	    try {
-	        JSON.parse(str);
-	    } catch (e) {
-	        return false;
-	    }
-	    return true;
-	}
-    
-    
-	
 	// Function to execute on page load
 	$(document).ready(function() {
 		// Load user list
 		loadBrokerIPList();
-		loadJsonBuilderList();
-		
-		
-		
-		//console.log(is_json({name: 'Robert'}));
+	//	loadJsonBuilderList();
 		// Handle form submission
 		$('#jsonBuilderForm').submit(function(event) {
 			event.preventDefault();
@@ -339,9 +269,9 @@
 
 			if (buttonText == 'Add') {
 				addJsonBuilder();
-			} else {
+			} /* else {
 				editJsonBuilder();
-			}
+			} */
 		});
 
 	});
@@ -365,7 +295,7 @@
 					<!-- <div class="col-25">
 						<label for="jsonStringName">JSON String Name</label>
 					</div> -->
-					<div class="col-75-1" style="width: 20%; margin-top: -20px;">
+					<div class="col-75-1" style="width: 170px; margin-top: -20px; font-size: 15px">
 						<input type="text" id="json_string_name" name="json_string_name"
 							placeholder="JSON String Name" required style="height: 17px;" />
 
@@ -375,13 +305,13 @@
 					<!-- <div class="col-25">
 						<label for="jsonInterval">JSON Interval</label>
 					</div> -->
-					<!-- <div class="col-75">
-						<input type="text" id="jsonInterval" name="jsonInterval" placeholder="JSON Interval"
+					 <div class="col-75-2" style="width: 165px; margin-top: -35px; margin-left: 180px;">
+						<input type="text" id="json_interval" name="json_interval" placeholder="JSON Interval"
 						required>
-					</div> -->
+					</div> 
 
-					<div class="col-75-2" style="width: 20%; margin-left: 20%; margin-top: -35px">
-						<select class="json-interval-select" id="json_interval" name="json_interval" style="height: 35px;">
+					<!-- <div class="col-75-2" style="width: 165px; margin-top: -35px; margin-left: 180px;">
+						<select class="json-interval-select" id="jsonInterval" name="jsonInterval" style="height: 35px;font-size: 15px">
 							<option value="">Select JSON Interval</option>
 							<option value="30sec">30 sec</option>
 							<option value="1min">1 min</option>
@@ -394,7 +324,7 @@
 							<option value="1hour">1 hour</option>
 
 						</select>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="row">
@@ -402,9 +332,9 @@
 													<label for="fileType">Broker Type</label>
 
 					</div> -->
-					<div class="col-75-3" style="width: 20%; margin-left: 40%; margin-top: -35px">
+					<div class="col-75-3" style="width: 155px; margin-left: 356px; margin-top: -35px">
 
-						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px;">
+						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px; font-size: 15px">
 						<option value="">Select Broker Type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
@@ -418,10 +348,10 @@
 					<!-- <div class="col-25">
 						<label for="broker_name">Broker Name</label>
 					</div> -->
-					<div class="col-75-4" style="width: 20%; margin-left: 60%; margin-top: -35px">
+					<div class="col-75-4" style="width: 160px; margin-left: 520px; margin-top: -35px">
 
-						<select class="textBox" id="broker_name" name="broker_name" style="height: 35px;">
-							<option value=""></option>
+						<select class="textBox" id="broker_name" name="broker_name" style="height: 35px; font-size: 15px">
+							<option value="Select Broker IP">Select Broker IP</option>
 
 						</select>
 					</div>
@@ -431,7 +361,7 @@
 					<!-- <div class="col-25">
 						<label for="publishTopic">Publish Topic</label>
 					</div> -->
-					<div class="col-75-5" style="width: 20%; margin-left: 80%; margin-top: -35px">
+					<div class="col-75-5" style="width: 160px; margin-left: 690px; margin-top: -35px">
 						<input type="text" id="publish_topic" name="publish_topic"
 							placeholder="Publish Topic" required style="height: 17px;">
 					</div>
@@ -441,10 +371,10 @@
 					<!-- <div class="col-25">
 						 <label for="pubStatus">Publishing Status</label>
 					</div> -->
-					<div class="col-75-6" style="width: 20%; margin-top: 10px;">
+					<div class="col-75-6" style="width: 178px; margin-left: 860px; margin-top: -35px;">
 						<select class="textBox" id="publishing_status"
-							name="publishing_status" style="height: 35px;">
-							<option value="enable">Enter Publishing Status</option>
+							name="publishing_status" style="font-size: 15px; height: 35px;">
+							<option value="enable">Publishing Status</option>
 							<option value="enable">Enable</option>
 							<option value="disable">Disable</option>
 						</select>
@@ -455,10 +385,10 @@
 					<!-- <div class="col-25">
 						<label for="storeAndForward">Store and Forward</label>
 					</div> -->
-					<div class="col-75-7" style="width: 20%; margin-left: 20%; margin-top: -35px">
+					<div class="col-75-7" style="width: 191px; margin-top: 10px;">
 						<select class="textBox" id="storeAndForward"
-							name="storeAndForward" style="height: 35px;">
-							<option value="Enter Store and Forward">Enter Store and Forward</option>
+							name="storeAndForward" style="font-size: 15px; height: 35px;">
+							<option value="Enter Store and Forward">Store and Forward</option>
 							<option value="enable">Enable</option>
 							<option value="disable">Disable</option>
 						</select>
@@ -491,7 +421,7 @@
 					<div class="col-75-9" style="margin-top: 10px; width: 100%">
 
 						<textarea id="json_string_validate" name="json_string_validate"
-							rows="10" cols="100" placeholder="Validate String" disabled></textarea>
+							rows="10" cols="100" placeholder="Validate String"></textarea>
 
 					</div>
 				</div>
@@ -521,7 +451,7 @@
 						<th>Broker IP Address</th>
 						<th>Publish Topic Name</th>
 						<th>Publishing Status</th>
-						<!-- <th>Store And Forward</th> -->
+						<th>Store And Forward</th>
 						<th>JSON String</th>
 						<th>Actions</th>
 					</tr>
