@@ -254,63 +254,73 @@ input[type="submit"] {
 
 <!DOCTYPE html>
 <html>
-<title>User Settings</title>
+<title>WP500 Web Configuration</title>
 <link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
-/>
-<link
-href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-rel="stylesheet"
-type="text/css"
-/>
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
-/>
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
+<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
+	rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	// Function to load user data and populate the user list table
 	function loadUserList() {
-		$.ajax({
-			url : 'data',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-				// Clear existing table rows
-				var userTable = $('#userListTable tbody');
-				userTable.empty();
+		$
+				.ajax({
+					url : 'data',
+					type : 'GET',
+					dataType : 'json',
+					success : function(data) {
+						// Clear existing table rows
+						var userTable = $('#userListTable tbody');
+						userTable.empty();
 
-				// Iterate through the user data and add rows to the table
-				$.each(data, function(index, user) {
-					var row = $('<tr>');
-					row.append($('<td>').text(user.firstName));
+						// Iterate through the user data and add rows to the table
+						$
+								.each(
+										data,
+										function(index, user) {
+											var row = $('<tr>');
+											row.append($('<td>').text(
+													user.firstName));
 
-					var actions = $('<td>');
-					var editButton = $('<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">').text('Edit').click(
-							function() {
-								settUser(user.firstName);
+											var actions = $('<td>');
+											var editButton = $(
+													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													.text('Edit')
+													.click(
+															function() {
+																settUser(user.firstName);
 
-							});
-					var deleteButton = $('<button style="background-color:red; border: none; border-radius: 5px; margin-left: 5px; color: white">').text('Delete').click(
-							function() {
-								deleteUser(user.firstName);
-							});
+															});
+											var deleteButton = $(
+													'<button style="background-color:red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													.text('Delete')
+													.click(
+															function() {
+																deleteUser(user.firstName);
+															});
 
-					actions.append(editButton);
-					actions.append(deleteButton);
+											actions.append(editButton);
+											actions.append(deleteButton);
 
-					row.append(actions);
+											row.append(actions);
 
-					userTable.append(row);
+											userTable.append(row);
 
+										});
+					},
+					error : function(xhr, status, error) {
+						console.log('Error loading user data: ' + error);
+					}
 				});
-			},
-			error : function(xhr, status, error) {
-				console.log('Error loading user data: ' + error);
-			}
-		});
 	}
 
 	function settUser(userId) {
@@ -431,67 +441,104 @@ href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
 </script>
 </head>
 <body>
-		
-<div class="sidebar">
-	<%@ include file="common.jsp"%>
-  </div>
-  <div class="header">
-	<%@ include file="header.jsp"%>
-  </div>
-  <div class="content">
-	<section style="margin-left: 1em">
-			<h3>ADD USER</h3><hr>
+
+	<div class="sidebar">
+		<%@ include file="common.jsp"%>
+	</div>
+	<div class="header">
+		<%@ include file="header.jsp"%>
+	</div>
+	<div class="content">
+		<section style="margin-left: 1em">
+			<h3>ADD USER</h3>
+			<hr>
 
 			<div class="container">
 				<form id="userForm">
-				  <div class="row">
-					<!-- <div class="col-25">
+					<div class="row">
+						<!-- <div class="col-25">
 					  <label for="username">Username</label>
 					</div> -->
-					<div class="col-75-1" style="width: 20%; margin-top: -20px;">
-					  <input type="text" id="firstName" name="firstName" placeholder="Username" required/>
-					  
+						<div class="col-75-1" style="width: 20%; margin-top: -20px;">
+							<input type="text" id="userName" name="userName"
+								placeholder="Username" required />
+
+						</div>
 					</div>
-				  </div>
-				  <div class="row">
-					<!-- <div class="col-25">
+					<div class="row">
+						<!-- <div class="col-25">
 					  <label for="password">Password</label>
 					</div> -->
-					<div class="col-75-2" style="width: 20%; margin-left: 20%; margin-top: -32px;">
-						<input type="password" id="password" name="password" placeholder="Password"
-						required>
+						<div class="col-75-2"
+							style="width: 20%; margin-left: 20%; margin-top: -32px;">
+							<input type="password" id="password" name="password"
+								placeholder="Password" required>
+						</div>
 					</div>
-				  </div>
+					<div class="row">
+						<!-- <div class="col-25">
+					  <label for="username">Username</label>
+					</div> -->
+						<div class="col-75-3"
+							style="width: 20%; margin-top: -32px; margin-left: 40%;">
+							<input type="text" id="first_name" name="first_name"
+								placeholder="Firstname" required />
 
-				  <div class="row">
-					<input style="margin-top: -50%; "
-					  type="submit"
-					  value="Add"
-					  id="registerBtn"
-					/>
-				  </div>
+						</div>
+					</div>
+					<div class="row">
+						<!-- <div class="col-25">
+					  <label for="username">Username</label>
+					</div> -->
+						<div class="col-75-4"
+							style="width: 20%; margin-top: -32px; margin-left: 60%;">
+							<input type="text" id="last_name" name="last_name"
+								placeholder="Lastname" required />
+
+						</div>
+					</div>
+
+					<div class="row">
+						
+						<div class="col-75-5" style="width: 20%; margin-left: 80%; margin-top: -35px">
+						<select class="role" id="role"
+							name="role" style="height: 35px;">
+							<option value="Select role">Select Role</option>
+							<option value="ADMIN">ADMIN</option>
+							<option value="VIEWER">VIEWER</option>
+						</select>
+					</div>
+					</div>
+
+					<div class="row">
+						<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
+							id="registerBtn" />
+					</div>
 				</form>
-			  </div>
-
-			<h3>USER LIST</h3><hr>
-			<div class="container">
-			<table id="userListTable">
-				<thead>
-					<tr>
-						<th>User Name</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- User list table rows will be populated dynamically using JavaScript -->
-				</tbody>
-			</table>
 			</div>
-			</section>
-		</div>
-		<div class="footer">
-			<%@ include file="footer.jsp"%>
-		  </div>
-	
+
+			<h3>USER LIST</h3>
+			<hr>
+			<div class="container">
+				<table id="userListTable">
+					<thead>
+						<tr>
+							<th>User Name</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- User list table rows will be populated dynamically using JavaScript -->
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+	<div class="footer">
+		<%@ include file="footer.jsp"%>
+	</div>
+
 </body>
 </html>

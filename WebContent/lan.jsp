@@ -494,7 +494,14 @@ cursor: pointer;
 	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <html>
-<title>LAN Settings</title>
+
+<title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
 
 <link
 rel="stylesheet"

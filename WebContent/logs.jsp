@@ -285,7 +285,13 @@ h2 {
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-    <title>Logs</title>
+    <title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
@@ -392,7 +398,7 @@ h2 {
  				var split_log5 = myArray[5];
  				
                   var row = $("<tr>").append(
-                    $("<td>").text(split_log0),
+                    $('<td style="width: 20%;">').text(split_log0),
                     $("<td>").text(split_log1),
                     $("<td>").text(split_log2),
                     $("<td>").text(split_log4),
@@ -433,7 +439,7 @@ h2 {
     </div>
     <div class="content">
       <section style="margin-left: 1em">
-        <h3>Logs</h3>
+        <h3>LOGS</h3>
         <hr />
 		<div class="row" style="margin-top: 3%;">
 			<div style="width: 20%; float: left;">
@@ -457,8 +463,8 @@ h2 {
           <thead>
             <tr>
               <th style="width: 15%">Date and Time</th>
-              <th style="width: 5%">Log Type</th>
-             <th>Line Number</th>
+              <th style="width: 8%">Log Type</th>
+             <th style="width: 15%">Line Number</th>
               <th>Class</th>
               <th style="width: 55%">Message</th>
               

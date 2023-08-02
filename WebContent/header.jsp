@@ -1,13 +1,26 @@
-
- <!DOCTYPE html>
-<html><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- <div class="header"> -->
     <header>
-      <div style="margin-left: 190px; margin-top: 5%;">
-        <span style="margin-right: 3%;">ADMIN </span>
-        <span><i class="fa fa-sign-out" style="font-size:20px"></i></span>
+      <div class="row" style="float: right; margin-top: 1%">
+        <div>
+          ADMIN
+          <i
+            class="fa fa-sign-out"
+            style="font-size: 20px; margin-left: 5px"
+            onclick="logout()"
+          ></i>
+        </div>
       </div>
     </header>
-  </body>
+    <!-- </div> -->
+  </head>
+  <!-- <body>
+    
+  </body> -->
 </html>

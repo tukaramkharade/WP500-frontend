@@ -96,7 +96,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Overview</title>
+    <title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
@@ -123,8 +129,8 @@
     </div>
     <div class="content">
       <section style="margin-left: 1em">
-        <h3>Overview</h3><hr>
-        <img src="image001.png" width="300" height="300" />
+        <h3>OVERVIEW</h3><hr>
+        <img src="images/rut_image.jpg" width="300" height="300" />
 
         <div class="general-data-table">
           <table>

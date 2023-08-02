@@ -72,7 +72,7 @@ a:hover {
   background-color: #f7f7f7;
   margin-top: 0vh;
   position: fixed;
-  width: 100%;
+  width: -webkit-fill-available;
   top: 0;
 }
 
@@ -159,7 +159,7 @@ Sidebar Nav
 }
 
 .sidebar-nav ul li a:hover {
-  background-color: #ec0806;
+  background-color: #1c245b;
   -webkit-transition: all 0.6s ease;
   -moz-transition: all 0.6s ease;
   transition: all 0.6s ease;
@@ -185,7 +185,7 @@ Sidebar Nav
 }
 
 .active {
-  background-color: #ec0806;
+  background-color: #1c245b;
 }
 
 .inactive {
@@ -219,7 +219,7 @@ Sidebar Nav
 }
 
 .sidebar-nav .nav-flyout a:hover {
-  background-color: #ec0806;
+  background-color: #1c245b;
 }
 
 .sidebar-nav ul>li:hover .nav-flyout {
@@ -233,6 +233,16 @@ Sidebar Nav
   transition: all 0.5s ease;
 }
 
+.sidebar-nav-nav-flyout {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
 
 h2 {
   margin-bottom: 5px;
@@ -326,7 +336,6 @@ table {
   border: 1;
   font-size: small;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  margin-bottom: 50px;
 }
 
 th,

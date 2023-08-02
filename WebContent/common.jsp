@@ -172,6 +172,14 @@
   <script src="jquery-3.6.0.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
 </head>
 <body>
   <!-- <section class="header">
@@ -183,7 +191,7 @@
   <section class="app">
     <aside class="sidebar">
       <header>
-        <img src="tasm2m.png" width="70%" />
+        <img src="images/tasm2m.png" width="70%" />
       </header>
       <nav class="sidebar-nav">
         <ul id="tabs">
@@ -215,7 +223,7 @@
                 <a href="#">Reboot</a>
               </li>
               <li class="nav-item">
-                <a href="certificates.jsp">Certificates</a>
+                <a href="#">Certificates</a>
               </li>
             </ul>
           </li>
@@ -231,12 +239,12 @@
               <li class="nav-item">
                 <a href="lan.jsp">LAN</a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="#">Application</a>
               </li>
               <li class="nav-item">
                 <a href="#">Quick Client</a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="firewall.jsp">Firewall</a>
               </li>
@@ -259,9 +267,9 @@
             </a>
             <ul class="nav-flyout">
               
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="#">Web Services</a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="mqtt.jsp">MQTT Server</a>
               </li>
@@ -270,7 +278,11 @@
               </li>
               <li class="nav-item">
                 <!-- <a href="http://192.168.1.102:8081/webmon/index.html" target="_blank">Straton</a> -->
-                <a onclick="openExtLink()">Straton</a>
+                <a onclick="openExtLink()">Straton Variable</a>
+              </li>
+              <li class="nav-item">
+                <!-- <a href="http://192.168.1.102:8081/webmon/index.html" target="_blank">Straton</a> -->
+                <a onclick="openExtLink()">Straton Live Data</a>
               </li>
             </ul>
           </li>

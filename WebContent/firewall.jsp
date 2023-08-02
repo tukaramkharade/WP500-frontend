@@ -237,7 +237,13 @@ th {
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-    <title>Firewall</title>
+   <title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
@@ -409,7 +415,7 @@ th {
     </div>
     <div class="content">
       <section style="margin-left: 1em">
-        <h3>Firewall</h3>
+        <h3>FIREWALL</h3>
 		<hr>
         <div class="container">
           <form id="firewallForm" method="post">
@@ -440,7 +446,7 @@ th {
             </div>
             
 			<div class="row">
-				<input style="margin-top: 2%;"
+				<input style="margin-top: 2%; margin-left:95%;"
 				  type="submit"
 				  value="Add"
 				  id="registerBtn"
@@ -449,7 +455,7 @@ th {
           </form>
         </div>
 
-        <h3>Firewall Settings List</h3>
+        <h3>FIREWALL SETTINGS LIST</h3>
 		<hr>
 		<div class="container">
         <table id="firewallListTable">

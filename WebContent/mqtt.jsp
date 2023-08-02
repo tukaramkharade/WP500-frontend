@@ -1,246 +1,3 @@
-<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>MQTT</title>
-
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-<link rel="stylesheet" href="nav-bar.css" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-	function loadMqttList() {
-		$.ajax({
-			url : "mqttData",
-			type : "GET",
-			dataType : "json",
-			success : function(data) {
-				// Clear existing table rows
-
-				var mqttTable = $("#mqttListTable tbody");
-				mqttTable.empty();
-
-				// Iterate through the user data and add rows to the table
-				$.each(data, function(index, mqtt) {
-					var row = $("<tr>");
-					row.append($("<td>").text(mqtt.publish_topic + ""));
-					row.append($("<td>").text(mqtt.password + ""));
-					row.append($("<td>").text(mqtt.broker_ip_address + ""));
-					row.append($("<td>").text(mqtt.prefix + ""));
-					row.append($("<td>").text(mqtt.file_type + ""));
-					row.append($("<td>").text(mqtt.enable + ""));
-					row.append($("<td>").text(mqtt.port_number + ""));
-					row.append($("<td>").text(mqtt.subscribe_topic + ""));
-					row.append($("<td>").text(mqtt.username + ""));
-
-					var actions = $('<td>');
-					var editButton = $('<button>').text('Edit').click(
-							function() {
-								settUser(user.firstName);
-
-							});
-					var deleteButton = $('<button>').text('Delete').click(
-							function() {
-								deleteUser(user.firstName);
-							});
-
-					actions.append(editButton);
-					actions.append(deleteButton);
-
-					row.append(actions);
-
-					mqttTable.append(row);
-				});
-			},
-			error : function(xhr, status, error) {
-				console.log("Error loading mqtt data: " + error);
-			},
-		});
-	}
-	function addMqttData() {
-		var broker_ip_address = $("#broker_ip_address").val();
-		var port_number = $("#port_number").val();
-		var username = $("#username").val();
-
-		var password = $("#password").val();
-		var subscribe_topic = $("#subscribe_topic").val();
-		var publish_topic = $("#publish_topic").val();
-
-		var prefix = $("#prefix").val();
-		var file_type = $("#file_type").val();
-		var enable = $("#enable").val();
-
-		$.ajax({
-			url : "mqttAddData",
-			type : "POST",
-			data : {
-
-				broker_ip_address : broker_ip_address,
-				port_number : port_number,
-				username : username,
-				password : password,
-				subscribe_topic : subscribe_topic,
-				publish_topic : publish_topic,
-				prefix : prefix,
-				file_type : file_type,
-				enable : enable,
-
-			},
-			success : function(data) {
-				// Display the ntp status message
-				alert(data.message);
-
-				// Clear form fields
-				$("#broker_ip_address").val("");
-				$("#port_number").val("");
-				$("#username").val("");
-
-				$("#password").val("");
-				$("#subscribe_topic").val("");
-				$("#publish_topic").val("");
-
-				$("#prefix").val("");
-				$("#file_type").val("");
-				$("#enable").val("");
-			},
-			error : function(xhr, status, error) {
-				console.log("Error adding ntp: " + error);
-			},
-		});
-		$("#addMqttData").val("Add");
-	}
-
-	//Function to execute on page load
-	$(document).ready(function() {
-		// Load user list
-		loadMqttList();
-
-		// Handle form submission
-		/* $('#userForm').submit(function(event) {
-			event.preventDefault();
-			var buttonText = $('#registerBtn').val();
-
-			if (buttonText == 'Add') {
-				addUser();
-			} else {
-				editUser();
-			}
-		}); */
-
-	});
-</script>
-
-<style type="text/css">
-#broker_label{
-margin-left: 50px;
-}
-</style>
-</head>
-
-<body>
-	
-		<div class="sidebar">
-			<%@ include file="common.jsp"%>
-
-		</div>
-
-		<div class="header">
-			<%@ include file="header.jsp"%>
-		</div>
-		
-		<div class="content">
-	<section style="margin-left: 1em">
-			<h3>MQTT</h3><hr>
-
-			<div class="container">
-				<form id="mqttForm">
-				  <div class="row">
-					<div class="col-25">
-					  <label for="broker_ip_address">Broker IP Address</label>
-					</div>
-					<div class="col-75">
-					  <input type="text" id="broker_ip_address" name="broker_ip_address" 
-					  	placeholder="Broker IP Address" required/>
-					  
-					</div>
-				  </div>
-				  
-				  <div class="row">
-					<div class="col-25">
-					  <label for="port_number">Port Number</label>
-					</div>
-					<div class="col-75">
-						<input type="text" id="port_number" name="port_number" placeholder="Port Number" required>
-					</div>
-				  </div>
-				  
-				  <div class="row">
-					<div class="col-25">
-					  <label for="username">User Name</label>
-					</div>
-					<div class="col-75">
-						<input type="text" id="username" name="username" placeholder="Username" required>
-					</div>
-				  </div>
-				  
-				  <div class="row">
-					<div class="col-25">
-					  <label for="password">Password</label>
-					</div>
-					<div class="col-75">
-						<input type="password" id="password" name="password" placeholder="Password" required>
-					</div>
-				  </div>
-				  
-				  
-
-				  <!-- <div class="row">
-					<input style="margin-top: 2%;"
-					  type="submit"
-					  value="Add"
-					  id="registerBtn"
-					/>
-				  </div>
- -->				</form>
-			  </div>
-
-			<!-- <h3>User List</h3><hr>
-			<div class="container">
-			<table id="userListTable">
-				<thead>
-					<tr>
-						<th>User Name</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					User list table rows will be populated dynamically using JavaScript
-				</tbody>
-			</table>
-			</div> -->
-			</section>
-		</div>
-
-	
-	<div class="footer">
-			<%@ include file="footer.jsp"%>
-		  </div>
-</body>
-</html> --%>
-
-
-<!-- --------------------------------- -->
-
-
-
-
 
 <%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -497,7 +254,13 @@ input[type="submit"] {
 
 <!DOCTYPE html>
 <html>
-<title>MQTT Server Settings</title>
+<title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -582,9 +345,16 @@ input[type="submit"] {
 							'Delete').click(function() {
 						deleteMqtt(mqtt.prefix);
 					});
+					var getStatusButton = $(
+					'<button style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">').text(
+					'Get Status').click(function() {
+				
+			});
 
 					actions.append(editButton);
 					actions.append(deleteButton);
+					actions.append(getStatusButton);
+					
 
 					row.append(actions);
 
@@ -802,10 +572,10 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="broker_ip_address">Broker IP Address</label>
 						</div> -->
-						<div class="col-75-1" style="width: 170px; margin-top: -20px;">
+						<div class="col-75-1" style="width: 20%; margin-top: -20px;">
 							<input type="text" id="broker_ip_address"
 								name="broker_ip_address" placeholder="Broker IP Address"
-								required style="font-size: 15px;" />
+								required />
 
 						</div>
 
@@ -814,9 +584,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="port_number">Port Number</label>
 						</div> -->
-						<div class="col-75-2" style="width: 140px; margin-top: -35px; margin-left: 180px;">
+						<div class="col-75-2" style="width: 20%; margin-top: -35px; margin-left: 20%;">
 							<input type="text" id="port_number" name="port_number"
-								placeholder="Port Number" required style="font-size: 15px;">
+								placeholder="Port Number" required />
 						</div>
 					</div>
 
@@ -824,9 +594,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="username">Username</label>
 						</div> -->
-						<div class="col-75-3" style="width: 170px; margin-top: -35px; margin-left: 330px;">
+						<div class="col-75-3" style="width: 20%; margin-top: -35px; margin-left: 40%;">
 							<input type="text" id="username" name="username"
-								placeholder="Username" required style="font-size: 15px;"/>
+								placeholder="Username" required />
 
 						</div>
 					</div>
@@ -834,9 +604,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="password">Password</label>
 						</div> -->
-						<div class="col-75-4" style="width: 170px; margin-top: -35px; margin-left: 510px;">
+						<div class="col-75-4" style="width: 20%; margin-top: -35px; margin-left: 60%;">
 							<input type="password" id="password" name="password"
-								placeholder="Password" required style="font-size: 15px;">
+								placeholder="Password" required />
 						</div>
 					</div>
 
@@ -844,9 +614,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="pub_topic">Published Topic</label>
 						</div> -->
-						<div class="col-75-5" style="width: 170px; margin-top: -35px; margin-left: 690px;">
+						<div class="col-75-5" style="width: 20%; margin-top: -35px; margin-left: 80%;">
 							<input type="text" id="pub_topic" name="pub_topic"
-								placeholder="Published Topic" required style="font-size: 15px;"/>
+								placeholder="Published Topic" required />
 
 						</div>
 					</div>
@@ -854,9 +624,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="sub_topic">Subscribed Topic</label>
 						</div> -->
-						<div class="col-75-6" style="width: 170px; margin-top: -35px; margin-left: 870px;">
+						<div class="col-75-6" style="width: 20%; margin-top: 10px;">
 							<input type="text" id="sub_topic" name="sub_topic"
-								placeholder="Subscribed Topic" required style="font-size: 15px;">
+								placeholder="Subscribed Topic" required />
 						</div>
 					</div>
 
@@ -864,9 +634,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="prefix">Prefix</label>
 						</div> -->
-						<div class="col-75-7" style="width: 170px; margin-top: 10px;">
+						<div class="col-75-7" style="width: 20%; margin-top: -34px; margin-left: 20%">
 							<input type="text" id="prefix" name="prefix" placeholder="Prefix"
-								required style="font-size: 15px;"/>
+								required />
 
 						</div>
 					</div>
@@ -876,9 +646,9 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="fileType">File Type</label>
 						</div> -->
-						<div class="col-75-8" style="width: 140px; margin-left: 180px; margin-top: -34px;">
+						<div class="col-75-8" style="width: 20%; margin-left: 40%; margin-top: -34px;">
 
-							<select class="textBox" id="file_type" name="file_type" style="font-size: 15px; height: 35px;">
+							<select class="textBox" id="file_type" name="file_type" style="height: 35px;">
 							<option value="">Select file type</option>
 								<option>SSL</option>
 								<option>TCP</option>
@@ -891,9 +661,9 @@ input[type="submit"] {
 						<!-- div class="col-25">
 								<label for="fileType"> File </label>
 							</div> -->
-						<div class="col-75-9" style="width: 170px; margin-left: 330px; margin-top: -35px;">
+						<div class="col-75-9" style="width: 20%; margin-left: 60%; margin-top: -35px;">
 							
-							<select class="textBox" id="crt_file" name="crt_file" style="height: 35px; font-size: 15px;">
+							<select class="textBox" id="crt_file" name="crt_file" style="height: 35px;">
 								<option value="">Select crt file...</option>
 
 							</select>
@@ -902,10 +672,10 @@ input[type="submit"] {
 					</div>
 					<div class="row">
 
-						<div class="col-25-1" style="margin-left: 510px; margin-top: -40px;">
-							<label for="enable" style="font-size: 15px;">Enable</label>
+						<div class="col-25-1" style="margin-left: 70%; margin-top: -35px;">
+							<label for="enable">Enable</label>
 						</div>
-						<div class="col-75-10" style="margin-left: 510px; margin-top: -10px;">
+						<div class="col-75-10" style="margin-left: 80%; margin-top: -22px;">
 							<input type="checkbox" class="enable" id="enable" name="enable">
 
 						</div>
@@ -913,7 +683,7 @@ input[type="submit"] {
 
 
 					<div class="row">
-						<input style="margin-top: 2%;" type="submit" value="Add"
+						<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
 							id="registerBtn" />
 						<!-- <input style="margin-top: 2%;" type="submit" value="Update" id="updateBtn" /> 
 							<input style="margin-top: 2%; background-color: red" type="submit"
@@ -923,7 +693,7 @@ input[type="submit"] {
 				</form>
 			</div>
 
-			<h3>MQTT Server List</h3>
+			<h3>MQTT SERVER LIST</h3>
 			<hr>
 			<div class="container">
 				<table id="mqttListTable">

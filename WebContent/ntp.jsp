@@ -373,7 +373,13 @@ input:checked+.slider:before {
 	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <html>
-	<title>NTP</title>
+	<title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
 	<link
 	rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
@@ -587,15 +593,15 @@ h2 {
 }
 
 .slider:before {
-	position: absolute;
-	content: "";
-	height: 26px;
-	width: 26px;
-	left: 4px;
-	bottom: 4px;
-	background-color: white;
-	-webkit-transition: .4s;
-	transition: .4s;
+    position: absolute;
+    content: "";
+    height: 25px;
+    width: 27px;
+    left: -2px;
+    bottom: 0px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 input:checked+.slider {
@@ -615,8 +621,8 @@ input:checked+.slider:before {
 /* Rounded sliders */
 .slider.round {
 	border-radius: 100px;
-    height: 31px;
-	width: 59px;
+    height: 25px;
+	width: 50px;
 }
 
 .slider.round:before {
@@ -726,20 +732,20 @@ input:checked+.slider:before {
 	  </div>
 	  <div class="content">
 		<section style="margin-left: 1em">
-			<h3>NTP Setting</h3><hr>
+			<h3>NTP SETTINGS</h3><hr>
 			<div class="container">
 			<form id="updateNtp" method="post">
 
 				<div class="row">
-					<div style="float: left;
-					width: 40%;
-					margin-top: 6px;">
-					  <label for="enableToggle">Enable NTP
+					<div style="width: 40%;
+					margin-top: 6px;
+					">
+					  <label for="enableToggle" style="margin-left: -26em;">Enable NTP
 						Client</label>
 					</div>
-					<div style="float: left;
-					width: 60%;
-					margin-top: 6px;">
+					<div style="margin-left: 4%;
+					width: 20%;
+					margin-top: -2.5em;">
 						<label class="switch"> <input type="checkbox"
 							id="ntp_client" name="ntp_client" onchange="toggleNtpClient()"
 							value="1" checked> <span class="slider round"></span>
@@ -749,37 +755,37 @@ input:checked+.slider:before {
 				  </div>
 				  <br />
 				<div class="row">
-					<div style="float: left;
+					<!-- <div style="float: left;
 					width: 40%;
 					margin-top: 6px;">
 					  <label for="updateInterval">Update
 						Interval</label>
-					</div>
-					<div style="float: left;
-					width: 60%;
-					margin-top: 6px;">
-					  <input type="text" id="ntp_interval" name="ntp_interval"/>
+					</div> -->
+					<div style="margin-left: 20%;
+					width: 20%;
+					margin-top: -5em;">
+					  <input type="text" id="ntp_interval" name="ntp_interval" placeholder="NTP Interval"/>
 					  
 					</div>
 				  </div>
 
 				  <div class="row">
-					<div style="float: left;
+					<!-- <div style="float: left;
 					width: 40%;
 					margin-top: 6px;">
 					  <label for="updateInterval">Update
 						Server</label>
-					</div>
-					<div style="float: left;
-					width: 60%;
-					margin-top: 6px;">
-					  <input type="text" id="ntp_server" name="ntp_server"/>
+					</div> -->
+					<div style="margin-left: 40%;
+					width: 20%;
+					margin-top: -2.5em;">
+					  <input type="text" id="ntp_server" name="ntp_server" placeholder="NTP Server"/>
 					  
 					</div>
 				  </div>
 				
 				  <div class="row">
-					<input style="margin-top: 2%;"
+					<input style="margin-left: 95%;"
 					  type="submit"
 					  value="Add"
 					  id="updatentp"

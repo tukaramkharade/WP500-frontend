@@ -4,7 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>JSON Builder</title>
+<title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -195,10 +201,10 @@
 		var confirmation = confirm('Are you sure you want to edit this json builder settings?');
 
 		var json_string_name = $('#json_string_name').val();
-		var jsonInterval = $('#jsonInterval').find(":selected").val();
+		var json_interval = $('#json_interval').find(":selected").val();
 		var broker_type = $('#broker_type').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
-		var publishTopic = $('#publish_topic').val();
+		var publish_topic = $('#publish_topic').val();
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		var json_string_text = $('#json_string_text').val();
@@ -208,10 +214,10 @@
 			type : 'POST',
 			data : {
 				json_string_name : json_string_name,
-				jsonInterval : jsonInterval,
+				json_interval : json_interval,
 				broker_type : broker_type,
 				broker_name : broker_name,
-				publishTopic : publishTopic,
+				publish_topic : publish_topic,
 				publishing_status : publishing_status,
 				storeAndForward : storeAndForward,
 				json_string_text : json_string_text
@@ -224,10 +230,10 @@
 				// Clear form fields
 
 				$('#json_string_name').val('');
-				$('#jsonInterval').val('');
+				$('#json_interval').val('');
 				$('#broker_type').val('');
 				$('#broker_name').val('');
-				$('#publishTopic').val('');
+				$('#publish_topic').val('');
 				$('#publishing_status').val('');
 				$('#storeAndForward').val('');
 				$('#json_string_text').val('');
@@ -251,9 +257,6 @@
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		var json_string_text = $('#json_string_text').val();
-
-		  
- 		
 			
 			
 		$.ajax({
@@ -273,7 +276,6 @@
 				// Display the registration status message
 				alert(data.message);
 				loadJsonBuilderList();
-				
 				
 				
 				// Clear form fields
@@ -296,19 +298,18 @@
 		$('#registerBtn').val('Add');
 	}
 
+	
 	function validateJSON(){
-		$('#json_string_text').val('');
-		
-		alert("Json string text:" + json_string_text);
-		
-		   var res = isJsonString(json_string_text);
-			alert(res)
-		 
-		 if(res == true){
-			alert('success')
-			$('#json_string_validate').val(json_string_text);
-			
-		}   
+		const json_string = document.querySelector('textarea').value;
+		  console.log(json_string);
+		  var res = isJsonString(json_string);
+		  
+		  if(res == true){
+			  $('#json_string_validate').val(json_string)
+		  }else{
+			  alert('Enter valid JSON!!')
+			  $('#json_string_text').val('');
+		  }
 		
 	}
 	
@@ -329,6 +330,10 @@
 		loadBrokerIPList();
 		loadJsonBuilderList();
 		
+		$('#validateBtn').click(function(){		
+			validateJSON();
+
+	 });
 		
 		
 		//console.log(is_json({name: 'Robert'}));
@@ -356,7 +361,7 @@
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>JSON Builder Settings</h3>
+		<h3>JSON BUILDER SETTINGS</h3>
 		<hr>
 
 		<div class="container">
@@ -479,7 +484,7 @@
 				</div>
 
 				<div class="row">
-					<input style="margin-top: 2%;" type="submit" value="Validate"
+					<input style="margin-top: 1%;" type="button" value="Validate"
 						id="validateBtn" />
 				</div>
 
@@ -497,7 +502,7 @@
 				</div>
 
 				<div class="row">
-					<input style="margin-top: 2%;" type="submit" value="Add"
+					<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
 						id="registerBtn" />
 
 					<!-- <input style="margin-top: 2%;"
@@ -509,7 +514,7 @@
 			</form>
 		</div>
 
-		<h3>JSON Builder Settings</h3>
+		<h3>JSON BUILDER SETTINGS</h3>
 		<hr>
 		<div class="container">
 			<table id="jsonBuilderListTable">
