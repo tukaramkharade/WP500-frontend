@@ -184,6 +184,8 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var json = {};
 	function loadBrokerIPList() {
 		$.ajax({
 			url : "commandConfigServlet",
@@ -241,13 +243,13 @@
  	    });
  	  }
 
-	$(document).ready(function() {
+	/* $(document).ready(function() {
 
 		// Load broker ip
 		loadBrokerIPList();
 		 loadTagList();
 		 
-		 $("#addBtn").click(function () {
+		 $("#saveBtn").click(function () {
 	    	    var tagName = $("#tag_name").val();
 	    	    var value = $("#variable").val();
 
@@ -274,7 +276,7 @@
 	    	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
 	    	    }
 	    	  });
-	    	  $("#saveBtn").click(function () {
+	    	  $("#addBtn").click(function () {
 	    		 // convertTableDataToJSON();
 	    		  tableToJson();
 	    		  addAlarmConfig();
@@ -286,11 +288,63 @@
 	    				if (buttonText == 'save') {
 	    					addAlarmConfig();
 	    				}
-	    			}); */
+	    			}); 
 
 	      	   
 	      	  });
-	    	});
+	    	}); */
+	    	
+	    	
+	    	 $(document).ready(function () {
+	       	  // Load broker ip
+	       	  loadBrokerIPList();
+	       	  loadTagList();
+	       	  
+	       	  
+	       	  $("#saveBtn").click(function () {
+	       	    var tagName = $("#tag_name").val();
+	       	    var value = $("#variable").val();
+
+	       	    // Check if tagName and value are not empty
+	       	    if (tagName.trim() !== "" && value.trim() !== "") {
+	       	      var newRow = $("<tr>")
+	       	        .append($("<td>").text(tagName))
+	       	        .append($("<td>").text(value))
+	       	        .append(
+	       	          $("<td>").html(
+	       	            `<input
+	       	                style="background-color :red"
+	       	                type="button"
+	       	                value="Delete"
+	       	                onclick="deleteRow(this)"
+	       	              />`
+	       	          )
+	       	        );
+
+	       	      $("#table_data").append(newRow);
+	       	      $("#tag_name").val("");
+	       	      $("#variable").val("");
+	       	    } else {
+	       	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
+	       	    }
+	       	  });
+	       	  $("#addBtn").click(function () {
+	       		 // convertTableDataToJSON();
+	       		  tableToJson();
+	       		addCommandConfig();
+	       		  
+	       		  /* $('#alarmConfigForm').submit(function(event) {
+	       				event.preventDefault();
+	       				var buttonText = $('#saveBtn').val();
+
+	       				if (buttonText == 'save') {
+	       					addAlarmConfig();
+	       				}
+	       			}); */
+
+	         	   
+	         	  });
+	       	});
 	
 	function deleteRow(button) {
 		  $(button).closest("tr").remove();
@@ -310,6 +364,59 @@
 
 			  return json;
 			}
+		
+		function addCommandConfig() {
+
+			var tagData = tableToJson();
+			alert('tag data : '+tagData)
+
+		    var unit_id = $('#unit_id').val();
+		    var asset_id = $('#asset_id').val();
+		    var broker_type = $('#broker_type').find(":selected").val();
+		    var broker_name = $('#broker_name').find(":selected").val();
+		    var interval = $('#interval').find(":selected").val();
+		    // Modify the next two lines to get the tag_name and variable from the JSON data
+		   /*  var tag_name = Object.keys(tagData)[0];
+		    var variable = tagData[tag_name]; */
+
+			
+			$.ajax({
+				url : 'commandConfigServlet',
+				type : 'POST',
+				data : {
+					unit_id : unit_id,
+					asset_id : asset_id,
+					broker_type : broker_type,
+					broker_name : broker_name,
+					interval : interval,
+					tagData: JSON.stringify(tagData)
+					//tagData: JSON.stringify(tagData)
+					/* tag_name : tag_name,
+					variable : variable */
+					
+				},
+				success : function(data) {
+					// Display the registration status message
+					alert(data.message);
+			//		loadMqttList();
+
+					// Clear form fields
+
+					$('#unit_id').val('');
+					$('#asset_id').val('');
+					$('#broker_type').val('');
+					$('#broker_name').val('');
+					$('#interval').val('');
+					/* $('#tag_name').val('');
+					$('#variable').val(''); */
+				},
+				error : function(xhr, status, error) {
+					console.log('Error adding mqtt settings: ' + error);
+				}
+			});
+
+			$('#registerBtn').val('Add');
+		}
 </script>
 </head>
 <body>
@@ -406,13 +513,24 @@
 
 				<div class="row">
 					<input style="margin-top: -31px;" type="button" value="Save"
-						id="saveBtn" />
-						
+						id="saveBtn" /> 
 						<input style="margin-top: -31px" type="button"
-							value="Add" id="addBtn" />
+						value="Add" id="addBtn" />
 				</div>
 
 			</form>
+		</div>
+		</section>
+		
+		<section style="margin-left: 1em">
+		<div class="container">
+			<table id="table_data">
+				<tr>
+					<th>Tag Name</th>
+					<th>Variable</th>
+					<th>Action</th>
+				</tr>
+			</table>
 		</div>
 		</section>
 	</div>

@@ -15,18 +15,18 @@ import org.json.JSONObject;
 import com.tas.utils.TCPClient;
 
 /**
- * Servlet implementation class Reboot
+ * Servlet implementation class CurrentDateTimeServlet
  */
-@WebServlet("/reboot")
-public class Reboot extends HttpServlet {
+@WebServlet("/currentDateTimeServlet")
+public class CurrentDateTimeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(Reboot.class);
+	final static Logger logger = Logger.getLogger(CurrentDateTimeServlet.class);
 
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Reboot() {
+    public CurrentDateTimeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,17 +43,19 @@ try{
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 			
-			json.put("operation", "reboot");
+			json.put("operation", "get_live_date_time");
 			
 			String respStr = client.sendMessage(json.toString());
-			System.out.println("response : "+respStr);
 			
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
-			logger.info("res " + new JSONObject(respStr).getString("msg"));
+			System.out.println("res " + new JSONObject(respStr));
 			
-			String message = new JSONObject(respStr).getString("msg");
+			String time = new JSONObject(respStr).getString("Time");
+			String date = new JSONObject(respStr).getString("Date");
+			
 			JSONObject jsonObject = new JSONObject();
-		    jsonObject.put("message", message);
+			
+		    jsonObject.put("time", time);
+		    jsonObject.put("date", date);
 		    
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");

@@ -17,13 +17,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-function loadConfig() {
+function reboot() {
 	$.ajax({
-		url : 'loadConfigurationServlet',
+		url : 'reboot',
 		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
-			alert(data.status);
+			alert(data.message);
 
 		},
 		error : function(xhr, status, error) {
@@ -35,8 +35,8 @@ function loadConfig() {
 
 $(document).ready(function() {
 
-	 $('#loadConfig').click(function(){		
-		 loadConfig();
+	 $('#reboot').click(function(){		
+		 reboot();
 
 	 });
 

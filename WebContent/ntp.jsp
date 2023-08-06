@@ -656,6 +656,24 @@ input:checked+.slider:before {
 			}
 		});
 	}
+	
+	function get_date_time() {
+		$.ajax({
+			url : 'currentDateTimeServlet',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+
+				alert(data.date + ' ' +data.time);
+				
+
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
+			}
+		});
+	}
 
 	// Function to load user data and populate the user list table
 
@@ -710,6 +728,8 @@ input:checked+.slider:before {
 
 	$(document).ready(function() {
 		getntp();
+		
+		
 		// Handle form submission
 		$("#updateNtp").submit(function(event) {
 			event.preventDefault();

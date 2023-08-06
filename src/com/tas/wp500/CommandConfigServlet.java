@@ -175,6 +175,71 @@ public class CommandConfigServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	//	doGet(request, response);
+		
+		String unit_id = request.getParameter("unit_id");
+		String asset_id = request.getParameter("asset_id");
+		String broker_type = request.getParameter("broker_type");
+		String broker_name = request.getParameter("broker_name");
+		String interval = request.getParameter("interval");
+		String tagData = request.getParameter("tagData");
+		
+		
+		System.out.println("tagData>"+tagData);
+		/*String tag_name = request.getParameter("tag_name");
+		String tag_name_2 = request.getParameter("tag_name_2");*/
+		
+		System.out.println("unit id : "+unit_id);
+		/*System.out.println("tag name: "+tag_name);
+		System.out.println("variable : "+tag_name_2);*/
+		
+		try {
+
+			System.out.println("In mqtt...");
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+
+			
+			json.put("operation", "protocol");
+			json.put("protocol_type", "command");
+			json.put("operation_type", "add_query");
+			
+			json.put("id","1");
+			json.put("username","admin");
+			
+			json.put("unit_id", unit_id);
+			json.put("asset_id", asset_id);
+			json.put("broker_type", broker_type);
+			json.put("broker_name", broker_name);
+			json.put("interval", interval);
+			json.put("command_tag", tagData);
+			/*JSONObject json_data = new JSONObject();
+			json_data.put(tag_name,tag_name_2);
+			*/
+			
+
+			String respStr = client.sendMessage(json.toString());
+
+			System.out.println("res " + new JSONObject(respStr));
+
+			String message = new JSONObject(respStr).getString("msg");
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("message", message);
+
+			// Set the content type of the response to application/json
+			response.setContentType("application/json");
+
+			// Get the response PrintWriter
+			PrintWriter out = response.getWriter();
+
+			// Write the JSON object to the response
+			out.print(jsonObject.toString());
+			out.flush();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

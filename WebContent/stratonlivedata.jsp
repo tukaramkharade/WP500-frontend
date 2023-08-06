@@ -61,6 +61,15 @@
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>STRATON LIVE DATA</h3>
+			<button onClick="window.location.reload();" style="cursor: pointer; background-color: #35449a; border-radius: 5px; 
+			border: none; color: white; font-size: small">Refresh Page</button>
+			
+			<div id="search">
+            <label for="searchInput">Find <i class="fa fa-search"></i>Tags</label>
+            <input id="searchInput" type="text" placeholder="Search">
+        </div>
+        
+        
 			<hr />
 
 			<div class="container">
