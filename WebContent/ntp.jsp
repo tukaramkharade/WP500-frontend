@@ -761,9 +761,9 @@ input:checked+.slider:before {
 					  <label for="updateInterval">Update
 						Interval</label>
 					</div> -->
-					<div style="margin-left: 20%;
+					<div style=";
 					width: 20%;
-					margin-top: -5em;">
+					margin-top: 0;">
 					  <input type="text" id="ntp_interval" name="ntp_interval" placeholder="NTP Interval"/>
 					  
 					</div>
@@ -776,7 +776,7 @@ input:checked+.slider:before {
 					  <label for="updateInterval">Update
 						Server</label>
 					</div> -->
-					<div style="margin-left: 40%;
+					<div style="margin-left: 20%;
 					width: 20%;
 					margin-top: -2.5em;">
 					  <input type="text" id="ntp_server" name="ntp_server" placeholder="NTP Server"/>
@@ -792,6 +792,13 @@ input:checked+.slider:before {
 					/>
 				  </div>
 			</form>
+		</div>
+		
+		<h3></h3>
+		<hr>
+		<div class="container">
+		
+		<input type="button" id="get_current_time" value="Get Current Time"/>
 		</div>
 			</section>
 		</div>

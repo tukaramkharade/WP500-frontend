@@ -42,10 +42,12 @@ public class UserEditServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		String userName = request.getParameter("userName");
-		String password = request.getParameter("password");
+		String first_name = request.getParameter("first_name");
+		String last_name = request.getParameter("last_name");
+		String username = request.getParameter("username");
+		String role = request.getParameter("role");
 
-		System.out.println(userName + " " + password);
+		System.out.println(username + " " + first_name + " " +last_name) ;
 
 		try {
 			TCPClient client = new TCPClient();
@@ -53,11 +55,15 @@ public class UserEditServlet extends HttpServlet {
 
 			
 			json.put("operation", "update_user");
-			json.put("password", password);
-			json.put("username", userName);
+			
+			json.put("username", username);
+			json.put("first_name", first_name);
+			json.put("last_name", last_name);
+			json.put("role", role);
+			
 			String respStr = client.sendMessage(json.toString());
 			
-			
+			System.out.println("response : "+respStr);
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));
 			
 			String message = new JSONObject(respStr).getString("msg");

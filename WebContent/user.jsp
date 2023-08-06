@@ -288,8 +288,10 @@ input[type="submit"] {
 										data,
 										function(index, user) {
 											var row = $('<tr>');
-											row.append($('<td>').text(
-													user.firstName));
+											row.append($('<td>').text(user.username));
+											row.append($('<td>').text(user.first_name));
+											row.append($('<td>').text(user.last_name));
+											row.append($('<td>').text(user.role));
 
 											var actions = $('<td>');
 											var editButton = $(
@@ -297,7 +299,10 @@ input[type="submit"] {
 													.text('Edit')
 													.click(
 															function() {
-																settUser(user.firstName);
+																settUser(user.username);
+																setFirstName(user.first_name);
+																setLastName(user.last_name);
+																setRole(user.role);
 
 															});
 											var deleteButton = $(
@@ -305,7 +310,7 @@ input[type="submit"] {
 													.text('Delete')
 													.click(
 															function() {
-																deleteUser(user.firstName);
+																deleteUser(user.username);
 															});
 
 											actions.append(editButton);
@@ -326,9 +331,26 @@ input[type="submit"] {
 	function settUser(userId) {
 		// Make an AJAX GET request to retrieve user details for editing
 
-		$('#firstName').val(userId);
+		$("#password").prop("disabled", true);
+		$('#username').val(userId);
+		$("#username").prop("disabled", true);
 		$('#registerBtn').val('Edit');
 
+	}
+	
+	function setFirstName(userId){
+		
+		$('#first_name').val(userId);
+	}
+	
+	function setLastName(userId){
+		
+		$('#last_name').val(userId);
+	}
+	
+	function setRole(userId){
+	
+	$('#role').val(userId);
 	}
 
 	// Function to handle deleting a user
@@ -343,7 +365,7 @@ input[type="submit"] {
 				url : 'UserDeleteServlet',
 				type : 'POST',
 				data : {
-					firstName : userId
+					username : userId
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -364,15 +386,21 @@ input[type="submit"] {
 
 		var confirmation = confirm('Are you sure you want to edit this user?');
 
-		var firstName = $('#firstName').val();
-		var password = $('#password').val();
+		var username = $('#username').val();
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		var role = $('#role').find(":selected").val();
+		
+		
 
 		$.ajax({
 			url : 'UserEditServlet',
 			type : 'POST',
 			data : {
-				firstName : firstName,
-				password : password
+				username : username,
+				first_name : first_name,
+				last_name : last_name,
+				role : role
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -380,11 +408,17 @@ input[type="submit"] {
 				loadUserList();
 
 				// Clear form fields
-				$('#firstName').val('');
-				$('#password').val('');
+				$('#username').val('');
+				$('#first_name').val('');
+				$('#last_name').val('');
+				$('#role').val('');
+				
+				$("#password").prop("disabled", false);
+				
+				$("#username").prop("disabled", false);
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding user: ' + error);
+				console.log('Error updating user: ' + error);
 			}
 		});
 
@@ -393,15 +427,22 @@ input[type="submit"] {
 
 	// Function to handle form submission and add a new user
 	function addUser() {
-		var firstName = $('#firstName').val();
+		
+		var username = $('#username').val();
 		var password = $('#password').val();
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		var role = $('#role').find(":selected").val();
 
 		$.ajax({
 			url : 'data',
 			type : 'POST',
 			data : {
-				firstName : firstName,
-				password : password
+				username : username,
+				password : password,
+				first_name : first_name,
+				last_name : last_name,
+				role : role
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -409,8 +450,13 @@ input[type="submit"] {
 				loadUserList();
 
 				// Clear form fields
-				$('#firstName').val('');
+				
+				$('#username').val('');
 				$('#password').val('');
+				$('#first_name').val('');
+				$('#last_name').val('');
+				$('#role').val('');
+				
 			},
 			error : function(xhr, status, error) {
 				console.log('Error adding user: ' + error);
@@ -433,6 +479,7 @@ input[type="submit"] {
 			if (buttonText == 'Add') {
 				addUser();
 			} else {
+				
 				editUser();
 			}
 		});
@@ -460,7 +507,7 @@ input[type="submit"] {
 					  <label for="username">Username</label>
 					</div> -->
 						<div class="col-75-1" style="width: 20%; margin-top: -20px;">
-							<input type="text" id="userName" name="userName"
+							<input type="text" id="username" name="username"
 								placeholder="Username" required />
 
 						</div>
@@ -500,9 +547,9 @@ input[type="submit"] {
 
 					<div class="row">
 						
-						<div class="col-75-5" style="width: 20%; margin-left: 80%; margin-top: -35px">
+						<div class="col-75-5" style="width: 20%; margin-left: 80%; margin-top: -32px">
 						<select class="role" id="role"
-							name="role" style="height: 35px;">
+							name="role" style="height: 33px;">
 							<option value="Select role">Select Role</option>
 							<option value="ADMIN">ADMIN</option>
 							<option value="VIEWER">VIEWER</option>
@@ -526,6 +573,7 @@ input[type="submit"] {
 							<th>User Name</th>
 							<th>First Name</th>
 							<th>Last Name</th>
+							<th>Role</th>
 							<th>Actions</th>
 						</tr>
 					</thead>

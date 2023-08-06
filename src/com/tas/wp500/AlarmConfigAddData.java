@@ -10,22 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
 /**
- * Servlet implementation class MQTTEditServlet
+ * Servlet implementation class MQTTData
  */
-@WebServlet("/mqttEditServlet")
-public class MQTTEditServlet extends HttpServlet {
+@WebServlet("/alarmConfigAddData")
+public class AlarmConfigAddData extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(MQTTEditServlet.class);
+	final static Logger logger = Logger.getLogger(AlarmConfigAddData.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public MQTTEditServlet() {
+	public AlarmConfigAddData() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -39,8 +40,7 @@ public class MQTTEditServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
-		
-		
+
 	}
 
 	/**
@@ -50,37 +50,43 @@ public class MQTTEditServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// doGet(request, response);
-
-		String broker_ip_address = request.getParameter("broker_ip_address");
-		String port_number = request.getParameter("port_number");
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String sub_topic = request.getParameter("sub_topic");
-		String pub_topic = request.getParameter("pub_topic");
-		String prefix = request.getParameter("prefix");
-		String file_type = request.getParameter("file_type");
-		String enable = request.getParameter("enable");
-
+		
+		
+		
+		String unit_id = request.getParameter("unit_id");
+		String asset_id = request.getParameter("asset_id");
+		String broker_type = request.getParameter("broker_type");
+		String broker_name = request.getParameter("broker_name");
+		String interval = request.getParameter("interval");
+		/*String tag_name = request.getParameter("tag_name");
+		String tag_name_2 = request.getParameter("tag_name_2");*/
+		
+		System.out.println("unit id : "+unit_id);
+		/*System.out.println("tag name: "+tag_name);
+		System.out.println("variable : "+tag_name_2);*/
+		
 		try {
 
 			System.out.println("In mqtt...");
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
-			json.put("operation", "protocol");
-			json.put("protocol_type", "mqtt");
-			json.put("operation_type", "update_query");
 			
-			json.put("broker_ip_address", broker_ip_address);
-			json.put("port_number", port_number);
-			json.put("username", username);
-			json.put("password", password);
-			json.put("subscribe_topic", sub_topic);
-			json.put("publish_topic", pub_topic);
-			json.put("prefix", prefix);
-			json.put("file_type", file_type);
-			json.put("enable", enable);
+			json.put("operation", "protocol");
+			json.put("protocol_type", "alarm");
+			json.put("operation_type", "add_query");
+			
+			json.put("id","1");
+			json.put("unit_id", unit_id);
+			json.put("asset_id", asset_id);
+			json.put("broker_type", broker_type);
+			json.put("broker_name", broker_name);
+			json.put("interval", interval);
+			
+			/*JSONObject json_data = new JSONObject();
+			json_data.put(tag_name,tag_name_2);
+			json.put("alarm_tag", json_data);*/
+			
 
 			String respStr = client.sendMessage(json.toString());
 
@@ -101,8 +107,10 @@ public class MQTTEditServlet extends HttpServlet {
 			out.flush();
 
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// doGet(request, response);
 	}
 
 }

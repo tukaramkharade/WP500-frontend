@@ -94,7 +94,7 @@ Sidebar
   height: 100%;
   top: 0;
   overflow: hidden;
-  background-color: #2b3991;
+  background-color: #19222a;
   -webkit-transform: translateZ(0);
   visibility: visible;
   -webkit-backface-visibility: hidden;
@@ -115,14 +115,13 @@ Sidebar Nav
   background-color: #2b3991;
   height: 100%;
 
-  font-size: 1.5em;
+  font-size: 1.2em;
   overflow: auto;
   padding-bottom: 6em;
   z-index: 9;
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  padding-left: 3px;
   /* -------------
   Chev elements
   ----------------*/
@@ -146,7 +145,7 @@ Sidebar Nav
   padding-left: 0;
   display: inline-block;
   width: 100%;
-  padding-bottom: 3px;
+  
   /* -------------
   Sidebar: icons
   ----------------*/
@@ -155,10 +154,9 @@ Sidebar Nav
 .sidebar-nav ul li a {
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.75em;
-  /* padding: 0.5em 0.5em; */
+  padding: 0.5em 0.5em;
   position: relative;
   display: block;
-  padding-bottom: 3px;
 }
 
 .sidebar-nav ul li a:hover {
@@ -221,50 +219,8 @@ Sidebar Nav
   line-height: 10px;
 }
 
-.sidebar-nav .nav-flyout a:hover .dropdown-btn:hover {
+.sidebar-nav .nav-flyout a:hover {
   background-color: #1c245b;
-}
-
-.dropdown-container {
-  display: none;
-  background-color: #35449a;
-  padding-left: 15px;
-  padding-bottom: 10px;
-}
-
-.dropdown-subcontainer {
-  display: none;
-  background-color: #35449a;
-  padding-left: 10px;
-}
-
-.dropdown-btn {
-  /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
-  text-decoration: none;
-  font-size: 1.5em;
-  color: white;
-  display: block;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-}
-
-.dropdown-subbtn {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  text-decoration: none;
-  font-size: 1.6em;
-  color: white;
-  display: block;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-  padding: 0px;
 }
 
 .sidebar-nav ul>li:hover .nav-flyout {

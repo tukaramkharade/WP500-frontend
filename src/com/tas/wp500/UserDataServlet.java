@@ -31,10 +31,13 @@ public class UserDataServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		String userName = request.getParameter("userName");
+		String first_name = request.getParameter("first_name");
+		String last_name = request.getParameter("last_name");
+		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String role = request.getParameter("role");
 
-		System.out.println(userName + " " + password);
+		System.out.println(username + " " + password + " " + first_name + " " + last_name);
 
 		try {
 			TCPClient client = new TCPClient();
@@ -42,8 +45,12 @@ public class UserDataServlet extends HttpServlet {
 
 			
 			json.put("operation", "add_user");
+			json.put("username", username);
 			json.put("password", password);
-			json.put("username", userName);
+			json.put("first_name", first_name);
+			json.put("last_name", last_name);
+			json.put("role", role);
+			
 			String respStr = client.sendMessage(json.toString());
 			
 			
@@ -98,18 +105,36 @@ public class UserDataServlet extends HttpServlet {
 			System.out.println("jsonArray " + jsonArray.toString());
 			// Convert each user to a JSONObject and add it to the JSONArray
 			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsObj = jsonArray.getJSONObject(i);
+				
+				String first_name = jsObj.getString("first_name");
+				logger.info("first_name : " + first_name);
+				
+				String last_name = jsObj.getString("last_name");
+				logger.info("last_name : " + last_name);
+				
+				String username = jsObj.getString("username");
+				logger.info("username : " + username);
+				
+				String role = jsObj.getString("role");
+				logger.info("role : " + role);
+
+			//	logger.info(jsonArray.get(i).toString());
+			//	resJsonArray.put(userObj);
+				
 				JSONObject userObj = new JSONObject();
-				try {
-					System.out.println("jsonArray " + jsonArray.get(i));
-					userObj.put("firstName", jsonArray.get(i).toString());
-					userObj.put("lastName", "");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+				
+				try{
+					
+					userObj.put("first_name", first_name);
+					userObj.put("last_name", last_name);
+					userObj.put("username", username);
+					userObj.put("role", role);					
+
+					resJsonArray.put(userObj);
+				}catch(Exception e){
 					e.printStackTrace();
 				}
-
-				logger.info(jsonArray.get(i).toString());
-				resJsonArray.put(userObj);
 			}
 
 			// Set the response content type to JSON

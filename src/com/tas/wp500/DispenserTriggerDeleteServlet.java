@@ -9,23 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
 /**
- * Servlet implementation class MQTTEditServlet
+ * Servlet implementation class DispenserTriggerDeleteServlet
  */
-@WebServlet("/mqttEditServlet")
-public class MQTTEditServlet extends HttpServlet {
+@WebServlet("/dispenserTriggerDeleteServlet")
+public class DispenserTriggerDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(MQTTEditServlet.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public MQTTEditServlet() {
+	public DispenserTriggerDeleteServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -39,8 +37,6 @@ public class MQTTEditServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
-		
-		
 	}
 
 	/**
@@ -52,36 +48,21 @@ public class MQTTEditServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
-		String broker_ip_address = request.getParameter("broker_ip_address");
-		String port_number = request.getParameter("port_number");
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String sub_topic = request.getParameter("sub_topic");
-		String pub_topic = request.getParameter("pub_topic");
-		String prefix = request.getParameter("prefix");
-		String file_type = request.getParameter("file_type");
-		String enable = request.getParameter("enable");
+		String serial_number = request.getParameter("serial_number");
+		String side = request.getParameter("side");
 
 		try {
 
-			System.out.println("In mqtt...");
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "protocol");
-			json.put("protocol_type", "mqtt");
-			json.put("operation_type", "update_query");
-			
-			json.put("broker_ip_address", broker_ip_address);
-			json.put("port_number", port_number);
-			json.put("username", username);
-			json.put("password", password);
-			json.put("subscribe_topic", sub_topic);
-			json.put("publish_topic", pub_topic);
-			json.put("prefix", prefix);
-			json.put("file_type", file_type);
-			json.put("enable", enable);
+			json.put("protocol_type", "dispenser");
+			json.put("operation_type", "delete_query");
 
+			json.put("serial_number", serial_number);
+			json.put("side", side);
+			
 			String respStr = client.sendMessage(json.toString());
 
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));

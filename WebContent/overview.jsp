@@ -132,7 +132,7 @@
         <h3>OVERVIEW</h3><hr>
         <img src="images/rut_image.jpg" width="300" height="300" />
 
-        <div class="general-data-table">
+        <div class="container" >
           <table>
             <tr>
               <th colspan="2">General Data</th>

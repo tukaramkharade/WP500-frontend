@@ -255,12 +255,7 @@ input[type="submit"] {
 <!DOCTYPE html>
 <html>
 <title>WP500 Web Configuration</title>
-<link
-      rel="icon"  
-      type="image/png"
-      sizes="32x32"
-      href="favicon.png"
-    /> 
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -280,8 +275,7 @@ input[type="submit"] {
 			success : function(data) {
 				if (data.crt_files_result
 						&& Array.isArray(data.crt_files_result)) {
-					
-					
+
 					var selectElement = $("#crt_file");
 					// Clear any existing options
 					selectElement.empty();
@@ -294,7 +288,7 @@ input[type="submit"] {
 						});
 						selectElement.append(option);
 					});
-					
+
 					/* var file_type = $('#file_type').find(":selected").val();
 					
 					alert("File type is: "+file_type);
@@ -312,69 +306,144 @@ input[type="submit"] {
 	}
 
 	function loadMqttList() {
-		$.ajax({
-			url : 'mqttData',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-				// Clear existing table rows
-				var mqttTable = $('#mqttListTable tbody');
-				mqttTable.empty();
+		$
+				.ajax({
+					url : 'mqttData',
+					type : 'GET',
+					dataType : 'json',
+					success : function(data) {
+						// Clear existing table rows
+						var mqttTable = $('#mqttListTable tbody');
+						mqttTable.empty();
 
-				// Iterate through the user data and add rows to the table
-				$.each(data, function(index, mqtt) {
-					var row = $('<tr>');
-					row.append($('<td>').text(mqtt.broker_ip_address + ""));
-					row.append($('<td>').text(mqtt.port_number + ""));
-					row.append($('<td>').text(mqtt.username + ""));
-					row.append($('<td>').text(mqtt.password + ""));
-					row.append($('<td>').text(mqtt.publish_topic + ""));
-					row.append($('<td>').text(mqtt.subscribe_topic + ""));
-					row.append($('<td>').text(mqtt.prefix + ""));
-					row.append($('<td>').text(mqtt.file_type + ""));
-					row.append($('<td>').text(mqtt.enable + ""));
+						// Iterate through the user data and add rows to the table
+						$
+								.each(
+										data,
+										function(index, mqtt) {
+											var row = $('<tr>');
+											row.append($('<td>').text(mqtt.broker_ip_address+ ""));
+											row.append($('<td>').text(
+													mqtt.port_number + ""));
+											row.append($('<td>').text(
+													mqtt.username + ""));
+											row.append($('<td>').text(
+													mqtt.password + ""));
+											row.append($('<td>').text(
+													mqtt.publish_topic + ""));
+											row.append($('<td>').text(
+													mqtt.subscribe_topic + ""));
+											row.append($('<td>').text(
+													mqtt.prefix + ""));
+											row.append($('<td>').text(
+													mqtt.file_type + ""));
+											row.append($('<td>').text(
+													mqtt.enable + ""));
 
-					var actions = $('<td>');
-					var editButton = $('<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">').text('Edit').click(
-							function() {
-								setMqtt(mqtt.prefixs);
+											var actions = $('<td>');
+											var editButton = $(
+													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													.text('Edit')
+													.click(function() {
+														setMqtt(mqtt.prefix);
+														setBrokerIPAddress(mqtt.broker_ip_address);
+														setPortNumber(mqtt.port_number);
+														setUsername(mqtt.username);
+														setPassword(mqtt.password);
+														setPublishedTopic(mqtt.publish_topic);
+														setSubscribedTopic(mqtt.subscribe_topic);
+														setFileType(mqtt.file_type);
+														setEnable(mqtt.enable);
+														
 
-							});
-					var deleteButton = $(
-							'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">').text(
-							'Delete').click(function() {
-						deleteMqtt(mqtt.prefix);
-					});
-					var getStatusButton = $(
-					'<button style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">').text(
-					'Get Status').click(function() {
-				
-			});
+													});
+											var deleteButton = $(
+													'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													.text('Delete')
+													.click(
+															function() {
+																deleteMqtt(mqtt.prefix);
+															});
+											var getStatusButton = $(
+													'<button style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
+													.text('Get Status').click(
+															function() {
 
-					actions.append(editButton);
-					actions.append(deleteButton);
-					actions.append(getStatusButton);
-					
+															});
 
-					row.append(actions);
+											actions.append(editButton);
+											actions.append(deleteButton);
+											actions.append(getStatusButton);
 
-					mqttTable.append(row);
+											row.append(actions);
 
+											mqttTable.append(row);
+
+										});
+					},
+					error : function(xhr, status, error) {
+						console.log('Error loading mqtt data: ' + error);
+					}
 				});
-			},
-			error : function(xhr, status, error) {
-				console.log('Error loading mqtt data: ' + error);
-			}
-		});
 	}
 
 	function setMqtt(mqttId) {
 		// Make an AJAX GET request to retrieve user details for editing
 
 		$('#prefix').val(mqttId);
+		$("#prefix").prop("disabled", true);
 		$('#registerBtn').val('Edit');
-
 	}
+
+	function setBrokerIPAddress(mqttId) {
+
+		$('#broker_ip_address').val(mqttId);
+	}
+
+	function setPortNumber(mqttId) {
+
+		$('#port_number').val(mqttId);
+	}
+
+	function setUsername(mqttId) {
+
+		$('#username').val(mqttId);
+	}
+
+	function setPassword(mqttId) {
+
+		$('#password').val(mqttId);
+	}
+
+	function setPublishedTopic(mqttId) {
+
+		$('#pub_topic').val(mqttId);
+	}
+
+	function setSubscribedTopic(mqttId) {
+
+		$('#sub_topic').val(mqttId);
+	}
+	
+	function setFileType(mqttId) {
+
+		$('#file_type').val(mqttId);
+	}
+
+	function setEnable(mqttId) {
+
+		
+		$('#enable').val(mqttId);
+		alert('enable : '+mqttId)
+		
+		if(mqttId == true){
+			
+			document.getElementById("enable").checked = true;
+		}
+		
+	}
+	
+	
 
 	// Function to handle deleting a user
 	function deleteMqtt(mqttId) {
@@ -453,6 +522,8 @@ input[type="submit"] {
 				$('#prefix').val('');
 				$('#file_type').val('');
 				$('#enable').val('');
+				
+				$("#prefix").prop("disabled", false);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error adding mqtt: ' + error);
@@ -526,17 +597,16 @@ input[type="submit"] {
 
 		loadMqttList();
 		loadCrtFilesList();
-		
-		$("#file_type").change(function (event) {
-       //     alert("You have Selected  :: "+$(this).val());
-            
-            if($(this).val() == 'SSL' || $(this).val() == 'ssl'){
-            	$("#crt_file").prop("disabled", false);
-            }else if($(this).val() == 'TCP' || $(this).val() == 'tcp'){
-            	$("#crt_file").prop("disabled", true);
-            }
-        });
-		
+
+		$("#file_type").change(function(event) {
+			//     alert("You have Selected  :: "+$(this).val());
+
+			if ($(this).val() == 'SSL' || $(this).val() == 'ssl') {
+				$("#crt_file").prop("disabled", false);
+			} else if ($(this).val() == 'TCP' || $(this).val() == 'tcp') {
+				$("#crt_file").prop("disabled", true);
+			}
+		});
 
 		// Handle form submission
 		$('#mqttForm').submit(function(event) {
@@ -584,7 +654,8 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="port_number">Port Number</label>
 						</div> -->
-						<div class="col-75-2" style="width: 20%; margin-top: -35px; margin-left: 20%;">
+						<div class="col-75-2"
+							style="width: 20%; margin-top: -35px; margin-left: 20%;">
 							<input type="text" id="port_number" name="port_number"
 								placeholder="Port Number" required />
 						</div>
@@ -594,7 +665,8 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="username">Username</label>
 						</div> -->
-						<div class="col-75-3" style="width: 20%; margin-top: -35px; margin-left: 40%;">
+						<div class="col-75-3"
+							style="width: 20%; margin-top: -35px; margin-left: 40%;">
 							<input type="text" id="username" name="username"
 								placeholder="Username" required />
 
@@ -604,7 +676,8 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="password">Password</label>
 						</div> -->
-						<div class="col-75-4" style="width: 20%; margin-top: -35px; margin-left: 60%;">
+						<div class="col-75-4"
+							style="width: 20%; margin-top: -35px; margin-left: 60%;">
 							<input type="password" id="password" name="password"
 								placeholder="Password" required />
 						</div>
@@ -614,7 +687,8 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="pub_topic">Published Topic</label>
 						</div> -->
-						<div class="col-75-5" style="width: 20%; margin-top: -35px; margin-left: 80%;">
+						<div class="col-75-5"
+							style="width: 20%; margin-top: -35px; margin-left: 80%;">
 							<input type="text" id="pub_topic" name="pub_topic"
 								placeholder="Published Topic" required />
 
@@ -634,7 +708,8 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="prefix">Prefix</label>
 						</div> -->
-						<div class="col-75-7" style="width: 20%; margin-top: -34px; margin-left: 20%">
+						<div class="col-75-7"
+							style="width: 20%; margin-top: -34px; margin-left: 20%">
 							<input type="text" id="prefix" name="prefix" placeholder="Prefix"
 								required />
 
@@ -646,24 +721,28 @@ input[type="submit"] {
 						<!-- <div class="col-25">
 							<label for="fileType">File Type</label>
 						</div> -->
-						<div class="col-75-8" style="width: 20%; margin-left: 40%; margin-top: -34px;">
+						<div class="col-75-8"
+							style="width: 20%; margin-left: 40%; margin-top: -34px;">
 
-							<select class="textBox" id="file_type" name="file_type" style="height: 35px;">
-							<option value="">Select file type</option>
+							<select class="textBox" id="file_type" name="file_type"
+								style="height: 35px;">
+								<option value="">Select file type</option>
 								<option>SSL</option>
 								<option>TCP</option>
 
 							</select>
 						</div>
-						</div>
-						
-						<div class="row">
+					</div>
+
+					<div class="row">
 						<!-- div class="col-25">
 								<label for="fileType"> File </label>
 							</div> -->
-						<div class="col-75-9" style="width: 20%; margin-left: 60%; margin-top: -35px;">
-							
-							<select class="textBox" id="crt_file" name="crt_file" style="height: 35px;">
+						<div class="col-75-9"
+							style="width: 20%; margin-left: 60%; margin-top: -35px;">
+
+							<select class="textBox" id="crt_file" name="crt_file"
+								style="height: 35px;">
 								<option value="">Select crt file...</option>
 
 							</select>
@@ -675,7 +754,8 @@ input[type="submit"] {
 						<div class="col-25-1" style="margin-left: 70%; margin-top: -35px;">
 							<label for="enable">Enable</label>
 						</div>
-						<div class="col-75-10" style="margin-left: 80%; margin-top: -22px;">
+						<div class="col-75-10"
+							style="margin-left: 80%; margin-top: -22px;">
 							<input type="checkbox" class="enable" id="enable" name="enable">
 
 						</div>
@@ -683,8 +763,8 @@ input[type="submit"] {
 
 
 					<div class="row">
-						<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
-							id="registerBtn" />
+						<input style="margin-top: 2%; margin-left: 95%;" type="submit"
+							value="Add" id="registerBtn" />
 						<!-- <input style="margin-top: 2%;" type="submit" value="Update" id="updateBtn" /> 
 							<input style="margin-top: 2%; background-color: red" type="submit"
 							value="Delete" id="deleteBtn" /> -->

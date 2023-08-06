@@ -99,29 +99,14 @@
 										data,
 										function(index, jsonBuilder) {
 											var row = $('<tr>');
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.json_string_name));
-											row.append($('<td>').text(
-													jsonBuilder.json_interval));
-											row.append($('<td>').text(
-													jsonBuilder.broker_type));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.broker_ip_address));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.publish_topic_name));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.publishing_status));
+											row.append($('<td>').text(jsonBuilder.json_string_name));
+											row.append($('<td>').text(jsonBuilder.json_interval));
+											row.append($('<td>').text(jsonBuilder.broker_type));
+											row.append($('<td>').text(jsonBuilder.broker_ip_address));
+											row.append($('<td>').text(jsonBuilder.publish_topic_name));
+											row.append($('<td>').text(jsonBuilder.publishing_status));
 											/* row.append($('<td>').text(jsonBuilder.store_n_forward)); */
-											row.append($('<td>').text(
-													jsonBuilder.json_string));
+											row.append($('<td>').text(jsonBuilder.json_string));
 
 											var actions = $('<td>');
 											var editButton = $(
@@ -130,7 +115,13 @@
 													.click(
 															function() {
 																setJsonBuilder(jsonBuilder.json_string_name);
-
+																setJSONInterval(jsonBuilder.json_interval);
+																setBrokerType(jsonBuilder.broker_type);
+																setBrokerIPAddress(jsonBuilder.broker_ip_address);
+																setPublishTopic(jsonBuilder.publish_topic_name);
+																setPublishingStatus(jsonBuilder.publishing_status);
+																setStoreAndForward(jsonBuilder.store_n_forward);
+																setJSONString(jsonBuilder.json_string);
 															});
 
 											var deleteButton = $(
@@ -161,9 +152,45 @@
 		// Make an AJAX GET request to retrieve user details for editing
 
 		$('#json_string_name').val(jsonBuilderId);
+		$("#json_string_name").prop("disabled", true);
 
 		$('#registerBtn').val('Edit');
 
+	}
+	
+	function setJSONInterval(jsonBuilderId) {
+
+		$('#json_interval').val(jsonBuilderId);
+	}
+
+	function setBrokerType(jsonBuilderId) {
+
+		$('#broker_type').val(jsonBuilderId);
+	}
+	
+	function setBrokerIPAddress(jsonBuilderId) {
+
+		$('#broker_name').val(jsonBuilderId);
+	}
+
+	function setPublishTopic(jsonBuilderId) {
+
+		$('#publish_topic').val(jsonBuilderId);
+	}
+	
+	function setPublishingStatus(jsonBuilderId) {
+
+		$('#publishing_status').val(jsonBuilderId);
+	}
+	
+	function setStoreAndForward(jsonBuilderId) {
+
+		$('#storeAndForward').val(jsonBuilderId);
+	}
+	
+	function setJSONString(jsonBuilderId) {
+
+		$('#json_string_text').val(jsonBuilderId);
 	}
 
 	// Function to handle deleting a user
@@ -178,7 +205,7 @@
 				url : 'jsonBuilderDeleteServlet',
 				type : 'POST',
 				data : {
-					jsonStringName : jsonBuilderId
+					json_string_name : jsonBuilderId
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -237,6 +264,9 @@
 				$('#publishing_status').val('');
 				$('#storeAndForward').val('');
 				$('#json_string_text').val('');
+				
+				
+				$("#json_string_name").prop("disabled", false);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error adding json builder settings: ' + error);
@@ -276,7 +306,6 @@
 				// Display the registration status message
 				alert(data.message);
 				loadJsonBuilderList();
-				
 				
 				// Clear form fields
 
@@ -376,6 +405,7 @@
 
 					</div>
 				</div>
+				
 				<div class="row">
 					<!-- <div class="col-25">
 						<label for="jsonInterval">JSON Interval</label>
@@ -402,32 +432,20 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<!-- <div class="col-25">
-													<label for="fileType">Broker Type</label>
-
-					</div> -->
+				<div class="row">					
 					<div class="col-75-3" style="width: 20%; margin-left: 40%; margin-top: -35px">
-
 						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px;">
 						<option value="">Select Broker Type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
-
-
 						</select>
 					</div>
 				</div>
 
 				<div class="row">
-					<!-- <div class="col-25">
-						<label for="broker_name">Broker Name</label>
-					</div> -->
 					<div class="col-75-4" style="width: 20%; margin-left: 60%; margin-top: -35px">
-
 						<select class="textBox" id="broker_name" name="broker_name" style="height: 35px;">
 							<option value=""></option>
-
 						</select>
 					</div>
 				</div>
@@ -504,13 +522,8 @@
 				<div class="row">
 					<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
 						id="registerBtn" />
-
-					<!-- <input style="margin-top: 2%;"
-							type="submit" value="Update" id="updateBtn" /> 
-							<input
-							style="margin-top: 2%; background-color: red" type="submit"
-							value="Delete" id="deleteBtn" /> -->
 				</div>
+				
 			</form>
 		</div>
 

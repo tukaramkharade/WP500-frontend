@@ -59,6 +59,7 @@ public class WP500Login extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
+		System.out.println("In login...");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		try {
