@@ -74,8 +74,6 @@
 													mqtt.port_number + ""));
 											row.append($('<td>').text(
 													mqtt.username + ""));
-											/* row.append($('<td>').text(
-													mqtt.password + "")); */
 											row.append($('<td>').text(
 													mqtt.publish_topic + ""));
 											row.append($('<td>').text(
@@ -393,6 +391,20 @@
 				editMqtt();
 			}
 		});
+		
+		$('#clearBtn').click(function(){
+			$('#broker_ip_address').val('');
+			$('#port_number').val('');
+			$('#username').val('');
+			$('#password').val('');
+			$('#pub_topic').val('');
+			$('#sub_topic').val('');
+			$('#prefix').val('');
+			$('#file_type').val('');
+			$('#enable').val('');
+  	 
+  	});
+
 
 	});
 </script>
@@ -537,12 +549,14 @@
 
 
 					<div class="row">
-						<input style="margin-top: 2%; margin-left: 95%;" type="submit"
-							value="Add" id="registerBtn" />
-						<!-- <input style="margin-top: 2%;" type="submit" value="Update" id="updateBtn" /> 
-							<input style="margin-top: 2%; background-color: red" type="submit"
-							value="Delete" id="deleteBtn" /> -->
-					</div>
+					<input style="margin-top: 2%; margin-left: 85%;" type="button"
+						value="Clear" id="clearBtn" />
+				</div>
+
+				<div class="row">
+					<input style="margin-top: -1%; margin-left: 95%;" type="submit"
+						value="Add" id="registerBtn" />
+				</div>
 
 				</form>
 			</div>

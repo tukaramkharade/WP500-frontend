@@ -377,6 +377,23 @@
 				editDispenserTrigger();
 			}
 		});
+		
+		$('#clearBtn').click(function(){
+			$('#station_name').val('');
+			$('#serial_number').val('');
+			$('#side').val('');
+			$('#broker_name').val('');
+			$('#trigger_tag').val('');
+			$('#trigger_value').val('');
+			$('#start_pressure').val('');
+			$('#end_pressure').val('');
+			$('#temperature').val('');
+			$('#total').val('');
+			$('#quantity').val('');
+			$('#unit_price').val('');
+			$('#status').val('');
+  	 
+  	});
 
 	});
 </script>
@@ -518,7 +535,12 @@
 				</div>
 
 				<div class="row">
-					<input style="margin-top: 2%; margin-left: 95%;" type="submit"
+					<input style="margin-top: 2%; margin-left: 85%;" type="button"
+						value="Clear" id="clearBtn" />
+				</div>
+
+				<div class="row">
+					<input style="margin-top: -2.2%; margin-left: 95%;" type="submit"
 						value="Add" id="registerBtn" />
 				</div>
 

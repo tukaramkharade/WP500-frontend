@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -43,39 +44,37 @@ public class UserDataServlet extends HttpServlet {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
-			
 			json.put("operation", "add_user");
 			json.put("username", username);
 			json.put("password", password);
 			json.put("first_name", first_name);
 			json.put("last_name", last_name);
 			json.put("role", role);
-			
+
 			String respStr = client.sendMessage(json.toString());
-			
-			
+
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));
 			logger.info("res " + new JSONObject(respStr).getString("msg"));
-			
+
 			String message = new JSONObject(respStr).getString("msg");
 			JSONObject jsonObject = new JSONObject();
-		    jsonObject.put("message", message);
-		    
-		    // Set the content type of the response to application/json
-		    resp.setContentType("application/json");
-		    
-		    // Get the response PrintWriter
-		    PrintWriter out = resp.getWriter();
-		    
-		    // Write the JSON object to the response
-		    out.print(jsonObject.toString());
-		    out.flush();
-			
+			jsonObject.put("message", message);
+
+			// Set the content type of the response to application/json
+			resp.setContentType("application/json");
+
+			// Get the response PrintWriter
+			PrintWriter out = resp.getWriter();
+
+			// Write the JSON object to the response
+			out.print(jsonObject.toString());
+			out.flush();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		super.doPost(request, resp);
+		// super.doPost(request, resp);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -88,60 +87,73 @@ public class UserDataServlet extends HttpServlet {
 		// String errorString = null;
 
 		try {
-			
-			json.put("operation", "get_all_user");
-			String respStr = client.sendMessage(json.toString());
-			respJson = new JSONObject(respStr);
 
-			System.out.println("res " + respJson.getJSONArray("result"));
+			HttpSession session = request.getSession(false);
+			if (session != null) {
+				String check_username = (String) session.getAttribute("username");
 
-			// Create a JSONArray to hold the user data
-			
-			JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
-			logger.info(respJson.getJSONArray("result").toString());
-			
-			JSONArray resJsonArray = new JSONArray();
+				System.out.println("User session : " + check_username);
+				
+				json.put("operation", "get_all_user");
+				String respStr = client.sendMessage(json.toString());
+				respJson = new JSONObject(respStr);
 
-			System.out.println("jsonArray " + jsonArray.toString());
-			// Convert each user to a JSONObject and add it to the JSONArray
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsObj = jsonArray.getJSONObject(i);
-				
-				String first_name = jsObj.getString("first_name");
-				logger.info("first_name : " + first_name);
-				
-				String last_name = jsObj.getString("last_name");
-				logger.info("last_name : " + last_name);
-				
-				String username = jsObj.getString("username");
-				logger.info("username : " + username);
-				
-				String role = jsObj.getString("role");
-				logger.info("role : " + role);
+				System.out.println("res " + respJson.getJSONArray("result"));
 
-			//	logger.info(jsonArray.get(i).toString());
-			//	resJsonArray.put(userObj);
-				
-				JSONObject userObj = new JSONObject();
-				
-				try{
-					
-					userObj.put("first_name", first_name);
-					userObj.put("last_name", last_name);
-					userObj.put("username", username);
-					userObj.put("role", role);					
+				// Create a JSONArray to hold the user data
 
-					resJsonArray.put(userObj);
-				}catch(Exception e){
-					e.printStackTrace();
+				JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
+				logger.info(respJson.getJSONArray("result").toString());
+
+				JSONArray resJsonArray = new JSONArray();
+
+				System.out.println("jsonArray " + jsonArray.toString());
+				// Convert each user to a JSONObject and add it to the JSONArray
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jsObj = jsonArray.getJSONObject(i);
+
+					String first_name = jsObj.getString("first_name");
+					logger.info("first_name : " + first_name);
+
+					String last_name = jsObj.getString("last_name");
+					logger.info("last_name : " + last_name);
+
+					String username = jsObj.getString("username");
+					logger.info("username : " + username);
+
+					String role = jsObj.getString("role");
+					logger.info("role : " + role);
+
+					// logger.info(jsonArray.get(i).toString());
+					// resJsonArray.put(userObj);
+
+					JSONObject userObj = new JSONObject();
+
+					try {
+
+						userObj.put("first_name", first_name);
+						userObj.put("last_name", last_name);
+						userObj.put("username", username);
+						userObj.put("role", role);
+
+						resJsonArray.put(userObj);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(resJsonArray.toString());
+			} else {
+				System.out.println("login first");
+
+				response.sendRedirect("login.jsp");
 			}
 
-			// Set the response content type to JSON
-			response.setContentType("application/json");
-
-			// Write the JSON data to the response
-			response.getWriter().print(resJsonArray.toString());
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -16,35 +16,39 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+	function reboot() {
 
-function reboot() {
-	$.ajax({
-		url : 'reboot',
-		type : 'GET',
-		dataType : 'json',
-		success : function(data) {
-			alert(data.message);
+		var confirmation = confirm('Are you sure you want to reboot?');
 
-		},
-		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log('Error: ' + error);
+		if (confirmation) {
+			$.ajax({
+				url : 'reboot',
+				type : 'GET',
+				dataType : 'json',
+				success : function(data) {
+					alert(data.message);
+
+				},
+				error : function(xhr, status, error) {
+					// Handle the error response, if needed
+					console.log('Error: ' + error);
+				}
+			});
 		}
+	}
+
+	$(document).ready(function() {
+
+		$('#reboot').click(function() {
+			reboot();
+
+		});
+
 	});
-}
-
-$(document).ready(function() {
-
-	 $('#reboot').click(function(){		
-		 reboot();
-
-	 });
-
-});
 </script>
 </head>
 <body>
-<div class="sidebar">
+	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">

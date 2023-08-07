@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -42,6 +43,84 @@ public class AlarmConfigAddData extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
+		
+		try{
+			
+			System.out.println("In get alarm settings!");
+			JSONArray resJsonArray = new JSONArray();
+			
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+			
+			
+			json.put("operation", "protocol");
+			json.put("protocol_type", "alarm");
+			json.put("operation_type", "get_query");
+			json.put("username", "admin");
+			
+			String respStr = client.sendMessage(json.toString());
+			
+			System.out.println("res " + new JSONObject(respStr));
+			logger.info("res " + new JSONObject(respStr));
+			
+			JSONObject result = new JSONObject(respStr);
+			
+			JSONArray alarm_result = result.getJSONArray("result");
+			
+			System.out.println("Result : " + alarm_result.toString());
+
+			for (int i = 0; i < alarm_result.length(); i++) {
+				
+				JSONObject jsObj = alarm_result.getJSONObject(i);
+				
+				JSONObject alarm_tag = jsObj.getJSONObject("alarm_tag");
+				System.out.println("alarm tag : "+alarm_tag.toString());
+				
+				String interval = jsObj.getString("intrval");
+				System.out.println("Interval : "+interval);
+				
+				String broker_type = jsObj.getString("broker_type");
+				System.out.println(" Broker_type : "+broker_type);
+				
+				String broker_ip = jsObj.getString("broker_ip");
+				System.out.println("Broker_ip : "+broker_ip);
+				
+				String asset_id = jsObj.getString("asset_id");
+				System.out.println("Asset id : "+asset_id);
+				
+				String unit_id = jsObj.getString("unit_id");
+				System.out.println("Unit id : "+unit_id);
+				
+				JSONObject disObj = new JSONObject();
+				
+				try {
+
+					disObj.put("alarm_tag", alarm_tag);
+					disObj.put("interval", interval);
+					disObj.put("broker_type", broker_type);
+					disObj.put("broker_ip", broker_ip);
+					disObj.put("asset_id", asset_id);
+					disObj.put("unit_id", unit_id);
+					
+
+					resJsonArray.put(disObj);
+					// firewallObj.put("lastName", "");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+
+			response.setContentType("application/json");
+
+			// Write the JSON data to the response
+			response.getWriter().print(resJsonArray.toString());
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 	}
 
@@ -53,8 +132,6 @@ public class AlarmConfigAddData extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		
-		
 		String unit_id = request.getParameter("unit_id");
 		String asset_id = request.getParameter("asset_id");
 		String broker_type = request.getParameter("broker_type");
@@ -62,8 +139,6 @@ public class AlarmConfigAddData extends HttpServlet {
 		String interval = request.getParameter("interval");
 		String tagData = request.getParameter("tagData");
 		
-		
-		System.out.println("broker name: "+broker_name);
 		JSONParser parser = new JSONParser(); 
 		org.json.simple.JSONObject json_string_con = null;
 		try {
@@ -74,12 +149,7 @@ public class AlarmConfigAddData extends HttpServlet {
 		}  
 		
 		System.out.println("tagData>"+tagData);
-		/*String tag_name = request.getParameter("tag_name");
-		String tag_name_2 = request.getParameter("tag_name_2");*/
 		
-		System.out.println("unit id : "+unit_id);
-		/*System.out.println("tag name: "+tag_name);
-		System.out.println("variable : "+tag_name_2);*/
 		
 		try {
 

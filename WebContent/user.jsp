@@ -557,8 +557,12 @@ input[type="submit"] {
 					</div>
 					</div>
 
+<div class="row">
+					<input style="margin-top: 2%; margin-left: 80%;" type="button"
+						value="Clear" id="clearBtn" />
+				</div>
 					<div class="row">
-						<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
+						<input style="margin-top: -2.5%; margin-left: 95%;" type="submit" value="Add"
 							id="registerBtn" />
 					</div>
 				</form>

@@ -173,6 +173,46 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+		
+		//delete operation
+				
+		try{
+			System.out.println("in alarm delete!");
+			
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+
+			json.put("operation", "protocol");
+			json.put("protocol_type", "alarm");
+			json.put("operation_type", "delete_query");
+			json.put("id", "1");
+			json.put("username", "admin");
+			
+			String respStr = client.sendMessage(json.toString());
+			
+			
+			System.out.println("res " + new JSONObject(respStr).getString("msg"));
+			
+			String message = new JSONObject(respStr).getString("msg");
+			JSONObject jsonObject = new JSONObject();
+		    jsonObject.put("message", message);
+		    
+		    // Set the content type of the response to application/json
+		    response.setContentType("application/json");
+		    
+		    // Get the response PrintWriter
+		    PrintWriter out = response.getWriter();
+		    
+		    // Write the JSON object to the response
+		    out.print(jsonObject.toString());
+		    out.flush();
+			
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
 	}
 
 }

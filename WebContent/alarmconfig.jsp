@@ -75,9 +75,99 @@
     	      },
     	    });
     	  }
+      
+       function loadAlarmSettings() {
+  		$.ajax({
+  			url : 'alarmConfigAddData',
+  			type : 'GET',
+  			dataType : 'json',
+  			success : function(data) {
+				// Clear existing table rows
+				// Iterate through the user data and add rows to the table
+				$.each(data,function(index, alarmConfig) {
+									
+									var unit_id = alarmConfig.unit_id;
+									var asset_id = alarmConfig.asset_id;
+									var broker_type = alarmConfig.broker_type;
+									var broker_ip = alarmConfig.broker_ip;
+									var interval = alarmConfig.interval;
+									var alarm_tag = alarmConfig.alarm_tag;
+									
+									var result = JSON.stringify(alarm_tag);
+
+									$.each($.parseJSON(result), function(k, v) {
+									    alert(k + ' and ' + v);
+									    
+									    var newRow = $("<tr>")
+	    	        					.append($("<td>").text(k))
+	    	        					.append($("<td>").text(v))
+	    	        					.append(
+    	          $("<td>").html(
+    	            `<input
+    	                style="background-color :red"
+    	                type="button"
+    	                value="Delete"
+    	                onclick="deleteRow(this)"
+    	              />`
+    	          )
+    	        );
+										
+	    	        					$("#table_data").append(newRow);
+									});
+									
+									
+									if(unit_id != null){
+										$('#addBtn').val('Edit');
+									}
+									else{
+										$('#addBtn').val('Add');
+									}
+									//alert(JSON.stringify(alarm_tag));
+									
+									$('#unit_id').val(unit_id);
+									$('#asset_id').val(asset_id);
+									$('#broker_type').val(broker_type);
+									$('#broker_ip').val(broker_ip);
+									$('#interval').val(interval);
+									//$('#table_data').val(JSON.stringify(alarm_tag));
+									
+									
+								});
+			},
+  			error : function(xhr, status, error) {
+  				// Handle the error response, if needed
+  				console.log('Error: ' + error);
+  			}
+  		});
+  	
+  	} 
+       
+       function deleteAlarm() {
+   		
+   		var confirmation = confirm('Are you sure you want to delete this alarm settings?');
+   		if (confirmation) {
+   			$.ajax({
+   				url : 'alarmConfigTagListServlet',
+   				type : 'GET',
+   				dataType : 'json',
+   				success : function(data) {
+   					// Display the registration status message
+   					alert(data.message);
+
+   					// Refresh the user list
+   					loadAlarmSettings();
+   				},
+   				error : function(xhr, status, error) {
+   					// Handle the error response, if needed
+   					console.log('Error deleting alarm settings: '
+   							+ error);
+   				}
+   			});
+   		}
+   	}
      
       $(document).ready(function () {
-    	  // Load broker ip
+    	  loadAlarmSettings();
     	  loadBrokerIPList();
     	  loadTagList();
     	  
@@ -109,27 +199,48 @@
     	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
     	    }
     	  });
-    	  $("#addBtn").click(function () {
+    	  
+    	  /* $("#addBtn").click(function () {
     		 // convertTableDataToJSON();
     		  tableToJson();
     		  addAlarmConfig();
     		  
-    		  /* $('#alarmConfigForm').submit(function(event) {
-    				event.preventDefault();
-    				var buttonText = $('#saveBtn').val();
-
-    				if (buttonText == 'save') {
-    					addAlarmConfig();
-    				}
-    			}); */
-
       	   
-      	  });
-    	});
+      	  }); */
+      	  
+      	$('#alarmConfigForm').submit(function(event) {
+			event.preventDefault();
+			var buttonText = $('#addBtn').val();
 
+			if (buttonText == 'Add') {
+				addAlarmConfig();
+			} else {
+				editAlarmConfig();
+			}
+		});
+      	  
+      	  
+    	  
+    	  $('#clearBtn').click(function(){
+    		  $('#unit_id').val('');
+  			$('#asset_id').val('');
+  			$('#broker_type').val('');
+  			$('#broker_name').val('');
+  			$('#interval').val('');
+    		  
+    	  
+    	});
+    	  
+    	  $("#delBtn").click(function () {
+    		  deleteAlarm();
+    	  });
+      });
 
 function deleteRow(button) {
+	var confirmation = confirm('Are you sure you want to delete this tag?');
+	if (confirmation) {
   $(button).closest("tr").remove();
+	}
 }
 
 function tableToJson() {
@@ -147,7 +258,7 @@ function tableToJson() {
 	  return json;
 	}
 	
-function addAlarmConfig() {
+function editAlarmConfig() {
 
 	var tagData = tableToJson();
 	alert('tag data : '+tagData)
@@ -163,7 +274,7 @@ function addAlarmConfig() {
 
 	
 	$.ajax({
-		url : 'alarmConfigAddData',
+		url : 'alarmConfigServlet',
 		type : 'POST',
 		data : {
 			unit_id : unit_id,
@@ -193,12 +304,64 @@ function addAlarmConfig() {
 			$('#variable').val(''); */
 		},
 		error : function(xhr, status, error) {
-			console.log('Error adding mqtt settings: ' + error);
+			console.log('Error updating alarm settings: ' + error);
 		}
 	});
 
-	$('#registerBtn').val('Add');
+	$('#addBtn').val('Add');
 }
+
+function addAlarmConfig() {
+
+	var tagData = tableToJson();
+	alert('tag data : '+tagData)
+
+    var unit_id = $('#unit_id').val();
+    var asset_id = $('#asset_id').val();
+    var broker_type = $('#broker_type').find(":selected").val();
+    var broker_name = $('#broker_name').find(":selected").val();
+    var interval = $('#interval').find(":selected").val();
+    // Modify the next two lines to get the tag_name and variable from the JSON data
+   /*  var tag_name = Object.keys(tagData)[0];
+    var variable = tagData[tag_name]; */
+
+	
+	$.ajax({
+		url : 'alarmConfigAddData',
+		type : 'POST',
+		data : {
+			unit_id : unit_id,
+			asset_id : asset_id,
+			broker_type : broker_type,
+			broker_name : broker_name,
+			interval : interval,
+			tagData: JSON.stringify(tagData)
+			
+		},
+		success : function(data) {
+			// Display the registration status message
+			alert(data.message);
+	//		loadMqttList();
+
+			// Clear form fields
+
+			$('#unit_id').val('');
+			$('#asset_id').val('');
+			$('#broker_type').val('');
+			$('#broker_name').val('');
+			$('#interval').val('');
+			/* $('#tag_name').val('');
+			$('#variable').val(''); */
+		},
+		error : function(xhr, status, error) {
+			console.log('Error adding alarm settings: ' + error);
+		}
+	});
+
+	$('#addBtn').val('Add');
+}
+
+
     </script>
 </head>
 
@@ -270,10 +433,10 @@ function addAlarmConfig() {
 				<div class="row">
 					<div class="col-75-6" style="width: 20%; margin-top: 1%">
 						<input type="text" id="tag_name" name="tag_name"
-							placeholder="Tag Name" required style="height: 17px" />
+							placeholder="Tag Name" style="height: 17px" />
 					</div>
 
-					 <div class="row">
+					<div class="row">
 						<div class="col-75-7"
 							style="width: 20%; margin-left: 20%; margin-top: -35px">
 							<select class="textBox" id="variable" name="variable"
@@ -281,9 +444,9 @@ function addAlarmConfig() {
 								<option value=""></option>
 							</select>
 						</div>
-					</div> 
+					</div>
 
-					 <!-- <div class="row">
+					<!-- <div class="row">
 						<div class="col-75-7" style="width: 20%; margin-top: 1%">
 							<input type="text" id="variable" name="variable"
 								placeholder="Variable" required style="height: 17px" />
@@ -309,10 +472,15 @@ function addAlarmConfig() {
 
 
 					<div class="row">
-						<input style="margin-top: -31px" type="button" value="Save"
-							id="saveBtn" /> 
-							
-							<input style="margin-top: -31px" type="button"
+						<input style="margin-top: -31px; margin-left: 10%;" type="button"
+							value="Save" id="saveBtn" /> <input
+							style="margin-top: -31px; margin-left: 86%;" type="button"
+							value="Clear" id="clearBtn" /> 
+							<input
+							style="margin-top: -31px; margin-left: 75.2%;" type="button"
+							value="Delete" id="delBtn" />
+							<input
+							style="margin-top: -31px; margin-left: 95%;" type="submit"
 							value="Add" id="addBtn" />
 					</div>
 			</form>

@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -77,13 +78,17 @@ public class WP500Login extends HttpServlet {
 
 			String message = new JSONObject(respStr).getString("msg");
 			String status = new JSONObject(respStr).getString("status");
-			
+
 			logger.info(new JSONObject(respStr).getString("status"));
 			if (status.equals("success")) {
 				// Successful login
 
 				logger.info("username: " + username);
 				logger.info("password: " + password);
+
+				HttpSession session = request.getSession();
+				session.setAttribute("username", username);
+
 				response.sendRedirect("overview.jsp");
 			} else {
 				// Failed login

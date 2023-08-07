@@ -103,6 +103,10 @@
                 <li class="nav-item">
                   <a href="jsonbuilder.jsp">JSON Builder</a>
                 </li>
+                
+                <li class="nav-item">
+                <a href="dispensertrigger.jsp">Dispenser Trigger</a>
+              </li>
 
                 <li class="nav-item">
                   <a class="dropdown-subbtn">Straton

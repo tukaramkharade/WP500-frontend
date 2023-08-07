@@ -333,22 +333,26 @@ var json = {};
 	       		  tableToJson();
 	       		addCommandConfig();
 	       		  
-	       		  /* $('#alarmConfigForm').submit(function(event) {
-	       				event.preventDefault();
-	       				var buttonText = $('#saveBtn').val();
-
-	       				if (buttonText == 'save') {
-	       					addAlarmConfig();
-	       				}
-	       			}); */
-
-	         	   
-	         	  });
+	       	     	  });
+	       	  
+	       	 $('#clearBtn').click(function(){
+	    		  $('#unit_id').val('');
+	  			$('#asset_id').val('');
+	  			$('#broker_type').val('');
+	  			$('#broker_name').val('');
+	  			$('#interval').val('');
+	    		  
+	    	  
+	    	});
 	       	});
 	
-	function deleteRow(button) {
-		  $(button).closest("tr").remove();
-		}
+	    	function deleteRow(button) {
+	    		var confirmation = confirm('Are you sure you want to delete this tag?');
+	    		if (confirmation) {
+	    	  $(button).closest("tr").remove();
+	    		}
+	    	}
+
 
 		function tableToJson() {
 				 const table = document.getElementById("table_data");
@@ -479,7 +483,7 @@ var json = {};
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px;">
 							<option value="">Select Interval</option>
-							<option value="30sec">30 sec</option>
+							<option value="30">30</option>
 							<option value="1min">1 min</option>
 							<option value="5min">5 min</option>
 							<option value="10min">10 min</option>
@@ -512,8 +516,10 @@ var json = {};
 				</div>
 
 				<div class="row">
-					<input style="margin-top: -31px;" type="button" value="Save"
-						id="saveBtn" /> 
+					<input style="margin-top: -31px; margin-left: 10%;" type="button"
+							value="Save" id="saveBtn" />
+						<input style="margin-top: -31px; margin-left: 85%;" type="button"
+							value="Clear" id="clearBtn" /> 
 						<input style="margin-top: -31px" type="button"
 						value="Add" id="addBtn" />
 				</div>

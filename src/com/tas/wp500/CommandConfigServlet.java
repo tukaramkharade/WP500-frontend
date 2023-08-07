@@ -104,6 +104,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.tas.utils.TCPClient;
 
@@ -183,14 +185,18 @@ public class CommandConfigServlet extends HttpServlet {
 		String interval = request.getParameter("interval");
 		String tagData = request.getParameter("tagData");
 		
+		JSONParser parser = new JSONParser(); 
+		org.json.simple.JSONObject json_string_con = null;
+		try {
+			json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}  
 		
 		System.out.println("tagData>"+tagData);
-		/*String tag_name = request.getParameter("tag_name");
-		String tag_name_2 = request.getParameter("tag_name_2");*/
 		
 		System.out.println("unit id : "+unit_id);
-		/*System.out.println("tag name: "+tag_name);
-		System.out.println("variable : "+tag_name_2);*/
 		
 		try {
 
@@ -209,9 +215,9 @@ public class CommandConfigServlet extends HttpServlet {
 			json.put("unit_id", unit_id);
 			json.put("asset_id", asset_id);
 			json.put("broker_type", broker_type);
-			json.put("broker_name", broker_name);
-			json.put("interval", interval);
-			json.put("command_tag", tagData);
+			json.put("broker_ip", broker_name);
+			json.put("intrval", interval);
+			json.put("command_tag", json_string_con);
 			/*JSONObject json_data = new JSONObject();
 			json_data.put(tag_name,tag_name_2);
 			*/

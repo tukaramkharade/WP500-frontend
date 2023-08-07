@@ -377,6 +377,19 @@
 				editJsonBuilder();
 			}
 		});
+		
+		$('#clearBtn').click(function(){
+			$('#json_string_name').val('');
+			$('#json_interval').val('');
+			$('#broker_type').val('');
+			$('#broker_name').val('');
+			$('#publish_topic').val('');
+			$('#publishing_status').val('');
+			$('#storeAndForward').val('');
+			$('#json_string_text').val('');
+			$('#json_string_validate').val('');
+  	 
+  	});
 
 	});
 </script>
@@ -416,7 +429,7 @@
 					</div> -->
 
 					<div class="col-75-2" style="width: 20%; margin-left: 20%; margin-top: -35px">
-						<select class="json-interval-select" id="json_interval" name="json_interval" style="height: 35px;">
+						<select class="json-interval-select" id="json_interval" name="json_interval" style="height: 35px;" required>
 							<option value="">Select JSON Interval</option>
 							<option value="30sec">30 sec</option>
 							<option value="1min">1 min</option>
@@ -434,7 +447,7 @@
 
 				<div class="row">					
 					<div class="col-75-3" style="width: 20%; margin-left: 40%; margin-top: -35px">
-						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px;">
+						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px;" required>
 						<option value="">Select Broker Type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
@@ -444,7 +457,7 @@
 
 				<div class="row">
 					<div class="col-75-4" style="width: 20%; margin-left: 60%; margin-top: -35px">
-						<select class="textBox" id="broker_name" name="broker_name" style="height: 35px;">
+						<select class="textBox" id="broker_name" name="broker_name" style="height: 35px;" required>
 							<option value=""></option>
 						</select>
 					</div>
@@ -466,9 +479,9 @@
 					</div> -->
 					<div class="col-75-6" style="width: 20%; margin-top: 10px;">
 						<select class="textBox" id="publishing_status"
-							name="publishing_status" style="height: 35px;">
+							name="publishing_status" style="height: 35px;" required>
 							<option value="enable">Enter Publishing Status</option>
-							<option value="enable">Enable</option>
+							<option value="enable" selected>Enable</option>
 							<option value="disable">Disable</option>
 						</select>
 					</div>
@@ -480,7 +493,7 @@
 					</div> -->
 					<div class="col-75-7" style="width: 20%; margin-left: 20%; margin-top: -35px">
 						<select class="textBox" id="storeAndForward"
-							name="storeAndForward" style="height: 35px;">
+							name="storeAndForward" style="height: 35px;" required>
 							<option value="Enter Store and Forward">Enter Store and Forward</option>
 							<option value="enable">Enable</option>
 							<option value="disable">Disable</option>
@@ -496,7 +509,7 @@
 					<div class="col-75-8" style="margin-top: 10px; width: 100%">
 
 						<textarea id="json_string_text" name="json_string_text" rows="10"
-							cols="100" placeholder="Enter JSON String"></textarea>
+							cols="100" placeholder="Enter JSON String" required></textarea>
 
 					</div>
 				</div>
@@ -518,9 +531,14 @@
 
 					</div>
 				</div>
+				
+				<div class="row">
+					<input style="margin-top: 2%; margin-left: 85%;" type="button"
+						value="Clear" id="clearBtn" />
+				</div>
 
 				<div class="row">
-					<input style="margin-top: 2%; margin-left: 95%;" type="submit" value="Add"
+					<input style="margin-top: -2.2%; margin-left: 95%;" type="submit" value="Add"
 						id="registerBtn" />
 				</div>
 				
