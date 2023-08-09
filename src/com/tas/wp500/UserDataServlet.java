@@ -28,58 +28,84 @@ public class UserDataServlet extends HttpServlet {
 	JSONObject json = new JSONObject();
 	JSONObject respJson = null;
 
+	// HttpSession session = request.getSession(false);
+	// if (session != null) {
+	// String check_username = (String) session.getAttribute("username");
+	//
+	// System.out.println("User session : " + check_username);
+	// } else {
+	// System.out.println("login first");
+	//
+	// response.sendRedirect("login.jsp");
+	// }
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		String first_name = request.getParameter("first_name");
-		String last_name = request.getParameter("last_name");
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String role = request.getParameter("role");
+		HttpSession session = request.getSession(false);
 
-		System.out.println(username + " " + password + " " + first_name + " " + last_name);
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
-		try {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
+			String first_name = request.getParameter("first_name");
+			String last_name = request.getParameter("last_name");
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String role = request.getParameter("role");
 
-			json.put("operation", "add_user");
-			json.put("username", username);
-			json.put("password", password);
-			json.put("first_name", first_name);
-			json.put("last_name", last_name);
-			json.put("role", role);
+			System.out.println(username + " " + password + " " + first_name + " " + last_name);
 
-			String respStr = client.sendMessage(json.toString());
+			try {
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
-			logger.info("res " + new JSONObject(respStr).getString("msg"));
+				json.put("operation", "add_user");
+				json.put("user", check_username);
+				json.put("username", username);
+				json.put("password", password);
+				json.put("first_name", first_name);
+				json.put("last_name", last_name);
+				json.put("role", role);
 
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
+				String respStr = client.sendMessage(json.toString());
 
-			// Set the content type of the response to application/json
-			resp.setContentType("application/json");
+				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-			// Get the response PrintWriter
-			PrintWriter out = resp.getWriter();
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
 
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
+				// Set the content type of the response to application/json
+				resp.setContentType("application/json");
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				// Get the response PrintWriter
+				PrintWriter out = resp.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Login first");
+			resp.sendRedirect("login.jsp");
 		}
-		// super.doPost(request, resp);
+
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Retrieve the user data from wherever it's stored (e.g., a database)
+		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
 		TCPClient client = new TCPClient();
 		json = new JSONObject();
@@ -88,75 +114,69 @@ public class UserDataServlet extends HttpServlet {
 
 		try {
 
-			HttpSession session = request.getSession(false);
-			if (session != null) {
-				String check_username = (String) session.getAttribute("username");
+			json.put("operation", "get_all_user");
+			json.put("user", check_username);
+			
+			String respStr = client.sendMessage(json.toString());
+			respJson = new JSONObject(respStr);
 
-				System.out.println("User session : " + check_username);
-				
-				json.put("operation", "get_all_user");
-				String respStr = client.sendMessage(json.toString());
-				respJson = new JSONObject(respStr);
+			System.out.println("res " + respJson.getJSONArray("result"));
 
-				System.out.println("res " + respJson.getJSONArray("result"));
+			// Create a JSONArray to hold the user data
 
-				// Create a JSONArray to hold the user data
+			JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
+			logger.info(respJson.getJSONArray("result").toString());
 
-				JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
-				logger.info(respJson.getJSONArray("result").toString());
+			JSONArray resJsonArray = new JSONArray();
 
-				JSONArray resJsonArray = new JSONArray();
+			System.out.println("jsonArray " + jsonArray.toString());
+			// Convert each user to a JSONObject and add it to the JSONArray
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsObj = jsonArray.getJSONObject(i);
 
-				System.out.println("jsonArray " + jsonArray.toString());
-				// Convert each user to a JSONObject and add it to the JSONArray
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsObj = jsonArray.getJSONObject(i);
+				String first_name = jsObj.getString("first_name");
+				logger.info("first_name : " + first_name);
 
-					String first_name = jsObj.getString("first_name");
-					logger.info("first_name : " + first_name);
+				String last_name = jsObj.getString("last_name");
+				logger.info("last_name : " + last_name);
 
-					String last_name = jsObj.getString("last_name");
-					logger.info("last_name : " + last_name);
+				String username = jsObj.getString("username");
+				logger.info("username : " + username);
 
-					String username = jsObj.getString("username");
-					logger.info("username : " + username);
+				String role = jsObj.getString("role");
+				logger.info("role : " + role);
 
-					String role = jsObj.getString("role");
-					logger.info("role : " + role);
+				// logger.info(jsonArray.get(i).toString());
+				// resJsonArray.put(userObj);
 
-					// logger.info(jsonArray.get(i).toString());
-					// resJsonArray.put(userObj);
+				JSONObject userObj = new JSONObject();
 
-					JSONObject userObj = new JSONObject();
+				try {
 
-					try {
+					userObj.put("first_name", first_name);
+					userObj.put("last_name", last_name);
+					userObj.put("username", username);
+					userObj.put("role", role);
 
-						userObj.put("first_name", first_name);
-						userObj.put("last_name", last_name);
-						userObj.put("username", username);
-						userObj.put("role", role);
-
-						resJsonArray.put(userObj);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					resJsonArray.put(userObj);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
-			} else {
-				System.out.println("login first");
-
-				response.sendRedirect("login.jsp");
 			}
 
-			
+			// Set the response content type to JSON
+			response.setContentType("application/json");
+
+			// Write the JSON data to the response
+			response.getWriter().print(resJsonArray.toString());
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 

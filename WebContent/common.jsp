@@ -44,9 +44,9 @@
                   <a href="overview.jsp">Overview</a>
                 </li>
                 <li class="nav-item">
-                  <a href="user.jsp">User Settings</a>
+                  <a href="user.jsp">User List</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a href="#">Firmware</a>
                 </li>
                 <li class="nav-item">
@@ -54,13 +54,13 @@
                 </li>
                 <li class="nav-item">
                   <a href="#">Backup</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <a href="reboot.jsp">Reboot</a>
                 </li>
-                <li class="nav-item">
+               <!--  <li class="nav-item">
                   <a href="#">Certificates</a>
-                </li>
+                </li> -->
               </ul>
             </div>
 
@@ -127,6 +127,9 @@
                 <li class="nav-item">
                   <a href="commandconfig.jsp">Command Config</a>
                 </li>
+                <li class="nav-item">
+                  <a href="storeforward.jsp">Store and Forward</a>
+                </li>
               </ul>
             </div>
           </li>
@@ -143,9 +146,9 @@
                 <li class="nav-item">
                   <a href="logs.jsp">Logs</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                 <a href="loadconfig.jsp">Load Config</a>
-              </li>
+              </li> -->
               </ul>
             </div>
           </li>

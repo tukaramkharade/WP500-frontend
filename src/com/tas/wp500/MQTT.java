@@ -11,13 +11,15 @@ public class MQTT {
 	private String port_number;
 	private String subscribe_topic;
 	private String username;
+	private String file_name;
+	
 	
 	public MQTT() {
 		super();
 	}
 
 	public MQTT(String publish_topic, String password, String broker_ip_address, String prefix, String file_type,
-			String enable, String port_number, String subscribe_topic, String username) {
+			String enable, String port_number, String subscribe_topic, String username, String file_name) {
 		super();
 		this.publish_topic = publish_topic;
 		this.password = password;
@@ -28,6 +30,15 @@ public class MQTT {
 		this.port_number = port_number;
 		this.subscribe_topic = subscribe_topic;
 		this.username = username;
+		this.file_name = file_name;
+	}
+
+	public String getFile_name() {
+		return file_name;
+	}
+
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
 	}
 
 	public String getPublish_topic() {

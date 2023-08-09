@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -39,83 +40,103 @@ public class FirewallData extends HttpServlet {
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
 
-		TCPClient client = new TCPClient();
-		JSONObject json = new JSONObject();
+		HttpSession session = request.getSession(false);
 
-		
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
-		try {
-			json.put("operation", "get_ip_tables");
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
 
-			String respStr = client.sendMessage(json.toString());
+			try {
+				json.put("operation", "get_ip_tables");
+				json.put("user", check_username);
 
-		//	String var = "{\"msg\":\"successfully fetched list of ip Tables !!!\",\"result\":\"[{\\\"lineNumber\\\": \\\"1\\\", \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\": \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\": \\\"0.0.0.0/0\\\", \\\"destination\\\": \\\"0.0.0.0/0\\\"},{\\\"lineNumber\\\": \\\"2\\\", \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\": \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\": \\\"0.0.0.0/0\\\", \\\"destination\\\": \\\"0.0.0.0/0\\\"},{\\\"lineNumber\\\": \\\"3\\\", \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\": \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\": \\\"192.168.1.100\\\", \\\"destination\\\": \\\"0.0.0.0/0\\\"}]\",\"operation\":\"get_ip_tables\",\"status\":\"success\"}\r\n";
+				String respStr = client.sendMessage(json.toString());
 
-			 JSONObject respJson = new JSONObject(respStr);
-		//	JSONObject respJson = new JSONObject(var);
+				// String var = "{\"msg\":\"successfully fetched list of ip
+				// Tables !!!\",\"result\":\"[{\\\"lineNumber\\\": \\\"1\\\",
+				// \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\":
+				// \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\":
+				// \\\"0.0.0.0/0\\\", \\\"destination\\\":
+				// \\\"0.0.0.0/0\\\"},{\\\"lineNumber\\\": \\\"2\\\",
+				// \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\":
+				// \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\":
+				// \\\"0.0.0.0/0\\\", \\\"destination\\\":
+				// \\\"0.0.0.0/0\\\"},{\\\"lineNumber\\\": \\\"3\\\",
+				// \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\":
+				// \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\":
+				// \\\"192.168.1.100\\\", \\\"destination\\\":
+				// \\\"0.0.0.0/0\\\"}]\",\"operation\":\"get_ip_tables\",\"status\":\"success\"}\r\n";
 
-			System.out.println("res " + respJson.toString());
+				JSONObject respJson = new JSONObject(respStr);
+				// JSONObject respJson = new JSONObject(var);
 
-			JSONArray resJsonArray = new JSONArray();
+				System.out.println("res " + respJson.toString());
 
-			logger.info("Firewall response : " + respJson.toString());
+				JSONArray resJsonArray = new JSONArray();
 
-			String result = respJson.getString("result");
+				logger.info("Firewall response : " + respJson.toString());
 
-			logger.info("Result : " + result);
+				String result = respJson.getString("result");
 
-			JSONArray jsArr = new JSONArray(result);
+				logger.info("Result : " + result);
 
-			for (int i = 0; i < jsArr.length(); i++) {
+				JSONArray jsArr = new JSONArray(result);
 
-				JSONObject jsObj = jsArr.getJSONObject(i);
-				String lineNumber = jsObj.getString("lineNumber");
-				logger.info("line num : " + lineNumber);
+				for (int i = 0; i < jsArr.length(); i++) {
 
-				String target = jsObj.getString("target");
-				logger.info("target : " + target);
+					JSONObject jsObj = jsArr.getJSONObject(i);
+					String lineNumber = jsObj.getString("lineNumber");
+					logger.info("line num : " + lineNumber);
 
-				String protocol = jsObj.getString("protocol");
-				logger.info("protocol : " + protocol);
+					String target = jsObj.getString("target");
+					logger.info("target : " + target);
 
-				String opt = jsObj.getString("opt");
-				logger.info("opt : " + opt);
+					String protocol = jsObj.getString("protocol");
+					logger.info("protocol : " + protocol);
 
-				String source = jsObj.getString("source");
-				logger.info("source : " + source);
+					String opt = jsObj.getString("opt");
+					logger.info("opt : " + opt);
 
-				String destination = jsObj.getString("destination");
-				logger.info("destination : " + destination);
+					String source = jsObj.getString("source");
+					logger.info("source : " + source);
 
-				JSONObject firewallObj = new JSONObject();
-				try {
+					String destination = jsObj.getString("destination");
+					logger.info("destination : " + destination);
 
-					firewallObj.put("lineNumber", lineNumber);
-					firewallObj.put("target", target);
-					firewallObj.put("protocol", protocol);
-					firewallObj.put("opt", opt);
-					firewallObj.put("source", source);
-					firewallObj.put("destination", destination);
+					JSONObject firewallObj = new JSONObject();
+					try {
 
-					resJsonArray.put(firewallObj);
-					// firewallObj.put("lastName", "");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+						firewallObj.put("lineNumber", lineNumber);
+						firewallObj.put("target", target);
+						firewallObj.put("protocol", protocol);
+						firewallObj.put("opt", opt);
+						firewallObj.put("source", source);
+						firewallObj.put("destination", destination);
+
+						resJsonArray.put(firewallObj);
+						// firewallObj.put("lastName", "");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 
+				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(resJsonArray.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-			// Set the response content type to JSON
-			response.setContentType("application/json");
-
-			// Write the JSON data to the response
-			response.getWriter().print(resJsonArray.toString());
-
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 
@@ -124,44 +145,55 @@ public class FirewallData extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
-		int portNumber = Integer.parseInt(request.getParameter("portNumber"));
-		String protocol = request.getParameter("protocol");
-		String ip_addr = request.getParameter("ip_addr");
+		HttpSession session = request.getSession(false);
 
-		System.out.println(portNumber + " " + protocol + " " + ip_addr);
-		logger.info(portNumber + " " + protocol + " " + ip_addr);
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
-		try {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
+			int portNumber = Integer.parseInt(request.getParameter("portNumber"));
+			String protocol = request.getParameter("protocol");
+			String ip_addr = request.getParameter("ip_addr");
 
-			json.put("operation", "add_firewall_setting");
-			json.put("port_num", portNumber);
-			json.put("protocol", protocol);
-			json.put("ip_address", ip_addr);
+			System.out.println(portNumber + " " + protocol + " " + ip_addr);
+			logger.info(portNumber + " " + protocol + " " + ip_addr);
 
-			String respStr = client.sendMessage(json.toString());
+			try {
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
-			logger.info("res " + new JSONObject(respStr).getString("msg"));
+				json.put("operation", "add_firewall_setting");
+				json.put("user", check_username);
 
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
+				json.put("port_num", portNumber);
+				json.put("protocol", protocol);
+				json.put("ip_address", ip_addr);
 
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
+				String respStr = client.sendMessage(json.toString());
 
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
+				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 

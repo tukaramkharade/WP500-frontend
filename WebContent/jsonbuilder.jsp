@@ -5,12 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WP500 Web Configuration</title>
-<link
-      rel="icon"  
-      type="image/png"
-      sizes="32x32"
-      href="favicon.png"
-    /> 
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -47,10 +42,9 @@
 			},
 		});
 	}
- */
- 
- 
- function loadBrokerIPList() {
+	 */
+
+	function loadBrokerIPList() {
 		$.ajax({
 			url : "jsonBuilderData",
 			type : "GET",
@@ -58,8 +52,7 @@
 			success : function(data) {
 				if (data.broker_ip_result
 						&& Array.isArray(data.broker_ip_result)) {
-					
-					
+
 					var selectElement = $("#broker_name");
 					// Clear any existing options
 					selectElement.empty();
@@ -72,7 +65,7 @@
 						});
 						selectElement.append(option);
 					});
-					
+
 				}
 			},
 			error : function(xhr, status, error) {
@@ -80,7 +73,7 @@
 			},
 		});
 	}
- 
+
 	// Function to load user data and populate the user list table
 	function loadJsonBuilderList() {
 		$
@@ -99,14 +92,29 @@
 										data,
 										function(index, jsonBuilder) {
 											var row = $('<tr>');
-											row.append($('<td>').text(jsonBuilder.json_string_name));
-											row.append($('<td>').text(jsonBuilder.json_interval));
-											row.append($('<td>').text(jsonBuilder.broker_type));
-											row.append($('<td>').text(jsonBuilder.broker_ip_address));
-											row.append($('<td>').text(jsonBuilder.publish_topic_name));
-											row.append($('<td>').text(jsonBuilder.publishing_status));
+											row
+													.append($('<td>')
+															.text(
+																	jsonBuilder.json_string_name));
+											row.append($('<td>').text(
+													jsonBuilder.json_interval));
+											row.append($('<td>').text(
+													jsonBuilder.broker_type));
+											row
+													.append($('<td>')
+															.text(
+																	jsonBuilder.broker_ip_address));
+											row
+													.append($('<td>')
+															.text(
+																	jsonBuilder.publish_topic_name));
+											row
+													.append($('<td>')
+															.text(
+																	jsonBuilder.publishing_status));
 											/* row.append($('<td>').text(jsonBuilder.store_n_forward)); */
-											row.append($('<td>').text(jsonBuilder.json_string));
+											row.append($('<td>').text(
+													jsonBuilder.json_string));
 
 											var actions = $('<td>');
 											var editButton = $(
@@ -157,7 +165,7 @@
 		$('#registerBtn').val('Edit');
 
 	}
-	
+
 	function setJSONInterval(jsonBuilderId) {
 
 		$('#json_interval').val(jsonBuilderId);
@@ -167,7 +175,7 @@
 
 		$('#broker_type').val(jsonBuilderId);
 	}
-	
+
 	function setBrokerIPAddress(jsonBuilderId) {
 
 		$('#broker_name').val(jsonBuilderId);
@@ -177,17 +185,17 @@
 
 		$('#publish_topic').val(jsonBuilderId);
 	}
-	
+
 	function setPublishingStatus(jsonBuilderId) {
 
 		$('#publishing_status').val(jsonBuilderId);
 	}
-	
+
 	function setStoreAndForward(jsonBuilderId) {
 
 		$('#storeAndForward').val(jsonBuilderId);
 	}
-	
+
 	function setJSONString(jsonBuilderId) {
 
 		$('#json_string_text').val(jsonBuilderId);
@@ -264,8 +272,7 @@
 				$('#publishing_status').val('');
 				$('#storeAndForward').val('');
 				$('#json_string_text').val('');
-				
-				
+
 				$("#json_string_name").prop("disabled", false);
 			},
 			error : function(xhr, status, error) {
@@ -287,8 +294,7 @@
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		var json_string_text = $('#json_string_text').val();
-			
-			
+
 		$.ajax({
 			url : 'jsonBuilderData',
 			type : 'POST',
@@ -306,7 +312,7 @@
 				// Display the registration status message
 				alert(data.message);
 				loadJsonBuilderList();
-				
+
 				// Clear form fields
 
 				$('#json_string_name').val('');
@@ -327,44 +333,41 @@
 		$('#registerBtn').val('Add');
 	}
 
-	
-	function validateJSON(){
-		const json_string = document.querySelector('textarea').value;
-		  console.log(json_string);
-		  var res = isJsonString(json_string);
-		  
-		  if(res == true){
-			  $('#json_string_validate').val(json_string)
-		  }else{
-			  alert('Enter valid JSON!!')
-			  $('#json_string_text').val('');
-		  }
-		
+	function validateJSON() {
+		const
+		json_string = document.querySelector('textarea').value;
+		console.log(json_string);
+		var res = isJsonString(json_string);
+
+		if (res == true) {
+			$('#json_string_validate').val(json_string)
+		} else {
+			alert('Enter valid JSON!!')
+			$('#json_string_text').val('');
+		}
+
 	}
-	
+
 	function isJsonString(str) {
-	    try {
-	        JSON.parse(str);
-	    } catch (e) {
-	        return false;
-	    }
-	    return true;
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
 	}
-    
-    
-	
+
 	// Function to execute on page load
 	$(document).ready(function() {
 		// Load user list
 		loadBrokerIPList();
 		loadJsonBuilderList();
-		
-		$('#validateBtn').click(function(){		
+
+		$('#validateBtn').click(function() {
 			validateJSON();
 
-	 });
-		
-		
+		});
+
 		//console.log(is_json({name: 'Robert'}));
 		// Handle form submission
 		$('#jsonBuilderForm').submit(function(event) {
@@ -377,8 +380,8 @@
 				editJsonBuilder();
 			}
 		});
-		
-		$('#clearBtn').click(function(){
+
+		$('#clearBtn').click(function() {
 			$('#json_string_name').val('');
 			$('#json_interval').val('');
 			$('#broker_type').val('');
@@ -388,8 +391,8 @@
 			$('#storeAndForward').val('');
 			$('#json_string_text').val('');
 			$('#json_string_validate').val('');
-  	 
-  	});
+
+		});
 
 	});
 </script>
@@ -408,76 +411,67 @@
 
 		<div class="container">
 			<form id="jsonBuilderForm">
-				<div class="row">
-					<!-- <div class="col-25">
-						<label for="jsonStringName">JSON String Name</label>
-					</div> -->
-					<div class="col-75-1" style="width: 20%; margin-top: -20px;">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
+					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="json_string_name" name="json_string_name"
 							placeholder="JSON String Name" required style="height: 17px;" />
 
 					</div>
-				</div>
-				
-				<div class="row">
-					<!-- <div class="col-25">
-						<label for="jsonInterval">JSON Interval</label>
-					</div> -->
-					<!-- <div class="col-75">
-						<input type="text" id="jsonInterval" name="jsonInterval" placeholder="JSON Interval"
-						required>
-					</div> -->
+				<!-- </div>
 
-					<div class="col-75-2" style="width: 20%; margin-left: 20%; margin-top: -35px">
-						<select class="json-interval-select" id="json_interval" name="json_interval" style="height: 35px;" required>
+				<div class="row"> -->
+					<div class="col-75-2"
+						style="width: 20%;">
+						<select class="json-interval-select" id="json_interval"
+							name="json_interval" style="height: 35px;" required>
 							<option value="">Select JSON Interval</option>
-							<option value="30sec">30 sec</option>
-							<option value="1min">1 min</option>
-							<option value="5min">5 min</option>
-							<option value="10min">10 min</option>
-							<option value="15min">15 min</option>
-							<option value="20min">20 min</option>
-							<option value="25min">25 min</option>
-							<option value="30min">30 min</option>
-							<option value="1hour">1 hour</option>
+							<option value="30 sec">30 sec</option>
+							<option value="1 min">1 min</option>
+							<option value="5 min">5 min</option>
+							<option value="10 min">10 min</option>
+							<option value="15 min">15 min</option>
+							<option value="20 min">20 min</option>
+							<option value="25 min">25 min</option>
+							<option value="30 min">30 min</option>
+							<option value="1 hour">1 hour</option>
 
 						</select>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">					
-					<div class="col-75-3" style="width: 20%; margin-left: 40%; margin-top: -35px">
-						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px;" required>
-						<option value="">Select Broker Type</option>
+				<div class="row"> -->
+					<div class="col-75-3"
+						style="width: 20%;">
+						<select class="textBox" id="broker_type" name="broker_type"
+							style="height: 35px;" required>
+							<option value="">Select Broker Type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
 						</select>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
-					<div class="col-75-4" style="width: 20%; margin-left: 60%; margin-top: -35px">
-						<select class="textBox" id="broker_name" name="broker_name" style="height: 35px;" required>
+				<div class="row"> -->
+					<div class="col-75-4"
+						style="width: 20%;">
+						<select class="textBox" id="broker_name" name="broker_name"
+							style="height: 35px;" required>
 							<option value=""></option>
 						</select>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
-					<!-- <div class="col-25">
-						<label for="publishTopic">Publish Topic</label>
-					</div> -->
-					<div class="col-75-5" style="width: 20%; margin-left: 80%; margin-top: -35px">
+				<div class="row"> -->
+					<div class="col-75-5"
+						style="width: 20%;">
 						<input type="text" id="publish_topic" name="publish_topic"
 							placeholder="Publish Topic" required style="height: 17px;">
 					</div>
 				</div>
 
-				<div class="row">
-					<!-- <div class="col-25">
-						 <label for="pubStatus">Publishing Status</label>
-					</div> -->
-					<div class="col-75-6" style="width: 20%; margin-top: 10px;">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
+					
+					<div class="col-75-6" style="width: 20%;">
 						<select class="textBox" id="publishing_status"
 							name="publishing_status" style="height: 35px;" required>
 							<option value="enable">Enter Publishing Status</option>
@@ -485,16 +479,15 @@
 							<option value="disable">Disable</option>
 						</select>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
-					<!-- <div class="col-25">
-						<label for="storeAndForward">Store and Forward</label>
-					</div> -->
-					<div class="col-75-7" style="width: 20%; margin-left: 20%; margin-top: -35px">
+				<div class="row"> -->
+									<div class="col-75-7"
+						style="width: 20%;">
 						<select class="textBox" id="storeAndForward"
 							name="storeAndForward" style="height: 35px;" required>
-							<option value="Enter Store and Forward">Enter Store and Forward</option>
+							<option value="Enter Store and Forward">Enter Store and
+								Forward</option>
 							<option value="enable">Enable</option>
 							<option value="disable">Disable</option>
 						</select>
@@ -509,7 +502,7 @@
 					<div class="col-75-8" style="margin-top: 10px; width: 100%">
 
 						<textarea id="json_string_text" name="json_string_text" rows="10"
-							cols="100" placeholder="Enter JSON String" required></textarea>
+							cols="100" required>{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}</textarea>
 
 					</div>
 				</div>
@@ -531,21 +524,28 @@
 
 					</div>
 				</div>
-				
-				<div class="row">
+
+				<!-- <div class="row">
 					<input style="margin-top: 2%; margin-left: 85%;" type="button"
 						value="Clear" id="clearBtn" />
 				</div>
 
 				<div class="row">
-					<input style="margin-top: -2.2%; margin-left: 95%;" type="submit" value="Add"
-						id="registerBtn" />
-				</div>
+					<input style="margin-top: -2.2%; margin-left: 95%;" type="submit"
+						value="Add" id="registerBtn" />
+				</div> -->
 				
+				<div class="row" style="display: flex; justify-content: right; margin-top: 2%;">
+						<input type="button"
+							value="Clear" id="clearBtn" /> <input
+							style="margin-left: 5px;" type="submit"
+							value="Add" id="registerBtn" />
+					</div>
+
 			</form>
 		</div>
 
-		<h3>JSON BUILDER SETTINGS</h3>
+		<h3>JSON BUILDER SETTINGS LIST</h3>
 		<hr>
 		<div class="container">
 			<table id="jsonBuilderListTable">

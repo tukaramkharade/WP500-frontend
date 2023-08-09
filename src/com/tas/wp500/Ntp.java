@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -38,12 +39,18 @@ public class Ntp extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
+		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
 		try {
 			TCPClient client = new TCPClient();
 			json = new JSONObject();
 
 			json.put("operation", "get_ntp");
+			json.put("user", check_username);
 
 			String respStr = client.sendMessage(json.toString());
 
@@ -91,6 +98,10 @@ public class Ntp extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
+		}
 
 	}
 
@@ -102,6 +113,11 @@ public class Ntp extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
+		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
 		String ntp_client = request.getParameter("ntp_client");
 		String ntp_interval = request.getParameter("ntp_interval");
@@ -115,6 +131,7 @@ public class Ntp extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "update_ntp");
+			json.put("user", check_username);
 			json.put("ntp_client", ntp_client);
 			json.put("ntp_interval", ntp_interval);
 			json.put("ntp_server", ntp_server);
@@ -141,6 +158,10 @@ public class Ntp extends HttpServlet {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 

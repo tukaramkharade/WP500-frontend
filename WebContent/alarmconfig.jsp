@@ -86,6 +86,8 @@
 				// Iterate through the user data and add rows to the table
 				$.each(data,function(index, alarmConfig) {
 									
+							
+							
 									var unit_id = alarmConfig.unit_id;
 									var asset_id = alarmConfig.asset_id;
 									var broker_type = alarmConfig.broker_type;
@@ -93,12 +95,15 @@
 									var interval = alarmConfig.interval;
 									var alarm_tag = alarmConfig.alarm_tag;
 									
-									var result = JSON.stringify(alarm_tag);
+									//alert(alarm_tag);
+									
+									var result = alarm_tag;
 
 									$.each($.parseJSON(result), function(k, v) {
-									    alert(k + ' and ' + v);
+									//    alert(k + ' and ' + v);
 									    
-									    var newRow = $("<tr>")
+									if(k != null){
+										var newRow = $("<tr>")
 	    	        					.append($("<td>").text(k))
 	    	        					.append($("<td>").text(v))
 	    	        					.append(
@@ -110,8 +115,10 @@
     	                onclick="deleteRow(this)"
     	              />`
     	          )
+									
+									    
     	        );
-										
+									}				
 	    	        					$("#table_data").append(newRow);
 									});
 									
@@ -148,7 +155,7 @@
    		if (confirmation) {
    			$.ajax({
    				url : 'alarmConfigTagListServlet',
-   				type : 'GET',
+   				type : 'POST',
    				dataType : 'json',
    				success : function(data) {
    					// Display the registration status message
@@ -165,6 +172,30 @@
    			});
    		}
    	}
+       
+       function validatefields(tag_name) {
+   		var tagnameError = document.getElementById("tagnameError");
+
+   		if (tag_name === "") {
+   			tagnameError.textContent = "Please enter tag name";
+   			return false;
+   		} else {
+   			tagnameError.textContent = "";
+   			return true;
+   		}
+   	}
+
+   	function validateOption(variable) {
+   		var variableError = document.getElementById("variableError");
+
+   		if (variable === "") {
+   			variableError.textContent = "Please select variable";
+   			return false;
+   		} else {
+   			variableError.textContent = "";
+   			return true;
+   		}
+   	}
      
       $(document).ready(function () {
     	  loadAlarmSettings();
@@ -175,6 +206,8 @@
     	  $("#saveBtn").click(function () {
     	    var tagName = $("#tag_name").val();
     	    var value = $("#variable").val();
+    	    
+    	   
 
     	    // Check if tagName and value are not empty
     	    if (tagName.trim() !== "" && value.trim() !== "") {
@@ -195,9 +228,15 @@
     	      $("#table_data").append(newRow);
     	      $("#tag_name").val("");
     	      $("#variable").val("");
-    	    } else {
-    	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
-    	    }
+    	    } else  if (!validatefields(tagName)) {
+				tagnameError.textContent = "Please enter tag name.";
+				return;
+			}
+    	    else if (!validateOption(value)) {
+				variableError.textContent = "Please select variable.";
+				return;
+			}
+    	     
     	  });
     	  
     	  /* $("#addBtn").click(function () {
@@ -261,7 +300,7 @@ function tableToJson() {
 function editAlarmConfig() {
 
 	var tagData = tableToJson();
-	alert('tag data : '+tagData)
+	//alert('tag data : '+tagData)
 
     var unit_id = $('#unit_id').val();
     var asset_id = $('#asset_id').val();
@@ -292,6 +331,7 @@ function editAlarmConfig() {
 			// Display the registration status message
 			alert(data.message);
 	//		loadMqttList();
+	//loadAlarmSettings();
 
 			// Clear form fields
 
@@ -314,7 +354,7 @@ function editAlarmConfig() {
 function addAlarmConfig() {
 
 	var tagData = tableToJson();
-	alert('tag data : '+tagData)
+//	alert('tag data : '+tagData)
 
     var unit_id = $('#unit_id').val();
     var asset_id = $('#asset_id').val();
@@ -342,6 +382,7 @@ function addAlarmConfig() {
 			// Display the registration status message
 			alert(data.message);
 	//		loadMqttList();
+	//loadAlarmSettings();
 
 			// Clear form fields
 
@@ -375,23 +416,23 @@ function addAlarmConfig() {
 
 		<div class="container">
 			<form id="alarmConfigForm">
-				<div class="row">
-					<div class="col-75-1" style="width: 20%; margin-top: -20px">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
+					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="unit_id" name="unit_id"
 							placeholder="Unit ID" required style="height: 17px" />
 					</div>
-				</div>
-				<div class="row">
+				<!-- </div>
+				<div class="row"> -->
 					<div class="col-75-2"
-						style="width: 20%; margin-top: -35px; margin-left: 20%">
+						style="width: 20%;">
 						<input type="text" id="asset_id" name="asset_id"
 							placeholder="Asset ID" required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-3"
-						style="width: 20%; margin-left: 40%; margin-top: -35px">
+						style="width: 20%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px">
 							<option value="">Select Broker Type</option>
@@ -399,90 +440,67 @@ function addAlarmConfig() {
 							<option value="iothub">iothub</option>
 						</select>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-4"
-						style="width: 20%; margin-left: 60%; margin-top: -35px">
+						style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px">
 							<option value=""></option>
 						</select>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-5"
-						style="width: 20%; margin-left: 80%; margin-top: -35px">
+						style="width: 20%;">
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px">
 							<option value="">Select Interval</option>
-							<option value="30">30</option>
-							<option value="1min">1 min</option>
-							<option value="5min">5 min</option>
-							<option value="10min">10 min</option>
-							<option value="15min">15 min</option>
-							<option value="20min">20 min</option>
-							<option value="25min">25 min</option>
-							<option value="30min">30 min</option>
-							<option value="1hour">1 hour</option>
+							<option value="30 sec">30 sec</option>
+							<option value="1 min">1 min</option>
+							<option value="5 min">5 min</option>
+							<option value="10 min">10 min</option>
+							<option value="15 min">15 min</option>
+							<option value="20 min">20 min</option>
+							<option value="25 min">25 min</option>
+							<option value="30 min">30 min</option>
+							<option value="1 hour">1 hour</option>
 						</select>
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-75-6" style="width: 20%; margin-top: 1%">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
+					<div class="col-75-6" style="width: 20%;">
 						<input type="text" id="tag_name" name="tag_name"
-							placeholder="Tag Name" style="height: 17px" />
+							placeholder="Tag Name" style="height: 17px" /> <span
+							id="tagnameError" style="color: red;"></span>
 					</div>
+				<!-- </div>
 
-					<div class="row">
-						<div class="col-75-7"
-							style="width: 20%; margin-left: 20%; margin-top: -35px">
-							<select class="textBox" id="variable" name="variable"
-								style="height: 35px">
-								<option value=""></option>
-							</select>
-						</div>
+				<div class="row"> -->
+					<div class="col-75-7"
+						style="width: 20%;">
+						<select class="textBox" id="variable" name="variable"
+							style="height: 35px">
+							<option value=""></option>
+						</select> <span id="variableError" style="color: red;"></span>
 					</div>
+				</div>
 
-					<!-- <div class="row">
-						<div class="col-75-7" style="width: 20%; margin-top: 1%">
-							<input type="text" id="variable" name="variable"
-								placeholder="Variable" required style="height: 17px" />
-						</div>  -->
-
-
-					<!-- <div class="row">
- 						<div class="col-75-7" style="width: 20%; margin-left: 20%; margin-top: -35px">
-  									<input
-     								 type="text"
-     								 id="variable"
-      								 name="variable"
-     								 placeholder="Tag Variable"
-   								     required
-     								 style="height: 17px"
-     								 list="tag_list"
-  									  />
-    							<datalist id="tag_list" name="tag_list">
-    								  The options will be populated dynamically using AJAX
-  					    		</datalist>
- 						</div>
- 					</div>  -->
-
-
-					<div class="row">
-						<input style="margin-top: -31px; margin-left: 10%;" type="button"
-							value="Save" id="saveBtn" /> <input
-							style="margin-top: -31px; margin-left: 86%;" type="button"
-							value="Clear" id="clearBtn" /> 
-							<input
-							style="margin-top: -31px; margin-left: 75.2%;" type="button"
-							value="Delete" id="delBtn" />
-							<input
-							style="margin-top: -31px; margin-left: 95%;" type="submit"
-							value="Add" id="addBtn" />
-					</div>
+				<div class="row"><input style="margin-top: -31px; margin-left:-50px " type="button"
+						value="Plus" id="saveBtn" /> </div>
+						
+				<div class="row" style="display:flex;justify-content:right;">					
+						<input
+						style="margin-top: -31px;margin-left:5px" type="button"
+						value="Clear" id="clearBtn" /> 
+						 <input style="margin-top: -31px;margin-left:5px" type="submit" value="Add" id="addBtn" onClick="window.location.reload();"/>
+						<input
+						style="margin-top: -31px;margin-left:5px" type="button"
+						value="Delete" id="delBtn" onClick="window.location.reload();"/>
+				</div>
 			</form>
 		</div>
 		<hr />

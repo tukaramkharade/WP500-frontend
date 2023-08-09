@@ -204,7 +204,7 @@
 		var side = $('#side').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
 		var trigger_tag = $('#trigger_tag').val();
-		var trigger_value = $('#trigger_value').val();
+		var trigger_value = $('#trigger_value').find(":selected").val();
 		var start_pressure = $('#start_pressure').val();
 		var end_pressure = $('#end_pressure').val();
 		var temperature = $('#temperature').val();
@@ -240,17 +240,17 @@
 
 				$('#station_name').val('');
 				$('#serial_number').val('');
-				$('#side').val('');
+				$('#side').val('Select Side');
 				$('#broker_name').val('');
 				$('#trigger_tag').val('');
-				$('#trigger_value').val('');
+				$('#trigger_value').val('Select Trigger Value');
 				$('#start_pressure').val('');
 				$('#end_pressure').val('');
 				$('#temperature').val('');
 				$('#total').val('');
 				$('#quantity').val('');
 				$('#unit_price').val('');
-				$('#status').val('');
+				$('#status').val('Select Status');
 				
 				$("#serial_number").prop("disabled", false);
 				
@@ -273,7 +273,8 @@
 		var side = $('#side').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
 		var trigger_tag = $('#trigger_tag').val();
-		var trigger_value = $('#trigger_value').val();
+		//var trigger_value = $('#trigger_value').val();
+		var trigger_value = $('#trigger_value').find(":selected").val();
 		var start_pressure = $('#start_pressure').val();
 		var end_pressure = $('#end_pressure').val();
 		var temperature = $('#temperature').val();
@@ -310,17 +311,17 @@
 
 				$('#station_name').val('');
 				$('#serial_number').val('');
-				$('#side').val('');
+				$('#side').val('Select Side');
 				$('#broker_name').val('');
 				$('#trigger_tag').val('');
-				$('#trigger_value').val('');
+				$('#trigger_value').val('Select Trigger Value');
 				$('#start_pressure').val('');
 				$('#end_pressure').val('');
 				$('#temperature').val('');
 				$('#total').val('');
 				$('#quantity').val('');
 				$('#unit_price').val('');
-				$('#status').val('');
+				$('#status').val('Select Status');
 				
 				
 			},
@@ -336,7 +337,7 @@
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
-		alert(dispenserTriggerId)
+		//alert(dispenserTriggerId)
 		var confirmation = confirm('Are you sure you want to delete this dispenser trigger settings?');
 		if (confirmation) {
 			$.ajax({
@@ -362,6 +363,75 @@
 		}
 	}
 
+	function validateSide(side) {
+		var sideError = document.getElementById("sideError");
+
+		if (side == 'Select Side'){
+			
+			sideError.textContent = "Please select side";
+			return false;
+		} else {
+			sideError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateStatus(status) {
+		var statusError = document.getElementById("statusError");
+
+		if (status == 'Select Status'){
+			
+			statusError.textContent = "Please select status";
+			return false;
+		} else {
+			statusError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateTriggerValue(triggerValue) {
+		var triggerValueError = document.getElementById("triggerValueError");
+
+		if (triggerValue == 'Select Trigger Value'){
+			
+			triggerValueError.textContent = "Please select trigger value";
+			return false;
+		} else {
+			triggerValueError.textContent = "";
+			return true;
+		}
+	}
+	
+	/* function validateNumbers(number) {
+		const
+		numberPattern = /^-?\d+(\.\d+)?$/;
+		if (!numberPattern.test(number)) {
+			serialError.textContent = "Invalid Serial Number";
+			//triggerValError.textContent = "Invalid Trigger Value";
+			
+			return false;
+		} else if(numberPattern.test(number)) {
+			serialError.textContent = "";
+			//triggerValError.textContent = "";
+			return true;
+		}
+	} */
+	
+	/* function validateNumbers1(number) {
+		const
+		numberPattern = /^-?\d+(\.\d+)?$/;
+		if (!numberPattern.test(number)) {
+			//serialError.textContent = "Invalid Serial Number";
+			triggerValError.textContent = "Invalid Trigger Value";
+			
+			return false;
+		} else if(numberPattern.test(number)) {
+			//serialError.textContent = "";
+			triggerValError.textContent = "";
+			return true;
+		}
+	} */
+	
 	$(document).ready(function() {
 		// Load user list
 		loadBrokerIPList();
@@ -370,7 +440,40 @@
 		$('#dispensortriggerform').submit(function(event) {
 			event.preventDefault();
 			var buttonText = $('#registerBtn').val();
+			var side = $('#side').find(":selected").val();
+			var status = $('#status').find(":selected").val();
+			var trigger_value = $('#trigger_value').find(":selected").val();
+			
+			/* var serial_number = $('#serial_number')
+			.val();
+			var trigger_value = $('#trigger_value')
+			.val(); */
 
+			if (!validateSide(side)) {
+				sideError.textContent = "Please select side";
+				return;
+			}
+			
+			if (!validateStatus(status)) {
+				statusError.textContent = "Please select status";
+				return;
+			}
+			
+			if (!validateTriggerValue(trigger_value)) {
+				triggerValueError.textContent = "Please select trigger value";
+				return;
+			}
+			
+			/* if (!validateNumbers(serial_number)) {
+				serialError.textContent = "Please enter valid serial number.";
+				return;
+			}
+			
+			if (!validateNumbers1(trigger_value)) {
+				triggerValError.textContent = "Please enter valid trigger value.";
+				return;
+			} */
+			
 			if (buttonText == 'Add') {
 				addDispenserTrigger();
 			} else {
@@ -381,17 +484,17 @@
 		$('#clearBtn').click(function(){
 			$('#station_name').val('');
 			$('#serial_number').val('');
-			$('#side').val('');
+			$('#side').val('Select Side');
 			$('#broker_name').val('');
 			$('#trigger_tag').val('');
-			$('#trigger_value').val('');
+			$('#trigger_value').val('Select Trigger Value');
 			$('#start_pressure').val('');
 			$('#end_pressure').val('');
 			$('#temperature').val('');
 			$('#total').val('');
 			$('#quantity').val('');
 			$('#unit_price').val('');
-			$('#status').val('');
+			$('#status').val('Select Status');
   	 
   	});
 
@@ -412,129 +515,148 @@
 		<hr />
 		<div class="container">
 			<form id="dispensortriggerform">
-				<div class="row">
-					<div class="col-75-1" style="width: 20%; margin-top: -20px">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
+					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="station_name" name="station_name"
 							placeholder="Station Name" required style="height: 17px" />
 					</div>
-				</div>
+			<!-- 	</div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-2"
-						style="width: 20%; margin-top: -34px; margin-left: 20%">
+						style="width: 20%;">
 						<input type="text" id="serial_number" name="serial_number"
 							placeholder="Serial Number" required style="height: 17px" />
+							<span
+								style="color: red; font-size: 12px;" id="serialError"></span>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
-					<!-- <div class="col-75-3"
-						style="width: 20%; margin-left: 40%; margin-top: -34px">
-						<input type="text" id="side" name="side" placeholder="Side"
-							required style="height: 17px" />
-					</div> -->
+				<div class="row"> -->
 					
 					<div class="col-75-3"
-						style="width: 20%; margin-left: 40%; margin-top: -3%">
+						style="width: 20%;">
 						<select class="textBox" id="side" name="side"
-							style="height: 35px">
+							style="height: 35px" required>
 							<option value="Select Side">Select Side</option>
 							<option value="a">A</option>
 							<option value="b">B</option>
 							<option value="c">C</option>
 							<option value="d">D</option>
 						</select>
+						<span id="sideError" style="color: red"></span>
 					</div>
 					
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-4"
-						style="width: 20%; margin-left: 60%; margin-top: -34px">
+						style="width: 20%;">
 						<input type="text" id="trigger_tag" name="trigger_tag"
 							placeholder="Trigger Tag" required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
-					<div class="col-75-5"
-						style="width: 20%; margin-left: 80%; margin-top: -34px">
+				<div class="row"> -->
+					<!-- <div class="col-75-5"
+						style="width: 20%;">
 						<input type="text" id="trigger_value" name="trigger_value"
 							placeholder="Trigger Value" required style="height: 17px" />
+							<span
+								style="color: red; font-size: 12px;" id="triggerValError"></span>
+					</div> -->
+					
+					<div class="col-75-5"
+						style="width: 20%;">
+						<select class="textBox" id="trigger_value" name="trigger_value"
+							style="height: 35px" required>
+							<option value="Select Trigger Value">Select Trigger Value</option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							
+						</select>
+						<span id="triggerValueError" style="color: red"></span>
 					</div>
 				</div>
 
-
-
-				<div class="row">
-					<div class="col-75-1" style="width: 20%; margin-top: 1%">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
+					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="start_pressure" name="start_pressure"
 							placeholder="Start Pressure" required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-2"
-						style="width: 20%; margin-top: -3.1%; margin-left: 20%">
+						style="width: 20%;">
 						<input type="text" id="end_pressure" name="end_pressure"
 							placeholder="End Pressure" required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-3"
-						style="width: 20%; margin-left: 40%; margin-top: -3.1%">
-						<input type="text" id="temperature" name="temperature" placeholder="Temperatur"
+						style="width: 20%;">
+						<input type="text" id="temperature" name="temperature" placeholder="Temperature"
 							required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-4"
-						style="width: 20%; margin-left: 60%; margin-top: -3.1%">
+						style="width: 20%;">
 						<input type="text" id="total" name="total" placeholder="Total"
 							required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-5"
-						style="width: 20%; margin-left: 80%; margin-top: -3.1%">
+						style="width: 20%;">
 						<input type="text" id="quantity" name="quantity"
 							placeholder="Quantity" required style="height: 17px" />
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-75-5" style="width: 20%; margin-top: 1%">
+				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
+					<div class="col-75-5" style="width: 20%;">
 						<input type="text" id="unit_price" name="unit_price" placeholder="Unit Price"
 							required style="height: 17px" />
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-3"
-						style="width: 20%; margin-left: 20%; margin-top: -3%">
+						style="width: 20%;">
 						<select class="textBox" id="status" name="status"
-							style="height: 35px">
+							style="height: 35px" required>
 							<option value="Select Status">Select Status</option>
 							<option value="enable">Enable</option>
 							<option value="disable">Disable</option>
 						</select>
+						<span id="statusError" style="color: red"></span>
 					</div>
-				</div>
+				<!-- </div>
 
-				<div class="row">
+				<div class="row"> -->
 					<div class="col-75-4"
-						style="width: 20%; margin-left: 40%; margin-top: -35px">
+						style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;">
 							<option value=""></option>
 						</select>
 					</div>
 				</div>
+				
+				<div class="row" style="display: flex; justify-content: right; margin-top: 2%;">
+						<input type="button"
+							value="Clear" id="clearBtn" /> <input
+							style="margin-left: 5px;" type="submit"
+							value="Add" id="registerBtn" />
+					</div>
+				
 
-				<div class="row">
+				<!-- <div class="row">
 					<input style="margin-top: 2%; margin-left: 85%;" type="button"
 						value="Clear" id="clearBtn" />
 				</div>
@@ -542,7 +664,7 @@
 				<div class="row">
 					<input style="margin-top: -2.2%; margin-left: 95%;" type="submit"
 						value="Add" id="registerBtn" />
-				</div>
+				</div> -->
 
 			</form>
 		</div>

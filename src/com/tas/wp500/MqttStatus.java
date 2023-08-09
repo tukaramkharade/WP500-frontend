@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
@@ -24,6 +25,12 @@ public class MqttStatus extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
+			
 		String broker_ip_address = request.getParameter("broker_ip_address");
 		System.out.println("broker_ip_address-->" + broker_ip_address);
 
@@ -32,15 +39,16 @@ public class MqttStatus extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "get_mqtt_status");
+			json.put("user", check_username);			
 			json.put("ip_address", broker_ip_address);
 
 			String respStr = client.sendMessage(json.toString());
 
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
+			System.out.println("res " + new JSONObject(respStr).getString("connection_status"));
 
-			String message = new JSONObject(respStr).getString("msg");
+			String connection_status = new JSONObject(respStr).getString("connection_status");
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
+			jsonObject.put("connection_status", connection_status);
 
 			// Set the content type of the response to application/json
 			response.setContentType("application/json");
@@ -55,6 +63,10 @@ public class MqttStatus extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 }

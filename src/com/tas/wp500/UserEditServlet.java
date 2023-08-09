@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
@@ -42,6 +43,12 @@ public class UserEditServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
+
+		
 		String first_name = request.getParameter("first_name");
 		String last_name = request.getParameter("last_name");
 		String username = request.getParameter("username");
@@ -55,6 +62,7 @@ public class UserEditServlet extends HttpServlet {
 
 			
 			json.put("operation", "update_user");
+			json.put("user", check_username);
 			
 			json.put("username", username);
 			json.put("first_name", first_name);
@@ -83,6 +91,10 @@ public class UserEditServlet extends HttpServlet {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		}else{
+			System.out.println("Login first");
+			resp.sendRedirect("login.jsp");
 		}
 //		doGet(request, response);
 	}

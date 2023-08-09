@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -39,8 +40,7 @@ public class MQTTEditServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
-		
-		
+
 	}
 
 	/**
@@ -52,56 +52,69 @@ public class MQTTEditServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
-		String broker_ip_address = request.getParameter("broker_ip_address");
-		String port_number = request.getParameter("port_number");
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String sub_topic = request.getParameter("sub_topic");
-		String pub_topic = request.getParameter("pub_topic");
-		String prefix = request.getParameter("prefix");
-		String file_type = request.getParameter("file_type");
-		String enable = request.getParameter("enable");
+		HttpSession session = request.getSession(false);
 
-		try {
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 
-			System.out.println("In mqtt...");
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
+			String broker_ip_address = request.getParameter("broker_ip_address");
+			String port_number = request.getParameter("port_number");
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String sub_topic = request.getParameter("sub_topic");
+			String pub_topic = request.getParameter("pub_topic");
+			String prefix = request.getParameter("prefix");
+			String file_type = request.getParameter("file_type");
+			String enable = request.getParameter("enable");
+			String file_name = request.getParameter("file_name");
 
-			json.put("operation", "protocol");
-			json.put("protocol_type", "mqtt");
-			json.put("operation_type", "update_query");
-			
-			json.put("broker_ip_address", broker_ip_address);
-			json.put("port_number", port_number);
-			json.put("username", username);
-			json.put("password", password);
-			json.put("subscribe_topic", sub_topic);
-			json.put("publish_topic", pub_topic);
-			json.put("prefix", prefix);
-			json.put("file_type", file_type);
-			json.put("enable", enable);
+			try {
 
-			String respStr = client.sendMessage(json.toString());
+				System.out.println("In mqtt...");
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				json.put("operation", "protocol");
+				json.put("protocol_type", "mqtt");
+				json.put("operation_type", "update_query");
+				json.put("user", check_username);
 
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
+				json.put("broker_ip_address", broker_ip_address);
+				json.put("port_number", port_number);
+				json.put("username", username);
+				json.put("password", password);
+				json.put("subscribe_topic", sub_topic);
+				json.put("publish_topic", pub_topic);
+				json.put("prefix", prefix);
+				json.put("file_type", file_type);
+				json.put("file_name", file_name);
+				json.put("enable", enable);
+				
 
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
+				String respStr = client.sendMessage(json.toString());
 
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
+				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
 
-		} catch (Exception e) {
-			e.printStackTrace();
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 

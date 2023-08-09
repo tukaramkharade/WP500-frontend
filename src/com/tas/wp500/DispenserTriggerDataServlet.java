@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -39,6 +40,11 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 	//	response.getWriter().append("Served at: ").append(request.getContextPath());
 		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
+		
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 		
@@ -49,6 +55,7 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 			json.put("operation", "protocol");
 			json.put("protocol_type", "json_builder");
 			json.put("operation_type", "get_broker_ip");
+			json.put("user", check_username);
 			
 			String respStr = client.sendMessage(json.toString());
 			
@@ -74,7 +81,10 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
+		}
 	}
 
 	/**
@@ -83,6 +93,11 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	//	doGet(request, response);
+		
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
 		
 		String broker_name = request.getParameter("broker_name");
 		String station_name = request.getParameter("station_name");
@@ -110,6 +125,7 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 			json.put("operation", "protocol");
 			json.put("protocol_type", "dispenser");
 			json.put("operation_type", "add_query");
+			json.put("user", check_username);
 			
 			json.put("station_name", station_name);
 			json.put("serial_number", serial_number);
@@ -146,6 +162,10 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 		// doGet(request, response);
 	}

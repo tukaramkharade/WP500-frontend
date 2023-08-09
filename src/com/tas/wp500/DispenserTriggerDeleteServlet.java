@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
@@ -48,6 +49,11 @@ public class DispenserTriggerDeleteServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			String check_username = (String) session.getAttribute("username");
+			
 		String serial_number = request.getParameter("serial_number");
 		String side = request.getParameter("side");
 
@@ -59,6 +65,7 @@ public class DispenserTriggerDeleteServlet extends HttpServlet {
 			json.put("operation", "protocol");
 			json.put("protocol_type", "dispenser");
 			json.put("operation_type", "delete_query");
+			json.put("user", check_username);
 
 			json.put("serial_number", serial_number);
 			json.put("side", side);
@@ -83,6 +90,10 @@ public class DispenserTriggerDeleteServlet extends HttpServlet {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		}else{
+			System.out.println("Login first");
+			response.sendRedirect("login.jsp");
 		}
 	}
 
