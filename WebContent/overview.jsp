@@ -2,7 +2,13 @@
 <%-- <!DOCTYPE html>
 <html>
   <head>
-    <title>Overview</title>
+    <title>WP500 Web Configuration</title>
+<link
+      rel="icon"  
+      type="image/png"
+      sizes="32x32"
+      href="favicon.png"
+    /> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
@@ -22,41 +28,45 @@
   </head>
   <body>
     <div class="sidebar">
-     <%@ include file="common.jsp"%>
+      <%@ include file="common.jsp"%>
+    </div>
+    <div class="header">
+        <%@ include file="header.jsp"%>
     </div>
     <div class="content">
       <section style="margin-left: 1em">
-        <h2>Overview</h2>
-        <img src="image001.png" width="300" height="300" />
+        <h3>OVERVIEW</h3><hr>
+        <div style="display:flex;justify-content:left;">
+        <img src="images/rut_image.jpg" width="300" height="400" />
 
-        <div class="general-data-table">
+        <div class="container"  style="height:400;margin-left:3%;">
           <table>
             <tr>
               <th colspan="2">General Data</th>
             </tr>
 
             <tr>
-              <td>Vendor</td>
-              <td>TAS</td>
+              <td>Manufactured By</td>
+              <td>TAS INDIA PRIVATE LIMITED</td>
             </tr>
 
             <tr>
-              <td>Address</td>
-              <td>INDIA</td>
+              <td>Manufacturing Address</td>
+              <td>PUNE, INDIA</td>
             </tr>
 
             <tr>
-              <td>Internet</td>
+              <td>Web Address</td>
               <td>http://www.tasm2m.com</td>
             </tr>
 
             <tr>
-              <td>Type</td>
-              <td>AXC F 2152</td>
+              <td>Model Number</td>
+              <td>WP500</td>
             </tr>
 
             <tr>
-              <td>Order No.</td>
+              <td>Customer Order Number</td>
               <td>2404267</td>
             </tr>
 
@@ -66,32 +76,36 @@
             </tr>
 
             <tr>
-              <td>Firmware Version</td>
+              <td>Firmware Revision</td>
               <td>2022.6.0(22.6.0.43)</td>
             </tr>
 
             <tr>
-              <td>Hardware Version</td>
+              <td>Hardware Revision</td>
               <td>02</td>
             </tr>
 
             <tr>
-              <td>FPGA Version</td>
-              <td>1.1.80</td>
+              <td>Web app Version</td>
+              <td>1.0</td>
             </tr>
           </table>
         </div>
+         </div>
       </section>
-      <footer>
-        <span>COPYRIGHT © TAS INDIA PVT LTD, 2023</span>
-      </footer>
+      <!-- <footer>
+        <span>COPYRIGHT Â© TAS INDIA PVT LTD, 2023</span>
+      </footer> -->
+     
     </div>
+    <div class="footer">
+      <%@ include file="footer.jsp"%>
+ </div>
   </body>
 </html>
  --%>
  
- 
-<!--  ------------------------------------------------------------------------------------------- -->
+<!--  --------------------------------------------------------------------------------------- -->
 
 <!DOCTYPE html>
 <html>
@@ -130,36 +144,37 @@
     <div class="content">
       <section style="margin-left: 1em">
         <h3>OVERVIEW</h3><hr>
-        <img src="images/rut_image.jpg" width="300" height="300" />
+        <div style="display:flex;justify-content:left;width:100%;">
+        <img src="images/rut_image.jpg" width="500" height="400" />
 
-        <div class="container" >
-          <table>
+        <div class="container" style="width: 60%;margin-left: 1%;height: 400;" >
+          <table >
             <tr>
               <th colspan="2">General Data</th>
             </tr>
 
             <tr>
-              <td>Vendor</td>
-              <td>TAS</td>
+              <td>Manufactured By</td>
+              <td>TAS INDIA PRIVATE LIMITED</td>
             </tr>
 
             <tr>
-              <td>Address</td>
-              <td>INDIA</td>
+              <td>Manufacturing Address</td>
+              <td>PUNE, INDIA</td>
             </tr>
 
             <tr>
-              <td>Internet</td>
+              <td>Web Address</td>
               <td>http://www.tasm2m.com</td>
             </tr>
 
             <tr>
-              <td>Type</td>
-              <td>AXC F 2152</td>
+              <td>Model Number</td>
+              <td>WP500</td>
             </tr>
 
             <tr>
-              <td>Order No.</td>
+              <td>Customer Order Number</td>
               <td>2404267</td>
             </tr>
 
@@ -169,26 +184,27 @@
             </tr>
 
             <tr>
-              <td>Firmware Version</td>
+              <td>Firmware Revision</td>
               <td>2022.6.0(22.6.0.43)</td>
             </tr>
 
             <tr>
-              <td>Hardware Version</td>
+              <td>Hardware Revision</td>
               <td>02</td>
             </tr>
 
             <tr>
-              <td>FPGA Version</td>
-              <td>1.1.80</td>
+              <td>Web app Version</td>
+              <td>1.0</td>
             </tr>
           </table>
         </div>
+         </div>
       </section>
       <!-- <footer>
-        <span>COPYRIGHT © TAS INDIA PVT LTD, 2023</span>
+        <span>COPYRIGHT ï¿½ TAS INDIA PVT LTD, 2023</span>
       </footer> -->
-      
+     
     </div>
     <div class="footer">
       <%@ include file="footer.jsp"%>

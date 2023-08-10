@@ -1120,8 +1120,8 @@ input:checked+.slider:before {
 			dataType : 'json',
 			success : function(data) {
 
-				alert(data.ntp_client + " " + data.ntp_interval + " "
-						+ data.ntp_server);
+			//	alert(data.ntp_client + " " + data.ntp_interval + " "
+			//			+ data.ntp_server);
 				//$('#ntp_client').prop('checked', data.ntp_client);
 				$('#ntp_client').prop('checked', data.ntp_client === '1');
 				// $('#ntp_client').val(data.ntp_client);
@@ -1159,7 +1159,7 @@ input:checked+.slider:before {
 			},
 			success : function(data) {
 				// Display the ntp status message
-				alert(data.message);
+			//	alert(data.message);
 				getntp();
 				// Clear form fields
 				$("#ntp_client").val("");

@@ -108,19 +108,25 @@
                 <a href="dispensertrigger.jsp">Dispenser Trigger</a>
               </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="dropdown-subbtn">Straton
                     <i class="fa fa-caret-down"></i>
                     
                   </a>
-                  <!-- <button class="dropdown-subbtn">Straton
+                  <button class="dropdown-subbtn">Straton
                     <i class="fa fa-caret-down"></i>
-                  </button> -->
+                  </button>
                   <div class="dropdown-subcontainer">
                     <a onclick="openExtLink()">Straton Variable</a>
                     <a href="stratonlivedata.jsp">Straton Live Data</a>
                   </div>
+                </li> -->
+                
+                <li class="nav-item">
+                  <a href="stratonlivedata.jsp">Straton Live Data</a>
                 </li>
+                
+                
                 <li class="nav-item">
                   <a href="alarmconfig.jsp">Alarm Config</a>
                 </li>

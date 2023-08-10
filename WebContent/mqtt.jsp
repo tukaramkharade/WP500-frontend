@@ -623,7 +623,7 @@
 
 					var selectElement = $("#file_name");
 					// Clear any existing options
-					selectElement.empty();
+					//selectElement.empty();
 
 					// Loop through the data and add options to the select element
 					data.crt_files_result.forEach(function(filename) {
@@ -662,32 +662,17 @@
 						mqttTable.empty();
 
 						// Iterate through the user data and add rows to the table
-						$
-								.each(
-										data,
-										function(index, mqtt) {
+						$.each(data,function(index, mqtt) {
 											var row = $('<tr>');
-											row
-													.append($('<td>')
-															.text(
-																	mqtt.broker_ip_address
-																			+ ""));
-											row.append($('<td>').text(
-													mqtt.port_number + ""));
-											row.append($('<td>').text(
-													mqtt.username + ""));
-											row.append($('<td>').text(
-													mqtt.publish_topic + ""));
-											row.append($('<td>').text(
-													mqtt.subscribe_topic + ""));
-											row.append($('<td>').text(
-													mqtt.prefix + ""));
-											row.append($('<td>').text(
-													mqtt.file_type + ""));
-											row.append($('<td>').text(
-													mqtt.file_name + ""));
-											row.append($('<td>').text(
-													mqtt.enable + ""));
+											row.append($('<td>').text(mqtt.broker_ip_address+ ""));
+											row.append($('<td>').text(mqtt.port_number + ""));
+											row.append($('<td>').text(mqtt.username + ""));
+											row.append($('<td>').text(mqtt.publish_topic + ""));
+											row.append($('<td>').text(mqtt.subscribe_topic + ""));
+											row.append($('<td>').text(mqtt.prefix + ""));
+											row.append($('<td>').text(mqtt.file_type + ""));
+											row.append($('<td>').text(mqtt.file_name + ""));
+											row.append($('<td>').text(mqtt.enable + ""));
 											
 
 											var actions = $('<td>');
@@ -916,9 +901,9 @@
 				$('#pub_topic').val('');
 				$('#sub_topic').val('');
 				$('#prefix').val('');
-				$('#file_type').val('');
-				$('#file_name').val('');
-				$('#enable').val('');
+				$('#file_type').val('Select file type');
+				$('#file_name').val('Select crt file');
+				$('#enable').val('Enable');
 
 				$("#prefix").prop("disabled", false);
 			},
@@ -980,9 +965,9 @@
 				$('#pub_topic').val('');
 				$('#sub_topic').val('');
 				$('#prefix').val('');
-				$('#file_type').val('');
-				$('#file_name').val('');
-				$('#enable').val('');
+				$('#file_type').val('Select file type');
+				$('#file_name').val('Select crt file');
+				$('#enable').val('Enable');
 
 			},
 			error : function(xhr, status, error) {
@@ -1016,6 +1001,19 @@
 			return false;
 		} else {
 			fileTypeError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateCrtFile(crtFile) {
+		var crtFileError = document.getElementById("crtFileError");
+
+		if (crtFile == 'Select crt file'){
+			
+			crtFileError.textContent = "Please select crt file";
+			return false;
+		} else {
+			crtFileError.textContent = "";
 			return true;
 		}
 	}
@@ -1068,6 +1066,7 @@
 													'#broker_ip_address').val();
 											var type = $('#file_type').find(":selected").val();
 											var port_number = $('#port_number').val();
+											var file_name = $('#file_name').find(":selected").val();
 											
 											
 											if (!validateNumbers(port_number)) {
@@ -1077,6 +1076,11 @@
 
 											if (!validateFiletype(type)) {
 												fileTypeError.textContent = "Please select file type";
+												return;
+											}
+											
+											if (!validateCrtFile(file_name)) {
+												crtFileError.textContent = "Please select crt file";
 												return;
 											}
 											
@@ -1103,8 +1107,8 @@
 							$('#sub_topic').val('');
 							$('#prefix').val('');
 							$('#file_type').val('Select file type');
-							$('#file_name').val('');
-							$('#enable').val('');
+							$('#file_name').val('Select crt file');
+							$('#enable').val('Enable');
 
 						});
 
@@ -1224,26 +1228,25 @@
 							style="width: 20%;">
 
 							<select class="textBox" id="file_name" name="file_name"
-								style="height: 35px;">
-								<option value="">Select crt file...</option>
+								style="height: 35px;" required>
+								<option value="Select crt file">Select crt file</option>
 
 							</select>
+							<span id="crtFileError" style="color:red;"></span>
 
 						</div>
 					<!-- </div>
 					
 					<div class="row"> -->
-						<!-- <div class="col-25">
-							<label for="fileType">File Type</label>
-						</div> -->
+						
 						<div class="col-75-10"
 							style="width: 20%;">
 
 							<select class="textBox" id="enable" name="enable"
-								style="height: 35px;">
+								style="height: 35px; required">
 								
-								<option>Enable</option>
-								<option>Disable</option>
+								<option value="enable" selected>Enable</option>
+								<option value="disable">Disable</option>
 
 							</select>
 						</div>

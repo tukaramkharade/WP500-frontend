@@ -29,7 +29,7 @@
     <html>
       <body>
         <footer>
-            <span>COPYRIGHT © TAS INDIA PVT LTD, 2023 WP500 version 1.0</span>
+            <span>WP500 version 1.0 COPYRIGHT © TAS INDIA PVT LTD, 2023</span>
           </footer>
       </body>
     </html>

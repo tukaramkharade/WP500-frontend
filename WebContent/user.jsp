@@ -501,7 +501,7 @@
 				$('#username').val('');
 				$('#first_name').val('');
 				$('#last_name').val('');
-				$('#role').val('');
+				$('#role').val('Select role');
 
 				$("#password").prop("disabled", false);
 
@@ -545,7 +545,7 @@
 				$('#password').val('');
 				$('#first_name').val('');
 				$('#last_name').val('');
-				$('#role').val('');
+				$('#role').val('Select role');
 
 			},
 			error : function(xhr, status, error) {
@@ -554,6 +554,19 @@
 		});
 
 		$('#registerBtn').val('Add');
+	}
+	
+	function validateRole(role) {
+		var roleError = document.getElementById("roleError");
+
+		if (role == 'Select role'){
+			
+			roleError.textContent = "Please role";
+			return false;
+		} else {
+			roleError.textContent = "";
+			return true;
+		}
 	}
 
 	// Function to execute on page load
@@ -568,8 +581,13 @@
 								.submit(
 										function(event) {
 											event.preventDefault();
-											var buttonText = $('#registerBtn')
-													.val();
+											var buttonText = $('#registerBtn').val();
+											var role = $('#role').find(":selected").val();
+											
+											if (!validateRole(role)) {
+												roleError.textContent = "Please enter role";
+												return;
+											}
 											
 											if (buttonText == 'Add') {
 												addUser();
@@ -581,6 +599,17 @@
 											}
 										});
 
+						$('#clearBtn').click(function() {
+							$('#username').val('');
+							$('#password').val('');
+							$('#first_name').val('');
+							$('#last_name').val('');
+							$('#role').val('Select role');
+							
+							
+						});
+
+						
 					});
 </script>
 </head>
@@ -635,9 +664,12 @@
 						<div class="col-75-5"
 							style="width: 20%;">
 							<select class="role" id="role" name="role" style="height: 33px;">
+								<option value="Select role">Select role</option>
 								<option value="ADMIN">ADMIN</option>
 								<option value="VIEWER">VIEWER</option>
 							</select>
+							<span
+								style="color: red; font-size: 12px;" id="roleError"></span>
 						</div>
 					</div>
 

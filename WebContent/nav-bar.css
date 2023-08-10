@@ -52,15 +52,16 @@ a:hover {
   color: white;
   margin-top: 0vh; */
   /* width: 100%; */
-  padding: 0.27em;
+  padding-top: 0.27em;
+  padding-bottom:0.27em;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
   background-color: #2b3991;
   color: white;
-  text-align: center;
-  margin-left: 13em;
+  text-align: right;
+  margin-right: 5em;
   height: 1em;
   
 }
@@ -146,7 +147,7 @@ Sidebar Nav
   padding-left: 0;
   display: inline-block;
   width: 100%;
-  padding-bottom: 3px;
+ /*  padding-bottom: 3px; */
   /* -------------
   Sidebar: icons
   ----------------*/
@@ -158,7 +159,7 @@ Sidebar Nav
   /* padding: 0.5em 0.5em; */
   position: relative;
   display: block;
-  padding-bottom: 3px;
+  /* padding-bottom: 3px; */
 }
 
 .sidebar-nav ul li a:hover {
@@ -227,9 +228,10 @@ Sidebar Nav
 
 .dropdown-container {
   display: none;
-  background-color: #35449a;
+   background-color: #35449a; 
+/* background-color: red; */
   padding-left: 15px;
-  padding-bottom: 10px;
+ /*  padding-bottom: 1px; */
 }
 
 .dropdown-subcontainer {
@@ -338,13 +340,13 @@ label {
 }
 
 input[type="submit"],
-input[type="button"] {
+input[type="button"]
+{
   background-color: #2b3991;
   color: white;
   padding: 4px 10px;
   border: none;
   border-radius: 10px;
-  cursor: pointer;
   float: center;
   cursor: pointer;
   font-size: small;

@@ -14,6 +14,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
    
@@ -31,7 +32,7 @@
             if (data.broker_ip_result && Array.isArray(data.broker_ip_result)) {
               var selectElement = $("#broker_name");
               // Clear any existing options
-              selectElement.empty();
+           //   selectElement.empty();
 
               // Loop through the data and add options to the select element
               data.broker_ip_result.forEach(function (filename) {
@@ -196,6 +197,46 @@
    			return true;
    		}
    	}
+   	
+   	
+   	function validateInterval(interval) {
+		var intervalError = document.getElementById("intervalError");
+
+		if (interval == 'Select interval'){
+			
+			intervalError.textContent = "Please select interval";
+			return false;
+		} else {
+			intervalError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateBrokerType(broker_type) {
+		var brokerTypeError = document.getElementById("brokerTypeError");
+
+		if (broker_type == 'Select broker type'){
+			
+			brokerTypeError.textContent = "Please select broker type";
+			return false;
+		} else {
+			brokerTypeError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateBrokerIPAddress(broker_name) {
+		var brokerIPAddressError = document.getElementById("brokerIPAddressError");
+
+		if (broker_name == 'Select broker IP address'){
+			
+			brokerIPAddressError.textContent = "Please select broker ip address";
+			return false;
+		} else {
+			brokerIPAddressError.textContent = "";
+			return true;
+		}
+	}
      
       $(document).ready(function () {
     	  loadAlarmSettings();
@@ -250,6 +291,26 @@
       	$('#alarmConfigForm').submit(function(event) {
 			event.preventDefault();
 			var buttonText = $('#addBtn').val();
+			
+			var interval = $('#interval').find(":selected").val();
+			var broker_type = $('#broker_type').find(":selected").val();
+			var broker_name = $('#broker_name').find(":selected").val();
+			
+			if (!validateInterval(interval)) {
+				intervalError.textContent = "Please select interval";
+				return;
+			}
+			
+			if (!validateBrokerType(broker_type)) {
+				brokerTypeError.textContent = "Please select broker type";
+				return;
+			}
+			
+			if (!validateBrokerIPAddress(broker_name)) {
+				brokerIPAddressError.textContent = "Please select broker ip address ";
+				return;
+			}
+
 
 			if (buttonText == 'Add') {
 				addAlarmConfig();
@@ -258,16 +319,13 @@
 			}
 		});
       	  
-      	  
-    	  
     	  $('#clearBtn').click(function(){
     		  $('#unit_id').val('');
   			$('#asset_id').val('');
-  			$('#broker_type').val('');
-  			$('#broker_name').val('');
-  			$('#interval').val('');
+  			$('#broker_type').val('Select broker type');
+  			$('#broker_name').val('Select broker IP address');
+  			$('#interval').val('Select interval');
     		  
-    	  
     	});
     	  
     	  $("#delBtn").click(function () {
@@ -321,10 +379,7 @@ function editAlarmConfig() {
 			broker_type : broker_type,
 			broker_name : broker_name,
 			interval : interval,
-			//tagData: tagData
 			tagData: JSON.stringify(tagData)
-			/* tag_name : tag_name,
-			variable : variable */
 			
 		},
 		success : function(data) {
@@ -337,9 +392,9 @@ function editAlarmConfig() {
 
 			$('#unit_id').val('');
 			$('#asset_id').val('');
-			$('#broker_type').val('');
-			$('#broker_name').val('');
-			$('#interval').val('');
+			$('#broker_type').val('Select broker type');
+			$('#broker_name').val('Select broker IP address');
+			$('#interval').val('Select interval');
 			/* $('#tag_name').val('');
 			$('#variable').val(''); */
 		},
@@ -362,10 +417,7 @@ function addAlarmConfig() {
     var broker_name = $('#broker_name').find(":selected").val();
     var interval = $('#interval').find(":selected").val();
     // Modify the next two lines to get the tag_name and variable from the JSON data
-   /*  var tag_name = Object.keys(tagData)[0];
-    var variable = tagData[tag_name]; */
-
-	
+  
 	$.ajax({
 		url : 'alarmConfigAddData',
 		type : 'POST',
@@ -388,9 +440,9 @@ function addAlarmConfig() {
 
 			$('#unit_id').val('');
 			$('#asset_id').val('');
-			$('#broker_type').val('');
-			$('#broker_name').val('');
-			$('#interval').val('');
+			$('#broker_type').val('Select broker type');
+			$('#broker_name').val('Select broker IP address');
+			$('#interval').val('Select interval');
 			/* $('#tag_name').val('');
 			$('#variable').val(''); */
 		},
@@ -435,10 +487,11 @@ function addAlarmConfig() {
 						style="width: 20%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px">
-							<option value="">Select Broker Type</option>
+							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
 						</select>
+						<span id="brokerTypeError" style="color:red;"></span>
 					</div>
 				<!-- </div>
 
@@ -447,8 +500,9 @@ function addAlarmConfig() {
 						style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px">
-							<option value=""></option>
+							<option value="Select broker IP address">Select broker IP address</option>
 						</select>
+						<span id="brokerIPAddressError" style="color:red;"></span>
 					</div>
 				<!-- </div>
 
@@ -457,7 +511,7 @@ function addAlarmConfig() {
 						style="width: 20%;">
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px">
-							<option value="">Select Interval</option>
+							<option value="Select interval">Select interval</option>
 							<option value="30 sec">30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
@@ -468,6 +522,7 @@ function addAlarmConfig() {
 							<option value="30 min">30 min</option>
 							<option value="1 hour">1 hour</option>
 						</select>
+						<span id="intervalError" style="color:red;"></span>
 					</div>
 				</div>
 
@@ -489,8 +544,16 @@ function addAlarmConfig() {
 					</div>
 				</div>
 
-				<div class="row"><input style="margin-top: -31px; margin-left:-50px " type="button"
-						value="Plus" id="saveBtn" /> </div>
+				<div class="row">
+				<!-- <input style="margin-top: -31px; margin-left:-50px" type="button"
+						 id="saveBtn" />  -->
+						 
+						 <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
+  				border-radius: 10px; float: center;" 
+						 id="saveBtn">
+						 	<i class="fa fa-plus"></i></button>
+						 
+				</div>
 						
 				<div class="row" style="display:flex;justify-content:right;">					
 						<input

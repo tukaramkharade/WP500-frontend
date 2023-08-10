@@ -1,6 +1,11 @@
 package com.tas.wp500;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -66,25 +71,66 @@ public class StratonLiveDataServlet extends HttpServlet {
 
 				JSONArray resultArr = respJson.getJSONArray("result");
 
-				System.out.println("Result : " + resultArr.toString());
+				System.out.println("Result before sorting: " + resultArr.toString());
+				
+				String result_arr = resultArr.toString();
+				
+				System.out.println("result array in string : "+result_arr);
+				
+				 	JSONArray jsonArr = new JSONArray(result_arr);
+				 //   JSONArray sortedJsonArray = new JSONArray();
+				    
+				    List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+				    for (int i = 0; i < jsonArr.length(); i++) {
+				        jsonValues.add(jsonArr.getJSONObject(i));
+				    }
+				    Collections.sort( jsonValues, new Comparator<JSONObject>() {
+				        //You can change "Name" with "ID" if you want to sort by ID
+				        private static final String KEY_NAME = "tag_name";
 
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
+				        @Override
+				        public int compare(JSONObject a, JSONObject b) {
+				            String valA = new String();
+				            String valB = new String();
+
+				            try {
+				                valA = (String) a.get(KEY_NAME);
+				                valB = (String) b.get(KEY_NAME);
+				            } 
+				            catch (JSONException e) {
+				               e.printStackTrace();
+				            }
+
+				            return valA.compareTo(valB);
+				            //if you want to change the sort order, simply use the following:
+				            //return -valA.compareTo(valB);
+				        }
+				    });
+				    
+				 // Convert the sorted list back to JSONArray
+			        JSONArray sortedJsonArray = new JSONArray(jsonValues);
+
+			        // Print the sorted JSONArray
+			        System.out.println("sorted json array:" + sortedJsonArray);
+				    
+
+				for (int i = 0; i < sortedJsonArray.length(); i++) {
+					JSONObject jsObj = sortedJsonArray.getJSONObject(i);
 
 					String extError = jsObj.getString("extError");
-					logger.info("extError : " + extError);
+					//logger.info("extError : " + extError);
 
 					String access = jsObj.getString("access");
-					logger.info("access : " + access);
+				//	logger.info("access : " + access);
 
 					String tag_name = jsObj.getString("tag_name");
-					logger.info("tag_name : " + tag_name);
+				//	logger.info("tag_name : " + tag_name);
 
 					String error = jsObj.getString("error");
-					logger.info("error : " + error);
+			//		logger.info("error : " + error);
 
 					String value = jsObj.getString("value");
-					logger.info("value : " + value);
+			//		logger.info("value : " + value);
 
 					JSONObject stratonObj = new JSONObject();
 

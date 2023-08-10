@@ -26,7 +26,7 @@
 
 					var selectElement = $("#broker_name");
 					// Clear any existing options
-					selectElement.empty();
+				//	selectElement.empty();
 
 					// Loop through the data and add options to the select element
 					data.broker_ip_result.forEach(function(filename) {
@@ -44,6 +44,168 @@
 			},
 		});
 	}
+	
+	function loadTagListStartPressure() {
+ 	    $.ajax({
+ 	      url: "alarmConfigTagListServlet",
+ 	      type: "GET",
+ 	      dataType: "json",
+ 	      success: function (data) {
+ 	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
+ 	          var datalist = $("#start_pressure");
+ 	          // Clear any existing options
+ 	       //   datalist.empty();
+
+ 	          // Loop through the data and add options to the datalist
+ 	          data.tag_list_result.forEach(function (tag) {
+ 	            var option = $("<option>", {
+ 	              value: tag,
+ 	              text: tag,
+ 	            });
+ 	            datalist.append(option);
+ 	          });
+ 	        }
+ 	      },
+ 	      error: function (xhr, status, error) {
+ 	        console.log("Error showing tag list: " + error);
+ 	      },
+ 	    });
+ 	  }
+	
+	function loadTagListEndPressure() {
+ 	    $.ajax({
+ 	      url: "alarmConfigTagListServlet",
+ 	      type: "GET",
+ 	      dataType: "json",
+ 	      success: function (data) {
+ 	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
+ 	          var datalist = $("#end_pressure");
+ 	          // Clear any existing options
+ 	       //   datalist.empty();
+
+ 	          // Loop through the data and add options to the datalist
+ 	          data.tag_list_result.forEach(function (tag) {
+ 	            var option = $("<option>", {
+ 	              value: tag,
+ 	              text: tag,
+ 	            });
+ 	            datalist.append(option);
+ 	          });
+ 	        }
+ 	      },
+ 	      error: function (xhr, status, error) {
+ 	        console.log("Error showing tag list: " + error);
+ 	      },
+ 	    });
+ 	  }
+	
+	function loadTagListTemperature() {
+ 	    $.ajax({
+ 	      url: "alarmConfigTagListServlet",
+ 	      type: "GET",
+ 	      dataType: "json",
+ 	      success: function (data) {
+ 	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
+ 	          var datalist = $("#temperature");
+ 	          // Clear any existing options
+ 	       //   datalist.empty();
+
+ 	          // Loop through the data and add options to the datalist
+ 	          data.tag_list_result.forEach(function (tag) {
+ 	            var option = $("<option>", {
+ 	              value: tag,
+ 	              text: tag,
+ 	            });
+ 	            datalist.append(option);
+ 	          });
+ 	        }
+ 	      },
+ 	      error: function (xhr, status, error) {
+ 	        console.log("Error showing tag list: " + error);
+ 	      },
+ 	    });
+ 	  }
+	
+	function loadTagListTotal() {
+ 	    $.ajax({
+ 	      url: "alarmConfigTagListServlet",
+ 	      type: "GET",
+ 	      dataType: "json",
+ 	      success: function (data) {
+ 	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
+ 	          var datalist = $("#total");
+ 	          // Clear any existing options
+ 	       //   datalist.empty();
+
+ 	          // Loop through the data and add options to the datalist
+ 	          data.tag_list_result.forEach(function (tag) {
+ 	            var option = $("<option>", {
+ 	              value: tag,
+ 	              text: tag,
+ 	            });
+ 	            datalist.append(option);
+ 	          });
+ 	        }
+ 	      },
+ 	      error: function (xhr, status, error) {
+ 	        console.log("Error showing tag list: " + error);
+ 	      },
+ 	    });
+ 	  }
+	
+	function loadTagListQuantity() {
+ 	    $.ajax({
+ 	      url: "alarmConfigTagListServlet",
+ 	      type: "GET",
+ 	      dataType: "json",
+ 	      success: function (data) {
+ 	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
+ 	          var datalist = $("#quantity");
+ 	          // Clear any existing options
+ 	       //   datalist.empty();
+
+ 	          // Loop through the data and add options to the datalist
+ 	          data.tag_list_result.forEach(function (tag) {
+ 	            var option = $("<option>", {
+ 	              value: tag,
+ 	              text: tag,
+ 	            });
+ 	            datalist.append(option);
+ 	          });
+ 	        }
+ 	      },
+ 	      error: function (xhr, status, error) {
+ 	        console.log("Error showing tag list: " + error);
+ 	      },
+ 	    });
+ 	  }
+	
+	function loadTagListUnitPrice() {
+ 	    $.ajax({
+ 	      url: "alarmConfigTagListServlet",
+ 	      type: "GET",
+ 	      dataType: "json",
+ 	      success: function (data) {
+ 	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
+ 	          var datalist = $("#unit_price");
+ 	          // Clear any existing options
+ 	       //   datalist.empty();
+
+ 	          // Loop through the data and add options to the datalist
+ 	          data.tag_list_result.forEach(function (tag) {
+ 	            var option = $("<option>", {
+ 	              value: tag,
+ 	              text: tag,
+ 	            });
+ 	            datalist.append(option);
+ 	          });
+ 	        }
+ 	      },
+ 	      error: function (xhr, status, error) {
+ 	        console.log("Error showing tag list: " + error);
+ 	      },
+ 	    });
+ 	  }
 	
 	
 	function loadDispenserTriggerList() {
@@ -205,12 +367,12 @@
 		var broker_name = $('#broker_name').find(":selected").val();
 		var trigger_tag = $('#trigger_tag').val();
 		var trigger_value = $('#trigger_value').find(":selected").val();
-		var start_pressure = $('#start_pressure').val();
-		var end_pressure = $('#end_pressure').val();
-		var temperature = $('#temperature').val();
-		var total = $('#total').val();
-		var quantity = $('#quantity').val();
-		var unit_price = $('#unit_price').val();
+		var start_pressure = $('#start_pressure').find(":selected").val();
+		var end_pressure = $('#end_pressure').find(":selected").val();
+		var temperature = $('#temperature').find(":selected").val();
+		var total = $('#total').find(":selected").val();
+		var quantity = $('#quantity').find(":selected").val();
+		var unit_price = $('#unit_price').find(":selected").val();
 		var status = $('#status').find(":selected").val();
 
 		$.ajax({
@@ -240,17 +402,17 @@
 
 				$('#station_name').val('');
 				$('#serial_number').val('');
-				$('#side').val('Select Side');
-				$('#broker_name').val('');
+				$('#side').val('Select side');
+				$('#broker_name').val('Select broker IP address');
 				$('#trigger_tag').val('');
-				$('#trigger_value').val('Select Trigger Value');
-				$('#start_pressure').val('');
-				$('#end_pressure').val('');
-				$('#temperature').val('');
-				$('#total').val('');
-				$('#quantity').val('');
-				$('#unit_price').val('');
-				$('#status').val('Select Status');
+				$('#trigger_value').val('Select trigger value');
+				$('#start_pressure').val('Select start pressure');
+				$('#end_pressure').val('Select end pressure');
+				$('#temperature').val('Select temperature');
+				$('#total').val('Select total');
+				$('#quantity').val('Select quantity');
+				$('#unit_price').val('Select unit price');
+				$('#status').val('Select status');
 				
 				$("#serial_number").prop("disabled", false);
 				
@@ -275,12 +437,20 @@
 		var trigger_tag = $('#trigger_tag').val();
 		//var trigger_value = $('#trigger_value').val();
 		var trigger_value = $('#trigger_value').find(":selected").val();
-		var start_pressure = $('#start_pressure').val();
+		/* var start_pressure = $('#start_pressure').val();
 		var end_pressure = $('#end_pressure').val();
 		var temperature = $('#temperature').val();
 		var total = $('#total').val();
 		var quantity = $('#quantity').val();
-		var unit_price = $('#unit_price').val();
+		var unit_price = $('#unit_price').val(); */
+		
+		
+		var start_pressure = $('#start_pressure').find(":selected").val();
+		var end_pressure = $('#end_pressure').find(":selected").val();
+		var temperature = $('#temperature').find(":selected").val();
+		var total = $('#total').find(":selected").val();
+		var quantity = $('#quantity').find(":selected").val();
+		var unit_price = $('#unit_price').find(":selected").val();
 		var status = $('#status').find(":selected").val();
 			
 			
@@ -311,17 +481,17 @@
 
 				$('#station_name').val('');
 				$('#serial_number').val('');
-				$('#side').val('Select Side');
-				$('#broker_name').val('');
+				$('#side').val('Select side');
+				$('#broker_name').val('Select broker IP address');
 				$('#trigger_tag').val('');
-				$('#trigger_value').val('Select Trigger Value');
-				$('#start_pressure').val('');
-				$('#end_pressure').val('');
-				$('#temperature').val('');
-				$('#total').val('');
-				$('#quantity').val('');
-				$('#unit_price').val('');
-				$('#status').val('Select Status');
+				$('#trigger_value').val('Select trigger value');
+				$('#start_pressure').val('Select start pressure');
+				$('#end_pressure').val('Select end pressure');
+				$('#temperature').val('Select temperature');
+				$('#total').val('Select total');
+				$('#quantity').val('Select quantity');
+				$('#unit_price').val('Select unit price');
+				$('#status').val('Select status');
 				
 				
 			},
@@ -366,7 +536,7 @@
 	function validateSide(side) {
 		var sideError = document.getElementById("sideError");
 
-		if (side == 'Select Side'){
+		if (side == 'Select side'){
 			
 			sideError.textContent = "Please select side";
 			return false;
@@ -379,7 +549,7 @@
 	function validateStatus(status) {
 		var statusError = document.getElementById("statusError");
 
-		if (status == 'Select Status'){
+		if (status == 'Select status'){
 			
 			statusError.textContent = "Please select status";
 			return false;
@@ -392,12 +562,103 @@
 	function validateTriggerValue(triggerValue) {
 		var triggerValueError = document.getElementById("triggerValueError");
 
-		if (triggerValue == 'Select Trigger Value'){
+		if (triggerValue == 'Select trigger value'){
 			
 			triggerValueError.textContent = "Please select trigger value";
 			return false;
 		} else {
 			triggerValueError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateBrokerIPAddress(broker_name) {
+		var brokerIPAddressError = document.getElementById("brokerIPAddressError");
+
+		if (broker_name == 'Select broker IP address'){
+			
+			brokerIPAddressError.textContent = "Please select broker ip address";
+			return false;
+		} else {
+			brokerIPAddressError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateStartPressure(start_pressure) {
+		var startPressureError = document.getElementById("startPressureError");
+
+		if (start_pressure == 'Select start pressure'){
+			
+			startPressureError.textContent = "Please select start pressure";
+			return false;
+		} else {
+			startPressureError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateEndPressure(end_pressure) {
+		var endPressureError = document.getElementById("endPressureError");
+
+		if (end_pressure == 'Select end pressure'){
+			
+			endPressureError.textContent = "Please select end pressure";
+			return false;
+		} else {
+			endPressureError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateTemperature(temperature) {
+		var temperatureError = document.getElementById("temperatureError");
+
+		if (temperature == 'Select temperature'){
+			
+			temperatureError.textContent = "Please select temperature";
+			return false;
+		} else {
+			temperatureError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateTotal(total) {
+		var totalError = document.getElementById("totalError");
+
+		if (total == 'Select total'){
+			
+			totalError.textContent = "Please select total";
+			return false;
+		} else {
+			totalError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateQuantity(quantity) {
+		var quantityError = document.getElementById("quantityError");
+
+		if (quantity == 'Select quantity'){
+			
+			quantityError.textContent = "Please select quantity";
+			return false;
+		} else {
+			quantityError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validateUnitPrice(unit_price) {
+		var unitPriceError = document.getElementById("unitPriceError");
+
+		if (unit_price == 'Select unit price'){
+			
+			unitPriceError.textContent = "Please select unit price";
+			return false;
+		} else {
+			unitPriceError.textContent = "";
 			return true;
 		}
 	}
@@ -436,6 +697,12 @@
 		// Load user list
 		loadBrokerIPList();
 		loadDispenserTriggerList();
+		loadTagListStartPressure();
+		loadTagListEndPressure();
+		loadTagListTemperature();
+		loadTagListTotal();
+		loadTagListQuantity();
+		loadTagListUnitPrice();
 		
 		$('#dispensortriggerform').submit(function(event) {
 			event.preventDefault();
@@ -443,11 +710,14 @@
 			var side = $('#side').find(":selected").val();
 			var status = $('#status').find(":selected").val();
 			var trigger_value = $('#trigger_value').find(":selected").val();
+			var broker_name = $('#broker_name').find(":selected").val();
 			
-			/* var serial_number = $('#serial_number')
-			.val();
-			var trigger_value = $('#trigger_value')
-			.val(); */
+			var start_pressure = $('#start_pressure').find(":selected").val();
+			var end_pressure = $('#end_pressure').find(":selected").val();
+			var temperature = $('#temperature').find(":selected").val();
+			var total = $('#total').find(":selected").val();
+			var quantity = $('#quantity').find(":selected").val();
+			var unit_price = $('#unit_price').find(":selected").val();
 
 			if (!validateSide(side)) {
 				sideError.textContent = "Please select side";
@@ -464,15 +734,39 @@
 				return;
 			}
 			
-			/* if (!validateNumbers(serial_number)) {
-				serialError.textContent = "Please enter valid serial number.";
+			if (!validateBrokerIPAddress(broker_name)) {
+				brokerIPAddressError.textContent = "Please select broker ip address ";
 				return;
 			}
 			
-			if (!validateNumbers1(trigger_value)) {
-				triggerValError.textContent = "Please enter valid trigger value.";
+			if (!validateStartPressure(start_pressure)) {
+				startPressureError.textContent = "Please select start pressure ";
 				return;
-			} */
+			}
+			
+			if (!validateEndPressure(end_pressure)) {
+				endPressureError.textContent = "Please select end pressure ";
+				return;
+			}
+			
+			if (!validateTemperature(temperature)) {
+				temperatureError.textContent = "Please select temperature ";
+				return;
+			}
+			
+			if (!validateTotal(total)) {
+				totalError.textContent = "Please select total ";
+				return;
+			}
+			if (!validateQuantity(quantity)) {
+				quantityError.textContent = "Please select quantity ";
+				return;
+			}
+			if (!validateUnitPrice(unit_price)) {
+				unitPriceError.textContent = "Please select unit price ";
+				return;
+			}
+			
 			
 			if (buttonText == 'Add') {
 				addDispenserTrigger();
@@ -484,17 +778,17 @@
 		$('#clearBtn').click(function(){
 			$('#station_name').val('');
 			$('#serial_number').val('');
-			$('#side').val('Select Side');
-			$('#broker_name').val('');
+			$('#side').val('Select side');
+			$('#broker_name').val('Select broker IP address');
 			$('#trigger_tag').val('');
-			$('#trigger_value').val('Select Trigger Value');
-			$('#start_pressure').val('');
-			$('#end_pressure').val('');
-			$('#temperature').val('');
-			$('#total').val('');
-			$('#quantity').val('');
-			$('#unit_price').val('');
-			$('#status').val('Select Status');
+			$('#trigger_value').val('Select trigger value');
+			$('#start_pressure').val('Select start pressure');
+			$('#end_pressure').val('Select end pressure');
+			$('#temperature').val('Select temperature');
+			$('#total').val('Select total');
+			$('#quantity').val('Select quantity');
+			$('#unit_price').val('Select unit price');
+			$('#status').val('Select status');
   	 
   	});
 
@@ -538,7 +832,7 @@
 						style="width: 20%;">
 						<select class="textBox" id="side" name="side"
 							style="height: 35px" required>
-							<option value="Select Side">Select Side</option>
+							<option value="Select side">Select side</option>
 							<option value="a">A</option>
 							<option value="b">B</option>
 							<option value="c">C</option>
@@ -570,7 +864,7 @@
 						style="width: 20%;">
 						<select class="textBox" id="trigger_value" name="trigger_value"
 							style="height: 35px" required>
-							<option value="Select Trigger Value">Select Trigger Value</option>
+							<option value="Select trigger value">Select Trigger Value</option>
 							<option value="0">0</option>
 							<option value="1">1</option>
 							
@@ -580,49 +874,114 @@
 				</div>
 
 				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
-					<div class="col-75-1" style="width: 20%;">
+					
+					<!-- <div class="col-75-1" style="width: 20%;">
 						<input type="text" id="start_pressure" name="start_pressure"
 							placeholder="Start Pressure" required style="height: 17px" />
+					</div> -->
+					
+					<div class="col-75-1"
+						style="width: 20%;">
+						<select class="textBox" id="start_pressure" name="start_pressure"
+							style="height: 35px;">
+							<option value="Select start pressure">Select start pressure</option>
+						</select>
+						<span id="startPressureError" style="color: red"></span>
 					</div>
+					
+					
 				<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-2"
+					<!-- <div class="col-75-2"
 						style="width: 20%;">
 						<input type="text" id="end_pressure" name="end_pressure"
 							placeholder="End Pressure" required style="height: 17px" />
+					</div> -->
+					
+					<div class="col-75-2"
+						style="width: 20%;">
+						<select class="textBox" id="end_pressure" name="end_pressure"
+							style="height: 35px;">
+							<option value="Select end pressure">Select end pressure</option>
+						</select>
+						<span id="endPressureError" style="color: red"></span>
 					</div>
+					
+					
+					
 				<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-3"
+					<!-- <div class="col-75-3"
 						style="width: 20%;">
 						<input type="text" id="temperature" name="temperature" placeholder="Temperature"
 							required style="height: 17px" />
+					</div> -->
+					
+					<div class="col-75-3"
+						style="width: 20%;">
+						<select class="textBox" id="temperature" name="temperature"
+							style="height: 35px;">
+							<option value="Select temperature">Select temperature</option>
+						</select>
+						<span id="temperatureError" style="color: red"></span>
 					</div>
+					
+					
 				<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-4"
+					<!-- <div class="col-75-4"
 						style="width: 20%;">
 						<input type="text" id="total" name="total" placeholder="Total"
 							required style="height: 17px" />
+					</div> -->
+					
+					<div class="col-75-4"
+						style="width: 20%;">
+						<select class="textBox" id="total" name="total"
+							style="height: 35px;">
+							<option value="Select total">Select total</option>
+						</select>
+						<span id="totalError" style="color: red"></span>
 					</div>
+					
 				<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-5"
+					<!-- <div class="col-75-5"
 						style="width: 20%;">
 						<input type="text" id="quantity" name="quantity"
 							placeholder="Quantity" required style="height: 17px" />
+					</div> -->
+					
+					<div class="col-75-5"
+						style="width: 20%;">
+						<select class="textBox" id="quantity" name="quantity"
+							style="height: 35px;">
+							<option value="Select quantity">Select quantity</option>
+						</select>
+						<span id="quantityError" style="color: red"></span>
 					</div>
+					
 				</div>
 
 				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
-					<div class="col-75-5" style="width: 20%;">
+					<!-- <div class="col-75-5" style="width: 20%;">
 						<input type="text" id="unit_price" name="unit_price" placeholder="Unit Price"
 							required style="height: 17px" />
+					</div> -->
+					
+					<div class="col-75-6"
+						style="width: 20%;">
+						<select class="textBox" id="unit_price" name="unit_price"
+							style="height: 35px;">
+							<option value="Select unit price">Select unit price</option>
+						</select>
+						<span id="unitPriceError" style="color: red"></span>
 					</div>
+					
 				<!-- </div>
 
 				<div class="row"> -->
@@ -630,7 +989,7 @@
 						style="width: 20%;">
 						<select class="textBox" id="status" name="status"
 							style="height: 35px" required>
-							<option value="Select Status">Select Status</option>
+							<option value="Select status">Select status</option>
 							<option value="enable">Enable</option>
 							<option value="disable">Disable</option>
 						</select>
@@ -643,8 +1002,9 @@
 						style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;">
-							<option value=""></option>
+							<option value="Select broker IP address">Select broker IP address</option>
 						</select>
+						<span id="brokerIPAddressError" style="color:red;"></span>
 					</div>
 				</div>
 				

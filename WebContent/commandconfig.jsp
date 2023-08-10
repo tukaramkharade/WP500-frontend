@@ -14,6 +14,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
@@ -29,7 +30,7 @@ var json = {};
 
 					var selectElement = $("#broker_name");
 					// Clear any existing options
-					selectElement.empty();
+				//	selectElement.empty();
 
 					// Loop through the data and add options to the select element
 					data.broker_ip_result.forEach(function(filename) {
@@ -222,6 +223,70 @@ var json = {};
 	       		}
 	       	}
 	    	
+	    	function validatefields(tag_name) {
+	       		var tagnameError = document.getElementById("tagnameError");
+
+	       		if (tag_name === "") {
+	       			tagnameError.textContent = "Please enter tag name";
+	       			return false;
+	       		} else {
+	       			tagnameError.textContent = "";
+	       			return true;
+	       		}
+	       	}
+
+	       	function validateOption(variable) {
+	       		var variableError = document.getElementById("variableError");
+
+	       		if (variable === "") {
+	       			variableError.textContent = "Please select variable";
+	       			return false;
+	       		} else {
+	       			variableError.textContent = "";
+	       			return true;
+	       		}
+	       	}
+	       	
+	       	
+	       	function validateInterval(interval) {
+	    		var intervalError = document.getElementById("intervalError");
+
+	    		if (interval == 'Select interval'){
+	    			
+	    			intervalError.textContent = "Please select interval";
+	    			return false;
+	    		} else {
+	    			intervalError.textContent = "";
+	    			return true;
+	    		}
+	    	}
+	    	
+	    	function validateBrokerType(broker_type) {
+	    		var brokerTypeError = document.getElementById("brokerTypeError");
+
+	    		if (broker_type == 'Select broker type'){
+	    			
+	    			brokerTypeError.textContent = "Please select broker type";
+	    			return false;
+	    		} else {
+	    			brokerTypeError.textContent = "";
+	    			return true;
+	    		}
+	    	}
+	    	
+	    	function validateBrokerIPAddress(broker_name) {
+	    		var brokerIPAddressError = document.getElementById("brokerIPAddressError");
+
+	    		if (broker_name == 'Select broker IP address'){
+	    			
+	    			brokerIPAddressError.textContent = "Please select broker ip address";
+	    			return false;
+	    		} else {
+	    			brokerIPAddressError.textContent = "";
+	    			return true;
+	    		}
+	    	}
+	    	
 	    	 $(document).ready(function () {
 	       	  // Load broker ip
 	       	   loadCommandSettings();
@@ -252,9 +317,19 @@ var json = {};
 	       	      $("#table_data").append(newRow);
 	       	      $("#tag_name").val("");
 	       	      $("#variable").val("");
-	       	    } else {
+	       	    }else  if (!validatefields(tagName)) {
+					tagnameError.textContent = "Please enter tag name.";
+					return;
+				}
+	    	    else if (!validateOption(value)) {
+					variableError.textContent = "Please select variable.";
+					return;
+				}
+	       	    
+	       	    
+	       	    /* else {
 	       	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
-	       	    }
+	       	    } */
 	       	  });
 	       	  /* $("#addBtn").click(function () {
 	       		 // convertTableDataToJSON();
@@ -267,6 +342,25 @@ var json = {};
 	       	     	$('#commandConfigForm').submit(function(event) {
 	       				event.preventDefault();
 	       				var buttonText = $('#addBtn').val();
+	       				
+	       				var interval = $('#interval').find(":selected").val();
+	       				var broker_type = $('#broker_type').find(":selected").val();
+	       				var broker_name = $('#broker_name').find(":selected").val();
+	       				
+	       				if (!validateInterval(interval)) {
+	       					intervalError.textContent = "Please select interval";
+	       					return;
+	       				}
+	       				
+	       				if (!validateBrokerType(broker_type)) {
+	       					brokerTypeError.textContent = "Please select broker type";
+	       					return;
+	       				}
+	       				
+	       				if (!validateBrokerIPAddress(broker_name)) {
+	       					brokerIPAddressError.textContent = "Please select broker ip address ";
+	       					return;
+	       				}
 
 	       				if (buttonText == 'Add') {
 	       					addCommandConfig();
@@ -278,9 +372,9 @@ var json = {};
 	       	 $('#clearBtn').click(function(){
 	    		  $('#unit_id').val('');
 	  			$('#asset_id').val('');
-	  			$('#broker_type').val('');
-	  			$('#broker_name').val('');
-	  			$('#interval').val('');
+	  			$('#broker_type').val('Select broker type');
+	  			$('#broker_name').val('Select broker IP address');
+	  			$('#interval').val('Select interval');
 	    		  
 	    	  
 	    	});
@@ -337,10 +431,8 @@ var json = {};
 					broker_type : broker_type,
 					broker_name : broker_name,
 					interval : interval,
-					//tagData: tagData
 					tagData: JSON.stringify(tagData)
-					/* tag_name : tag_name,
-					variable : variable */
+					
 					
 				},
 				success : function(data) {
@@ -352,9 +444,9 @@ var json = {};
 
 					$('#unit_id').val('');
 					$('#asset_id').val('');
-					$('#broker_type').val('');
-					$('#broker_name').val('');
-					$('#interval').val('');
+					$('#broker_type').val('Select broker type');
+					$('#broker_name').val('Select broker IP address');
+					$('#interval').val('Select interval');
 					/* $('#tag_name').val('');
 					$('#variable').val(''); */
 				},
@@ -407,9 +499,9 @@ var json = {};
 
 					$('#unit_id').val('');
 					$('#asset_id').val('');
-					$('#broker_type').val('');
-					$('#broker_name').val('');
-					$('#interval').val('');
+					$('#broker_type').val('Select broker type');
+					$('#broker_name').val('Select broker IP address');
+					$('#interval').val('Select interval');
 					/* $('#tag_name').val('');
 					$('#variable').val(''); */
 				},
@@ -459,10 +551,11 @@ var json = {};
 						style="width: 20%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px;">
-							<option value="">Select Broker Type</option>
+							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
 						</select>
+						<span id="brokerTypeError" style="color:red;"></span>
 					</div>
 				<!-- </div>
 
@@ -471,8 +564,9 @@ var json = {};
 						style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;">
-							<option value=""></option>
+							<option value="Select broker IP address">Select broker IP address</option>
 						</select>
+						<span id="brokerIPAddressError" style="color:red;"></span>
 					</div>
 				<!-- </div>
 
@@ -481,7 +575,7 @@ var json = {};
 						style="width: 20%;">
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px;">
-							<option value="">Select Interval</option>
+							<option value="Select interval">Select interval</option>
 							<option value="30 sec">30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
@@ -493,6 +587,7 @@ var json = {};
 							<option value="1 hour">1 hour</option>
 
 						</select>
+						<span id="intervalError" style="color:red;"></span>
 					</div>
 				</div>
 
@@ -514,8 +609,16 @@ var json = {};
 					</div>
 				</div>
 				
-				<div class="row"><input style="margin-top: -31px; margin-left:-50px " type="button"
-						value="Plus" id="saveBtn" /> </div>
+				<div class="row">
+				<!-- <input style="margin-top: -31px; margin-left:-50px " type="button"
+						value="Plus" id="saveBtn" />  -->
+						
+						<button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
+  				border-radius: 10px; float: center;" 
+						 id="saveBtn">
+						 	<i class="fa fa-plus"></i></button>
+						
+						</div>
 						
 				<div class="row" style="display:flex;justify-content:right;">					
 						<input
