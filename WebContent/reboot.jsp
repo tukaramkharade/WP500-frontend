@@ -26,6 +26,17 @@
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
+					
+					var json1 = JSON.stringify(data);
+
+					var json = JSON.parse(json1);
+
+					if (json.status == 'fail') {
+						var confirmation = confirm(json.msg);
+						if (confirmation) {
+							window.location.href = 'login.jsp';
+						}
+					}
 					alert(data.message);
 
 				},

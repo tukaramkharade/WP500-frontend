@@ -35,6 +35,17 @@
 			success : function(data) {
 				var storeForwardDataTable = $('#data-table tbody');
 				storeForwardDataTable.empty();
+				
+				var json1 = JSON.stringify(data);
+
+				var json = JSON.parse(json1);
+
+				if (json.status == 'fail') {
+					var confirmation = confirm(json.msg);
+					if (confirmation) {
+						window.location.href = 'login.jsp';
+					}
+				}
 
 				var startIndex = (currentPage - 1) * itemsPerPage;
 				var endIndex = startIndex + itemsPerPage;

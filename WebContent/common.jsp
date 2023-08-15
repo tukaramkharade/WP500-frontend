@@ -43,9 +43,14 @@
                 <li class="nav-item">
                   <a href="overview.jsp">Overview</a>
                 </li>
+                <%-- <li class="nav-item">
+                  <a href="${pageContext.request.contextPath}/data">User List</a>
+                </li> --%>
+                
                 <li class="nav-item">
                   <a href="user.jsp">User List</a>
                 </li>
+                
                 <!-- <li class="nav-item">
                   <a href="#">Firmware</a>
                 </li>

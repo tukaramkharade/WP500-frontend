@@ -3,6 +3,7 @@ package com.tas.wp500;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,105 +51,130 @@ public class CommandConfigEditServlet extends HttpServlet {
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
 
-		try {
-
-			System.out.println("In get command settings!");
-			JSONArray resJsonArray = new JSONArray();
-
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			json.put("operation", "protocol");
-			json.put("protocol_type", "command");
-			json.put("operation_type", "get_query");
-			json.put("user", check_username);
-
-			String respStr = client.sendMessage(json.toString());
-
-			System.out.println("res " + new JSONObject(respStr));
-			logger.info("res " + new JSONObject(respStr));
-
-			JSONObject result = new JSONObject(respStr);
-
-			JSONArray command_result = result.getJSONArray("result");
-
-			System.out.println("Result : " + command_result.toString());
-
-			for (int i = 0; i < command_result.length(); i++) {
-
-				JSONObject jsObj = command_result.getJSONObject(i);
-
-				String command_tag = jsObj.getString("command_tag");
-				System.out.println("command_tag : " + command_tag);
-
-				String interval = jsObj.getString("intrval");
-				System.out.println("Interval : " + interval);
-
-				String broker_type = jsObj.getString("broker_type");
-				System.out.println(" Broker_type : " + broker_type);
-
-				String broker_ip = jsObj.getString("broker_ip");
-				System.out.println("Broker_ip : " + broker_ip);
-
-				String asset_id = jsObj.getString("asset_id");
-				System.out.println("Asset id : " + asset_id);
-
-				String unit_id = jsObj.getString("unit_id");
-				System.out.println("Unit id : " + unit_id);
-
-				JSONObject disObj = new JSONObject();
-
+			if(check_username != null){
+				
 				try {
 
-					disObj.put("command_tag", command_tag);
-				//	disObj.put("interval", interval);
-					
-					if(interval.equals("30")){
-						disObj.put("interval", "30 sec");
-					}else if(interval.equals("60")){
-						disObj.put("interval", "1 min");
-					}else if(interval.equals("300")){
-						disObj.put("interval", "5 min");
-					}else if(interval.equals("600")){
-						disObj.put("interval", "10 min");
-					}else if(interval.equals("900")){
-						disObj.put("interval", "15 min");
-					}else if(interval.equals("1200")){
-						disObj.put("interval", "20 min");
-					}else if(interval.equals("1500")){
-						disObj.put("interval", "25 min");
-					}else if(interval.equals("1800")){
-						disObj.put("interval", "30 min");
-					}else if(interval.equals("3600")){
-						disObj.put("interval", "1 hour");
-					}
-					
-					disObj.put("broker_type", broker_type);
-					disObj.put("broker_ip", broker_ip);
-					disObj.put("asset_id", asset_id);
-					disObj.put("unit_id", unit_id);
+					System.out.println("In get command settings!");
+					JSONArray resJsonArray = new JSONArray();
 
-					resJsonArray.put(disObj);
-					// firewallObj.put("lastName", "");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+					TCPClient client = new TCPClient();
+					JSONObject json = new JSONObject();
+
+					json.put("operation", "protocol");
+					json.put("protocol_type", "command");
+					json.put("operation_type", "get_query");
+					json.put("user", check_username);
+
+					String respStr = client.sendMessage(json.toString());
+
+					System.out.println("res " + new JSONObject(respStr));
+					logger.info("res " + new JSONObject(respStr));
+
+					JSONObject result = new JSONObject(respStr);
+
+					JSONArray command_result = result.getJSONArray("result");
+
+					System.out.println("Result : " + command_result.toString());
+
+					for (int i = 0; i < command_result.length(); i++) {
+
+						JSONObject jsObj = command_result.getJSONObject(i);
+
+						String command_tag = jsObj.getString("command_tag");
+						System.out.println("command_tag : " + command_tag);
+
+						String interval = jsObj.getString("intrval");
+						System.out.println("Interval : " + interval);
+
+						String broker_type = jsObj.getString("broker_type");
+						System.out.println(" Broker_type : " + broker_type);
+
+						String broker_ip = jsObj.getString("broker_ip");
+						System.out.println("Broker_ip : " + broker_ip);
+
+						String asset_id = jsObj.getString("asset_id");
+						System.out.println("Asset id : " + asset_id);
+
+						String unit_id = jsObj.getString("unit_id");
+						System.out.println("Unit id : " + unit_id);
+
+						JSONObject disObj = new JSONObject();
+
+						try {
+
+							disObj.put("command_tag", command_tag);
+						//	disObj.put("interval", interval);
+							
+							if(interval.equals("30")){
+								disObj.put("interval", "30 sec");
+							}else if(interval.equals("60")){
+								disObj.put("interval", "1 min");
+							}else if(interval.equals("300")){
+								disObj.put("interval", "5 min");
+							}else if(interval.equals("600")){
+								disObj.put("interval", "10 min");
+							}else if(interval.equals("900")){
+								disObj.put("interval", "15 min");
+							}else if(interval.equals("1200")){
+								disObj.put("interval", "20 min");
+							}else if(interval.equals("1500")){
+								disObj.put("interval", "25 min");
+							}else if(interval.equals("1800")){
+								disObj.put("interval", "30 min");
+							}else if(interval.equals("3600")){
+								disObj.put("interval", "1 hour");
+							}
+							
+							disObj.put("broker_type", broker_type);
+							disObj.put("broker_ip", broker_ip);
+							disObj.put("asset_id", asset_id);
+							disObj.put("unit_id", unit_id);
+
+							resJsonArray.put(disObj);
+							// firewallObj.put("lastName", "");
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+
+					response.setContentType("application/json");
+
+					// Write the JSON data to the response
+					response.getWriter().print(resJsonArray.toString());
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}else{
+				
+				try {
+					JSONObject userObj = new JSONObject();
+					userObj.put("msg", "Your session is timeout. Please login again");
+					userObj.put("status", "fail");
+					
+					
+					
+					System.out.println(">>" +userObj);
+					
+					// Set the response content type to JSON
+					response.setContentType("application/json");
+
+					// Write the JSON data to the response
+					response.getWriter().print(userObj.toString());
+					
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
-			logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-
-			response.setContentType("application/json");
-
-			// Write the JSON data to the response
-			response.getWriter().print(resJsonArray.toString());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+//			System.out.println("Login first");
+//			response.sendRedirect("login.jsp");
 		}
 
 	}

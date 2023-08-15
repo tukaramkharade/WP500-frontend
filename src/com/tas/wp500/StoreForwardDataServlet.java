@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -40,11 +41,21 @@ public class StoreForwardDataServlet extends HttpServlet {
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
 
+		
+		
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 
 		try {
 
+			
+			HttpSession session = request.getSession(false);
+
+			System.out.println(">> " + session.getAttribute("username"));
+			
+			String check_username = (String) session.getAttribute("username");
+			
+			if (check_username != null) {
 			json.put("operation", "get_store_forword_data");
 
 			String respStr = client.sendMessage(json.toString());
@@ -101,10 +112,30 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 			// Write the JSON data to the response
 			response.getWriter().print(resJsonArray.toString());
+			}else{
+				
+				try {
+					JSONObject userObj = new JSONObject();
+					userObj.put("msg", "Your session is timeout. Please login again");
+					userObj.put("status", "fail");
+					
+					
+					System.out.println(">>" +userObj);
+					
+					// Set the response content type to JSON
+					response.setContentType("application/json");
 
+					// Write the JSON data to the response
+					response.getWriter().print(userObj.toString());
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**

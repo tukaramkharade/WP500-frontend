@@ -1,114 +1,3 @@
-
-<%-- <!DOCTYPE html>
-<head>
-    
-    <title>Login</title>
-    <link rel="stylesheet" href="nav-bar.css" />
-    <!-- <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            background-image: url("images/background.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        
-        .container {
-            max-width: 400px;
-            margin-top: 18%;
-            margin-left:35%;
-            padding: 20px;
-            background-color: #cdd1ef;           
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            text-align: center;
-            color: #f7f4f4;
-            margin-top: 150px;
-        }
-        
-        .error-message {
-            color: red;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: #000209;
-        }
-        
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #6c45ed;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-bottom: 15px;
-
-        }
-        
-        input[type="submit"]:hover {
-            background-color: #6b13ee;
-            
-        }
-        img{
-            margin-left: 35%;
-            margin-bottom: 20px;
-            height: 50px;
-        }
-        /* @media screen and (max-width:600px) {
-            .container{
-                max-width: 200px;
-            margin-top: 25%;
-            margin-left:50%;
-            }
-            
-        } */
-       
-    </style> -->
-</head>
-<body style="background-color: #2e3891d4;">
-    
-     <!-- Display error message if there is an error parameter in the URL
-    <% if (request.getParameter("error") != null) { %>
-        <p style="color: red;">Invalid username or password.</p>
-    <% } %>  -->
-    
-    <form action="WP500Login" method="post" class="container" style="width: 24em; border-radius: 30px; margin-left: 37em;margin-top: 12em; background-color: #ffffff8f;padding-bottom: 30px;">
-        <div>
-            <img src="images/tasm2m.png" alt="Tasm2mLogo" style="width: 78%; float: center;"/>
-        </div>
-            <label for="username" style="float: left;">Username:</label>
-        <input type="text" id="username" name="username" required><br>
-        
-        <label for="password" style="float: left;">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-      
-        <input style="padding: 5px 140px;font-size:medium" type="submit" value="Login">
-    </form>
-   
-</body>
-</html> --%>
-
-
-
-<!-- ------------------------------------------------------------------------------------------ -->
-
-
 <!DOCTYPE html>
 <head>
     
@@ -123,6 +12,54 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+ function checkLogin() {
+	
+	var username = $('#username').val();
+	var password = $('#password').val();
+	
+	$
+			.ajax({
+				
+				url : 'WP500Login',
+				type : 'POST',
+				data : {
+					username : username,
+					password : password
+				},
+				success : function(data) {
+					
+				//alert(data.msg);
+				
+				var json1 = JSON.stringify(data);
+
+						var json = JSON.parse(json1);
+
+						if (json.status == 'fail') {
+							var confirmation = confirm(json.msg);
+							if (confirmation) {
+								//window.location.href = 'login.jsp';
+							}
+						}
+				
+				
+				
+				
+				
+			},
+				error : function(xhr, status, error) {
+					console.log('Error showing login data: ' + error);
+				}
+			});
+} 
+
+$(document).ready(function() {
+	//checkLogin();
+	
+});
+
+</script>
     <style>
         body {
             display: flex;
@@ -181,7 +118,7 @@
         <label for="password" style="float: left;">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
       
-        <input style="padding: 5px 140px;font-size:medium" type="submit" value="Login">
+        <input style="padding: 5px 140px;font-size:medium" type="submit" value="Login" id="login">
     </form>
    
 </body>

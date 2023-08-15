@@ -1,6 +1,9 @@
 package com.tas.wp500;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,35 +37,26 @@ public class WP500Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// String username = request.getParameter("username");
-		// String password = request.getParameter("password");
-		//
-		//
-		// System.out.println(username + " " + password);
-		// // Check the credentials (in this example, the username is "admin"
-		// and the
-		// // password is "password")
-		// if (username.equals("admin") && password.equals("password")) {
-		// // Successful login
-		// response.sendRedirect("overview.jsp");
-		// } else {
-		// // Failed login
-		// response.sendRedirect("login.jsp?error=1");
-		// }
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
-		
-			
 		System.out.println("In login...");
+		
+		HttpSession session = request.getSession();
+		session.setMaxInactiveInterval(1800);
+		
+		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		try {
@@ -70,7 +64,6 @@ public class WP500Login extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "login");
-			json.put("user", username);
 
 			json.put("username", username);
 			json.put("password", password);
@@ -79,26 +72,44 @@ public class WP500Login extends HttpServlet {
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));
 			logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-			String message = new JSONObject(respStr).getString("msg");
+			
 			String status = new JSONObject(respStr).getString("status");
-
+			
 			logger.info(new JSONObject(respStr).getString("status"));
 			if (status.equals("success")) {
 				// Successful login
 
 				logger.info("username: " + username);
 				logger.info("password: " + password);
-
-				HttpSession session = request.getSession();
-				session.setAttribute("username", username);
-
+				
 				response.sendRedirect("overview.jsp");
-			} else {
-				// Failed login
-				response.sendRedirect("login.jsp?error=1");
+				session.setAttribute("username", username);
+			}else {
+				
+				try {
+					JSONObject userObj = new JSONObject();
+					userObj.put("msg", "Invalid user. Please login again");
+					userObj.put("status", "fail");
+					
+					
+					System.out.println(">>" +userObj);
+					
+					// Set the response content type to JSON
+					response.setContentType("application/json");
+
+					// Write the JSON data to the response
+					response.getWriter().print(userObj.toString());
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				//response.sendRedirect("login.jsp");
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.sendRedirect("login.jsp?error=1");
 		}
 	}
 

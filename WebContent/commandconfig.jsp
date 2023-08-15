@@ -74,64 +74,7 @@ var json = {};
  	        console.log("Error showing tag list: " + error);
  	      },
  	    });
- 	  }
-
-	/* $(document).ready(function() {
-
-		// Load broker ip
-		loadBrokerIPList();
-		 loadTagList();
-		 
-		 $("#saveBtn").click(function () {
-	    	    var tagName = $("#tag_name").val();
-	    	    var value = $("#variable").val();
-
-	    	    // Check if tagName and value are not empty
-	    	    if (tagName.trim() !== "" && value.trim() !== "") {
-	    	      var newRow = $("<tr>")
-	    	        .append($("<td>").text(tagName))
-	    	        .append($("<td>").text(value))
-	    	        .append(
-	    	          $("<td>").html(
-	    	            `<input
-	    	                style="background-color :red"
-	    	                type="button"
-	    	                value="Delete"
-	    	                onclick="deleteRow(this)"
-	    	              />`
-	    	          )
-	    	        );
-
-	    	      $("#table_data").append(newRow);
-	    	      $("#tag_name").val("");
-	    	      $("#variable").val("");
-	    	    } else {
-	    	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
-	    	    }
-	    	  });
-	    	  $("#addBtn").click(function () {
-	    		 // convertTableDataToJSON();
-	    		  tableToJson();
-	    		  addAlarmConfig();
-	    		  
-	    		  /* $('#alarmConfigForm').submit(function(event) {
-	    				event.preventDefault();
-	    				var buttonText = $('#saveBtn').val();
-
-	    				if (buttonText == 'save') {
-	    					addAlarmConfig();
-	    				}
-	    			}); 
-
-	      	   
-	      	  });
-	    	}); */
-	    	
-	    	
-/* 	    	-----------------------------------------------------------------------
- */	    	
- 
- 
+ 	  } 
  
  function loadCommandSettings() {
 		$.ajax({
@@ -141,6 +84,19 @@ var json = {};
 			success : function(data) {
 				// Clear existing table rows
 				// Iterate through the user data and add rows to the table
+				
+				
+				var json1 = JSON.stringify(data);
+
+						var json = JSON.parse(json1);
+
+						if (json.status == 'fail') {
+							var confirmation = confirm(json.msg);
+							if (confirmation) {
+								window.location.href = 'login.jsp';
+							}
+						}
+						
 				$.each(data,function(index, commandConfig) {
 									
 									var unit_id = commandConfig.unit_id;
@@ -528,7 +484,7 @@ var json = {};
 		<h3>COMMAND CONFIG SETTINGS</h3>
 		<hr>
 		<div class="container">
-			<form id="commandConfigForm">
+			<form id="commandConfigForm" action="commandConfigEditServlet">
 				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="unit_id" name="unit_id"

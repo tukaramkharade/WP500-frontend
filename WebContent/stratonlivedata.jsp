@@ -23,6 +23,17 @@
 
 				var stratonLiveTable = $('#data-table tbody');
 				stratonLiveTable.empty();
+				
+				var json1 = JSON.stringify(data);
+
+				var json = JSON.parse(json1);
+
+				if (json.status == 'fail') {
+					var confirmation = confirm(json.msg);
+					if (confirmation) {
+						window.location.href = 'login.jsp';
+					}
+				}
 
 				// Iterate through the user data and add rows to the table
 				$.each(data, function(index, stratonLiveData) {

@@ -47,8 +47,9 @@ public class JSONBuilderEditServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
+			
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
@@ -156,8 +157,27 @@ public class JSONBuilderEditServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+//			System.out.println("Login first");
+//			response.sendRedirect("login.jsp");
+			
+			
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+				
+				
+				System.out.println(">>" +userObj);
+				
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

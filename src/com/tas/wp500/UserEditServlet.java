@@ -3,6 +3,7 @@ package com.tas.wp500;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -87,6 +88,7 @@ public class UserEditServlet extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
+
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

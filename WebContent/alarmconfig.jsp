@@ -85,9 +85,19 @@
   			success : function(data) {
 				// Clear existing table rows
 				// Iterate through the user data and add rows to the table
+				
+				var json1 = JSON.stringify(data);
+
+						var json = JSON.parse(json1);
+
+						if (json.status == 'fail') {
+							var confirmation = confirm(json.msg);
+							if (confirmation) {
+								window.location.href = 'login.jsp';
+							}
+						}
+						
 				$.each(data,function(index, alarmConfig) {
-									
-							
 							
 									var unit_id = alarmConfig.unit_id;
 									var asset_id = alarmConfig.asset_id;
@@ -96,13 +106,10 @@
 									var interval = alarmConfig.interval;
 									var alarm_tag = alarmConfig.alarm_tag;
 									
-									//alert(alarm_tag);
-									
 									var result = alarm_tag;
 
 									$.each($.parseJSON(result), function(k, v) {
-									//    alert(k + ' and ' + v);
-									    
+									
 									if(k != null){
 										var newRow = $("<tr>")
 	    	        					.append($("<td>").text(k))
@@ -467,7 +474,7 @@ function addAlarmConfig() {
 		<hr />
 
 		<div class="container">
-			<form id="alarmConfigForm">
+			<form id="alarmConfigForm" action="alarmConfigAddData">
 				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="unit_id" name="unit_id"
@@ -532,9 +539,7 @@ function addAlarmConfig() {
 							placeholder="Tag Name" style="height: 17px" /> <span
 							id="tagnameError" style="color: red;"></span>
 					</div>
-				<!-- </div>
-
-				<div class="row"> -->
+				
 					<div class="col-75-7"
 						style="width: 20%;">
 						<select class="textBox" id="variable" name="variable"
@@ -545,9 +550,7 @@ function addAlarmConfig() {
 				</div>
 
 				<div class="row">
-				<!-- <input style="margin-top: -31px; margin-left:-50px" type="button"
-						 id="saveBtn" />  -->
-						 
+				
 						 <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
   				border-radius: 10px; float: center;" 
 						 id="saveBtn">
