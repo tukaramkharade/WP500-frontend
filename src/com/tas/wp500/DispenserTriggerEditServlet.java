@@ -112,6 +112,9 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 
 						String status = jsObj.getString("status");
 						logger.info("status : " + status);
+						
+						String unit_id= jsObj.getString("unit_id");
+						logger.info("unit_id : " + unit_id);
 
 						JSONObject disObj = new JSONObject();
 
@@ -130,6 +133,7 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 							disObj.put("unit_price", unit_price);
 							disObj.put("trigger_tag", trigger_tag);
 							disObj.put("status", status);
+							disObj.put("unit_id", unit_id);
 
 							resJsonArray.put(disObj);
 							// firewallObj.put("lastName", "");
@@ -201,6 +205,7 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 			String quantity = request.getParameter("quantity");
 			String unit_price = request.getParameter("unit_price");
 			String status = request.getParameter("status");
+			String unit_id = request.getParameter("unit_id");
 
 			try {
 
@@ -226,6 +231,7 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 				json.put("quantity", quantity);
 				json.put("unit_price", unit_price);
 				json.put("broker_ip_address", broker_name);
+				json.put("unit_id", unit_id);
 
 				String respStr = client.sendMessage(json.toString());
 

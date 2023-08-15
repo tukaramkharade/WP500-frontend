@@ -23,7 +23,10 @@ public class TCPClient {
 			//127.0.0.1
 			logger.info("Connecting.......");
 			System.out.println("Connecting..");
-			s = new Socket("192.168.1.124", 6801);// new
+			//s = new Socket("192.168.1.124", 6801);
+			s = new Socket("127.0.0.1", 6801);
+			
+			// new
 																			// Socket("192.168.1.149",
 																			// 6881);
 			// Step 1 read length

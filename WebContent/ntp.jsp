@@ -12,8 +12,9 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 
@@ -338,7 +339,7 @@ input:checked+.slider:before {
 
 		$("#updatentp").val("Add");
 	}
-	
+
 	function toggleNtpClient() {
 		var toggleButton = document.getElementById("ntp_client");
 		var ipField = document.getElementById("ntp_interval");
@@ -355,34 +356,38 @@ input:checked+.slider:before {
 		}
 	}
 
-	function setManualTime(){
-		
+	function setManualTime() {
+
 		var datetime = $('#datetime').val();
-		
-		
+
 		$.ajax({
 			url : 'dateTimeServlet',
 			type : 'POST',
 			data : {
 				datetime : datetime
-			
+
 			},
 			success : function(data) {
 				// Display the registration status message
 				alert(data.message);
-		
+
 				// Clear form fields
 
 				$('#datetime').val('');
-				
+
 			},
 			error : function(xhr, status, error) {
 				console.log('Error setting manual time: ' + error);
 			}
 		});
-		
-		
-		
+
+	}
+
+	function toggleDateTimeInput() {
+		var datetimeInput = document.getElementById("datetime");
+		var ntpClientCheckbox = document.getElementById("ntp_client");
+
+		datetimeInput.disabled = ntpClientCheckbox.checked;
 	}
 
 	$(document).ready(function() {
@@ -390,12 +395,11 @@ input:checked+.slider:before {
 			getCurrentTime();
 		});
 		getntp();
-		
+
 		$('#setDateTime').click(function() {
 			setManualTime();
 		});
-		
-		
+
 		// Handle form submission
 		$("#updateNtp").submit(function(event) {
 			event.preventDefault();
@@ -406,7 +410,6 @@ input:checked+.slider:before {
 			}
 		});
 
-		
 	});
 </script>
 
@@ -484,15 +487,11 @@ input:checked+.slider:before {
 				<p id="ist_time"></p>
 				<p id="utc_time"></p>
 
+				<label for="datetime">Select Date-Time:</label> <input
+					type="datetime-local" id="datetime" name="datetime" required
+					onchange="toggleDateTimeInput()">
+				<button id="setDateTime">Submit</button>
 
-				<!-- <label for="datetime">Select a date and time:</label> <input
-					type="datetime-local" id="datetime" name="datetime"> -->
-
-
-				<label for="datetime">Select Date-Time:</label>
-        <input type="datetime-local" id="datetime" name="datetime" required>
-        <button id="setDateTime">Submit</button>
-        
 			</div>
 		</section>
 	</div>

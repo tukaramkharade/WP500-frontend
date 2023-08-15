@@ -295,6 +295,8 @@
 																	dispenserTrigger.broker_ip_address));
 											row.append($('<td>').text(
 													dispenserTrigger.status));
+											row.append($('<td>').text(
+													dispenserTrigger.unit_id));
 
 											var actions = $('<td>');
 											var editButton = $(
@@ -315,6 +317,7 @@
 																setQuantity(dispenserTrigger.quantity);
 																setUnitPrice(dispenserTrigger.unit_price);
 																setStatus(dispenserTrigger.status);
+																setUnitId(dispenserTrigger.unit_id);
 															});
 
 											var deleteButton = $(
@@ -337,7 +340,7 @@
 										});
 					},
 					error : function(xhr, status, error) {
-						console.log('Error loading jsonBuilderTable data: '
+						console.log('Error loading dispenser trigger data: '
 								+ error);
 					}
 				});
@@ -413,6 +416,11 @@
 
 		$('#status').val(dispenserTriggerId);
 	}
+	
+	function setUnitId(dispenserTriggerId) {
+
+		$('#unit_id').val(dispenserTriggerId);
+	}
 
 	function editDispenserTrigger() {
 
@@ -431,6 +439,7 @@
 		var quantity = $('#quantity').find(":selected").val();
 		var unit_price = $('#unit_price').find(":selected").val();
 		var status = $('#status').find(":selected").val();
+		var unit_id = $('#unit_id').val();
 
 		$.ajax({
 			url : 'dispenserTriggerEditServlet',
@@ -448,7 +457,8 @@
 				total : total,
 				quantity : quantity,
 				unit_price : unit_price,
-				status : status
+				status : status,
+				unit_id : unit_id
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -470,6 +480,7 @@
 				$('#quantity').val('Select quantity');
 				$('#unit_price').val('Select unit price');
 				$('#status').val('Select status');
+				$('#unit_id').val('');
 
 				$("#serial_number").prop("disabled", false);
 
@@ -499,6 +510,7 @@
 		var quantity = $('#quantity').find(":selected").val();
 		var unit_price = $('#unit_price').find(":selected").val();
 		var status = $('#status').find(":selected").val();
+		var unit_id = $('#unit_id').val();
 
 		$.ajax({
 			url : 'dispenserTriggerDataServlet',
@@ -516,7 +528,8 @@
 				total : total,
 				quantity : quantity,
 				unit_price : unit_price,
-				status : status
+				status : status,
+				unit_id : unit_id
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -538,6 +551,7 @@
 				$('#quantity').val('Select quantity');
 				$('#unit_price').val('Select unit price');
 				$('#status').val('Select status');
+				$('#unit_id').val('');
 
 			},
 			error : function(xhr, status, error) {
@@ -823,6 +837,7 @@
 							$('#quantity').val('Select quantity');
 							$('#unit_price').val('Select unit price');
 							$('#status').val('Select status');
+							$('#unit_id').val('');
 
 						});
 
@@ -869,10 +884,6 @@
 							<option value="d">D</option>
 						</select> <span id="sideError" style="color: red"></span>
 					</div> 
-					
-					
-					
-
 					
 					<div class="col-75-4" style="width: 20%;">
 						<input type="text" id="trigger_tag" name="trigger_tag"
@@ -945,9 +956,6 @@
 						</select> <span id="unitPriceError" style="color: red"></span>
 					</div>
 
-					<!-- </div>
-
-				<div class="row"> -->
 					<div class="col-75-3" style="width: 20%;">
 						<select class="textBox" id="status" name="status"
 							style="height: 35px" required>
@@ -956,15 +964,18 @@
 							<option value="disable">Disable</option>
 						</select> <span id="statusError" style="color: red"></span>
 					</div>
-					<!-- </div>
-
-				<div class="row"> -->
+					
 					<div class="col-75-4" style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;">
 							<option value="Select broker IP address">Select broker
 								IP address</option>
 						</select> <span id="brokerIPAddressError" style="color: red;"></span>
+					</div>
+					
+					<div class="col-75-14" style="width: 20%;">
+						<input type="text" id="unit_id" name="unit_id"
+							placeholder="Unit ID" required />
 					</div>
 				</div>
 
@@ -998,6 +1009,7 @@
 						<th>Quantity</th>
 						<th>Broker IP Address</th>
 						<th>Status</th>
+						<th>Unit ID</th>
 						<th>Actions</th>
 					</tr>
 				</thead>

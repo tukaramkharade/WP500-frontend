@@ -112,6 +112,8 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 		String quantity = request.getParameter("quantity");
 		String unit_price = request.getParameter("unit_price");
 		String status = request.getParameter("status");
+		String unit_id = request.getParameter("unit_id");
+		
 
 		// System.out.println(firstName + " " + password);
 
@@ -140,6 +142,7 @@ public class DispenserTriggerDataServlet extends HttpServlet {
 			json.put("quantity", quantity);
 			json.put("unit_price", unit_price);
 			json.put("broker_ip_address", broker_name);
+			json.put("unit_id", unit_id);
 
 			String respStr = client.sendMessage(json.toString());
 

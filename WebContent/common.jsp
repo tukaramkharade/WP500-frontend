@@ -43,9 +43,10 @@
                 <li class="nav-item">
                   <a href="overview.jsp">Overview</a>
                 </li>
-                <%-- <li class="nav-item">
-                  <a href="${pageContext.request.contextPath}/data">User List</a>
-                </li> --%>
+                
+                 <li class="nav-item">
+                  <a href="generalsettings.jsp">General Settings</a>
+                </li>
                 
                 <li class="nav-item">
                   <a href="user.jsp">User List</a>
@@ -84,7 +85,7 @@
                   <a href="lan.jsp">LAN</a>
                 </li>
                 <li class="nav-item">
-                  <a href="firewall.jsp">Firewall</a>
+                  <a href="trafficrules.jsp">Traffic Rules</a>
                 </li>
                 <li class="nav-item">
                   <a href="ntp.jsp">NTP</a>

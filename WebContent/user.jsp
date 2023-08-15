@@ -259,6 +259,34 @@
 			return true;
 		}
 	}
+	
+	function validatePassword() {
+		  var password = document.getElementById("password").value;
+		  var passwordError = document.getElementById("passwordError");
+
+		  // Reset error message
+		  passwordError.textContent = "";
+
+		  // Password length should be at least 8 characters
+		  if (password.length < 8) {
+		    passwordError.textContent = "Password must be at least 8 characters long.";
+		    return;
+		  }
+
+		  // Password should contain at least one uppercase letter, one lowercase letter, and one digit
+		  var hasUppercase = /[A-Z]/.test(password);
+		  var hasLowercase = /[a-z]/.test(password);
+		  var hasDigit = /\d/.test(password);
+
+		  if (!hasUppercase || !hasLowercase || !hasDigit) {
+		    passwordError.textContent = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
+		    return;
+		  }
+
+		  // Password is valid
+		//  alert("Password is valid!");
+		}
+
 
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -270,12 +298,18 @@
 			event.preventDefault();
 			var buttonText = $('#registerBtn').val();
 			var role = $('#role').find(":selected").val();
+			var password = $('#password').val();
 
 			if (!validateRole(role)) {
 				roleError.textContent = "Please select role";
 				return;
 			}
 
+			if (!validatePassword(password)) {
+				passwordError.textContent = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
+				return;
+			}
+			
 			if (buttonText == 'Add') {
 				addUser();
 
@@ -324,6 +358,8 @@
 						<div class="col-75-2" style="width: 20%;">
 							<input type="password" id="password" name="password"
 								placeholder="Password" required>
+								
+								<p id="passwordError" style="color: red;"></p>
 						</div>
 						<!-- </div>
 					<div class="row"> -->

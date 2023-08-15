@@ -15,11 +15,12 @@ public class DispenserTrigger {
 	private String broker_ip_address;
 	private String quantity;
 	private String unit_price;
+	private String unit_id;
 	
 	
 	public DispenserTrigger(String station_name, String serial_number, String side, String trigger_tag,
 			String trigger_value, String status, String start_pressure, String end_pressure, String temperature,
-			String total, String broker_ip_address, String quantity, String unit_price) {
+			String total, String broker_ip_address, String quantity, String unit_price, String unit_id) {
 		super();
 		this.station_name = station_name;
 		this.serial_number = serial_number;
@@ -34,6 +35,17 @@ public class DispenserTrigger {
 		this.broker_ip_address = broker_ip_address;
 		this.quantity = quantity;
 		this.unit_price = unit_price;
+		this.unit_id = unit_id;
+	}
+
+
+	public String getUnit_id() {
+		return unit_id;
+	}
+
+
+	public void setUnit_id(String unit_id) {
+		this.unit_id = unit_id;
 	}
 
 

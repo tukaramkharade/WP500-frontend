@@ -1,7 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WP500 Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
 <link rel="stylesheet"
@@ -11,7 +13,69 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-<!-- <%--  <%@ include file="header.jsp"%> --%> -->
+
+<style type="text/css">
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 14px;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 27px;
+	width: 26px;
+	left: 6.3px;
+	bottom: 2px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+	border-radius: 54px;
+}
+
+.slider.round:before {
+	border-radius: 50%;
+}
+</style>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	function loadFirewallList() {
@@ -36,7 +100,7 @@
 								window.location.href = 'login.jsp';
 							}
 						}
-						
+
 						// Iterate through the user data and add rows to the table
 						$
 								.each(
@@ -137,6 +201,23 @@
 			});
 		}
 	}
+
+	function toggle() {
+		var toggleButton = document.getElementById("ntp_client");
+		var ipField = document.getElementById("ntp_interval");
+		var serverField = document.getElementById("ntp_server");
+
+		if (toggleButton.checked) {
+			ipField.disabled = false;
+			serverField.disabled = false;
+			toggleButton.value = "1"; //ntp_client_enable
+		} else {
+			ipField.disabled = true;
+			serverField.disabled = true;
+			toggleButton.value = "0"; //ntp_client_disable
+		}
+	}
+
 	//Function to execute on page load
 	$(document).ready(function() {
 		// Load user list
@@ -151,7 +232,7 @@
 				addFirewall();
 			}
 		});
-		
+
 		$('#clearBtn').click(function() {
 			$('#portNumber').val('');
 			$('#protocol').val('');
@@ -161,57 +242,76 @@
 	});
 </script>
 
-<style>
-* {
-	box-sizing: border-box;
-}
 
-/* Clear floats after the columns */
-.row::after {
-	content: "";
-	display: table;
-	clear: both;
-}
-
-/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-	.col-25, .col-75, input[type="submit"] {
-		width: 100%;
-		margin-top: 0;
-	}
-}
-</style>
 </head>
 <body>
-	<!-- <div class="container"> -->
+
 	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
+
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>FIREWALL</h3>
+		<h3>TRAFFIC RULES</h3>
 		<hr>
+
 		<div class="container">
 			<form id="firewallForm" method="post">
-				<div class="row" style="display: flex; flex-content: space-between; margin-top: -20px;">
+
+				<div class="row">
+					<div
+						style="width: 40%; margin-top: -20px; display: flex; justify-content: left;">
+
+						<label for="enable">Enable</label> <label class="switch">
+							<input type="checkbox" checked> <span
+							class="slider round"></span>
+						</label>
+
+					</div>
+
+				</div>
+
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
+
+					<div class="col-75-5" style="width: 20%;">
+						<input type="text" id="name" name="name" placeholder="Name" />
+					</div>
+
+					<div class="col-75-4" style="width: 20%;">
+						<input type="text" id="interface"
+							name="interface" placeholder="Interface" />
+					</div>
+
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="portNumber" name="portNumber"
-							placeholder="Port Number" />
+							placeholder="Destination Port" />
 					</div>
-				
-					<div class="col-75-2"
-						style="width: 20%;">
-						<input type="text" id="protocol" name="protocol"
-							placeholder="Protocol" />
+
+					<div class="col-75-1" style="width: 20%;">
+						<input type="text" id="macAddress" name="macAddress"
+							placeholder="Source MAC address" />
 					</div>
-				
-					<div class="col-75-3"
-						style="width: 20%;">
+
+					<div class="col-75-2" style="width: 20%;">
+						<select class="textBox" id="protocol" name="protocol"
+								style="height: 35px;">
+								<option value="Select protocol">Select protocol</option>
+								<option>TCP</option>
+								<option>UDP</option>
+
+							</select>
+					</div>
+				</div>
+
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
+					<div class="col-75-3" style="width: 20%;">
 						<input type="text" id="ip_addr" name="ip_addr"
-							placeholder="IP Address" />
+							placeholder="Source IP address" />
 					</div>
 				</div>
 
@@ -224,7 +324,7 @@
 			</form>
 		</div>
 
-		<h3>FIREWALL SETTINGS LIST</h3>
+		<h3>TRAFFIC RULES LIST</h3>
 		<hr>
 		<div class="container">
 			<table id="firewallListTable">
@@ -247,20 +347,5 @@
 		</section>
 	</div>
 
-	<div class="footer">
-		<%@ include file="footer.jsp"%>
-	</div>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
