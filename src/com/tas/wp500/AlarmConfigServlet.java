@@ -234,7 +234,17 @@ public class AlarmConfigServlet extends HttpServlet {
 			json.put("broker_ip", broker_name);
 			//json.put("intrval", interval);
 			
-			if(interval.equals("30 sec")){
+			if(interval.equals("5 sec")){
+				json.put("intrval", "5");
+			}else if(interval.equals("10 sec")){
+				json.put("intrval", "10");
+			}else if(interval.equals("15 sec")){
+				json.put("intrval", "15");
+			}else if(interval.equals("20 sec")){
+				json.put("intrval", "20");
+			}else if(interval.equals("25 sec")){
+				json.put("intrval", "25");
+			}else if(interval.equals("30 sec")){
 				json.put("intrval", "30");
 			}else if(interval.equals("1 min")){
 				json.put("intrval", "60");

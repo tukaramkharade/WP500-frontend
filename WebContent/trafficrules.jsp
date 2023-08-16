@@ -45,7 +45,7 @@
 	content: "";
 	height: 27px;
 	width: 26px;
-	left: 6.3px;
+	left: 3px;
 	bottom: 2px;
 	background-color: white;
 	-webkit-transition: .4s;
@@ -105,20 +105,14 @@ input:checked+.slider:before {
 						$
 								.each(
 										data,
-										function(index, firewall) {
+										function(index, trafficrules) {
 											var row = $("<tr>");
-											row.append($("<td>").text(
-													firewall.lineNumber + ""));
-											row.append($("<td>").text(
-													firewall.target + ""));
-											row.append($("<td>").text(
-													firewall.protocol + ""));
-											row.append($("<td>").text(
-													firewall.opt + ""));
-											row.append($("<td>").text(
-													firewall.source + ""));
-											row.append($("<td>").text(
-													firewall.destination + ""));
+											row.append($("<td>").text(trafficrules.lineNumber + ""));
+											row.append($("<td>").text(trafficrules.target + ""));
+											row.append($("<td>").text(trafficrules.protocol + ""));
+											row.append($("<td>").text(trafficrules.opt + ""));
+											row.append($("<td>").text(trafficrules.source + ""));
+											row.append($("<td>").text(trafficrules.destination + ""));
 
 											var actions = $("<td>");
 											var deleteButton = $(
@@ -126,7 +120,7 @@ input:checked+.slider:before {
 													.text("Delete")
 													.click(
 															function() {
-																deleteFirewall(firewall.lineNumber);
+																deleteFirewall(trafficrules.lineNumber);
 															});
 
 											//	actions.append(editButton);

@@ -106,7 +106,17 @@ public class AlarmConfigAddData extends HttpServlet {
 							disObj.put("alarm_tag", alarm_tag);
 							// disObj.put("interval", interval);
 
-							if (interval.equals("30")) {
+							if (interval.equals("5")) {
+								disObj.put("interval", "5 sec");
+							} else if (interval.equals("10")) {
+								disObj.put("interval", "10 sec");
+							} else if (interval.equals("15")) {
+								disObj.put("interval", "15 sec");
+							} else if (interval.equals("20")) {
+								disObj.put("interval", "20 sec");
+							} else if (interval.equals("25")) {
+								disObj.put("interval", "25 sec");
+							} else if (interval.equals("30")) {
 								disObj.put("interval", "30 sec");
 							} else if (interval.equals("60")) {
 								disObj.put("interval", "1 min");
@@ -151,38 +161,36 @@ public class AlarmConfigAddData extends HttpServlet {
 				}
 			} else {
 
-//				System.out.println("Login first");
-//
-//				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/login.jsp");
-//
-//				try {
-//					dispatcher.forward(request, response);
-//				} catch (ServletException | IOException e) {
-//					// TODO Auto-generated catch block
-//					// e.printStackTrace();
-//					logger.error(e.getMessage());
-//				}
-				
-				
+				// System.out.println("Login first");
+				//
+				// RequestDispatcher dispatcher =
+				// this.getServletContext().getRequestDispatcher("/login.jsp");
+				//
+				// try {
+				// dispatcher.forward(request, response);
+				// } catch (ServletException | IOException e) {
+				// // TODO Auto-generated catch block
+				// // e.printStackTrace();
+				// logger.error(e.getMessage());
+				// }
+
 				try {
 					JSONObject userObj = new JSONObject();
 					userObj.put("msg", "Your session is timeout. Please login again");
 					userObj.put("status", "fail");
-					
-					
-					
-					System.out.println(">>" +userObj);
-					
+
+					System.out.println(">>" + userObj);
+
 					// Set the response content type to JSON
 					response.setContentType("application/json");
 
 					// Write the JSON data to the response
 					response.getWriter().print(userObj.toString());
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 
 		} else {
@@ -240,7 +248,17 @@ public class AlarmConfigAddData extends HttpServlet {
 				json.put("broker_ip", broker_name);
 				// json.put("intrval", interval);
 
-				if (interval.equals("30 sec")) {
+				if (interval.equals("5 sec")) {
+					json.put("intrval", "5");
+				}else if (interval.equals("10 sec")) {
+					json.put("intrval", "10");
+				}else if (interval.equals("15 sec")) {
+					json.put("intrval", "15");
+				}else if (interval.equals("20 sec")) {
+					json.put("intrval", "20");
+				}else if (interval.equals("25 sec")) {
+					json.put("intrval", "25");
+				} else if (interval.equals("30 sec")) {
 					json.put("intrval", "30");
 				} else if (interval.equals("1 min")) {
 					json.put("intrval", "60");

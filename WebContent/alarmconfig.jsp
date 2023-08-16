@@ -14,12 +14,10 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   
-
-	/* $('#registerBtn').val('Add'); */
 	
 	var json = {};
 
@@ -246,6 +244,39 @@
 	}
      
       $(document).ready(function () {
+    	  $('#addBtn').prop('disabled', true);
+    	  var role = '${role}';
+    	  
+    	  /* if(role == 'VIEWER')
+    		  {
+    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+    		  
+    		  $('#addBtn').prop('disabled', true); 
+				$('#delBtn').prop('disabled', true); 
+    		  
+    		  } */
+    		  
+    		 /*  alert(role)
+    		  if(role == 'VIEWER'){
+    			  
+    			 alert('You do not have enough privileges for role VIEWER');
+    			 var buttonText = $('#addBtn').val();
+    			 
+    			 alert(buttonText)
+    			 
+    			 if(buttonText == 'Add'){
+    				 $('#addBtn').prop('disabled', true); 
+    			 } */
+
+    			 
+    			  
+  				$('#delBtn').prop('disabled', true); 
+    			  
+    			  
+    		  }
+    	 // alert('role : '+role)
+    	  
+    	  
     	  loadAlarmSettings();
     	  loadBrokerIPList();
     	  loadTagList();
@@ -402,8 +433,8 @@ function editAlarmConfig() {
 			$('#broker_type').val('Select broker type');
 			$('#broker_name').val('Select broker IP address');
 			$('#interval').val('Select interval');
-			/* $('#tag_name').val('');
-			$('#variable').val(''); */
+			
+			location.reload();
 		},
 		error : function(xhr, status, error) {
 			console.log('Error updating alarm settings: ' + error);
@@ -416,7 +447,6 @@ function editAlarmConfig() {
 function addAlarmConfig() {
 
 	var tagData = tableToJson();
-//	alert('tag data : '+tagData)
 
     var unit_id = $('#unit_id').val();
     var asset_id = $('#asset_id').val();
@@ -450,8 +480,8 @@ function addAlarmConfig() {
 			$('#broker_type').val('Select broker type');
 			$('#broker_name').val('Select broker IP address');
 			$('#interval').val('Select interval');
-			/* $('#tag_name').val('');
-			$('#variable').val(''); */
+
+			location.reload();
 		},
 		error : function(xhr, status, error) {
 			console.log('Error adding alarm settings: ' + error);
@@ -475,50 +505,51 @@ function addAlarmConfig() {
 
 		<div class="container">
 			<form id="alarmConfigForm" action="alarmConfigAddData">
-				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="unit_id" name="unit_id"
 							placeholder="Unit ID" required style="height: 17px" />
 					</div>
-				<!-- </div>
+					<!-- </div>
 				<div class="row"> -->
-					<div class="col-75-2"
-						style="width: 20%;">
+					<div class="col-75-2" style="width: 20%;">
 						<input type="text" id="asset_id" name="asset_id"
 							placeholder="Asset ID" required style="height: 17px" />
 					</div>
-				<!-- </div>
+					<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-3"
-						style="width: 20%;">
+					<div class="col-75-3" style="width: 20%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px">
 							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
-						</select>
-						<span id="brokerTypeError" style="color:red;"></span>
+						</select> <span id="brokerTypeError" style="color: red;"></span>
 					</div>
-				<!-- </div>
+					<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-4"
-						style="width: 20%;">
+					<div class="col-75-4" style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px">
-							<option value="Select broker IP address">Select broker IP address</option>
-						</select>
-						<span id="brokerIPAddressError" style="color:red;"></span>
+							<option value="Select broker IP address">Select broker
+								IP address</option>
+						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
-				<!-- </div>
+					<!-- </div>
 
 				<div class="row"> -->
-					<div class="col-75-5"
-						style="width: 20%;">
+					<div class="col-75-5" style="width: 20%;">
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px">
 							<option value="Select interval">Select interval</option>
+							<option value="5 sec">5 sec</option>
+							<option value="10 sec">10 sec</option>
+							<option value="15 sec">15 sec</option>
+							<option value="20 sec">20 sec</option>
+							<option value="25 sec">25 sec</option>
 							<option value="30 sec">30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
@@ -528,20 +559,19 @@ function addAlarmConfig() {
 							<option value="25 min">25 min</option>
 							<option value="30 min">30 min</option>
 							<option value="1 hour">1 hour</option>
-						</select>
-						<span id="intervalError" style="color:red;"></span>
+						</select> <span id="intervalError" style="color: red;"></span>
 					</div>
 				</div>
 
-				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					<div class="col-75-6" style="width: 20%;">
 						<input type="text" id="tag_name" name="tag_name"
 							placeholder="Tag Name" style="height: 17px" /> <span
 							id="tagnameError" style="color: red;"></span>
 					</div>
-				
-					<div class="col-75-7"
-						style="width: 20%;">
+
+					<div class="col-75-7" style="width: 20%;">
 						<select class="textBox" id="variable" name="variable"
 							style="height: 35px">
 							<option value=""></option>
@@ -550,22 +580,24 @@ function addAlarmConfig() {
 				</div>
 
 				<div class="row">
-				
-						 <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
+
+					<!--  <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
   				border-radius: 10px; float: center;" 
 						 id="saveBtn">
-						 	<i class="fa fa-plus"></i></button>
-						 
+						 	<i class="fa fa-plus"></i></button> -->
+
+					<input style="margin-top: -31px; margin-left: 10%;" type="button"
+						value="+" id="saveBtn" />
+
 				</div>
-						
-				<div class="row" style="display:flex;justify-content:right;">					
-						<input
-						style="margin-top: -31px;margin-left:5px" type="button"
-						value="Clear" id="clearBtn" /> 
-						 <input style="margin-top: -31px;margin-left:5px" type="submit" value="Add" id="addBtn" onClick="window.location.reload();"/>
-						<input
-						style="margin-top: -31px;margin-left:5px" type="button"
-						value="Delete" id="delBtn" onClick="window.location.reload();"/>
+
+				<div class="row" style="display: flex; justify-content: right;">
+					<input style="margin-top: -31px; margin-left: 5px" type="button"
+						value="Clear" id="clearBtn" /> <input
+						style="margin-top: -31px; margin-left: 5px" type="submit"
+						value="Add" id="addBtn" onClick="window.location.reload();" /> <input
+						style="margin-top: -31px; margin-left: 5px" type="button"
+						value="Delete" id="delBtn" onClick="window.location.reload();" />
 				</div>
 			</form>
 		</div>

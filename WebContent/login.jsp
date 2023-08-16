@@ -103,10 +103,10 @@ $(document).ready(function() {
 </head>
 <body style="background-color: #2e3891d4;">
     
-     <!-- <%-- Display error message if there is an error parameter in the URL --%>
-    <% if (request.getParameter("error") != null) { %>
-        <p style="color: red;">Invalid username or password.</p>
-    <% } %>  -->
+      <%-- Display error message if there is an error parameter in the URL --%>
+    <%-- <% if (request.getParameter("error") != null) { %>
+        <p style="color: red; margin-top: -25%; margin-left: 50%;">Invalid username or password.</p>
+    <% } %>   --%>
     
     <form action="WP500Login" method="post" class="container" style="width: 24em; border-radius: 30px; background-color: #ffffff8f;padding-bottom: 30px;">
         <div>

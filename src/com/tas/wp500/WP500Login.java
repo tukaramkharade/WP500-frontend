@@ -84,6 +84,7 @@ public class WP500Login extends HttpServlet {
 				
 				response.sendRedirect("overview.jsp");
 				session.setAttribute("username", username);
+			//	session.setAttribute("role", "VIEWER");
 			}else {
 				
 				try {

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -80,144 +80,220 @@ input:checked+.slider:before {
 
 <script>
 
-function validateInput(input) {
-	var inputError = document.getElementById("inputError");
+function editGeneralSettings() {
 
-	if (input == 'Select input'){
-		
-		inputError.textContent = "Please select input";
-		return false;
-	} else {
-		inputError.textContent = "";
-		return true;
-	}
+	var confirmation = confirm('Are you sure you want to edit this general setting?');
+
+	var input = $('#input').val();
+	var output = $('#output').val();
+	var forward = $('#forward').val();
+	
+	$.ajax({
+		url : 'generalSettingsEditServlet',
+		type : 'POST',
+		data : {
+			input : input,
+			output : output,
+			forward : forward
+			
+		},
+		success : function(data) {
+			// Display the registration status message
+			alert(data.message);
+			loadGeneralSettingsList();
+
+			// Clear form fields
+			$('#input').val('Select input');
+			$('#output').val('Select output');
+			$('#forward').val('Select forward');
+			
+
+		},
+		error : function(xhr, status, error) {
+			console.log('Error updating general settings: ' + error);
+		}
+	});
+
+	$('#registerBtn').val('Add');
 }
 
-function validateOutput(output) {
-	var outputError = document.getElementById("outputError");
+	function addGeneralSettings() {
 
-	if (output == 'Select output'){
-		
-		outputError.textContent = "Please select output";
-		return false;
-	} else {
-		outputError.textContent = "";
-		return true;
+		var input = $('#input').val();
+		var output = $('#output').val();
+		var forward = $('#forward').val();
+
+		$.ajax({
+			url : 'generalSettingsServlet',
+			type : 'POST',
+			data : {
+				input : input,
+				output : output,
+				forward : forward
+
+			},
+			success : function(data) {
+				// Display the registration status message
+				alert(data.message);
+				loadGeneralSettingsList();
+
+				// Clear form fields
+
+				$('#input').val('Select input');
+				$('#output').val('Select output');
+				$('#forward').val('Select forward');
+
+			},
+			error : function(xhr, status, error) {
+				console.log('Error adding user: ' + error);
+			}
+		});
+
+		$('#registerBtn').val('Add');
+
 	}
-}
 
-function validateForward(forward) {
-	var forwardError = document.getElementById("forwardError");
+	function validateInput(input) {
+		var inputError = document.getElementById("inputError");
 
-	if (forward == 'Select forward'){
-		
-		forwardError.textContent = "Please select forward";
-		return false;
-	} else {
-		forwardError.textContent = "";
-		return true;
+		if (input == 'Select input') {
+
+			inputError.textContent = "Please select input";
+			return false;
+		} else {
+			inputError.textContent = "";
+			return true;
+		}
 	}
-}
 
+	function validateOutput(output) {
+		var outputError = document.getElementById("outputError");
 
-$(document).ready(function() {
-	$('#generalSettingsForm')
-	.submit(
-			function(event) {
-				event.preventDefault();
-				
-				var input = $('#input').find(":selected").val();
-				var output = $('#output').find(":selected").val();
-				var forward = $('#forward').find(":selected").val();
-				
-				if (!validateInput(input)) {
-					inputError.textContent = "Please select input";
-					return;
-				}
+		if (output == 'Select output') {
 
-				if (!validateOutput(output)) {
-					outputError.textContent = "Please select output";
-					return;
-				}
-				
-				if (!validateForward(forward)) {
-					forwardError.textContent = "Please select forward";
-					return;
-				}
-				
-			});
-});
+			outputError.textContent = "Please select output";
+			return false;
+		} else {
+			outputError.textContent = "";
+			return true;
+		}
+	}
+
+	function validateForward(forward) {
+		var forwardError = document.getElementById("forwardError");
+
+		if (forward == 'Select forward') {
+
+			forwardError.textContent = "Please select forward";
+			return false;
+		} else {
+			forwardError.textContent = "";
+			return true;
+		}
+	}
+
+	$(document).ready(function() {
+		$('#generalSettingsForm').submit(function(event) {
+			event.preventDefault();
+
+			var input = $('#input').find(":selected").val();
+			var output = $('#output').find(":selected").val();
+			var forward = $('#forward').find(":selected").val();
+
+			if (!validateInput(input)) {
+				inputError.textContent = "Please select input";
+				return;
+			}
+
+			if (!validateOutput(output)) {
+				outputError.textContent = "Please select output";
+				return;
+			}
+
+			if (!validateForward(forward)) {
+				forwardError.textContent = "Please select forward";
+				return;
+			}
+
+		});
+
+		$('#input').val('Select input');
+		$('#output').val('Select output');
+		$('#forward').val('Select forward');
+
+	});
 </script>
 </head>
 <body>
 
-<div class="sidebar">
+	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-	
+
 	<div class="content">
 		<section style="margin-left: 1em">
 		<h3>GENERAL SETTINGS</h3>
 		<hr>
-		
+
 		<div class="container">
 			<form id="generalSettingsForm" method="post">
-			
-			<div class="row"
+
+				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
-					
+
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="input" name="input"
-								style="height: 35px;">
-								<option value="Select input">Select input</option>
-								<option>Accept</option>
-								<option>Reject</option>
-							</select>
-							
-							<span id="inputError" style="color:red;"></span>
+							style="height: 35px;">
+							<option value="Select input">Select input</option>
+							<option>Accept</option>
+							<option>Reject</option>
+						</select> <span id="inputError" style="color: red;"></span>
 					</div>
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="output" name="output"
-								style="height: 35px;">
-								<option value="Select output">Select output</option>
-								<option>Accept</option>
-								<option>Reject</option>
-							</select>
-							
-							<span id="outputError" style="color:red;"></span>
+							style="height: 35px;">
+							<option value="Select output">Select output</option>
+							<option>Accept</option>
+							<option>Reject</option>
+						</select> <span id="outputError" style="color: red;"></span>
 					</div>
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="forward" name="forward"
-								style="height: 35px;">
-								<option value="Select forward">Select forward</option>
-								<option>Accept</option>
-								<option>Reject</option>
-							</select>
-							
-							<span id="forwardError" style="color:red;"></span>
+							style="height: 35px;">
+							<option value="Select forward">Select forward</option>
+							<option>Accept</option>
+							<option>Reject</option>
+						</select> <span id="forwardError" style="color: red;"></span>
 					</div>
-					</div>
-					
-					<div class="row">
+				</div>
+
+				<div class="row">
 					<div
 						style="width: 40%; margin-top: 30px; display: flex; justify-content: left;">
 
-						<label for="enable">Drop invalid packets</label> <label class="switch">
-							<input type="checkbox" checked> <span
+						<label for="enable">Drop invalid packets</label> <label
+							class="switch"> <input type="checkbox" checked> <span
 							class="slider round"></span>
 						</label>
 
 					</div>
 
 				</div>
-				
+
+				<div class="row"
+					style="display: flex; justify-content: right; margin-top: 2%;">
+					<input type="button" value="Clear" id="clearBtn" /> <input
+						style="margin-left: 5px;" type="submit" value="Add"
+						id="registerBtn" />
+				</div>
+
 			</form>
-			</div>
-		</section>
 		</div>
+		</section>
+	</div>
 
 </body>
 </html>

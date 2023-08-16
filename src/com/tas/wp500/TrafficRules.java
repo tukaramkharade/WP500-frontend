@@ -1,6 +1,6 @@
 package com.tas.wp500;
 
-public class Firewall {
+public class TrafficRules {
 
 	private String lineNumber;
 	private String target;
@@ -12,7 +12,7 @@ public class Firewall {
 	private String mac_address;
 	private String ip_address;
 	
-	public Firewall(String lineNumber, String target, String protocol, String opt, String source_port,
+	public TrafficRules(String lineNumber, String target, String protocol, String opt, String source_port,
 			String destination_address, String name, String mac_address, String ip_address) {
 		super();
 		this.lineNumber = lineNumber;
@@ -26,7 +26,7 @@ public class Firewall {
 		this.ip_address = ip_address;
 	}
 
-	public Firewall() {
+	public TrafficRules() {
 		super();
 	}
 

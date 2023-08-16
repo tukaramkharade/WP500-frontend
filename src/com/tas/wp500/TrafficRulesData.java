@@ -21,11 +21,11 @@ import com.tas.utils.TCPClient;
  * Servlet implementation class Firewall
  */
 @WebServlet("/firewallData")
-public class FirewallData extends HttpServlet {
+public class TrafficRulesData extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(FirewallData.class);
+	final static Logger logger = Logger.getLogger(TrafficRulesData.class);
 
-	public FirewallData() {
+	public TrafficRulesData() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

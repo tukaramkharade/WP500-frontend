@@ -1,6 +1,7 @@
 package com.tas.wp500;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -74,6 +75,23 @@ public class DateTimeServlet extends HttpServlet {
 			String respStr = client.sendMessage(json.toString());
 
 			System.out.println("res " + new JSONObject(respStr));
+			
+			String message = new JSONObject(respStr).getString("msg");
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("message", message);
+
+			// Set the content type of the response to application/json
+			response.setContentType("application/json");
+
+			// Get the response PrintWriter
+			PrintWriter out = response.getWriter();
+
+			// Write the JSON object to the response
+			out.print(jsonObject.toString());
+			out.flush();
+			
+			
+			
 			
 			
 		}catch(Exception e){

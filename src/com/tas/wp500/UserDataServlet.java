@@ -35,9 +35,10 @@ public class UserDataServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(true);
 
-		if (session != null) {
+		String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 			//System.out.println("session : " + session);
-			String check_username = (String) session.getAttribute("username");
+			
 
 			String first_name = request.getParameter("first_name");
 			String last_name = request.getParameter("last_name");
@@ -79,7 +80,7 @@ public class UserDataServlet extends HttpServlet {
 				out.flush();
 				
 				
-
+				session.setAttribute("role", role);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -116,6 +117,8 @@ public class UserDataServlet extends HttpServlet {
 		try {
 
 			HttpSession session = request.getSession(false);
+			
+			
 
 			System.out.println(">> " + session.getAttribute("username"));
 			
@@ -156,6 +159,8 @@ public class UserDataServlet extends HttpServlet {
 					String role = jsObj.getString("role");
 					logger.info("role : " + role);
 
+					
+					//session.setAttribute("role", role);
 					// logger.info(jsonArray.get(i).toString());
 					// resJsonArray.put(userObj);
 

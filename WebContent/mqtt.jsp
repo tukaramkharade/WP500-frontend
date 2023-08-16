@@ -295,7 +295,7 @@
 				$('#prefix').val('');
 				$('#file_type').val('Select file type');
 				$('#file_name').val('Select crt file');
-				$('#enable').val('Enable');
+				$('#enable').val('true');
 
 				$("#prefix").prop("disabled", false);
 			},
@@ -353,7 +353,7 @@
 				$('#prefix').val('');
 				$('#file_type').val('Select file type');
 				$('#file_name').val('Select crt file');
-				$('#enable').val('Enable');
+				$('#enable').val('true');
 
 			},
 			error : function(xhr, status, error) {
@@ -408,7 +408,10 @@
 			.ready(
 					function() {
 						// Load user list
-
+						
+						
+						
+						
 						loadMqttList();
 						loadCrtFilesList();
 
@@ -472,7 +475,7 @@
 							$('#prefix').val('');
 							$('#file_type').val('Select file type');
 							$('#file_name').val('Select crt file');
-							$('#enable').val('Enable');
+							$('#enable').val('true');
 
 						});
 
@@ -609,8 +612,8 @@
 							<select class="textBox" id="enable" name="enable"
 								style="height: 35px; required">
 								
-								<option value="enable" selected>Enable</option>
-								<option value="disable">Disable</option>
+								<option value="enable" selected>true</option>
+								<option value="disable">false</option>
 
 							</select>
 						</div>

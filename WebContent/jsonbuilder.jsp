@@ -327,17 +327,16 @@
 
 	function validateJSON() {
 		
-		var unit_id = $('#unit_id').val();
-		var asset_id = $('#asset_id').val();
-		
-		var data = {
-		        "unit_id": unit_id,
-		        "asset_id": asset_id
-		    }
-		
-		var tagData = tableToJson();
-		alert('table data :'+tagData);
-		console.log(tagData)
+		const json_string = document.querySelector('textarea').value;
+		  console.log(json_string);
+		  var res = isJsonString(json_string);
+		  
+		  if(res == true){
+			  $('#json_string_validate').val(json_string)
+		  }else{
+			  alert('Enter valid JSON!!')
+			  $('#json_string_text').val('');
+		  }
 	}
 
 	function isJsonString(str) {

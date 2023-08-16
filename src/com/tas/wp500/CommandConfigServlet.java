@@ -237,11 +237,10 @@ public class CommandConfigServlet extends HttpServlet {
 
 			System.out.println("tagData>" + tagData);
 
-			System.out.println("unit id : " + unit_id);
-
+			
 			try {
 
-				System.out.println("In mqtt...");
+				System.out.println("In command config...");
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 

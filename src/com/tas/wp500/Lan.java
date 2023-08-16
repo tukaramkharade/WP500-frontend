@@ -50,7 +50,7 @@ public class Lan extends HttpServlet {
 			JSONObject result = new JSONObject(respStr);
 		
 			
-			JSONObject lan0 = result.getJSONObject("LAN0_setting");
+			JSONObject lan0 = result.getJSONObject("eth1");
 			System.out.println("lan 0 :"+lan0.toString());
 			
 			JSONObject lan1 = result.getJSONObject("LAN1_setting");
@@ -60,39 +60,54 @@ public class Lan extends HttpServlet {
 			System.out.println("lan 2 :"+lan2.toString());
 			
 			
-			String eth0_ipaddr = lan0.getString("eth0_ipaddr");
-			System.out.println("eth0_ipaddr : "+eth0_ipaddr);
-			logger.info("eth0_ipaddr : "+eth0_ipaddr);
-			
-			String eth0_subnet = lan0.getString("eth0_subnet");
-			System.out.println("eth0_subnet : "+eth0_subnet);
-			logger.info("eth0_subnet : "+eth0_subnet);
-			
-			String eth1_ipaddr = lan1.getString("eth1_ipaddr");
+			String eth1_ipaddr = lan0.getString("eth1_ipaddr");
 			System.out.println("eth1_ipaddr : "+eth1_ipaddr);
 			logger.info("eth1_ipaddr : "+eth1_ipaddr);
 			
-			String eth1_subnet = lan1.getString("eth1_subnet");
+			String eth1_subnet = lan0.getString("eth1_subnet");
 			System.out.println("eth1_subnet : "+eth1_subnet);
 			logger.info("eth1_subnet : "+eth1_subnet);
 			
-			String eth2_ipaddr = lan2.getString("eth2_ipaddr");
-			System.out.println("eth2_ipaddr : "+eth2_ipaddr);
-			logger.info("eth2_ipaddr : "+eth2_ipaddr);
+			String eth1_dhcp = lan0.getString("eth1_dhcp");
+			System.out.println("eth1_dhcp : "+eth1_dhcp);
+			logger.info("eth1_dhcp : "+eth1_dhcp);
 			
-			String eth2_subnet = lan2.getString("eth2_subnet");
-			System.out.println("eth2_subnet : "+eth2_subnet);
-			logger.info("eth2_subnet : "+eth2_subnet);
+			String lan1_ipaddr = lan1.getString("lan1_ipaddr");
+			System.out.println("lan1_ipaddr : "+lan1_ipaddr);
+			logger.info("lan1_ipaddr : "+lan1_ipaddr);
+			
+			String lan1_subnet = lan1.getString("lan1_subnet");
+			System.out.println("lan1_subnet : "+lan1_subnet);
+			logger.info("lan1_subnet : "+lan1_subnet);
+			
+			String lan1_dhcp = lan1.getString("lan1_dhcp");
+			System.out.println("lan1_dhcp : "+lan1_dhcp);
+			logger.info("lan1_dhcp : "+lan1_dhcp);
+			
+			String lan2_ipaddr = lan2.getString("lan2_ipaddr");
+			System.out.println("lan2_ipaddr : "+lan2_ipaddr);
+			logger.info("lan2_ipaddr : "+lan2_ipaddr);
+			
+			String lan2_subnet = lan2.getString("lan2_subnet");
+			System.out.println("lan2_subnet : "+lan2_subnet);
+			logger.info("lan2_subnet : "+lan2_subnet);
+			
+			String lan2_dhcp = lan2.getString("lan2_dhcp");
+			System.out.println("lan2_dhcp : "+lan2_dhcp);
+			logger.info("lan2_dhcp : "+lan2_dhcp);
 					
 			JSONObject jsonObject = new JSONObject();
-		    jsonObject.put("eth0_ipaddr", eth0_ipaddr);
-		    jsonObject.put("eth0_subnet", eth0_subnet);
-		    
 		    jsonObject.put("eth1_ipaddr", eth1_ipaddr);
 		    jsonObject.put("eth1_subnet", eth1_subnet);
+		    jsonObject.put("eth1_dhcp", eth1_dhcp);
 		    
-		    jsonObject.put("eth2_ipaddr", eth2_ipaddr);
-		    jsonObject.put("eth2_subnet", eth2_subnet);
+		    jsonObject.put("lan1_ipaddr", lan1_ipaddr);
+		    jsonObject.put("lan1_subnet", lan1_subnet);
+		    jsonObject.put("lan1_dhcp", lan1_dhcp);
+		    
+		    jsonObject.put("lan2_ipaddr", lan2_ipaddr);
+		    jsonObject.put("lan2_subnet", lan2_subnet);
+		    jsonObject.put("lan2_dhcp", lan2_dhcp);
 		    
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");
@@ -153,16 +168,13 @@ public class Lan extends HttpServlet {
 		try {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-
 			
 			json.put("operation", "get_dhcp_setting");
 			json.put("user", check_username);
 		
 			json.put("eth_type", eth_type);
 			
-		
 			String respStr = client.sendMessage(json.toString());
-			
 			
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));
 			logger.info("res " + new JSONObject(respStr).getString("msg"));
@@ -184,8 +196,7 @@ public class Lan extends HttpServlet {
 		    jsonObject.put("eth1_subnet", eth1_subnet);
 		    jsonObject.put("eth1_ipaddr", eth1_ipaddr);
 		    
-		    
-		    
+		   
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");
 		    

@@ -250,6 +250,7 @@ input:checked+.slider:before {
 .slider.round:before {
 	border-radius: 50%;
 }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -288,13 +289,14 @@ input:checked+.slider:before {
 						window.location.href = 'login.jsp';
 					}
 				}
-
+				
 				//$('#ntp_client').prop('checked', data.ntp_client);
 				$('#ntp_client').prop('checked', data.ntp_client === '1');
 
 				$('#ntp_interval').val(data.ntp_interval);
 				$('#ntp_server').val(data.ntp_server);
 				toggleNtpClient();
+				toggleDateTimeInput();
 
 			},
 			error : function(xhr, status, error) {
@@ -354,6 +356,8 @@ input:checked+.slider:before {
 			serverField.disabled = true;
 			toggleButton.value = "0"; //ntp_client_disable
 		}
+		
+		toggleDateTimeInput();
 	}
 
 	function setManualTime() {
@@ -391,6 +395,8 @@ input:checked+.slider:before {
 	}
 
 	$(document).ready(function() {
+		
+		toggleDateTimeInput();
 		$("#get_current_time").click(function() {
 			getCurrentTime();
 		});
@@ -398,6 +404,7 @@ input:checked+.slider:before {
 
 		$('#setDateTime').click(function() {
 			setManualTime();
+			toggleDateTimeInput();
 		});
 
 		// Handle form submission
@@ -444,33 +451,33 @@ input:checked+.slider:before {
 						</div>
 					</div>
 					<br />
-					<div class="row">
-						<!-- <div style="float: left;
+					<!-- <div class="row">
+						<div style="float: left;
 					width: 40%;
 					margin-top: 6px;">
 					  <label for="updateInterval">Update
 						Interval</label>
-					</div> -->
+					</div>
 						<div style="width: 20%; margin-top: 0;">
 							<input type="text" id="ntp_interval" name="ntp_interval"
 								placeholder="NTP Interval" />
 
 						</div>
-					</div>
+					</div> -->
 
-					<div class="row">
-						<!-- <div style="float: left;
+					<!-- <div class="row">
+						<div style="float: left;
 					width: 40%;
 					margin-top: 6px;">
 					  <label for="updateInterval">Update
 						Server</label>
-					</div> -->
+					</div>
 						<div style="margin-left: 20%; width: 20%; margin-top: -2.5em;">
 							<input type="text" id="ntp_server" name="ntp_server"
 								placeholder="NTP Server" />
 
 						</div>
-					</div>
+					</div> -->
 
 					<div class="row">
 						<input style="margin-left: 95%;" type="submit" value="Add"

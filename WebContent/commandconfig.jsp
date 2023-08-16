@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -142,8 +141,6 @@ var json = {};
 									$('#broker_type').val(broker_type);
 									$('#broker_ip').val(broker_ip);
 									$('#interval').val(interval);
-									//$('#table_data').val(JSON.stringify(alarm_tag));
-									
 									
 								});
 			},
@@ -168,7 +165,7 @@ var json = {};
 	       					alert(data.message);
 
 	       					// Refresh the user list
-	       					loadAlarmSettings();
+	       					loadCommandSettings();
 	       				},
 	       				error : function(xhr, status, error) {
 	       					// Handle the error response, if needed
@@ -245,7 +242,7 @@ var json = {};
 	    	
 	    	 $(document).ready(function () {
 	       	  // Load broker ip
-	       	   loadCommandSettings();
+	      	   loadCommandSettings();
 	       	  loadBrokerIPList();
 	       	  loadTagList();
 	       	  
@@ -273,27 +270,19 @@ var json = {};
 	       	      $("#table_data").append(newRow);
 	       	      $("#tag_name").val("");
 	       	      $("#variable").val("");
-	       	    }else  if (!validatefields(tagName)) {
+	       	    }
+	       	    
+	       	     else  if (!validatefields(tagName)) {
 					tagnameError.textContent = "Please enter tag name.";
 					return;
 				}
 	    	    else if (!validateOption(value)) {
 					variableError.textContent = "Please select variable.";
 					return;
-				}
+				} 
 	       	    
-	       	    
-	       	    /* else {
-	       	      alert("Tag Name and Value cannot be empty. Please fill in both fields.");
-	       	    } */
 	       	  });
-	       	  /* $("#addBtn").click(function () {
-	       		 // convertTableDataToJSON();
-	       		  tableToJson();
-	       		addCommandConfig();
-	       		  
-	       	     	  }); */
-	       	     	  
+	       	  
 	       	     	  
 	       	     	$('#commandConfigForm').submit(function(event) {
 	       				event.preventDefault();
@@ -373,11 +362,7 @@ var json = {};
 		    var broker_type = $('#broker_type').find(":selected").val();
 		    var broker_name = $('#broker_name').find(":selected").val();
 		    var interval = $('#interval').find(":selected").val();
-		    // Modify the next two lines to get the tag_name and variable from the JSON data
-		   /*  var tag_name = Object.keys(tagData)[0];
-		    var variable = tagData[tag_name]; */
-
-			
+		   
 			$.ajax({
 				url : 'commandConfigEditServlet',
 				type : 'POST',
@@ -403,8 +388,9 @@ var json = {};
 					$('#broker_type').val('Select broker type');
 					$('#broker_name').val('Select broker IP address');
 					$('#interval').val('Select interval');
-					/* $('#tag_name').val('');
-					$('#variable').val(''); */
+					
+					location.reload();
+					
 				},
 				error : function(xhr, status, error) {
 					console.log('Error updating command settings: ' + error);
@@ -415,22 +401,16 @@ var json = {};
 		}
 
 		
-		
 		function addCommandConfig() {
 
 			var tagData = tableToJson();
-		//	alert('tag data : '+tagData)
-
+		
 		    var unit_id = $('#unit_id').val();
 		    var asset_id = $('#asset_id').val();
 		    var broker_type = $('#broker_type').find(":selected").val();
 		    var broker_name = $('#broker_name').find(":selected").val();
 		    var interval = $('#interval').find(":selected").val();
-		    // Modify the next two lines to get the tag_name and variable from the JSON data
-		   /*  var tag_name = Object.keys(tagData)[0];
-		    var variable = tagData[tag_name]; */
-
-			
+		   
 			$.ajax({
 				url : 'commandConfigServlet',
 				type : 'POST',
@@ -441,9 +421,6 @@ var json = {};
 					broker_name : broker_name,
 					interval : interval,
 					tagData: JSON.stringify(tagData)
-					//tagData: JSON.stringify(tagData)
-					/* tag_name : tag_name,
-					variable : variable */
 					
 				},
 				success : function(data) {
@@ -458,8 +435,9 @@ var json = {};
 					$('#broker_type').val('Select broker type');
 					$('#broker_name').val('Select broker IP address');
 					$('#interval').val('Select interval');
-					/* $('#tag_name').val('');
-					$('#variable').val(''); */
+					
+					location.reload();
+					
 				},
 				error : function(xhr, status, error) {
 					console.log('Error adding command config settings: ' + error);
@@ -524,9 +502,7 @@ var json = {};
 						</select>
 						<span id="brokerIPAddressError" style="color:red;"></span>
 					</div>
-				<!-- </div>
-
-				<div class="row"> -->
+				
 					<div class="col-75-5"
 						style="width: 20%;">
 						<select class="interval-select" id="interval" name="interval"
@@ -553,9 +529,7 @@ var json = {};
 							placeholder="Tag Name" style="height: 17px;" />
 
 					</div>
-				<!-- </div>
-
-				<div class="row"> -->
+				
 					<div class="col-75-7"
 						style="width: 20%;">
 						<select class="textBox" id="variable" name="variable"
@@ -566,13 +540,13 @@ var json = {};
 				</div>
 				
 				<div class="row">
-				<!-- <input style="margin-top: -31px; margin-left:-50px " type="button"
-						value="Plus" id="saveBtn" />  -->
 						
-						<button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
-  				border-radius: 10px; float: center;" 
-						 id="saveBtn">
-						 	<i class="fa fa-plus"></i></button>
+						<!-- <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
+  				border-radius: 10px; float: center;" id="saveBtn">
+						 	<i class="fa fa-plus"></i></button> -->
+						 	
+						 		<input style="margin-top: -31px; margin-left: 10%;" type="button"
+							value="+" id="saveBtn" />
 						
 						</div>
 						
@@ -581,23 +555,11 @@ var json = {};
 						style="margin-top: -31px;margin-left:5px" type="button"
 						value="Clear" id="clearBtn" /> <input
 						style="margin-top: -31px;margin-left:5px" type="submit"
-						value="Add" id="addBtn" onClick="window.location.reload();"/>
+						value="Add" id="addBtn" />
 						<input
 						style="margin-top: -31px;margin-left:5px" type="button"
 						value="Delete" id="delBtn" onClick="window.location.reload();"/> 
 				</div>
-
-				<!-- <div class="row">
-					<input style="margin-top: -31px; margin-left: 10%;" type="button"
-							value="Save" id="saveBtn" />
-						<input style="margin-top: -31px; margin-left: 85%;" type="button"
-							value="Clear" id="clearBtn" /> 
-							<input
-						style="margin-top: -31px; margin-left: 75.2%;" type="button"
-						value="Delete" id="delBtn" />
-						<input style="margin-top: -31px" type="submit"
-						value="Add" id="addBtn" />
-				</div> -->
 
 			</form>
 		</div>

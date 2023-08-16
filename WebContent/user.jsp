@@ -260,33 +260,17 @@
 		}
 	}
 	
-	function validatePassword() {
-		  var password = document.getElementById("password").value;
-		  var passwordError = document.getElementById("passwordError");
+	function validatePassword(password) {
+		var passwordError = document.getElementById("passwordError");
 
-		  // Reset error message
-		  passwordError.textContent = "";
-
-		  // Password length should be at least 8 characters
-		  if (password.length < 8) {
-		    passwordError.textContent = "Password must be at least 8 characters long.";
-		    return;
-		  }
-
-		  // Password should contain at least one uppercase letter, one lowercase letter, and one digit
-		  var hasUppercase = /[A-Z]/.test(password);
-		  var hasLowercase = /[a-z]/.test(password);
-		  var hasDigit = /\d/.test(password);
-
-		  if (!hasUppercase || !hasLowercase || !hasDigit) {
-		    passwordError.textContent = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
-		    return;
-		  }
-
-		  // Password is valid
-		//  alert("Password is valid!");
+		if (password.length < 8 || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password)) {
+			passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+			return false;
+		} else {
+			passwordError.textContent = "";
+			return true;
 		}
-
+	}
 
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -305,11 +289,11 @@
 				return;
 			}
 
-			if (!validatePassword(password)) {
-				passwordError.textContent = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
-				return;
-			}
 			
+			if (!validatePassword(password)) {
+				passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+				return;
+			}			
 			if (buttonText == 'Add') {
 				addUser();
 
