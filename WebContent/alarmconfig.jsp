@@ -243,41 +243,63 @@
 		}
 	}
      
+	
+	function changeButtonColor(isDisabled) {
+        var $add_button = $('#addBtn');
+        var $delete_button = $('#delBtn');
+        var $clear_button = $('#clearBtn');
+        var $save_button = $('#saveBtn');
+        
+        
+        if (isDisabled) {
+            $add_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $delete_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $delete_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $clear_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $save_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $save_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+    }
+	
       $(document).ready(function () {
-    	  $('#addBtn').prop('disabled', true);
-    	  var role = '${role}';
     	  
-    	  /* if(role == 'VIEWER')
-    		  {
-    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
-    		  
-    		  $('#addBtn').prop('disabled', true); 
-				$('#delBtn').prop('disabled', true); 
-    		  
-    		  } */
-    		  
-    		 /*  alert(role)
-    		  if(role == 'VIEWER'){
-    			  
-    			 alert('You do not have enough privileges for role VIEWER');
-    			 var buttonText = $('#addBtn').val();
-    			 
-    			 alert(buttonText)
-    			 
-    			 if(buttonText == 'Add'){
-    				 $('#addBtn').prop('disabled', true); 
-    			 } */
-
-    			 
-    			  
-  				$('#delBtn').prop('disabled', true); 
-    			  
-    			  
-    		  }
-    	 // alert('role : '+role)
-    	  
-    	  
+    	  <%
+    	// Access the session variable
+    	HttpSession role = request.getSession();
+    	String roleValue = (String) session.getAttribute("role");
+    	%>
+    	
+    	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+        
+    	//alert(roleValue);
+    	
     	  loadAlarmSettings();
+    	  
+    	  if(roleValue == 'VIEWER'){
+    		  
+    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+    		  $('#addBtn').prop('disabled', true);
+    		  $('#clearBtn').prop('disabled', true); 
+    		  $('#delBtn').prop('disabled', true);
+    		  $('#saveBtn').prop('disabled', true);
+    		  changeButtonColor(true);
+    	  }
+    	  
     	  loadBrokerIPList();
     	  loadTagList();
     	  
@@ -286,8 +308,6 @@
     	    var tagName = $("#tag_name").val();
     	    var value = $("#variable").val();
     	    
-    	   
-
     	    // Check if tagName and value are not empty
     	    if (tagName.trim() !== "" && value.trim() !== "") {
     	      var newRow = $("<tr>")
@@ -403,11 +423,7 @@ function editAlarmConfig() {
     var broker_type = $('#broker_type').find(":selected").val();
     var broker_name = $('#broker_name').find(":selected").val();
     var interval = $('#interval').find(":selected").val();
-    // Modify the next two lines to get the tag_name and variable from the JSON data
-   /*  var tag_name = Object.keys(tagData)[0];
-    var variable = tagData[tag_name]; */
-
-	
+   
 	$.ajax({
 		url : 'alarmConfigServlet',
 		type : 'POST',
@@ -423,8 +439,6 @@ function editAlarmConfig() {
 		success : function(data) {
 			// Display the registration status message
 			alert(data.message);
-	//		loadMqttList();
-	//loadAlarmSettings();
 
 			// Clear form fields
 
@@ -595,7 +609,7 @@ function addAlarmConfig() {
 					<input style="margin-top: -31px; margin-left: 5px" type="button"
 						value="Clear" id="clearBtn" /> <input
 						style="margin-top: -31px; margin-left: 5px" type="submit"
-						value="Add" id="addBtn" onClick="window.location.reload();" /> <input
+						value="Add" id="addBtn" /> <input
 						style="margin-top: -31px; margin-left: 5px" type="button"
 						value="Delete" id="delBtn" onClick="window.location.reload();" />
 				</div>

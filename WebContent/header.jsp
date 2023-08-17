@@ -22,6 +22,8 @@
 			}
 		});
 	}
+	
+	
 
 	$(document).ready(function() {
 
@@ -29,6 +31,22 @@
 			loadConfig();
 
 		});
+		
+		$("#logoutBtn").click(function() {
+			var confirmation = confirm('Are you sure you want to logout?');
+			
+            $.ajax({
+                type: "POST",
+                url: "logout",
+                success: function(response) {
+                    // Handle the response, e.g., redirect to login page
+                    window.location.href = "login.jsp";
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error: " + error);
+                }
+            });
+        });
 
 	});
 </script>
@@ -41,7 +59,7 @@
 			value="Update Configuration" />
 		<div>
 			${username} <i class="fa fa-sign-out"
-				style="font-size: 20px; margin-left: 5px" onclick="logout()"></i>
+				style="font-size: 20px; margin-left: 5px" id="logoutBtn"></i>
 		</div>
 	</div>
 </header>

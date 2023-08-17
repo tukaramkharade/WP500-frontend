@@ -262,8 +262,8 @@ input:checked+.slider:before {
 			dataType : "json",
 			success : function(data) {
 				// Update the <p> tags with the fetched time data
-				$("#ist_time").text("IST_Time: " + data.IST_Time);
-				$("#utc_time").text("UTC_Time: " + data.UTC_Time);
+				$("#ist_time").text("IST Time: " + data.IST_Time);
+				$("#utc_time").text("UTC Time: " + data.UTC_Time);
 			},
 			error : function(xhr, status, error) {
 				// Handle any errors that occur during the AJAX request

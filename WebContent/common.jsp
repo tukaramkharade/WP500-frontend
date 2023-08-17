@@ -44,10 +44,6 @@
                   <a href="overview.jsp">Overview</a>
                 </li>
                 
-                 <li class="nav-item">
-                  <a href="generalsettings.jsp">General Settings</a>
-                </li>
-                
                 <li class="nav-item">
                   <a href="user.jsp">User List</a>
                 </li>

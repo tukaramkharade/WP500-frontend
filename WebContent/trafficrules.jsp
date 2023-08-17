@@ -78,16 +78,16 @@ input:checked+.slider:before {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-	function loadFirewallList() {
+	function loadTrafficRulesList() {
 		$
 				.ajax({
-					url : "firewallData",
+					url : "trafficRulesData",
 					type : "GET",
 					dataType : "json",
 					success : function(data) {
 						// Clear existing table rows
 
-						var firewallTable = $("#firewallListTable tbody");
+						var firewallTable = $("#trafficRulesListTable tbody");
 						firewallTable.empty();
 
 						var json1 = JSON.stringify(data);
@@ -107,12 +107,29 @@ input:checked+.slider:before {
 										data,
 										function(index, trafficrules) {
 											var row = $("<tr>");
-											row.append($("<td>").text(trafficrules.lineNumber + ""));
-											row.append($("<td>").text(trafficrules.target + ""));
-											row.append($("<td>").text(trafficrules.protocol + ""));
-											row.append($("<td>").text(trafficrules.opt + ""));
-											row.append($("<td>").text(trafficrules.source + ""));
-											row.append($("<td>").text(trafficrules.destination + ""));
+											row.append($("<td>").text(
+													trafficrules.name
+															+ ""));
+											row.append($("<td>").text(
+													trafficrules.protocol + ""));
+											row
+													.append($("<td>")
+															.text(
+																	trafficrules.destination_port
+																			+ ""));
+											row.append($("<td>").text(
+													trafficrules.iface + ""));
+											row.append($("<td>").text(
+													trafficrules.mac_address + ""));
+											row.append($("<td>").text(
+													trafficrules.ip_address
+															+ ""));
+											row.append($("<td>").text(
+													trafficrules.action
+															+ ""));
+											row.append($("<td>").text(
+													trafficrules.type
+															+ ""));
 
 											var actions = $("<td>");
 											var deleteButton = $(
@@ -196,21 +213,7 @@ input:checked+.slider:before {
 		}
 	}
 
-	function toggle() {
-		var toggleButton = document.getElementById("ntp_client");
-		var ipField = document.getElementById("ntp_interval");
-		var serverField = document.getElementById("ntp_server");
-
-		if (toggleButton.checked) {
-			ipField.disabled = false;
-			serverField.disabled = false;
-			toggleButton.value = "1"; //ntp_client_enable
-		} else {
-			ipField.disabled = true;
-			serverField.disabled = true;
-			toggleButton.value = "0"; //ntp_client_disable
-		}
-	}
+	
 
 	//Function to execute on page load
 	$(document).ready(function() {
@@ -218,7 +221,7 @@ input:checked+.slider:before {
 		loadFirewallList();
 
 		// Handle form submission
-		$("#firewallForm").submit(function(event) {
+		$("#trafficRulesForm").submit(function(event) {
 			event.preventDefault();
 			var buttonText = $("#registerBtn").val();
 
@@ -228,9 +231,14 @@ input:checked+.slider:before {
 		});
 
 		$('#clearBtn').click(function() {
+			$('#name').val('');
+			$('#interface').val('');
 			$('#portNumber').val('');
+			$('#macAddress').val('');
 			$('#protocol').val('');
 			$('#ip_addr').val('');
+			$('#type').val('');
+			$('#action').val('');
 
 		});
 	});
@@ -249,24 +257,63 @@ input:checked+.slider:before {
 
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>TRAFFIC RULES</h3>
+		<h3>GENERAL SETTINGS</h3>
 		<hr>
 
 		<div class="container">
-			<form id="firewallForm" method="post">
+			<form id="generalSettingsForm">
 
-				<div class="row">
-					<div
-						style="width: 40%; margin-top: -20px; display: flex; justify-content: left;">
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: -25px;">
 
-						<label for="enable">Enable</label> <label class="switch">
-							<input type="checkbox" checked> <span
-							class="slider round"></span>
-						</label>
-
+					<div class="col-75-2" style="width: 20%;">
+					<label>Input</label>
+						<select class="textBox" id="input" name="input"
+							style="height: 35px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="inputError" style="color: red;"></span>
 					</div>
-
+					<div class="col-75-2" style="width: 20%;">
+					<label>Output</label>
+						<select class="textBox" id="output" name="output"
+							style="height: 35px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="outputError" style="color: red;"></span>
+					</div>
+					<div class="col-75-2" style="width: 20%;">
+					<label>Forward</label>
+						<select class="textBox" id="forward" name="forward"
+							style="height: 35px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="forwardError" style="color: red;"></span>
+					</div>
+					<div class="col-75-2" style="width: 20%;">
+					<label>Drop invalid packets</label>
+						<select class="textBox" id="invalid_packet" name="invalid_packet"
+							style="height: 35px;">
+							<option value="on">on</option>
+							<option value="off">off</option>
+						</select> <span id="forwardError" style="color: red;"></span>
+					</div>
 				</div>
+
+				
+				<div class="row"
+					style="display: flex; justify-content: right; margin-top: -1%;">
+					<input type="button" value="Apply" id="applyBtn" /> 
+				</div>
+
+			</form>
+		</div>
+
+		<h3>TRAFFIC RULES</h3>
+		<hr>
+		<div class="container">
+
+			<form id="trafficRulesForm">
 
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
@@ -276,8 +323,8 @@ input:checked+.slider:before {
 					</div>
 
 					<div class="col-75-4" style="width: 20%;">
-						<input type="text" id="interface"
-							name="interface" placeholder="Interface" />
+						<input type="text" id="interface" name="interface"
+							placeholder="Interface" />
 					</div>
 
 					<div class="col-75-1" style="width: 20%;">
@@ -292,12 +339,11 @@ input:checked+.slider:before {
 
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="protocol" name="protocol"
-								style="height: 35px;">
-								<option value="Select protocol">Select protocol</option>
-								<option>TCP</option>
-								<option>UDP</option>
+							style="height: 35px;">							
+							<option value="tcp">tcp</option>
+							<option value="udp">udp</option>
 
-							</select>
+						</select>
 					</div>
 				</div>
 
@@ -307,30 +353,52 @@ input:checked+.slider:before {
 						<input type="text" id="ip_addr" name="ip_addr"
 							placeholder="Source IP address" />
 					</div>
+					
+					<div class="col-75-2" style="width: 20%;">
+						<select class="textBox" id="type" name="type"
+							style="height: 35px;">							
+							<option value="ip">ip</option>
+							<option value="mac">mac</option>
+
+						</select>
+					</div>
+					
+					<div class="col-75-2" style="width: 20%;">
+						<select class="textBox" id="action" name="action"
+							style="height: 35px;">							
+							<option value="ACCEPT">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+					</div>
+					
 				</div>
 
-				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 2%;">
-					<input type="button" value="Clear" id="clearBtn" /> <input
-						style="margin-left: 5px;" type="submit" value="Add"
+				<div class="row" style="display: flex; justify-content: right; margin-top: 2%;">
+					<input type="button" value="Apply" id="applyBtn" /> 
+					<input style="margin-left: 5px;" type="button" value="Clear" id="clearBtn" /> 
+					<input style="margin-left: 5px;" type="submit" value="Add"
 						id="registerBtn" />
 				</div>
 			</form>
 		</div>
 
+
 		<h3>TRAFFIC RULES LIST</h3>
 		<hr>
 		<div class="container">
-			<table id="firewallListTable">
+			<table id="trafficRulesListTable">
 				<thead>
 					<tr>
-						<th>Chain Number</th>
-						<th>Target</th>
+						<th>Name</th>
+						<th>Interface</th>
 						<th>Protocol</th>
-						<th>Opt</th>
-						<th>Source</th>
-						<th>Destination</th>
+						<th>Source IP address</th>
+						<th>MAC address</th>
+						<th>Destination port</th>
 						<th>Action</th>
+						<th>Type</th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>

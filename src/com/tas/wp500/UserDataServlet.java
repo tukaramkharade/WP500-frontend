@@ -80,7 +80,7 @@ public class UserDataServlet extends HttpServlet {
 				out.flush();
 				
 				
-				session.setAttribute("role", role);
+			//	session.setAttribute("role", role);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -160,7 +160,7 @@ public class UserDataServlet extends HttpServlet {
 					logger.info("role : " + role);
 
 					
-					//session.setAttribute("role", role);
+				//	session.setAttribute("role", role);
 					// logger.info(jsonArray.get(i).toString());
 					// resJsonArray.put(userObj);
 

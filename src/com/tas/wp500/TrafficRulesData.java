@@ -20,7 +20,7 @@ import com.tas.utils.TCPClient;
 /**
  * Servlet implementation class Firewall
  */
-@WebServlet("/firewallData")
+@WebServlet("/trafficRulesData")
 public class TrafficRulesData extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(TrafficRulesData.class);

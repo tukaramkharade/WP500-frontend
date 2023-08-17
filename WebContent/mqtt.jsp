@@ -14,6 +14,9 @@
 <script>
 	// Function to load user data and populate the user list table
 
+	var roleValue;
+						
+	
 	function loadCrtFilesList() {
 		$.ajax({
 			url : "mqttAddData",
@@ -45,6 +48,7 @@
 	}
 
 	function loadMqttList() {
+		
 		$
 				.ajax({
 					url : 'mqttData',
@@ -80,9 +84,11 @@
 											row.append($('<td>').text(mqtt.enable + ""));
 											
 
-											var actions = $('<td>');
+											var actions = $('<td>')
+											
+											
 											var editButton = $(
-													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
 													.text('Edit')
 													.click(
 															function() {
@@ -99,14 +105,16 @@
 
 															});
 											var deleteButton = $(
-													'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													'<button class="delBtn" style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
 													.text('Delete')
 													.click(
 															function() {
-																deleteMqtt(mqtt.prefix);
+															
+															deleteMqtt(mqtt.prefix);
+																
 															});
 											var getStatusButton = $(
-													'<button style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
+													'<button class="statusBtn" style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
 													.text('Get Status')
 													.click(
 															function() {
@@ -116,9 +124,9 @@
 											actions.append(editButton);
 											actions.append(deleteButton);
 											actions.append(getStatusButton);
-
+	
 											row.append(actions);
-
+												
 											mqttTable.append(row);
 
 										});
@@ -184,11 +192,7 @@
 	}
 
 	function getMqttStatus(mqttId) {
-		// Perform necessary actions to get the MQTT status
-		// For example, make an AJAX call to a servlet
-
-		//alert(mqttId);
-		//console.log('broker_ip_address: ' + mqttId);
+		
 
 		$.ajax({
 			url : 'getMqttStatus',
@@ -402,17 +406,79 @@
 			return true;
 		}
 	}
+	
+	
+	//change color of disabled buttons
+	
+	function changeButtonColor(isDisabled) {
+        var $add_button = $('#registerBtn');       
+        var $clear_button = $('#clearBtn');
+        var $delete_button = $('.delBtn');
+        
+        
+       
+        
+         if (isDisabled) {
+            $add_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $clear_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $delete_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $delete_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+    }
 
+	
+	
+	
 	// Function to execute on page load
 	$(document)
 			.ready(
 					function() {
-						// Load user list
+						
+						 $(".delBtn").click(function() {
+							 var buttonValue = $(this).val();
+							 alert(buttonValue);
+							 console.log(buttonValue);
+						 });
 						
 						
 						
 						
+						
+						
+							 
+						<%// Access the session variable
+			HttpSession role = request.getSession();
+			String roleValue = (String) session.getAttribute("role");%>
+    	
+    	roleValue = '<%=roleValue%>';
+
+						// This will insert the session value into the JavaScript code
+
 						loadMqttList();
+						
+						
+						if (roleValue == 'VIEWER') {
+
+							var confirmation = confirm('You do not have enough privileges for role VIEWER');
+							$('#registerBtn').prop('disabled', true);
+							$('#clearBtn').prop('disabled', true);
+							$('.delBtn').prop('disabled', true);
+
+							changeButtonColor(true);
+						}
+
 						loadCrtFilesList();
 
 						$("#file_type").change(
@@ -437,11 +503,13 @@
 													.val();
 											var broker_ip_address = $(
 													'#broker_ip_address').val();
-											var type = $('#file_type').find(":selected").val();
-											var port_number = $('#port_number').val();
-											var file_name = $('#file_name').find(":selected").val();
-											
-											
+											var type = $('#file_type').find(
+													":selected").val();
+											var port_number = $('#port_number')
+													.val();
+											var file_name = $('#file_name')
+													.find(":selected").val();
+
 											if (!validateNumbers(port_number)) {
 												portNoError.textContent = "Enter port number upto 5 digits";
 												return;
@@ -451,12 +519,11 @@
 												fileTypeError.textContent = "Please select file type";
 												return;
 											}
-											
+
 											if (!validateCrtFile(file_name)) {
 												crtFileError.textContent = "Please select crt file";
 												return;
 											}
-											
 
 											if (buttonText == 'Add') {
 												addMqtt();
@@ -497,86 +564,80 @@
 			<hr>
 
 			<div class="container">
-				<form id="mqttForm" action="/WP500/mqttData">
-					<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
-						
-						<div class="col-75-1"
-							style="width: 20%; height: 20%">
+				<form id="mqttForm">
+					<div class="row"
+						style="display: flex; flex-content: space-between; margin-top: -20px;">
+
+						<div class="col-75-1" style="width: 20%; height: 20%">
 							<input type="text" id="broker_ip_address"
-								name="broker_ip_address" placeholder="Host Name"
-								required />
+								name="broker_ip_address" placeholder="Host Name" required />
 
 						</div>
 
-					<!-- </div>
+						<!-- </div>
 					<div class="row"> -->
-						
-						<div class="col-75-2"
-							style="width: 20%; ">
+
+						<div class="col-75-2" style="width: 20%;">
 							<input type="text" id="port_number" name="port_number"
 								placeholder="Port Number" required /> <span
 								style="color: red; font-size: 12px;" id="portNoError"></span>
 
 						</div>
-					<!-- </div>
+						<!-- </div>
 
 					<div class="row"> -->
 						<!-- <div class="col-25">
 							<label for="username">Username</label>
 						</div> -->
-						<div class="col-75-3"
-							style="width: 20%; height: 20%">
+						<div class="col-75-3" style="width: 20%; height: 20%">
 							<input type="text" id="username" name="username"
 								placeholder="Username" required />
 
 						</div>
-					<!-- </div>
+						<!-- </div>
 					<div class="row"> -->
-						
-						<div class="col-75-4"
-							style="width: 20%; height: 20%">
+
+						<div class="col-75-4" style="width: 20%; height: 20%">
 							<input type="password" id="password" name="password"
-								placeholder="Password" required /> 
+								placeholder="Password" required />
 						</div>
 
 
-					<!-- </div>
+						<!-- </div>
 
 					<div class="row"> -->
-						
-						<div class="col-75-5"
-							style="width: 20%; height: 20%">
+
+						<div class="col-75-5" style="width: 20%; height: 20%">
 							<input type="text" id="pub_topic" name="pub_topic"
 								placeholder="Published Topic" required />
 
 						</div>
 					</div>
-					
-					
-					<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
-						
+
+
+					<div class="row"
+						style="display: flex; flex-content: space-between; margin-top: 10px;">
+
 						<div class="col-75-6" style="width: 20%;">
 							<input type="text" id="sub_topic" name="sub_topic"
 								placeholder="Subscribed Topic" required />
 						</div>
-					<!-- </div>
+						<!-- </div>
 
 					<div class="row"> -->
-						
-						<div class="col-75-7"
-							style="width: 20%;">
+
+						<div class="col-75-7" style="width: 20%;">
 							<input type="text" id="prefix" name="prefix" placeholder="Prefix"
 								required />
 
 						</div>
-					<!-- </div>
+						<!-- </div>
 
 					<div class="row"> -->
 						<!-- <div class="col-25">
 							<label for="fileType">File Type</label>
 						</div> -->
-						<div class="col-75-8"
-							style="width: 20%;">
+						<div class="col-75-8" style="width: 20%;">
 
 							<select class="textBox" id="file_type" name="file_type"
 								style="height: 35px;">
@@ -584,34 +645,30 @@
 								<option>SSL</option>
 								<option>TCP</option>
 
-							</select>
-							<span id="fileTypeError" style="color:red;"></span>
+							</select> <span id="fileTypeError" style="color: red;"></span>
 						</div>
-					<!-- </div>
+						<!-- </div>
 
 					<div class="row"> -->
-							
-						<div class="col-75-9"
-							style="width: 20%;">
+
+						<div class="col-75-9" style="width: 20%;">
 
 							<select class="textBox" id="file_name" name="file_name"
 								style="height: 35px;" required>
 								<option value="Select crt file">Select crt file</option>
 
-							</select>
-							<span id="crtFileError" style="color:red;"></span>
+							</select> <span id="crtFileError" style="color: red;"></span>
 
 						</div>
-					<!-- </div>
+						<!-- </div>
 					
 					<div class="row"> -->
-						
-						<div class="col-75-10"
-							style="width: 20%;">
+
+						<div class="col-75-10" style="width: 20%;">
 
 							<select class="textBox" id="enable" name="enable"
-								style="height: 35px; required">
-								
+								style="height: 35px;">
+
 								<option value="enable" selected>true</option>
 								<option value="disable">false</option>
 
@@ -631,15 +688,15 @@
 
 						</div>
 					</div> -->
-					
-					
 
 
-					<div class="row" style="display: flex; justify-content: right; margin-top: 2%;">
-						<input type="button"
-							value="Clear" id="clearBtn" /> <input
-							style="margin-left: 5px;" type="submit"
-							value="Add" id="registerBtn" />
+
+
+					<div class="row"
+						style="display: flex; justify-content: right; margin-top: 2%;">
+						<input type="button" value="Clear" id="clearBtn" /> <input
+							style="margin-left: 5px;" type="submit" value="Add"
+							id="registerBtn" />
 					</div>
 
 					<!-- <div class="row">
@@ -666,7 +723,7 @@
 							<th>File Type</th>
 							<th>File Name</th>
 							<th>Enable</th>
-							<th>Actions</th>
+							<th class="actions">Actions</th>
 
 						</tr>
 					</thead>

@@ -54,8 +54,8 @@ public class NtpLiveTime extends HttpServlet {
 
 			String respStr = client.sendMessage(json.toString());
 
-			String IST_Time = new JSONObject(respStr).getString("IST_Time");
-			String UTC_Time = new JSONObject(respStr).getString("UTC_Time");
+			String IST_Time = new JSONObject(respStr).getString("IST Time");
+			String UTC_Time = new JSONObject(respStr).getString("UTC Time");
 			
 			String IST_Time1 = IST_Time.toString();
 			String UTC_Time1 = UTC_Time.toString();

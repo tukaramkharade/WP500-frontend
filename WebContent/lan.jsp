@@ -71,10 +71,10 @@
 	function editEth1() {
 
 		var lan_type = 'eth1';
-		var eth1_ipaddr = $('#ip_addr_dis_0').val();
-		var eth1_subnet = $('#subnet_mask_0').val();
+		var eth1_ipaddr = $('#ip_addr_eth1').val();
+		var eth1_subnet = $('#subnet_mask_eth1').val();
 		
-		alert('eth1_dhcp : '+eth1_dhcp)
+		//alert('eth1_dhcp : '+eth1_dhcp)
 		
 		
 		$.ajax({
@@ -88,19 +88,24 @@
 				lan_type : lan_type
 			},
 			success : function(data) {
-				// Display the registration status message
 				
-				if(!eth1_dhcp == '0'){
+				if(eth1_dhcp == '1'){
 					alert('DHCP  = 1 Cannot update IP address and subnet mask');
 					
-					$('#ip_addr_0').prop('disabled', true); 
-					$('#subnet_mask_0').prop('disabled', true); 
+					$('#ip_addr_eth1').prop('disabled', true); 
+					$('#subnet_mask_eth1').prop('disabled', true); 
 					
-					$('#ip_addr_0').val(eth1_ipaddr);
-					$('#subnet_mask_0').val(eth1_subnet);
+					$('#ip_addr_eth1').val(eth1_ipaddr);
+					$('#subnet_mask_eth1').val(eth1_subnet);
 					
 				}else{
+					
 					alert(data.message);
+					
+					//clear fields
+					$('#ip_addr_eth1').val('');
+					$('#subnet_mask_eth1').val('');
+					
 				}
 				
 				
@@ -112,83 +117,7 @@
 		});
 
 	}
-	
-	
-	/* function loadLanDHCPSettings0(lan_type) {
-		var lan_type = eth1;
-		//alert(eth_type)
-		
-		$.ajax({
-			url : 'lanUpdateServlet',
-			type : 'POST',
-			data : {
-				lan_type : lan_type
-			},
-			success : function(data) {
-				
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
-			}
-		});
-	} */
-	
-	//eth_type = 1
-	/* function loadLanDHCPSettings1(lan_type) {
-		var lan_type = lan1;
-		
-		alert(eth1_dhcp + ' ' + lan1_dhcp + ' ' +lan2_dhcp)
-		
-		$.ajax({
-			url : 'lan',
-			type : 'POST',
-			data : {
-				lan_type : lan_type
-			},
-			success : function(data) {
-				
-				if(data.eth1_dhcp == 1){
-					$('#ip_addr_1').prop('disabled', true); 
-					$('#subnet_mask_1').prop('disabled', true);
-					
-					$('#ip_addr_1').val(data.eth1_ipaddr);
-					$('#subnet_mask_1').val(data.eth1_subnet);
-					
-					$('#checkbox1').prop('disabled', true);
-				}
 
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
-			}
-		});
-	}
-	 */
-	//eth_type = 2
-	/* function loadLanDHCPSettings2(eth_type) {
-		var lan_type = lan2;
-		//alert(eth_type)
-		
-		$.ajax({
-			url : 'lan',
-			type : 'POST',
-			data : {
-				lan_type : lan_type
-			},
-			success : function(data) {
-			
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
-			}
-		});
-	}
-	
- */
- 
  
 	$(document).ready(function() {
 
@@ -205,24 +134,7 @@
 			
 			editEth1();
 		});
-		 
-		 /* $('#get_dhcp_1').click(function(){		
-				loadLanDHCPSettings1(1);
-
-		 });
-		 
-		 $('#get_dhcp_2').click(function(){		
-				loadLanDHCPSettings2(2);
-
-		 }); */
-		 
-		 
-		 
-		 
-		 /* $('#eth1_button').click(function() {
-			 
-			// editEth1(eth1);
-		 }); */
+		
 		
 	});
 </script>
@@ -264,15 +176,18 @@
 
 						<td><input id="ip_addr_dis_0" class="status" disabled
 							type='text' name="ip_addr_dis_0"></td>
-						<td><input id="ip_addr_0" class="config" type='text'
-							name="ip_addr_0"></td>
+							
+						<td>
+						<input id="ip_addr_eth1" class="config" type='text'
+							name="ip_addr_eth1"></td>
 					</tr>
 					<tr>
 						<td>Subnet Mask</td>
 						<td><input id="subnet_mask_dis_0" class="status" disabled
 							type='text' name="subnet_mask_dis_0"></td>
-						<td><input id="subnet_mask_0" class="config" type='text'
-							name="subnet_mask_0"></td>
+							
+						<td><input id="subnet_mask_eth1" class="config" type='text'
+							name="subnet_mask_eth1"></td>
 					</tr>
 
 

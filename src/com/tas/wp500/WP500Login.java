@@ -74,6 +74,7 @@ public class WP500Login extends HttpServlet {
 
 			
 			String status = new JSONObject(respStr).getString("status");
+			String role = new JSONObject(respStr).getString("role");
 			
 			logger.info(new JSONObject(respStr).getString("status"));
 			if (status.equals("success")) {
@@ -84,7 +85,8 @@ public class WP500Login extends HttpServlet {
 				
 				response.sendRedirect("overview.jsp");
 				session.setAttribute("username", username);
-			//	session.setAttribute("role", "VIEWER");
+				session.setAttribute("role", role);
+				
 			}else {
 				
 				try {

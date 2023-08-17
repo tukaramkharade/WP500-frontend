@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
@@ -47,18 +48,31 @@ public class LanUpdateServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
-
-		String eth1_ipaddr = request.getParameter("ip_addr_0");
-		String eth1_subnet = request.getParameter("subnet_mask_0");
+		
+		
+		HttpSession session = request.getSession(false);
+		
+		String check_username = (String) session.getAttribute("username");
+		
+		if(check_username != null){
+			
+		String eth1_ipaddr = request.getParameter("eth1_ipaddr");
+		String eth1_subnet = request.getParameter("eth1_subnet");
 		String eth1_type = request.getParameter("lan_type");
 		String eth1_dhcp = request.getParameter("eth1_dhcp");
 
 		try {
 
+			System.out.println("eth1_ipaddr : "+eth1_ipaddr);
+			System.out.println("eth1_subnet : "+eth1_subnet);
+			System.out.println("eth1_type : "+eth1_type);
+			System.out.println("eth1_dhcp : "+eth1_dhcp);
+			
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "update_lan_setting");
+			json.put("user", check_username);
 			json.put("lan_type", eth1_type);
 			json.put("eth1_dhcp", eth1_dhcp);
 			json.put("eth1_ipaddr", eth1_ipaddr);
@@ -83,6 +97,9 @@ public class LanUpdateServlet extends HttpServlet {
 		    out.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		}else{
+			
 		}
 	}
 

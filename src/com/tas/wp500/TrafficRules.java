@@ -2,48 +2,56 @@ package com.tas.wp500;
 
 public class TrafficRules {
 
-	private String lineNumber;
-	private String target;
-	private String protocol;
-	private String opt;
-	private String source_port;
-	private String destination_address;
 	private String name;
+	private String protocol;	
+	private String destination_port;
+	private String iface;
 	private String mac_address;
 	private String ip_address;
+	private String action;
+	private String type;
 	
-	public TrafficRules(String lineNumber, String target, String protocol, String opt, String source_port,
-			String destination_address, String name, String mac_address, String ip_address) {
-		super();
-		this.lineNumber = lineNumber;
-		this.target = target;
-		this.protocol = protocol;
-		this.opt = opt;
-		this.source_port = source_port;
-		this.destination_address = destination_address;
-		this.name = name;
-		this.mac_address = mac_address;
-		this.ip_address = ip_address;
-	}
+	
 
 	public TrafficRules() {
 		super();
 	}
 
-	public String getLineNumber() {
-		return lineNumber;
+	public TrafficRules(String name, String protocol, String destination_port, String iface, String mac_address,
+			String ip_address, String action, String type) {
+		super();
+		this.name = name;
+		this.protocol = protocol;
+		this.destination_port = destination_port;
+		this.iface = iface;
+		this.mac_address = mac_address;
+		this.ip_address = ip_address;
+		this.action = action;
+		this.type = type;
 	}
 
-	public void setLineNumber(String lineNumber) {
-		this.lineNumber = lineNumber;
+	public String getAction() {
+		return action;
 	}
 
-	public String getTarget() {
-		return target;
+	public void setAction(String action) {
+		this.action = action;
 	}
 
-	public void setTarget(String target) {
-		this.target = target;
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getProtocol() {
@@ -54,36 +62,20 @@ public class TrafficRules {
 		this.protocol = protocol;
 	}
 
-	public String getOpt() {
-		return opt;
+	public String getDestination_port() {
+		return destination_port;
 	}
 
-	public void setOpt(String opt) {
-		this.opt = opt;
+	public void setDestination_port(String destination_port) {
+		this.destination_port = destination_port;
 	}
 
-	public String getSource_port() {
-		return source_port;
+	public String getIface() {
+		return iface;
 	}
 
-	public void setSource_port(String source_port) {
-		this.source_port = source_port;
-	}
-
-	public String getDestination_address() {
-		return destination_address;
-	}
-
-	public void setDestination_address(String destination_address) {
-		this.destination_address = destination_address;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setIface(String iface) {
+		this.iface = iface;
 	}
 
 	public String getMac_address() {
@@ -102,4 +94,5 @@ public class TrafficRules {
 		this.ip_address = ip_address;
 	}
 	
-}
+	
+	}
