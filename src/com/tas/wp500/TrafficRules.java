@@ -10,6 +10,10 @@ public class TrafficRules {
 	private String ip_address;
 	private String action;
 	private String type;
+	private String input;
+	private String output;
+	private String forward;
+	private String rule_drop;
 	
 	
 
@@ -17,8 +21,11 @@ public class TrafficRules {
 		super();
 	}
 
-	public TrafficRules(String name, String protocol, String destination_port, String iface, String mac_address,
-			String ip_address, String action, String type) {
+	
+	public TrafficRules(java.lang.String name, java.lang.String protocol, java.lang.String destination_port,
+			java.lang.String iface, java.lang.String mac_address, java.lang.String ip_address, java.lang.String action,
+			java.lang.String type, java.lang.String input, java.lang.String output, java.lang.String forward,
+			java.lang.String rule_drop) {
 		super();
 		this.name = name;
 		this.protocol = protocol;
@@ -28,7 +35,53 @@ public class TrafficRules {
 		this.ip_address = ip_address;
 		this.action = action;
 		this.type = type;
+		this.input = input;
+		this.output = output;
+		this.forward = forward;
+		this.rule_drop = rule_drop;
 	}
+
+	
+
+	public String getInput() {
+		return input;
+	}
+
+
+	public void setInput(String input) {
+		this.input = input;
+	}
+
+
+	public String getOutput() {
+		return output;
+	}
+
+
+	public void setOutput(String output) {
+		this.output = output;
+	}
+
+
+	public String getForward() {
+		return forward;
+	}
+
+
+	public void setForward(String forward) {
+		this.forward = forward;
+	}
+
+
+	public String getRule_drop() {
+		return rule_drop;
+	}
+
+
+	public void setRule_drop(String rule_drop) {
+		this.rule_drop = rule_drop;
+	}
+
 
 	public String getAction() {
 		return action;

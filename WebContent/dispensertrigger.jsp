@@ -46,6 +46,35 @@
 			},
 		});
 	}
+	
+	function loadTagListTriggerTag() {
+		$
+				.ajax({
+					url : "alarmConfigTagListServlet",
+					type : "GET",
+					dataType : "json",
+					success : function(data) {
+						if (data.tag_list_result
+								&& Array.isArray(data.tag_list_result)) {
+							var datalist = $("#trigger_tag");
+							// Clear any existing options
+							//   datalist.empty();
+
+							// Loop through the data and add options to the datalist
+							data.tag_list_result.forEach(function(tag) {
+								var option = $("<option>", {
+									value : tag,
+									text : tag,
+								});
+								datalist.append(option);
+							});
+						}
+					},
+					error : function(xhr, status, error) {
+						console.log("Error showing tag list: " + error);
+					},
+				});
+	}
 
 	function loadTagListStartPressure() {
 		$
@@ -430,7 +459,7 @@
 		var serial_number = $('#serial_number').val();
 		var side = $('#side').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
-		var trigger_tag = $('#trigger_tag').val();
+		var trigger_tag = $('#trigger_tag').find(":selected").val();
 		var trigger_value = $('#trigger_value').find(":selected").val();
 		var start_pressure = $('#start_pressure').find(":selected").val();
 		var end_pressure = $('#end_pressure').find(":selected").val();
@@ -471,7 +500,7 @@
 				$('#serial_number').val('');
 				$('#side').val('Select side');
 				$('#broker_name').val('Select broker IP address');
-				$('#trigger_tag').val('');
+				$('#trigger_tag').val('Select trigger tag');
 				$('#trigger_value').val('Select trigger value');
 				$('#start_pressure').val('Select start pressure');
 				$('#end_pressure').val('Select end pressure');
@@ -501,7 +530,7 @@
 		var serial_number = $('#serial_number').val();
 		var side = $('#side').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
-		var trigger_tag = $('#trigger_tag').val();
+		var trigger_tag = $('#trigger_tag').find(":selected").val();
 		var trigger_value = $('#trigger_value').find(":selected").val();
 		var start_pressure = $('#start_pressure').find(":selected").val();
 		var end_pressure = $('#end_pressure').find(":selected").val();
@@ -542,7 +571,7 @@
 				$('#serial_number').val('');
 				$('#side').val('Select side');
 				$('#broker_name').val('Select broker IP address');
-				$('#trigger_tag').val('');
+				$('#trigger_tag').val('Select trigger tag');
 				$('#trigger_value').val('Select trigger value');
 				$('#start_pressure').val('Select start pressure');
 				$('#end_pressure').val('Select end pressure');
@@ -708,6 +737,19 @@
 			return true;
 		}
 	}
+	
+	function validateTriggerTag(trigger_tag) {
+		var triggerTagError = document.getElementById("triggerTagError");
+
+		if (trigger_tag == 'Select trigger tag') {
+
+			triggerTagError.textContent = "Please select trigger tag";
+			return false;
+		} else {
+			triggerTagError.textContent = "";
+			return true;
+		}
+	}
 
 	function validateUnitPrice(unit_price) {
 		var unitPriceError = document.getElementById("unitPriceError");
@@ -731,6 +773,7 @@
 					
 						loadBrokerIPList();
 						loadDispenserTriggerList();
+						loadTagListTriggerTag();
 						loadTagListStartPressure();
 						loadTagListEndPressure();
 						loadTagListTemperature();
@@ -767,6 +810,8 @@
 													":selected").val();
 											var unit_price = $('#unit_price')
 													.find(":selected").val();
+											var trigger_tag = $('#trigger_tag')
+											.find(":selected").val();
 
 											if (!validateSide(side)) {
 												sideError.textContent = "Please select side";
@@ -813,6 +858,11 @@
 											}
 											if (!validateUnitPrice(unit_price)) {
 												unitPriceError.textContent = "Please select unit price ";
+												return;
+											}
+											
+											if (!validateTriggerTag(trigger_tag)) {
+												triggerTagError.textContent = "Please select trigger tag ";
 												return;
 											}
 
@@ -886,8 +936,17 @@
 					</div> 
 					
 					<div class="col-75-4" style="width: 20%;">
-						<input type="text" id="trigger_tag" name="trigger_tag"
-							placeholder="Trigger Tag" required style="height: 17px" />
+						<!-- <input type="text" id="trigger_tag" name="trigger_tag"
+							placeholder="Trigger Tag" required style="height: 17px" /> -->
+							
+							
+						<select class="textBox" id=trigger_tag name="trigger_tag"
+							style="height: 35px;">
+							<option value="Select trigger tag">Select trigger tag</option>
+						</select> <span id="triggerTagError" style="color: red"></span>
+					
+							
+							
 					</div>
 
 					<div class="col-75-5" style="width: 20%;">

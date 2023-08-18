@@ -87,8 +87,8 @@ input:checked+.slider:before {
 					success : function(data) {
 						// Clear existing table rows
 
-						var firewallTable = $("#trafficRulesListTable tbody");
-						firewallTable.empty();
+						var trafficRulesTable = $("#trafficRulesListTable tbody");
+						trafficRulesTable.empty();
 
 						var json1 = JSON.stringify(data);
 
@@ -108,117 +108,522 @@ input:checked+.slider:before {
 										function(index, trafficrules) {
 											var row = $("<tr>");
 											row.append($("<td>").text(
-													trafficrules.name
-															+ ""));
-											row.append($("<td>").text(
-													trafficrules.protocol + ""));
+													trafficrules.name + ""));
 											row
 													.append($("<td>")
 															.text(
-																	trafficrules.destination_port
+																	trafficrules.protocol
 																			+ ""));
 											row.append($("<td>").text(
 													trafficrules.iface + ""));
+											row
+													.append($("<td>")
+															.text(
+																	trafficrules.ipAddress
+																			+ ""));
 											row.append($("<td>").text(
-													trafficrules.mac_address + ""));
-											row.append($("<td>").text(
-													trafficrules.ip_address
+													trafficrules.macAddress
 															+ ""));
 											row.append($("<td>").text(
-													trafficrules.action
-															+ ""));
+													trafficrules.portNum + ""));
 											row.append($("<td>").text(
-													trafficrules.type
-															+ ""));
+													trafficrules.action + ""));
+											row.append($("<td>").text(
+													trafficrules.type + ""));
 
 											var actions = $("<td>");
-											var deleteButton = $(
+
+											var editButton = $(
 													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text("Delete")
+													.text('Edit')
 													.click(
 															function() {
-																deleteFirewall(trafficrules.lineNumber);
+																setName(trafficrules.name);
+																setInterface(trafficrules.iface);
+																setProtocol(trafficrules.protocol);
+																setPortNumber(trafficrules.portNum);
+																setMacAddress(trafficrules.macAddress);
+																setIPAddress(trafficrules.ipAddress);
+																setType(trafficrules.type);
+																setAction(trafficrules.action);
+
+															});
+
+											var deleteButton = $(
+													'<button style="background-color:red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+													.text('Delete')
+													.click(
+															function() {
+																deleteTrafficRules(trafficrules.name);
 															});
 
 											//	actions.append(editButton);
+											actions.append(editButton);
 											actions.append(deleteButton);
 
 											row.append(actions);
 
-											firewallTable.append(row);
+											trafficRulesTable.append(row);
 										});
 					},
 					error : function(xhr, status, error) {
-						console.log("Error loading firewall data: " + error);
+						console.log("Error loading traffic rules data: "
+								+ error);
 					},
 				});
 	}
 
-	function addFirewall() {
-		var portNumber = $("#portNumber").val();
-		var protocol = $("#protocol").val();
-		var ip_addr = $("#ip_addr").val();
-
+	function addTrafficRules() {
+		var name = $('#name').val();
+		var iface = $('#iface').find(":selected").val();
+		var portNumber = $('#portNumber').val();
+		var macAddress = $('#macAddress').val();
+		var protocol = $('#protocol').find(":selected").val();
+		var ip_addr = $('#ip_addr').val();
+		var type = $('#type').find(":selected").val();
+		var action = $('#action').find(":selected").val();
+		
+		
 		$.ajax({
-			url : "firewallData",
+			url : "trafficRulesData",
 			type : "POST",
 			data : {
+				name : name,
+				iface : iface,
 				portNumber : portNumber,
+				macAddress : macAddress,
 				protocol : protocol,
 				ip_addr : ip_addr,
+				type : type,
+				action : action
 			},
 			success : function(data) {
 				// Display the registration status message
 				alert(data.message);
-				loadFirewallList();
+				loadTrafficRulesList();
 
 				// Clear form fields
-				$("#portNumber").val("");
-				$("#protocol").val("");
-				$("#ip_addr").val("");
+				$('#name').val('');
+				$('#iface').val('eth0');
+				$('#portNumber').val('');
+				$('#macAddress').val('');
+				$('#protocol').val('tcp');
+				$('#ip_addr').val('');
+				$('#type').val('Select type');
+				$('#action').val('ACCEPT');
+
+				$('#ip_addr').prop('disabled', false);
+				$('#macAddress').prop('disabled', false);
 			},
 			error : function(xhr, status, error) {
-				console.log("Error adding firewall: " + error);
+				console.log("Error adding traffic rules: " + error);
 			},
 		});
 
-		$("#addFirewall").val("Add");
+		$("#registerBtn").val("Add");
 	}
 
-	function deleteFirewall(firewallId) {
+	function deleteTrafficRules(trafficRulesId) {
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
-		alert(firewallId);
-		var confirmation = confirm("Are you sure you want to delete this firewall setting?");
+		alert(trafficRulesId);
+		var confirmation = confirm("Are you sure you want to delete this traffic rules?");
 		if (confirmation) {
 			$.ajax({
-				url : "firewallDeleteServlet",
+				url : "trafficRulesDeleteServlet",
 				type : "POST",
 				data : {
-					lineNumber : firewallId,
+					name : trafficRulesId,
 				},
 				success : function(data) {
 					// Display the registration status message
 					alert(data.message);
 
 					// Refresh the user list
-					loadFirewallList();
+					loadTrafficRulesList();
 				},
 				error : function(xhr, status, error) {
 					// Handle the error response, if needed
-					console.log("Error deleting user: " + error);
+					console.log("Error deleting traffic rules: " + error);
 				},
 			});
 		}
 	}
 
+	function applyTrafficRules() {
+
+		$.ajax({
+			url : "trafficRulesEditServlet",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+
+				alert(data.message);
+				loadTrafficRulesList();
+
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log("Error applying traffic rules: " + error);
+			},
+		});
+	}
+
+	function editTrafficRules() {
+
+		var confirmation = confirm('Are you sure you want to edit this traffic rule?');
+
+		var name = $('#name').val();
+		var iface = $('#iface').find(":selected").val();
+		var portNumber = $('#portNumber').val();
+		var macAddress = $('#macAddress').val();
+		var protocol = $('#protocol').find(":selected").val();
+		var ip_addr = $('#ip_addr').val();
+		var type = $('#type').find(":selected").val();
+		var action = $('#action').find(":selected").val();
+		
+		if(type == 'ip'){
+			alert(type)
+			$("#macAddress").prop("disabled", true);
+		}else if(type == 'mac'){
+			
+			$("#ip_addr").prop("disabled", true);
+		}
+		
 	
+		$.ajax({
+			url : 'trafficRulesEditServlet',
+			type : 'POST',
+			data : {
+				name : name,
+				iface : iface,
+				portNumber : portNumber,
+				macAddress : macAddress,
+				protocol : protocol,
+				ip_addr : ip_addr,
+				type : type,
+				action : action
+			},
+			success : function(data) {
+				// Display the registration status message
+
+				alert(data.message);
+				loadTrafficRulesList();
+
+				// Clear form fields
+				$('#name').val('');
+				$('#iface').val('eth0');
+				$('#portNumber').val('');
+				$('#macAddress').val('');
+				$('#protocol').val('tcp');
+				$('#ip_addr').val('');
+				$('#type').val('Select type');
+				$('#action').val('ACCEPT');
+
+				$("#name").prop("disabled", false);
+				$('#ip_addr').prop('disabled', false);
+				$('#macAddress').prop('disabled', false);
+			},
+			error : function(xhr, status, error) {
+				console.log('Error updating traffic rule: ' + error);
+			}
+		});
+
+		$('#registerBtn').val('Add');
+	}
+
+	function setName(trafficRulesId) {
+
+		$('#name').val(trafficRulesId);
+		$("#name").prop("disabled", true);
+		$('#registerBtn').val('Edit');
+
+	}
+
+	function setInterface(trafficRulesId) {
+
+		$('#iface').val(trafficRulesId);
+	}
+
+	function setProtocol(trafficRulesId) {
+
+		$('#protocol').val(trafficRulesId);
+	}
+
+	function setPortNumber(trafficRulesId) {
+
+		$('#portNumber').val(trafficRulesId);
+	}
+
+	function setMacAddress(trafficRulesId) {
+
+		
+		$('#macAddress').val(trafficRulesId);
+
+	}
+
+	function setIPAddress(trafficRulesId) {
+
+		$('#ip_addr').val(trafficRulesId);
+
+	}
+
+	function setType(trafficRulesId) {
+
+		$('#type').val(trafficRulesId);
+		
+		if(trafficRulesId == 'ip'){
+			
+			$("#macAddress").prop("disabled", true);
+		}else if(trafficRulesId == 'mac'){
+			
+			$("#ip_addr").prop("disabled", true);
+		}
+	}
+
+	function setAction(trafficRulesId) {
+
+		$('#action').val(trafficRulesId);
+	}
+
+	function getGeneralSettings() {
+
+		$.ajax({
+			url : "generalSettingsServlet",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+
+				$('#input').val(data.input);
+				$('#output').val(data.output);
+				$('#forward').val(data.forword);
+				$('#rule_drop').val(data.rule_drop);
+
+				if ($('#input').val(data.input) != null) {
+					$('#registerBtnGenSettings').val('Edit');
+				} else {
+					$('#registerBtnGenSettings').val('Add');
+				}
+
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log("Error loading general Settings: " + error);
+			},
+		});
+
+	}
+
+	function addGeneralSettings() {
+
+		var input = $('#input').val();
+		var output = $('#output').val();
+		var forward = $('#forward').val();
+		var rule_drop = $('#rule_drop').val();
+
+		$.ajax({
+			url : 'generalSettingsServlet',
+			type : 'POST',
+			data : {
+				input : input,
+				output : output,
+				forward : forward,
+				rule_drop : rule_drop
+
+			},
+			success : function(data) {
+				// Display the registration status message
+				alert(data.message);
+				getGeneralSettings()
+
+				// Clear form fields
+
+				$('#input').val('accept');
+				$('#output').val('accept');
+				$('#forward').val('accept');
+				$('#rule_drop').val('on');
+
+			},
+			error : function(xhr, status, error) {
+				console.log('Error adding general setting: ' + error);
+			}
+		});
+
+		$('#registerBtnGenSettings').val('Add');
+
+	}
+
+	function editGeneralSettings() {
+		var input = $('#input').val();
+		var output = $('#output').val();
+		var forward = $('#forward').val();
+		var rule_drop = $('#rule_drop').val();
+		
+		
+
+		$.ajax({
+			url : 'generalSettingsEditServlet',
+			type : 'POST',
+			data : {
+				input : input,
+				output : output,
+				forward : forward,
+				rule_drop : rule_drop
+
+			},
+			success : function(data) {
+				// Display the registration status message
+				alert(data.message);
+				getGeneralSettings()
+
+				// Clear form fields
+
+				$('#input').val('');
+				$('#output').val('');
+				$('#forward').val('');
+				$('#rule_drop').val('');
+
+			},
+			error : function(xhr, status, error) {
+				console.log('Error editing general setting: ' + error);
+			}
+		});
+
+		$('#registerBtnGenSettings').val('Add');
+	}
+
+	function deleteGeneralSettings() {
+
+		var input = $('#input').val();
+		var output = $('#output').val();
+		var forward = $('#forward').val();
+		var rule_drop = $('#rule_drop').val();
+
+		$.ajax({
+			url : 'generalSettingsDeleteServlet',
+			type : 'POST',
+			data : {
+				input : input,
+				output : output,
+				forward : forward,
+				rule_drop : rule_drop
+
+			},
+			success : function(data) {
+				// Display the registration status message
+				alert(data.message);
+				getGeneralSettings()
+
+				// Clear form fields
+
+				$('#input').val('');
+				$('#output').val('');
+				$('#forward').val('');
+				$('#rule_drop').val('');
+
+			},
+			error : function(xhr, status, error) {
+				console.log('Error editing general setting: ' + error);
+			}
+		});
+
+		$('#registerBtnGenSettings').val('Add');
+
+	}
+
+	function applyGeneralSettings() {
+		var input = $('#input').val();
+		var output = $('#output').val();
+		var forward = $('#forward').val();
+		var rule_drop = $('#rule_drop').val();
+
+		$.ajax({
+			url : 'generalSettingsApplyServlet',
+			type : 'POST',
+			data : {
+				input : input,
+				output : output,
+				forward : forward,
+				rule_drop : rule_drop
+
+			},
+			success : function(data) {
+				// Display the registration status message
+				alert(data.message);
+				getGeneralSettings()
+
+				// Clear form fields
+
+				$('#input').val('');
+				$('#output').val('');
+				$('#forward').val('');
+				$('#rule_drop').val('');
+
+			},
+			error : function(xhr, status, error) {
+				console.log('Error applying general setting: ' + error);
+			}
+		});
+
+	}
 
 	//Function to execute on page load
 	$(document).ready(function() {
 		// Load user list
-		loadFirewallList();
+		loadTrafficRulesList();
+		getGeneralSettings();
+
+		 $("#type").change(function(event) {
+			//     alert("You have Selected  :: "+$(this).val());
+
+			if ($(this).val() == 'ip' || $(this).val() == 'IP') {
+				 
+				$("#macAddress").prop("disabled", true);
+				$("#macAddress").val('');
+				
+				var isDisabled = $('#ip_addr').prop('disabled');
+				 
+				 if(isDisabled){
+					 $("#ip_addr").prop("disabled", false);
+				 }
+				
+			} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
+				$("#ip_addr").prop("disabled", true);
+				$("#ip_addr").val('');
+				
+				var isDisabled = $('#macAddress').prop('disabled');
+				 
+				 if(isDisabled){
+					 $("#macAddress").prop("disabled", false);
+				 }
+			}
+		}); 
+
+		$('#applyBtnRules').click(function() {
+			applyTrafficRules();
+
+		});
+
+		$('#applyBtnGenSettings').click(function() {
+			applyGeneralSettings();
+
+		});
+
+		$("#delBtnGenSettings").click(function() {
+			deleteGeneralSettings();
+		});
+
+		$('#generalSettingsForm').submit(function(event) {
+			event.preventDefault();
+			var buttonText = $('#registerBtnGenSettings').val();
+
+			if (buttonText == 'Add') {
+				addGeneralSettings();
+			} else {
+				editGeneralSettings();
+			}
+		});
 
 		// Handle form submission
 		$("#trafficRulesForm").submit(function(event) {
@@ -226,19 +631,21 @@ input:checked+.slider:before {
 			var buttonText = $("#registerBtn").val();
 
 			if (buttonText == "Add") {
-				addFirewall();
+				addTrafficRules();
+			} else {
+				editTrafficRules();
 			}
 		});
 
 		$('#clearBtn').click(function() {
 			$('#name').val('');
-			$('#interface').val('');
+			$('#iface').val('eth0');
 			$('#portNumber').val('');
 			$('#macAddress').val('');
-			$('#protocol').val('');
+			$('#protocol').val('tcp');
 			$('#ip_addr').val('');
-			$('#type').val('');
-			$('#action').val('');
+			$('#type').val('Select type');
+			$('#action').val('ACCEPT');
 
 		});
 	});
@@ -267,43 +674,42 @@ input:checked+.slider:before {
 					style="display: flex; flex-content: space-between; margin-top: -25px;">
 
 					<div class="col-75-2" style="width: 20%;">
-					<label>Input</label>
-						<select class="textBox" id="input" name="input"
-							style="height: 35px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
+						<label>Input</label> <select class="textBox" id="input"
+							name="input" style="height: 35px;">
+							<option value="accept">accept</option>
+							<option value="reject">reject</option>
 						</select> <span id="inputError" style="color: red;"></span>
 					</div>
 					<div class="col-75-2" style="width: 20%;">
-					<label>Output</label>
-						<select class="textBox" id="output" name="output"
-							style="height: 35px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
+						<label>Output</label> <select class="textBox" id="output"
+							name="output" style="height: 35px;">
+							<option value="accept">accept</option>
+							<option value="reject">reject</option>
 						</select> <span id="outputError" style="color: red;"></span>
 					</div>
 					<div class="col-75-2" style="width: 20%;">
-					<label>Forward</label>
-						<select class="textBox" id="forward" name="forward"
-							style="height: 35px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
+						<label>Forward</label> <select class="textBox" id="forward"
+							name="forward" style="height: 35px;">
+							<option value="accept">accept</option>
+							<option value="reject">reject</option>
 						</select> <span id="forwardError" style="color: red;"></span>
 					</div>
 					<div class="col-75-2" style="width: 20%;">
-					<label>Drop invalid packets</label>
-						<select class="textBox" id="invalid_packet" name="invalid_packet"
-							style="height: 35px;">
+						<label>Drop invalid packets</label> <select class="textBox"
+							id="rule_drop" name="rule_drop" style="height: 35px;">
 							<option value="on">on</option>
 							<option value="off">off</option>
 						</select> <span id="forwardError" style="color: red;"></span>
 					</div>
 				</div>
 
-				
+
 				<div class="row"
 					style="display: flex; justify-content: right; margin-top: -1%;">
-					<input type="button" value="Apply" id="applyBtn" /> 
+					<input type="button" value="Apply" id="applyBtnGenSettings" /> <input
+						type="submit" value="Add" id="registerBtnGenSettings"
+						style="margin-left: 5px;" /> <input type="button" value="Delete"
+						id="delBtnGenSettings" style="margin-left: 5px;" />
 				</div>
 
 			</form>
@@ -323,13 +729,30 @@ input:checked+.slider:before {
 					</div>
 
 					<div class="col-75-4" style="width: 20%;">
-						<input type="text" id="interface" name="interface"
-							placeholder="Interface" />
+						<!-- <input type="text" id="iface" name="iface"
+							placeholder="Interface" /> -->
+
+						<select class="textBox" id="iface" name="iface"
+							style="height: 35px;">
+							<option value="eth0">eth0</option>
+							<option value="eth1">eth1</option>
+							<option value="lan1">lan1</option>
+							<option value="lan2">lan2</option>
+
+						</select>
+
 					</div>
 
-					<div class="col-75-1" style="width: 20%;">
-						<input type="text" id="portNumber" name="portNumber"
-							placeholder="Destination Port" />
+
+
+					<div class="col-75-2" style="width: 20%;">
+						<select class="textBox" id="type" name="type"
+							style="height: 35px;">
+							<option value="Select type">Select type</option>
+							<option value="ip">ip</option>
+							<option value="mac">mac</option>
+
+						</select>
 					</div>
 
 					<div class="col-75-1" style="width: 20%;">
@@ -339,7 +762,7 @@ input:checked+.slider:before {
 
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="protocol" name="protocol"
-							style="height: 35px;">							
+							style="height: 35px;">
 							<option value="tcp">tcp</option>
 							<option value="udp">udp</option>
 
@@ -353,32 +776,29 @@ input:checked+.slider:before {
 						<input type="text" id="ip_addr" name="ip_addr"
 							placeholder="Source IP address" />
 					</div>
-					
-					<div class="col-75-2" style="width: 20%;">
-						<select class="textBox" id="type" name="type"
-							style="height: 35px;">							
-							<option value="ip">ip</option>
-							<option value="mac">mac</option>
 
-						</select>
+					<div class="col-75-1" style="width: 20%;">
+						<input type="text" id="portNumber" name="portNumber"
+							placeholder="Destination Port" />
 					</div>
-					
+
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="action" name="action"
-							style="height: 35px;">							
+							style="height: 35px;">
 							<option value="ACCEPT">ACCEPT</option>
 							<option value="REJECT">REJECT</option>
 
 						</select>
 					</div>
-					
+
 				</div>
 
-				<div class="row" style="display: flex; justify-content: right; margin-top: 2%;">
-					<input type="button" value="Apply" id="applyBtn" /> 
-					<input style="margin-left: 5px;" type="button" value="Clear" id="clearBtn" /> 
-					<input style="margin-left: 5px;" type="submit" value="Add"
-						id="registerBtn" />
+				<div class="row"
+					style="display: flex; justify-content: right; margin-top: 2%;">
+					<input type="button" value="Apply" id="applyBtnRules" /> <input
+						style="margin-left: 5px;" type="button" value="Clear"
+						id="clearBtn" /> <input style="margin-left: 5px;" type="submit"
+						value="Add" id="registerBtn" />
 				</div>
 			</form>
 		</div>
@@ -391,8 +811,8 @@ input:checked+.slider:before {
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Interface</th>
 						<th>Protocol</th>
+						<th>Interface</th>
 						<th>Source IP address</th>
 						<th>MAC address</th>
 						<th>Destination port</th>

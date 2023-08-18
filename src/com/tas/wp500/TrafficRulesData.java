@@ -49,28 +49,16 @@ public class TrafficRulesData extends HttpServlet {
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
+			
+			
 
 			try {
-				json.put("operation", "get_ip_tables");
+				json.put("operation", "firewall_settings");
 				json.put("user", check_username);
 
 				String respStr = client.sendMessage(json.toString());
 
-				// String var = "{\"msg\":\"successfully fetched list of ip
-				// Tables !!!\",\"result\":\"[{\\\"lineNumber\\\": \\\"1\\\",
-				// \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\":
-				// \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\":
-				// \\\"0.0.0.0/0\\\", \\\"destination\\\":
-				// \\\"0.0.0.0/0\\\"},{\\\"lineNumber\\\": \\\"2\\\",
-				// \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\":
-				// \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\":
-				// \\\"0.0.0.0/0\\\", \\\"destination\\\":
-				// \\\"0.0.0.0/0\\\"},{\\\"lineNumber\\\": \\\"3\\\",
-				// \\\"target\\\": \\\"ACCEPT\\\", \\\"protocol\\\":
-				// \\\"tcp\\\", \\\"opt\\\": \\\"--\\\", \\\"source\\\":
-				// \\\"192.168.1.100\\\", \\\"destination\\\":
-				// \\\"0.0.0.0/0\\\"}]\",\"operation\":\"get_ip_tables\",\"status\":\"success\"}\r\n";
-
+				
 				JSONObject respJson = new JSONObject(respStr);
 				// JSONObject respJson = new JSONObject(var);
 
@@ -78,44 +66,53 @@ public class TrafficRulesData extends HttpServlet {
 
 				JSONArray resJsonArray = new JSONArray();
 
-				logger.info("Firewall response : " + respJson.toString());
+				logger.info("Traffic Rules response : " + respJson.toString());
 
-				String result = respJson.getString("result");
+				
+				JSONArray ip_tables = respJson.getJSONArray("ip_tables");
 
-				logger.info("Result : " + result);
+				logger.info("Result : " + ip_tables);
 
-				JSONArray jsArr = new JSONArray(result);
+				
 
-				for (int i = 0; i < jsArr.length(); i++) {
+				for (int i = 0; i < ip_tables.length(); i++) {
 
-					JSONObject jsObj = jsArr.getJSONObject(i);
-					String lineNumber = jsObj.getString("lineNumber");
-					logger.info("line num : " + lineNumber);
+					JSONObject jsObj = ip_tables.getJSONObject(i);
+					String name = jsObj.getString("name");
+					logger.info("name : " + name);
 
-					String target = jsObj.getString("target");
-					logger.info("target : " + target);
+					String iface = jsObj.getString("iface");
+					logger.info("iface : " + iface);
 
 					String protocol = jsObj.getString("protocol");
 					logger.info("protocol : " + protocol);
 
-					String opt = jsObj.getString("opt");
-					logger.info("opt : " + opt);
+					String macAddress = jsObj.getString("macAddress");
+					logger.info("macAddress : " + macAddress);
 
-					String source = jsObj.getString("source");
-					logger.info("source : " + source);
+					String portNum = jsObj.getString("portNum");
+					logger.info("portNum : " + portNum);
 
-					String destination = jsObj.getString("destination");
-					logger.info("destination : " + destination);
+					String ipAddress = jsObj.getString("ipAddress");
+					logger.info("ipAddress : " + ipAddress);
+					
+					String action = jsObj.getString("action");
+					logger.info("action : " + action);
+
+					String type = jsObj.getString("type");
+					logger.info("type : " + type);
 
 					JSONObject firewallObj = new JSONObject();
 					try {
 
-						firewallObj.put("lineNumber", lineNumber);
-						firewallObj.put("target", target);
+						firewallObj.put("name", name);
+						firewallObj.put("iface", iface);
 						firewallObj.put("protocol", protocol);
-						firewallObj.put("opt", opt);
-						firewallObj.put("source", source);
-						firewallObj.put("destination", destination);
+						firewallObj.put("macAddress", macAddress);
+						firewallObj.put("portNum", portNum);
+						firewallObj.put("ipAddress", ipAddress);
+						firewallObj.put("action", action);
+						firewallObj.put("type", type);
 
 						resJsonArray.put(firewallObj);
 						// firewallObj.put("lastName", "");
@@ -125,14 +122,15 @@ public class TrafficRulesData extends HttpServlet {
 					}
 
 				}
-
+				
+				
 				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
 				// Set the response content type to JSON
 				response.setContentType("application/json");
 
 				// Write the JSON data to the response
 				response.getWriter().print(resJsonArray.toString());
-
+		
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -169,26 +167,39 @@ public class TrafficRulesData extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
+			
 
-			int portNumber = Integer.parseInt(request.getParameter("portNumber"));
+			String name = request.getParameter("name");
+			String iface = request.getParameter("iface");
+			String portNumber = request.getParameter("portNumber");
+			String macAddress = request.getParameter("macAddress");
 			String protocol = request.getParameter("protocol");
 			String ip_addr = request.getParameter("ip_addr");
+			String type = request.getParameter("type");
+			String action = request.getParameter("action");
+			
 
 			System.out.println(portNumber + " " + protocol + " " + ip_addr);
-			logger.info(portNumber + " " + protocol + " " + ip_addr);
+			
 
 			try {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
-				json.put("operation", "add_firewall_setting");
+				json.put("operation", "ip_tables");
+				json.put("operation_type", "add_ip");
 				json.put("user", check_username);
-
-				json.put("port_num", portNumber);
+				json.put("name", name);
+				json.put("interface", iface);
 				json.put("protocol", protocol);
-				json.put("ip_address", ip_addr);
+				json.put("ipAddress", ip_addr);
+				json.put("macAddress", macAddress);
+				json.put("portNum", portNumber);
+				json.put("action", action);
+				json.put("type", type);
+				
 
 				String respStr = client.sendMessage(json.toString());
 

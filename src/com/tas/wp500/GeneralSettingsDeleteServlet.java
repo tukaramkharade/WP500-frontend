@@ -15,24 +15,26 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-import sun.util.logging.resources.logging;
-
 /**
- * Servlet implementation class FirewallDeleteServlet
+ * Servlet implementation class GeneralSettingsDeleteServlet
  */
-@WebServlet("/firewallDeleteServlet")
-public class FirewallDeleteServlet extends HttpServlet {
+@WebServlet("/generalSettingsDeleteServlet")
+public class GeneralSettingsDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final static Logger logger = Logger.getLogger(FirewallDeleteServlet.class);
+	final static Logger logger = Logger.getLogger(GeneralSettingsDeleteServlet.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public FirewallDeleteServlet() {
+	public GeneralSettingsDeleteServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -40,31 +42,37 @@ public class FirewallDeleteServlet extends HttpServlet {
 		// ").append(request.getContextPath());
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
 
-		// String firstName = request.getParameter("firstName");
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
 
-			logger.info("In delete firewall !");
-			int chainNumber = Integer.parseInt(request.getParameter("lineNumber"));
+		if (check_username != null) {
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
 
-			System.out.println(chainNumber);
-			logger.info("Chain number: " + chainNumber);
+			String input = request.getParameter("input");
+			String output = request.getParameter("output");
+			String forward = request.getParameter("forward");
+			String rule_drop = request.getParameter("rule_drop");
 
 			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "delete_firewall_setting");
+				json.put("operation", "genral_setting");
+				json.put("operation_type", "delete");
+				json.put("input", input);
+				json.put("output", output);
+				json.put("forword", forward);
+				json.put("rule_drop", rule_drop);
 				json.put("user", check_username);
 
-				json.put("chain_num", chainNumber);
 				String respStr = client.sendMessage(json.toString());
 
 				System.out.println("res " + new JSONObject(respStr).getString("msg"));
@@ -85,12 +93,11 @@ public class FirewallDeleteServlet extends HttpServlet {
 				out.flush();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+
 		}
 	}
 

@@ -112,6 +112,8 @@ $(document).ready(function() {
         <div>
             <img src="images/tasm2m.png" alt="Tasm2mLogo" style="width: 78%; float: center;"/>
         </div>
+        
+        <p>WP500 Web Configuration</p>
             <label for="username" style="float: left;">Username:</label>
         <input type="text" id="username" name="username" required><br>
         
