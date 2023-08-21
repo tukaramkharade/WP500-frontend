@@ -19,11 +19,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	
+var roleValue;
+
 	var json = {};
 
       function loadBrokerIPList() {
         $.ajax({
-          url: "alarmConfigServlet",
+          url: "jsonBuilderData",
           type: "GET",
           dataType: "json",
           success: function (data) {
@@ -106,6 +108,7 @@
 									
 									var result = alarm_tag;
 
+									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 									$.each($.parseJSON(result), function(k, v) {
 									
 									if(k != null){
@@ -127,6 +130,18 @@
 									}				
 	    	        					$("#table_data").append(newRow);
 									});
+									}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+										
+										$.each($.parseJSON(result), function(k, v) {
+									//	    alert(k + ' and ' + v);
+										    
+										    var newRow = $("<tr>")
+		    	        					.append($("<td>").text(k))
+		    	        					.append($("<td>").text(v))
+		    	        					
+		    	        					$("#table_data").append(newRow);
+										});
+									}
 									
 									
 									if(unit_id != null){
@@ -140,7 +155,7 @@
 									$('#unit_id').val(unit_id);
 									$('#asset_id').val(asset_id);
 									$('#broker_type').val(broker_type);
-									$('#broker_ip').val(broker_ip);
+									$('#broker_name').val(broker_ip);
 									$('#interval').val(interval);
 									//$('#table_data').val(JSON.stringify(alarm_tag));
 									
@@ -202,7 +217,6 @@
    			return true;
    		}
    	}
-   	
    	
    	function validateInterval(interval) {
 		var intervalError = document.getElementById("intervalError");
@@ -284,15 +298,16 @@
     	String roleValue = (String) session.getAttribute("role");
     	%>
     	
-    	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
         
     	//alert(roleValue);
     	
     	  loadAlarmSettings();
     	  
-    	  if(roleValue == 'VIEWER'){
+    	  if(roleValue == 'VIEWER' == roleValue == 'Viewer'){
     		  
     		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+    		  $("#actions").hide();
     		  $('#addBtn').prop('disabled', true);
     		  $('#clearBtn').prop('disabled', true); 
     		  $('#delBtn').prop('disabled', true);
@@ -338,14 +353,7 @@
     	     
     	  });
     	  
-    	  /* $("#addBtn").click(function () {
-    		 // convertTableDataToJSON();
-    		  tableToJson();
-    		  addAlarmConfig();
-    		  
-      	   
-      	  }); */
-      	  
+    	  
       	$('#alarmConfigForm').submit(function(event) {
 			event.preventDefault();
 			var buttonText = $('#addBtn').val();
@@ -581,7 +589,7 @@ function addAlarmConfig() {
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					<div class="col-75-6" style="width: 20%;">
 						<input type="text" id="tag_name" name="tag_name"
-							placeholder="Tag Name" style="height: 17px" /> <span
+							placeholder="Tag name" style="height: 17px" /> <span
 							id="tagnameError" style="color: red;"></span>
 					</div>
 
@@ -624,7 +632,7 @@ function addAlarmConfig() {
 				<tr>
 					<th>Tag Name</th>
 					<th>Variable</th>
-					<th>Action</th>
+					<th id="actions">Action</th>
 				</tr>
 			</table>
 		</div>

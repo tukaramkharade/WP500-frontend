@@ -14,8 +14,7 @@
 <script>
 	// Function to load user data and populate the user list table
 
-	var roleValue;
-						
+	var roleValue;						
 	
 	function loadCrtFilesList() {
 		$.ajax({
@@ -71,65 +70,101 @@
 						}
 
 						// Iterate through the user data and add rows to the table
-						$.each(data,function(index, mqtt) {
-											var row = $('<tr>');
-											row.append($('<td>').text(mqtt.broker_ip_address+ ""));
-											row.append($('<td>').text(mqtt.port_number + ""));
-											row.append($('<td>').text(mqtt.username + ""));
-											row.append($('<td>').text(mqtt.publish_topic + ""));
-											row.append($('<td>').text(mqtt.subscribe_topic + ""));
-											row.append($('<td>').text(mqtt.prefix + ""));
-											row.append($('<td>').text(mqtt.file_type + ""));
-											row.append($('<td>').text(mqtt.file_name + ""));
-											row.append($('<td>').text(mqtt.enable + ""));
-											
+						
+						
+						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
+							$.each(data,function(index, mqtt) {
+								var row = $('<tr>');
+								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
+								row.append($('<td>').text(mqtt.port_number + ""));
+								row.append($('<td>').text(mqtt.username + ""));
+								row.append($('<td>').text(mqtt.publish_topic + ""));
+								row.append($('<td>').text(mqtt.subscribe_topic + ""));
+								row.append($('<td>').text(mqtt.prefix + ""));
+								row.append($('<td>').text(mqtt.file_type + ""));
+								row.append($('<td>').text(mqtt.file_name + ""));
+								row.append($('<td>').text(mqtt.enable + ""));
+								
+								var actions = $('<td>')
+								
+								
+								var editButton = $(
+										'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+										.text('Edit')
+										.click(
+												function() {
+													setMqtt(mqtt.prefix);
+													setBrokerIPAddress(mqtt.broker_ip_address);
+													setPortNumber(mqtt.port_number);
+													setUsername(mqtt.username);
+													setPassword(mqtt.password);
+													setPublishedTopic(mqtt.publish_topic);
+													setSubscribedTopic(mqtt.subscribe_topic);
+													setFileType(mqtt.file_type);
+													setFileName(mqtt.file_name);
+													setEnable(mqtt.enable);
 
-											var actions = $('<td>')
-											
-											
-											var editButton = $(
-													'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text('Edit')
-													.click(
-															function() {
-																setMqtt(mqtt.prefix);
-																setBrokerIPAddress(mqtt.broker_ip_address);
-																setPortNumber(mqtt.port_number);
-																setUsername(mqtt.username);
-																setPassword(mqtt.password);
-																setPublishedTopic(mqtt.publish_topic);
-																setSubscribedTopic(mqtt.subscribe_topic);
-																setFileType(mqtt.file_type);
-																setFileName(mqtt.file_name);
-																setEnable(mqtt.enable);
-
-															});
-											var deleteButton = $(
-													'<button class="delBtn" style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text('Delete')
-													.click(
-															function() {
-															
-															deleteMqtt(mqtt.prefix);
-																
-															});
-											var getStatusButton = $(
-													'<button class="statusBtn" style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
-													.text('Get Status')
-													.click(
-															function() {
-																getMqttStatus(mqtt.broker_ip_address);
-															});
-
-											actions.append(editButton);
-											actions.append(deleteButton);
-											actions.append(getStatusButton);
-	
-											row.append(actions);
+												});
+								var deleteButton = $(
+										'<button class="delBtn" style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+										.text('Delete')
+										.click(
+												function() {
 												
-											mqttTable.append(row);
+												deleteMqtt(mqtt.prefix);
+													
+												});
+								var getStatusButton = $(
+										'<button class="statusBtn" style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
+										.text('Get Status')
+										.click(
+												function() {
+													getMqttStatus(mqtt.broker_ip_address);
+												});
 
-										});
+								actions.append(editButton);
+								actions.append(deleteButton);
+								actions.append(getStatusButton);
+
+								row.append(actions);
+									
+								mqttTable.append(row);
+
+							});
+							
+						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+							$.each(data,function(index, mqtt) {
+								var row = $('<tr>');
+								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
+								row.append($('<td>').text(mqtt.port_number + ""));
+								row.append($('<td>').text(mqtt.username + ""));
+								row.append($('<td>').text(mqtt.publish_topic + ""));
+								row.append($('<td>').text(mqtt.subscribe_topic + ""));
+								row.append($('<td>').text(mqtt.prefix + ""));
+								row.append($('<td>').text(mqtt.file_type + ""));
+								row.append($('<td>').text(mqtt.file_name + ""));
+								row.append($('<td>').text(mqtt.enable + ""));
+								
+								var actions = $('<td>')
+								
+								
+								var getStatusButton = $(
+										'<button class="statusBtn" style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
+										.text('Get Status')
+										.click(
+												function() {
+													getMqttStatus(mqtt.broker_ip_address);
+												});
+
+															actions.append(getStatusButton);
+
+								row.append(actions);
+									
+								mqttTable.append(row);
+
+							});
+						}
+						
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading mqtt data: ' + error);
@@ -214,8 +249,6 @@
 					alert(mqttId + ' : disconnected');
 				} 
 				
-
-				// Refresh the user list or perform other actions if needed
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
@@ -286,7 +319,7 @@
 			},
 			success : function(data) {
 				// Display the registration status message
-				//	alert(data.message);
+					alert(data.message);
 				loadMqttList();
 
 				// Clear form fields
@@ -311,7 +344,7 @@
 		$('#registerBtn').val('Add');
 	}
 
-	// Function to handle form submission and add a new user
+	// Function to handle form submission and add a new mqtt
 	function addMqtt() {
 
 		var broker_ip_address = $('#broker_ip_address').val();
@@ -407,16 +440,12 @@
 		}
 	}
 	
-	
 	//change color of disabled buttons
 	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
-        var $delete_button = $('.delBtn');
         
-        
-       
         
          if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
@@ -430,35 +459,12 @@
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-        if (isDisabled) {
-            $delete_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $delete_button.css('background-color', '#2b3991'); // Reset to original color
-        } 
-        
     }
 
-	
-	
-	
 	// Function to execute on page load
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						
-						 $(".delBtn").click(function() {
-							 var buttonValue = $(this).val();
-							 alert(buttonValue);
-							 console.log(buttonValue);
-						 });
-						
-						
-						
-						
-						
-						
-							 
-						<%// Access the session variable
+			<%// Access the session variable
 			HttpSession role = request.getSession();
 			String roleValue = (String) session.getAttribute("role");%>
     	
@@ -469,13 +475,12 @@
 						loadMqttList();
 						
 						
-						if (roleValue == 'VIEWER') {
+						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 							var confirmation = confirm('You do not have enough privileges for role VIEWER');
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
-							$('.delBtn').prop('disabled', true);
-
+							
 							changeButtonColor(true);
 						}
 
@@ -483,8 +488,7 @@
 
 						$("#file_type").change(
 								function(event) {
-									//     alert("You have Selected  :: "+$(this).val());
-
+									
 									if ($(this).val() == 'SSL'
 											|| $(this).val() == 'ssl') {
 										$("#crt_file").prop("disabled", false);
@@ -570,46 +574,31 @@
 
 						<div class="col-75-1" style="width: 20%; height: 20%">
 							<input type="text" id="broker_ip_address"
-								name="broker_ip_address" placeholder="Host Name" required />
+								name="broker_ip_address" placeholder="Hostname" required />
 
 						</div>
-
-						<!-- </div>
-					<div class="row"> -->
 
 						<div class="col-75-2" style="width: 20%;">
 							<input type="text" id="port_number" name="port_number"
-								placeholder="Port Number" required /> <span
+								placeholder="Port number" required /> <span
 								style="color: red; font-size: 12px;" id="portNoError"></span>
 
 						</div>
-						<!-- </div>
-
-					<div class="row"> -->
-						<!-- <div class="col-25">
-							<label for="username">Username</label>
-						</div> -->
+						
 						<div class="col-75-3" style="width: 20%; height: 20%">
 							<input type="text" id="username" name="username"
 								placeholder="Username" required />
 
 						</div>
-						<!-- </div>
-					<div class="row"> -->
-
+						
 						<div class="col-75-4" style="width: 20%; height: 20%">
 							<input type="password" id="password" name="password"
 								placeholder="Password" required />
 						</div>
 
-
-						<!-- </div>
-
-					<div class="row"> -->
-
 						<div class="col-75-5" style="width: 20%; height: 20%">
 							<input type="text" id="pub_topic" name="pub_topic"
-								placeholder="Published Topic" required />
+								placeholder="Published topic" required />
 
 						</div>
 					</div>
@@ -620,23 +609,15 @@
 
 						<div class="col-75-6" style="width: 20%;">
 							<input type="text" id="sub_topic" name="sub_topic"
-								placeholder="Subscribed Topic" required />
+								placeholder="Subscribed topic" required />
 						</div>
-						<!-- </div>
-
-					<div class="row"> -->
-
+						
 						<div class="col-75-7" style="width: 20%;">
 							<input type="text" id="prefix" name="prefix" placeholder="Prefix"
 								required />
 
 						</div>
-						<!-- </div>
-
-					<div class="row"> -->
-						<!-- <div class="col-25">
-							<label for="fileType">File Type</label>
-						</div> -->
+						
 						<div class="col-75-8" style="width: 20%;">
 
 							<select class="textBox" id="file_type" name="file_type"
@@ -647,9 +628,6 @@
 
 							</select> <span id="fileTypeError" style="color: red;"></span>
 						</div>
-						<!-- </div>
-
-					<div class="row"> -->
 
 						<div class="col-75-9" style="width: 20%;">
 
@@ -660,10 +638,7 @@
 							</select> <span id="crtFileError" style="color: red;"></span>
 
 						</div>
-						<!-- </div>
-					
-					<div class="row"> -->
-
+						
 						<div class="col-75-10" style="width: 20%;">
 
 							<select class="textBox" id="enable" name="enable"
@@ -676,33 +651,12 @@
 						</div>
 					</div>
 
-					<!-- <div class="row">
-
-						<div class="col-25-1"
-							style="margin-left: 65%; margin-top: -35px;">
-							<label for="enable">Enable</label>
-						</div>
-						<div class="col-75-10"
-							style="margin-left: 70%; margin-top: -22px;">
-							<input type="checkbox" class="enable" id="enable" name="enable" checked="enable">
-
-						</div>
-					</div> -->
-
-
-
-
 					<div class="row"
 						style="display: flex; justify-content: right; margin-top: 2%;">
 						<input type="button" value="Clear" id="clearBtn" /> <input
 							style="margin-left: 5px;" type="submit" value="Add"
 							id="registerBtn" />
 					</div>
-
-					<!-- <div class="row">
-					<input style="margin-top: -1%; margin-left: 95%;" type="submit"
-						value="Add" id="registerBtn" />
-				</div> -->
 
 				</form>
 			</div>
@@ -713,17 +667,16 @@
 				<table id="mqttListTable">
 					<thead>
 						<tr>
-							<th>Broker IP Address</th>
+							<th>Broker IP address</th>
 							<th>Port Number</th>
 							<th>Username</th>
-							<!-- <th>Password</th> -->
-							<th>Published Topic</th>
-							<th>Subscribed Topic</th>
+							<th>Published topic</th>
+							<th>Subscribed topic</th>
 							<th>Prefix</th>
-							<th>File Type</th>
-							<th>File Name</th>
+							<th>File type</th>
+							<th>File name</th>
 							<th>Enable</th>
-							<th class="actions">Actions</th>
+							<th>Actions</th>
 
 						</tr>
 					</thead>

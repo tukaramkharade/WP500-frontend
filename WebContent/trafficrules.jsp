@@ -78,6 +78,9 @@ input:checked+.slider:before {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var roleValue; 
+
 	function loadTrafficRulesList() {
 		$
 				.ajax({
@@ -102,34 +105,18 @@ input:checked+.slider:before {
 						}
 
 						// Iterate through the user data and add rows to the table
-						$
-								.each(
-										data,
-										function(index, trafficrules) {
+						
+						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
+							$.each(data,function(index, trafficrules) {
 											var row = $("<tr>");
-											row.append($("<td>").text(
-													trafficrules.name + ""));
-											row
-													.append($("<td>")
-															.text(
-																	trafficrules.protocol
-																			+ ""));
-											row.append($("<td>").text(
-													trafficrules.iface + ""));
-											row
-													.append($("<td>")
-															.text(
-																	trafficrules.ipAddress
-																			+ ""));
-											row.append($("<td>").text(
-													trafficrules.macAddress
-															+ ""));
-											row.append($("<td>").text(
-													trafficrules.portNum + ""));
-											row.append($("<td>").text(
-													trafficrules.action + ""));
-											row.append($("<td>").text(
-													trafficrules.type + ""));
+											row.append($("<td>").text(trafficrules.name + ""));
+											row.append($("<td>").text(trafficrules.protocol+ ""));
+											row.append($("<td>").text(trafficrules.iface + ""));
+											row.append($("<td>").text(trafficrules.ipAddress+ ""));
+											row.append($("<td>").text(trafficrules.macAddress+ ""));
+											row.append($("<td>").text(trafficrules.portNum + ""));
+											row.append($("<td>").text(trafficrules.action + ""));
+											row.append($("<td>").text(trafficrules.type + ""));
 
 											var actions = $("<td>");
 
@@ -165,6 +152,21 @@ input:checked+.slider:before {
 
 											trafficRulesTable.append(row);
 										});
+						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+							$.each(data,function(index, trafficrules) {
+								var row = $("<tr>");
+								row.append($("<td>").text(trafficrules.name + ""));
+								row.append($("<td>").text(trafficrules.protocol+ ""));
+								row.append($("<td>").text(trafficrules.iface + ""));
+								row.append($("<td>").text(trafficrules.ipAddress+ ""));
+								row.append($("<td>").text(trafficrules.macAddress+ ""));
+								row.append($("<td>").text(trafficrules.portNum + ""));
+								row.append($("<td>").text(trafficrules.action + ""));
+								row.append($("<td>").text(trafficrules.type + ""));
+
+								trafficRulesTable.append(row);
+							});
+						}
 					},
 					error : function(xhr, status, error) {
 						console.log("Error loading traffic rules data: "
@@ -568,10 +570,80 @@ input:checked+.slider:before {
 
 	}
 
+	function changeButtonColor(isDisabled) {
+        var $add_button_tr = $('#registerBtn');       
+        var $clear_button_tr = $('#clearBtn');
+        var $apply_button_tr = $('#applyBtnRules');
+        var $add_button_gs = $('#registerBtnGenSettings');       
+        var $delete_button_gs = $('#delBtnGenSettings');
+        var $apply_button_gs = $('#applyBtnGenSettings');
+        
+        
+         if (isDisabled) {
+            $add_button_tr.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button_tr.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $clear_button_tr.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $clear_button_tr.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $apply_button_tr.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $apply_button_tr.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $add_button_gs.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button_gs.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $delete_button_gs.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $delete_button_gs.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $apply_button_gs.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $apply_button_gs.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+    }
+	
 	//Function to execute on page load
 	$(document).ready(function() {
-		// Load user list
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+		    	
+		    	roleValue = '<%=roleValue%>';
+		    	
+		// Load traffic rules list
 		loadTrafficRulesList();
+		
+		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+			var confirmation = confirm('You do not have enough privileges for role VIEWER');
+			
+			 $("#actions").hide();
+			$('#registerBtn').prop('disabled', true);
+			$('#clearBtn').prop('disabled', true);
+			$('#applyBtnRules').prop('disabled', true);
+			$('#registerBtnGenSettings').prop('disabled', true);
+			$('#delBtnGenSettings').prop('disabled', true);
+			$('#applyBtnGenSettings').prop('disabled', true);
+
+			changeButtonColor(true);
+		}
+		
 		getGeneralSettings();
 
 		 $("#type").change(function(event) {
@@ -646,6 +718,9 @@ input:checked+.slider:before {
 			$('#ip_addr').val('');
 			$('#type').val('Select type');
 			$('#action').val('ACCEPT');
+			
+			$('#ip_addr').prop('disabled', false);
+			$('#macAddress').prop('disabled', false);
 
 		});
 	});
@@ -795,10 +870,9 @@ input:checked+.slider:before {
 
 				<div class="row"
 					style="display: flex; justify-content: right; margin-top: 2%;">
-					<input type="button" value="Apply" id="applyBtnRules" /> <input
-						style="margin-left: 5px;" type="button" value="Clear"
-						id="clearBtn" /> <input style="margin-left: 5px;" type="submit"
-						value="Add" id="registerBtn" />
+					<input type="button" value="Apply" id="applyBtnRules" /> 
+					<input style="margin-left: 5px;" type="button" value="Clear" id="clearBtn" /> 
+					<input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
 				</div>
 			</form>
 		</div>
@@ -818,7 +892,7 @@ input:checked+.slider:before {
 						<th>Destination port</th>
 						<th>Action</th>
 						<th>Type</th>
-						<th>Actions</th>
+						<th id="actions">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -828,6 +902,8 @@ input:checked+.slider:before {
 		</div>
 		</section>
 	</div>
-
+<div class="footer">
+		<%@ include file="footer.jsp"%>
+	</div>
 </body>
 </html>

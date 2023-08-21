@@ -133,54 +133,7 @@ public class AlarmConfigServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			try {
-
-				// System.out.println("In json builder...");
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "json_builder");
-				json.put("operation_type", "get_broker_ip");
-				json.put("user", check_username);
-
-				String respStr = client.sendMessage(json.toString());
-
-				System.out.println("res " + new JSONObject(respStr));
-				logger.info("res " + new JSONObject(respStr));
-
-				JSONObject result = new JSONObject(respStr);
-
-				JSONArray broker_ip_result = result.getJSONArray("result");
-
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("broker_ip_result", broker_ip_result);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
-		}
-
+		
 	}
 
 	/**

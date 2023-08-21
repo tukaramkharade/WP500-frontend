@@ -16,6 +16,9 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var roleValue;	
+
 	function reboot() {
 
 		var confirmation = confirm('Are you sure you want to reboot?');
@@ -47,9 +50,36 @@
 			});
 		}
 	}
+	
+	function changeButtonColor(isDisabled) {
+        var $reboot_button = $('#reboot');
+        
+        if (isDisabled) {
+            $reboot_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $reboot_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+	}
 
 	$(document).ready(function() {
 
+		<%
+    	// Access the session variable
+    	HttpSession role = request.getSession();
+    	String roleValue = (String) session.getAttribute("role");
+    	%>
+    	
+    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	
+    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+  		  
+  		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+  		  
+  		$('#reboot').prop('disabled', true);
+  		  
+  		  changeButtonColor(true);
+  	  }
+    	
 		$('#reboot').click(function() {
 			reboot();
 

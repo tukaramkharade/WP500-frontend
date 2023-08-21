@@ -17,9 +17,12 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var roleValue;
+
 	function loadBrokerIPList() {
 		$.ajax({
-			url : "dispenserTriggerDataServlet",
+			url : "jsonBuilderData",
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
@@ -275,98 +278,87 @@
 						}
 
 						// Iterate through the user data and add rows to the table
-						$
-								.each(
-										data,
-										function(index, dispenserTrigger) {
-											var row = $('<tr>');
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.station_name));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.serial_number));
-											row.append($('<td>').text(
-													dispenserTrigger.side));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.trigger_tag));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.trigger_value));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.start_pressesure));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.end_pressure));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.tempreture));
-											row.append($('<td>').text(
-													dispenserTrigger.total));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.unit_price));
-											row.append($('<td>').text(
-													dispenserTrigger.quantity));
-											row
-													.append($('<td>')
-															.text(
-																	dispenserTrigger.broker_ip_address));
-											row.append($('<td>').text(
-													dispenserTrigger.status));
-											row.append($('<td>').text(
-													dispenserTrigger.unit_id));
+					if(roleValue == 'Admin' || roleValue == 'ADMIN'){
+						$.each(data,function(index, dispenserTrigger) {
+							var row = $('<tr>');
+							row.append($('<td>').text(dispenserTrigger.station_name));
+							row.append($('<td>').text(dispenserTrigger.serial_number));
+							row.append($('<td>').text(dispenserTrigger.side));
+							row.append($('<td>').text(dispenserTrigger.trigger_tag));
+							row.append($('<td>').text(dispenserTrigger.trigger_value));
+							row.append($('<td>').text(dispenserTrigger.start_pressesure));
+							row.append($('<td>').text(dispenserTrigger.end_pressure));
+							row.append($('<td>').text(dispenserTrigger.tempreture));
+							row.append($('<td>').text(dispenserTrigger.total));
+							row.append($('<td>').text(dispenserTrigger.unit_price));
+							row.append($('<td>').text(dispenserTrigger.quantity));
+							row.append($('<td>').text(dispenserTrigger.broker_ip_address));
+							row.append($('<td>').text(dispenserTrigger.status));
+							row.append($('<td>').text(dispenserTrigger.unit_id));
 
-											var actions = $('<td>');
-											var editButton = $(
-													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text('Edit')
-													.click(
-															function() {
-																setSerialNumber(dispenserTrigger.serial_number);
-																setStationName(dispenserTrigger.station_name);
-																setSide(dispenserTrigger.side);
-																setBrokerName(dispenserTrigger.broker_ip_address);
-																setTriggerTag(dispenserTrigger.trigger_tag);
-																setTriggerValue(dispenserTrigger.trigger_value);
-																setStartPressure(dispenserTrigger.start_pressesure);
-																setEndPressure(dispenserTrigger.end_pressure);
-																setTemperature(dispenserTrigger.tempreture);
-																setTotal(dispenserTrigger.total);
-																setQuantity(dispenserTrigger.quantity);
-																setUnitPrice(dispenserTrigger.unit_price);
-																setStatus(dispenserTrigger.status);
-																setUnitId(dispenserTrigger.unit_id);
-															});
+							var actions = $('<td>');
+							var editButton = $(
+									'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+									.text('Edit')
+									.click(
+											function() {
+												setSerialNumber(dispenserTrigger.serial_number);
+												setStationName(dispenserTrigger.station_name);
+												setSide(dispenserTrigger.side);
+												setBrokerName(dispenserTrigger.broker_ip_address);
+												setTriggerTag(dispenserTrigger.trigger_tag);
+												setTriggerValue(dispenserTrigger.trigger_value);
+												setStartPressure(dispenserTrigger.start_pressesure);
+												setEndPressure(dispenserTrigger.end_pressure);
+												setTemperature(dispenserTrigger.tempreture);
+												setTotal(dispenserTrigger.total);
+												setQuantity(dispenserTrigger.quantity);
+												setUnitPrice(dispenserTrigger.unit_price);
+												setStatus(dispenserTrigger.status);
+												setUnitId(dispenserTrigger.unit_id);
+											});
 
-											var deleteButton = $(
-													'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white; margin-top: 3px;">')
-													.text('Delete')
-													.click(
-															function() {
-																deleteDispenserTrigger(
-																		dispenserTrigger.serial_number,
-																		dispenserTrigger.side);
-															});
+							var deleteButton = $(
+									'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white; margin-top: 3px;">')
+									.text('Delete')
+									.click(
+											function() {
+												deleteDispenserTrigger(
+														dispenserTrigger.serial_number,
+														dispenserTrigger.side);
+											});
 
-											actions.append(editButton);
-											actions.append(deleteButton);
+							actions.append(editButton);
+							actions.append(deleteButton);
 
-											row.append(actions);
+							row.append(actions);
 
-											dispenserTriggerTable.append(row);
+							dispenserTriggerTable.append(row);
 
-										});
+						});
+					}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+						$.each(data,function(index, dispenserTrigger) {
+							var row = $('<tr>');
+							row.append($('<td>').text(dispenserTrigger.station_name));
+							row.append($('<td>').text(dispenserTrigger.serial_number));
+							row.append($('<td>').text(dispenserTrigger.side));
+							row.append($('<td>').text(dispenserTrigger.trigger_tag));
+							row.append($('<td>').text(dispenserTrigger.trigger_value));
+							row.append($('<td>').text(dispenserTrigger.start_pressesure));
+							row.append($('<td>').text(dispenserTrigger.end_pressure));
+							row.append($('<td>').text(dispenserTrigger.tempreture));
+							row.append($('<td>').text(dispenserTrigger.total));
+							row.append($('<td>').text(dispenserTrigger.unit_price));
+							row.append($('<td>').text(dispenserTrigger.quantity));
+							row.append($('<td>').text(dispenserTrigger.broker_ip_address));
+							row.append($('<td>').text(dispenserTrigger.status));
+							row.append($('<td>').text(dispenserTrigger.unit_id));
+
+							dispenserTriggerTable.append(row);
+
+						});
+					}
+						
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading dispenser trigger data: '
@@ -764,15 +756,46 @@
 		}
 	}
 
-	$(document)
-			.ready(
-					function() {
+	function changeButtonColor(isDisabled) {
+        var $add_button = $('#registerBtn');       
+        var $clear_button = $('#clearBtn');
+        
+        
+         if (isDisabled) {
+            $add_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $clear_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+    }
+	
+	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+		roleValue = '<%=roleValue%>';
+	
 
-							//change selectboxes to selectize mode to be searchable
-							  // $('#side').select2();
-					
 						loadBrokerIPList();
 						loadDispenserTriggerList();
+						
+						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+							$("#actions").hide(); 
+							var confirmation = confirm('You do not have enough privileges for role VIEWER');
+							$('#registerBtn').prop('disabled', true);
+							$('#clearBtn').prop('disabled', true);
+							
+							changeButtonColor(true);
+						}
+						
 						loadTagListTriggerTag();
 						loadTagListStartPressure();
 						loadTagListEndPressure();
@@ -782,36 +805,20 @@
 						loadTagListUnitPrice();
 
 						$('#dispensortriggerform')
-								.submit(
-										function(event) {
+								.submit(function(event) {
 											event.preventDefault();
-											var buttonText = $('#registerBtn')
-													.val();
-											var side = $('#side').find(
-													":selected").val();
-											var status = $('#status').find(
-													":selected").val();
-											var trigger_value = $(
-													'#trigger_value').find(
-													":selected").val();
-											var broker_name = $('#broker_name')
-													.find(":selected").val();
-											var start_pressure = $(
-													'#start_pressure').find(
-													":selected").val();
-											var end_pressure = $(
-													'#end_pressure').find(
-													":selected").val();
-											var temperature = $('#temperature')
-													.find(":selected").val();
-											var total = $('#total').find(
-													":selected").val();
-											var quantity = $('#quantity').find(
-													":selected").val();
-											var unit_price = $('#unit_price')
-													.find(":selected").val();
-											var trigger_tag = $('#trigger_tag')
-											.find(":selected").val();
+											var buttonText = $('#registerBtn').val();
+											var side = $('#side').find(":selected").val();
+											var status = $('#status').find(":selected").val();
+											var trigger_value = $('#trigger_value').find(":selected").val();
+											var broker_name = $('#broker_name').find(":selected").val();
+											var start_pressure = $('#start_pressure').find(":selected").val();
+											var end_pressure = $('#end_pressure').find(":selected").val();
+											var temperature = $('#temperature').find(":selected").val();
+											var total = $('#total').find(":selected").val();
+											var quantity = $('#quantity').find(":selected").val();
+											var unit_price = $('#unit_price').find(":selected").val();
+											var trigger_tag = $('#trigger_tag').find(":selected").val();
 
 											if (!validateSide(side)) {
 												sideError.textContent = "Please select side";
@@ -1069,7 +1076,7 @@
 						<th>Broker IP Address</th>
 						<th>Status</th>
 						<th>Unit ID</th>
-						<th>Actions</th>
+						<th id="actions">Actions</th>
 					</tr>
 				</thead>
 				<tbody>

@@ -22,6 +22,8 @@
 	var lan2_dhcp;
 	var lan_type;
 	
+	var roleValue;
+	
 	function loadDHCPButton0(){
 		
 		lan_type = 'eth1';
@@ -118,10 +120,79 @@
 
 	}
 
+	function changeButtonColor(isDisabled) {
+        var $eth1_button_discard = $('#eth1_button_discard');
+        var $eth1_button = $('#eth1_button');
+        var $lan1_button_discard = $('#lan1_button_discard');
+        var $lan1_button = $('#lan1_button');
+        var $lan2_button_discard = $('#lan2_button_discard');
+        var $lan2_button = $('#lan2_button');
+     
+       
+        
+        if (isDisabled) {
+            $eth1_button_discard.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $eth1_button_discard.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $eth1_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $eth1_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $lan1_button_discard.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $lan1_button_discard.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $lan1_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $lan1_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $lan2_button_discard.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $lan2_button_discard.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $lan2_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $lan2_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+	}
  
 	$(document).ready(function() {
+		
+		<%
+    	// Access the session variable
+    	HttpSession role = request.getSession();
+    	String roleValue = (String) session.getAttribute("role");
+    	%>
+    	
+    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+      
 
 		loadLanSettings();
+    	
+		 if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+   		  	
+   		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+   		  
+   		  $('#eth1_button_discard').prop('disabled', true);
+   		  $('#eth1_button').prop('disabled', true);
+   		  $('#lan1_button_discard').prop('disabled', true);
+ 		  $('#lan1_button').prop('disabled', true);
+ 		  $('#lan2_button_discard').prop('disabled', true);
+  		  $('#lan2_button').prop('disabled', true);
+   		  
+   		  changeButtonColor(true);
+   	  }
 		 
 		$('#get_dhcp_0').click(function(){		
 				/* loadLanDHCPSettings0(0); */
@@ -193,9 +264,8 @@
 
 				</table>
 				<div style="margin-top: 1%;">
-					<input type="button" value="Discard"
-						style="background-color: #ef0803;"> <input type="button"
-						value="Apply changes" id="eth1_button">
+					<input type="button" value="Discard" style="background-color: #ef0803;" id="eth1_button_discard"> 
+					<input type="button" value="Apply changes" id="eth1_button">
 				</div>
 			</div>
 
@@ -237,9 +307,8 @@
 				</table>
 
 				<div style="margin-top: 1%;">
-					<input type="button" style="background-color: #ef0803;"
-						value="Discard"> <input type="button"
-						value="Apply changes">
+					<input type="button" style="background-color: #ef0803;" value="Discard" id="lan1_button_discard"> 
+					<input type="button" value="Apply changes" id="lan1_button">
 				</div>
 			</div>
 
@@ -281,9 +350,8 @@
 
 
 				<div style="margin-top: 1%;">
-					<input type="button" style="background-color: #ef0803;"
-						value="Discard"> <input type="button"
-						value="Apply changes">
+					<input type="button" style="background-color: #ef0803;" value="Discard" id="lan2_button_discard"> 
+						<input type="button" value="Apply changes" id="lan2_button">
 				</div>
 
 			</div>

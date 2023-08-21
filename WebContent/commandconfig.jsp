@@ -17,10 +17,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
+var roleValue;
+
 var json = {};
 	function loadBrokerIPList() {
 		$.ajax({
-			url : "commandConfigServlet",
+			url : "jsonBuilderData",
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
@@ -106,28 +108,49 @@ var json = {};
 									var command_tag = commandConfig.command_tag;
 									
 									var result = command_tag;
-
-									$.each($.parseJSON(result), function(k, v) {
-						//			    alert(k + ' and ' + v);
-									    
-									    var newRow = $("<tr>")
-	    	        					.append($("<td>").text(k))
-	    	        					.append($("<td>").text(v))
-	    	        					.append(
- 	          $("<td>").html(
- 	            `<input
- 	                style="background-color :red"
- 	                type="button"
- 	                value="Delete"
- 	                onclick="deleteRow(this)"
- 	              />`
- 	          )
- 	        );
+									
+								//	alert('role : '+roleValue)
+								//	alert(broker_ip);
+									
+									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 										
-	    	        					$("#table_data").append(newRow);
-									});
-									
-									
+										$.each($.parseJSON(result), function(k, v) {
+									//					    alert(k + ' and ' + v);
+														    
+														    var newRow = $("<tr>")
+						    	        					.append($("<td>").text(k))
+						    	        					.append($("<td>").text(v))
+						    	        					.append(
+					 	          $("<td>").html(
+					 	            `<input
+					 	                style="background-color :red"
+					 	                type="button"
+					 	                value="Delete"
+					 	                onclick="deleteRow(this)"
+					 	                addClass="tagDelBtn"
+					 	              />`
+					 	          )
+					 	        );
+															
+						    	        					$("#table_data").append(newRow);
+														});
+														
+										
+									 }
+								  else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+										
+										$.each($.parseJSON(result), function(k, v) {
+										//				    alert(k + ' and ' + v);
+														    
+														    var newRow = $("<tr>")
+						    	        					.append($("<td>").text(k))
+						    	        					.append($("<td>").text(v))
+						    	        					
+						    	        					$("#table_data").append(newRow);
+														});
+														
+									}   
+
 									if(unit_id != null){
 										$('#addBtn').val('Edit');
 									}
@@ -139,7 +162,7 @@ var json = {};
 									$('#unit_id').val(unit_id);
 									$('#asset_id').val(asset_id);
 									$('#broker_type').val(broker_type);
-									$('#broker_ip').val(broker_ip);
+									$('#broker_name').val(broker_ip);
 									$('#interval').val(interval);
 									
 								});
@@ -240,9 +263,67 @@ var json = {};
 	    		}
 	    	}
 	    	
+	    	function changeButtonColor(isDisabled) {
+	            var $add_button = $('#addBtn');
+	            var $delete_button = $('#delBtn');
+	            var $clear_button = $('#clearBtn');
+	            var $save_button = $('#saveBtn');
+	           
+	            
+	            if (isDisabled) {
+	                $add_button.css('background-color', 'gray'); // Change to your desired color
+	            } else {
+	                $add_button.css('background-color', '#2b3991'); // Reset to original color
+	            }
+	            
+	            if (isDisabled) {
+	                $delete_button.css('background-color', 'gray'); // Change to your desired color
+	            } else {
+	                $delete_button.css('background-color', '#2b3991'); // Reset to original color
+	            }
+	            
+	            if (isDisabled) {
+	                $clear_button.css('background-color', 'gray'); // Change to your desired color
+	            } else {
+	                $clear_button.css('background-color', '#2b3991'); // Reset to original color
+	            }
+	            
+	            if (isDisabled) {
+	                $save_button.css('background-color', 'gray'); // Change to your desired color
+	            } else {
+	                $save_button.css('background-color', '#2b3991'); // Reset to original color
+	            }
+	            
+	            
+	    	}
+	    	
 	    	 $(document).ready(function () {
+	    		 
+	    		 <%
+	    	    	// Access the session variable
+	    	    	HttpSession role = request.getSession();
+	    	    	String roleValue = (String) session.getAttribute("role");
+	    	    	%>
+	    	    	
+	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+	    	      
+	    		 
 	       	  // Load broker ip
 	      	   loadCommandSettings();
+	       	  
+	      	 if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+	    		  
+	    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+	    		  
+	    		  $("#actions").hide(); 
+	    		  $('#addBtn').prop('disabled', true);
+	    		  $('#clearBtn').prop('disabled', true); 
+	    		  $('#delBtn').prop('disabled', true);
+	    		  $('#saveBtn').prop('disabled', true);
+	    		 
+	    		  changeButtonColor(true);
+	    	  }
+	       	  
 	       	  loadBrokerIPList();
 	       	  loadTagList();
 	       	  
@@ -526,7 +607,7 @@ var json = {};
 				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
 					<div class="col-75-6" style="width: 20%;">
 						<input type="text" id="tag_name" name="tag_name"
-							placeholder="Tag Name" style="height: 17px;" />
+							placeholder="Tag name" style="height: 17px;" />
 
 					</div>
 				
@@ -571,7 +652,7 @@ var json = {};
 				<tr>
 					<th>Tag Name</th>
 					<th>Variable</th>
-					<th>Action</th>
+					<th id="actions">Action</th>
 				</tr>
 			</table>
 		</div>

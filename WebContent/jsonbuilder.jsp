@@ -15,6 +15,9 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var roleValue;	
+
 	function loadBrokerIPList() {
 		$.ajax({
 			url : "jsonBuilderData",
@@ -27,7 +30,6 @@
 					var selectElement = $("#broker_name");
 					// Clear any existing options
 					//	selectElement.empty();
-
 					// Loop through the data and add options to the select element
 					data.broker_ip_result.forEach(function(filename) {
 						var option = $("<option>", {
@@ -69,70 +71,73 @@
 						}
 
 						// Iterate through the user data and add rows to the table
-						$
-								.each(
-										data,
-										function(index, jsonBuilder) {
-											var row = $('<tr>');
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.json_string_name));
-											row.append($('<td>').text(
-													jsonBuilder.json_interval));
-											row.append($('<td>').text(
-													jsonBuilder.broker_type));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.broker_ip_address));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.publish_topic_name));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.publishing_status));
-											row
-													.append($('<td>')
-															.text(
-																	jsonBuilder.store_n_forward));
-											row.append($('<td style="width: 400px; word-break: break-all; white-space: normal; overflow: hidden; text-overflow: ellipsis;">').text(
-													jsonBuilder.json_string));
+					
+						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
+							
+								$.each(data,function(index, jsonBuilder) {
+									
+										var row = $('<tr>');
+										row.append($('<td>').text(jsonBuilder.json_string_name));
+										row.append($('<td>').text(jsonBuilder.json_interval));
+										row.append($('<td>').text(jsonBuilder.broker_type));
+										row.append($('<td>').text(jsonBuilder.broker_ip_address));
+										row.append($('<td>').text(jsonBuilder.publish_topic_name));
+										row.append($('<td>').text(jsonBuilder.publishing_status));
+										row.append($('<td>').text(jsonBuilder.store_n_forward));
+										row.append($('<td style="width: 400px; word-break: break-all; white-space: normal; overflow: hidden; text-overflow: ellipsis;">').text(
+												jsonBuilder.json_string));
 
-											var actions = $('<td>');
-											var editButton = $(
-													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text('Edit')
-													.click(
-															function() {
-																setJsonBuilder(jsonBuilder.json_string_name);
-																setJSONInterval(jsonBuilder.json_interval);
-																setBrokerType(jsonBuilder.broker_type);
-																setBrokerIPAddress(jsonBuilder.broker_ip_address);
-																setPublishTopic(jsonBuilder.publish_topic_name);
-																setPublishingStatus(jsonBuilder.publishing_status);
-																setStoreAndForward(jsonBuilder.store_n_forward);
-																setJSONString(jsonBuilder.json_string);
-															});
+										 var actions = $('<td>');
+										var editButton = $(
+												'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+												.text('Edit')
+												.click(
+														function() {
+															setJsonBuilder(jsonBuilder.json_string_name);
+															setJSONInterval(jsonBuilder.json_interval);
+															setBrokerType(jsonBuilder.broker_type);
+															setBrokerIPAddress(jsonBuilder.broker_ip_address);
+															setPublishTopic(jsonBuilder.publish_topic_name);
+															setPublishingStatus(jsonBuilder.publishing_status);
+															setStoreAndForward(jsonBuilder.store_n_forward);
+															setJSONString(jsonBuilder.json_string);
+														});
 
-											var deleteButton = $(
-													'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white; margin-top: 3px;">')
-													.text('Delete')
-													.click(
-															function() {
-																deleteJsonBuilder(jsonBuilder.json_string_name);
-															});
+										var deleteButton = $(
+												'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white; margin-top: 3px;">')
+												.text('Delete')
+												.click(
+														function() {
+															deleteJsonBuilder(jsonBuilder.json_string_name);
+														}); 
 
-											actions.append(editButton);
-											actions.append(deleteButton);
+										 actions.append(editButton);
+										actions.append(deleteButton);
 
-											row.append(actions);
+										row.append(actions); 
 
-											jsonBuilderTable.append(row);
+										jsonBuilderTable.append(row);
+								});
+						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+							
+							$.each(data,function(index, jsonBuilder) {
+								
+								var row = $('<tr>');
+								row.append($('<td>').text(jsonBuilder.json_string_name));
+								row.append($('<td>').text(jsonBuilder.json_interval));
+								row.append($('<td>').text(jsonBuilder.broker_type));
+								row.append($('<td>').text(jsonBuilder.broker_ip_address));
+								row.append($('<td>').text(jsonBuilder.publish_topic_name));
+								row.append($('<td>').text(jsonBuilder.publishing_status));
+								row.append($('<td>').text(jsonBuilder.store_n_forward));
+								row.append($('<td style="width: 400px; word-break: break-all; white-space: normal; overflow: hidden; text-overflow: ellipsis;">').text(
+										jsonBuilder.json_string));
 
-										});
+								
+								jsonBuilderTable.append(row);
+						});
+						}	
+						
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading jsonBuilderTable data: '
@@ -430,43 +435,55 @@
 	    });
 	  }
 	
-	function deleteRow(button) {
-		var confirmation = confirm('Are you sure you want to delete this tag?');
-		if (confirmation) {
-	  $(button).closest("tr").remove();
-		}
-	}
-	
-	function tableToJson() {
-		 const table = document.getElementById("table_data");
-	// 	 const json = {};
-
-	  for (var i = 1; i < table.rows.length; i++) {
-	    const row = table.rows[i];
-	    const tag = row.cells[0].textContent;
-	    const variable = row.cells[1].textContent;
-	    json[tag] = variable;
-	    console.log(json);
-	  }
-
-	  return json;
-	}
+	function changeButtonColor(isDisabled) {
+        var $add_button = $('#registerBtn');       
+        var $clear_button = $('#clearBtn');
+        
+        
+         if (isDisabled) {
+            $add_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $clear_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+    }
 	
 	// Function to execute on page load
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
+						
+						<%// Access the session variable
+			HttpSession role = request.getSession();
+			String roleValue = (String) session.getAttribute("role");%>
+			    	
+			    	roleValue = '<%=roleValue%>';
+
 						// Load user list
 						loadBrokerIPList();
 						loadJsonBuilderList();
+
+						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+							var confirmation = confirm('You do not have enough privileges for role VIEWER');
+							
+							 $("#actions").hide();
+							$('#registerBtn').prop('disabled', true);
+							$('#clearBtn').prop('disabled', true);
+
+							changeButtonColor(true);
+						}
+
 						loadTagList();
 
 						$('#validateBtn').click(function() {
 							validateJSON();
 
 						});
-						
-						 
 
 						//console.log(is_json({name: 'Robert'}));
 						// Handle form submission
@@ -623,9 +640,9 @@
 							<option value="disable">Disable</option>
 						</select> <span id="storeAndForwardError" style="color: red;"></span>
 					</div>
-					
+
 				</div>
-				
+
 				<div class="row">
 
 					<div class="col-75-8" style="margin-top: 10px; width: 100%">
@@ -635,7 +652,7 @@
 
 					</div>
 				</div>
-				
+
 
 				<div class="row">
 					<input style="margin-top: 1%;" type="button" value="Validate"
@@ -676,7 +693,7 @@
 						<th>Publishing Status</th>
 						<th>Store And Forward</th>
 						<th>JSON String</th>
-						<th>Actions</th>
+						<th id="actions">Actions</th>
 					</tr>
 				</thead>
 				<tbody>

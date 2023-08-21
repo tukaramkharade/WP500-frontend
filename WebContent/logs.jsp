@@ -13,6 +13,9 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var roleValue;
+
 	function searchLogData() {
 		var searchQuery = document.getElementById("search_query").value.trim();
 		var selectedLogFile = document.getElementById("log_file").value;
@@ -119,10 +122,39 @@
 				});
 	}
 
+	function changeButtonColor(isDisabled) {
+        var $load_button = $('#loadLogFileButton');
+        
+        if (isDisabled) {
+            $load_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $load_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+	}
+	
 	//Function to execute on page load
 	$(document).ready(function() {
 		// Load log file list
+		
+		<%
+	    	    	// Access the session variable
+	    	    	HttpSession role = request.getSession();
+	    	    	String roleValue = (String) session.getAttribute("role");
+	    	    	%>
+	    	    	
+	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+	    	    	
+	    	    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+	  	    		  
+	  	    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
+	  	    		  
+	  	    		$('#loadLogFileButton').prop('disabled', true);
+	  	    		  
+	  	    		  changeButtonColor(true);
+	  	    	  }
 		loadLogFileList();
+		
+		
 		$(document).on("click", "#loadLogFileButton", function() {
 			var searchQuery = $("#search_query").val().trim();
 			if (searchQuery !== "") {

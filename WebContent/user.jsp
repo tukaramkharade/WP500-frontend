@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var roleValue;
+
 	// Function to load user data and populate the user list table
 	function loadUserList() {
 		$
@@ -36,22 +39,16 @@
 							}
 						}
 
-						if (Array.isArray(data)) {
-
+						
+						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 							// Iterate through the user data and add rows to the table
-							$
-									.each(
-											data,
-											function(index, user) {
+							$.each(data,function(index, user) {
 												var row = $('<tr>');
-												row.append($('<td>').text(
-														user.username));
-												row.append($('<td>').text(
-														user.first_name));
-												row.append($('<td>').text(
-														user.last_name));
-												row.append($('<td>').text(
-														user.role));
+												
+												row.append($('<td>').text(user.username));
+												row.append($('<td>').text(user.first_name));
+												row.append($('<td>').text(user.last_name));
+												row.append($('<td>').text(user.role));
 
 												var actions = $('<td>');
 												var editButton = $(
@@ -81,9 +78,23 @@
 												userTable.append(row);
 
 											});
-						} else {
-							console.log('Invalid JSON response:', data);
+						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+							
+							// Iterate through the user data and add rows to the table
+							$.each(data,function(index, user) {
+												var row = $('<tr>');
+												
+												row.append($('<td>').text(user.username));
+												row.append($('<td>').text(user.first_name));
+												row.append($('<td>').text(user.last_name));
+												row.append($('<td>').text(user.role));
+
+												userTable.append(row);
+
+											});
 						}
+							
+						
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading user data: ' + error);
@@ -272,10 +283,48 @@
 		}
 	}
 
+	
+	function changeButtonColor(isDisabled) {
+        var $add_button = $('#registerBtn');       
+        var $clear_button = $('#clearBtn');
+        
+        
+         if (isDisabled) {
+            $add_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $clear_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+    }
+	
 	// Function to execute on page load
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+	roleValue = '<%=roleValue%>';
+		
 		// Load user list
 		loadUserList();
+		
+		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+			var confirmation = confirm('You do not have enough privileges for role VIEWER');
+			$("#actions").hide();
+			$('#registerBtn').prop('disabled', true);
+			$('#clearBtn').prop('disabled', true);
+			
+			changeButtonColor(true);
+		}
+
 
 		// Handle form submission
 		$('#userForm').submit(function(event) {
@@ -390,7 +439,7 @@
 							<th>First Name</th>
 							<th>Last Name</th>
 							<th>Role</th>
-							<th>Actions</th>
+							<th id="actions">Actions</th>
 						</tr>
 					</thead>
 					<tbody>

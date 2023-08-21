@@ -161,18 +161,7 @@ public class AlarmConfigAddData extends HttpServlet {
 				}
 			} else {
 
-				// System.out.println("Login first");
-				//
-				// RequestDispatcher dispatcher =
-				// this.getServletContext().getRequestDispatcher("/login.jsp");
-				//
-				// try {
-				// dispatcher.forward(request, response);
-				// } catch (ServletException | IOException e) {
-				// // TODO Auto-generated catch block
-				// // e.printStackTrace();
-				// logger.error(e.getMessage());
-				// }
+			
 
 				try {
 					JSONObject userObj = new JSONObject();

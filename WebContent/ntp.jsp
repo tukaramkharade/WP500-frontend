@@ -17,8 +17,6 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
-
-
 <style type="text/css">
 .btn_discard_0 {
 	padding: 5px 10px;
@@ -394,7 +392,51 @@ input:checked+.slider:before {
 		datetimeInput.disabled = ntpClientCheckbox.checked;
 	}
 
+	function changeButtonColor(isDisabled) {
+        var $add_button = $('#updatentp');  
+        var $current_datetime_button = $('#get_current_time'); 
+        var $set_datetime_button = $('#setDateTime');   
+       
+        if (isDisabled) {
+            $add_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $add_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $current_datetime_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $current_datetime_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $set_datetime_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $set_datetime_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+
+    }
+	
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+	roleValue = '<%=roleValue%>';
+	
+	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+		var confirmation = confirm('You do not have enough privileges for role VIEWER');
+		
+		$('#updatentp').prop('disabled', true);
+		$('#get_current_time').prop('disabled', true);
+		$('#setDateTime').prop('disabled', true);
+		
+		
+		
+		changeButtonColor(true);
+	}
 		
 		toggleDateTimeInput();
 		$("#get_current_time").click(function() {
@@ -480,8 +522,7 @@ input:checked+.slider:before {
 					</div> -->
 
 					<div class="row">
-						<input style="margin-left: 95%;" type="submit" value="Add"
-							id="updatentp" />
+						<input style="margin-left: 95%;" type="submit" value="Add" id="updatentp" />
 					</div>
 				</form>
 			</div>
@@ -497,7 +538,9 @@ input:checked+.slider:before {
 				<label for="datetime">Select Date-Time:</label> <input
 					type="datetime-local" id="datetime" name="datetime" required
 					onchange="toggleDateTimeInput()">
-				<button id="setDateTime">Submit</button>
+					
+					<input type="button" id="setDateTime" value="Submit" />
+				
 
 			</div>
 		</section>
