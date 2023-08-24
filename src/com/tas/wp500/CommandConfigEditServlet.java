@@ -65,7 +65,6 @@ public class CommandConfigEditServlet extends HttpServlet {
 					String asset_id = command_result.getString("asset_id");
 					String unit_id = command_result.getString("unit_id");
 
-					
 					try {
 
 						disObj.put("command_tag", command_tag);
@@ -219,6 +218,23 @@ public class CommandConfigEditServlet extends HttpServlet {
 			}
 		} else {
 
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
 		}
 	}
 }

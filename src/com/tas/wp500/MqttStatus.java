@@ -17,7 +17,7 @@ import com.tas.utils.TCPClient;
 
 @WebServlet("/getMqttStatus")
 public class MqttStatus extends HttpServlet {
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		final Logger logger = Logger.getLogger(MqttStatus.class);
@@ -26,42 +26,58 @@ public class MqttStatus extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 
 		if (check_username != null) {
-			
-		String broker_ip_address = request.getParameter("broker_ip_address");
 
-		try {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
+			String broker_ip_address = request.getParameter("broker_ip_address");
 
-			json.put("operation", "get_mqtt_status");
-			json.put("user", check_username);			
-			json.put("ip_address", broker_ip_address);
+			try {
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-			String respStr = client.sendMessage(json.toString());
-			
-			logger.info("res " + new JSONObject(respStr).getString("connection_status"));
+				json.put("operation", "get_mqtt_status");
+				json.put("user", check_username);
+				json.put("ip_address", broker_ip_address);
 
-			String connection_status = new JSONObject(respStr).getString("connection_status");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("connection_status", connection_status);
+				String respStr = client.sendMessage(json.toString());
 
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
+				logger.info("res " + new JSONObject(respStr).getString("connection_status"));
 
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
+				String connection_status = new JSONObject(respStr).getString("connection_status");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("connection_status", connection_status);
 
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error in getting mqtt status : "+e);
-			
-		}
-		}else{
-			
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in getting mqtt status : " + e);
+
+			}
+		} else {
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
 		}
 	}
 }

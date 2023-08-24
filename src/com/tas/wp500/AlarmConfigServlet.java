@@ -114,101 +114,118 @@ import com.tas.utils.TCPClient;
 
 @WebServlet("/alarmConfigServlet")
 public class AlarmConfigServlet extends HttpServlet {
-	
+
 	final static Logger logger = Logger.getLogger(AlarmConfigServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
 
-		String unit_id = request.getParameter("unit_id");
-		String asset_id = request.getParameter("asset_id");
-		String broker_type = request.getParameter("broker_type");
-		String broker_name = request.getParameter("broker_name");
-		String interval = request.getParameter("interval");
-		String tagData = request.getParameter("tagData");
+		if (check_username != null) {
 
-		JSONParser parser = new JSONParser();
-		org.json.simple.JSONObject json_string_con = null;
-		try {
-			json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+			String unit_id = request.getParameter("unit_id");
+			String asset_id = request.getParameter("asset_id");
+			String broker_type = request.getParameter("broker_type");
+			String broker_name = request.getParameter("broker_name");
+			String interval = request.getParameter("interval");
+			String tagData = request.getParameter("tagData");
 
-		try {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			json.put("operation", "protocol");
-			json.put("protocol_type", "alarm");
-			json.put("operation_type", "update_query");
-			json.put("user", check_username);
-
-			json.put("id", "1");
-			json.put("username", "admin");
-			json.put("unit_id", unit_id);
-			json.put("asset_id", asset_id);
-			json.put("broker_type", broker_type);
-			json.put("broker_ip", broker_name);
-			
-			Map<String, String> intervalMap = new HashMap<>();
-			intervalMap.put("5 sec", "5");
-			intervalMap.put("10 sec", "10");
-			intervalMap.put("15 sec", "15");
-			intervalMap.put("20 sec", "20");
-			intervalMap.put("25 sec", "25");
-			intervalMap.put("30 sec", "30");
-			intervalMap.put("1 min", "60");
-			intervalMap.put("5 min", "300");
-			intervalMap.put("10 min", "600");
-			intervalMap.put("15 min", "900");
-			intervalMap.put("20 min", "1200");
-			intervalMap.put("25 min", "1500");
-			intervalMap.put("30 min", "1800");
-			intervalMap.put("1 hour", "3600");
-
-			String intervalValue = intervalMap.get(interval);
-			if (intervalValue != null) {
-			    json.put("intrval", intervalValue);
+			JSONParser parser = new JSONParser();
+			org.json.simple.JSONObject json_string_con = null;
+			try {
+				json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			
-			json.put("alarm_tag", json_string_con);
-			
-			String respStr = client.sendMessage(json.toString());
 
-			logger.info("res " + new JSONObject(respStr));
+			try {
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
+				json.put("operation", "protocol");
+				json.put("protocol_type", "alarm");
+				json.put("operation_type", "update_query");
+				json.put("user", check_username);
 
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
+				json.put("id", "1");
+				json.put("username", "admin");
+				json.put("unit_id", unit_id);
+				json.put("asset_id", asset_id);
+				json.put("broker_type", broker_type);
+				json.put("broker_ip", broker_name);
 
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
+				Map<String, String> intervalMap = new HashMap<>();
+				intervalMap.put("5 sec", "5");
+				intervalMap.put("10 sec", "10");
+				intervalMap.put("15 sec", "15");
+				intervalMap.put("20 sec", "20");
+				intervalMap.put("25 sec", "25");
+				intervalMap.put("30 sec", "30");
+				intervalMap.put("1 min", "60");
+				intervalMap.put("5 min", "300");
+				intervalMap.put("10 min", "600");
+				intervalMap.put("15 min", "900");
+				intervalMap.put("20 min", "1200");
+				intervalMap.put("25 min", "1500");
+				intervalMap.put("30 min", "1800");
+				intervalMap.put("1 hour", "3600");
 
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
+				String intervalValue = intervalMap.get(interval);
+				if (intervalValue != null) {
+					json.put("intrval", intervalValue);
+				}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error updating alarm data : "+e);
-		}
-		}else{
-			
+				json.put("alarm_tag", json_string_con);
+
+				String respStr = client.sendMessage(json.toString());
+
+				logger.info("res " + new JSONObject(respStr));
+
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
+
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error updating alarm data : " + e);
+			}
+		} else {
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
 		}
 	}
 }

@@ -50,7 +50,7 @@ public class StoreForwardDataServlet extends HttpServlet {
 					String dataString = jsObj.getString("data_string");
 					String brokerIp = jsObj.getString("broker_ip");
 					String publishTopic = jsObj.getString("publish_topic");
-					
+
 					JSONObject storeForwardObj = new JSONObject();
 
 					try {
@@ -62,7 +62,7 @@ public class StoreForwardDataServlet extends HttpServlet {
 						resJsonArray.put(storeForwardObj);
 					} catch (JSONException e) {
 						e.printStackTrace();
-						logger.error("Error in putting store forward data in json array : "+e);
+						logger.error("Error in putting store forward data in json array : " + e);
 					}
 				}
 
@@ -89,17 +89,17 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.error("Error in session timeout : "+e);
+					logger.error("Error in session timeout : " + e);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Error in getting store forward data: "+e);
+			logger.error("Error in getting store forward data: " + e);
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 	}
 }
