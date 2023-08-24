@@ -15,53 +15,32 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class GeneralSettingsEditServlet
- */
 @WebServlet("/generalSettingsEditServlet")
 public class GeneralSettingsEditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(GeneralSettingsEditServlet.class);
 
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public GeneralSettingsEditServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	//	doGet(request, response);
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
 
-		
 		String check_username = (String) session.getAttribute("username");
-		
+
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-			
+
 			String input = request.getParameter("input");
 			String output = request.getParameter("output");
 			String forward = request.getParameter("forward");
 			String rule_drop = request.getParameter("rule_drop");
-			
-			try{
+
+			try {
 				json.put("operation", "genral_setting");
 				json.put("operation_type", "update");
 				json.put("input", input);
@@ -69,10 +48,9 @@ public class GeneralSettingsEditServlet extends HttpServlet {
 				json.put("forword", forward);
 				json.put("rule_drop", rule_drop);
 				json.put("user", check_username);
-				
+
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
@@ -88,15 +66,14 @@ public class GeneralSettingsEditServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-				
-			}catch(Exception e){
+
+			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in updating general settings : "+e);
 			}
-			
-			
-		}else{
-			
+
+		} else {
+
 		}
 	}
-
 }

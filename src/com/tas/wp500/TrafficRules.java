@@ -15,12 +15,9 @@ public class TrafficRules {
 	private String forward;
 	private String rule_drop;
 	
-	
-
 	public TrafficRules() {
 		super();
 	}
-
 	
 	public TrafficRules(java.lang.String name, java.lang.String protocol, java.lang.String destination_port,
 			java.lang.String iface, java.lang.String mac_address, java.lang.String ip_address, java.lang.String action,

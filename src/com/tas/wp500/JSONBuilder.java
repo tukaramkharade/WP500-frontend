@@ -1,6 +1,5 @@
 package com.tas.wp500;
 
-
 public class JSONBuilder {
 
 	private String json_string_name;

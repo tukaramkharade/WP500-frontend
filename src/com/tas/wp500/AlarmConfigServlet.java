@@ -94,6 +94,8 @@ package com.tas.wp500;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -110,40 +112,18 @@ import org.json.simple.parser.ParseException;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class AlarmConfigServlet
- */
 @WebServlet("/alarmConfigServlet")
 public class AlarmConfigServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(AlarmConfigServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AlarmConfigServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
 		
 		HttpSession session = request.getSession(false);
 
@@ -166,11 +146,7 @@ public class AlarmConfigServlet extends HttpServlet {
 			e1.printStackTrace();
 		}
 
-		System.out.println("tagData>" + tagData);
-
 		try {
-
-			System.out.println("In update alarm config...");
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
@@ -185,47 +161,33 @@ public class AlarmConfigServlet extends HttpServlet {
 			json.put("asset_id", asset_id);
 			json.put("broker_type", broker_type);
 			json.put("broker_ip", broker_name);
-			//json.put("intrval", interval);
 			
-			if(interval.equals("5 sec")){
-				json.put("intrval", "5");
-			}else if(interval.equals("10 sec")){
-				json.put("intrval", "10");
-			}else if(interval.equals("15 sec")){
-				json.put("intrval", "15");
-			}else if(interval.equals("20 sec")){
-				json.put("intrval", "20");
-			}else if(interval.equals("25 sec")){
-				json.put("intrval", "25");
-			}else if(interval.equals("30 sec")){
-				json.put("intrval", "30");
-			}else if(interval.equals("1 min")){
-				json.put("intrval", "60");
-			}else if(interval.equals("5 min")){
-				json.put("intrval", "300");
-			}else if(interval.equals("10 min")){
-				json.put("intrval", "600");
-			}else if(interval.equals("15 min")){
-				json.put("intrval", "900");
-			}else if(interval.equals("20 min")){
-				json.put("intrval", "1200");
-			}else if(interval.equals("25 min")){
-				json.put("intrval", "1500");
-			}else if(interval.equals("30 min")){
-				json.put("intrval", "1800");
-			}else if(interval.equals("1 hour")){
-				json.put("intrval", "3600");
+			Map<String, String> intervalMap = new HashMap<>();
+			intervalMap.put("5 sec", "5");
+			intervalMap.put("10 sec", "10");
+			intervalMap.put("15 sec", "15");
+			intervalMap.put("20 sec", "20");
+			intervalMap.put("25 sec", "25");
+			intervalMap.put("30 sec", "30");
+			intervalMap.put("1 min", "60");
+			intervalMap.put("5 min", "300");
+			intervalMap.put("10 min", "600");
+			intervalMap.put("15 min", "900");
+			intervalMap.put("20 min", "1200");
+			intervalMap.put("25 min", "1500");
+			intervalMap.put("30 min", "1800");
+			intervalMap.put("1 hour", "3600");
+
+			String intervalValue = intervalMap.get(interval);
+			if (intervalValue != null) {
+			    json.put("intrval", intervalValue);
 			}
 			
 			json.put("alarm_tag", json_string_con);
-			/*
-			 * JSONObject json_data = new JSONObject();
-			 * json_data.put(tag_name,tag_name_2);
-			 */
-
+			
 			String respStr = client.sendMessage(json.toString());
 
-			System.out.println("res " + new JSONObject(respStr));
+			logger.info("res " + new JSONObject(respStr));
 
 			String message = new JSONObject(respStr).getString("msg");
 			JSONObject jsonObject = new JSONObject();
@@ -242,13 +204,11 @@ public class AlarmConfigServlet extends HttpServlet {
 			out.flush();
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("Error updating alarm data : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
-
 }

@@ -17,35 +17,17 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class DispenserTriggerEditServlet
- */
 @WebServlet("/dispenserTriggerEditServlet")
 public class DispenserTriggerEditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(DispenserTriggerEditServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DispenserTriggerEditServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+		
 		HttpSession session = request.getSession(false);
-
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
 
 			if (check_username != null) {
 				TCPClient client = new TCPClient();
@@ -61,60 +43,29 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 
 					JSONObject respJson = new JSONObject(respStr);
 
-					System.out.println("res " + respJson.toString());
-
 					JSONArray resJsonArray = new JSONArray();
 
 					logger.info("Dispenser response : " + respJson.toString());
 
 					JSONArray resultArr = respJson.getJSONArray("result");
 
-					System.out.println("Result : " + resultArr.toString());
-
 					for (int i = 0; i < resultArr.length(); i++) {
 						JSONObject jsObj = resultArr.getJSONObject(i);
 
 						String broker_ip_address = jsObj.getString("broker_ip_address");
-						logger.info("broker_ip_address : " + broker_ip_address);
-
 						String station_name = jsObj.getString("station_name");
-						logger.info("station_name : " + station_name);
-
 						String side = jsObj.getString("side");
-						logger.info("side : " + side);
-
 						String total = jsObj.getString("total");
-						logger.info("total : " + total);
-
 						String quantity = jsObj.getString("quantity");
-						logger.info("quantity : " + quantity);
-
 						String tempreture = jsObj.getString("tempreture");
-						logger.info("tempreture : " + tempreture);
-
 						String start_pressesure = jsObj.getString("start_pressesure");
-						logger.info("start_pressesure : " + start_pressesure);
-
 						String end_pressure = jsObj.getString("end_pressure");
-						logger.info("end_pressure : " + end_pressure);
-
 						String trigger_value = jsObj.getString("trigger_value");
-						logger.info("trigger_value : " + trigger_value);
-
 						String serial_number = jsObj.getString("serial_number");
-						logger.info("serial_number : " + serial_number);
-
 						String unit_price = jsObj.getString("unit_price");
-						logger.info("unit_price : " + unit_price);
-
 						String trigger_tag = jsObj.getString("trigger_tag");
-						logger.info("trigger_tag : " + trigger_tag);
-
 						String status = jsObj.getString("status");
-						logger.info("status : " + status);
-						
 						String unit_id= jsObj.getString("unit_id");
-						logger.info("unit_id : " + unit_id);
 
 						JSONObject disObj = new JSONObject();
 
@@ -136,10 +87,9 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 							disObj.put("unit_id", unit_id);
 
 							resJsonArray.put(disObj);
-							// firewallObj.put("lastName", "");
 						} catch (JSONException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
+							logger.error("Error putting dispenser trigger in json array : "+e);
 						}
 					}
 
@@ -151,6 +101,7 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 					response.getWriter().print(resJsonArray.toString());
 				} catch (Exception e) {
 					e.printStackTrace();
+					logger.error("Error getting dispenser trigger data :"+e);
 				}
 
 			} else {
@@ -169,29 +120,19 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					logger.error("Error in session timeout : "+e);
 				}
 			}
-		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
-		}
-
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
+		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-
+		if (check_username != null) {
+			
 			String broker_name = request.getParameter("broker_name");
 			String station_name = request.getParameter("station_name");
 			String serial_number = request.getParameter("serial_number");
@@ -209,7 +150,6 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 
 			try {
 
-				System.out.println("In dispenser...");
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -235,7 +175,7 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -253,11 +193,10 @@ public class DispenserTriggerEditServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in updating dispenser trigger : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
-
 }

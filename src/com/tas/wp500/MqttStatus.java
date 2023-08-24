@@ -10,29 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
 @WebServlet("/getMqttStatus")
 public class MqttStatus extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	public MqttStatus() {
-		super();
-	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		final Logger logger = Logger.getLogger(MqttStatus.class);
 
-		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 			
 		String broker_ip_address = request.getParameter("broker_ip_address");
-		System.out.println("broker_ip_address-->" + broker_ip_address);
 
 		try {
 			TCPClient client = new TCPClient();
@@ -43,8 +38,8 @@ public class MqttStatus extends HttpServlet {
 			json.put("ip_address", broker_ip_address);
 
 			String respStr = client.sendMessage(json.toString());
-
-			System.out.println("res " + new JSONObject(respStr).getString("connection_status"));
+			
+			logger.info("res " + new JSONObject(respStr).getString("connection_status"));
 
 			String connection_status = new JSONObject(respStr).getString("connection_status");
 			JSONObject jsonObject = new JSONObject();
@@ -62,11 +57,11 @@ public class MqttStatus extends HttpServlet {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			logger.error("Error in getting mqtt status : "+e);
+			
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
 }

@@ -15,34 +15,16 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class TrafficRulesEditServlet
- */
 @WebServlet("/trafficRulesEditServlet")
 public class TrafficRulesEditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(TrafficRulesEditServlet.class);
 
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public TrafficRulesEditServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-		if (check_username != null) {
-			
+		if (check_username != null) {			
 			try{
 				
 				TCPClient client = new TCPClient();
@@ -53,7 +35,6 @@ public class TrafficRulesEditServlet extends HttpServlet {
 				
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
@@ -68,31 +49,22 @@ public class TrafficRulesEditServlet extends HttpServlet {
 
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
-				out.flush();
-				
+				out.flush();	
 				
 			}catch(Exception e){
 				e.printStackTrace();
-			}
-			
-		}
-		
-		
+				logger.error("Error in applying traffic rules : "+e);
+			}	
+		}	
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
 		
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
 		if (check_username != null) {
 			
-
 			String name = request.getParameter("name");
 			String iface = request.getParameter("iface");
 			String portNumber = request.getParameter("portNumber");
@@ -102,10 +74,6 @@ public class TrafficRulesEditServlet extends HttpServlet {
 			String type = request.getParameter("type");
 			String action = request.getParameter("action");
 			
-
-			System.out.println(portNumber + " " + protocol + " " + ip_addr);
-			
-
 			try {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
@@ -122,10 +90,8 @@ public class TrafficRulesEditServlet extends HttpServlet {
 				json.put("action", action);
 				json.put("type", type);
 				
-
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
@@ -143,15 +109,11 @@ public class TrafficRulesEditServlet extends HttpServlet {
 				out.flush();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error("Error in updating traffic rules : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
-		}
-		
-		
+			
+		}		
 	}
-
 }

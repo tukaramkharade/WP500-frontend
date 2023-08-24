@@ -15,37 +15,19 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class LoadConfigurationServlet
- */
 @WebServlet("/loadConfigurationServlet")
 public class LoadConfigurationServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(LoadConfigurationServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public LoadConfigurationServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
 
+		if (check_username != null) {
 			try {
 
 				TCPClient client = new TCPClient();
@@ -56,7 +38,6 @@ public class LoadConfigurationServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("Status"));
 				logger.info("res " + new JSONObject(respStr).getString("Status"));
 
 				String status = new JSONObject(respStr).getString("Status");
@@ -75,21 +56,15 @@ public class LoadConfigurationServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in load configuration : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
+		
 	}
-
 }

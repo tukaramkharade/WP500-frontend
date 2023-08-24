@@ -15,137 +15,91 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class StratonLiveDataServlet
- */
 @WebServlet("/storeForwardDataServlet")
 public class StoreForwardDataServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(StoreForwardDataServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public StoreForwardDataServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
 
-		
-		
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 
 		try {
-
-			
 			HttpSession session = request.getSession(false);
 
-			System.out.println(">> " + session.getAttribute("username"));
-			
 			String check_username = (String) session.getAttribute("username");
-			
+
 			if (check_username != null) {
-			json.put("operation", "get_store_forword_data");
+				json.put("operation", "get_store_forword_data");
 
-			String respStr = client.sendMessage(json.toString());
+				String respStr = client.sendMessage(json.toString());
 
-			JSONObject respJson = new JSONObject(respStr);
+				JSONObject respJson = new JSONObject(respStr);
 
-			System.out.println("res " + respJson.toString());
+				JSONArray resJsonArray = new JSONArray();
 
-			JSONArray resJsonArray = new JSONArray();
+				logger.info("Store Forword data value response : " + respJson.toString());
 
-			logger.info("Store Forword data value response : " + respJson.toString());
+				JSONArray resultArr = respJson.getJSONArray("result");
 
-			JSONArray resultArr = respJson.getJSONArray("result");
+				for (int i = 0; i < resultArr.length(); i++) {
+					JSONObject jsObj = resultArr.getJSONObject(i);
 
-			System.out.println("Result : " + resultArr.toString());
+					String dateTime = jsObj.getString("date_time");
+					String dataString = jsObj.getString("data_string");
+					String brokerIp = jsObj.getString("broker_ip");
+					String publishTopic = jsObj.getString("publish_topic");
+					
+					JSONObject storeForwardObj = new JSONObject();
 
-			for (int i = 0; i < resultArr.length(); i++) {
-				JSONObject jsObj = resultArr.getJSONObject(i);
+					try {
+						storeForwardObj.put("dateTime", dateTime);
+						storeForwardObj.put("dataString", dataString);
+						storeForwardObj.put("brokerIp", brokerIp);
+						storeForwardObj.put("publishTopic", publishTopic);
 
-				String dateTime = jsObj.getString("date_time");
-				logger.info("dateTime : " + dateTime);
-
-				String dataString = jsObj.getString("data_string");
-				logger.info("dataString : " + dataString);
-
-				String brokerIp = jsObj.getString("broker_ip");
-				logger.info("brokerIp : " + brokerIp);
-
-				String publishTopic = jsObj.getString("publish_topic");
-				logger.info("publishTopic : " + publishTopic);
-
-				
-
-				JSONObject storeForwardObj = new JSONObject();
-
-				try {
-
-					storeForwardObj.put("dateTime", dateTime);
-					storeForwardObj.put("dataString", dataString);
-					storeForwardObj.put("brokerIp", brokerIp);
-					storeForwardObj.put("publishTopic", publishTopic);
-
-					resJsonArray.put(storeForwardObj);
-					// firewallObj.put("lastName", "");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+						resJsonArray.put(storeForwardObj);
+					} catch (JSONException e) {
+						e.printStackTrace();
+						logger.error("Error in putting store forward data in json array : "+e);
+					}
 				}
-			}
 
-			logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
 
-			response.setContentType("application/json");
+				response.setContentType("application/json");
 
-			// Write the JSON data to the response
-			response.getWriter().print(resJsonArray.toString());
-			}else{
-				
+				// Write the JSON data to the response
+				response.getWriter().print(resJsonArray.toString());
+			} else {
+
 				try {
 					JSONObject userObj = new JSONObject();
 					userObj.put("msg", "Your session is timeout. Please login again");
 					userObj.put("status", "fail");
-					
-					
-					System.out.println(">>" +userObj);
-					
+
+					System.out.println(">>" + userObj);
+
 					// Set the response content type to JSON
 					response.setContentType("application/json");
 
 					// Write the JSON data to the response
 					response.getWriter().print(userObj.toString());
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
+					logger.error("Error in session timeout : "+e);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error in getting store forward data: "+e);
 		}
-		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
+		
 	}
-
 }

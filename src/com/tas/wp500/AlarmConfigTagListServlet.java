@@ -106,50 +106,29 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class AlarmConfigTagListServlet
- */
 @WebServlet("/alarmConfigTagListServlet")
 public class AlarmConfigTagListServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(AlarmConfigTagListServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AlarmConfigTagListServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {			
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			try {
 
-				// System.out.println("In json builder...");
-
 				json.put("operation", "get_Tag_list");
 				json.put("user", check_username);
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr));
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject result = new JSONObject(respStr);
@@ -170,22 +149,15 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 				out.flush();
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error getting tag list : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
-
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
 
 		// delete operation
 
@@ -195,7 +167,6 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 
 			try {
-				System.out.println("in alarm delete!");
 
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
@@ -208,7 +179,7 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -226,12 +197,10 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error deleting alarm : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
-
 	}
-
 }

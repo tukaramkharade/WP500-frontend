@@ -16,36 +16,18 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class MQTTData
- */
 @WebServlet("/mqttAddData")
 public class MQTTAddData extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(MQTTAddData.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public MQTTAddData() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
 		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+
+		if (check_username != null) {
 
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -59,7 +41,6 @@ public class MQTTAddData extends HttpServlet {
 
 			String respStr = client.sendMessage(json.toString());
 
-			System.out.println("res " + new JSONObject(respStr));
 			logger.info("res " + new JSONObject(respStr));
 
 			JSONObject result = new JSONObject(respStr);
@@ -81,30 +62,20 @@ public class MQTTAddData extends HttpServlet {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error in getting crt files : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+	
 		}
+}
 
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
-		
 		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-			
-			
+		if (check_username != null) {
 			
 		String broker_ip_address = request.getParameter("broker_ip_address");
 		String port_number = request.getParameter("port_number");
@@ -117,23 +88,15 @@ public class MQTTAddData extends HttpServlet {
 		String enable = request.getParameter("enable");
 		String file_name = request.getParameter("file_name");
 
-		// System.out.println(firstName + " " + password);
-		
-		System.out.println("broker ip : "+broker_ip_address);
-		System.out.println("file name : "+file_name);
-
 		try {
 
-			System.out.println("In mqtt...");
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
-			System.out.println("broker ip addr :" + broker_ip_address);
 			json.put("operation", "protocol");
 			json.put("protocol_type", "mqtt");
 			json.put("operation_type", "add_query");
 			json.put("user", check_username);
-			
 			json.put("broker_ip_address", broker_ip_address);
 			json.put("port_number", port_number);
 			json.put("username", username);
@@ -145,10 +108,9 @@ public class MQTTAddData extends HttpServlet {
 			json.put("enable", enable);
 			json.put("file_name", file_name);
 			
-
 			String respStr = client.sendMessage(json.toString());
 
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
+			logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 			String message = new JSONObject(respStr).getString("msg");
 			JSONObject jsonObject = new JSONObject();
@@ -165,14 +127,11 @@ public class MQTTAddData extends HttpServlet {
 			out.flush();
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("Error in adding mqtt : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
-		}
-		// doGet(request, response);
+			
+		}		
 	}
-
 }

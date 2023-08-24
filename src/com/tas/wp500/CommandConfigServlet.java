@@ -93,6 +93,8 @@ package com.tas.wp500;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -110,44 +112,24 @@ import org.json.simple.parser.ParseException;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class CommandConfigServlet
- */
+
 @WebServlet("/commandConfigServlet")
 public class CommandConfigServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(CommandConfigServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public CommandConfigServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
+		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 
 			String unit_id = request.getParameter("unit_id");
 			String asset_id = request.getParameter("asset_id");
@@ -156,67 +138,51 @@ public class CommandConfigServlet extends HttpServlet {
 			String interval = request.getParameter("interval");
 			String tagData = request.getParameter("tagData");
 
-			System.out.println("tagdata : " + tagData);
-
 			JSONParser parser = new JSONParser();
 			org.json.simple.JSONObject json_string_con = null;
 			try {
 				json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				logger.error("Error in converting into json object : "+e1);
 			}
 
-			System.out.println("tagData>" + tagData);
-
-			
 			try {
 
-				System.out.println("In command config...");
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
 				json.put("operation", "protocol");
 				json.put("protocol_type", "command");
 				json.put("operation_type", "add_query");
-
 				json.put("id", "1");
 				json.put("user", check_username);
-
 				json.put("unit_id", unit_id);
 				json.put("asset_id", asset_id);
 				json.put("broker_type", broker_type);
 				json.put("broker_ip", broker_name);
-				// json.put("intrval", interval);
+				
+				Map<String, String> intervalMap = new HashMap<>();
+				intervalMap.put("30 sec", "30");
+				intervalMap.put("1 min", "60");
+				intervalMap.put("5 min", "300");
+				intervalMap.put("10 min", "600");
+				intervalMap.put("15 min", "900");
+				intervalMap.put("20 min", "1200");
+				intervalMap.put("25 min", "1500");
+				intervalMap.put("30 min", "1800");
+				intervalMap.put("1 hour", "3600");
 
-				if (interval.equals("30 sec")) {
-					json.put("intrval", "30");
-				} else if (interval.equals("1 min")) {
-					json.put("intrval", "60");
-				} else if (interval.equals("5 min")) {
-					json.put("intrval", "300");
-				} else if (interval.equals("10 min")) {
-					json.put("intrval", "600");
-				} else if (interval.equals("15 min")) {
-					json.put("intrval", "900");
-				} else if (interval.equals("20 min")) {
-					json.put("intrval", "1200");
-				} else if (interval.equals("25 min")) {
-					json.put("intrval", "1500");
-				} else if (interval.equals("30 min")) {
-					json.put("intrval", "1800");
-				} else if (interval.equals("1 hour")) {
-					json.put("intrval", "3600");
+				String intervalValue = intervalMap.get(interval);
+				if (intervalValue != null) {
+				    json.put("intrval", intervalValue);
 				}
+				
 				json.put("command_tag", json_string_con);
-				/*
-				 * JSONObject json_data = new JSONObject();
-				 * json_data.put(tag_name,tag_name_2);
-				 */
-
+				
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -235,12 +201,10 @@ public class CommandConfigServlet extends HttpServlet {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error("Error in adding command : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
-
 	}
-
 }

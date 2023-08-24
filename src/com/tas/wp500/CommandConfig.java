@@ -8,10 +8,10 @@ public class CommandConfig {
 	private String asset_id;
 	private String broker_type;
 	private String broker_ip;
-	private String interval;
+	private int interval;
 	private JSONObject command_tag;
 
-	public CommandConfig(String unit_id, String asset_id, String broker_type, String broker_ip, String interval,
+	public CommandConfig(String unit_id, String asset_id, String broker_type, String broker_ip, int interval,
 			JSONObject command_tag) {
 		super();
 		this.unit_id = unit_id;
@@ -58,11 +58,11 @@ public class CommandConfig {
 		this.broker_ip = broker_ip;
 	}
 
-	public String getInterval() {
+	public int getInterval() {
 		return interval;
 	}
 
-	public void setInterval(String interval) {
+	public void setInterval(int interval) {
 		this.interval = interval;
 	}
 

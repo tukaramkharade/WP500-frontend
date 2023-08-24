@@ -15,47 +15,22 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class MQTTEditServlet
- */
 @WebServlet("/mqttEditServlet")
 public class MQTTEditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(MQTTEditServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public MQTTEditServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
 
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 
 			String broker_ip_address = request.getParameter("broker_ip_address");
 			String port_number = request.getParameter("port_number");
@@ -70,7 +45,6 @@ public class MQTTEditServlet extends HttpServlet {
 
 			try {
 
-				System.out.println("In mqtt...");
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -78,7 +52,6 @@ public class MQTTEditServlet extends HttpServlet {
 				json.put("protocol_type", "mqtt");
 				json.put("operation_type", "update_query");
 				json.put("user", check_username);
-
 				json.put("broker_ip_address", broker_ip_address);
 				json.put("port_number", port_number);
 				json.put("username", username);
@@ -90,10 +63,9 @@ public class MQTTEditServlet extends HttpServlet {
 				json.put("file_name", file_name);
 				json.put("enable", enable);
 				
-
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -111,11 +83,10 @@ public class MQTTEditServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+				logger.error("Error in updating mqtt : "+e);
+				}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
-
 }

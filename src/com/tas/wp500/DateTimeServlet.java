@@ -12,92 +12,68 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class DateTimeServlet
- */
 @WebServlet("/dateTimeServlet")
 public class DateTimeServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DateTimeServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	final static Logger logger = Logger.getLogger(DateTimeServlet.class);
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	//	doGet(request, response);
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
 		if (check_username != null) {
-			
 
-		String date_time = request.getParameter("datetime");
-		
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
-		
-		try{
-			
-			 Date date = inputFormat.parse(date_time);
-	            String formattedDateTime = outputFormat.format(date);
-	            
-	            System.out.println("formatted date time : "+formattedDateTime);
-			
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-			
-			json.put("operation", "set_manul_time");
-			json.put("time", formattedDateTime);
-			json.put("user", check_username);
-			
-			String respStr = client.sendMessage(json.toString());
+			String date_time = request.getParameter("datetime");
 
-			System.out.println("res " + new JSONObject(respStr));
-			
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
+			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+			SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
+			try {
 
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
+				Date date = inputFormat.parse(date_time);
+				String formattedDateTime = outputFormat.format(date);
 
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
-			
-			
-			
-			
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
+
+				json.put("operation", "set_manul_time");
+				json.put("time", formattedDateTime);
+				json.put("user", check_username);
+
+				String respStr = client.sendMessage(json.toString());
+
+				logger.info("res " + new JSONObject(respStr));
+
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
+
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error setting date time :"+e);
+			}
 		}
 	}
-
 }

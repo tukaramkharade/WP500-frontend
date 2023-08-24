@@ -11,94 +11,68 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class UserEditServlet
- */
 @WebServlet("/UserEditServlet")
 public class UserEditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UserEditServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	final static Logger logger = Logger.getLogger(UserEditServlet.class);
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		///response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
 
-		
-		String first_name = request.getParameter("first_name");
-		String last_name = request.getParameter("last_name");
-		String username = request.getParameter("username");
-		String role = request.getParameter("role");
+		if (check_username != null) {
+			String first_name = request.getParameter("first_name");
+			String last_name = request.getParameter("last_name");
+			String username = request.getParameter("username");
+			String role = request.getParameter("role");
 
-		System.out.println(username + " " + first_name + " " +last_name) ;
+			try {
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-		try {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
+				json.put("operation", "update_user");
+				json.put("user", check_username);
 
-			
-			json.put("operation", "update_user");
-			json.put("user", check_username);
-			
-			json.put("username", username);
-			json.put("first_name", first_name);
-			json.put("last_name", last_name);
-			json.put("role", role);
-			
-			String respStr = client.sendMessage(json.toString());
-			
-			System.out.println("response : "+respStr);
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
-			
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-		    jsonObject.put("message", message);
-		    
-		    // Set the content type of the response to application/json
-		    resp.setContentType("application/json");
-		    
-		    // Get the response PrintWriter
-		    PrintWriter out = resp.getWriter();
-		    
-		    // Write the JSON object to the response
-		    out.print(jsonObject.toString());
-		    out.flush();
+				json.put("username", username);
+				json.put("first_name", first_name);
+				json.put("last_name", last_name);
+				json.put("role", role);
 
+				String respStr = client.sendMessage(json.toString());
+
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
+
+				// Set the content type of the response to application/json
+				resp.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = resp.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in updating user: "+e);
+			}
+		} else {
 			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		}else{
-			System.out.println("Login first");
-			resp.sendRedirect("login.jsp");
-		}
-//		doGet(request, response);
 	}
-
 }

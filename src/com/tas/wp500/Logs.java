@@ -16,36 +16,17 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class Logs
- */
 @WebServlet("/logs")
 public class Logs extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(Logs.class);
 
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Logs() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
 		if (check_username != null) {
 			
-		
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 		
@@ -54,14 +35,10 @@ public class Logs extends HttpServlet {
 			json.put("user", check_username);
 			
 			String respStr = client.sendMessage(json.toString());
-			
-			System.out.println("res " + new JSONObject(respStr));
 			logger.info("res " + new JSONObject(respStr));
 			
 			JSONObject result = new JSONObject(respStr);
-			
 			JSONArray log_file_result= result.getJSONArray("result");
-			
 			JSONObject jsonObject = new JSONObject();
 		    jsonObject.put("log_file_result", log_file_result);
 			// Set the content type of the response to application/json
@@ -75,6 +52,7 @@ public class Logs extends HttpServlet {
 		    out.flush();
 		}catch(Exception e){
 			e.printStackTrace();
+			logger.error("Error in getting log file list : "+e);
 		}
 		}else{
 
@@ -93,22 +71,17 @@ public class Logs extends HttpServlet {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in session timeout : "+e);
 			}
-
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	//	doGet(request, response);
 		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 			
 		String fileName = request.getParameter("log_file");
 		String log_type = "application";
@@ -124,13 +97,10 @@ public class Logs extends HttpServlet {
 			
 			String respStr = client.sendMessage(json.toString());
 			
-			System.out.println("res " + new JSONObject(respStr));
 			logger.info("res " + new JSONObject(respStr));
 			
 			JSONObject result = new JSONObject(respStr);
-			
 			JSONArray log_file_result= result.getJSONArray("result");
-			
 			JSONObject jsonObject = new JSONObject();
 		    jsonObject.put("log_file_data", log_file_result);
 			// Set the content type of the response to application/json
@@ -144,11 +114,10 @@ public class Logs extends HttpServlet {
 		    out.flush();
 		}catch(Exception e){
 			e.printStackTrace();
+			logger.error("Error in getting log file data : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
-
 }

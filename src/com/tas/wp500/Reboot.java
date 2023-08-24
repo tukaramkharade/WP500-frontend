@@ -15,38 +15,19 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class Reboot
- */
+
 @WebServlet("/reboot")
 public class Reboot extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(Reboot.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public Reboot() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 
 		if (check_username != null) {
-			
-
 			try {
 
 				TCPClient client = new TCPClient();
@@ -77,6 +58,7 @@ public class Reboot extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in rebooting system :"+e);
 			}
 		} else {
 			
@@ -95,18 +77,13 @@ public class Reboot extends HttpServlet {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in session timeout : "+e);
 			}
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
+		
 	}
-
 }

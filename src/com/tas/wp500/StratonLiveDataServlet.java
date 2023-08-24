@@ -20,39 +20,18 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class StratonLiveDataServlet
- */
 @WebServlet("/stratonLiveDataServlet")
 public class StratonLiveDataServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(StratonLiveDataServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public StratonLiveDataServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 		HttpSession session = request.getSession(false);
 		
 		String check_username = (String) session.getAttribute("username");
 
 		if (check_username != null) {
-			
-
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
@@ -65,8 +44,6 @@ public class StratonLiveDataServlet extends HttpServlet {
 
 				JSONObject respJson = new JSONObject(respStr);
 
-				System.out.println("res " + respJson.toString());
-
 				JSONArray resJsonArray = new JSONArray();
 
 				logger.info("Straton live value response : " + respJson.toString());
@@ -76,11 +53,8 @@ public class StratonLiveDataServlet extends HttpServlet {
 				System.out.println("Result before sorting: " + resultArr.toString());
 				
 				String result_arr = resultArr.toString();
-				
-				System.out.println("result array in string : "+result_arr);
-				
+								
 				 	JSONArray jsonArr = new JSONArray(result_arr);
-				 //   JSONArray sortedJsonArray = new JSONArray();
 				    
 				    List<JSONObject> jsonValues = new ArrayList<JSONObject>();
 				    for (int i = 0; i < jsonArr.length(); i++) {
@@ -101,6 +75,7 @@ public class StratonLiveDataServlet extends HttpServlet {
 				            } 
 				            catch (JSONException e) {
 				               e.printStackTrace();
+				               logger.error("Error in sorting tags :" +e);
 				            }
 
 				            return valA.compareTo(valB);
@@ -120,20 +95,11 @@ public class StratonLiveDataServlet extends HttpServlet {
 					JSONObject jsObj = sortedJsonArray.getJSONObject(i);
 
 					String extError = jsObj.getString("extError");
-					//logger.info("extError : " + extError);
-
 					String access = jsObj.getString("access");
-				//	logger.info("access : " + access);
-
 					String tag_name = jsObj.getString("tag_name");
-				//	logger.info("tag_name : " + tag_name);
-
 					String error = jsObj.getString("error");
-			//		logger.info("error : " + error);
-
 					String value = jsObj.getString("value");
-			//		logger.info("value : " + value);
-
+			
 					JSONObject stratonObj = new JSONObject();
 
 					try {
@@ -145,10 +111,9 @@ public class StratonLiveDataServlet extends HttpServlet {
 						stratonObj.put("value", value);
 
 						resJsonArray.put(stratonObj);
-						// firewallObj.put("lastName", "");
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						logger.error("Error in putting straton data in json array : "+e);
 					}
 				}
 
@@ -161,9 +126,9 @@ public class StratonLiveDataServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in getting straton data : "+e);
 			}
 		} else {
-			
 			
 			try {
 				JSONObject userObj = new JSONObject();
@@ -180,19 +145,15 @@ public class StratonLiveDataServlet extends HttpServlet {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in session timeout : "+e);
 			}
 
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
+	
 	}
-
 }

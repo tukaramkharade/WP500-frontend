@@ -10,45 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class LanUpdateServlet
- */
+import sun.util.logging.resources.logging;
+
 @WebServlet("/lanUpdateServlet")
 public class LanUpdateServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public LanUpdateServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	final static Logger logger = Logger.getLogger(LanUpdateServlet.class);
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-		
 		
 		HttpSession session = request.getSession(false);
 		
@@ -79,9 +58,8 @@ public class LanUpdateServlet extends HttpServlet {
 			json.put("eth1_subnet", eth1_subnet);
 
 			String respStr = client.sendMessage(json.toString());
-
-			System.out.println("response : " + respStr);
-
+			logger.info("res " + new JSONObject(respStr).getString("msg"));
+			
 			String message = new JSONObject(respStr).getString("msg");
 			JSONObject jsonObject = new JSONObject();
 		    jsonObject.put("message", message);
@@ -97,6 +75,7 @@ public class LanUpdateServlet extends HttpServlet {
 		    out.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error in updating lan settings: "+e);
 		}
 		}else{
 			

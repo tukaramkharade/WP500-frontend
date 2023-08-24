@@ -15,49 +15,25 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class JSONBuilderDeleteServlet
- */
 @WebServlet("/jsonBuilderDeleteServlet")
 public class JSONBuilderDeleteServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(JSONBuilderDeleteServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public JSONBuilderDeleteServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
+		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 			
 		String json_string_name = request.getParameter("json_string_name");
-		System.out.println("in json builder delete...");
 
 		try {
 
@@ -72,7 +48,7 @@ public class JSONBuilderDeleteServlet extends HttpServlet {
 			
 			String respStr = client.sendMessage(json.toString());
 
-			System.out.println("res " + new JSONObject(respStr).getString("msg"));
+			logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 			String message = new JSONObject(respStr).getString("msg");
 			JSONObject jsonObject = new JSONObject();
@@ -90,10 +66,10 @@ public class JSONBuilderDeleteServlet extends HttpServlet {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error in deleting json builder : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
 

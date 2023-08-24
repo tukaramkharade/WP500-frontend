@@ -97,16 +97,25 @@ var roleValue;
 							}
 						}
 						
-				$.each(data,function(index, alarmConfig) {
+			//	$.each(data,function(index, alarmConfig) {
 							
-									var unit_id = alarmConfig.unit_id;
+									/* var unit_id = alarmConfig.unit_id;
 									var asset_id = alarmConfig.asset_id;
 									var broker_type = alarmConfig.broker_type;
 									var broker_ip = alarmConfig.broker_ip;
 									var interval = alarmConfig.interval;
-									var alarm_tag = alarmConfig.alarm_tag;
+									var alarm_tag = alarmConfig.alarm_tag; */
 									
-									var result = alarm_tag;
+									alert(data.unit_id + ' ' + data.alarm_tag);
+									
+									$('#unit_id').val(data.unit_id);
+									$('#asset_id').val(data.asset_id);
+									$('#broker_type').val(data.broker_type);
+									$('#broker_name').val(data.broker_ip);
+									$('#interval').val(data.interval);
+									//var alarm_tag = $('#alarm_tag').val(data.alarm_tag);
+									
+									var result = data.alarm_tag;
 
 									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 									$.each($.parseJSON(result), function(k, v) {
@@ -133,7 +142,6 @@ var roleValue;
 									}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 										
 										$.each($.parseJSON(result), function(k, v) {
-									//	    alert(k + ' and ' + v);
 										    
 										    var newRow = $("<tr>")
 		    	        					.append($("<td>").text(k))
@@ -160,7 +168,7 @@ var roleValue;
 									//$('#table_data').val(JSON.stringify(alarm_tag));
 									
 									
-								});
+							//	});
 			},
   			error : function(xhr, status, error) {
   				// Handle the error response, if needed

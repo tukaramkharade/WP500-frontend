@@ -2,6 +2,8 @@ package com.tas.wp500;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,186 +22,126 @@ import org.json.simple.parser.ParseException;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class MQTTData
- */
 @WebServlet("/alarmConfigAddData")
 public class AlarmConfigAddData extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
 	final static Logger logger = Logger.getLogger(AlarmConfigAddData.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AlarmConfigAddData() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
 
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+		
+		JSONObject disObj = new JSONObject();
 
-			if (check_username != null) {
+		if (check_username != null) {
+			try {
+				JSONArray resJsonArray = new JSONArray();
 
-				try {
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-					System.out.println("In get alarm settings!");
-					JSONArray resJsonArray = new JSONArray();
+				json.put("operation", "protocol");
+				json.put("protocol_type", "alarm");
+				json.put("operation_type", "get_query");
+				json.put("user", check_username);
 
-					TCPClient client = new TCPClient();
-					JSONObject json = new JSONObject();
+				String respStr = client.sendMessage(json.toString());
 
-					json.put("operation", "protocol");
-					json.put("protocol_type", "alarm");
-					json.put("operation_type", "get_query");
-					json.put("user", check_username);
+				logger.info("res " + new JSONObject(respStr));
+				
+				JSONObject respJson = new JSONObject(respStr);
 
-					String respStr = client.sendMessage(json.toString());
+				JSONObject alarm_result = respJson.getJSONObject("result");
 
-					System.out.println("res " + new JSONObject(respStr));
-					logger.info("res " + new JSONObject(respStr));
+				for (int i = 0; i < alarm_result.length(); i++) {
 
-					JSONObject result = new JSONObject(respStr);
+					String alarm_tag = alarm_result.getString("alarm_tag");
+					String interval = alarm_result.getString("intrval");
+					String broker_type =alarm_result.getString("broker_type");
+					String broker_ip = alarm_result.getString("broker_ip");
+					String asset_id = alarm_result.getString("asset_id");
+					String unit_id = alarm_result.getString("unit_id");
 
-					JSONArray alarm_result = result.getJSONArray("result");
+					try {
+						disObj.put("alarm_tag", alarm_tag);
 
-					System.out.println("Result : " + alarm_result.toString());
+						Map<String, String> reverseIntervalMap = new HashMap<>();
+						reverseIntervalMap.put("5", "5 sec");
+						reverseIntervalMap.put("10", "10 sec");
+						reverseIntervalMap.put("15", "15 sec");
+						reverseIntervalMap.put("20", "20 sec");
+						reverseIntervalMap.put("25", "25 sec");
+						reverseIntervalMap.put("30", "30 sec");
+						reverseIntervalMap.put("60", "1 min");
+						reverseIntervalMap.put("300", "5 min");
+						reverseIntervalMap.put("600", "10 min");
+						reverseIntervalMap.put("900", "15 min");
+						reverseIntervalMap.put("1200", "20 min");
+						reverseIntervalMap.put("1500", "25 min");
+						reverseIntervalMap.put("1800", "30 min");
+						reverseIntervalMap.put("3600", "1 hour");
 
-					for (int i = 0; i < alarm_result.length(); i++) {
-
-						JSONObject jsObj = alarm_result.getJSONObject(i);
-
-						String alarm_tag = jsObj.getString("alarm_tag");
-						System.out.println("alarm tag : " + alarm_tag);
-
-						String interval = jsObj.getString("intrval");
-						System.out.println("Interval : " + interval);
-
-						String broker_type = jsObj.getString("broker_type");
-						System.out.println(" Broker_type : " + broker_type);
-
-						String broker_ip = jsObj.getString("broker_ip");
-						System.out.println("Broker_ip : " + broker_ip);
-
-						String asset_id = jsObj.getString("asset_id");
-						System.out.println("Asset id : " + asset_id);
-
-						String unit_id = jsObj.getString("unit_id");
-						System.out.println("Unit id : " + unit_id);
-
-						JSONObject disObj = new JSONObject();
-
-						try {
-
-							disObj.put("alarm_tag", alarm_tag);
-							// disObj.put("interval", interval);
-
-							if (interval.equals("5")) {
-								disObj.put("interval", "5 sec");
-							} else if (interval.equals("10")) {
-								disObj.put("interval", "10 sec");
-							} else if (interval.equals("15")) {
-								disObj.put("interval", "15 sec");
-							} else if (interval.equals("20")) {
-								disObj.put("interval", "20 sec");
-							} else if (interval.equals("25")) {
-								disObj.put("interval", "25 sec");
-							} else if (interval.equals("30")) {
-								disObj.put("interval", "30 sec");
-							} else if (interval.equals("60")) {
-								disObj.put("interval", "1 min");
-							} else if (interval.equals("300")) {
-								disObj.put("interval", "5 min");
-							} else if (interval.equals("600")) {
-								disObj.put("interval", "10 min");
-							} else if (interval.equals("900")) {
-								disObj.put("interval", "15 min");
-							} else if (interval.equals("1200")) {
-								disObj.put("interval", "20 min");
-							} else if (interval.equals("1500")) {
-								disObj.put("interval", "25 min");
-							} else if (interval.equals("1800")) {
-								disObj.put("interval", "30 min");
-							} else if (interval.equals("3600")) {
-								disObj.put("interval", "1 hour");
-							}
-
-							disObj.put("broker_type", broker_type);
-							disObj.put("broker_ip", broker_ip);
-							disObj.put("asset_id", asset_id);
-							disObj.put("unit_id", unit_id);
-
-							resJsonArray.put(disObj);
-							// firewallObj.put("lastName", "");
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						// Get the corresponding interval string from the map
+						String intervalString = reverseIntervalMap.get(interval);
+						if (intervalString != null) {
+							disObj.put("interval", intervalString);
 						}
+
+						disObj.put("broker_type", broker_type);
+						disObj.put("broker_ip", broker_ip);
+						disObj.put("asset_id", asset_id);
+						disObj.put("unit_id", unit_id);
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+						logger.error("Error putting alarm data in json object: " + e);
 					}
-
-					logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(resJsonArray.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-
-			
-
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-
-					System.out.println(">>" + userObj);
-
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(disObj.toString());
+				out.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error getting alarm data : " + e);
 			}
-
 		} else {
-			System.out.println("Invalid session");
-		}
 
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
+		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+
+		if (check_username != null) {
 
 			String unit_id = request.getParameter("unit_id");
 			String asset_id = request.getParameter("asset_id");
@@ -215,13 +157,11 @@ public class AlarmConfigAddData extends HttpServlet {
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				logger.error("Error converting into json object: " + e1);
 			}
-
-			System.out.println("tagData>" + tagData);
 
 			try {
 
-				System.out.println("In alarm config...");
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -235,47 +175,33 @@ public class AlarmConfigAddData extends HttpServlet {
 				json.put("asset_id", asset_id);
 				json.put("broker_type", broker_type);
 				json.put("broker_ip", broker_name);
-				// json.put("intrval", interval);
 
-				if (interval.equals("5 sec")) {
-					json.put("intrval", "5");
-				}else if (interval.equals("10 sec")) {
-					json.put("intrval", "10");
-				}else if (interval.equals("15 sec")) {
-					json.put("intrval", "15");
-				}else if (interval.equals("20 sec")) {
-					json.put("intrval", "20");
-				}else if (interval.equals("25 sec")) {
-					json.put("intrval", "25");
-				} else if (interval.equals("30 sec")) {
-					json.put("intrval", "30");
-				} else if (interval.equals("1 min")) {
-					json.put("intrval", "60");
-				} else if (interval.equals("5 min")) {
-					json.put("intrval", "300");
-				} else if (interval.equals("10 min")) {
-					json.put("intrval", "600");
-				} else if (interval.equals("15 min")) {
-					json.put("intrval", "900");
-				} else if (interval.equals("20 min")) {
-					json.put("intrval", "1200");
-				} else if (interval.equals("25 min")) {
-					json.put("intrval", "1500");
-				} else if (interval.equals("30 min")) {
-					json.put("intrval", "1800");
-				} else if (interval.equals("1 hour")) {
-					json.put("intrval", "3600");
+				Map<String, String> intervalMap = new HashMap<>();
+				intervalMap.put("5 sec", "5");
+				intervalMap.put("10 sec", "10");
+				intervalMap.put("15 sec", "15");
+				intervalMap.put("20 sec", "20");
+				intervalMap.put("25 sec", "25");
+				intervalMap.put("30 sec", "30");
+				intervalMap.put("1 min", "60");
+				intervalMap.put("5 min", "300");
+				intervalMap.put("10 min", "600");
+				intervalMap.put("15 min", "900");
+				intervalMap.put("20 min", "1200");
+				intervalMap.put("25 min", "1500");
+				intervalMap.put("30 min", "1800");
+				intervalMap.put("1 hour", "3600");
+
+				String intervalValue = intervalMap.get(interval);
+				if (intervalValue != null) {
+					json.put("intrval", intervalValue);
 				}
 
 				json.put("alarm_tag", json_string_con);
-				/*
-				 * JSONObject json = new JSONObject();
-				 * json.put(tag_name,tag_name_2);
-				 */
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -294,12 +220,10 @@ public class AlarmConfigAddData extends HttpServlet {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error("Error adding alarm data : " + e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
-		}
-		// doGet(request, response);
-	}
 
+		}
+	}
 }

@@ -2,6 +2,8 @@ package com.tas.wp500;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,44 +20,23 @@ import org.json.simple.parser.ParseException;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class JSONBuilderData
- */
 @WebServlet("/jsonBuilderData")
 public class JSONBuilderData extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
 	final static Logger logger = Logger.getLogger(JSONBuilderData.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public JSONBuilderData() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			try {
-
-				// System.out.println("In json builder...");
-
 				json.put("operation", "protocol");
 				json.put("protocol_type", "json_builder");
 				json.put("operation_type", "get_broker_ip");
@@ -63,7 +44,6 @@ public class JSONBuilderData extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr));
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject result = new JSONObject(respStr);
@@ -84,27 +64,21 @@ public class JSONBuilderData extends HttpServlet {
 				out.flush();
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in getting broker ip :"+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
-
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
+		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+
+		if (check_username != null) {
 
 			String json_string_name = request.getParameter("json_string_name");
 			String jsonInterval = request.getParameter("json_interval");
@@ -115,20 +89,17 @@ public class JSONBuilderData extends HttpServlet {
 			String storeAndForward = request.getParameter("storeAndForward");
 			String json_string_text = request.getParameter("json_string_text");
 			
-
 			JSONParser parser = new JSONParser();
 			org.json.simple.JSONObject json_string_con = null;
 			try {
 				json_string_con = (org.json.simple.JSONObject) parser.parse(json_string_text);
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				logger.error("Error in converting into json object : "+e1);
 			}
-			// System.out.println(firstName + " " + password);
 
 			try {
 
-				System.out.println("store forward : " + storeAndForward);
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -139,26 +110,22 @@ public class JSONBuilderData extends HttpServlet {
 
 				JSONObject json_data = new JSONObject();
 				json_data.put("json_string_name", json_string_name);
-			//	json_data.put("json_interval", jsonInterval);
 				
-				if(jsonInterval.equals("30 sec")){
-					json_data.put("json_interval", "30");
-				}else if(jsonInterval.equals("1 min")){
-					json_data.put("json_interval", "60");
-				}else if(jsonInterval.equals("5 min")){
-					json_data.put("json_interval", "300");
-				}else if(jsonInterval.equals("10 min")){
-					json_data.put("json_interval", "600");
-				}else if(jsonInterval.equals("15 min")){
-					json_data.put("json_interval", "900");
-				}else if(jsonInterval.equals("20 min")){
-					json_data.put("json_interval", "1200");
-				}else if(jsonInterval.equals("25 min")){
-					json_data.put("json_interval", "1500");
-				}else if(jsonInterval.equals("30 min")){
-					json_data.put("json_interval", "1800");
-				}else if(jsonInterval.equals("1 hour")){
-					json_data.put("json_interval", "3600");
+				Map<String, String> intervalMap = new HashMap<>();
+				intervalMap.put("30 sec", "30");
+				intervalMap.put("1 min", "60");
+				intervalMap.put("5 min", "300");
+				intervalMap.put("10 min", "600");
+				intervalMap.put("15 min", "900");
+				intervalMap.put("20 min", "1200");
+				intervalMap.put("25 min", "1500");
+				intervalMap.put("30 min", "1800");
+				intervalMap.put("1 hour", "3600");
+
+				// Get the corresponding interval value from the map
+				String intervalValue = intervalMap.get(jsonInterval);
+				if (intervalValue != null) {
+				    json_data.put("json_interval", intervalValue);
 				}
 				
 				json_data.put("broker_type", broker_type);
@@ -166,16 +133,13 @@ public class JSONBuilderData extends HttpServlet {
 				json_data.put("publish_topic_name", publishTopic);
 				json_data.put("publishing_status", publishStatus);
 				json_data.put("store_n_forward", storeAndForward);
-
-				// JSONObject json_string = new JSONObject();
 				json_data.put("json_string", json_string_con);
 
-				// json_data.put("json_string", json_string);
 				json.put("Data", json_data);
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -192,12 +156,11 @@ public class JSONBuilderData extends HttpServlet {
 				out.flush();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.info("Error in adding json builder : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
 

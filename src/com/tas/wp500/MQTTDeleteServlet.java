@@ -10,49 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class MQTTDeleteServlet
- */
 @WebServlet("/mqttDeleteServlet")
 public class MQTTDeleteServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	final static Logger logger = Logger.getLogger(MQTTDeleteServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public MQTTDeleteServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
+	
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
 
 			String prefix = request.getParameter("prefix");
 
@@ -65,11 +44,10 @@ public class MQTTDeleteServlet extends HttpServlet {
 				json.put("protocol_type", "mqtt");
 				json.put("operation_type", "delete_query");
 				json.put("user", check_username);
-
 				json.put("prefix", prefix);
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));		
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -87,11 +65,10 @@ public class MQTTDeleteServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in deleting mqtt : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
-
 	}
 }

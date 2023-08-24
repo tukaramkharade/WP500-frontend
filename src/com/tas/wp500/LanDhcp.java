@@ -2,7 +2,6 @@ package com.tas.wp500;
 
 public class LanDhcp {
 
-	
 	private int eth_type;
 
 	public LanDhcp() {
@@ -21,5 +20,4 @@ public class LanDhcp {
 	public void setEth_type(int eth_type) {
 		this.eth_type = eth_type;
 	}
-	
 }

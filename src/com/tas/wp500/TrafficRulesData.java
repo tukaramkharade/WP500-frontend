@@ -17,90 +17,46 @@ import org.json.JSONObject;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class Firewall
- */
 @WebServlet("/trafficRulesData")
 public class TrafficRulesData extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(TrafficRulesData.class);
 
-	public TrafficRulesData() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 		HttpSession session = request.getSession(false);
-
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
 			
 			if (check_username != null) {
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-			
-			
-
+	
 			try {
 				json.put("operation", "firewall_settings");
 				json.put("user", check_username);
 
 				String respStr = client.sendMessage(json.toString());
-
 				
 				JSONObject respJson = new JSONObject(respStr);
-				// JSONObject respJson = new JSONObject(var);
-
-				System.out.println("res " + respJson.toString());
 
 				JSONArray resJsonArray = new JSONArray();
 
 				logger.info("Traffic Rules response : " + respJson.toString());
-
 				
 				JSONArray ip_tables = respJson.getJSONArray("ip_tables");
-
-				logger.info("Result : " + ip_tables);
-
-				
 
 				for (int i = 0; i < ip_tables.length(); i++) {
 
 					JSONObject jsObj = ip_tables.getJSONObject(i);
 					String name = jsObj.getString("name");
-					logger.info("name : " + name);
-
 					String iface = jsObj.getString("iface");
-					logger.info("iface : " + iface);
-
 					String protocol = jsObj.getString("protocol");
-					logger.info("protocol : " + protocol);
-
 					String macAddress = jsObj.getString("macAddress");
-					logger.info("macAddress : " + macAddress);
-
 					String portNum = jsObj.getString("portNum");
-					logger.info("portNum : " + portNum);
-
 					String ipAddress = jsObj.getString("ipAddress");
-					logger.info("ipAddress : " + ipAddress);
-					
 					String action = jsObj.getString("action");
-					logger.info("action : " + action);
-
 					String type = jsObj.getString("type");
-					logger.info("type : " + type);
 
 					JSONObject firewallObj = new JSONObject();
 					try {
@@ -115,14 +71,11 @@ public class TrafficRulesData extends HttpServlet {
 						firewallObj.put("type", type);
 
 						resJsonArray.put(firewallObj);
-						// firewallObj.put("lastName", "");
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						logger.error("Error in putting traffic rules data in json array : "+e);
 					}
-
 				}
-				
 				
 				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
 				// Set the response content type to JSON
@@ -133,6 +86,7 @@ public class TrafficRulesData extends HttpServlet {
 		
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("Error in getting traffic rules data: "+e);
 			}
 		}else{
 			try {
@@ -150,27 +104,19 @@ public class TrafficRulesData extends HttpServlet {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-			
-		}
-			
-		}else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
-		}
+				logger.error("Error in session timeout : "+e);
+			}		
+		}		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
+		
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
 		if (check_username != null) {
-			
-
+		
 			String name = request.getParameter("name");
 			String iface = request.getParameter("iface");
 			String portNumber = request.getParameter("portNumber");
@@ -180,10 +126,6 @@ public class TrafficRulesData extends HttpServlet {
 			String type = request.getParameter("type");
 			String action = request.getParameter("action");
 			
-
-			System.out.println(portNumber + " " + protocol + " " + ip_addr);
-			
-
 			try {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
@@ -199,11 +141,9 @@ public class TrafficRulesData extends HttpServlet {
 				json.put("portNum", portNumber);
 				json.put("action", action);
 				json.put("type", type);
-				
 
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
@@ -221,13 +161,11 @@ public class TrafficRulesData extends HttpServlet {
 				out.flush();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error("Error in adding traffic rules : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
-
 }

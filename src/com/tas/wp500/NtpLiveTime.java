@@ -16,19 +16,10 @@ import org.json.JSONException;
 
 import com.tas.utils.TCPClient;
 
-/**
- * Servlet implementation class ntp
- */
+
 @WebServlet("/ntpLiveTime")
 public class NtpLiveTime extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
 	final static Logger logger = Logger.getLogger(Ntp.class);
-
-	public NtpLiveTime() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	TCPClient client = new TCPClient();
 	JSONObject json = new JSONObject();
@@ -36,14 +27,12 @@ public class NtpLiveTime extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
 		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
+		String check_username = (String) session.getAttribute("username");
+
+		if (check_username != null) {
 
 		try {
 			TCPClient client = new TCPClient();
@@ -53,6 +42,8 @@ public class NtpLiveTime extends HttpServlet {
 			json.put("user", check_username);
 
 			String respStr = client.sendMessage(json.toString());
+			
+			logger.info("res : "+new JSONObject(respStr));
 
 			String IST_Time = new JSONObject(respStr).getString("IST_Time");
 			String UTC_Time = new JSONObject(respStr).getString("UTC_Time");
@@ -60,17 +51,9 @@ public class NtpLiveTime extends HttpServlet {
 			String IST_Time1 = IST_Time.toString();
 			String UTC_Time1 = UTC_Time.toString();
 			
-			System.out.println("IST_Time : " + IST_Time1);
-			System.out.println("UTC_Time : " + UTC_Time1);
-
-			
-
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("IST_Time", IST_Time1);
 			jsonObject.put("UTC_Time", UTC_Time1);
-
-			
-			System.out.println(jsonObject);
 
 			// Set the content type of the response to application/json
 			response.setContentType("application/json");
@@ -83,17 +66,12 @@ public class NtpLiveTime extends HttpServlet {
 			out.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error in getting live date and time : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 
 }

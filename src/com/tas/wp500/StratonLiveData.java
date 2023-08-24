@@ -60,5 +60,4 @@ public class StratonLiveData {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
 }

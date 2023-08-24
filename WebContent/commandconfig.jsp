@@ -98,16 +98,22 @@ var json = {};
 							}
 						}
 						
-				$.each(data,function(index, commandConfig) {
+		//		$.each(data,function(index, commandConfig) {
 									
-									var unit_id = commandConfig.unit_id;
+									/* var unit_id = commandConfig.unit_id;
 									var asset_id = commandConfig.asset_id;
 									var broker_type = commandConfig.broker_type;
 									var broker_ip = commandConfig.broker_ip;
 									var interval = commandConfig.interval;
-									var command_tag = commandConfig.command_tag;
+									var command_tag = commandConfig.command_tag; */
 									
-									var result = command_tag;
+									$('#unit_id').val(data.unit_id);
+									$('#asset_id').val(data.asset_id);
+									$('#broker_type').val(data.broker_type);
+									$('#broker_name').val(data.broker_ip);
+									$('#interval').val(data.interval);
+									
+									var result = data.command_tag;
 									
 								//	alert('role : '+roleValue)
 								//	alert(broker_ip);
@@ -165,7 +171,7 @@ var json = {};
 									$('#broker_name').val(broker_ip);
 									$('#interval').val(interval);
 									
-								});
+					//			});
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed

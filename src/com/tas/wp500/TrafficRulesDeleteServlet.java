@@ -17,47 +17,26 @@ import com.tas.utils.TCPClient;
 
 import sun.util.logging.resources.logging;
 
-/**
- * Servlet implementation class FirewallDeleteServlet
- */
+
 @WebServlet("/trafficRulesDeleteServlet")
 public class TrafficRulesDeleteServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(TrafficRulesDeleteServlet.class);
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public TrafficRulesDeleteServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-
-		// String firstName = request.getParameter("firstName");
+		
 		HttpSession session = request.getSession(false);
 		
 		String check_username = (String) session.getAttribute("username");
 
 		if (check_username != null) {
 			
-
-			logger.info("In delete traffic rules !");
 			String name = request.getParameter("name");
-
-			System.out.println(name);
-			logger.info("Name: " + name);
 
 			try {
 				TCPClient client = new TCPClient();
@@ -69,7 +48,6 @@ public class TrafficRulesDeleteServlet extends HttpServlet {
 				json.put("name", name);
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
@@ -87,12 +65,11 @@ public class TrafficRulesDeleteServlet extends HttpServlet {
 				out.flush();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error("Error in deleting traffic rules : "+e);
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
 		}
 	}
 
