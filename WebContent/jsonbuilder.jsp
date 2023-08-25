@@ -51,7 +51,7 @@ var roleValue;
 	function loadJsonBuilderList() {
 		$
 				.ajax({
-					url : 'jsonBuilderEditServlet',
+					url : 'jsonBuilderServlet',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -200,8 +200,8 @@ var roleValue;
 		var confirmation = confirm('Are you sure you want to delete this json builder settings?');
 		if (confirmation) {
 			$.ajax({
-				url : 'jsonBuilderDeleteServlet',
-				type : 'POST',
+				url : 'jsonBuilderServlet',
+				type : 'DELETE',
 				data : {
 					json_string_name : jsonBuilderId
 				},
@@ -236,8 +236,8 @@ var roleValue;
 
 		$
 				.ajax({
-					url : 'jsonBuilderEditServlet',
-					type : 'POST',
+					url : 'jsonBuilderServlet',
+					type : 'PUT',
 					data : {
 						json_string_name : json_string_name,
 						json_interval : json_interval,
@@ -291,7 +291,7 @@ var roleValue;
 
 		$
 				.ajax({
-					url : 'jsonBuilderData',
+					url : 'jsonBuilderServlet',
 					type : 'POST',
 					data : {
 						json_string_name : json_string_name,
@@ -408,32 +408,6 @@ var roleValue;
 	}
 
 	
-	function loadTagList() {
-	    $.ajax({
-	      url: "alarmConfigTagListServlet",
-	      type: "GET",
-	      dataType: "json",
-	      success: function (data) {
-	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
-	          var datalist = $("#variable");
-	          // Clear any existing options
-	          datalist.empty();
-
-	          // Loop through the data and add options to the datalist
-	          data.tag_list_result.forEach(function (tag) {
-	            var option = $("<option>", {
-	              value: tag,
-	              text: tag,
-	            });
-	            datalist.append(option);
-	          });
-	        }
-	      },
-	      error: function (xhr, status, error) {
-	        console.log("Error showing tag list: " + error);
-	      },
-	    });
-	  }
 	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
@@ -477,8 +451,6 @@ var roleValue;
 
 							changeButtonColor(true);
 						}
-
-						loadTagList();
 
 						$('#validateBtn').click(function() {
 							validateJSON();

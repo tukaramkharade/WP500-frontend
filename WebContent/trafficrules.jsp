@@ -13,69 +13,6 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-
-<style type="text/css">
-.switch {
-	position: relative;
-	display: inline-block;
-	width: 50px;
-	height: 14px;
-}
-
-.switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-.slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #ccc;
-	-webkit-transition: .4s;
-	transition: .4s;
-}
-
-.slider:before {
-	position: absolute;
-	content: "";
-	height: 27px;
-	width: 26px;
-	left: 3px;
-	bottom: 2px;
-	background-color: white;
-	-webkit-transition: .4s;
-	transition: .4s;
-}
-
-input:checked+.slider {
-	background-color: #2196F3;
-}
-
-input:focus+.slider {
-	box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked+.slider:before {
-	-webkit-transform: translateX(26px);
-	-ms-transform: translateX(26px);
-	transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-	border-radius: 54px;
-}
-
-.slider.round:before {
-	border-radius: 50%;
-}
-</style>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
@@ -84,7 +21,7 @@ var roleValue;
 	function loadTrafficRulesList() {
 		$
 				.ajax({
-					url : "trafficRulesData",
+					url : "trafficRulesServlet",
 					type : "GET",
 					dataType : "json",
 					success : function(data) {
@@ -187,7 +124,7 @@ var roleValue;
 		
 		
 		$.ajax({
-			url : "trafficRulesData",
+			url : "trafficRulesServlet",
 			type : "POST",
 			data : {
 				name : name,
@@ -233,8 +170,8 @@ var roleValue;
 		var confirmation = confirm("Are you sure you want to delete this traffic rules?");
 		if (confirmation) {
 			$.ajax({
-				url : "trafficRulesDeleteServlet",
-				type : "POST",
+				url : "trafficRulesServlet",
+				type : "DELETE",
 				data : {
 					name : trafficRulesId,
 				},
@@ -256,7 +193,7 @@ var roleValue;
 	function applyTrafficRules() {
 
 		$.ajax({
-			url : "trafficRulesEditServlet",
+			url : "trafficRulesApplyServlet",
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
@@ -295,8 +232,8 @@ var roleValue;
 		
 	
 		$.ajax({
-			url : 'trafficRulesEditServlet',
-			type : 'POST',
+			url : 'trafficRulesServlet',
+			type : 'PUT',
 			data : {
 				name : name,
 				iface : iface,
@@ -465,8 +402,8 @@ var roleValue;
 		
 
 		$.ajax({
-			url : 'generalSettingsEditServlet',
-			type : 'POST',
+			url : 'generalSettingsServlet',
+			type : 'PUT',
 			data : {
 				input : input,
 				output : output,
@@ -503,8 +440,8 @@ var roleValue;
 		var rule_drop = $('#rule_drop').val();
 
 		$.ajax({
-			url : 'generalSettingsDeleteServlet',
-			type : 'POST',
+			url : 'generalSettingsServlet',
+			type : 'DELETE',
 			data : {
 				input : input,
 				output : output,

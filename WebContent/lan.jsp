@@ -32,7 +32,7 @@
 	
 	function loadLanSettings() {
 		$.ajax({
-			url : 'lan',
+			url : 'lanServlet',
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
@@ -81,7 +81,7 @@
 		
 		$.ajax({
 			
-			url : 'lanUpdateServlet',
+			url : 'lanServlet',
 			type : 'POST',
 			data : {
 				eth1_ipaddr : eth1_ipaddr,

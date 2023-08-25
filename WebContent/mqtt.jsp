@@ -18,7 +18,7 @@
 	
 	function loadCrtFilesList() {
 		$.ajax({
-			url : "mqttAddData",
+			url : "mqttCrtFileListServlet",
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
@@ -50,7 +50,7 @@
 		
 		$
 				.ajax({
-					url : 'mqttData',
+					url : 'mqttServlet',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -227,10 +227,8 @@
 	}
 
 	function getMqttStatus(mqttId) {
-		
-
 		$.ajax({
-			url : 'getMqttStatus',
+			url : 'mqttCrtFileListServlet',
 			type : 'POST',
 			data : {
 				broker_ip_address : mqttId
@@ -266,8 +264,8 @@
 		var confirmation = confirm('Are you sure you want to delete this mqtt?');
 		if (confirmation) {
 			$.ajax({
-				url : 'mqttDeleteServlet',
-				type : 'POST',
+				url : 'mqttServlet',
+				type : 'DELETE',
 				data : {
 					prefix : mqttId
 				},
@@ -302,8 +300,8 @@
 		var enable = $('#enable').find(":selected").val();
 		
 		$.ajax({
-			url : 'mqttEditServlet',
-			type : 'POST',
+			url : 'mqttServlet',
+			type : 'PUT',
 			data : {
 				broker_ip_address : broker_ip_address,
 				port_number : port_number,
@@ -359,7 +357,7 @@
 		var file_type = $('#file_type').find(":selected").val();
 
 		$.ajax({
-			url : 'mqttAddData',
+			url : 'mqttServlet',
 			type : 'POST',
 			data : {
 				broker_ip_address : broker_ip_address,

@@ -255,7 +255,7 @@ input:checked+.slider:before {
 	// Function to fetch current time from the server and update the button text
 	function getCurrentTime() {
 		$.ajax({
-			url : "ntpLiveTime", // Replace with your server endpoint to get the current time
+			url : "ntpServlet", // Replace with your server endpoint to get the current time
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
@@ -266,40 +266,6 @@ input:checked+.slider:before {
 			error : function(xhr, status, error) {
 				// Handle any errors that occur during the AJAX request
 				console.error("Error fetching current time:", status, error);
-			}
-		});
-	}
-
-	function getntp() {
-		$.ajax({
-			url : 'ntp',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-
-				var json1 = JSON.stringify(data);
-
-				var json = JSON.parse(json1);
-
-				if (json.status == 'fail') {
-					var confirmation = confirm(json.msg);
-					if (confirmation) {
-						window.location.href = 'login.jsp';
-					}
-				}
-				
-				//$('#ntp_client').prop('checked', data.ntp_client);
-				$('#ntp_client').prop('checked', data.ntp_client === '1');
-
-				$('#ntp_interval').val(data.ntp_interval);
-				$('#ntp_server').val(data.ntp_server);
-				toggleNtpClient();
-				toggleDateTimeInput();
-
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
 			}
 		});
 	}
@@ -315,7 +281,7 @@ input:checked+.slider:before {
 		var ntp_server = $("#ntp_server").val();
 
 		$.ajax({
-			url : "ntp",
+			url : "ntpServlet",
 			type : "POST",
 			data : {
 				ntp_client : ntp_client,

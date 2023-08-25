@@ -79,7 +79,7 @@ var json = {};
  
  function loadCommandSettings() {
 		$.ajax({
-			url : 'commandConfigEditServlet',
+			url : 'commandConfigServlet',
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
@@ -186,8 +186,8 @@ var json = {};
 	       		var confirmation = confirm('Are you sure you want to delete the command settings?');
 	       		if (confirmation) {
 	       			$.ajax({
-	       				url : 'commandConfigDeleteServlet',
-	       				type : 'GET',
+	       				url : 'commandConfigServlet',
+	       				type : 'DELETE',
 	       				dataType : 'json',
 	       				success : function(data) {
 	       					// Display the registration status message
@@ -451,8 +451,8 @@ var json = {};
 		    var interval = $('#interval').find(":selected").val();
 		   
 			$.ajax({
-				url : 'commandConfigEditServlet',
-				type : 'POST',
+				url : 'commandConfigServlet',
+				type : 'PUT',
 				data : {
 					unit_id : unit_id,
 					asset_id : asset_id,
@@ -466,8 +466,6 @@ var json = {};
 				success : function(data) {
 					// Display the registration status message
 					alert(data.message);
-			//		loadMqttList();
-
 					// Clear form fields
 
 					$('#unit_id').val('');
@@ -513,8 +511,6 @@ var json = {};
 				success : function(data) {
 					// Display the registration status message
 					alert(data.message);
-			//		loadMqttList();
-
 					// Clear form fields
 
 					$('#unit_id').val('');
@@ -556,18 +552,14 @@ var json = {};
 							placeholder="Unit ID" required style="height: 17px;" />
 
 					</div>
-				<!-- </div>
-
-				<div class="row"> -->
+				
 					<div class="col-75-2"
 						style="width: 20%;">
 						<input type="text" id="asset_id" name="asset_id"
 							placeholder="Asset ID" required style="height: 17px;" />
 
 					</div>
-				<!-- </div>
-
-				<div class="row"> -->
+				
 					<div class="col-75-3"
 						style="width: 20%;">
 						<select class="textBox" id="broker_type" name="broker_type"
@@ -578,9 +570,7 @@ var json = {};
 						</select>
 						<span id="brokerTypeError" style="color:red;"></span>
 					</div>
-				<!-- </div>
-
-				<div class="row"> -->
+				
 					<div class="col-75-4"
 						style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
@@ -628,10 +618,6 @@ var json = {};
 				
 				<div class="row">
 						
-						<!-- <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
-  				border-radius: 10px; float: center;" id="saveBtn">
-						 	<i class="fa fa-plus"></i></button> -->
-						 	
 						 		<input style="margin-top: -31px; margin-left: 10%;" type="button"
 							value="+" id="saveBtn" />
 						
@@ -640,7 +626,7 @@ var json = {};
 				<div class="row" style="display:flex;justify-content:right;">					
 						<input
 						style="margin-top: -31px;margin-left:5px" type="button"
-						value="Clear" id="clearBtn" /> <input
+						value="Clear" id="clearBtn" onclick="clearFields()" /> <input
 						style="margin-top: -31px;margin-left:5px" type="submit"
 						value="Add" id="addBtn" />
 						<input

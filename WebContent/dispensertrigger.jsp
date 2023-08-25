@@ -256,12 +256,11 @@ var roleValue;
 	function loadDispenserTriggerList() {
 		$
 				.ajax({
-					url : 'dispenserTriggerEditServlet',
+					url : 'dispenserTriggerServlet',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
 						// Clear existing table rows
-						
 						
 						var dispenserTriggerTable = $('#dispenserTriggerListTable tbody');
 						dispenserTriggerTable.empty();
@@ -463,8 +462,8 @@ var roleValue;
 		var unit_id = $('#unit_id').val();
 
 		$.ajax({
-			url : 'dispenserTriggerEditServlet',
-			type : 'POST',
+			url : 'dispenserTriggerServlet',
+			type : 'PUT',
 			data : {
 				station_name : station_name,
 				serial_number : serial_number,
@@ -534,7 +533,7 @@ var roleValue;
 		var unit_id = $('#unit_id').val();
 
 		$.ajax({
-			url : 'dispenserTriggerDataServlet',
+			url : 'dispenserTriggerServlet',
 			type : 'POST',
 			data : {
 				station_name : station_name,
@@ -590,8 +589,8 @@ var roleValue;
 		var confirmation = confirm('Are you sure you want to delete this dispenser trigger settings?');
 		if (confirmation) {
 			$.ajax({
-				url : 'dispenserTriggerDeleteServlet',
-				type : 'POST',
+				url : 'dispenserTriggerServlet',
+				type : 'DELETE',
 				data : {
 					serial_number : dispenserTriggerId1,
 					side : dispenserTriggerId2
@@ -804,8 +803,7 @@ var roleValue;
 						loadTagListQuantity();
 						loadTagListUnitPrice();
 
-						$('#dispensortriggerform')
-								.submit(function(event) {
+						$('#dispensortriggerform').submit(function(event) {
 											event.preventDefault();
 											var buttonText = $('#registerBtn').val();
 											var side = $('#side').find(":selected").val();
@@ -921,15 +919,12 @@ var roleValue;
 						<input type="text" id="station_name" name="station_name"
 							placeholder="Station Name" required style="height: 17px" />
 					</div>
-					<!-- 	</div>
-
-				<div class="row"> -->
+					
 					<div class="col-75-2" style="width: 20%;">
 						<input type="text" id="serial_number" name="serial_number"
 							placeholder="Serial Number" required style="height: 17px" /> <span
 							style="color: red; font-size: 12px;" id="serialError"></span>
 					</div>
-					
 
 					 <div class="col-75-3" style="width: 20%;">
 						<select class="textBox" id="side" name="side" style="height: 35px"
@@ -943,17 +938,12 @@ var roleValue;
 					</div> 
 					
 					<div class="col-75-4" style="width: 20%;">
-						<!-- <input type="text" id="trigger_tag" name="trigger_tag"
-							placeholder="Trigger Tag" required style="height: 17px" /> -->
-							
 							
 						<select class="textBox" id=trigger_tag name="trigger_tag"
 							style="height: 35px;">
 							<option value="Select trigger tag">Select trigger tag</option>
 						</select> <span id="triggerTagError" style="color: red"></span>
-					
-							
-							
+						
 					</div>
 
 					<div class="col-75-5" style="width: 20%;">

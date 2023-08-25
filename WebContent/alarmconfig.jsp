@@ -79,7 +79,7 @@ var roleValue;
       
        function loadAlarmSettings() {
   		$.ajax({
-  			url : 'alarmConfigAddData',
+  			url : 'alarmConfigServlet',
   			type : 'GET',
   			dataType : 'json',
   			success : function(data) {
@@ -183,8 +183,8 @@ var roleValue;
    		var confirmation = confirm('Are you sure you want to delete this alarm settings?');
    		if (confirmation) {
    			$.ajax({
-   				url : 'alarmConfigTagListServlet',
-   				type : 'POST',
+   				url : 'alarmConfigServlet',
+   				type : 'DELETE',
    				dataType : 'json',
    				success : function(data) {
    					// Display the registration status message
@@ -298,6 +298,14 @@ var roleValue;
         }
     }
 	
+	function clearFields() {
+		$('#unit_id').val('');
+			$('#asset_id').val('');
+			$('#broker_type').val('Select broker type');
+			$('#broker_name').val('Select broker IP address');
+			$('#interval').val('Select interval');
+	}
+	
       $(document).ready(function () {
     	  
     	  <%
@@ -385,7 +393,6 @@ var roleValue;
 				return;
 			}
 
-
 			if (buttonText == 'Add') {
 				addAlarmConfig();
 			} else {
@@ -393,14 +400,6 @@ var roleValue;
 			}
 		});
       	  
-    	  $('#clearBtn').click(function(){
-    		  $('#unit_id').val('');
-  			$('#asset_id').val('');
-  			$('#broker_type').val('Select broker type');
-  			$('#broker_name').val('Select broker IP address');
-  			$('#interval').val('Select interval');
-    		  
-    	});
     	  
     	  $("#delBtn").click(function () {
     		  deleteAlarm();
@@ -416,7 +415,6 @@ function deleteRow(button) {
 
 function tableToJson() {
 		 const table = document.getElementById("table_data");
-	// 	 const json = {};
 
 	  for (var i = 1; i < table.rows.length; i++) {
 	    const row = table.rows[i];
@@ -442,7 +440,7 @@ function editAlarmConfig() {
    
 	$.ajax({
 		url : 'alarmConfigServlet',
-		type : 'POST',
+		type : 'PUT',
 		data : {
 			unit_id : unit_id,
 			asset_id : asset_id,
@@ -457,12 +455,7 @@ function editAlarmConfig() {
 			alert(data.message);
 
 			// Clear form fields
-
-			$('#unit_id').val('');
-			$('#asset_id').val('');
-			$('#broker_type').val('Select broker type');
-			$('#broker_name').val('Select broker IP address');
-			$('#interval').val('Select interval');
+			clearFields();
 			
 			location.reload();
 		},
@@ -486,7 +479,7 @@ function addAlarmConfig() {
     // Modify the next two lines to get the tag_name and variable from the JSON data
   
 	$.ajax({
-		url : 'alarmConfigAddData',
+		url : 'alarmConfigServlet',
 		type : 'POST',
 		data : {
 			unit_id : unit_id,
@@ -500,16 +493,10 @@ function addAlarmConfig() {
 		success : function(data) {
 			// Display the registration status message
 			alert(data.message);
-	//		loadMqttList();
-	//loadAlarmSettings();
 
 			// Clear form fields
 
-			$('#unit_id').val('');
-			$('#asset_id').val('');
-			$('#broker_type').val('Select broker type');
-			$('#broker_name').val('Select broker IP address');
-			$('#interval').val('Select interval');
+			clearFields();
 
 			location.reload();
 		},
@@ -534,22 +521,19 @@ function addAlarmConfig() {
 		<hr />
 
 		<div class="container">
-			<form id="alarmConfigForm" action="alarmConfigAddData">
+			<form id="alarmConfigForm" onsubmit="clearFields()">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="unit_id" name="unit_id"
 							placeholder="Unit ID" required style="height: 17px" />
 					</div>
-					<!-- </div>
-				<div class="row"> -->
+					
 					<div class="col-75-2" style="width: 20%;">
 						<input type="text" id="asset_id" name="asset_id"
 							placeholder="Asset ID" required style="height: 17px" />
 					</div>
-					<!-- </div>
-
-				<div class="row"> -->
+					
 					<div class="col-75-3" style="width: 20%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px">
@@ -558,9 +542,7 @@ function addAlarmConfig() {
 							<option value="iothub">iothub</option>
 						</select> <span id="brokerTypeError" style="color: red;"></span>
 					</div>
-					<!-- </div>
-
-				<div class="row"> -->
+					
 					<div class="col-75-4" style="width: 20%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px">
@@ -568,9 +550,7 @@ function addAlarmConfig() {
 								IP address</option>
 						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
-					<!-- </div>
-
-				<div class="row"> -->
+					
 					<div class="col-75-5" style="width: 20%;">
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px">
@@ -611,11 +591,6 @@ function addAlarmConfig() {
 
 				<div class="row">
 
-					<!--  <button style="font-size:medium; margin-top: -28px; margin-left:-50px; background-color: #2b3991; color: white; border: none;
-  				border-radius: 10px; float: center;" 
-						 id="saveBtn">
-						 	<i class="fa fa-plus"></i></button> -->
-
 					<input style="margin-top: -31px; margin-left: 10%;" type="button"
 						value="+" id="saveBtn" />
 
@@ -623,7 +598,7 @@ function addAlarmConfig() {
 
 				<div class="row" style="display: flex; justify-content: right;">
 					<input style="margin-top: -31px; margin-left: 5px" type="button"
-						value="Clear" id="clearBtn" /> <input
+						value="Clear" id="clearBtn" onclick="clearFields()"/> <input
 						style="margin-top: -31px; margin-left: 5px" type="submit"
 						value="Add" id="addBtn" /> <input
 						style="margin-top: -31px; margin-left: 5px" type="button"

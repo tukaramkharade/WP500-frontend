@@ -20,7 +20,7 @@ var roleValue;
 		$
 				.ajax({
 					//	url : 'data',
-					url : 'data',
+					url : 'userServlet',
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
@@ -134,12 +134,11 @@ var roleValue;
 
 		alert(userId)
 		
-		
 		var confirmation = confirm('Are you sure you want to delete this user?');
 		if (confirmation) {
 			$.ajax({
-				url : 'UserDeleteServlet',
-				type : 'POST',
+				url : 'userServlet',
+				type : 'DELETE',
 				data : {
 					username : userId
 				},
@@ -186,8 +185,8 @@ var roleValue;
 		var role = $('#role').find(":selected").val();
 
 		$.ajax({
-			url : 'UserEditServlet',
-			type : 'POST',
+			url : 'userServlet',
+			type : 'PUT',
 			data : {
 				username : username,
 				first_name : first_name,
@@ -200,10 +199,7 @@ var roleValue;
 				loadUserList();
 
 				// Clear form fields
-				$('#username').val('');
-				$('#first_name').val('');
-				$('#last_name').val('');
-				$('#role').val('Select role');
+				clearFields();
 
 				$("#password").prop("disabled", false);
 
@@ -227,7 +223,7 @@ var roleValue;
 		var role = $('#role').find(":selected").val();
 
 		$.ajax({
-			url : 'data',
+			url : 'userServlet',
 			type : 'POST',
 			data : {
 				username : username,
@@ -243,11 +239,7 @@ var roleValue;
 
 				// Clear form fields
 
-				$('#username').val('');
-				$('#password').val('');
-				$('#first_name').val('');
-				$('#last_name').val('');
-				$('#role').val('Select role');
+				clearFields();
 
 			},
 			error : function(xhr, status, error) {
@@ -300,8 +292,15 @@ var roleValue;
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
-        
     }
+	
+	function clearFields() {
+	    $('#username').val('');
+	    $('#password').val('');
+	    $('#first_name').val('');
+	    $('#last_name').val('');
+	    $('#role').val('Select role');
+	}
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -352,14 +351,7 @@ var roleValue;
 			}
 		});
 
-		$('#clearBtn').click(function() {
-			$('#username').val('');
-			$('#password').val('');
-			$('#first_name').val('');
-			$('#last_name').val('');
-			$('#role').val('Select role');
-
-		});
+		clearFields();
 
 	});
 </script>
@@ -378,7 +370,7 @@ var roleValue;
 			<hr>
 
 			<div class="container">
-				<form id="userForm" action="/WP500/data">
+				<form id="userForm" onsubmit="clearFields()">
 					<div class="row"
 						style="display: flex; flex-content: space-between; margin-top: -20px;">
 						<div class="col-75-1" style="width: 20%;">
@@ -386,31 +378,25 @@ var roleValue;
 								placeholder="Username" required />
 
 						</div>
-						<!-- </div>
-					<div class="row"> -->
+						
 						<div class="col-75-2" style="width: 20%;">
 							<input type="password" id="password" name="password"
 								placeholder="Password" required>
 								
 								<p id="passwordError" style="color: red;"></p>
 						</div>
-						<!-- </div>
-					<div class="row"> -->
+						
 						<div class="col-75-3" style="width: 20%;">
 							<input type="text" id="first_name" name="first_name"
 								placeholder="Firstname" />
 
 						</div>
-						<!-- 	</div>
-					<div class="row"> -->
+						
 						<div class="col-75-4" style="width: 20%;">
 							<input type="text" id="last_name" name="last_name"
 								placeholder="Lastname" />
 						</div>
-						<!-- </div>
-
-					<div class="row"> -->
-
+					
 						<div class="col-75-5" style="width: 20%;">
 							<select class="role" id="role" name="role" style="height: 33px;">
 								<option value="Select role">Select role</option>
@@ -422,7 +408,7 @@ var roleValue;
 
 					<div class="row"
 						style="display: flex; justify-content: right; margin-top: 2%;">
-						<input type="button" value="Clear" id="clearBtn" /> <input
+						<input type="button" value="Clear" id="clearBtn" onclick="clearFields()"/> <input
 							style="margin-left: 5px;" type="submit" value="Add"
 							id="registerBtn" />
 					</div>
