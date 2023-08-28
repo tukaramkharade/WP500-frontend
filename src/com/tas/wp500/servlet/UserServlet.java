@@ -30,48 +30,174 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+
+		String first_name = null;
+		String last_name = null;
+		String username = null;
+		String password = null;
+		String role = null;
+
 		if (check_username != null) {
 
-			String first_name = request.getParameter("first_name");
-			String last_name = request.getParameter("last_name");
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String role = request.getParameter("role");
+			String action = request.getParameter("action");
 
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
+			if (action != null) {
+				switch (action) {
 
-				json.put("operation", "add_user");
-				json.put("user", check_username);
-				json.put("username", username);
-				json.put("password", password);
-				json.put("first_name", first_name);
-				json.put("last_name", last_name);
-				json.put("role", role);
+				case "add":
 
-				String respStr = client.sendMessage(json.toString());
+					first_name = request.getParameter("first_name");
+					last_name = request.getParameter("last_name");
+					username = request.getParameter("username");
+					password = request.getParameter("password");
+					role = request.getParameter("role");
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
+						json.put("operation", "add_user");
+						json.put("user", check_username);
+						json.put("username", username);
+						json.put("password", password);
+						json.put("first_name", first_name);
+						json.put("last_name", last_name);
+						json.put("role", role);
 
-				// Set the content type of the response to application/json
-				resp.setContentType("application/json");
+						String respStr = client.sendMessage(json.toString());
 
-				// Get the response PrintWriter
-				PrintWriter out = resp.getWriter();
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in adding user: " + e);
+						// Set the content type of the response to
+						// application/json
+						resp.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = resp.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in adding user: " + e);
+					}
+
+					break;
+
+				case "update":
+					first_name = request.getParameter("first_name");
+					last_name = request.getParameter("last_name");
+					username = request.getParameter("username");
+					role = request.getParameter("role");
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "update_user");
+						json.put("user", check_username);
+
+						json.put("username", username);
+						json.put("first_name", first_name);
+						json.put("last_name", last_name);
+						json.put("role", role);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						resp.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = resp.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating user: " + e);
+					}
+
+					break;
+
+				case "delete":
+
+					username = request.getParameter("username");
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "delete_user");
+						json.put("user", check_username);
+
+						json.put("username", username);
+
+						if (!username.equals("tasm2m_admin")) {
+
+							String respStr = client.sendMessage(json.toString());
+
+							System.out.println("res " + new JSONObject(respStr).getString("msg"));
+
+							String message = new JSONObject(respStr).getString("msg");
+							JSONObject jsonObject = new JSONObject();
+							jsonObject.put("message", message);
+
+							// Set the content type of the response to
+							// application/json
+							resp.setContentType("application/json");
+
+							// Get the response PrintWriter
+							PrintWriter out = resp.getWriter();
+
+							// Write the JSON object to the response
+							out.print(jsonObject.toString());
+							out.flush();
+						} else {
+
+							try {
+								JSONObject userObj = new JSONObject();
+								userObj.put("msg", "Cannot delete tasm2m_admin user !!");
+								userObj.put("status", "fail");
+
+								System.out.println(">>" + userObj);
+
+								// Set the response content type to JSON
+								resp.setContentType("application/json");
+
+								// Write the JSON data to the response
+								resp.getWriter().print(userObj.toString());
+
+							} catch (Exception e) {
+								e.printStackTrace();
+								logger.error("Error in deleting tasm2m user: " + e);
+
+							}
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in deleting user: " + e);
+					}
+
+					break;
+				}
 			}
+
 		} else {
 			try {
 				JSONObject userObj = new JSONObject();
@@ -138,7 +264,7 @@ public class UserServlet extends HttpServlet {
 						resJsonArray.put(userObj);
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error in putting user data in json array : "+e);
+						logger.error("Error in putting user data in json array : " + e);
 					}
 				}
 
@@ -164,166 +290,13 @@ public class UserServlet extends HttpServlet {
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.error("Error in session timeout : "+e);
+					logger.error("Error in session timeout : " + e);
 				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Error in getting user list : "+e);
+			logger.error("Error in getting user list : " + e);
 		}
-	}
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-			String first_name = request.getParameter("first_name");
-			String last_name = request.getParameter("last_name");
-			String username = request.getParameter("username");
-			String role = request.getParameter("role");
-
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "update_user");
-				json.put("user", check_username);
-
-				json.put("username", username);
-				json.put("first_name", first_name);
-				json.put("last_name", last_name);
-				json.put("role", role);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in updating user: " + e);
-			}
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-		String check_username = (String) session.getAttribute("username");
-
-		String username = request.getParameter("username");
-
-		if (check_username != null) {
-
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "delete_user");
-				json.put("user", check_username);
-
-				json.put("username", username);
-
-				if (!username.equals("tasm2m_admin")) {
-
-					String respStr = client.sendMessage(json.toString());
-
-					System.out.println("res " + new JSONObject(respStr).getString("msg"));
-
-					String message = new JSONObject(respStr).getString("msg");
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("message", message);
-
-					// Set the content type of the response to application/json
-					response.setContentType("application/json");
-
-					// Get the response PrintWriter
-					PrintWriter out = response.getWriter();
-
-					// Write the JSON object to the response
-					out.print(jsonObject.toString());
-					out.flush();
-				} else {
-
-					try {
-						JSONObject userObj = new JSONObject();
-						userObj.put("msg", "Cannot delete tasm2m_admin user !!");
-						userObj.put("status", "fail");
-
-						System.out.println(">>" + userObj);
-
-						// Set the response content type to JSON
-						response.setContentType("application/json");
-
-						// Write the JSON data to the response
-						response.getWriter().print(userObj.toString());
-
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in deleting tasm2m user: " + e);
-
-					}
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in deleting user: " + e);
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-		
 	}
 }

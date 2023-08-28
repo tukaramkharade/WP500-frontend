@@ -115,192 +115,163 @@ public class TrafficRulesServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-		if (check_username != null) {
-
-			String name = request.getParameter("name");
-			String iface = request.getParameter("iface");
-			String portNumber = request.getParameter("portNumber");
-			String macAddress = request.getParameter("macAddress");
-			String protocol = request.getParameter("protocol");
-			String ip_addr = request.getParameter("ip_addr");
-			String type = request.getParameter("type");
-			String action = request.getParameter("action");
-
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "ip_tables");
-				json.put("operation_type", "add_ip");
-				json.put("user", check_username);
-				json.put("name", name);
-				json.put("interface", iface);
-				json.put("protocol", protocol);
-				json.put("ipAddress", ip_addr);
-				json.put("macAddress", macAddress);
-				json.put("portNum", portNumber);
-				json.put("action", action);
-				json.put("type", type);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in adding traffic rules : " + e);
-			}
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
-		if (check_username != null) {
-			
-			String name = request.getParameter("name");
-			String iface = request.getParameter("iface");
-			String portNumber = request.getParameter("portNumber");
-			String macAddress = request.getParameter("macAddress");
-			String protocol = request.getParameter("protocol");
-			String ip_addr = request.getParameter("ip_addr");
-			String type = request.getParameter("type");
-			String action = request.getParameter("action");
-			
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "ip_tables");
-				json.put("operation_type", "update_ip");
-				json.put("user", check_username);
-				json.put("name", name);
-				json.put("interface", iface);
-				json.put("protocol", protocol);
-				json.put("ipAddress", ip_addr);
-				json.put("macAddress", macAddress);
-				json.put("portNum", portNumber);
-				json.put("action", action);
-				json.put("type", type);
-				
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in updating traffic rules : "+e);
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-HttpSession session = request.getSession(false);
 		
-		String check_username = (String) session.getAttribute("username");
-
+		String name = null;
+		String iface = null;
+		String portNumber = null;
+		String macAddress = null;
+		String protocol = null;
+		String ip_addr = null;
+		String type = null;
+		String action = null;
+		
 		if (check_username != null) {
 			
-			String name = request.getParameter("name");
+			String operation_action = request.getParameter("operation_action");
 
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
+			if (operation_action != null) {
+				switch (operation_action) {
+				
+				case "add":
+					name = request.getParameter("name");
+					 iface = request.getParameter("iface");
+					 portNumber = request.getParameter("portNumber");
+					 macAddress = request.getParameter("macAddress");
+					 protocol = request.getParameter("protocol");
+					 ip_addr = request.getParameter("ip_addr");
+					 type = request.getParameter("type");
+					 action = request.getParameter("action");
 
-				json.put("operation", "ip_tables");
-				json.put("operation_type", "delete_ip");			
-				json.put("user", check_username);			
-				json.put("name", name);
-				String respStr = client.sendMessage(json.toString());
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+						json.put("operation", "ip_tables");
+						json.put("operation_type", "add_ip");
+						json.put("user", check_username);
+						json.put("name", name);
+						json.put("interface", iface);
+						json.put("protocol", protocol);
+						json.put("ipAddress", ip_addr);
+						json.put("macAddress", macAddress);
+						json.put("portNum", portNumber);
+						json.put("action", action);
+						json.put("type", type);
 
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
+						String respStr = client.sendMessage(json.toString());
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in deleting traffic rules : "+e);
-			}
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in adding traffic rules : " + e);
+					}
+					
+					break;
+					
+				case "update":
+					 name = request.getParameter("name");
+					 iface = request.getParameter("iface");
+					 portNumber = request.getParameter("portNumber");
+					 macAddress = request.getParameter("macAddress");
+					 protocol = request.getParameter("protocol");
+					 ip_addr = request.getParameter("ip_addr");
+					 type = request.getParameter("type");
+					 action = request.getParameter("action");
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "ip_tables");
+						json.put("operation_type", "update_ip");
+						json.put("user", check_username);
+						json.put("name", name);
+						json.put("interface", iface);
+						json.put("protocol", protocol);
+						json.put("ipAddress", ip_addr);
+						json.put("macAddress", macAddress);
+						json.put("portNum", portNumber);
+						json.put("action", action);
+						json.put("type", type);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating traffic rules : " + e);
+					}
+					
+					break;
+					
+					
+				case "delete":
+					 name = request.getParameter("name");
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "ip_tables");
+						json.put("operation_type", "delete_ip");
+						json.put("user", check_username);
+						json.put("name", name);
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in deleting traffic rules : " + e);
+					}
+					
+					break;		
+				}
+				} 
 		} else {
 			try {
 				JSONObject userObj = new JSONObject();
@@ -321,4 +292,6 @@ HttpSession session = request.getSession(false);
 			}
 		}
 	}
+
+	
 }

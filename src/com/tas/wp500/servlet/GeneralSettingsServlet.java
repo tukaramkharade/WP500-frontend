@@ -59,7 +59,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 						jsonObject.put("rule_drop", rule_drop);
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error in putting general settings in json object: "+e);
+						logger.error("Error in putting general settings in json object: " + e);
 					}
 				}
 				// Get the response PrintWriter
@@ -71,7 +71,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in getting general settings data : "+e);
+				logger.error("Error in getting general settings data : " + e);
 			}
 
 		} else {
@@ -103,47 +103,153 @@ public class GeneralSettingsServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 
+		String input = null;
+		String output = null;
+		String forward = null;
+		String rule_drop = null;
+
 		if (check_username != null) {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
 
-			String input = request.getParameter("input");
-			String output = request.getParameter("output");
-			String forward = request.getParameter("forward");
-			String rule_drop = request.getParameter("rule_drop");
+			String operation_action = request.getParameter("operation_action");
 
-			try {
-				json.put("operation", "genral_setting");
-				json.put("operation_type", "add");
-				json.put("input", input);
-				json.put("output", output);
-				json.put("forword", forward);
-				json.put("rule_drop", rule_drop);
-				json.put("user", check_username);
+			if (operation_action != null) {
+				switch (operation_action) {
 
-				String respStr = client.sendMessage(json.toString());
+				case "add":
+					input = request.getParameter("input");
+					output = request.getParameter("output");
+					forward = request.getParameter("forward");
+					rule_drop = request.getParameter("rule_drop");
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+					try {
 
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+						json.put("operation", "genral_setting");
+						json.put("operation_type", "add");
+						json.put("input", input);
+						json.put("output", output);
+						json.put("forword", forward);
+						json.put("rule_drop", rule_drop);
+						json.put("user", check_username);
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+						String respStr = client.sendMessage(json.toString());
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in adding general settings : "+e);
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in adding general settings : " + e);
+					}
+
+					break;
+
+				case "update":
+
+					 input = request.getParameter("input");
+					 output = request.getParameter("output");
+					 forward = request.getParameter("forward");
+					 rule_drop = request.getParameter("rule_drop");
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "genral_setting");
+						json.put("operation_type", "update");
+						json.put("input", input);
+						json.put("output", output);
+						json.put("forword", forward);
+						json.put("rule_drop", rule_drop);
+						json.put("user", check_username);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating general settings : " + e);
+					}
+
+					break;
+
+				case "delete":
+					 input = request.getParameter("input");
+					 output = request.getParameter("output");
+					 forward = request.getParameter("forward");
+					 rule_drop = request.getParameter("rule_drop");
+
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "genral_setting");
+						json.put("operation_type", "delete");
+						json.put("input", input);
+						json.put("output", output);
+						json.put("forword", forward);
+						json.put("rule_drop", rule_drop);
+						json.put("user", check_username);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in deleting general settings: " + e);
+					}
+					break;
+				}
 			}
-
 		} else {
 
 			try {
@@ -165,142 +271,5 @@ public class GeneralSettingsServlet extends HttpServlet {
 			}
 		}
 	}
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			String input = request.getParameter("input");
-			String output = request.getParameter("output");
-			String forward = request.getParameter("forward");
-			String rule_drop = request.getParameter("rule_drop");
-
-			try {
-				json.put("operation", "genral_setting");
-				json.put("operation_type", "update");
-				json.put("input", input);
-				json.put("output", output);
-				json.put("forword", forward);
-				json.put("rule_drop", rule_drop);
-				json.put("user", check_username);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in updating general settings : "+e);
-			}
-
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			String input = request.getParameter("input");
-			String output = request.getParameter("output");
-			String forward = request.getParameter("forward");
-			String rule_drop = request.getParameter("rule_drop");
-
-			try {
-				json.put("operation", "genral_setting");
-				json.put("operation_type", "delete");
-				json.put("input", input);
-				json.put("output", output);
-				json.put("forword", forward);
-				json.put("rule_drop", rule_drop);
-				json.put("user", check_username);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in deleting general settings: "+e);
-			}
-
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
 }

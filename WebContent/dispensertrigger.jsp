@@ -463,7 +463,7 @@ var roleValue;
 
 		$.ajax({
 			url : 'dispenserTriggerServlet',
-			type : 'PUT',
+			type : 'POST',
 			data : {
 				station_name : station_name,
 				serial_number : serial_number,
@@ -478,7 +478,8 @@ var roleValue;
 				quantity : quantity,
 				unit_price : unit_price,
 				status : status,
-				unit_id : unit_id
+				unit_id : unit_id,
+				action: 'update'
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -549,7 +550,8 @@ var roleValue;
 				quantity : quantity,
 				unit_price : unit_price,
 				status : status,
-				unit_id : unit_id
+				unit_id : unit_id,
+				action: 'add'
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -590,10 +592,11 @@ var roleValue;
 		if (confirmation) {
 			$.ajax({
 				url : 'dispenserTriggerServlet',
-				type : 'DELETE',
+				type : 'POST',
 				data : {
 					serial_number : dispenserTriggerId1,
-					side : dispenserTriggerId2
+					side : dispenserTriggerId2,
+					action: 'delete'
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -913,6 +916,7 @@ var roleValue;
 		<hr />
 		<div class="container">
 			<form id="dispensortriggerform">
+			<input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">

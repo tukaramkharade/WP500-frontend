@@ -1,5 +1,6 @@
 package com.tas.wp500.servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -119,205 +120,179 @@ public class MQTTServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 
-		if (check_username != null) {
-
-			String broker_ip_address = request.getParameter("broker_ip_address");
-			String port_number = request.getParameter("port_number");
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String sub_topic = request.getParameter("sub_topic");
-			String pub_topic = request.getParameter("pub_topic");
-			String prefix = request.getParameter("prefix");
-			String file_type = request.getParameter("file_type");
-			String enable = request.getParameter("enable");
-			String file_name = request.getParameter("file_name");
-
-			try {
-
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "mqtt");
-				json.put("operation_type", "add_query");
-				json.put("user", check_username);
-				json.put("broker_ip_address", broker_ip_address);
-				json.put("port_number", port_number);
-				json.put("username", username);
-				json.put("password", password);
-				json.put("subscribe_topic", sub_topic);
-				json.put("publish_topic", pub_topic);
-				json.put("prefix", prefix);
-				json.put("file_type", file_type);
-				json.put("enable", enable);
-				json.put("file_name", file_name);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in adding mqtt : " + e);
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doPut(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-		String check_username = (String) session.getAttribute("username");
+		String broker_ip_address = null;
+		String port_number = null;
+		String username = null;
+		String password = null;
+		String sub_topic = null;
+		String pub_topic = null;
+		String prefix = null;
+		String file_type = null;
+		String enable = null;
+		String file_name = null;
 
 		if (check_username != null) {
 
-			String broker_ip_address = request.getParameter("broker_ip_address");
-			String port_number = request.getParameter("port_number");
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String sub_topic = request.getParameter("sub_topic");
-			String pub_topic = request.getParameter("pub_topic");
-			String prefix = request.getParameter("prefix");
-			String file_type = request.getParameter("file_type");
-			String enable = request.getParameter("enable");
-			String file_name = request.getParameter("file_name");
+			String action = request.getParameter("action");
 
-			try {
+			if (action != null) {
+				switch (action) {
 
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
+				case "add":
 
-				json.put("operation", "protocol");
-				json.put("protocol_type", "mqtt");
-				json.put("operation_type", "update_query");
-				json.put("user", check_username);
-				json.put("broker_ip_address", broker_ip_address);
-				json.put("port_number", port_number);
-				json.put("username", username);
-				json.put("password", password);
-				json.put("subscribe_topic", sub_topic);
-				json.put("publish_topic", pub_topic);
-				json.put("prefix", prefix);
-				json.put("file_type", file_type);
-				json.put("file_name", file_name);
-				json.put("enable", enable);
-				
-				String respStr = client.sendMessage(json.toString());
+					broker_ip_address = request.getParameter("broker_ip_address");
+					port_number = request.getParameter("port_number");
+					username = request.getParameter("username");
+					password = request.getParameter("password");
+					sub_topic = request.getParameter("sub_topic");
+					pub_topic = request.getParameter("pub_topic");
+					prefix = request.getParameter("prefix");
+					file_type = request.getParameter("file_type");
+					enable = request.getParameter("enable");
+					file_name = request.getParameter("file_name");
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+					try {
 
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+						json.put("operation", "protocol");
+						json.put("protocol_type", "mqtt");
+						json.put("operation_type", "add_query");
+						json.put("user", check_username);
+						json.put("broker_ip_address", broker_ip_address);
+						json.put("port_number", port_number);
+						json.put("username", username);
+						json.put("password", password);
+						json.put("subscribe_topic", sub_topic);
+						json.put("publish_topic", pub_topic);
+						json.put("prefix", prefix);
+						json.put("file_type", file_type);
+						json.put("enable", enable);
+						json.put("file_name", file_name);
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+						String respStr = client.sendMessage(json.toString());
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in updating mqtt : "+e);
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in adding mqtt : " + e);
+					}
+					break;
+
+				case "update":
+					broker_ip_address = request.getParameter("broker_ip_address");
+					port_number = request.getParameter("port_number");
+					username = request.getParameter("username");
+					password = request.getParameter("password");
+					sub_topic = request.getParameter("sub_topic");
+					pub_topic = request.getParameter("pub_topic");
+					prefix = request.getParameter("prefix");
+					file_type = request.getParameter("file_type");
+					enable = request.getParameter("enable");
+					file_name = request.getParameter("file_name");
+
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "protocol");
+						json.put("protocol_type", "mqtt");
+						json.put("operation_type", "update_query");
+						json.put("user", check_username);
+						json.put("broker_ip_address", broker_ip_address);
+						json.put("port_number", port_number);
+						json.put("username", username);
+						json.put("password", password);
+						json.put("subscribe_topic", sub_topic);
+						json.put("publish_topic", pub_topic);
+						json.put("prefix", prefix);
+						json.put("file_type", file_type);
+						json.put("file_name", file_name);
+						json.put("enable", enable);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating mqtt : " + e);
+					}
+
+					break;
+
+				case "delete":
+					prefix = request.getParameter("prefix");
+					System.out.println("prefix : " + prefix);
+
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "protocol");
+						json.put("protocol_type", "mqtt");
+						json.put("operation_type", "delete_query");
+						json.put("user", check_username);
+						json.put("prefix", prefix);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in deleting mqtt : " + e);
+					}
+
+					break;
 				}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-
-			String prefix = request.getParameter("prefix");
-
-			try {
-
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "mqtt");
-				json.put("operation_type", "delete_query");
-				json.put("user", check_username);
-				json.put("prefix", prefix);
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));		
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in deleting mqtt : "+e);
 			}
 		} else {
 			try {

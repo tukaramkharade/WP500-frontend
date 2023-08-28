@@ -201,9 +201,10 @@ var roleValue;
 		if (confirmation) {
 			$.ajax({
 				url : 'jsonBuilderServlet',
-				type : 'DELETE',
+				type : 'POST',
 				data : {
-					json_string_name : jsonBuilderId
+					json_string_name : jsonBuilderId,
+					action: 'delete'
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -237,7 +238,7 @@ var roleValue;
 		$
 				.ajax({
 					url : 'jsonBuilderServlet',
-					type : 'PUT',
+					type : 'POST',
 					data : {
 						json_string_name : json_string_name,
 						json_interval : json_interval,
@@ -246,7 +247,8 @@ var roleValue;
 						publish_topic : publish_topic,
 						publishing_status : publishing_status,
 						storeAndForward : storeAndForward,
-						json_string_text : json_string_text
+						json_string_text : json_string_text,
+						action: 'update'
 					},
 					success : function(data) {
 						// Display the registration status message
@@ -301,7 +303,8 @@ var roleValue;
 						publish_topic : publish_topic,
 						publishing_status : publishing_status,
 						storeAndForward : storeAndForward,
-						json_string_text : json_string_text
+						json_string_text : json_string_text,
+						action: 'add'
 					},
 					success : function(data) {
 						// Display the registration status message
@@ -543,6 +546,7 @@ var roleValue;
 
 		<div class="container">
 			<form id="jsonBuilderForm">
+			 <input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">

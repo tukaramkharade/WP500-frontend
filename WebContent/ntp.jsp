@@ -17,6 +17,8 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
+
+
 <style type="text/css">
 .btn_discard_0 {
 	padding: 5px 10px;
@@ -255,7 +257,7 @@ input:checked+.slider:before {
 	// Function to fetch current time from the server and update the button text
 	function getCurrentTime() {
 		$.ajax({
-			url : "ntpServlet", // Replace with your server endpoint to get the current time
+			url : "ntpLiveTime", // Replace with your server endpoint to get the current time
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
@@ -266,6 +268,40 @@ input:checked+.slider:before {
 			error : function(xhr, status, error) {
 				// Handle any errors that occur during the AJAX request
 				console.error("Error fetching current time:", status, error);
+			}
+		});
+	}
+
+	function getntp() {
+		$.ajax({
+			url : 'ntp',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+
+				var json1 = JSON.stringify(data);
+
+				var json = JSON.parse(json1);
+
+				if (json.status == 'fail') {
+					var confirmation = confirm(json.msg);
+					if (confirmation) {
+						window.location.href = 'login.jsp';
+					}
+				}
+				
+				//$('#ntp_client').prop('checked', data.ntp_client);
+				$('#ntp_client').prop('checked', data.ntp_client === '1');
+
+				$('#ntp_interval').val(data.ntp_interval);
+				$('#ntp_server').val(data.ntp_server);
+				//toggleNtpClient();
+				toggleDateTimeInput();
+
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
 			}
 		});
 	}
@@ -281,7 +317,7 @@ input:checked+.slider:before {
 		var ntp_server = $("#ntp_server").val();
 
 		$.ajax({
-			url : "ntpServlet",
+			url : "ntp",
 			type : "POST",
 			data : {
 				ntp_client : ntp_client,
@@ -305,7 +341,77 @@ input:checked+.slider:before {
 
 		$("#updatentp").val("Add");
 	}
+	function loadNtpSettings() {
+		$.ajax({
+			url : 'ntpDataUpadate',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+				//alert(data.eth0_ipaddr + " " + data.eth0_subnet);
+				
+				var json1 = JSON.stringify(data);
 
+						var json = JSON.parse(json1);
+
+						if (json.status == 'fail') {
+							var confirmation = confirm(json.msg);
+							if (confirmation) {
+								window.location.href = 'login.jsp';
+							}
+						}			
+
+				$('#ntp_server1').val(data.ntp_server1);
+				$('#ntp_server2').val(data.ntp_server2); 
+				$('#ntp_server3').val(data.ntp_server3);
+				$('#ntp_interval_1').val(data.ntp_interval);	
+				
+				
+				
+				console.log('lan1_ipaddr:', data.ntp_server1);
+				console.log('lan1_subnet:', data.ntp_server2);
+				
+				console.log('lan2_ipaddr:', data.ntp_server3);
+				console.log('lan2_subnet:', data.ntp_interval);
+				
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
+			}
+		});
+	}
+	
+	function editNtpData() {		
+		var ntp_server1 = $('#ntp_server1').val();
+		var ntp_server2 = $('#ntp_server2').val();   
+		var ntp_server3 = $('#ntp_server3').val();
+		var ntp_interval = $('#ntp_interval_1').val();	
+		
+		$.ajax({
+			
+			url : 'ntpDataUpadate', 
+			type : 'POST',
+			data : {
+				ntp_server1 : ntp_server1,
+				ntp_server2 : ntp_server2,
+				ntp_server3 : ntp_server3,
+				ntp_interval : ntp_interval
+				
+			},
+			success : function(data) {
+					alert(data.message);
+					
+					//clear fields
+					
+			
+			},
+			error : function(xhr, status, error) {
+				console.log('Error updating lan : ' + error);
+			}
+		});
+
+	}
+	
 	function toggleNtpClient() {
 		var toggleButton = document.getElementById("ntp_client");
 		var ipField = document.getElementById("ntp_interval");
@@ -352,63 +458,21 @@ input:checked+.slider:before {
 	}
 
 	function toggleDateTimeInput() {
-		var datetimeInput = document.getElementById("datetime");
 		var ntpClientCheckbox = document.getElementById("ntp_client");
+		var datetimeInput = document.getElementById("datetime");
+		
 
 		datetimeInput.disabled = ntpClientCheckbox.checked;
 	}
 
-	function changeButtonColor(isDisabled) {
-        var $add_button = $('#updatentp');  
-        var $current_datetime_button = $('#get_current_time'); 
-        var $set_datetime_button = $('#setDateTime');   
-       
-        if (isDisabled) {
-            $add_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $add_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-        
-        if (isDisabled) {
-            $current_datetime_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $current_datetime_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-        
-        if (isDisabled) {
-            $set_datetime_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $set_datetime_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-
-    }
-	
 	$(document).ready(function() {
-		
-		<%// Access the session variable
-		HttpSession role = request.getSession();
-		String roleValue = (String) session.getAttribute("role");%>
-	
-	roleValue = '<%=roleValue%>';
-	
-	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
-
-		var confirmation = confirm('You do not have enough privileges for role VIEWER');
-		
-		$('#updatentp').prop('disabled', true);
-		$('#get_current_time').prop('disabled', true);
-		$('#setDateTime').prop('disabled', true);
-		
-		
-		
-		changeButtonColor(true);
-	}
+		loadNtpSettings();
 		
 		toggleDateTimeInput();
 		$("#get_current_time").click(function() {
 			getCurrentTime();
 		});
-		getntp();
+		//getntp();
 
 		$('#setDateTime').click(function() {
 			setManualTime();
@@ -451,7 +515,7 @@ input:checked+.slider:before {
 
 							<div style="width: 20%;">
 								<label class="switch"> <input type="checkbox"
-									id="ntp_client" name="ntp_client" onchange="toggleNtpClient()"
+									id="ntp_client" name="ntp_client" onchange="toggleDateTimeInput()"
 									value="1" checked> <span class="slider round"></span>
 								</label>
 
@@ -459,36 +523,62 @@ input:checked+.slider:before {
 						</div>
 					</div>
 					<br />
-					<!-- <div class="row">
-						<div style="float: left;
-					width: 40%;
-					margin-top: 6px;">
-					  <label for="updateInterval">Update
-						Interval</label>
-					</div>
-						<div style="width: 20%; margin-top: 0;">
-							<input type="text" id="ntp_interval" name="ntp_interval"
-								placeholder="NTP Interval" />
+					  
 
-						</div>
-					</div> -->
-
-					<!-- <div class="row">
-						<div style="float: left;
-					width: 40%;
-					margin-top: 6px;">
-					  <label for="updateInterval">Update
-						Server</label>
+					 <div class="row">
+						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
+					 <label for="updateServer">NTP Server1</label>
 					</div>
-						<div style="margin-left: 20%; width: 20%; margin-top: -2.5em;">
-							<input type="text" id="ntp_server" name="ntp_server"
+						<div style="width: 20%; margin-top:0;">
+							<input type="text" id="ntp_server1" name="ntp_server1"
 								placeholder="NTP Server" />
 
 						</div>
-					</div> -->
+					</div> 
+					
+					<div class="row">
+						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
+					 <label for="updateServer">NTP Server2</label>
+					</div>
+						<div style="width: 20%; margin-top:0;">
+							<input type="text" id="ntp_server2" name="ntp_server2"
+								placeholder="NTP Server" />
+
+						</div>
+					</div>
+					
+					<div class="row">
+						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
+					 <label for="updateServer">NTP Server3</label>
+					</div>
+						<div style="width: 20%; margin-top:0;">
+							<input type="text" id="ntp_server3" name="ntp_server3"
+								placeholder="NTP Server" />
+
+						</div>
+					</div>
+					
+					<div class="row">
+						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
+					  <label for="updateInterval">NTP Interval</label>
+					</div>
+						<div style="width: 20%; margin-top: 0;">
+							<input type="text" id="ntp_interval_1" name="ntp_interval_1"
+								placeholder="NTP Interval" />
+
+						</div>
+					</div>
+					
+					<div class="row">
+   						 <div style="width: 40%; margin-top: 6px; justify-content: left ; display: flex;">
+       						 <input type="button" id="saveButton" onclick="editNtpData()" value ="Save"/>
+       						 
+    					</div>
+					</div>
 
 					<div class="row">
-						<input style="margin-left: 95%;" type="submit" value="Add" id="updatentp" />
+						<input style="margin-left: 95%;" type="submit" value="Add"
+							id="updatentp" />
 					</div>
 				</form>
 			</div>
@@ -504,9 +594,7 @@ input:checked+.slider:before {
 				<label for="datetime">Select Date-Time:</label> <input
 					type="datetime-local" id="datetime" name="datetime" required
 					onchange="toggleDateTimeInput()">
-					
-					<input type="button" id="setDateTime" value="Submit" />
-				
+				<button id="setDateTime">Submit</button>
 
 			</div>
 		</section>

@@ -134,7 +134,8 @@ var roleValue;
 				protocol : protocol,
 				ip_addr : ip_addr,
 				type : type,
-				action : action
+				action : action,
+				operation_action: 'add'
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -171,9 +172,10 @@ var roleValue;
 		if (confirmation) {
 			$.ajax({
 				url : "trafficRulesServlet",
-				type : "DELETE",
+				type : "POST",
 				data : {
 					name : trafficRulesId,
+					operation_action: 'delete'
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -233,7 +235,7 @@ var roleValue;
 	
 		$.ajax({
 			url : 'trafficRulesServlet',
-			type : 'PUT',
+			type : 'POST',
 			data : {
 				name : name,
 				iface : iface,
@@ -242,7 +244,8 @@ var roleValue;
 				protocol : protocol,
 				ip_addr : ip_addr,
 				type : type,
-				action : action
+				action : action,
+				operation_action: 'update'
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -368,7 +371,8 @@ var roleValue;
 				input : input,
 				output : output,
 				forward : forward,
-				rule_drop : rule_drop
+				rule_drop : rule_drop,
+				operation_action: 'add'
 
 			},
 			success : function(data) {
@@ -403,12 +407,13 @@ var roleValue;
 
 		$.ajax({
 			url : 'generalSettingsServlet',
-			type : 'PUT',
+			type : 'POST',
 			data : {
 				input : input,
 				output : output,
 				forward : forward,
-				rule_drop : rule_drop
+				rule_drop : rule_drop,
+				operation_action: 'update'
 
 			},
 			success : function(data) {
@@ -441,12 +446,13 @@ var roleValue;
 
 		$.ajax({
 			url : 'generalSettingsServlet',
-			type : 'DELETE',
+			type : 'POST',
 			data : {
 				input : input,
 				output : output,
 				forward : forward,
-				rule_drop : rule_drop
+				rule_drop : rule_drop,
+				operation_action: 'delete'
 
 			},
 			success : function(data) {
@@ -681,6 +687,7 @@ var roleValue;
 
 		<div class="container">
 			<form id="generalSettingsForm">
+			<input type="hidden" id="operation_action" name="operation_action" value="">
 
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -25px;">
@@ -732,6 +739,7 @@ var roleValue;
 		<div class="container">
 
 			<form id="trafficRulesForm">
+			<input type="hidden" id="action" name="action" value="">
 
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">

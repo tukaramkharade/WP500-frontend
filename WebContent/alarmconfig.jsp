@@ -298,13 +298,9 @@ var roleValue;
         }
     }
 	
-	function clearFields() {
-		$('#unit_id').val('');
-			$('#asset_id').val('');
-			$('#broker_type').val('Select broker type');
-			$('#broker_name').val('Select broker IP address');
-			$('#interval').val('Select interval');
-	}
+	//function clearFields() {
+		
+	//}
 	
       $(document).ready(function () {
     	  
@@ -400,6 +396,13 @@ var roleValue;
 			}
 		});
       	  
+      	$('#clearBtn').click(function(){
+  		  $('#unit_id').val('');
+			$('#asset_id').val('');
+			$('#broker_type').val('Select broker type');
+			$('#broker_name').val('Select broker IP address');
+			$('#interval').val('Select interval');	    		
+  	});
     	  
     	  $("#delBtn").click(function () {
     		  deleteAlarm();
@@ -440,14 +443,15 @@ function editAlarmConfig() {
    
 	$.ajax({
 		url : 'alarmConfigServlet',
-		type : 'PUT',
+		type : 'POST',
 		data : {
 			unit_id : unit_id,
 			asset_id : asset_id,
 			broker_type : broker_type,
 			broker_name : broker_name,
 			interval : interval,
-			tagData: JSON.stringify(tagData)
+			tagData: JSON.stringify(tagData),
+			action: 'update'
 			
 		},
 		success : function(data) {
@@ -455,7 +459,11 @@ function editAlarmConfig() {
 			alert(data.message);
 
 			// Clear form fields
-			clearFields();
+			$('#unit_id').val('');
+			$('#asset_id').val('');
+			$('#broker_type').val('Select broker type');
+			$('#broker_name').val('Select broker IP address');
+			$('#interval').val('Select interval');
 			
 			location.reload();
 		},
@@ -487,16 +495,20 @@ function addAlarmConfig() {
 			broker_type : broker_type,
 			broker_name : broker_name,
 			interval : interval,
-			tagData: JSON.stringify(tagData)
+			tagData: JSON.stringify(tagData),
+			action: 'add'
 			
 		},
 		success : function(data) {
 			// Display the registration status message
 			alert(data.message);
 
-			// Clear form fields
-
-			clearFields();
+			$('#unit_id').val('');
+			$('#asset_id').val('');
+			$('#broker_type').val('Select broker type');
+			$('#broker_name').val('Select broker IP address');
+			$('#interval').val('Select interval');
+			
 
 			location.reload();
 		},
@@ -521,7 +533,9 @@ function addAlarmConfig() {
 		<hr />
 
 		<div class="container">
-			<form id="alarmConfigForm" onsubmit="clearFields()">
+			<form id="alarmConfigForm">
+			
+			<input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
@@ -598,7 +612,7 @@ function addAlarmConfig() {
 
 				<div class="row" style="display: flex; justify-content: right;">
 					<input style="margin-top: -31px; margin-left: 5px" type="button"
-						value="Clear" id="clearBtn" onclick="clearFields()"/> <input
+						value="Clear" id="clearBtn"/> <input
 						style="margin-top: -31px; margin-left: 5px" type="submit"
 						value="Add" id="addBtn" /> <input
 						style="margin-top: -31px; margin-left: 5px" type="button"

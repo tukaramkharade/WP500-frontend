@@ -255,19 +255,18 @@
 		});
 	}
 
-	// Function to handle deleting a user
-	function deleteMqtt(mqttId) {
-		// Perform necessary actions to delete the user
-		// For example, make an AJAX call to a delete servlet
-
-		alert(mqttId)
+	 function deleteMqtt(prefix) {
+		
+		alert(prefix)
 		var confirmation = confirm('Are you sure you want to delete this mqtt?');
 		if (confirmation) {
+			
 			$.ajax({
 				url : 'mqttServlet',
-				type : 'DELETE',
+				type : 'POST',
 				data : {
-					prefix : mqttId
+					prefix : prefix,
+					action: 'delete'
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -282,7 +281,8 @@
 				}
 			});
 		}
-	}
+	} 
+
 
 	function editMqtt() {
 
@@ -301,7 +301,7 @@
 		
 		$.ajax({
 			url : 'mqttServlet',
-			type : 'PUT',
+			type : 'POST',
 			data : {
 				broker_ip_address : broker_ip_address,
 				port_number : port_number,
@@ -312,7 +312,8 @@
 				prefix : prefix,
 				file_type : file_type,
 				enable : enable,
-				file_name : file_name
+				file_name : file_name,
+				action: 'update'
 
 			},
 			success : function(data) {
@@ -344,7 +345,7 @@
 
 	// Function to handle form submission and add a new mqtt
 	function addMqtt() {
-
+		
 		var broker_ip_address = $('#broker_ip_address').val();
 		var port_number = $('#port_number').val();
 		var username = $('#username').val();
@@ -369,11 +370,13 @@
 				prefix : prefix,
 				file_type : file_type,
 				enable : enable,
-				file_name : file_name
-
+				file_name : file_name,
+				action: 'add'
+				
 			},
 			success : function(data) {
 				// Display the registration status message
+				
 				alert(data.message);
 				loadMqttList();
 
@@ -489,10 +492,10 @@
 									
 									if ($(this).val() == 'SSL'
 											|| $(this).val() == 'ssl') {
-										$("#crt_file").prop("disabled", false);
+										$("#file_name").prop("disabled", false);
 									} else if ($(this).val() == 'TCP'
 											|| $(this).val() == 'tcp') {
-										$("#crt_file").prop("disabled", true);
+										$("#file_name").prop("disabled", true);
 									}
 								});
 
@@ -567,6 +570,9 @@
 
 			<div class="container">
 				<form id="mqttForm">
+				
+				 <input type="hidden" id="action" name="action" value="">
+				 
 					<div class="row"
 						style="display: flex; flex-content: space-between; margin-top: -20px;">
 

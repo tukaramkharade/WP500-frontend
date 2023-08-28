@@ -19,7 +19,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.tas.wp500.utils.IntervalMapper;
-import com.tas.wp500.utils.IntervalMapperReverse;
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/alarmConfigServlet")
@@ -59,13 +58,13 @@ public class AlarmConfigServlet extends HttpServlet {
 				for (int i = 0; i < alarm_result.length(); i++) {
 
 					String alarm_tag = alarm_result.getString("alarm_tag");
-					String interval = alarm_result.getString("intrval");
+					int interval = alarm_result.getInt("intrval");
 					String broker_type = alarm_result.getString("broker_type");
 					String broker_ip = alarm_result.getString("broker_ip");
 					String asset_id = alarm_result.getString("asset_id");
 					String unit_id = alarm_result.getString("unit_id");
 
-					String intervalString = IntervalMapperReverse.getIntervalString(interval);
+					String intervalString = IntervalMapper.getIntervalByValue(interval);
 
 					try {
 						disObj.put("alarm_tag", alarm_tag);
@@ -120,153 +119,147 @@ public class AlarmConfigServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 
-		if (check_username != null) {
+		String unit_id = null;
+		String asset_id = null;
+		String broker_type = null;
+		String broker_name = null;
+		String interval = null;
+		String tagData = null;
+		String intervalValue = null;
 
-			String unit_id = request.getParameter("unit_id");
-			String asset_id = request.getParameter("asset_id");
-			String broker_type = request.getParameter("broker_type");
-			String broker_name = request.getParameter("broker_name");
-			String interval = request.getParameter("interval");
-			String tagData = request.getParameter("tagData");
-
-			String intervalValue = IntervalMapper.getIntervalValue(interval);
-
-			JSONParser parser = new JSONParser();
-			org.json.simple.JSONObject json_string_con = null;
-			try {
-				json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				logger.error("Error converting into json object: " + e1);
-			}
-
-			try {
-
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "alarm");
-				json.put("operation_type", "add_query");
-				json.put("id", "1");
-				json.put("user", check_username);
-				json.put("unit_id", unit_id);
-				json.put("asset_id", asset_id);
-				json.put("broker_type", broker_type);
-				json.put("broker_ip", broker_name);
-				json.put("intrval", intervalValue);
-				json.put("alarm_tag", json_string_con);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error adding alarm data : " + e);
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doPut(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
+		JSONParser parser = new JSONParser();
+		org.json.simple.JSONObject json_string_con = null;
 
 		if (check_username != null) {
 
-			String unit_id = request.getParameter("unit_id");
-			String asset_id = request.getParameter("asset_id");
-			String broker_type = request.getParameter("broker_type");
-			String broker_name = request.getParameter("broker_name");
-			String interval = request.getParameter("interval");
-			String tagData = request.getParameter("tagData");
+			String action = request.getParameter("action");
 
-			String intervalValue = IntervalMapper.getIntervalValue(interval);
+			if (action != null) {
+				switch (action) {
 
-			JSONParser parser = new JSONParser();
-			org.json.simple.JSONObject json_string_con = null;
-			try {
-				json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				case "add":
+					unit_id = request.getParameter("unit_id");
+					asset_id = request.getParameter("asset_id");
+					broker_type = request.getParameter("broker_type");
+					broker_name = request.getParameter("broker_name");
+					interval = request.getParameter("interval");
+					tagData = request.getParameter("tagData");
+
+					intervalValue = IntervalMapper.getIntervalByString(interval);
+
+					try {
+						json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						logger.error("Error converting into json object: " + e1);
+					}
+
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "protocol");
+						json.put("protocol_type", "alarm");
+						json.put("operation_type", "add_query");
+						json.put("id", "1");
+						json.put("user", check_username);
+						json.put("unit_id", unit_id);
+						json.put("asset_id", asset_id);
+						json.put("broker_type", broker_type);
+						json.put("broker_ip", broker_name);
+						json.put("intrval", intervalValue);
+						json.put("alarm_tag", json_string_con);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error adding alarm data : " + e);
+					}
+
+					break;
+
+				case "update":
+					unit_id = request.getParameter("unit_id");
+					asset_id = request.getParameter("asset_id");
+					broker_type = request.getParameter("broker_type");
+					broker_name = request.getParameter("broker_name");
+					interval = request.getParameter("interval");
+					tagData = request.getParameter("tagData");
+
+					intervalValue = IntervalMapper.getIntervalByString(interval);
+
+					try {
+						json_string_con = (org.json.simple.JSONObject) parser.parse(tagData);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "protocol");
+						json.put("protocol_type", "alarm");
+						json.put("operation_type", "update_query");
+						json.put("user", check_username);
+						json.put("id", "1");
+						json.put("username", "admin");
+						json.put("unit_id", unit_id);
+						json.put("asset_id", asset_id);
+						json.put("broker_type", broker_type);
+						json.put("broker_ip", broker_name);
+						json.put("intrval", intervalValue);
+						json.put("alarm_tag", json_string_con);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error updating alarm data : " + e);
+					}
+
+					break;
+				}
 			}
 
-			try {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "alarm");
-				json.put("operation_type", "update_query");
-				json.put("user", check_username);
-				json.put("id", "1");
-				json.put("username", "admin");
-				json.put("unit_id", unit_id);
-				json.put("asset_id", asset_id);
-				json.put("broker_type", broker_type);
-				json.put("broker_ip", broker_name);
-				json.put("intrval", intervalValue);
-				json.put("alarm_tag", json_string_con);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error updating alarm data : " + e);
-			}
 		} else {
 			try {
 				JSONObject userObj = new JSONObject();

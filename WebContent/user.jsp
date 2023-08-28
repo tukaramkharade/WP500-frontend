@@ -56,6 +56,7 @@ var roleValue;
 														.text('Edit')
 														.click(
 																function() {
+																	
 																	settUser(user.username);
 																	setFirstName(user.first_name);
 																	setLastName(user.last_name);
@@ -138,9 +139,10 @@ var roleValue;
 		if (confirmation) {
 			$.ajax({
 				url : 'userServlet',
-				type : 'DELETE',
+				type : 'POST',
 				data : {
-					username : userId
+					username : userId,
+					action: 'delete'
 				},
 				success : function(data) {
 					// Display the registration status message
@@ -186,12 +188,13 @@ var roleValue;
 
 		$.ajax({
 			url : 'userServlet',
-			type : 'PUT',
+			type : 'POST',
 			data : {
 				username : username,
 				first_name : first_name,
 				last_name : last_name,
-				role : role
+				role : role,
+				action: 'update'
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -199,7 +202,11 @@ var roleValue;
 				loadUserList();
 
 				// Clear form fields
-				clearFields();
+			$('#username').val('');
+	    $('#password').val('');
+	    $('#first_name').val('');
+	    $('#last_name').val('');
+	    $('#role').val('Select role');
 
 				$("#password").prop("disabled", false);
 
@@ -230,7 +237,8 @@ var roleValue;
 				password : password,
 				first_name : first_name,
 				last_name : last_name,
-				role : role
+				role : role,
+				action: 'add'
 			},
 			success : function(data) {
 				// Display the registration status message
@@ -238,8 +246,11 @@ var roleValue;
 				loadUserList();
 
 				// Clear form fields
-
-				clearFields();
+				$('#username').val('');
+			    $('#password').val('');
+			    $('#first_name').val('');
+			    $('#last_name').val('');
+			    $('#role').val('Select role');
 
 			},
 			error : function(xhr, status, error) {
@@ -294,14 +305,6 @@ var roleValue;
         } 
     }
 	
-	function clearFields() {
-	    $('#username').val('');
-	    $('#password').val('');
-	    $('#first_name').val('');
-	    $('#last_name').val('');
-	    $('#role').val('Select role');
-	}
-	
 	// Function to execute on page load
 	$(document).ready(function() {
 		
@@ -338,10 +341,16 @@ var roleValue;
 			}
 
 			
-			if (!validatePassword(password)) {
-				passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
-				return;
-			}			
+			 var isDisabled = $("#password").prop("disabled");
+			 
+			 if (!isDisabled) {
+				 if (!validatePassword(password)) {
+						passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+						return;
+					}	
+			    } 
+			
+					
 			if (buttonText == 'Add') {
 				addUser();
 
@@ -351,7 +360,11 @@ var roleValue;
 			}
 		});
 
-		clearFields();
+		$('#username').val('');
+	    $('#password').val('');
+	    $('#first_name').val('');
+	    $('#last_name').val('');
+	    $('#role').val('Select role');
 
 	});
 </script>
@@ -370,7 +383,10 @@ var roleValue;
 			<hr>
 
 			<div class="container">
-				<form id="userForm" onsubmit="clearFields()">
+				<form id="userForm">
+				
+				<input type="hidden" id="action" name="action" value="">
+				
 					<div class="row"
 						style="display: flex; flex-content: space-between; margin-top: -20px;">
 						<div class="col-75-1" style="width: 20%;">
@@ -408,7 +424,7 @@ var roleValue;
 
 					<div class="row"
 						style="display: flex; justify-content: right; margin-top: 2%;">
-						<input type="button" value="Clear" id="clearBtn" onclick="clearFields()"/> <input
+						<input type="button" value="Clear" id="clearBtn"/> <input
 							style="margin-left: 5px;" type="submit" value="Add"
 							id="registerBtn" />
 					</div>

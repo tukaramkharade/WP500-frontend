@@ -406,9 +406,7 @@ var json = {};
 	  			$('#asset_id').val('');
 	  			$('#broker_type').val('Select broker type');
 	  			$('#broker_name').val('Select broker IP address');
-	  			$('#interval').val('Select interval');
-	    		  
-	    	  
+	  			$('#interval').val('Select interval');	    		
 	    	});
 	       	 
 	       	$("#delBtn").click(function () {
@@ -452,14 +450,15 @@ var json = {};
 		   
 			$.ajax({
 				url : 'commandConfigServlet',
-				type : 'PUT',
+				type : 'POST',
 				data : {
 					unit_id : unit_id,
 					asset_id : asset_id,
 					broker_type : broker_type,
 					broker_name : broker_name,
 					interval : interval,
-					tagData: JSON.stringify(tagData)
+					tagData: JSON.stringify(tagData),
+					action: 'update'
 					
 					
 				},
@@ -505,7 +504,8 @@ var json = {};
 					broker_type : broker_type,
 					broker_name : broker_name,
 					interval : interval,
-					tagData: JSON.stringify(tagData)
+					tagData: JSON.stringify(tagData),
+					action: 'add'
 					
 				},
 				success : function(data) {
@@ -545,7 +545,9 @@ var json = {};
 		<h3>COMMAND CONFIG SETTINGS</h3>
 		<hr>
 		<div class="container">
-			<form id="commandConfigForm" action="commandConfigEditServlet">
+			<form id="commandConfigForm">
+			
+			<input type="hidden" id="action" name="action" value="">
 				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="unit_id" name="unit_id"

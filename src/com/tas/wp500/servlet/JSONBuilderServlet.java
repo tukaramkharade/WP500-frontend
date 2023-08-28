@@ -18,7 +18,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.tas.wp500.utils.IntervalMapper;
-import com.tas.wp500.utils.IntervalMapperReverse;
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/jsonBuilderServlet")
@@ -63,7 +62,9 @@ public class JSONBuilderServlet extends HttpServlet {
 					String store_n_forward = jsObj.getString("store_n_forward");
 					String json_string = jsObj.getString("json_string");
 					
-					String intervalString = IntervalMapperReverse.getIntervalString(json_interval);
+					int intervalValue = Integer.parseInt(json_interval);
+					String intervalString = IntervalMapper.getIntervalByValue(intervalValue);
+					
 
 					JSONObject jsonBuilderObj = new JSONObject();
 
@@ -119,234 +120,203 @@ public class JSONBuilderServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		
+		String json_string_name = null;
+		String jsonInterval = null;
+		String broker_type = null;
+		String broker_name = null;
+		String publishTopic = null;
+		String publishStatus = null;
+		String storeAndForward = null;
+		String json_string_text = null;
+		
+		String intervalValue = null;
+		
+		JSONParser parser = new JSONParser();
+		org.json.simple.JSONObject json_string_con = null;
+		
 
 		if (check_username != null) {
-
-			String json_string_name = request.getParameter("json_string_name");
-			String jsonInterval = request.getParameter("json_interval");
-			String broker_type = request.getParameter("broker_type");
-			String broker_name = request.getParameter("broker_name");
-			String publishTopic = request.getParameter("publish_topic");
-			String publishStatus = request.getParameter("publishing_status");
-			String storeAndForward = request.getParameter("storeAndForward");
-			String json_string_text = request.getParameter("json_string_text");
 			
-			String intervalValue = IntervalMapper.getIntervalValue(jsonInterval);
+			String action = request.getParameter("action");
 
-			
-			JSONParser parser = new JSONParser();
-			org.json.simple.JSONObject json_string_con = null;
-			try {
-				json_string_con = (org.json.simple.JSONObject) parser.parse(json_string_text);
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-				logger.error("Error in converting into json object : "+e1);
-			}
+			if (action != null) {
+				switch (action) {
+				
+				case "add":
+					json_string_name = request.getParameter("json_string_name");
+					 jsonInterval = request.getParameter("json_interval");
+					 broker_type = request.getParameter("broker_type");
+					 broker_name = request.getParameter("broker_name");
+					 publishTopic = request.getParameter("publish_topic");
+					 publishStatus = request.getParameter("publishing_status");
+					 storeAndForward = request.getParameter("storeAndForward");
+					 json_string_text = request.getParameter("json_string_text");
+					
+					 intervalValue = IntervalMapper.getIntervalByString(jsonInterval);
+				
+					
+					try {
+						json_string_con = (org.json.simple.JSONObject) parser.parse(json_string_text);
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+						logger.error("Error in converting into json object : "+e1);
+					}
 
-			try {
+					try {
 
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-				json.put("operation", "protocol");
-				json.put("protocol_type", "json_builder");
-				json.put("operation_type", "add_query");
-				json.put("user", check_username);
+						json.put("operation", "protocol");
+						json.put("protocol_type", "json_builder");
+						json.put("operation_type", "add_query");
+						json.put("user", check_username);
 
-				JSONObject json_data = new JSONObject();
-				json_data.put("json_string_name", json_string_name);
-				json_data.put("json_interval", intervalValue);
-				json_data.put("broker_type", broker_type);
-				json_data.put("broker_ip_address", broker_name);
-				json_data.put("publish_topic_name", publishTopic);
-				json_data.put("publishing_status", publishStatus);
-				json_data.put("store_n_forward", storeAndForward);
-				json_data.put("json_string", json_string_con);
+						JSONObject json_data = new JSONObject();
+						json_data.put("json_string_name", json_string_name);
+						json_data.put("json_interval", intervalValue);
+						json_data.put("broker_type", broker_type);
+						json_data.put("broker_ip_address", broker_name);
+						json_data.put("publish_topic_name", publishTopic);
+						json_data.put("publishing_status", publishStatus);
+						json_data.put("store_n_forward", storeAndForward);
+						json_data.put("json_string", json_string_con);
 
-				json.put("Data", json_data);
+						json.put("Data", json_data);
 
-				String respStr = client.sendMessage(json.toString());
+						String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.info("Error in adding json builder : "+e);
-			}
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.info("Error in adding json builder : "+e);
+					}				
+					break;
+					
+				case "update":
+					
+					 json_string_name = request.getParameter("json_string_name");
+					 jsonInterval = request.getParameter("json_interval");
+					 broker_type = request.getParameter("broker_type");
+					 broker_name = request.getParameter("broker_name");
+					 publishTopic = request.getParameter("publish_topic");
+					 publishStatus = request.getParameter("publishing_status");
+					 storeAndForward = request.getParameter("storeAndForward");
+					 json_string_text = request.getParameter("json_string_text");
+					
+					intervalValue = IntervalMapper.getIntervalByString(jsonInterval);
+
+					try {
+						json_string_con = (org.json.simple.JSONObject) parser.parse(json_string_text);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						logger.error("Error in converting into json object : "+e1);
+					}
+
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "protocol");
+						json.put("protocol_type", "json_builder");
+						json.put("operation_type", "update_query");
+						json.put("user", check_username);
+
+						JSONObject json_data = new JSONObject();
+						json_data.put("json_string_name", json_string_name);							
+						json_data.put("json_interval", intervalValue);
+						json_data.put("broker_type", broker_type);
+						json_data.put("broker_ip_address", broker_name);
+						json_data.put("publish_topic_name", publishTopic);
+						json_data.put("publishing_status", publishStatus);
+						json_data.put("store_n_forward", storeAndForward);
+
+						json_data.put("json_string", json_string_con);
+
+						json.put("Data", json_data);
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating json builder : "+e);
+					}					
+					break;
+					
+				case "delete":
+					
+					 json_string_name = request.getParameter("json_string_name");
+					 
+					 try {
+							TCPClient client = new TCPClient();
+							JSONObject json = new JSONObject();
+
+							json.put("operation", "protocol");
+							json.put("protocol_type", "json_builder");
+							json.put("operation_type", "delete_query");
+							json.put("user", check_username);
+							json.put("json_string_name", json_string_name);
+							
+							String respStr = client.sendMessage(json.toString());
+
+							logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+							String message = new JSONObject(respStr).getString("msg");
+							JSONObject jsonObject = new JSONObject();
+							jsonObject.put("message", message);
+
+							// Set the content type of the response to application/json
+							response.setContentType("application/json");
+
+							// Get the response PrintWriter
+							PrintWriter out = response.getWriter();
+
+							// Write the JSON object to the response
+							out.print(jsonObject.toString());
+							out.flush();
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							logger.error("Error in deleting json builder : "+e);
+						}				
+					break;
+				}
+			}			 
 		} else {
-			
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-
-			String json_string_name = request.getParameter("json_string_name");
-			String jsonInterval = request.getParameter("json_interval");
-			String broker_type = request.getParameter("broker_type");
-			String broker_name = request.getParameter("broker_name");
-			String publishTopic = request.getParameter("publish_topic");
-			String publishStatus = request.getParameter("publishing_status");
-			String storeAndForward = request.getParameter("storeAndForward");
-			String json_string_text = request.getParameter("json_string_text");
-			
-			String intervalValue = IntervalMapper.getIntervalValue(jsonInterval);
-
-			JSONParser parser = new JSONParser();
-			org.json.simple.JSONObject json_string_con = null;
-			try {
-				json_string_con = (org.json.simple.JSONObject) parser.parse(json_string_text);
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				logger.error("Error in converting into json object : "+e1);
-			}
-
-			try {
-
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "json_builder");
-				json.put("operation_type", "update_query");
-				json.put("user", check_username);
-
-				JSONObject json_data = new JSONObject();
-				json_data.put("json_string_name", json_string_name);							
-				json_data.put("json_interval", intervalValue);
-				json_data.put("broker_type", broker_type);
-				json_data.put("broker_ip_address", broker_name);
-				json_data.put("publish_topic_name", publishTopic);
-				json_data.put("publishing_status", publishStatus);
-				json_data.put("store_n_forward", storeAndForward);
-
-				json_data.put("json_string", json_string_con);
-
-				json.put("Data", json_data);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in updating json builder : "+e);
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-			
-		String json_string_name = request.getParameter("json_string_name");
-
-		try {
-
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			json.put("operation", "protocol");
-			json.put("protocol_type", "json_builder");
-			json.put("operation_type", "delete_query");
-			json.put("user", check_username);
-			json.put("json_string_name", json_string_name);
-			
-			String respStr = client.sendMessage(json.toString());
-
-			logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-			String message = new JSONObject(respStr).getString("msg");
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("message", message);
-
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
-
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
-
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error in deleting json builder : "+e);
-		}
-		}else{
 			
 			try {
 				JSONObject userObj = new JSONObject();
