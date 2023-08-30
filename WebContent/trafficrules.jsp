@@ -758,8 +758,6 @@ var roleValue;
 
 					</div>
 
-
-
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="type" name="type"
 							style="height: 35px;">

@@ -31,6 +31,12 @@ public class SMTPServlet extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			JSONObject jsonObject = new JSONObject();
+			String tls_auth = "";
+			String tls_enable = "";
+			String tls_port = "";
+			String ssl_smtp_type = "";
+			String ssl_socket_factory_port =""; 
+			String ssl_port = "";
 			
 			try {
 				
@@ -47,16 +53,23 @@ public class SMTPServlet extends HttpServlet {
 				
 				for (int i = 0; i < respJson.length(); i++) {
 					
-					String ssl_socket_factory_port = respJson.getString("ssl_socket_factory_port");
-					String tls_port = respJson.getString("tls_port");
+					
 					String from_email_id = respJson.getString("from_email_id");
 					String password = respJson.getString("password");
 					String smtp_type = respJson.getString("smtp_type");
-					String tls_auth = respJson.getString("tls_auth");
-					String tls_enable = respJson.getString("tls_enable");
-					String ssl_smtp_type = respJson.getString("ssl_smtp_type");
 					String host = respJson.getString("host");
-					String ssl_port = respJson.getString("ssl_port");
+					
+					if ("ssl".equalsIgnoreCase(smtp_type)) {
+						ssl_socket_factory_port = respJson.getString("ssl_socket_factory_port");
+						ssl_port = respJson.getString("ssl_port");
+						ssl_smtp_type = respJson.getString("ssl_smtp_type");
+						
+					} else if ("tls".equalsIgnoreCase(smtp_type)) {
+						tls_port = respJson.getString("tls_port");
+						tls_auth = respJson.getString("tls_auth");
+						tls_enable = respJson.getString("tls_enable");
+						
+					}
 					
 					try {
 						jsonObject.put("ssl_socket_factory_port", ssl_socket_factory_port);
@@ -68,7 +81,7 @@ public class SMTPServlet extends HttpServlet {
 						jsonObject.put("tls_enable", tls_enable);
 						jsonObject.put("ssl_smtp_type", ssl_smtp_type);
 						jsonObject.put("host", host);
-						jsonObject.put("ssl_port", ssl_port);
+						jsonObject.put("ssl_port", ssl_port); 
 						
 					} catch (Exception e) {
 						e.printStackTrace();

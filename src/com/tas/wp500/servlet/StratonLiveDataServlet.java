@@ -49,8 +49,6 @@ public class StratonLiveDataServlet extends HttpServlet {
 				logger.info("Straton live value response : " + respJson.toString());
 
 				JSONArray resultArr = respJson.getJSONArray("result");
-
-				System.out.println("Result before sorting: " + resultArr.toString());
 				
 				String result_arr = resultArr.toString();
 								

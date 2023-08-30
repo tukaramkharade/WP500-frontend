@@ -498,8 +498,12 @@ function addAlarmConfig() {
 </head>
 
 <body>
-	<div class="sidebar"><%@ include file="common.jsp"%></div>
-	<div class="header"><%@ include file="header.jsp"%></div>
+	<div class="sidebar">
+		<%@ include file="common.jsp"%>
+	</div>
+	<div class="header">
+		<%@ include file="header.jsp"%>
+	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
 		<h3>ALARM CONFIG SETTINGS</h3>
@@ -609,6 +613,8 @@ function addAlarmConfig() {
 		</section>
 	</div>
 
-	<div class="footer"><%@ include file="footer.jsp"%></div>
+	<div class="footer">
+		<%@ include file="footer.jsp"%>
+	</div>
 </body>
 </html>

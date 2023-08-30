@@ -132,9 +132,7 @@
                 <li class="nav-item">
                   <a href="storeforward.jsp">Store and Forward</a>
                 </li>
-                <li class="nav-item">
-                  <a href="smtp.jsp">SMTP Settings</a>
-                </li>
+                
               </ul>
             </div>
           </li>
@@ -157,6 +155,28 @@
                 <!-- <li class="nav-item">
                 <a href="loadconfig.jsp">Load Config</a>
               </li> -->
+              </ul>
+            </div>
+          </li>
+          
+          <li class="nav-item">
+            <a class="dropdown-btn">
+              <div class="sidebar-title">
+                <img src="icons/network_white.png" />
+                <div class="sidebar-title">CyberGuard</div>
+              </div>
+            </a>
+            <div class="dropdown-container">
+              <ul>
+              <li class="nav-item">
+                  <a href="dashboard.jsp">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                  <a href="threatsandattacks.jsp">Threats and attacks</a>
+                </li>
+                <li class="nav-item">
+                  <a href="smtp.jsp">SMTP Settings</a>
+                </li>
               </ul>
             </div>
           </li>

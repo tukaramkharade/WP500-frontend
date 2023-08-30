@@ -7,10 +7,13 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+
+	
 }
 
 #prevPage, #nextPage {
 	margin-right: 10px; /* Add some spacing between the links */
+	margin-left: 5px;
 }
 </style>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
@@ -26,77 +29,128 @@
 <script>
 	var currentPage = 1; // Initial page
 	var itemsPerPage = 100; // Items per page
-
+	var total_pages=0;
+	
 	function getStoreForwardData() {
 		$.ajax({
 			url : 'storeForwardDataServlet',
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
-				var storeForwardDataTable = $('#data-table tbody');
-				storeForwardDataTable.empty();
-				
-				var json1 = JSON.stringify(data);
+	            if (Array.isArray(data) && data.length > 0) {
+	                total_pages = data[0].total_pages; // Access the total_pages value
+	                console.log("totalPageNo: " + total_pages);
+	            } else {
+	                console.log("No valid data received.");
+	            }
+	            
+	            var storeForwardDataTable = $('#data-table tbody');
+	            storeForwardDataTable.empty();
 
-				var json = JSON.parse(json1);
+	            var json1 = JSON.stringify(data);
+	            var json = JSON.parse(json1);
 
-				if (json.status == 'fail') {
-					var confirmation = confirm(json.msg);
-					if (confirmation) {
-						window.location.href = 'login.jsp';
-					}
-				}
+	            if (json.status == 'fail') {
+	                var confirmation = confirm(json.msg);
+	                if (confirmation) {
+	                    window.location.href = 'login.jsp';
+	                }
+	            }
+	            clearTable();
+	            if(data.dateTime != null){
+	            	console.log("Data Fetching")
+	            $.each(data, function(index, storeForwardData) {
+	                var row = $('<tr>');
+	                row.append($('<td>').text(storeForwardData.dateTime + ""));
+	                row.append($('<td>').text(storeForwardData.dataString + ""));
+	                row.append($('<td>').text(storeForwardData.brokerIp + ""));
+	                row.append($('<td>').text(storeForwardData.publishTopic + ""));
+	                storeForwardDataTable.append(row);
+	            });
+	            }
 
-				var startIndex = (currentPage - 1) * itemsPerPage;
-				var endIndex = startIndex + itemsPerPage;
-
-				if (data.length > 0) {
-					$.each(data, function(index, storeForwardData) {
-						if (index >= startIndex && index < endIndex) {
-							var row = $('<tr>');
-							row.append($('<td>').text(
-									storeForwardData.dateTime + ""));
-							row.append($('<td>').text(
-									storeForwardData.dataString + ""));
-							row.append($('<td>').text(
-									storeForwardData.brokerIp + ""));
-							row.append($('<td>').text(
-									storeForwardData.publishTopic + ""));
-							storeForwardDataTable.append(row);
-						}
-					});
-
-					// Show pagination controls if needed
-					$('#pagination').show();
-				} else {
-					// Hide pagination controls if there is no data
-					$('#pagination').hide();
-				}
-			},
-			error : function(xhr, status, error) {
-				console.log('Error loading store forward data: ' + error);
-			}
-		});
+	            // Hide pagination controls since there's no pagination
+	             
+	        },
+	        error: function(xhr, status, error) {
+	            console.log('Error loading store forward data: ' + error);
+	        }
+	    });
 	}
 
+	function getStoreForward(currentPage) {
+	    $.ajax({
+	        url: 'storeForwardDataServlet',
+	        type: 'POST', // Use POST method
+	        data: { currentPage: currentPage }, // Pass current page number
+	        dataType: 'json',
+	        success: function (data) {
+	            if (Array.isArray(data) && data.length > 0) {
+	                total_pages = data[0].total_pages; // Access the total_pages value
+	                console.log("totalPageNo: " + total_pages);
+	            } else {
+	                console.log("No valid data received.");
+	            }
+	            
+	            var storeForwardDataTable = $('#data-table tbody');
+	            storeForwardDataTable.empty();
+
+	            var json1 = JSON.stringify(data);
+	            var json = JSON.parse(json1);
+
+	            if (json.status == 'fail') {
+	                var confirmation = confirm(json.msg);
+	                if (confirmation) {
+	                    window.location.href = 'login.jsp';
+	                }
+	            }
+	            clearTable();
+	            $.each(data, function(index, storeForwardData) {
+	                var row = $('<tr>');
+	                row.append($('<td>').text(storeForwardData.dateTime + ""));
+	                row.append($('<td>').text(storeForwardData.dataString + ""));
+	                row.append($('<td>').text(storeForwardData.brokerIp + ""));
+	                row.append($('<td>').text(storeForwardData.publishTopic + ""));
+	                storeForwardDataTable.append(row);
+	            });
+
+	            // Hide pagination controls since there's no pagination
+	             
+	        },
+	        error: function(xhr, status, error) {
+	            console.log('Error loading store forward data: ' + error);
+	        }
+	    });
+	}
+
+	function clearTable() {
+        $('#data-table tbody').empty();
+    }
+	function updatePageInfo() {
+		$('#pageInfo').text('Page ' + currentPage);
+	}
 	$(document).ready(function() {
 		getStoreForwardData();
 		$('#prevPage').on('click', function() {
 			if (currentPage > 1) {
 				currentPage--;
-				getStoreForwardData();
+				clearTable(); 
+				getStoreForward(currentPage);
 				updatePageInfo();
 			}
 		});
 
 		$('#nextPage').on('click', function() {
+	
+			 console.log("totalPageNo: " + total_pages);
+			if(currentPage < total_pages){
 			currentPage++;
-			getStoreForwardData();
+			clearTable();
+			getStoreForward(currentPage);
 			updatePageInfo();
-		});
-		function updatePageInfo() {
-			$('#pageInfo').text('Page ' + currentPage);
 		}
+		});
+		
 		
 });
 	
@@ -110,15 +164,15 @@
 	<div class="header"><%@ include file="header.jsp"%></div>
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>STORE FORWORD DATA</h3>
+			<h3>STORE FORWARD DATA</h3>
 			<button onClick="window.location.reload();"
 				style="cursor: pointer; background-color: #35449a; border-radius: 5px; border: none; color: white; font-size: small">Refresh
 				Page</button>
 
 			<div class="pagination" id="pagination">
 				<!-- Ensure the ID is "pagination" -->
-				<a href="#" id="prevPage">Previous</a> <span id="pageInfo">Page
-					1</span> <a href="#" id="nextPage">Next</a>
+				<a href="#" id="prevPage">Previous</a> <span id="pageInfo">Page1</span> 
+				<a href="#" id="nextPage">Next</a>
 			</div>
 
 

@@ -32,6 +32,13 @@ function getSMTPSettings() {
 			$('#password').val(data.password);
 			$('#host').val(data.host);
 			$('#smtp_type').val(data.smtp_type);
+			if(data.smtp_type =='ssl' || data.smtp_type =='SSL'){
+				$('#tls_port, #tls_auth, #tls_enable').prop('disabled', true);
+	            $('#ssl_socket_factory_port, #ssl_port, #ssl_smtp_type').prop('disabled', false);
+			} else if (data.smtp_type =='tls' || data.smtp_type =='TLS'){
+				$('#ssl_socket_factory_port, #ssl_port, #ssl_smtp_type').prop('disabled', true);
+	            $('#tls_port, #tls_auth, #tls_enable').prop('disabled', false);
+			}
 			$('#ssl_socket_factory_port').val(data.ssl_socket_factory_port);
 			$('#ssl_port').val(data.ssl_port);
 			$('#ssl_smtp_type').val(data.ssl_smtp_type);
@@ -375,7 +382,6 @@ roleValue = '<%=roleValue%>';
 						<select class="smtp_type" id="smtp_type" name="smtp_type"
 							style="height: 35px">
 							<option value="Select SMTP type">Select SMTP type</option>
-							<option value="No authentication">No authentication</option>
 							<option value="SSL">SSL</option>
 							<option value="TLS">TLS</option>
 						</select>
