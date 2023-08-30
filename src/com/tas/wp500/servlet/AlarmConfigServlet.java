@@ -131,7 +131,6 @@ public class AlarmConfigServlet extends HttpServlet {
 		org.json.simple.JSONObject json_string_con = null;
 
 		if (check_username != null) {
-
 			String action = request.getParameter("action");
 
 			if (action != null) {

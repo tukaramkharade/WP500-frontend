@@ -98,30 +98,19 @@ var json = {};
 							}
 						}
 						
-		//		$.each(data,function(index, commandConfig) {
-									
-									/* var unit_id = commandConfig.unit_id;
-									var asset_id = commandConfig.asset_id;
-									var broker_type = commandConfig.broker_type;
-									var broker_ip = commandConfig.broker_ip;
-									var interval = commandConfig.interval;
-									var command_tag = commandConfig.command_tag; */
-									
-									$('#unit_id').val(data.unit_id);
-									$('#asset_id').val(data.asset_id);
-									$('#broker_type').val(data.broker_type);
-									$('#broker_name').val(data.broker_ip);
-									$('#interval').val(data.interval);
+				
+									var unit_id = $('#unit_id').val(data.unit_id);
+									var asset_id = $('#asset_id').val(data.asset_id);
+									var broker_type = $('#broker_type').val(data.broker_type);
+									var broker_ip = $('#broker_name').val(data.broker_ip);
+									var interval = $('#interval').val(data.interval);
 									
 									var result = data.command_tag;
-									
-								//	alert('role : '+roleValue)
-								//	alert(broker_ip);
-									
+								
 									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 										
 										$.each($.parseJSON(result), function(k, v) {
-									//					    alert(k + ' and ' + v);
+									
 														    
 														    var newRow = $("<tr>")
 						    	        					.append($("<td>").text(k))
@@ -146,7 +135,7 @@ var json = {};
 								  else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 										
 										$.each($.parseJSON(result), function(k, v) {
-										//				    alert(k + ' and ' + v);
+										
 														    
 														    var newRow = $("<tr>")
 						    	        					.append($("<td>").text(k))
@@ -163,15 +152,7 @@ var json = {};
 									else{
 										$('#addBtn').val('Add');
 									}
-									//alert(JSON.stringify(alarm_tag));
-									
-									$('#unit_id').val(unit_id);
-									$('#asset_id').val(asset_id);
-									$('#broker_type').val(broker_type);
-									$('#broker_name').val(broker_ip);
-									$('#interval').val(interval);
-									
-					//			});
+								
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed

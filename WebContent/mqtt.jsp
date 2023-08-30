@@ -487,8 +487,7 @@
 
 						loadCrtFilesList();
 
-						$("#file_type").change(
-								function(event) {
+						$("#file_type").change(function(event) {
 									
 									if ($(this).val() == 'SSL'
 											|| $(this).val() == 'ssl') {
@@ -500,9 +499,7 @@
 								});
 
 						// Handle form submission
-						$('#mqttForm')
-								.submit(
-										function(event) {
+						$('#mqttForm').submit(function(event) {
 											event.preventDefault();
 											var buttonText = $('#registerBtn')
 													.val();
@@ -636,7 +633,7 @@
 						<div class="col-75-9" style="width: 20%;">
 
 							<select class="textBox" id="file_name" name="file_name"
-								style="height: 35px;" required>
+								style="height: 35px;">
 								<option value="Select crt file">Select crt file</option>
 
 							</select> <span id="crtFileError" style="color: red;"></span>

@@ -96,23 +96,13 @@ var roleValue;
 								window.location.href = 'login.jsp';
 							}
 						}
-						
-			//	$.each(data,function(index, alarmConfig) {
-							
-									/* var unit_id = alarmConfig.unit_id;
-									var asset_id = alarmConfig.asset_id;
-									var broker_type = alarmConfig.broker_type;
-									var broker_ip = alarmConfig.broker_ip;
-									var interval = alarmConfig.interval;
-									var alarm_tag = alarmConfig.alarm_tag; */
+			
 									
-									alert(data.unit_id + ' ' + data.alarm_tag);
-									
-									$('#unit_id').val(data.unit_id);
-									$('#asset_id').val(data.asset_id);
-									$('#broker_type').val(data.broker_type);
-									$('#broker_name').val(data.broker_ip);
-									$('#interval').val(data.interval);
+									var unit_id = $('#unit_id').val(data.unit_id);
+									var asset = $('#asset_id').val(data.asset_id);
+									var broker_type = $('#broker_type').val(data.broker_type);
+									var broker_ip = $('#broker_name').val(data.broker_ip);
+									var interval = $('#interval').val(data.interval);
 									//var alarm_tag = $('#alarm_tag').val(data.alarm_tag);
 									
 									var result = data.alarm_tag;
@@ -158,17 +148,7 @@ var roleValue;
 									else{
 										$('#addBtn').val('Add');
 									}
-									//alert(JSON.stringify(alarm_tag));
 									
-									$('#unit_id').val(unit_id);
-									$('#asset_id').val(asset_id);
-									$('#broker_type').val(broker_type);
-									$('#broker_name').val(broker_ip);
-									$('#interval').val(interval);
-									//$('#table_data').val(JSON.stringify(alarm_tag));
-									
-									
-							//	});
 			},
   			error : function(xhr, status, error) {
   				// Handle the error response, if needed
@@ -265,7 +245,6 @@ var roleValue;
 		}
 	}
      
-	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#addBtn');
         var $delete_button = $('#delBtn');
@@ -297,11 +276,7 @@ var roleValue;
             $save_button.css('background-color', '#2b3991'); // Reset to original color
         }
     }
-	
-	//function clearFields() {
-		
-	//}
-	
+
       $(document).ready(function () {
     	  
     	  <%
@@ -311,8 +286,6 @@ var roleValue;
     	%>
     	
     	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
-        
-    	//alert(roleValue);
     	
     	  loadAlarmSettings();
     	  

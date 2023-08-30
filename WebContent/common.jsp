@@ -15,12 +15,7 @@
 </head>
 
 <body>
-  <!-- <section class="header">
-        <header>
-          
-          
-        </header>
-      </section> -->
+  
   <section class="app">
     <aside class="sidebar">
       <header>
@@ -128,7 +123,6 @@
                   <a href="stratonlivedata.jsp">Straton Live Data</a>
                 </li>
                 
-                
                 <li class="nav-item">
                   <a href="alarmconfig.jsp">Alarm Config</a>
                 </li>
@@ -137,6 +131,9 @@
                 </li>
                 <li class="nav-item">
                   <a href="storeforward.jsp">Store and Forward</a>
+                </li>
+                <li class="nav-item">
+                  <a href="smtp.jsp">SMTP Settings</a>
                 </li>
               </ul>
             </div>
@@ -153,6 +150,9 @@
               <ul>
                 <li class="nav-item">
                   <a href="logs.jsp">Logs</a>
+                </li>
+                <li class="nav-item">
+                  <a href="systemlog.jsp">System Logs</a>
                 </li>
                 <!-- <li class="nav-item">
                 <a href="loadconfig.jsp">Load Config</a>

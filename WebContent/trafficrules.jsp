@@ -41,7 +41,7 @@ var roleValue;
 							}
 						}
 
-						// Iterate through the user data and add rows to the table
+						// Iterate through the traffic rules data and add rows to the table
 						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
 							$.each(data,function(index, trafficrules) {
@@ -81,7 +81,7 @@ var roleValue;
 																deleteTrafficRules(trafficrules.name);
 															});
 
-											//	actions.append(editButton);
+											
 											actions.append(editButton);
 											actions.append(deleteButton);
 
@@ -232,7 +232,6 @@ var roleValue;
 			$("#ip_addr").prop("disabled", true);
 		}
 		
-	
 		$.ajax({
 			url : 'trafficRulesServlet',
 			type : 'POST',
@@ -299,9 +298,7 @@ var roleValue;
 	}
 
 	function setMacAddress(trafficRulesId) {
-
-		
-		$('#macAddress').val(trafficRulesId);
+	$('#macAddress').val(trafficRulesId);
 
 	}
 
@@ -403,8 +400,6 @@ var roleValue;
 		var forward = $('#forward').val();
 		var rule_drop = $('#rule_drop').val();
 		
-		
-
 		$.ajax({
 			url : 'generalSettingsServlet',
 			type : 'POST',
@@ -469,7 +464,7 @@ var roleValue;
 
 			},
 			error : function(xhr, status, error) {
-				console.log('Error editing general setting: ' + error);
+				console.log('Error deleting general setting: ' + error);
 			}
 		});
 
@@ -669,7 +664,6 @@ var roleValue;
 	});
 </script>
 
-
 </head>
 <body>
 
@@ -725,9 +719,10 @@ var roleValue;
 
 				<div class="row"
 					style="display: flex; justify-content: right; margin-top: -1%;">
-					<input type="button" value="Apply" id="applyBtnGenSettings" /> <input
-						type="submit" value="Add" id="registerBtnGenSettings"
-						style="margin-left: 5px;" /> <input type="button" value="Delete"
+					<input type="button" value="Apply" id="applyBtnGenSettings" /> 
+					<input type="submit" value="Add" id="registerBtnGenSettings"
+						style="margin-left: 5px;" /> 
+						<input type="button" value="Delete"
 						id="delBtnGenSettings" style="margin-left: 5px;" />
 				</div>
 
