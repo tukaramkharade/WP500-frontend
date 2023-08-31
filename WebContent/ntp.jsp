@@ -3,8 +3,9 @@
 	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <html>
-<title>WP500 Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+<title>WPConnex Web Configuration</title>
+<link rel="icon" type="image/png" sizes="32x32"
+	href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -247,7 +248,6 @@ input:checked+.slider:before {
 .slider.round:before {
 	border-radius: 50%;
 }
-
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -286,7 +286,7 @@ input:checked+.slider:before {
 						window.location.href = 'login.jsp';
 					}
 				}
-				
+
 				//$('#ntp_client').prop('checked', data.ntp_client);
 				$('#ntp_client').prop('checked', data.ntp_client === '1');
 
@@ -345,31 +345,29 @@ input:checked+.slider:before {
 			dataType : 'json',
 			success : function(data) {
 				//alert(data.eth0_ipaddr + " " + data.eth0_subnet);
-				
+
 				var json1 = JSON.stringify(data);
 
-						var json = JSON.parse(json1);
+				var json = JSON.parse(json1);
 
-						if (json.status == 'fail') {
-							var confirmation = confirm(json.msg);
-							if (confirmation) {
-								window.location.href = 'login.jsp';
-							}
-						}			
+				if (json.status == 'fail') {
+					var confirmation = confirm(json.msg);
+					if (confirmation) {
+						window.location.href = 'login.jsp';
+					}
+				}
 
 				$('#ntp_server1').val(data.ntp_server1);
-				$('#ntp_server2').val(data.ntp_server2); 
+				$('#ntp_server2').val(data.ntp_server2);
 				$('#ntp_server3').val(data.ntp_server3);
-				$('#ntp_interval_1').val(data.ntp_interval);	
-				
-				
-				
+				$('#ntp_interval_1').val(data.ntp_interval);
+
 				console.log('lan1_ipaddr:', data.ntp_server1);
 				console.log('lan1_subnet:', data.ntp_server2);
-				
+
 				console.log('lan2_ipaddr:', data.ntp_server3);
 				console.log('lan2_subnet:', data.ntp_interval);
-				
+
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
@@ -377,30 +375,29 @@ input:checked+.slider:before {
 			}
 		});
 	}
-	
-	function editNtpData() {		
+
+	function editNtpData() {
 		var ntp_server1 = $('#ntp_server1').val();
-		var ntp_server2 = $('#ntp_server2').val();   
+		var ntp_server2 = $('#ntp_server2').val();
 		var ntp_server3 = $('#ntp_server3').val();
-		var ntp_interval = $('#ntp_interval_1').val();	
-		
+		var ntp_interval = $('#ntp_interval_1').val();
+
 		$.ajax({
-			
-			url : 'ntpDataUpadate', 
+
+			url : 'ntpDataUpadate',
 			type : 'POST',
 			data : {
 				ntp_server1 : ntp_server1,
 				ntp_server2 : ntp_server2,
 				ntp_server3 : ntp_server3,
 				ntp_interval : ntp_interval
-				
+
 			},
 			success : function(data) {
-					alert(data.message);
-					
-					//clear fields
-					
-			
+				alert(data.message);
+
+				//clear fields
+
 			},
 			error : function(xhr, status, error) {
 				console.log('Error updating lan : ' + error);
@@ -408,7 +405,7 @@ input:checked+.slider:before {
 		});
 
 	}
-	
+
 	function toggleNtpClient() {
 		var toggleButton = document.getElementById("ntp_client");
 		var ipField = document.getElementById("ntp_interval");
@@ -423,7 +420,7 @@ input:checked+.slider:before {
 			serverField.disabled = true;
 			toggleButton.value = "0"; //ntp_client_disable
 		}
-		
+
 		toggleDateTimeInput();
 	}
 
@@ -457,14 +454,13 @@ input:checked+.slider:before {
 	function toggleDateTimeInput() {
 		var ntpClientCheckbox = document.getElementById("ntp_client");
 		var datetimeInput = document.getElementById("datetime");
-		
 
 		datetimeInput.disabled = ntpClientCheckbox.checked;
 	}
 
 	$(document).ready(function() {
 		loadNtpSettings();
-		
+
 		toggleDateTimeInput();
 		$("#get_current_time").click(function() {
 			getCurrentTime();
@@ -512,65 +508,51 @@ input:checked+.slider:before {
 
 							<div style="width: 20%;">
 								<label class="switch"> <input type="checkbox"
-									id="ntp_client" name="ntp_client" onchange="toggleDateTimeInput()"
-									value="1" checked> <span class="slider round"></span>
+									id="ntp_client" name="ntp_client"
+									onchange="toggleDateTimeInput()" value="1" checked> <span
+									class="slider round"></span>
 								</label>
 
 							</div>
 						</div>
 					</div>
 					<br />
-					  
 
-					 <div class="row">
-						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
-					 <label for="updateServer">NTP Server1</label>
-					</div>
-						<div style="width: 20%; margin-top:0;">
-							<input type="text" id="ntp_server1" name="ntp_server1"
-								placeholder="NTP Server" />
 
-						</div>
-					</div> 
-					
-					<div class="row">
-						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
-					 <label for="updateServer">NTP Server2</label>
-					</div>
-						<div style="width: 20%; margin-top:0;">
-							<input type="text" id="ntp_server2" name="ntp_server2"
-								placeholder="NTP Server" />
-
-						</div>
-					</div>
-					
-					<div class="row">
-						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
-					 <label for="updateServer">NTP Server3</label>
-					</div>
-						<div style="width: 20%; margin-top:0;">
-							<input type="text" id="ntp_server3" name="ntp_server3"
-								placeholder="NTP Server" />
-
-						</div>
-					</div>
-					
-					<div class="row">
-						<div style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
-					  <label for="updateInterval">NTP Interval</label>
-					</div>
+					<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: -20px;">
 						<div style="width: 20%; margin-top: 0;">
-							<input type="text" id="ntp_interval_1" name="ntp_interval_1"
+							<label>NTP Server 1</label><input type="text" id="ntp_server1" name="ntp_server1"
+								placeholder="NTP Server" />
+
+						</div>
+					
+						<div style="width: 20%; margin-top: 0;">
+							<label>NTP Server 2</label><input type="text" id="ntp_server2" name="ntp_server2"
+								placeholder="NTP Server" />
+
+						</div>					
+
+						<div style="width: 20%; margin-top: 0;">
+							<label>NTP Server 3</label><input type="text" id="ntp_server3" name="ntp_server3"
+								placeholder="NTP Server" />
+
+						</div>
+						
+						<div style="width: 20%; margin-top: 0;">
+							<label>NTP Interval</label><input type="text" id="ntp_interval_1" name="ntp_interval_1"
 								placeholder="NTP Interval" />
 
 						</div>
 					</div>
-					
+
 					<div class="row">
-   						 <div style="width: 40%; margin-top: 6px; justify-content: left ; display: flex;">
-       						 <input type="button" id="saveButton" onclick="editNtpData()" value ="Save"/>
-       						 
-    					</div>
+						<div
+							style="width: 40%; margin-top: 6px; justify-content: left; display: flex;">
+							<input type="button" id="saveButton" onclick="editNtpData()"
+								value="Save" />
+
+						</div>
 					</div>
 
 					<div class="row">

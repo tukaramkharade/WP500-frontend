@@ -1,11 +1,6 @@
 package com.tas.wp500.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,9 +14,9 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-@WebServlet("/activeThreatServlet")
-public class ActiveThreatServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(ActiveThreatServlet.class);
+@WebServlet("/threatLogsServlet")
+public class ThreatLogsServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(ThreatLogsServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -29,12 +24,13 @@ public class ActiveThreatServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		
 		if(check_username != null){
+			
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 			
 			try{
 				
-				json.put("operation", "get_active_threats");
+				json.put("operation", "get_threat_logs");
 				json.put("user", check_username);
 				
 				String respStr = client.sendMessage(json.toString());
@@ -43,7 +39,7 @@ public class ActiveThreatServlet extends HttpServlet {
 
 				JSONArray resJsonArray = new JSONArray();
 
-				logger.info("Active Threats response : " + respJson.toString());
+				logger.info("Threat Logs response : " + respJson.toString());
 				
 				JSONArray resultArr = respJson.getJSONArray("data");
 				
@@ -62,8 +58,6 @@ public class ActiveThreatServlet extends HttpServlet {
 					int dest_port = jsObj.getInt("dest_port");
 					String timestamp = jsObj.getString("timestamp");
 					
-					session.setAttribute("threat_id", threat_id);
-					
 					JSONObject activeThreatsObj = new JSONObject();
 					try{
 						activeThreatsObj.put("src_ip", src_ip);
@@ -81,20 +75,21 @@ public class ActiveThreatServlet extends HttpServlet {
 						resJsonArray.put(activeThreatsObj);
 					}catch(Exception e){
 						e.printStackTrace();
-						logger.error("Error in putting active threats data in json array : " + e);
-					}					
+						logger.error("Error in putting threat logs data in json array : " + e);
+					}	
 				}
 				
-				logger.info("JSON ARRAY :" + resJsonArray.toString());
+				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
 
 				response.setContentType("application/json");
 
 				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
+				response.getWriter().print(resJsonArray.toString());			
+								
 				
 			}catch(Exception e){
 				e.printStackTrace();
-				logger.error("Error getting active threats :"+e);
+				logger.error("Error getting threat logs :"+e);
 			}
 			
 		}else{
@@ -118,82 +113,9 @@ public class ActiveThreatServlet extends HttpServlet {
 		}
 	}
 
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		HttpSession session = request.getSession(false);	
-		String check_username = (String) session.getAttribute("username");
-		ArrayList<String> stringList = new ArrayList<>();
-		String threat_id = request.getParameter("threat_id");
-		System.out.println("Thread id : "+threat_id);
-		stringList.add(threat_id);
-        System.out.println("string list : "+stringList);
-		
-		if(check_username != null){
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-			
-	        Date currentDate = new Date();
-
-	        // Create a date format to format the date as a string
-	        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-	        // Format the current date and time as a string
-	        String formattedDate = dateFormat.format(currentDate);
-	        
-	        
-			
-			try{
-			
-				json.put("operation", "ack_threats");
-				json.put("threats_ids", stringList);
-				json.put("ack_at", formattedDate);
-				json.put("ack_by", check_username);
-				json.put("user", check_username);
-				
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-				
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to
-				// application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-				
-				
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			
-			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-				
-				System.out.println(">>" +userObj);
-				
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : "+e);
-			}
-		}
 	}
+
 }

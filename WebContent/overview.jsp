@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>WP500 Web Configuration</title>
+    <title>WPConnex Web Configuration</title>
 <link
       rel="icon"  
       type="image/png"
       sizes="32x32"
-      href="favicon.png"
+      href="images/WP_Connex_logo_favicon.png"
     /> 
     <link
       rel="stylesheet"

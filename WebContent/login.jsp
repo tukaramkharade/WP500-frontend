@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <head>
     
-   <title>WP500 Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+   <title>WPConnex Web Configuration</title>
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -110,10 +110,10 @@ $(document).ready(function() {
     
     <form action="WP500Login" method="post" class="container" style="width: 24em; border-radius: 30px; background-color: #ffffff8f;padding-bottom: 30px;">
         <div>
-            <img src="images/tasm2m.png" alt="Tasm2mLogo" style="width: 78%; float: center;"/>
+            <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo" style="width: 78%; float: center;"/>
         </div>
         
-        <p>WP500 Web Configuration</p>
+        <p>WPConnex Web Configuration</p>
             <label for="username" style="float: left;">Username:</label>
         <input type="text" id="username" name="username" required><br>
         

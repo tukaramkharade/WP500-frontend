@@ -15,24 +15,13 @@ public class ListServlet extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<String> staticList = new ArrayList<>();
-        staticList.add("Item 1");
-        staticList.add("Item 2");
-        staticList.add("Item 3");
+		StringBuilder itemListHtml = new StringBuilder();
+        itemListHtml.append("<li>Item 1</li>");
+        itemListHtml.append("<li>Item 2</li>");
+        itemListHtml.append("<li>Item 3</li>");
 
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("[");
-        for (int i = 0; i < staticList.size(); i++) {
-            jsonBuilder.append("\"").append(staticList.get(i)).append("\"");
-            if (i < staticList.size() - 1) {
-                jsonBuilder.append(",");
-            }
-        }
-        jsonBuilder.append("]");
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jsonBuilder.toString());
+        response.setContentType("text/html");
+        response.getWriter().write(itemListHtml.toString());
 
 	}
 

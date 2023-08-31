@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html>
 
-<title>WP500 Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+<title>WPConnex Web Configuration</title>
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />

@@ -10,8 +10,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>WP500 Web Configuration</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <title>WPConnex Web Configuration</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 </head>
 
 <body>
@@ -19,7 +19,7 @@
   <section class="app">
     <aside class="sidebar">
       <header>
-        <img src="images/tasm2m.png" width="70%" />
+        <img src="images/WP_connex_logo_full.png" width="70%" />
       </header>
       <nav class="sidebar-nav">
         <ul id="tabs">
@@ -120,7 +120,7 @@
                 </li> -->
                 
                 <li class="nav-item">
-                  <a href="stratonlivedata.jsp">Straton Live Data</a>
+                  <a href="wpconnexworkbench.jsp">WPConnex Work Bench</a>
                 </li>
                 
                 <li class="nav-item">
@@ -152,9 +152,9 @@
                 <li class="nav-item">
                   <a href="systemlog.jsp">System Logs</a>
                 </li>
-                <!-- <li class="nav-item">
-                <a href="loadconfig.jsp">Load Config</a>
-              </li> -->
+                 <li class="nav-item">
+                <a href="event.jsp">Events</a>
+              </li> 
               </ul>
             </div>
           </li>
@@ -162,7 +162,7 @@
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
-                <img src="icons/network_white.png" />
+                <img src="icons/cyberguard.png" />
                 <div class="sidebar-title">CyberGuard</div>
               </div>
             </a>
@@ -172,7 +172,10 @@
                   <a href="dashboard.jsp">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                  <a href="threatsandattacks.jsp">Threats and attacks</a>
+                  <a href="activethreats.jsp">Active Threats</a>
+                </li>
+                <li class="nav-item">
+                  <a href="threatlogs.jsp">Threat Logs</a>
                 </li>
                 <li class="nav-item">
                   <a href="smtp.jsp">SMTP Settings</a>
