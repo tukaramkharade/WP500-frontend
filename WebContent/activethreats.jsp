@@ -54,7 +54,7 @@
 </style>
 
 <script>
-var global_threat_id;
+var threats_type;
 
 function getActiveThreats() {
 	
@@ -101,6 +101,18 @@ function getActiveThreats() {
 						row.append($('<td>').text(activeThreats.ack_at + ""));
 						row.append($('<td>').text(activeThreats.ack_by + ""));
 						
+						var actions = $('<td>')
+						var ackButton = $(
+										'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+										.text('Acknowledge')
+										.click(
+												function() {
+													ackThreats(activeThreats.threat_id);
+												});
+						
+						actions.append(ackButton);
+					
+						row.append(actions);
 											
 						activeThreatsTable.append(row);
 					
@@ -113,16 +125,41 @@ function getActiveThreats() {
 	});
 }
 
-function AckThreats(){
+
+
+function getThreats(){
 	
-	//var threat_id = global_threat_id;
-	alert('global threat_id : '+global_threat_id);
+	threats_type = $('#file_name').find(":selected").val();
+	alert('threats_type :'+threats_type);
 	
 	$.ajax({
 		url : 'activeThreatServlet',
 		type : 'POST',
 		data : {
-			threat_id : global_threat_id
+			threats_type : threats_type,
+			startdatetime : startdatetime,
+			enddatetime : enddatetime
+			
+			
+		},
+		success : function(data) {
+			// Display the registration status message
+				alert(data.message);
+			
+		},
+		error : function(xhr, status, error) {
+			console.log('Error acknowledging threats: ' + error);
+		}
+	});
+}
+
+function ackThreats(threat_id){
+	
+	$.ajax({
+		url : 'activeThreatServlet',
+		type : 'POST',
+		data : {
+			threat_id : threat_id
 			
 		},
 		success : function(data) {
@@ -137,16 +174,21 @@ function AckThreats(){
 }
 
 $(document).ready(function() {
+	
 	getActiveThreats();
 	
-	<%// Access the session variable
-	//HttpSession session = request.getSession();
-	String global_threat_id = (String) session.getAttribute("threat_id");%>
-
-	global_threat_id = '<%=global_threat_id%>';
-	alert('threat_id: '+global_threat_id);
-
-	AckThreats();
+	$(document).on("click", "#loadThreats", function() {
+	
+		/* if($("#threat_type").val('Active threats')){
+			getActiveThreats();
+		}else */ 
+		if($("#threat_type").val('Threat logs')){
+			//loadThreatLogs();
+		}
+		
+	});
+	
+	//AckThreats();
 
 });
 
@@ -161,8 +203,48 @@ $(document).ready(function() {
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>ACTIVE THREATS</h3>
+		<h3>THREATS</h3>
 		<hr />
+		
+		<input type="hidden" id="thread_id_name" name="thread_id_name" value="">
+		
+		<div class="row"
+			style="display: flex; flex-content: space-between; margin-top: 5px;">
+			
+			<div style="width: 20%;">
+				<label for="log_file">Select Threat Type:</label>
+			</div>
+			
+			<div style="width: 25%; margin-left: -11%;">
+				<select id="threats_type">
+					<option value="Select threat type">Select threat type</option>
+					<option value="Active threats">Active threats</option>
+					<option value="Threat logs">Threat logs</option>
+				</select>
+			</div>
+			
+			<div style="width: 20%;">
+				<label for="log_file">Choose a date:</label>
+			</div>
+			
+			<div style="width: 25%; margin-left: -11%;margin-top: 5px;">
+				<input type="datetime-local" id="startdatetime" name="startdatetime" >
+			</div>
+			
+			<div style="width: 10%; margin-left: -10%;">
+				<label for="log_file">  to  </label>
+			</div>
+			
+			<div style="width: 25%; margin-left: -8%;margin-top: 5px;">
+				<input type="datetime-local" id="enddatetime" name="enddatetime" >
+			</div>
+			
+			<div>
+				<input style="margin-left: 1%; margin-top: 5%;" type="button"
+					id="loadThreats" value="Load threats">
+			</div>
+			
+			</div>
 		
 		<div class="container">
 
@@ -180,6 +262,7 @@ $(document).ready(function() {
 							<th>Protocol type</th>
 							<th>Ack at</th>
 							<th>Ack by</th>
+							<th>Acknowledge</th>
 							
 						</tr>
 					</thead>

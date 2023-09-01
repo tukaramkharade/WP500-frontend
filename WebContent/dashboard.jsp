@@ -35,34 +35,145 @@ margin-left: 2%;
 }
 
 .last_threats{
-width: 540px;
+width: 380px;
     height: 200px;
     color: black;
     font-size: 12px;
-    margin-left: 15px;
+    margin-left: 25px;
      /* Border properties */
     border: 2px solid #e74c3c; /* Border width, style, and color */
     border-radius: 10px; /* Border radius for rounded corners */
    
 }
 
-#itemList{
+#dataList{
 list-style: none;
+padding: 0;
+
+}
+
+.red-box {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    
+}
+
+.orange-box {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: orange;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    
+}
+
+.yellow-box {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: yellow;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+   
+}
+
+.green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
 }
 
 
 </style>
 <script>
 
-$(document).ready(function() {
-    $.ajax({
-        url: "getList",
-        type: "GET",
-        dataType: "html",
-        success: function(response) {
-            $("#itemList").html(response);
+function latestActiveThreats(){
+	$.ajax({
+        url: "dashboard",
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            // Iterate through the data and populate the list
+            var dataList = $("#dataList");
+            $.each(data, function (index, item) {
+                /* var listItem = $("<li></li>");
+                
+                if(item.priority == '1'){	
+                	var priority = 'high';
+                	listItem.html(item.timeStamp + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.alertMessage + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.threat_id + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='red-box'>" + priority + "</span>");
+				}else if(item.priority == '2'){
+					var priority = 'medium';
+                	listItem.html(item.timeStamp + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.alertMessage + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.threat_id + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='orange-box'>" + priority + "</span>");
+				}else if(item.priority == '3'){
+					var priority = 'low';
+                	listItem.html(item.timeStamp + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.alertMessage + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.threat_id + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='yellow-box'>" + priority + "</span>");
+				} */
+                
+				
+				var row = $('<tr>');
+				row.append($('<td>').text(item.timeStamp+ " "));
+				row.append($('<td>').text(item.alertMessage + " "));
+				row.append($('<td>').text(item.threat_id + " "));
+				
+				if(item.priority == '1'){							
+					row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
+				}else if(item.priority == '2'){
+					row.append($('<td>').append($('<div>').addClass('orange-box').text('medium')));
+				}else if(item.priority == '3'){
+					row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
+				}
+					
+                dataList.append(row);
+            });
+        },
+        error: function (error) {
+            console.error("Error fetching data: " + error);
         }
     });
+}
+
+function countDetails(){
+	$.ajax({
+		url : "countDetailsServlet", // Replace with your server endpoint to get the current time
+		type : "GET",
+		dataType : "json",
+		success : function(data) {
+			// Update the <p> tags with the fetched time data
+			//$("#status").text("System Status: " + data.status);
+			
+			if (data.status == 'success') {
+    			var status = 'Running';
+    			$("#status").html("System Status: <span class='green-text'>" + status + "</span>");
+			} else {
+    			var status = 'Stop';
+    			$("#status").html("System Status: <span class='red-text'>" + status + "</span>");
+}
+			$("#last_update").text("Last Update: " + data.last_update);
+			$("#active_threat_count").text("Active threat count: " + data.active_threats_count);
+			$("#total_threat").text("Total threat: " + data.total_count);
+			$("#ack_count").text("Total acknowledged threat: " + data.threats_log_count);
+			$("#unack_count").text("Total unacknowledged threat: " + data.active_threats_count);
+		},
+		error : function(xhr, status, error) {
+			// Handle any errors that occur during the AJAX request
+			console.error("Error fetching count:", status, error);
+		}
+	});
+}
+
+$(document).ready(function() {
+	latestActiveThreats();
+	countDetails();
 });
 </script>
 
@@ -101,20 +212,20 @@ $(document).ready(function() {
 					
 					<div class="overview">
 						<h5>Overview</h5>
-						<p>System Status : Running</p>
-						<p>Last Update : </p>
-						<p>Active threat count : </p>
-						<p>Total threat : </p>
-						<p>Total acknowledged threat : </p>
-						<p>Total unacknowledged threats : </p>
+						<p id="status"></p>
+						<p id="last_update"></p>
+						<p id="active_threat_count"></p>
+						<p id="total_threat"></p>
+						<p id="ack_count"></p>
+						<p id="unack_count"></p>
 					</div>
 					
 					<div class="last_threats">
 						<h5>Last Threats</h5>
-						<ul id="itemList">
+						<ul id="dataList">
         					<!-- List items will be populated here -->
     					</ul>
-						<input style="margin-left: 460px; margin-top: 70px;" type="button" value="Show all" id="show_all" /> 
+						<input style="margin-left: 300px; margin-top: 40px;" type="button" value="Show all" id="show_all" /> 
 						
 					</div>
 					

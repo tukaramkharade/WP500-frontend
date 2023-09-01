@@ -62,8 +62,6 @@ public class ActiveThreatServlet extends HttpServlet {
 					int dest_port = jsObj.getInt("dest_port");
 					String timestamp = jsObj.getString("timestamp");
 					
-					session.setAttribute("threat_id", threat_id);
-					
 					JSONObject activeThreatsObj = new JSONObject();
 					try{
 						activeThreatsObj.put("src_ip", src_ip);
@@ -124,9 +122,8 @@ public class ActiveThreatServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		ArrayList<String> stringList = new ArrayList<>();
 		String threat_id = request.getParameter("threat_id");
-		System.out.println("Thread id : "+threat_id);
+		
 		stringList.add(threat_id);
-        System.out.println("string list : "+stringList);
 		
 		if(check_username != null){
 			TCPClient client = new TCPClient();

@@ -45,34 +45,73 @@ public class ThreatLogsServlet extends HttpServlet {
 				
 				for (int i = 0; i < resultArr.length(); i++) {
 					JSONObject jsObj = resultArr.getJSONObject(i);
+					String src_ip = null;
+					if (jsObj.has("src_ip")) {
+						src_ip = jsObj.getString("src_ip");
+				        System.out.println("src ip: " + src_ip);
+				    } else {			        
+				        System.out.println("src ip not found in JSON object.");
+				    }
 					
-					String src_ip = jsObj.getString("src_ip");
 					int src_port = jsObj.getInt("src_port");
-					String protocol_type = jsObj.getString("protocol_type");
+					String protocol_type = null;
+					if (jsObj.has("protocol_type")) {
+						protocol_type = jsObj.getString("protocol_type");
+				        System.out.println("protocol_type ip: " + protocol_type);
+				    } else {			        
+				        System.out.println("protocol type not found in JSON object.");
+				    }
 					String ack_at = jsObj.getString("ack_at");
 					String ack_by = jsObj.getString("ack_by");
-					String alert_message = jsObj.getString("alert_message");
-					String dest_ip = jsObj.getString("dest_ip");
-					String threat_id = jsObj.getString("threat_id");
-					String priority = jsObj.getString("priority");
-					int dest_port = jsObj.getInt("dest_port");
-					String timestamp = jsObj.getString("timestamp");
+					//String alert_message = jsObj.getString("alert_message");
+					String alert_message = null;
+					if (jsObj.has("alert_message")) {
+						alert_message = jsObj.getString("alert_message");
+				        System.out.println("alert message : " + alert_message);
+				    } else {			        
+				        System.out.println("alert message not found in JSON object.");
+				    }
 					
-					JSONObject activeThreatsObj = new JSONObject();
+					//String dest_ip = jsObj.getString("dest_ip");
+					String dest_ip = null;
+					if (jsObj.has("dest_ip")) {
+						dest_ip = jsObj.getString("dest_ip");
+				        System.out.println("dest ip : " + dest_ip);
+				    } else {			        
+				        System.out.println("dest ip not found in JSON object.");
+				    }
+					String threat_id = jsObj.getString("threat_id");
+					String priority = null;
+					if (jsObj.has("priority")) {
+						priority = jsObj.getString("priority");
+				        System.out.println(" priority: " + priority);
+				    } else {			        
+				        System.out.println("priority not found in JSON object.");
+				    }
+					int dest_port = jsObj.getInt("dest_port");
+					String timestamp = null;
+					if (jsObj.has("timestamp")) {
+						timestamp = jsObj.getString("timestamp");
+				        System.out.println("timestamp : " + timestamp);
+				    } else {			        
+				        System.out.println("timestamp not found in JSON object.");
+				    }
+					
+					JSONObject threatLogsObj = new JSONObject();
 					try{
-						activeThreatsObj.put("src_ip", src_ip);
-						activeThreatsObj.put("src_port", src_port);
-						activeThreatsObj.put("protocol_type", protocol_type);
-						activeThreatsObj.put("ack_at", ack_at);
-						activeThreatsObj.put("ack_by", ack_by);
-						activeThreatsObj.put("alert_message", alert_message);
-						activeThreatsObj.put("dest_ip", dest_ip);
-						activeThreatsObj.put("threat_id", threat_id);
-						activeThreatsObj.put("priority", priority);
-						activeThreatsObj.put("dest_port", dest_port);
-						activeThreatsObj.put("timestamp", timestamp);
+						threatLogsObj.put("src_ip", src_ip);
+						threatLogsObj.put("src_port", src_port);
+						threatLogsObj.put("protocol_type", protocol_type);
+						threatLogsObj.put("ack_at", ack_at);
+						threatLogsObj.put("ack_by", ack_by);
+						threatLogsObj.put("alert_message", alert_message);
+						threatLogsObj.put("dest_ip", dest_ip);
+						threatLogsObj.put("threat_id", threat_id);
+						threatLogsObj.put("priority", priority);
+						threatLogsObj.put("dest_port", dest_port);
+						threatLogsObj.put("timestamp", timestamp);
 
-						resJsonArray.put(activeThreatsObj);
+						resJsonArray.put(threatLogsObj);
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error in putting threat logs data in json array : " + e);
