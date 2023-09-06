@@ -441,14 +441,14 @@ var roleValue;
 				
 					<div class="row"
 						style="display: flex; flex-content: space-between; margin-top: -20px;">
-						<div class="col-75-1" style="width: 20%;">
+						<div class="col-75-1" style="width: 15%;">
 							<input type="text" id="username" name="username"
 								placeholder="Username" required maxlength="31"/>
 								<p id="field_User_Error" style="color: red;"></p>
 
 						</div>
 						
-						<div class="col-75-2" style="width: 20%;">
+						<div class="col-75-2" style="width: 15%;">
 							<input type="password" id="password" name="password"
 								placeholder="Password" required maxlength="31">
 								
@@ -457,20 +457,20 @@ var roleValue;
 								
 						</div>
 						
-						<div class="col-75-3" style="width: 20%;">
+						<div class="col-75-3" style="width: 15%;">
 							<input type="text" id="first_name" name="first_name"
 								placeholder="Firstname" maxlength="31"/>
 								<p id="field_FirstN_Error" style="color: red;"></p>
 
 						</div>
 						
-						<div class="col-75-4" style="width: 20%;">
+						<div class="col-75-4" style="width: 15%;">
 							<input type="text" id="last_name" name="last_name"
 								placeholder="Lastname" maxlength="31"/>
 								<p id="field_LastN_Error" style="color: red;"></p>
 						</div>
 					
-						<div class="col-75-5" style="width: 20%;">
+						<div class="col-75-5" style="width: 7%;">
 							<select class="role" id="role" name="role" style="height: 33px;">
 								<option value="Select role">Select role</option>
 								<option value="ADMIN">ADMIN</option>

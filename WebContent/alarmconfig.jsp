@@ -346,6 +346,30 @@ var roleValue;
 			var interval = $('#interval').find(":selected").val();
 			var broker_type = $('#broker_type').find(":selected").val();
 			var broker_name = $('#broker_name').find(":selected").val();
+			var unit_id = $('#unit_id').val();
+			var asset_id = $('#asset_id').val();
+			var tag_name = $('#tag_name').val();
+			
+			
+			if ((unit_id.length > 30)) {
+				unitid_error.textContent = "You can write upto 30 maximum characters."
+			}
+			else {
+				unitid_error.textContent = ""
+			}
+
+			if ((asset_id.length > 30)) {
+				assetid_error.textContent = "You can write upto 30 maximum characters."
+			} else {
+				assetid_error.textContent = ""
+			}
+
+			if ((tag_name.length > 30)) {
+				tagname_error.textContent = "You can write upto 30 maximum characters."
+			}
+			else {
+				tagname_error.textContent = ""
+			}
 			
 			if (!validateInterval(interval)) {
 				intervalError.textContent = "Please select interval";
@@ -515,17 +539,19 @@ function addAlarmConfig() {
 			<input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
-					<div class="col-75-1" style="width: 20%;">
+					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="unit_id" name="unit_id"
-							placeholder="Unit ID" required style="height: 17px" />
+							placeholder="Unit ID" required style="height: 17px" maxlength="31"/>
+							<p id="unitid_error" style="color: red;"></p>
 					</div>
 					
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 15%;">
 						<input type="text" id="asset_id" name="asset_id"
-							placeholder="Asset ID" required style="height: 17px" />
+							placeholder="Asset ID" required style="height: 17px" maxlength="31"/>
+							<p id="assetid_error" style="color: red;"></p>
 					</div>
 					
-					<div class="col-75-3" style="width: 20%;">
+					<div class="col-75-3" style="width: 15%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px">
 							<option value="Select broker type">Select broker type</option>
@@ -534,7 +560,7 @@ function addAlarmConfig() {
 						</select> <span id="brokerTypeError" style="color: red;"></span>
 					</div>
 					
-					<div class="col-75-4" style="width: 20%;">
+					<div class="col-75-4" style="width: 15%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px">
 							<option value="Select broker IP address">Select broker
@@ -542,7 +568,7 @@ function addAlarmConfig() {
 						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
 					
-					<div class="col-75-5" style="width: 20%;">
+					<div class="col-75-5" style="width: 10%;">
 						<select class="interval-select" id="interval" name="interval"
 							style="height: 35px">
 							<option value="Select interval">Select interval</option>
@@ -566,13 +592,14 @@ function addAlarmConfig() {
 
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
-					<div class="col-75-6" style="width: 20%;">
+					<div class="col-75-6" style="width: 15%;">
 						<input type="text" id="tag_name" name="tag_name"
-							placeholder="Tag name" style="height: 17px" /> <span
+							placeholder="Tag name" style="height: 17px" maxlength="31"/> <span
 							id="tagnameError" style="color: red;"></span>
+							<p id="tagname_error" style="color: red;"></p>
 					</div>
 
-					<div class="col-75-7" style="width: 20%;">
+					<div class="col-75-7" style="width: 15%;">
 						<select class="textBox" id="variable" name="variable"
 							style="height: 35px">
 							<option value=""></option>

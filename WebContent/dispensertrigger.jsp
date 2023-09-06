@@ -822,6 +822,29 @@ var roleValue;
 											var quantity = $('#quantity').find(":selected").val();
 											var unit_price = $('#unit_price').find(":selected").val();
 											var trigger_tag = $('#trigger_tag').find(":selected").val();
+											var station_name = $('#station_name').val();
+											var serial_number = $('#serial_number').val();
+											var unit_id = $('#unit_id').val();
+											
+											if ((station_name.length > 30)) {
+												station_name_error.textContent = "You can write upto 30 maximum characters."
+											}
+											else {
+												station_name_error.textContent = ""
+											}
+
+											if ((serial_number.length > 30)) {
+												serial_number_error.textContent = "You can write upto 30 maximum characters."
+											} else {
+												serial_number_error.textContent = ""
+											}
+
+											if ((unit_id.length > 30)) {
+												unitid_error.textContent = "You can write upto 30 maximum characters."
+											}
+											else {
+												unitid_error.textContent = ""
+											}
 
 											if (!validateSide(side)) {
 												sideError.textContent = "Please select side";
@@ -921,18 +944,25 @@ var roleValue;
 			<input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
-					<div class="col-75-1" style="width: 20%;">
+					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="station_name" name="station_name"
-							placeholder="Station Name" required style="height: 17px" />
+							placeholder="Station Name" required style="height: 17px" maxlength="31"/>
+							<p id="station_name_error" style="color: red;"></p>
 					</div>
 					
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 15%;">
 						<input type="text" id="serial_number" name="serial_number"
-							placeholder="Serial Number" required style="height: 17px" /> <span
-							style="color: red; font-size: 12px;" id="serialError"></span>
+							placeholder="Serial Number" required style="height: 17px" maxlength="31"/> 
+							<p id="serial_number_error" style="color: red;"></p>
+					</div>
+					
+					<div class="col-75-14" style="width: 15%;">
+						<input type="text" id="unit_id" name="unit_id"
+							placeholder="Unit ID" required maxlength="31"/>
+							<p id="unitid_error" style="color: red;"></p>
 					</div>
 
-					 <div class="col-75-3" style="width: 20%;">
+					 <div class="col-75-3" style="width: 7%;">
 						<select class="textBox" id="side" name="side" style="height: 35px"
 							required>
 							<option value="Select side">Select side</option>
@@ -943,7 +973,7 @@ var roleValue;
 						</select> <span id="sideError" style="color: red"></span>
 					</div> 
 					
-					<div class="col-75-4" style="width: 20%;">
+					<div class="col-75-4" style="width: 13%;">
 							
 						<select class="textBox" id=trigger_tag name="trigger_tag"
 							style="height: 35px;">
@@ -952,7 +982,7 @@ var roleValue;
 						
 					</div>
 
-					<div class="col-75-5" style="width: 20%;">
+					<div class="col-75-5" style="width: 13%;">
 						<select class="textBox" id="trigger_value" name="trigger_value"
 							style="height: 35px" required>
 							<option value="Select trigger value">Select Trigger
@@ -962,21 +992,20 @@ var roleValue;
 
 						</select> <span id="triggerValueError" style="color: red"></span>
 					</div>
-				</div>
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-					<div class="col-75-1" style="width: 20%;">
+					
+					<div class="col-75-1" style="width: 13%;">
 						<select class="textBox" id="start_pressure" name="start_pressure"
 							style="height: 35px;">
 							<option value="Select start pressure">Select start
 								pressure</option>
 						</select> <span id="startPressureError" style="color: red"></span>
 					</div>
+				</div>
 
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
 
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 13%;">
 						<select class="textBox" id="end_pressure" name="end_pressure"
 							style="height: 35px;">
 							<option value="Select end pressure">Select end pressure</option>
@@ -984,7 +1013,7 @@ var roleValue;
 					</div>
 
 
-					<div class="col-75-3" style="width: 20%;">
+					<div class="col-75-3" style="width: 13%;">
 						<select class="textBox" id="temperature" name="temperature"
 							style="height: 35px;">
 							<option value="Select temperature">Select temperature</option>
@@ -992,57 +1021,48 @@ var roleValue;
 					</div>
 
 
-					<div class="col-75-4" style="width: 20%;">
+					<div class="col-75-4" style="width: 13%;">
 						<select class="textBox" id="total" name="total"
 							style="height: 35px;">
 							<option value="Select total">Select total</option>
 						</select> <span id="totalError" style="color: red"></span>
 					</div>
 
-					<div class="col-75-5" style="width: 20%;">
+					<div class="col-75-5" style="width: 13%;">
 						<select class="textBox" id="quantity" name="quantity"
 							style="height: 35px;">
 							<option value="Select quantity">Select quantity</option>
 						</select> <span id="quantityError" style="color: red"></span>
 					</div>
-
-				</div>
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-					<div class="col-75-6" style="width: 20%;">
+					
+					<div class="col-75-6" style="width: 13%;">
 						<select class="textBox" id="unit_price" name="unit_price"
 							style="height: 35px;">
 							<option value="Select unit price">Select unit price</option>
 						</select> <span id="unitPriceError" style="color: red"></span>
 					</div>
 
-					<div class="col-75-3" style="width: 20%;">
+					<div class="col-75-3" style="width: 13%;">
 						<select class="textBox" id="status" name="status"
 							style="height: 35px" required>
 							<option value="Select status">Select status</option>
-							<option value="enable">Enable</option>
-							<option value="disable">Disable</option>
+							<option value="Enable">Enable</option>
+							<option value="Disable">Disable</option>
 						</select> <span id="statusError" style="color: red"></span>
 					</div>
-					
-					<div class="col-75-4" style="width: 20%;">
+
+					<div class="col-75-4" style="width: 13%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;">
 							<option value="Select broker IP address">Select broker
 								IP address</option>
 						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
-					
-					<div class="col-75-14" style="width: 20%;">
-						<input type="text" id="unit_id" name="unit_id"
-							placeholder="Unit ID" required />
 					</div>
-				</div>
+				
 
 				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 2%;">
+					style="display: flex; justify-content: right; margin-top: -2%;">
 					<input type="button" value="Clear" id="clearBtn" /> <input
 						style="margin-left: 5px;" type="submit" value="Add"
 						id="registerBtn" />

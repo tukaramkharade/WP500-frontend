@@ -359,6 +359,30 @@ var json = {};
 	       				var interval = $('#interval').find(":selected").val();
 	       				var broker_type = $('#broker_type').find(":selected").val();
 	       				var broker_name = $('#broker_name').find(":selected").val();
+	       				var unit_id = $('#unit_id').val();
+	       				var asset_id = $('#asset_id').val();
+	       				var tag_name = $('#tag_name').val();
+	       				
+	       				
+	       				if ((unit_id.length > 30)) {
+	       					unitid_error.textContent = "You can write upto 30 maximum characters."
+	       				}
+	       				else {
+	       					unitid_error.textContent = ""
+	       				}
+
+	       				if ((asset_id.length > 30)) {
+	       					assetid_error.textContent = "You can write upto 30 maximum characters."
+	       				} else {
+	       					assetid_error.textContent = ""
+	       				}
+
+	       				if ((tag_name.length > 30)) {
+	       					tagname_error.textContent = "You can write upto 30 maximum characters."
+	       				}
+	       				else {
+	       					tagname_error.textContent = ""
+	       				}
 	       				
 	       				if (!validateInterval(interval)) {
 	       					intervalError.textContent = "Please select interval";
@@ -529,45 +553,46 @@ var json = {};
 			<form id="commandConfigForm">
 			
 			<input type="hidden" id="action" name="action" value="">
-				<div class="row" style="display:flex; flex-content:space-between; margin-top: -20px;">
-					<div class="col-75-1" style="width: 20%;">
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: -20px;">
+					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="unit_id" name="unit_id"
-							placeholder="Unit ID" required style="height: 17px;" />
-
+							placeholder="Unit ID" required style="height: 17px" maxlength="31"/>
+							<p id="unitid_error" style="color: red;"></p>
 					</div>
-				
-					<div class="col-75-2"
-						style="width: 20%;">
+					
+					<div class="col-75-2" style="width: 15%;">
 						<input type="text" id="asset_id" name="asset_id"
-							placeholder="Asset ID" required style="height: 17px;" />
-
+							placeholder="Asset ID" required style="height: 17px" maxlength="31"/>
+							<p id="assetid_error" style="color: red;"></p>
 					</div>
-				
-					<div class="col-75-3"
-						style="width: 20%;">
+					
+					<div class="col-75-3" style="width: 15%;">
 						<select class="textBox" id="broker_type" name="broker_type"
-							style="height: 35px;">
+							style="height: 35px">
 							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
-						</select>
-						<span id="brokerTypeError" style="color:red;"></span>
+						</select> <span id="brokerTypeError" style="color: red;"></span>
 					</div>
-				
-					<div class="col-75-4"
-						style="width: 20%;">
+					
+					<div class="col-75-4" style="width: 15%;">
 						<select class="textBox" id="broker_name" name="broker_name"
-							style="height: 35px;">
-							<option value="Select broker IP address">Select broker IP address</option>
-						</select>
-						<span id="brokerIPAddressError" style="color:red;"></span>
+							style="height: 35px">
+							<option value="Select broker IP address">Select broker
+								IP address</option>
+						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
-				
-					<div class="col-75-5"
-						style="width: 20%;">
+					
+					<div class="col-75-5" style="width: 10%;">
 						<select class="interval-select" id="interval" name="interval"
-							style="height: 35px;">
+							style="height: 35px">
 							<option value="Select interval">Select interval</option>
+							<option value="5 sec">5 sec</option>
+							<option value="10 sec">10 sec</option>
+							<option value="15 sec">15 sec</option>
+							<option value="20 sec">20 sec</option>
+							<option value="25 sec">25 sec</option>
 							<option value="30 sec">30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
@@ -577,44 +602,41 @@ var json = {};
 							<option value="25 min">25 min</option>
 							<option value="30 min">30 min</option>
 							<option value="1 hour">1 hour</option>
-
-						</select>
-						<span id="intervalError" style="color:red;"></span>
+						</select> <span id="intervalError" style="color: red;"></span>
 					</div>
 				</div>
 
-				<div class="row" style="display:flex; flex-content:space-between; margin-top: 10px;">
-					<div class="col-75-6" style="width: 20%;">
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
+					<div class="col-75-6" style="width: 15%;">
 						<input type="text" id="tag_name" name="tag_name"
-							placeholder="Tag name" style="height: 17px;" />
-
+							placeholder="Tag name" style="height: 17px" maxlength="31"/> <span
+							id="tagnameError" style="color: red;"></span>
+							<p id="tagname_error" style="color: red;"></p>
 					</div>
-				
-					<div class="col-75-7"
-						style="width: 20%;">
+
+					<div class="col-75-7" style="width: 15%;">
 						<select class="textBox" id="variable" name="variable"
-							style="height: 35px;">
+							style="height: 35px">
 							<option value=""></option>
-						</select>
+						</select> <span id="variableError" style="color: red;"></span>
 					</div>
 				</div>
-				
+
 				<div class="row">
-						
-						 		<input style="margin-top: -31px; margin-left: 10%;" type="button"
-							value="+" id="saveBtn" />
-						
-						</div>
-						
-				<div class="row" style="display:flex;justify-content:right;">					
-						<input
-						style="margin-top: -31px;margin-left:5px" type="button"
-						value="Clear" id="clearBtn" onclick="clearFields()" /> <input
-						style="margin-top: -31px;margin-left:5px" type="submit"
-						value="Add" id="addBtn" />
-						<input
-						style="margin-top: -31px;margin-left:5px" type="button"
-						value="Delete" id="delBtn" onClick="window.location.reload();"/> 
+
+					<input style="margin-top: -31px; margin-left: 10%;" type="button"
+						value="+" id="saveBtn" />
+
+				</div>
+
+				<div class="row" style="display: flex; justify-content: right;">
+					<input style="margin-top: -31px; margin-left: 5px" type="button"
+						value="Clear" id="clearBtn"/> <input
+						style="margin-top: -31px; margin-left: 5px" type="submit"
+						value="Add" id="addBtn" /> <input
+						style="margin-top: -31px; margin-left: 5px" type="button"
+						value="Delete" id="delBtn" onClick="window.location.reload();" />
 				</div>
 
 			</form>

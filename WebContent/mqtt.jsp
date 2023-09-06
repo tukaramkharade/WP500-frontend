@@ -333,9 +333,9 @@
 					$('#pub_topic').val('');
 					$('#sub_topic').val('');
 					$('#prefix').val('');
-					$('#file_type').val('Select file type');
+					$('#file_type').val('Select type');
 					$('#file_name').val('Select crt file');
-					$('#enable').val('true');
+					$('#enable').val('Select status');
 
 					$("#prefix").prop("disabled", false);
 					$('#file_name').prop('disabled', false);
@@ -407,7 +407,7 @@
 				$('#prefix').val('');
 				$('#file_type').val('Select type');
 				$('#file_name').val('Select crt file');
-				$('#enable').val('true');
+				$('#enable').val('Select status');
 				
 				$('#file_name').prop('disabled', false);
 
@@ -538,15 +538,64 @@
 											var buttonText = $('#registerBtn')
 													.val();
 											var broker_ip_address = $(
-													'#broker_ip_address').val();
-											var type = $('#file_type').find(
-													":selected").val();
-											var port_number = $('#port_number')
-													.val();
-											var file_name = $('#file_name')
-													.find(":selected").val();
-											var enable = $('#enable')
+											'#broker_ip_address').val();
+										var type = $('#file_type').find(
+											":selected").val();
+										var port_number = $('#port_number')
+											.val();
+										var file_name = $('#file_name')
 											.find(":selected").val();
+										var broker_ip_address = $('#broker_ip_address').val();
+										var port_number = $('#port_number').val();
+										var username = $('#username').val();
+										var password = $('#password').val();
+										var pub_topic = $('#pub_topic').val();
+										var sub_topic = $('#sub_topic').val();
+										var prefix = $('#prefix').val();
+
+										if ((prefix.length > 30)) {
+											prefix_error.textContent = "You can write upto 30 maximum characters."
+										}
+										else {
+											prefix_error.textContent = ""
+										}
+
+										if ((sub_topic.length > 30)) {
+											sub_topic_error.textContent = "You can write upto 30 maximum characters."
+										} else {
+											sub_topic_error.textContent = ""
+										}
+
+										if ((pub_topic.length > 30)) {
+											pub_topic_error.textContent = "You can write upto 30 maximum characters."
+										}
+										else {
+											pub_topic_error.textContent = ""
+										}
+
+										if ((password.length > 30)) {
+											password_error.textContent = "You can write upto 30 maximum characters."
+										} else {
+											password_error.textContent = ""
+										}
+										if ((username.length > 30)) {
+											username_error.textContent = "You can write upto 30 maximum characters."
+										} else {
+											username_error.textContent = ""
+										}
+
+										if ((port_number.length > 5)) {
+											port_number_error.textContent = "You can write upto 5 maximum characters."
+										}
+										else {
+											port_number_error.textContent = ""
+										}
+
+										if ((broker_ip_address.length > 30)) {
+											broker_ip_error.textContent = "You can write upto 30 maximum characters."
+										} else {
+											broker_ip_error.textContent = ""
+										}
 
 											if (!validateNumbers(port_number)) {
 												portNoError.textContent = "Enter port number upto 5 digits";
@@ -589,7 +638,7 @@
 							$('#prefix').val('');
 							$('#file_type').val('Select type');
 							$('#file_name').val('Select crt file');
-							$('#enable').val('true');
+							$('#enable').val('Select status');
 
 						});
 
@@ -612,62 +661,57 @@
 
 			<div class="container">
 				<form id="mqttForm">
-				
-				 <input type="hidden" id="action" name="action" value="">
-				 
-					<div class="row"
-						style="display: flex; flex-content: space-between; margin-top: -20px;">
 
-						<div class="col-75-1" style="width: 20%; height: 20%">
-							<input type="text" id="broker_ip_address"
-								name="broker_ip_address" placeholder="Hostname" required />
+					<input type="hidden" id="action" name="action" value="">
+
+					<div class="row" style="display: flex; flex-content: space-between; margin-top: -20px;">
+
+						<div class="col-75-1" style="width: 15%; height: 20%">
+							<input type="text" id="broker_ip_address" maxlength="31" name="broker_ip_address"
+								placeholder="Hostname" required />
+							<p id="broker_ip_error" style="color: red;"></p>
+
+						</div>
+
+						<div class="col-75-2" style="width: 10%;">
+							<input type="text" id="port_number" name="port_number" maxlength="6"
+								placeholder="Port number" required /> <span style="color: red; font-size: 12px;"
+								id="portNoError"></span>
+							<p id="port_number_error" style="color: red;"></p>
 
 						</div>
 
-						<div class="col-75-2" style="width: 20%;">
-							<input type="text" id="port_number" name="port_number"
-								placeholder="Port number" required /> <span
-								style="color: red; font-size: 12px;" id="portNoError"></span>
-
-						</div>
-						
-						<div class="col-75-3" style="width: 20%; height: 20%">
-							<input type="text" id="username" name="username"
-								placeholder="Username" required />
-
-						</div>
-						
-						<div class="col-75-4" style="width: 20%; height: 20%">
-							<input type="password" id="password" name="password"
-								placeholder="Password" required />
-						</div>
-
-						<div class="col-75-5" style="width: 20%; height: 20%">
-							<input type="text" id="pub_topic" name="pub_topic"
-								placeholder="Published topic" required />
-
-						</div>
-					</div>
-
-
-					<div class="row"
-						style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-						<div class="col-75-6" style="width: 20%;">
-							<input type="text" id="sub_topic" name="sub_topic"
-								placeholder="Subscribed topic" required />
-						</div>
-						
-						<div class="col-75-7" style="width: 20%;">
-							<input type="text" id="prefix" name="prefix" placeholder="Prefix"
+						<div class="col-75-3" style="width: 15%; height: 20%">
+							<input type="text" id="username" name="username" placeholder="Username" maxlength="31"
 								required />
+							<p id="username_error" style="color: red;"></p>
 
 						</div>
-						
-						<div class="col-75-8" style="width: 20%;">
 
-							<select class="textBox" id="file_type" name="file_type"
-								style="height: 35px;">
+						<div class="col-75-4" style="width: 15%; height: 20%">
+							<input type="password" id="password" name="password" placeholder="Password" maxlength="31"
+								required />
+							<p id="password_error" style="color: red;"></p>
+
+						</div>
+
+						<div class="col-75-5" style="width: 15%; height: 20%">
+							<input type="text" id="pub_topic" name="pub_topic" placeholder="Published topic"
+								maxlength="30" required />
+							<p id="pub_topic_error" style="color: red;"></p>
+						</div>
+						<div class="col-75-10" style="width: 10%;">
+							<select class="textBox" id="enable" name="enable" style="height: 35px;">
+								<option value="Select status">Select status</option>
+								<option value="True">True</option>
+								<option value="False">False</option>
+
+							</select>
+							<span id="statusError" style="color: red;"></span>
+						</div>
+						<div class="col-75-8" style="width: 10%;">
+
+							<select class="textBox" id="file_type" name="file_type" style="height: 35px;">
 								<option value="Select type">Select type</option>
 								<option>SSL</option>
 								<option>TCP</option>
@@ -675,34 +719,37 @@
 							</select> <span id="fileTypeError" style="color: red;"></span>
 						</div>
 
-						<div class="col-75-9" style="width: 20%;">
+						<div class="col-75-9" style="width: 10%;">
 
-							<select class="textBox" id="file_name" name="file_name"
-								style="height: 35px;">
+							<select class="textBox" id="file_name" name="file_name" style="height: 35px;">
 								<option value="Select crt file">Select crt file</option>
 
 							</select> <span id="crtFileError" style="color: red;"></span>
 
 						</div>
-						
-						<div class="col-75-10" style="width: 20%;">
-
-							<select class="textBox" id="enable" name="enable"
-								style="height: 35px;">
-								<option value="Select status">Select status</option>
-								<option value="true">true</option>
-								<option value="false">false</option>
-
-							</select>
-							<span id="statusError" style="color: red;"></span>
-						</div>
 					</div>
 
-					<div class="row"
-						style="display: flex; justify-content: right; margin-top: -2%;">
-						<input type="button" value="Clear" id="clearBtn" /> <input
-							style="margin-left: 5px;" type="submit" value="Add"
-							id="registerBtn" />
+
+					<div class="row" style="display: flex; flex-content: space-between; margin-top: 10px;">
+
+						<div class="col-75-6" style="width: 15%;">
+							<input type="text" id="sub_topic" name="sub_topic" placeholder="Subscribed topic"
+								maxlength="31" required />
+							<p id="sub_topic_error" style="color: red;"></p>
+
+						</div>
+
+						<div class="col-75-7" style="width: 10%;">
+							<input type="text" id="prefix" name="prefix" maxlength="31" placeholder="Prefix" required />
+							<p id="prefix_error" style="color: red;"></p>
+
+						</div>
+
+					</div>
+
+					<div class="row" style="display: flex; justify-content: right;margin-top: -2%; ">
+						<input type="button" value="Clear" id="clearBtn" /> <input style="margin-left: 5px;"
+							type="submit" value="Add" id="registerBtn" />
 					</div>
 
 				</form>

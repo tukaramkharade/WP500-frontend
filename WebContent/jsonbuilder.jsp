@@ -646,15 +646,15 @@ var json_string_text;
 				<input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
-					<div class="col-75-1" style="width: 20%;">
+					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="json_string_name" name="json_string_name"
 							placeholder="JSON String Name" required style="height: 17px;"
-							maxlength="30" />
+							maxlength="31" />
 						<p id="json_string_name_error" style="color: red;"></p>
 
 					</div>
 
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 10%;">
 						<select class="json-interval-select" id="json_interval"
 							name="json_interval" style="height: 35px;" required>
 							<option value="Select JSON Interval">Select JSON
@@ -672,7 +672,7 @@ var json_string_text;
 						</select> <span id="jsonIntervalError" style="color: red;"></span>
 					</div>
 
-					<div class="col-75-3" style="width: 20%;">
+					<div class="col-75-3" style="width: 15%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px;" required>
 							<option value="Select Broker Type">Select Broker Type</option>
@@ -681,7 +681,7 @@ var json_string_text;
 						</select> <span id="brokerTypeError" style="color: red;"></span>
 					</div>
 
-					<div class="col-75-4" style="width: 20%;">
+					<div class="col-75-4" style="width: 15%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;" required>
 							<option value="Select Broker IP Address">Select Broker
@@ -689,18 +689,14 @@ var json_string_text;
 						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
 
-					<div class="col-75-5" style="width: 20%;">
+					<div class="col-75-5" style="width: 15%;">
 						<input type="text" id="publish_topic" name="publish_topic"
 							placeholder="Publish Topic" required style="height: 17px;"
-							maxlength="30">
+							maxlength="31">
 						<p id="publish_topic_error" style="color: red;"></p>
 					</div>
-				</div>
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-					<div class="col-75-6" style="width: 20%;">
+				
+					<div class="col-75-6" style="width: 10%;">
 						<select class="textBox" id="publishing_status"
 							name="publishing_status" style="height: 35px;" required>
 							<option value="Select publishing status">Select
@@ -710,7 +706,7 @@ var json_string_text;
 						</select> <span id="publishingStatusError" style="color: red;"></span>
 					</div>
 
-					<div class="col-75-7" style="width: 20%;">
+					<div class="col-75-7" style="width: 12%;">
 						<select class="textBox" id="storeAndForward"
 							name="storeAndForward" style="height: 35px;" required>
 							<option value="Select Store and Forward">Select Store
