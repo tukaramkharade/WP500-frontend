@@ -5,7 +5,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32"
+	href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -17,6 +18,7 @@
 <script>
 
 var roleValue;	
+var json_string_text;
 
 	function loadBrokerIPList() {
 		$.ajax({
@@ -230,7 +232,7 @@ var roleValue;
 			var publish_topic = $('#publish_topic').val();
 			var publishing_status = $('#publishing_status').find(":selected").val();
 			var storeAndForward = $('#storeAndForward').find(":selected").val();
-			var json_string_text = $('#json_string_text').val();
+			 json_string_text = $('#json_string_validate').val();
 
 			$
 					.ajax({
@@ -262,7 +264,9 @@ var roleValue;
 							$('#publishing_status').val('Enable');
 							$('#storeAndForward').val('Enter Store and Forward');
 							$('#json_string_text')
-									.val('');
+									.val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
+							$('#json_string_validate').val('');
+							
 
 							$("#json_string_name").prop("disabled", false);
 						},
@@ -287,7 +291,7 @@ var roleValue;
 		var publish_topic = $('#publish_topic').val();
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
-		var json_string_text = $('#json_string_text').val();
+		 json_string_text = $('#json_string_validate').val();
 
 		$
 				.ajax({
@@ -334,26 +338,78 @@ var roleValue;
 	function validateJSON() {
 		
 		const json_string = document.querySelector('textarea').value;
-		  console.log(json_string);
-		  var res = isJsonString(json_string);
 		  
-		  if(res == true){
-			  $('#json_string_validate').val(json_string)
+		  var res_val = isValidJsonString(json_string);
+		  var res_dup = isJsonStringDuplicate(json_string);
+		  
+		  alert('res val : '+res_val + ' ' + 'res_dup : '+res_dup);
+		 
+		  if(res_val == true && res_dup == false){
+			  json_string_text = json_string; // Assign the value here
+			  $('#json_string_validate').val(json_string_text)
 		  }else{
 			  alert('Enter valid JSON!!')
-			  $('#json_string_text').val('');
+			  
+			  $('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 		  }
 	}
 
-	function isJsonString(str) {
-		try {
-			JSON.parse(str);
-		} catch (e) {
-			return false;
-		}
-		return true;
-	}
+	 function isValidJsonString(jsonString) {
+	    try {
+	        JSON.parse(jsonString);
+	        return true; // JSON is valid
+	    } catch (e) {
+	        return false; // JSON is not valid
+	    }
+	} 
+	 
+	
 
+	
+	    function isJsonStringDuplicate(jsonString) {
+		 const seenKeys = {};
+
+		    try {
+		        // Parse the JSON string manually
+		        const stack = [];
+		        let i = 0;
+
+		        while (i < jsonString.length) {
+		            const char = jsonString[i];
+
+		            if (char === '{' || char === '[') {
+		                stack.push(char);
+		            } else if (char === '}' || char === ']') {
+		                stack.pop();
+		            } else if (char === '"' && stack[stack.length - 1] !== '\\') {
+		                // Found the start of a key
+		                i++; // Move past the opening quote
+		                const keyStart = i;
+		                while (i < jsonString.length && jsonString[i] !== '"') {
+		                    i++; // Move to the end of the key
+		                }
+		                const key = jsonString.substring(keyStart, i);
+
+		                if (seenKeys[key]) {
+		                    return true; // Found a duplicate key
+		                }
+
+		                seenKeys[key] = true;
+		            }
+		            i++;
+		        }
+
+		        // No duplicate keys found
+		        return false;
+		    } catch (e) {
+		        // Invalid JSON, return false
+		        return false;
+		    }
+	}   
+	 
+	
+	
+	
 	function validateSoreAndForward(storeAndForward) {
 		var storeAndForwardError = document
 				.getElementById("storeAndForwardError");
@@ -364,6 +420,19 @@ var roleValue;
 			return false;
 		} else {
 			storeAndForwardError.textContent = "";
+			return true;
+		}
+	}
+	
+	function validatePublishingStatus(publishingStatus) {
+		var publishingStatusError = document.getElementById("publishingStatusError");
+
+		if (publishingStatus == 'Select publishing status') {
+
+			publishingStatusError.textContent = "Please select publishing status";
+			return false;
+		} else {
+			publishingStatusError.textContent = "";
 			return true;
 		}
 	}
@@ -431,6 +500,7 @@ var roleValue;
 	
 	// Function to execute on page load
 	$(document).ready(function() {
+		
 						
 						<%// Access the session variable
 			HttpSession role = request.getSession();
@@ -445,8 +515,8 @@ var roleValue;
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 							var confirmation = confirm('You do not have enough privileges for role VIEWER');
-							
-							 $("#actions").hide();
+
+							$("#actions").hide();
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
 
@@ -467,6 +537,9 @@ var roleValue;
 											var buttonText = $('#registerBtn')
 													.val();
 
+											var publishingStatus = $(
+													'#publishing_status').find(
+													":selected").val();
 											var storeAndForward = $(
 													'#storeAndForward').find(
 													":selected").val();
@@ -477,6 +550,15 @@ var roleValue;
 													.find(":selected").val();
 											var broker_name = $('#broker_name')
 													.find(":selected").val();
+											var json_string_name = $(
+													"#json_string_name").val();
+											var publish_topic = $(
+													"#publish_topic").val();
+
+											if (!validatePublishingStatus(publishingStatus)) {
+												publishingStatusError.textContent = "Please select publishing status";
+												return;
+											}
 
 											if (!validateSoreAndForward(storeAndForward)) {
 												storeAndForwardError.textContent = "Please select store and forward";
@@ -498,11 +580,28 @@ var roleValue;
 												return;
 											}
 
-											if (buttonText == 'Add') {
-												addJsonBuilder();
+											if (publish_topic.length > 30) {
+												publish_topic_error.textContent = "You can write upto 30 maximum characters.";
 											} else {
-												editJsonBuilder();
+												publish_topic_error.textContent = "";
 											}
+
+											if (json_string_name.length > 30) {
+												json_string_name_error.textContent = "You can write upto 30 maximum characters.";
+											} else {
+												json_string_name_error.textContent = "";
+											}
+
+											if (json_string_text) {
+												if (buttonText == 'Add') {
+													addJsonBuilder();
+												} else {
+													editJsonBuilder();
+												}
+											} else {
+												alert('First validate json!')
+											}
+
 										});
 
 						$('#clearBtn')
@@ -544,12 +643,14 @@ var roleValue;
 
 		<div class="container">
 			<form id="jsonBuilderForm">
-			 <input type="hidden" id="action" name="action" value="">
+				<input type="hidden" id="action" name="action" value="">
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="json_string_name" name="json_string_name"
-							placeholder="JSON String Name" required style="height: 17px;" />
+							placeholder="JSON String Name" required style="height: 17px;"
+							maxlength="30" />
+						<p id="json_string_name_error" style="color: red;"></p>
 
 					</div>
 
@@ -590,7 +691,9 @@ var roleValue;
 
 					<div class="col-75-5" style="width: 20%;">
 						<input type="text" id="publish_topic" name="publish_topic"
-							placeholder="Publish Topic" required style="height: 17px;">
+							placeholder="Publish Topic" required style="height: 17px;"
+							maxlength="30">
+						<p id="publish_topic_error" style="color: red;"></p>
 					</div>
 				</div>
 
@@ -600,9 +703,11 @@ var roleValue;
 					<div class="col-75-6" style="width: 20%;">
 						<select class="textBox" id="publishing_status"
 							name="publishing_status" style="height: 35px;" required>
+							<option value="Select publishing status">Select
+								publishing status</option>
 							<option value="Enable" selected>Enable</option>
 							<option value="Disable">Disable</option>
-						</select>
+						</select> <span id="publishingStatusError" style="color: red;"></span>
 					</div>
 
 					<div class="col-75-7" style="width: 20%;">
@@ -644,7 +749,7 @@ var roleValue;
 				</div>
 
 				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 2%;">
+					style="display: flex; justify-content: right; margin-top: -2%;">
 					<input type="button" value="Clear" id="clearBtn" /> <input
 						style="margin-left: 5px;" type="submit" value="Add"
 						id="registerBtn" />

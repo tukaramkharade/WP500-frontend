@@ -699,7 +699,7 @@
 					</div>
 
 					<div class="row"
-						style="display: flex; justify-content: right; margin-top: 2%;">
+						style="display: flex; justify-content: right; margin-top: -2%;">
 						<input type="button" value="Clear" id="clearBtn" /> <input
 							style="margin-left: 5px;" type="submit" value="Add"
 							id="registerBtn" />

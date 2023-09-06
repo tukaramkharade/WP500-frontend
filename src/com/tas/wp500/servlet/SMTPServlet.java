@@ -19,14 +19,15 @@ import com.tas.wp500.utils.TCPClient;
 public class SMTPServlet extends HttpServlet {
 	final static Logger logger = Logger.getLogger(SMTPServlet.class);
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-		
+
 		if (check_username != null) {
-			
+
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
@@ -35,41 +36,51 @@ public class SMTPServlet extends HttpServlet {
 			String tls_enable = "";
 			String tls_port = "";
 			String ssl_smtp_type = "";
-			String ssl_socket_factory_port =""; 
+			String ssl_socket_factory_port = "";
 			String ssl_port = "";
-			
+			String to_email_id = "";
+			String email_cc = "";
+			String email_bcc = "";
+
 			try {
-				
+
 				json.put("operation", "protocol");
 				json.put("protocol_type", "smtp");
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
-				
+
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
 
 				logger.info("res " + respJson.toString());
-				
+
 				for (int i = 0; i < respJson.length(); i++) {
-					
+
 					String from_email_id = respJson.getString("from_email_id");
 					String password = respJson.getString("password");
 					String smtp_type = respJson.getString("smtp_type");
 					String host = respJson.getString("host");
-					
+					to_email_id = respJson.getString("to_email_id");
+					if (respJson.has("cc")) {
+						email_cc = respJson.getString("cc");
+					}
+					if (respJson.has("bcc")) {
+						email_bcc = respJson.getString("bcc");
+						// System.out.println("bcc value"+email_bcc);
+					}
 					if ("ssl".equalsIgnoreCase(smtp_type)) {
 						ssl_socket_factory_port = respJson.getString("ssl_socket_factory_port");
 						ssl_port = respJson.getString("ssl_port");
 						ssl_smtp_type = respJson.getString("ssl_smtp_type");
-						
+
 					} else if ("tls".equalsIgnoreCase(smtp_type)) {
 						tls_port = respJson.getString("tls_port");
 						tls_auth = respJson.getString("tls_auth");
 						tls_enable = respJson.getString("tls_enable");
-						
+
 					}
-					
+
 					try {
 						jsonObject.put("ssl_socket_factory_port", ssl_socket_factory_port);
 						jsonObject.put("tls_port", tls_port);
@@ -80,14 +91,16 @@ public class SMTPServlet extends HttpServlet {
 						jsonObject.put("tls_enable", tls_enable);
 						jsonObject.put("ssl_smtp_type", ssl_smtp_type);
 						jsonObject.put("host", host);
-						jsonObject.put("ssl_port", ssl_port); 
-						
+						jsonObject.put("ssl_port", ssl_port);
+						jsonObject.put("to_email_id", to_email_id);
+						jsonObject.put("email_cc", email_cc);
+						jsonObject.put("email_bcc", email_bcc);
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in putting SMTP settings in json object: " + e);
 					}
 				}
-				
+
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
@@ -95,39 +108,21 @@ public class SMTPServlet extends HttpServlet {
 				out.print(jsonObject.toString());
 				out.flush();
 
-				
-			}catch(Exception e){
-				e.printStackTrace();
-				logger.error("Error while getting SMTP Settings : "+e);
-				
-			}
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
+				logger.error("Error while getting SMTP Settings : " + e);
+
 			}
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-		
+
 		String ssl_socket_factory_port = null;
 		String tls_port = null;
 		String from_email_id = null;
@@ -138,15 +133,17 @@ public class SMTPServlet extends HttpServlet {
 		String ssl_smtp_type = null;
 		String host = null;
 		String ssl_port = null;
-		
+		String to_email_id = null;
+		String email_cc = null;
+		String email_bcc = null;
 		if (check_username != null) {
-			
+
 			String action = request.getParameter("action");
-			System.out.println("action : "+action);
+			System.out.println("action : " + action);
 
 			if (action != null) {
 				switch (action) {
-				
+
 				case "add":
 					ssl_socket_factory_port = request.getParameter("ssl_socket_factory_port");
 					tls_port = request.getParameter("tls_port");
@@ -158,12 +155,14 @@ public class SMTPServlet extends HttpServlet {
 					ssl_smtp_type = request.getParameter("ssl_smtp_type");
 					host = request.getParameter("host");
 					ssl_port = request.getParameter("ssl_port");
-					
-					try{
-						
+					to_email_id = request.getParameter("to_email_id");
+					email_cc = request.getParameter("email_cc");
+					email_bcc = request.getParameter("email_bcc");
+					try {
+
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-	
+
 						json.put("operation", "protocol");
 						json.put("protocol_type", "smtp");
 						json.put("operation_type", "add_query");
@@ -181,6 +180,9 @@ public class SMTPServlet extends HttpServlet {
 						json.put("tls_port", tls_port);
 						json.put("tls_enable", tls_enable);
 						json.put("tls_auth", tls_auth);
+						json.put("to_email_id", to_email_id);
+						json.put("email_cc", email_cc);
+						json.put("email_bcc", email_bcc);
 						json.put("user", check_username);
 
 						String respStr = client.sendMessage(json.toString());
@@ -201,14 +203,14 @@ public class SMTPServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-						
-					}catch(Exception e){
+
+					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error in adding SMTP settings: "+e);
+						logger.error("Error in adding SMTP settings: " + e);
 					}
-					
+
 					break;
-					
+
 				case "update":
 					ssl_socket_factory_port = request.getParameter("ssl_socket_factory_port");
 					tls_port = request.getParameter("tls_port");
@@ -220,12 +222,15 @@ public class SMTPServlet extends HttpServlet {
 					ssl_smtp_type = request.getParameter("ssl_smtp_type");
 					host = request.getParameter("host");
 					ssl_port = request.getParameter("ssl_port");
-					
-					try{
-						
+					to_email_id = request.getParameter("to_email_id");
+					email_cc = request.getParameter("email_cc");
+					email_bcc = request.getParameter("email_bcc");
+
+					try {
+
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-	
+
 						json.put("operation", "protocol");
 						json.put("protocol_type", "smtp");
 						json.put("operation_type", "update_query");
@@ -243,6 +248,9 @@ public class SMTPServlet extends HttpServlet {
 						json.put("tls_port", tls_port);
 						json.put("tls_enable", tls_enable);
 						json.put("tls_auth", tls_auth);
+						json.put("to_email_id", to_email_id);
+						json.put("email_cc", email_cc);
+						json.put("email_bcc", email_bcc);
 						json.put("user", check_username);
 
 						String respStr = client.sendMessage(json.toString());
@@ -263,17 +271,17 @@ public class SMTPServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-						
-					}catch(Exception e){
+
+					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error in updating SMTP settings: "+e);
+						logger.error("Error in updating SMTP settings: " + e);
 					}
-					
+
 					break;
 				}
 			}
-			
-		}else{
+
+		} else {
 			try {
 				JSONObject userObj = new JSONObject();
 				userObj.put("msg", "Your session is timeout. Please login again");
@@ -307,7 +315,7 @@ public class SMTPServlet extends HttpServlet {
 
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
-				
+
 				json.put("operation", "protocol");
 				json.put("protocol_type", "smtp");
 				json.put("operation_type", "delete_query");
@@ -355,4 +363,6 @@ public class SMTPServlet extends HttpServlet {
 			}
 		}
 	}
+
+	
 }
