@@ -81,6 +81,18 @@ function addSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
+	if (!validateEmails(to_email_id) || !validateEmails(email_cc) || !validateEmails(email_bcc)) {
+        return; // Exit the function if any email is invalid
+    }
+	
+	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
+        return;
+    }
+    if (password.length > 13) {
+        alert('Password must be at most 13 characters long.');
+        return;
+    }
+    
 	$.ajax({
 		url : 'SMTPServlet',
 		type : 'POST',
@@ -146,6 +158,18 @@ function editSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
+	if (!validateEmails(to_email_id) || !validateEmails(email_cc) || !validateEmails(email_bcc)) {
+        return; // Exit the function if any email is invalid
+    }
+	
+	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
+        return;
+    }
+    if (password.length > 13) {
+        alert('Password must be at most 13 characters long.');
+        return;
+    }
+	
 	$.ajax({
 		url : 'SMTPServlet',
 		type : 'POST',
@@ -196,7 +220,53 @@ function editSMTPSettings() {
 
 	$('#addBtn').val('Add');
 }
-
+function validatePortLength(port) {
+    if (port.length > 5) {
+        alert('Port must not exceed 5 digits in length.');
+        return false;
+    }
+    return true;
+}
+function validateEmails(emails) {
+	
+    var emailArray = emails.split(',').map(function (email) {
+        return email; // Remove leading/trailing spaces
+    });
+    
+    var emailArray1 = emails.split(',').map(function (email) {
+        return email.trim(); // Remove leading/trailing spaces
+    });
+	
+    if (emailArray.length > 1) {
+        if (!emails.includes(',') ) {
+            console.log("comma " + emailArray.length + " " + emails.length);
+            alert('Comma is required between email addresses: ' + emails);
+            return false; // Comma is required between multiple emails
+        }
+    }
+    if (emails.includes(' ')) {
+        alert('Space is not allowed between email addresses: ' + emails);
+        return false; // Space is not allowed between email addresses
+    }
+    
+    for (var i = 0; i < emailArray1.length; i++) {
+        if (!isValidEmail(emailArray1[i])) {
+        	if (!emails.includes(',') ) {
+                console.log("comma " + emailArray.length + " " + emails.length);
+                alert('Comma is required between email addresses: ' + emails);
+                return false; // Comma is required between multiple emails
+            }
+            alert('Invalid email address: ' + emailArray1[i]);
+            return false; // Stop and show an alert for the first invalid email
+        }
+    }
+    
+    return true; // All emails are valid
+}
+function isValidEmail(email) {
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 function deleteSMTPSettings() {
 		
 		var confirmation = confirm('Are you sure you want to delete this SMTP settings?');
