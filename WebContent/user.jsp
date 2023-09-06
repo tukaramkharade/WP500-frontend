@@ -43,7 +43,8 @@ var roleValue;
 						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
-												var row = $('<tr>');
+								if (user.username !== 'tasm2m_admin') {
+											var row = $('<tr>');
 												
 												row.append($('<td>').text(user.username));
 												row.append($('<td>').text(user.first_name));
@@ -77,12 +78,13 @@ var roleValue;
 												row.append(actions);
 
 												userTable.append(row);
-
+								}
 											});
 						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 							
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
+								if (user.username !== 'tasm2m_admin') {
 												var row = $('<tr>');
 												
 												row.append($('<td>').text(user.username));
@@ -91,7 +93,7 @@ var roleValue;
 												row.append($('<td>').text(user.role));
 
 												userTable.append(row);
-
+								}
 											});
 						}
 							
@@ -132,8 +134,6 @@ var roleValue;
 	function deleteUser(userId) {
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
-
-		alert(userId)
 		
 		var confirmation = confirm('Are you sure you want to delete this user?');
 		if (confirmation) {
@@ -165,7 +165,6 @@ var roleValue;
 						alert(data.message);
 					}
 				
-
 					// Refresh the user list
 					loadUserList();
 				},
@@ -181,43 +180,46 @@ var roleValue;
 
 		var confirmation = confirm('Are you sure you want to edit this user?');
 
-		var username = $('#username').val();
-		var first_name = $('#first_name').val();
-		var last_name = $('#last_name').val();
-		var role = $('#role').find(":selected").val();
+		if (confirmation) {
+			var username = $('#username').val();
+			var first_name = $('#first_name').val();
+			var last_name = $('#last_name').val();
+			var role = $('#role').find(":selected").val();
 
-		$.ajax({
-			url : 'userServlet',
-			type : 'POST',
-			data : {
-				username : username,
-				first_name : first_name,
-				last_name : last_name,
-				role : role,
-				action: 'update'
-			},
-			success : function(data) {
-				// Display the registration status message
-				alert(data.message);
-				loadUserList();
+			$.ajax({
+				url : 'userServlet',
+				type : 'POST',
+				data : {
+					username : username,
+					first_name : first_name,
+					last_name : last_name,
+					role : role,
+					action: 'update'
+				},
+				success : function(data) {
+					// Display the registration status message
+					alert(data.message);
+					loadUserList();
 
-				// Clear form fields
-			$('#username').val('');
-	    $('#password').val('');
-	    $('#first_name').val('');
-	    $('#last_name').val('');
-	    $('#role').val('Select role');
+					// Clear form fields
+				$('#username').val('');
+		    $('#password').val('');
+		    $('#first_name').val('');
+		    $('#last_name').val('');
+		    $('#role').val('Select role');
 
-				$("#password").prop("disabled", false);
+					$("#password").prop("disabled", false);
 
-				$("#username").prop("disabled", false);
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating user: ' + error);
-			}
-		});
+					$("#username").prop("disabled", false);
+				},
+				error : function(xhr, status, error) {
+					console.log('Error updating user: ' + error);
+				}
+			});
 
-		$('#registerBtn').val('Add');
+			$('#registerBtn').val('Add');
+		}
+		
 	}
 
 	// Function to handle form submission and add a new user
@@ -276,8 +278,8 @@ var roleValue;
 	
 	function validatePassword(password) {
 		var passwordError = document.getElementById("passwordError");
-
-		if (password.length < 8 || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password)) {
+		const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+		if (password.length < 8 || !strongRegex.test(password)) {
 			passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
 			return false;
 		} else {
@@ -319,7 +321,6 @@ var roleValue;
 		
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-			var confirmation = confirm('You do not have enough privileges for role VIEWER');
 			$("#actions").hide();
 			$('#registerBtn').prop('disabled', true);
 			$('#clearBtn').prop('disabled', true);
@@ -334,6 +335,10 @@ var roleValue;
 			var buttonText = $('#registerBtn').val();
 			var role = $('#role').find(":selected").val();
 			var password = $('#password').val();
+			var user_name = $('#username').val();
+			var firstname = $('#first_name').val();
+			var lastname = $('#last_name').val();
+
 
 			if (!validateRole(role)) {
 				roleError.textContent = "Please select role";
@@ -341,14 +346,58 @@ var roleValue;
 			}
 
 			
-			 var isDisabled = $("#password").prop("disabled");
-			 
-			 if (!isDisabled) {
-				 if (!validatePassword(password)) {
-						passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
-						return;
-					}	
-			    } 
+			if((user_name.length > 30)){
+
+                field_User_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }
+
+            else{
+
+                field_User_Error.textContent =""
+
+            }  
+
+            if((password.length > 30)){
+
+                field_Pass_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }else{
+
+                field_Pass_Error.textContent =""
+
+            }          
+
+            if( (firstname.length > 30)){
+
+                field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }
+
+            else{
+
+                field_FirstN_Error.textContent=""
+
+            }
+
+            if( (lastname.length > 30)){
+
+                field_LastN_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }else{
+
+                field_LastN_Error.textContent =""
+
+            }
+			
+		 var isDisabled = $("#password").prop("disabled");
+		 
+		 if (!isDisabled) {
+			 if (!validatePassword(password)) {
+					passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+					return;
+				}	
+		    }
 			
 					
 			if (buttonText == 'Add') {
@@ -360,11 +409,14 @@ var roleValue;
 			}
 		});
 
-		$('#username').val('');
-	    $('#password').val('');
-	    $('#first_name').val('');
-	    $('#last_name').val('');
-	    $('#role').val('Select role');
+		$('#clearBtn').click(function() {
+			$('#username').val('');
+		    $('#password').val('');
+		    $('#first_name').val('');
+		    $('#last_name').val('');
+		    $('#role').val('Select role');
+		});
+		
 
 	});
 </script>
@@ -391,26 +443,31 @@ var roleValue;
 						style="display: flex; flex-content: space-between; margin-top: -20px;">
 						<div class="col-75-1" style="width: 20%;">
 							<input type="text" id="username" name="username"
-								placeholder="Username" required />
+								placeholder="Username" required maxlength="31"/>
+								<p id="field_User_Error" style="color: red;"></p>
 
 						</div>
 						
 						<div class="col-75-2" style="width: 20%;">
 							<input type="password" id="password" name="password"
-								placeholder="Password" required>
+								placeholder="Password" required maxlength="31">
 								
 								<p id="passwordError" style="color: red;"></p>
+								<p id="field_Pass_Error" style="color: red;"></p>
+								
 						</div>
 						
 						<div class="col-75-3" style="width: 20%;">
 							<input type="text" id="first_name" name="first_name"
-								placeholder="Firstname" />
+								placeholder="Firstname" maxlength="31"/>
+								<p id="field_FirstN_Error" style="color: red;"></p>
 
 						</div>
 						
 						<div class="col-75-4" style="width: 20%;">
 							<input type="text" id="last_name" name="last_name"
-								placeholder="Lastname" />
+								placeholder="Lastname" maxlength="31"/>
+								<p id="field_LastN_Error" style="color: red;"></p>
 						</div>
 					
 						<div class="col-75-5" style="width: 20%;">

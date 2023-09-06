@@ -84,8 +84,7 @@ var roleValue;
 										row.append($('<td>').text(jsonBuilder.publish_topic_name));
 										row.append($('<td>').text(jsonBuilder.publishing_status));
 										row.append($('<td>').text(jsonBuilder.store_n_forward));
-										row.append($('<td style="width: 400px; word-break: break-all; white-space: normal; overflow: hidden; text-overflow: ellipsis;">').text(
-												jsonBuilder.json_string));
+										row.append($('<td>').text(jsonBuilder.json_string));
 
 										 var actions = $('<td>');
 										var editButton = $(
@@ -130,10 +129,8 @@ var roleValue;
 								row.append($('<td>').text(jsonBuilder.publish_topic_name));
 								row.append($('<td>').text(jsonBuilder.publishing_status));
 								row.append($('<td>').text(jsonBuilder.store_n_forward));
-								row.append($('<td style="width: 400px; word-break: break-all; white-space: normal; overflow: hidden; text-overflow: ellipsis;">').text(
-										jsonBuilder.json_string));
+								row.append($('<td>').text(jsonBuilder.json_string));
 
-								
 								jsonBuilderTable.append(row);
 						});
 						}	
@@ -196,7 +193,6 @@ var roleValue;
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
-		alert(jsonBuilderId)
 		var confirmation = confirm('Are you sure you want to delete this json builder settings?');
 		if (confirmation) {
 			$.ajax({
@@ -225,58 +221,60 @@ var roleValue;
 	function editJsonBuilder() {
 
 		var confirmation = confirm('Are you sure you want to edit this json builder settings?');
+		
+		if(confirmation){
+			var json_string_name = $('#json_string_name').val();
+			var json_interval = $('#json_interval').find(":selected").val();
+			var broker_type = $('#broker_type').find(":selected").val();
+			var broker_name = $('#broker_name').find(":selected").val();
+			var publish_topic = $('#publish_topic').val();
+			var publishing_status = $('#publishing_status').find(":selected").val();
+			var storeAndForward = $('#storeAndForward').find(":selected").val();
+			var json_string_text = $('#json_string_text').val();
 
-		var json_string_name = $('#json_string_name').val();
-		var json_interval = $('#json_interval').find(":selected").val();
-		var broker_type = $('#broker_type').find(":selected").val();
-		var broker_name = $('#broker_name').find(":selected").val();
-		var publish_topic = $('#publish_topic').val();
-		var publishing_status = $('#publishing_status').find(":selected").val();
-		var storeAndForward = $('#storeAndForward').find(":selected").val();
-		var json_string_text = $('#json_string_text').val();
+			$
+					.ajax({
+						url : 'jsonBuilderServlet',
+						type : 'POST',
+						data : {
+							json_string_name : json_string_name,
+							json_interval : json_interval,
+							broker_type : broker_type,
+							broker_name : broker_name,
+							publish_topic : publish_topic,
+							publishing_status : publishing_status,
+							storeAndForward : storeAndForward,
+							json_string_text : json_string_text,
+							action: 'update'
+						},
+						success : function(data) {
+							// Display the registration status message
+							alert(data.message);
+							loadJsonBuilderList();
 
-		$
-				.ajax({
-					url : 'jsonBuilderServlet',
-					type : 'POST',
-					data : {
-						json_string_name : json_string_name,
-						json_interval : json_interval,
-						broker_type : broker_type,
-						broker_name : broker_name,
-						publish_topic : publish_topic,
-						publishing_status : publishing_status,
-						storeAndForward : storeAndForward,
-						json_string_text : json_string_text,
-						action: 'update'
-					},
-					success : function(data) {
-						// Display the registration status message
-						alert(data.message);
-						loadJsonBuilderList();
+							// Clear form fields
 
-						// Clear form fields
+							$('#json_string_name').val('');
+							$('#json_interval').val('Select JSON Interval');
+							$('#broker_type').val('Select Broker Type');
+							$('#broker_name').val('Select Broker IP Address');
+							$('#publish_topic').val('');
+							$('#publishing_status').val('Enable');
+							$('#storeAndForward').val('Enter Store and Forward');
+							$('#json_string_text')
+									.val('');
 
-						$('#json_string_name').val('');
-						$('#json_interval').val('Select JSON Interval');
-						$('#broker_type').val('Select Broker Type');
-						$('#broker_name').val('Select Broker IP Address');
-						$('#publish_topic').val('');
-						$('#publishing_status').val('Enable');
-						$('#storeAndForward').val('Enter Store and Forward');
-						$('#json_string_text')
-								.val(
-										'{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
+							$("#json_string_name").prop("disabled", false);
+						},
+						error : function(xhr, status, error) {
+							console.log('Error updating json builder settings: '
+									+ error);
+						}
+					});
 
-						$("#json_string_name").prop("disabled", false);
-					},
-					error : function(xhr, status, error) {
-						console.log('Error updating json builder settings: '
-								+ error);
-					}
-				});
-
-		$('#registerBtn').val('Add');
+			$('#registerBtn').val('Add');
+		}
+		
 	}
 
 	// Function to handle form submission and add a new user

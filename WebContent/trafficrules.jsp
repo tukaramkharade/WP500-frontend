@@ -167,7 +167,6 @@ var roleValue;
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
-		alert(trafficRulesId);
 		var confirmation = confirm("Are you sure you want to delete this traffic rules?");
 		if (confirmation) {
 			$.ajax({
@@ -214,64 +213,67 @@ var roleValue;
 	function editTrafficRules() {
 
 		var confirmation = confirm('Are you sure you want to edit this traffic rule?');
-
-		var name = $('#name').val();
-		var iface = $('#iface').find(":selected").val();
-		var portNumber = $('#portNumber').val();
-		var macAddress = $('#macAddress').val();
-		var protocol = $('#protocol').find(":selected").val();
-		var ip_addr = $('#ip_addr').val();
-		var type = $('#type').find(":selected").val();
-		var action = $('#action').find(":selected").val();
 		
-		if(type == 'ip'){
-			alert(type)
-			$("#macAddress").prop("disabled", true);
-		}else if(type == 'mac'){
+		if(confirmation){
+			var name = $('#name').val();
+			var iface = $('#iface').find(":selected").val();
+			var portNumber = $('#portNumber').val();
+			var macAddress = $('#macAddress').val();
+			var protocol = $('#protocol').find(":selected").val();
+			var ip_addr = $('#ip_addr').val();
+			var type = $('#type').find(":selected").val();
+			var action = $('#action').find(":selected").val();
 			
-			$("#ip_addr").prop("disabled", true);
-		}
-		
-		$.ajax({
-			url : 'trafficRulesServlet',
-			type : 'POST',
-			data : {
-				name : name,
-				iface : iface,
-				portNumber : portNumber,
-				macAddress : macAddress,
-				protocol : protocol,
-				ip_addr : ip_addr,
-				type : type,
-				action : action,
-				operation_action: 'update'
-			},
-			success : function(data) {
-				// Display the registration status message
-
-				alert(data.message);
-				loadTrafficRulesList();
-
-				// Clear form fields
-				$('#name').val('');
-				$('#iface').val('eth0');
-				$('#portNumber').val('');
-				$('#macAddress').val('');
-				$('#protocol').val('tcp');
-				$('#ip_addr').val('');
-				$('#type').val('Select type');
-				$('#action').val('ACCEPT');
-
-				$("#name").prop("disabled", false);
-				$('#ip_addr').prop('disabled', false);
-				$('#macAddress').prop('disabled', false);
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating traffic rule: ' + error);
+			if(type == 'ip'){
+				alert(type)
+				$("#macAddress").prop("disabled", true);
+			}else if(type == 'mac'){
+				
+				$("#ip_addr").prop("disabled", true);
 			}
-		});
+			
+			$.ajax({
+				url : 'trafficRulesServlet',
+				type : 'POST',
+				data : {
+					name : name,
+					iface : iface,
+					portNumber : portNumber,
+					macAddress : macAddress,
+					protocol : protocol,
+					ip_addr : ip_addr,
+					type : type,
+					action : action,
+					operation_action: 'update'
+				},
+				success : function(data) {
+					// Display the registration status message
 
-		$('#registerBtn').val('Add');
+					alert(data.message);
+					loadTrafficRulesList();
+
+					// Clear form fields
+					$('#name').val('');
+					$('#iface').val('eth0');
+					$('#portNumber').val('');
+					$('#macAddress').val('');
+					$('#protocol').val('tcp');
+					$('#ip_addr').val('');
+					$('#type').val('Select type');
+					$('#action').val('ACCEPT');
+
+					$("#name").prop("disabled", false);
+					$('#ip_addr').prop('disabled', false);
+					$('#macAddress').prop('disabled', false);
+				},
+				error : function(xhr, status, error) {
+					console.log('Error updating traffic rule: ' + error);
+				}
+			});
+
+			$('#registerBtn').val('Add');
+		}
+
 	}
 
 	function setName(trafficRulesId) {

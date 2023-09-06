@@ -113,7 +113,7 @@ $(document).ready(function() {
             <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo" style="width: 78%; float: center;"/>
         </div>
         
-        <p>WPConnex Web Configuration</p>
+        <p style="font-size: medium;"><b>WPConnex Web Configuration</b></p>
             <label for="username" style="float: left;">Username:</label>
         <input type="text" id="username" name="username" required><br>
         

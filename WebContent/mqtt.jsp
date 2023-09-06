@@ -213,6 +213,11 @@
 	function setFileType(mqttId) {
 
 		$('#file_type').val(mqttId);
+		
+		if(mqttId == 'TCP'){
+			$("#file_name").prop("disabled", true);
+		}
+		
 	}
 
 	function setFileName(mqttId) {
@@ -255,8 +260,8 @@
 
 	 function deleteMqtt(prefix) {
 		
-		alert(prefix)
-		var confirmation = confirm('Are you sure you want to delete this mqtt?');
+		
+		var confirmation = confirm('Are you sure you want to delete this mqtt settings?');
 		if (confirmation) {
 			
 			$.ajax({
@@ -285,60 +290,64 @@
 	function editMqtt() {
 
 		var confirmation = confirm('Are you sure you want to edit this mqtt settings?');
-
-		var broker_ip_address = $('#broker_ip_address').val();
-		var port_number = $('#port_number').val();
-		var username = $('#username').val();
-		var password = $('#password').val();
-		var pub_topic = $('#pub_topic').val();
-		var sub_topic = $('#sub_topic').val();
-		var prefix = $('#prefix').val();
-		var file_type = $('#file_type').find(":selected").val();
-		var file_name = $('#file_name').find(":selected").val();
-		var enable = $('#enable').find(":selected").val();
 		
-		$.ajax({
-			url : 'mqttServlet',
-			type : 'POST',
-			data : {
-				broker_ip_address : broker_ip_address,
-				port_number : port_number,
-				username : username,
-				password : password,
-				pub_topic : pub_topic,
-				sub_topic : sub_topic,
-				prefix : prefix,
-				file_type : file_type,
-				enable : enable,
-				file_name : file_name,
-				action: 'update'
+		if(confirmation){
+			var broker_ip_address = $('#broker_ip_address').val();
+			var port_number = $('#port_number').val();
+			var username = $('#username').val();
+			var password = $('#password').val();
+			var pub_topic = $('#pub_topic').val();
+			var sub_topic = $('#sub_topic').val();
+			var prefix = $('#prefix').val();
+			var file_type = $('#file_type').find(":selected").val();
+			var file_name = $('#file_name').find(":selected").val();
+			var enable = $('#enable').find(":selected").val();
+			
+			$.ajax({
+				url : 'mqttServlet',
+				type : 'POST',
+				data : {
+					broker_ip_address : broker_ip_address,
+					port_number : port_number,
+					username : username,
+					password : password,
+					pub_topic : pub_topic,
+					sub_topic : sub_topic,
+					prefix : prefix,
+					file_type : file_type,
+					enable : enable,
+					file_name : file_name,
+					action: 'update'
 
-			},
-			success : function(data) {
-				// Display the registration status message
-					alert(data.message);
-				loadMqttList();
+				},
+				success : function(data) {
+					// Display the registration status message
+						alert(data.message);
+					loadMqttList();
 
-				// Clear form fields
-				$('#broker_ip_address').val('');
-				$('#port_number').val('');
-				$('#username').val('');
-				$('#password').val('');
-				$('#pub_topic').val('');
-				$('#sub_topic').val('');
-				$('#prefix').val('');
-				$('#file_type').val('Select file type');
-				$('#file_name').val('Select crt file');
-				$('#enable').val('true');
+					// Clear form fields
+					$('#broker_ip_address').val('');
+					$('#port_number').val('');
+					$('#username').val('');
+					$('#password').val('');
+					$('#pub_topic').val('');
+					$('#sub_topic').val('');
+					$('#prefix').val('');
+					$('#file_type').val('Select file type');
+					$('#file_name').val('Select crt file');
+					$('#enable').val('true');
 
-				$("#prefix").prop("disabled", false);
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating mqtt: ' + error);
-			}
-		});
+					$("#prefix").prop("disabled", false);
+					$('#file_name').prop('disabled', false);
+				},
+				error : function(xhr, status, error) {
+					console.log('Error updating mqtt: ' + error);
+				}
+			});
 
-		$('#registerBtn').val('Add');
+			$('#registerBtn').val('Add');
+		}
+
 	}
 
 	// Function to handle form submission and add a new mqtt
@@ -351,9 +360,18 @@
 		var pub_topic = $('#pub_topic').val();
 		var sub_topic = $('#sub_topic').val();
 		var prefix = $('#prefix').val();
-		var file_name = $('#file_name').find(":selected").val();
+		//var file_name = $('#file_name').find(":selected").val();
 		var enable = $('#enable').find(":selected").val();
 		var file_type = $('#file_type').find(":selected").val();
+		var file_name;
+		
+		if(file_type == 'TCP'){
+			file_name = '';
+		
+		}else if(file_type == 'SSL'){
+			file_name = $('#file_name').find(":selected").val();
+			
+		}
 
 		$.ajax({
 			url : 'mqttServlet',
@@ -387,9 +405,12 @@
 				$('#pub_topic').val('');
 				$('#sub_topic').val('');
 				$('#prefix').val('');
-				$('#file_type').val('Select file type');
+				$('#file_type').val('Select type');
 				$('#file_name').val('Select crt file');
 				$('#enable').val('true');
+				
+				$('#file_name').prop('disabled', false);
+
 
 			},
 			error : function(xhr, status, error) {
@@ -405,7 +426,7 @@
 
 		if (type == 'Select file type'){
 			
-			fileTypeError.textContent = "Please select file type";
+			fileTypeError.textContent = "Please select type";
 			return false;
 		} else {
 			fileTypeError.textContent = "";
@@ -425,6 +446,20 @@
 			return true;
 		}
 	}
+	
+	function validateStatus(status) {
+		var statusError = document.getElementById("statusError");
+
+		if (status == 'Select status'){
+			
+			statusError.textContent = "Please select status";
+			return false;
+		} else {
+			statusError.textContent = "";
+			return true;
+		}
+	}
+
 	
 	function validateNumbers(number) {
 		const
@@ -493,6 +528,7 @@
 									} else if ($(this).val() == 'TCP'
 											|| $(this).val() == 'tcp') {
 										$("#file_name").prop("disabled", true);
+										$('#file_name').val('');
 									}
 								});
 
@@ -509,6 +545,8 @@
 													.val();
 											var file_name = $('#file_name')
 													.find(":selected").val();
+											var enable = $('#enable')
+											.find(":selected").val();
 
 											if (!validateNumbers(port_number)) {
 												portNoError.textContent = "Enter port number upto 5 digits";
@@ -516,14 +554,23 @@
 											}
 
 											if (!validateFiletype(type)) {
-												fileTypeError.textContent = "Please select file type";
+												fileTypeError.textContent = "Please select type";
+												return;
+											}
+											
+											if (!validateStatus(enable)) {
+												statusError.textContent = "Please select status";
 												return;
 											}
 
-											if (!validateCrtFile(file_name)) {
-												crtFileError.textContent = "Please select crt file";
-												return;
-											}
+											 var isDisabled = $("#file_name").prop("disabled");
+											 if (!isDisabled) {
+												 if (!validateCrtFile(file_name)) {
+														crtFileError.textContent = "Please select crt file";
+														return;
+													}
+											 }
+											
 
 											if (buttonText == 'Add') {
 												addMqtt();
@@ -540,7 +587,7 @@
 							$('#pub_topic').val('');
 							$('#sub_topic').val('');
 							$('#prefix').val('');
-							$('#file_type').val('Select file type');
+							$('#file_type').val('Select type');
 							$('#file_name').val('Select crt file');
 							$('#enable').val('true');
 
@@ -560,7 +607,7 @@
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>MQTT Server Settings</h3>
+			<h3>MQTT SERVER SETTINGS</h3>
 			<hr>
 
 			<div class="container">
@@ -621,7 +668,7 @@
 
 							<select class="textBox" id="file_type" name="file_type"
 								style="height: 35px;">
-								<option value="Select file type">Select file type</option>
+								<option value="Select type">Select type</option>
 								<option>SSL</option>
 								<option>TCP</option>
 
@@ -642,11 +689,12 @@
 
 							<select class="textBox" id="enable" name="enable"
 								style="height: 35px;">
-
-								<option value="enable" selected>true</option>
-								<option value="disable">false</option>
+								<option value="Select status">Select status</option>
+								<option value="true">true</option>
+								<option value="false">false</option>
 
 							</select>
+							<span id="statusError" style="color: red;"></span>
 						</div>
 					</div>
 
@@ -672,7 +720,7 @@
 							<th>Published topic</th>
 							<th>Subscribed topic</th>
 							<th>Prefix</th>
-							<th>File type</th>
+							<th>Type</th>
 							<th>File name</th>
 							<th>Enable</th>
 							<th>Actions</th>

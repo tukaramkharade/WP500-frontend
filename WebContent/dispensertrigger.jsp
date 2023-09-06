@@ -445,75 +445,77 @@ var roleValue;
 	function editDispenserTrigger() {
 
 		var confirmation = confirm('Are you sure you want to edit this dispenser trigger settings?');
+		
+		if(confirmation){
+			var station_name = $('#station_name').val();
+			var serial_number = $('#serial_number').val();
+			var side = $('#side').find(":selected").val();
+			var broker_name = $('#broker_name').find(":selected").val();
+			var trigger_tag = $('#trigger_tag').find(":selected").val();
+			var trigger_value = $('#trigger_value').find(":selected").val();
+			var start_pressure = $('#start_pressure').find(":selected").val();
+			var end_pressure = $('#end_pressure').find(":selected").val();
+			var temperature = $('#temperature').find(":selected").val();
+			var total = $('#total').find(":selected").val();
+			var quantity = $('#quantity').find(":selected").val();
+			var unit_price = $('#unit_price').find(":selected").val();
+			var status = $('#status').find(":selected").val();
+			var unit_id = $('#unit_id').val();
 
-		var station_name = $('#station_name').val();
-		var serial_number = $('#serial_number').val();
-		var side = $('#side').find(":selected").val();
-		var broker_name = $('#broker_name').find(":selected").val();
-		var trigger_tag = $('#trigger_tag').find(":selected").val();
-		var trigger_value = $('#trigger_value').find(":selected").val();
-		var start_pressure = $('#start_pressure').find(":selected").val();
-		var end_pressure = $('#end_pressure').find(":selected").val();
-		var temperature = $('#temperature').find(":selected").val();
-		var total = $('#total').find(":selected").val();
-		var quantity = $('#quantity').find(":selected").val();
-		var unit_price = $('#unit_price').find(":selected").val();
-		var status = $('#status').find(":selected").val();
-		var unit_id = $('#unit_id').val();
+			$.ajax({
+				url : 'dispenserTriggerServlet',
+				type : 'POST',
+				data : {
+					station_name : station_name,
+					serial_number : serial_number,
+					side : side,
+					broker_name : broker_name,
+					trigger_tag : trigger_tag,
+					trigger_value : trigger_value,
+					start_pressure : start_pressure,
+					end_pressure : end_pressure,
+					temperature : temperature,
+					total : total,
+					quantity : quantity,
+					unit_price : unit_price,
+					status : status,
+					unit_id : unit_id,
+					action: 'update'
+				},
+				success : function(data) {
+					// Display the registration status message
+					alert(data.message);
+					loadDispenserTriggerList();
 
-		$.ajax({
-			url : 'dispenserTriggerServlet',
-			type : 'POST',
-			data : {
-				station_name : station_name,
-				serial_number : serial_number,
-				side : side,
-				broker_name : broker_name,
-				trigger_tag : trigger_tag,
-				trigger_value : trigger_value,
-				start_pressure : start_pressure,
-				end_pressure : end_pressure,
-				temperature : temperature,
-				total : total,
-				quantity : quantity,
-				unit_price : unit_price,
-				status : status,
-				unit_id : unit_id,
-				action: 'update'
-			},
-			success : function(data) {
-				// Display the registration status message
-				alert(data.message);
-				loadDispenserTriggerList();
+					// Clear form fields
 
-				// Clear form fields
+					$('#station_name').val('');
+					$('#serial_number').val('');
+					$('#side').val('Select side');
+					$('#broker_name').val('Select broker IP address');
+					$('#trigger_tag').val('Select trigger tag');
+					$('#trigger_value').val('Select trigger value');
+					$('#start_pressure').val('Select start pressure');
+					$('#end_pressure').val('Select end pressure');
+					$('#temperature').val('Select temperature');
+					$('#total').val('Select total');
+					$('#quantity').val('Select quantity');
+					$('#unit_price').val('Select unit price');
+					$('#status').val('Select status');
+					$('#unit_id').val('');
 
-				$('#station_name').val('');
-				$('#serial_number').val('');
-				$('#side').val('Select side');
-				$('#broker_name').val('Select broker IP address');
-				$('#trigger_tag').val('Select trigger tag');
-				$('#trigger_value').val('Select trigger value');
-				$('#start_pressure').val('Select start pressure');
-				$('#end_pressure').val('Select end pressure');
-				$('#temperature').val('Select temperature');
-				$('#total').val('Select total');
-				$('#quantity').val('Select quantity');
-				$('#unit_price').val('Select unit price');
-				$('#status').val('Select status');
-				$('#unit_id').val('');
+					$("#serial_number").prop("disabled", false);
 
-				$("#serial_number").prop("disabled", false);
+					$("#side").prop("disabled", false);
+				},
+				error : function(xhr, status, error) {
+					console.log('Error updating dispenser trigger settings: '
+							+ error);
+				}
+			});
 
-				$("#side").prop("disabled", false);
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating dispenser trigger settings: '
-						+ error);
-			}
-		});
-
-		$('#registerBtn').val('Add');
+			$('#registerBtn').val('Add');
+		}
 	}
 
 	function addDispenserTrigger() {
