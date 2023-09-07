@@ -468,9 +468,13 @@ var roleValue;
 	function toggleDateTimeInput() {
 		var ntpClientCheckbox = document.getElementById("ntp_client");
 		var datetimeInput = document.getElementById("datetime");
+		var dateTimeButton = document.getElementById("setDateTime");
 
 		datetimeInput.disabled = ntpClientCheckbox.checked;
+		dateTimeButton.disabled = ntpClientCheckbox.checked;
+		
 	}
+	
 	function getCurrentTimeInIndia() {
 	    const date = new Date();
 	  //  console.log("Current Time:", date);
@@ -583,7 +587,7 @@ var roleValue;
 							</div>
 							<div>
 							<input type="text" id="ntp_server1" name="ntp_server1"
-								placeholder="NTP Server" />
+								placeholder="NTP Server" maxlength="31"/>
 							</div>
 						</div>
 					
@@ -593,29 +597,29 @@ var roleValue;
 							</div>
 							<div>
 								<input type="text" id="ntp_server2" name="ntp_server2"
-								placeholder="NTP Server" />
+								placeholder="NTP Server" maxlength="31"/>
 							</div>
 						</div>	
 					</div>					
 					<div class="row"
 					style="display: flex; flex-content: space-between;">
-						<div style="width: 22%; margin-top: 0;display:flex;margin-top: 6px">
+						<div style="width: 22%; margin-top: 2px;display:flex;">
 							<div>
 								<label>NTP Server 3</label>
 							</div>
 							<div>	
 								<input type="text" id="ntp_server3" name="ntp_server3"
-								placeholder="NTP Server" />
+								placeholder="NTP Server" maxlength="31"/>
 							</div>
 						</div>
 						
-						<div style="width: 22%; margin-top: 0;display:flex;">
+						<div style="width: 22%; margin-top: 2px;display:flex; margin-left: 4px;">
 								<div>
 									<label>NTP Interval</label>
 								</div>
 								<div>
 									<input type="text" id="ntp_interval_1" name="ntp_interval_1"
-										placeholder="NTP Interval" />
+										placeholder="NTP Interval" maxlength="31" />
 								</div>
 						</div>
 					</div>

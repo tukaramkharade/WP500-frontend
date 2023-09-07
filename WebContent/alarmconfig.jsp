@@ -17,6 +17,54 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+/* Style for buttons */
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+</style>
 <script>
 	
 var roleValue;
@@ -181,6 +229,46 @@ var roleValue;
    			});
    		}
    	}
+       
+       function CheckPopup() {
+ 		  // Display the custom modal dialog
+ 		  var modal = document.getElementById('custom-modal');
+ 		  modal.style.display = 'block';
+
+ 		  // Handle the confirm button click
+ 		  var confirmButton = document.getElementById('confirm-button');
+ 		  confirmButton.onclick = function () {
+ 		    // Make the AJAX call to delete the user
+ 		    $.ajax({
+ 		      url: 'alarmConfigServlet',
+ 		      type: 'DELETE',
+ 		     dataType : 'json',
+ 		      success: function (data) {
+ 		        // Display the registration status message
+ 		        alert(data.message);
+
+ 		        // Close the modal
+ 		        modal.style.display = 'none';
+
+ 		        // Refresh the user list
+ 		       loadAlarmSettings();
+ 		      },
+ 		      error: function (xhr, status, error) {
+ 		        // Handle the error response, if needed
+ 		        console.log('Error deleting alarm settings: ' + error);
+ 		        // Close the modal
+ 		        modal.style.display = 'none';
+ 		      }
+ 		    });
+ 		  };
+
+ 		  // Handle the cancel button click
+ 		  var cancelButton = document.getElementById('cancel-button');
+ 		  cancelButton.onclick = function () {
+ 		    // Close the modal
+ 		    modal.style.display = 'none';
+ 		  };
+ 		}
        
        function validatefields(tag_name) {
    		var tagnameError = document.getElementById("tagnameError");
@@ -624,6 +712,15 @@ function addAlarmConfig() {
 				</div>
 			</form>
 		</div>
+		
+		<div id="custom-modal" class="modal">
+				<div class="modal-content">
+				  <p>Are you sure you want to delete this alarm setting?</p>
+				  <button id="confirm-button">Yes</button>
+				  <button id="cancel-button">No</button>
+				</div>
+			  </div>
+			  
 		<hr />
 		</section>
 

@@ -14,6 +14,54 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+/* Style for buttons */
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+</style>
 <script>
 
 var roleValue; 
@@ -190,6 +238,49 @@ var roleValue;
 			});
 		}
 	}
+	
+	function CheckPopup(trafficRulesId) {
+		  // Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal');
+		  modal.style.display = 'block';
+
+		  // Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button');
+		  confirmButton.onclick = function () {
+		    // Make the AJAX call to delete the user
+		    $.ajax({
+		      url: 'trafficRulesServlet',
+		      type: 'POST',
+		      data: {
+		    	  name : trafficRulesId,
+					operation_action: 'delete'
+		      },
+		      success: function (data) {
+		        // Display the registration status message
+		        alert(data.message);
+
+		        // Close the modal
+		        modal.style.display = 'none';
+
+		        // Refresh the user list
+		        loadTrafficRulesList();
+		      },
+		      error: function (xhr, status, error) {
+		        // Handle the error response, if needed
+		        console.log('Error deleting traffic rules: ' + error);
+		        // Close the modal
+		        modal.style.display = 'none';
+		      }
+		    });
+		  };
+
+		  // Handle the cancel button click
+		  var cancelButton = document.getElementById('cancel-button');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		  };
+		}
 
 	function applyTrafficRules() {
 
@@ -641,7 +732,61 @@ var roleValue;
 		$("#trafficRulesForm").submit(function(event) {
 			event.preventDefault();
 			var buttonText = $("#registerBtn").val();
+			
+			var name = $('#name').val();
+			var macAddress = $('#macAddress').val();
+			var ip_addr = $('#ip_addr').val();
+			var portNumber = $('#portNumber').val();
+			
+			if((name.length > 30)){
 
+				nameError.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }
+
+            else{
+
+            	nameError.textContent =""
+
+            }  
+			
+			if((macAddress.length > 30)){
+
+				macAddrError.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }
+
+            else{
+
+            	macAddrError.textContent =""
+
+            }  
+            
+            if((ip_addr.length > 30)){
+
+            	sourceIpError.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }
+
+            else{
+
+            	sourceIpError.textContent =""
+
+            }  
+            
+           if((portNumber.length > 30)){
+
+        	   destPortError.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }
+
+            else{
+
+            	destPortError.textContent =""
+
+            }  
+            
+            
 			if (buttonText == "Add") {
 				addTrafficRules();
 			} else {
@@ -688,32 +833,32 @@ var roleValue;
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -25px;">
 
-					<div class="col-75-2" style="width: 20%;text-align:left;">
+					<div class="col-75-2" style="width: 10%; text-align: left;">
 						<label>Input</label> <select class="textBox" id="input"
 							name="input" style="height: 35px;">
-							<option value="accept">Accept</option>
-							<option value="reject">Reject</option>
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
 						</select> <span id="inputError" style="color: red;"></span>
 					</div>
-					<div class="col-75-2" style="width: 20%;textAlign:left;">
+					<div class="col-75-2" style="width: 10%; text-align: left;">
 						<label>Output</label> <select class="textBox" id="output"
 							name="output" style="height: 35px;">
-							<option value="accept">accept</option>
-							<option value="reject">reject</option>
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
 						</select> <span id="outputError" style="color: red;"></span>
 					</div>
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 10%; text-align: left;">
 						<label>Forward</label> <select class="textBox" id="forward"
 							name="forward" style="height: 35px;">
-							<option value="accept">accept</option>
-							<option value="reject">reject</option>
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
 						</select> <span id="forwardError" style="color: red;"></span>
 					</div>
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 10%; text-align: left;">
 						<label>Drop invalid packets</label> <select class="textBox"
 							id="rule_drop" name="rule_drop" style="height: 35px;">
-							<option value="on">on</option>
-							<option value="off">off</option>
+							<option value="On">On</option>
+							<option value="Off">Off</option>
 						</select> <span id="forwardError" style="color: red;"></span>
 					</div>
 				</div>
@@ -743,9 +888,10 @@ var roleValue;
 
 					<div class="col-75-5" style="width: 15%;">
 						<input type="text" id="name" name="name" placeholder="Name" maxlength="31"/>
+						<p id="nameError" style="color: red;"></p>
 					</div>
 
-					<div class="col-75-4" style="width: 20%;">
+					<div class="col-75-4" style="width: 10%;">
 						
 						<select class="textBox" id="iface" name="iface"
 							style="height: 35px;">
@@ -759,7 +905,7 @@ var roleValue;
 
 					</div>
 
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 10%;">
 						<select class="textBox" id="type" name="type"
 							style="height: 35px;">
 							<option value="Select type">Select type</option>
@@ -769,12 +915,13 @@ var roleValue;
 						</select>
 					</div>
 
-					<div class="col-75-1" style="width: 20%;">
+					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="macAddress" name="macAddress"
 							placeholder="Source MAC address" maxlength="31"/>
+							<p id="macAddrError" style="color: red;"></p>
 					</div>
 
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 10%;">
 						<select class="textBox" id="protocol" name="protocol"
 							style="height: 35px;">
 							<option value="Select protocol">Select protocol</option>
@@ -783,21 +930,20 @@ var roleValue;
 
 						</select>
 					</div>
-				</div>
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-					<div class="col-75-3" style="width: 20%;">
+					
+					<div class="col-75-3" style="width: 15%;">
 						<input type="text" id="ip_addr" name="ip_addr"
 							placeholder="Source IP address" maxlength="31"/>
+							<p id="sourceIpError" style="color: red;"></p>
 					</div>
 
-					<div class="col-75-1" style="width: 20%;">
+					<div class="col-75-1" style="width: 10%;">
 						<input type="text" id="portNumber" name="portNumber"
-							placeholder="Destination Port" />
+							placeholder="Destination Port" maxlength="6"/>
+							<p id="destPortError" style="color: red;"></p>
 					</div>
-
-					<div class="col-75-2" style="width: 20%;">
+					
+					<div class="col-75-2" style="width: 10%;">
 						<select class="textBox" id="action" name="action"
 							style="height: 35px;">
 							<option value="ACCEPT">ACCEPT</option>
@@ -805,9 +951,9 @@ var roleValue;
 
 						</select>
 					</div>
-
 				</div>
 
+				
 				<div class="row"
 					style="display: flex; justify-content: right; margin-top: 2%;">
 					<input type="button" value="Apply" id="applyBtnRules" /> 
@@ -816,6 +962,14 @@ var roleValue;
 				</div>
 			</form>
 		</div>
+		
+		<div id="custom-modal" class="modal">
+				<div class="modal-content">
+				  <p>Are you sure you want to delete this traffic rule?</p>
+				  <button id="confirm-button">Yes</button>
+				  <button id="cancel-button">No</button>
+				</div>
+			  </div>
 
 
 		<h3>TRAFFIC RULES LIST</h3>
