@@ -385,40 +385,40 @@
 						<td>IP Address</td>
 
 						<td><input id="ip_addr_dis_0" class="status" disabled
-							type='text' name="ip_addr_dis_0"></td>
+							type='text' name="ip_addr_dis_0" style="width: 18%;"></td>
 							
 						<td>
 						<input id="ip_addr_eth1" class="config" type='text'
-							name="ip_addr_eth1"></td>
+							name="ip_addr_eth1" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Subnet Mask</td>
 						<td><input id="subnet_mask_dis_0" class="status" disabled
-							type='text' name="subnet_mask_dis_0"></td>
+							type='text' name="subnet_mask_dis_0" style="width: 18%;"></td>
 							
 						<td><input id="subnet_mask_eth1" class="config" type='text'
-							name="subnet_mask_eth1"></td>
+							name="subnet_mask_eth1" style="width: 18%;"></td>
 					</tr>
 					
 					<tr>
 						<td>Gateway</td>
 
 						<td><input id="gateway_dis_0" class="status" disabled
-							type='text' name="gateway_dis_0"></td>
+							type='text' name="gateway_dis_0" style="width: 18%;"></td>
 							
 						<td>
 						<input id="gateway_eth1" class="config" type='text'
-							name="gateway_eth1"></td>
+							name="gateway_eth1" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Dns Address</td>
 
 						<td><input id="dns_dis_0" class="status" disabled
-							type='text' name="dns_dis_0"></td>
+							type='text' name="dns_dis_0" style="width: 18%;"></td>
 							
 						<td>
 						<input id="dns_ip_eth1" class="config" type='text'
-							name="dns_ip_eth1"></td>
+							name="dns_ip_eth1" style="width: 18%;"></td>
 					</tr>
 
 
@@ -453,36 +453,36 @@
 						<td>IP Address</td>
 
 						<td><input id="ip_addr_dis_1" class="status" disabled
-							type='text' name="ip_addr_dis_1"></td>
+							type='text' name="ip_addr_dis_1" style="width: 18%;"></td>
 						<td><input id="ip_addr_lan1" class="config" type='text'
-							name="ip_addr_lan1"></td>
+							name="ip_addr_lan1" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Subnet Mask</td>
 						<td><input id="subnet_mask_dis_1" class="status" disabled
-							type='text' name="subnet_mask_dis_1"></td>
+							type='text' name="subnet_mask_dis_1" style="width: 18%;"></td>
 						<td><input id="subnet_mask_lan1" class="config" type='text'
-							name="subnet_mask_lan1"></td>
+							name="subnet_mask_lan1" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
 
 						<td><input id="gateway_dis_1" class="status" disabled
-							type='text' name="gateway_dis_1"></td>
+							type='text' name="gateway_dis_1" style="width: 18%;"></td>
 							
 						<td>
 						<input id="gateway_lan1" class="config" type='text'
-							name="gateway_lan1"></td>
+							name="gateway_lan1" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Dns Address</td>
 
 						<td><input id="dns_dis_1" class="status" disabled
-							type='text' name="dns_dis_1"></td>
+							type='text' name="dns_dis_1" style="width: 18%;"></td>
 							
 						<td>
 						<input id="dns_ip_lan1" class="config" type='text'
-							name="dns_ip_lan1"></td>
+							name="dns_ip_lan1" style="width: 18%;"></td>
 					</tr>
 
 
@@ -516,36 +516,36 @@
 						<td>IP Address</td>
 
 						<td><input id="ip_addr_dis_2" class="status" disabled
-							type='text' name="ip_addr_dis_2"></td>
+							type='text' name="ip_addr_dis_2" style="width: 18%;"></td>
 						<td><input id="ip_addr_lan2" class="config" type='text'
-							name="ip_addr_lan2"></td>
+							name="ip_addr_lan2" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Subnet Mask</td>
 						<td><input id="subnet_mask_dis_2" class="status" disabled
-							type='text' name="subnet_mask_dis_2"></td>
+							type='text' name="subnet_mask_dis_2" style="width: 18%;"></td>
 						<td><input id="subnet_mask_lan2" class="config" type='text'
-							name="subnet_mask_lan2"></td>
+							name="subnet_mask_lan2" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
 
 						<td><input id="gateway_dis_2" class="status" disabled
-							type='text' name="gateway_dis_2"></td>
+							type='text' name="gateway_dis_2" style="width: 18%;"></td>
 							
 						<td>
 						<input id="gateway_lan2" class="config" type='text'
-							name="gateway_lan2"></td>
+							name="gateway_lan2" style="width: 18%;"></td>
 					</tr>
 					<tr>
 						<td>Dns Address</td>
 
 						<td><input id="dns_dis_2" class="status" disabled
-							type='text' name="dns_dis_2"></td>
+							type='text' name="dns_dis_2" style="width: 18%;"></td>
 							
 						<td>
 						<input id="dns_ip_lan2" class="config" type='text'
-							name="dns_ip_lan2"></td>
+							name="dns_ip_lan2" style="width: 18%;"></td>
 					</tr>
 
 

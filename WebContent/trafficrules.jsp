@@ -688,14 +688,14 @@ var roleValue;
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -25px;">
 
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 20%;text-align:left;">
 						<label>Input</label> <select class="textBox" id="input"
 							name="input" style="height: 35px;">
-							<option value="accept">accept</option>
-							<option value="reject">reject</option>
+							<option value="accept">Accept</option>
+							<option value="reject">Reject</option>
 						</select> <span id="inputError" style="color: red;"></span>
 					</div>
-					<div class="col-75-2" style="width: 20%;">
+					<div class="col-75-2" style="width: 20%;textAlign:left;">
 						<label>Output</label> <select class="textBox" id="output"
 							name="output" style="height: 35px;">
 							<option value="accept">accept</option>
@@ -741,16 +741,15 @@ var roleValue;
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 
-					<div class="col-75-5" style="width: 20%;">
-						<input type="text" id="name" name="name" placeholder="Name" />
+					<div class="col-75-5" style="width: 15%;">
+						<input type="text" id="name" name="name" placeholder="Name" maxlength="31"/>
 					</div>
 
 					<div class="col-75-4" style="width: 20%;">
-						<!-- <input type="text" id="iface" name="iface"
-							placeholder="Interface" /> -->
-
+						
 						<select class="textBox" id="iface" name="iface"
 							style="height: 35px;">
+							<option value="Select interface">Select interface</option>
 							<option value="eth0">eth0</option>
 							<option value="eth1">eth1</option>
 							<option value="lan1">lan1</option>
@@ -772,12 +771,13 @@ var roleValue;
 
 					<div class="col-75-1" style="width: 20%;">
 						<input type="text" id="macAddress" name="macAddress"
-							placeholder="Source MAC address" />
+							placeholder="Source MAC address" maxlength="31"/>
 					</div>
 
 					<div class="col-75-2" style="width: 20%;">
 						<select class="textBox" id="protocol" name="protocol"
 							style="height: 35px;">
+							<option value="Select protocol">Select protocol</option>
 							<option value="tcp">tcp</option>
 							<option value="udp">udp</option>
 
@@ -789,7 +789,7 @@ var roleValue;
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					<div class="col-75-3" style="width: 20%;">
 						<input type="text" id="ip_addr" name="ip_addr"
-							placeholder="Source IP address" />
+							placeholder="Source IP address" maxlength="31"/>
 					</div>
 
 					<div class="col-75-1" style="width: 20%;">

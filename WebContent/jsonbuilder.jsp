@@ -342,19 +342,18 @@ var json_string_text;
 		  var res_val = isValidJsonString(json_string);
 		  var res_dup = isJsonStringDuplicate(json_string);
 		  
-		  alert('res val : '+res_val + ' ' + 'res_dup : '+res_dup);
 		 
-		  if(res_val == true && res_dup == false){
+		  if(res_val == true &&  res_dup == false){
 			  json_string_text = json_string; // Assign the value here
 			  $('#json_string_validate').val(json_string_text)
 		  }else{
-			  alert('Enter valid JSON!!')
+			  alert('Check if JSON is valid or keys must duplicate!!')
 			  
 			  $('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 		  }
 	}
 
-	 function isValidJsonString(jsonString) {
+	function isValidJsonString(jsonString) {
 	    try {
 	        JSON.parse(jsonString);
 	        return true; // JSON is valid
@@ -362,53 +361,35 @@ var json_string_text;
 	        return false; // JSON is not valid
 	    }
 	} 
-	 
-	
 
 	
-	    function isJsonStringDuplicate(jsonString) {
-		 const seenKeys = {};
+	function isJsonStringDuplicate(jsonString) {
+		
+		    let keys = new Set();
+		    let inString = false;
 
-		    try {
-		        // Parse the JSON string manually
-		        const stack = [];
-		        let i = 0;
+		    for (var i = 0; i < jsonString.length; i++) {
+		        const char = jsonString.charAt(i);
 
-		        while (i < jsonString.length) {
-		            const char = jsonString[i];
+		        if (char === '"') {
+		            // Toggle the inString flag when encountering double quotes
+		            inString = !inString;
+		        } else if (!inString && char === ':') {
+		            // When not in a string and encountering a colon, check for duplicate key
+		            const keyStart = jsonString.lastIndexOf('"', i - 2); // Find the start of the key
+		            const key = jsonString.substring(keyStart + 1, i).trim();
 
-		            if (char === '{' || char === '[') {
-		                stack.push(char);
-		            } else if (char === '}' || char === ']') {
-		                stack.pop();
-		            } else if (char === '"' && stack[stack.length - 1] !== '\\') {
-		                // Found the start of a key
-		                i++; // Move past the opening quote
-		                const keyStart = i;
-		                while (i < jsonString.length && jsonString[i] !== '"') {
-		                    i++; // Move to the end of the key
-		                }
-		                const key = jsonString.substring(keyStart, i);
-
-		                if (seenKeys[key]) {
-		                    return true; // Found a duplicate key
-		                }
-
-		                seenKeys[key] = true;
+		            if (keys.has(key)) {
+		                return true; // Duplicate key found
 		            }
-		            i++;
+		            keys.add(key);
 		        }
-
-		        // No duplicate keys found
-		        return false;
-		    } catch (e) {
-		        // Invalid JSON, return false
-		        return false;
 		    }
-	}   
-	 
-	
-	
+
+		    return false; // No duplicate keys found
+		}
+
+
 	
 	function validateSoreAndForward(storeAndForward) {
 		var storeAndForwardError = document
@@ -592,6 +573,7 @@ var json_string_text;
 												json_string_name_error.textContent = "";
 											}
 
+											alert(json_string_text)
 											if (json_string_text) {
 												if (buttonText == 'Add') {
 													addJsonBuilder();
@@ -745,7 +727,7 @@ var json_string_text;
 				</div>
 
 				<div class="row"
-					style="display: flex; justify-content: right; margin-top: -2%;">
+					style="display: flex; justify-content: right; margin-top: 2%;">
 					<input type="button" value="Clear" id="clearBtn" /> <input
 						style="margin-left: 5px;" type="submit" value="Add"
 						id="registerBtn" />
