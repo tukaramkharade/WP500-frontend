@@ -502,13 +502,14 @@ var roleValue;
 
 		$('#clearBtn').click(function() {
 			$('#username').val('');
-		    $('#password').val('');
-		    $('#first_name').val('');
+			$("#username").prop("disabled", false);
+			$('#password').val('');
+			$("#password").prop("disabled", false);
+			$('#first_name').val('');
 		    $('#last_name').val('');
 		    $('#role').val('Select role');
+		    $('#registerBtn').val('Add');
 		});
-		
-
 	});
 </script>
 </head>

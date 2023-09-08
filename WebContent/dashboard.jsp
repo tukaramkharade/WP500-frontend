@@ -16,6 +16,10 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.1/chartjs-adapter-moment.min.js" 
+ integrity="sha512-hVy4KxCKgnXi2ok7rlnlPma4JHXI1VPQeempoaclV1GwRHrDeaiuS1pI6DVldaj5oh6Opy2XJ2CTljQLPkaMrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <style type="text/css">
 
@@ -93,6 +97,16 @@ padding: 0;
     color: red;
 }
 
+.threats_count{
+width: 540px;
+    height: 400px;
+    color: black;
+    font-size: 12px;
+    /* Border properties */
+    border: 2px solid #e74c3c; /* Border width, style, and color */
+    border-radius: 10px; /* Border radius for rounded corners */
+}
+
 
 </style>
 <script>
@@ -106,19 +120,6 @@ function latestActiveThreats(){
             // Iterate through the data and populate the list
             var dataList = $("#dataList");
             $.each(data, function (index, item) {
-                /* var listItem = $("<li></li>");
-                
-                if(item.priority == '1'){	
-                	var priority = 'high';
-                	listItem.html(item.timeStamp + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.alertMessage + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.threat_id + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='red-box'>" + priority + "</span>");
-				}else if(item.priority == '2'){
-					var priority = 'medium';
-                	listItem.html(item.timeStamp + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.alertMessage + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.threat_id + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='orange-box'>" + priority + "</span>");
-				}else if(item.priority == '3'){
-					var priority = 'low';
-                	listItem.html(item.timeStamp + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.alertMessage + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + item.threat_id + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class='yellow-box'>" + priority + "</span>");
-				} */
-                
 				
 				var row = $('<tr>');
 				row.append($('<td>').text(item.timeStamp+ " "));
@@ -148,8 +149,6 @@ function countDetails(){
 		type : "GET",
 		dataType : "json",
 		success : function(data) {
-			// Update the <p> tags with the fetched time data
-			//$("#status").text("System Status: " + data.status);
 			
 			if (data.status == 'success') {
     			var status = 'Running';
@@ -171,9 +170,93 @@ function countDetails(){
 	});
 }
 
+	function updateLineChart(data) {
+		var ctx = document.getElementById('lineChart').getContext('2d');
+		var chart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		    	
+		        labels: data.labels, // Array of date labels
+		        datasets: [{
+		            label: 'Threat Count',
+		            data: data.values, // Array of threat count values
+		            borderColor: 'blue',
+		            fill: false
+		        }]
+		
+		    },
+		    options: {
+		        responsive: true,
+		        maintainAspectRatio: false,
+		        scales: {
+		            x: {
+		                type: 'time', // Use time scale for dates
+		                time: {
+		                    parser: 'YYYY-MM-DD', // Specify the date format
+		                    unit: 'day',
+		                    displayFormats: {
+		                        day: 'YYYY-MM-DD'
+		                    }
+		                },
+		                title: {
+		                    display: true,
+		                    text: 'Date'
+		                }
+		            },
+		            y: {
+		                beginAtZero: true,
+		                title: {
+		                    display: true,
+		                    text: 'Threat Count'
+		                }
+		            }
+		        }
+		    }
+		});
+
+        }
+		
+	
+ function threatCountsLineChart(){
+	 var start_time = $('#start_time').val();
+		var end_time = $('#end_time').val();
+		
+	        // AJAX request to fetch data from the servlet
+	        $.ajax({
+	            url: 'dashboard', // Replace with your servlet URL
+	            type: 'POST',
+	            data: {
+	            	
+	            	start_time : start_time,
+	    			end_time : end_time,
+	                action: 'threat_count' // Specify the action to retrieve data
+	            },
+	            success: function(response) {
+	            	if (typeof response === 'object') {
+	                    updateLineChart(response); // Use the response object directly
+	                } else {
+	                    // Parse the JSON response
+	                    var data = JSON.parse(response);
+	                    updateLineChart(data); // Update the line chart with the fetched data
+	                }
+	            },
+	            error: function(error) {
+	                console.error('Error fetching data:', error);
+	            }
+	        });
+	
+ }
+	
+        
+
 $(document).ready(function() {
-	latestActiveThreats();
-	countDetails();
+//	latestActiveThreats();
+//	countDetails();
+	
+	$('#apply').click(function() {
+		threatCountsLineChart();
+	});
+	
 });
 </script>
 
@@ -194,6 +277,8 @@ $(document).ready(function() {
 		
 		<div class="container">
 		
+		<input type="hidden" id="action" name="action" value="">
+		
 		<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -15px;">
 						<input type="button" value="Today" id="today"/> 
@@ -201,8 +286,8 @@ $(document).ready(function() {
 						<input style="margin-left: 5px" type="button" value="Week" id="week" />
 						<input style="margin-left: 5px" type="button" value="Month" id="month" />
 						<input style="margin-left: 25px; width: 13%;" type="button" value="Custom" id="custom" />
-						<label style="margin-left: 5px;">From</label><input style="margin-left: 3px" type="datetime-local" id="fromdate" name="fromdate" />
-						<label style="margin-left: 5px;">To</label><input style="margin-left: 3px" type="datetime-local" id="todate" name="todate" />
+						<label style="margin-left: 5px;">From</label><input style="margin-left: 3px" type="datetime-local" id="start_time" name="start_time" />
+						<label style="margin-left: 5px;">To</label><input style="margin-left: 3px" type="datetime-local" id="end_time" name="end_time" />
 						<input style="margin-left: 15px" type="button" value="Apply" id="apply" />					
 				</div>
 				
@@ -230,6 +315,15 @@ $(document).ready(function() {
 					</div>
 					
 				</div>
+				
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
+					<div class="threats_count">
+					 <canvas id="lineChart" width="400" height="400"></canvas>
+					</div>
+					</div>
+				
+				
 		
 		</div>
 		</section>
