@@ -98,15 +98,21 @@ padding: 0;
 }
 
 .threats_count{
-width: 540px;
-    height: 400px;
+width: 440px;
+    height: 460px;
     color: black;
     font-size: 12px;
-    /* Border properties */
-    border: 2px solid #e74c3c; /* Border width, style, and color */
-    border-radius: 10px; /* Border radius for rounded corners */
+   
 }
 
+.threats_priority{
+width: 380px;
+    height: 300px;
+    color: black;
+    font-size: 12px;
+    margin-left: 25px;
+    
+}
 
 </style>
 <script>
@@ -215,6 +221,32 @@ function countDetails(){
 		});
 
         }
+	
+	function updateBarChart(data){
+		var ctx = document.getElementById('barChart').getContext('2d');
+
+        // Create a new bar chart using Chart.js
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Threat Priority',
+                    data: data.values,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize the colors as needed
+                    borderColor: 'rgba(75, 192, 192, 1)',     // Customize the colors as needed
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+	}
 		
 	
  function threatCountsLineChart(){
@@ -246,7 +278,38 @@ function countDetails(){
 	        });
 	
  }
-	
+ 
+ 
+	 function threatPriorityBarChart() {
+		 var start_time = $('#start_time').val();
+			var end_time = $('#end_time').val();
+			
+	     $.ajax({
+	         url: 'dashboard', // Replace with the URL of your servlet
+	         type: 'POST',
+	         data: {
+	             action: 'threat_priority', // Replace with your desired action
+	             start_time: start_time, // Replace with the actual start time
+	             end_time: end_time // Replace with the actual end time
+	         },
+	       
+	         success: function(response) {
+	        	 if (typeof response === 'object') {
+	        		 console.log("Data received:", response);
+	        		 updateBarChart(response); // Use the response object directly
+	                } else {
+	                    // Parse the JSON response
+	                    var data = JSON.parse(response);
+	                    console.log("Data received:", response);
+	                    updateBarChart(data); // Update the line chart with the fetched data
+	                }
+	        	   
+	         },
+	         error: function (xhr, status, error) {
+	             console.error('Error: ' + error);
+	         }
+	     });
+	 }
         
 
 $(document).ready(function() {
@@ -255,6 +318,7 @@ $(document).ready(function() {
 	
 	$('#apply').click(function() {
 		threatCountsLineChart();
+		threatPriorityBarChart();
 	});
 	
 });
@@ -319,7 +383,13 @@ $(document).ready(function() {
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					<div class="threats_count">
-					 <canvas id="lineChart" width="400" height="400"></canvas>
+					<h5>Day wise threats count</h5>
+					 <canvas id="lineChart" width="300" height="400"></canvas>
+					</div>
+					
+					<div class="threats_priority">
+					<h5>Day wise threats priority</h5>
+					  <canvas id="barChart" width="400" height="400"></canvas>
 					</div>
 					</div>
 				

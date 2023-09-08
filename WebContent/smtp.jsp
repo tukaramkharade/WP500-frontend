@@ -537,7 +537,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
 							<select class="smtp_type" id="smtp_type" name="smtp_type"
-								style="height: 35px">
+								style="height: 35px" required>
 								<option value="Select SMTP type">Select SMTP type</option>
 								<option value="SSL">SSL</option>
 								<option value="TLS">TLS</option>
@@ -555,7 +555,7 @@ roleValue = '<%=roleValue%>';
 							</div>
 							<div>	
 								<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port"
-									 style="height: 17px" />
+									 style="height: 17px" required />
 							</div>
 						</div>
 						
@@ -565,7 +565,7 @@ roleValue = '<%=roleValue%>';
 							</div>
 							<div>
 								<input type="text" id="ssl_port" name="ssl_port"
-									 style="height: 17px" />
+									 style="height: 17px" required/>
 							</div>
 					</div>
 					<div class="col-75-7" style="width: 20%;display:flex">
@@ -574,14 +574,13 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
 							<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type"
-								style="height: 35px">
+								style="height: 35px" required>
 								<option value="True" selected>True</option>
 								<option value="False">False</option>
 							</select>
 						</div>	
 					</div>
 				</div>
-					
 					
 				
 				<div class="row"
@@ -593,7 +592,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>	
 							<input type="text" id="tls_port" name="tls_port"
-								 style="height: 17px" />
+								 style="height: 17px" required/>
 						</div>
 					</div>	
 					
@@ -603,7 +602,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
 							<select class="tls_auth" id="tls_auth" name="tls_auth"
-								style="height: 35px">
+								style="height: 35px" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
 							</select>
@@ -616,7 +615,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
 							<select class="tls_enable" id="tls_enable" name="tls_enable"
-							style="height: 35px">
+							style="height: 35px" required>
 							<option value="True">True</option>
 							<option value="False" selected>False</option>
 							</select>
