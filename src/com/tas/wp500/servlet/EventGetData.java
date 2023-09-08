@@ -15,52 +15,30 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-
-/**
- * Servlet implementation class Logs
- */
 @WebServlet("/loadEventData")
 public class EventGetData extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 	final static Logger logger = Logger.getLogger(EventGetData.class);
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public EventGetData() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-
+		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-			
-			
-
+		String check_username = (String) session.getAttribute("username");
+		
+		if (check_username != null) {
+		
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			try {
 				json.put("operation", "get_event_data");
-				// json.put("user", "admin");
+				 json.put("user", check_username);
 
 				json.put("page_no", "1");
 
 				String respStr = client.sendMessage(json.toString());
 
-//				System.out.println("res " + new JSONObject(respStr));
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject result = new JSONObject(respStr);
@@ -83,24 +61,33 @@ public class EventGetData extends HttpServlet {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+				
+				System.out.println(">>" +userObj);
+				
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout : "+e);
+			}
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
+		
 		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-
+		if (check_username != null) {
 			String currentPage = request.getParameter("currentPage");
 
 			TCPClient client = new TCPClient();
@@ -108,8 +95,7 @@ public class EventGetData extends HttpServlet {
 
 			try {
 				json.put("operation", "get_event_data");
-				
-				// json.put("user", "admin");
+				json.put("user", check_username);
 
 				json.put("page_no", currentPage);
 
@@ -138,8 +124,23 @@ public class EventGetData extends HttpServlet {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+				
+				System.out.println(">>" +userObj);
+				
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout : "+e);
+			}
 		}
 
 	}

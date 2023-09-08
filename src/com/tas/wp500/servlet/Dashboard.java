@@ -122,14 +122,8 @@ public class Dashboard extends HttpServlet {
 		Date startDate = null;
 		Date endDate = null;
 		
-		try {
-			startDate = inputFormat.parse(start_time);
-			endDate = inputFormat.parse(end_time);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-		String startDateTime = outputFormat.format(startDate);		
-		String endDateTime = outputFormat.format(endDate);
+		
+		
 		
 		
 		if(check_username != null){
@@ -145,7 +139,10 @@ public class Dashboard extends HttpServlet {
 				case "threat_count" :
 					
 					try{
-						
+						startDate = inputFormat.parse(start_time);
+						String startDateTime = outputFormat.format(startDate);	
+						endDate = inputFormat.parse(end_time);							
+						String endDateTime = outputFormat.format(endDate);
 						json.put("operation", "get_count_Threats");
 						json.put("start_time", startDateTime);
 						json.put("end_time", endDateTime);
@@ -197,17 +194,84 @@ public class Dashboard extends HttpServlet {
 					
 				case "threat_priority" :
 					try{
+						
+						startDate = inputFormat.parse(start_time);
+						String startDateTime = outputFormat.format(startDate);	
+						endDate = inputFormat.parse(end_time);							
+						String endDateTime = outputFormat.format(endDate);
+						
 						json.put("operation", "get_count_Threats_priority");
 						json.put("start_time", startDateTime);
 						json.put("end_time", endDateTime);
 						json.put("user", check_username);
 						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						JSONObject jsonObject = new JSONObject(respStr);
+				        JSONObject dataObject = jsonObject.getJSONObject("data");
+				        
+				     
+
+//				     // Convert the keys to an array and iterate over them
+//				        String[] dateKeys = JSONObject.getNames(dataObject);
+//				        if (dateKeys != null) {
+//				            for (String date : dateKeys) {
+//				                System.out.println("Date: " + date);
+//
+//				                JSONObject innerObject = dataObject.getJSONObject(date);
+//
+//				                // Convert the inner keys to an array and iterate over them
+//				                String[] numberKeys = JSONObject.getNames(innerObject);
+//				                if (numberKeys != null) {
+//				                    for (String number : numberKeys) {
+//				                        int value = innerObject.getInt(number);
+//				                        System.out.println("Number " + number + ": " + value);
+//				                    }
+//				                }
+//				            }
+//				        }
+				        
+				        
+				     // Prepare the data for the bar chart
+				        JSONArray labels = new JSONArray(); // Labels for the bars (e.g., threat priorities)
+				        JSONArray data = new JSONArray();   // Data values (e.g., counts for each priority)
+				        String[] dateKeys = JSONObject.getNames(dataObject);
+
+				        // Populate the labels and data arrays based on your retrieved data
+				        for (String date : dateKeys) {
+				            JSONObject innerObject = dataObject.getJSONObject(date);
+
+				            // Assuming you have a specific format for threat priorities, e.g., "High", "Medium", "Low"
+				            String[] priorityLevels = { "High", "Medium", "Low" };
+				            for (String priority : priorityLevels) {
+				                int value = innerObject.optInt(priority, 0); // Use 0 as default if not found
+				                labels.put(priority);
+				                data.put(value);
+				            }
+				        }
+
+				        // Create a JSON object to hold the chart data
+				        JSONObject chartData = new JSONObject();
+				        chartData.put("labels", labels);
+				        chartData.put("values", data);
+
+				        // Set the response content type to JSON
+				        response.setContentType("application/json");
+
+				        // Write the JSON data to the response
+				        PrintWriter out = response.getWriter();
+				        out.print(chartData.toString());
+				        out.flush();
+						
+						
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error loading threats priority : "+e);
 					}
-					
-					
+					break;
+									
 				}
 			}
 				
