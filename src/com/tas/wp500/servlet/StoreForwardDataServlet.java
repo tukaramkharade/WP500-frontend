@@ -1,6 +1,7 @@
 package com.tas.wp500.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,71 +23,46 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		TCPClient client = new TCPClient();
-		JSONObject json = new JSONObject();
-
+		
 		try {
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
 
 			if (check_username != null) {
-				json.put("operation", "get_store_forword_data");
-				json.put("page_no", "1");
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-				String respStr = client.sendMessage(json.toString());
+				try {
+					json.put("operation", "get_store_forword_data");
+					// json.put("user", "admin");
 
-				JSONObject respJson = new JSONObject(respStr);
-				
-				String total_pages = respJson.getString("total_pages");
-				System.out.println("total_pages-->"+total_pages);
-				
-				//String totalPageNo =respJson.getString("total_pages");
-				
-				JSONArray resJsonArray = new JSONArray();
-				JSONObject totalPage = new JSONObject();
-			
-				totalPage.put("total_pages",total_pages);
-				resJsonArray.put(totalPage);
-				System.out.println(resJsonArray);
-//				logger.info("Store Forword data value response : " + respJson.toString());
+					json.put("page_no", "1");
 
-				JSONArray resultArr = respJson.getJSONArray("result");
-				
-				
-				//System.out.println("TotalPagr-->>"+totalPageNo);
-				String dateTime="";
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
+					String respStr = client.sendMessage(json.toString());
 
-					 dateTime = jsObj.getString("date_time");
-					String dataString = jsObj.getString("data_string");
-					String brokerIp = jsObj.getString("broker_ip");
-					String publishTopic = jsObj.getString("publish_topic");
-					
-					
-					JSONObject storeForwardObj = new JSONObject();
-					
-					try {
-						storeForwardObj.put("dateTime", dateTime);
-						storeForwardObj.put("dataString", dataString);
-						storeForwardObj.put("brokerIp", brokerIp);
-						storeForwardObj.put("publishTopic", publishTopic);
-						
-						resJsonArray.put(storeForwardObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting store forward data in json array : " + e);
-					}
+//					System.out.println("res " + new JSONObject(respStr));
+					logger.info("res " + new JSONObject(respStr));
+
+					JSONObject result = new JSONObject(respStr);
+					String totalPage = result.getString("total_pages");
+					JSONArray event_log_result = result.getJSONArray("result");
+
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("event_log_result", event_log_result);
+					jsonObject.put("total_page", totalPage);
+					// Set the content type of the response to application/json
+					response.setContentType("application/json");
+
+					// Get the response PrintWriter
+					PrintWriter out = response.getWriter();
+
+					// Write the JSON object to the response
+					out.print(jsonObject.toString());
+					out.flush();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-//				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
 			} else {
 
 				try {
@@ -94,7 +70,7 @@ public class StoreForwardDataServlet extends HttpServlet {
 					userObj.put("msg", "Your session is timeout. Please login again");
 					userObj.put("status", "fail");
 
-					System.out.println(">>" + userObj);
+					System.out.println(">>" + userObj); 
 
 					// Set the response content type to JSON
 					response.setContentType("application/json");
@@ -115,70 +91,45 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		TCPClient client = new TCPClient();
-		JSONObject json = new JSONObject();
-
 		try {
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
 			String currentPage = request.getParameter("currentPage");
 			if (check_username != null) {
-				json.put("operation", "get_store_forword_data");
-				json.put("page_no", currentPage);
-				System.out.println("Json-->"+json);
-				String respStr = client.sendMessage(json.toString());
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
 
-				JSONObject respJson = new JSONObject(respStr);
-				
-				String total_pages = respJson.getString("total_pages");
-				System.out.println("total_pages-->"+total_pages);
-				
-				//String totalPageNo =respJson.getString("total_pages");
-				
-				JSONArray resJsonArray = new JSONArray();
-				JSONObject totalPage = new JSONObject();
-			
-				totalPage.put("total_pages",total_pages);
-				resJsonArray.put(totalPage);
-				System.out.println(resJsonArray);
-				logger.info("Store Forword data value response : " + respJson.toString());
+				try {
+					json.put("operation", "get_store_forword_data");
+					// json.put("user", "admin");
 
-				JSONArray resultArr = respJson.getJSONArray("result");
-				
-				
-				//System.out.println("TotalPagr-->>"+totalPageNo);
-				
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
+					json.put("page_no", currentPage);
 
-					String dateTime = jsObj.getString("date_time");
-					String dataString = jsObj.getString("data_string");
-					String brokerIp = jsObj.getString("broker_ip");
-					String publishTopic = jsObj.getString("publish_topic");
-					
-					
-					JSONObject storeForwardObj = new JSONObject();
-					
-					try {
-						storeForwardObj.put("dateTime", dateTime);
-						storeForwardObj.put("dataString", dataString);
-						storeForwardObj.put("brokerIp", brokerIp);
-						storeForwardObj.put("publishTopic", publishTopic);
-						
-						resJsonArray.put(storeForwardObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting store forward data in json array : " + e);
-					}
+					String respStr = client.sendMessage(json.toString());
+
+//					System.out.println("res " + new JSONObject(respStr));
+					logger.info("res " + new JSONObject(respStr));
+
+					JSONObject result = new JSONObject(respStr);
+					String totalPage = result.getString("total_pages");
+					JSONArray event_log_result = result.getJSONArray("result");
+
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("event_log_result", event_log_result);
+					jsonObject.put("total_page", totalPage);
+					// Set the content type of the response to application/json
+					response.setContentType("application/json");
+
+					// Get the response PrintWriter
+					PrintWriter out = response.getWriter();
+
+					// Write the JSON object to the response
+					out.print(jsonObject.toString());
+					out.flush();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
 			} else {
 
 				try {

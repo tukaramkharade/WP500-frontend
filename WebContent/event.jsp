@@ -68,29 +68,28 @@ function getEventData(currentPage) {
         dataType: 'json',
         success: function (data) {
         	
-                total_pages = data.total_page; // Access the total_pages value
-                console.log("totalPageNo: " + total_pages);
-            	
-                var count = data.event_log_result.length;
-                console.log("count: " + count);
-                
-            if (data.event_log_result && Array.isArray(data.event_log_result)) {
-                
-            	//tableBody.empty();
-                data.event_log_result.forEach(function(log) {
-                    var dateTime = log.date_time; // Accessing the date_time property
-                    var EventName = log.event_name; // Accessing the event_name property
-                    var EventType = log.event_type; // Accessing the event_type property
-                    var message = log.msg; // Accessing the msg property
+        	  total_pages = data.total_page; // Access the total_pages value
+              console.log("totalPageNo: " + total_pages);
+         		
+              var count = data.event_log_result.length;
+              console.log("count: " + count);
+          if (data.event_log_result && Array.isArray(data.event_log_result)) {
+           //   tableBody.empty();
+	
+              data.event_log_result.forEach(function(log) {
+                  var dateTime = log.date_time; // Accessing the date_time property
+                  var EventName = log.event_name; // Accessing the event_name property
+                  var EventType = log.event_type; // Accessing the event_type property
+                  var message = log.msg; // Accessing the msg property
 
-                    var row = $("<tr>").append(
-                        $("<td>").text(dateTime),
-                        $("<td>").text(EventName),
-                        $("<td>").text(EventType),
-                        $("<td>").text(message)
-                    );
-                    tableBody.append(row);
-                });
+                  var row = $("<tr>").append(
+                      $("<td>").text(dateTime),
+                      $("<td>").text(EventName),
+                      $("<td>").text(EventType),
+                      $("<td>").text(message)
+                  );
+                  tableBody.append(row);
+              });
 
                 
 
