@@ -81,17 +81,25 @@ function addSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
-	if (!validateEmails(to_email_id) || !validateEmails(email_cc) || !validateEmails(email_bcc)) {
-        return; // Exit the function if any email is invalid
+	// Check validation for email_cc if it is not blank
+    if (email_cc && !validateEmails(email_cc)) {
+        return; // Exit the function if email_cc is not blank and is invalid
+    }
+
+    // Check validation for email_bcc if it is not blank
+    if (email_bcc && !validateEmails(email_bcc)) {
+        return; // Exit the function if email_bcc is not blank and is invalid
+    }
+
+    // Check validation for to_email_id
+    if (!validateEmails(to_email_id)) {
+        return; // Exit the function if to_email_id is invalid
     }
 	
 	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
         return;
     }
-    if (password.length > 13) {
-        alert('Password must be at most 13 characters long.');
-        return;
-    }
+    
     
 	$.ajax({
 		url : 'SMTPServlet',
@@ -158,17 +166,25 @@ function editSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
-	if (!validateEmails(to_email_id) || !validateEmails(email_cc) || !validateEmails(email_bcc)) {
-        return; // Exit the function if any email is invalid
+	// Check validation for email_cc if it is not blank
+    if (email_cc && !validateEmails(email_cc)) {
+        return; // Exit the function if email_cc is not blank and is invalid
+    }
+
+    // Check validation for email_bcc if it is not blank
+    if (email_bcc && !validateEmails(email_bcc)) {
+        return; // Exit the function if email_bcc is not blank and is invalid
+    }
+
+    // Check validation for to_email_id
+    if (!validateEmails(to_email_id)) {
+        return; // Exit the function if to_email_id is invalid
     }
 	
 	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
         return;
     }
-    if (password.length > 13) {
-        alert('Password must be at most 13 characters long.');
-        return;
-    }
+   
 	
 	$.ajax({
 		url : 'SMTPServlet',
@@ -237,27 +253,28 @@ function validateEmails(emails) {
         return email.trim(); // Remove leading/trailing spaces
     });
 	
-    if (emailArray.length > 1) {
-        if (!emails.includes(',') ) {
-            console.log("comma " + emailArray.length + " " + emails.length);
-            alert('Comma is required between email addresses: ' + emails);
-            return false; // Comma is required between multiple emails
-        }
-    }
     if (emails.includes(' ')) {
         alert('Space is not allowed between email addresses: ' + emails);
         return false; // Space is not allowed between email addresses
     }
+
     
     for (var i = 0; i < emailArray1.length; i++) {
         if (!isValidEmail(emailArray1[i])) {
-        	if (!emails.includes(',') ) {
+        	if (!emails.includes(',') && !emailArray.length > 1) {
                 console.log("comma " + emailArray.length + " " + emails.length);
-                alert('Comma is required between email addresses: ' + emails);
+                alert('Comma is required between email addresses:1' + emailArray1[i]);
                 return false; // Comma is required between multiple emails
             }
-            alert('Invalid email address: ' + emailArray1[i]);
+        	else if(!emails.includes(',') && !isValidEmail(emailArray1[i])){
+        		console.log("comma " + emailArray.length + " " + emails.length);
+                alert('Comma is required between email addresses and email address Invalid :2' + emailArray1[i]);
+                return false; // Comma is required between multiple emails
+        	}
+        	alert('Invalid email address: ' + emailArray1[i]);
             return false; // Stop and show an alert for the first invalid email
+        	
+            
         }
     }
     
@@ -265,7 +282,16 @@ function validateEmails(emails) {
 }
 function isValidEmail(email) {
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    var isValid = emailRegex.test(email);
+
+    // Log whether the email is considered valid or not
+    if (isValid) {
+        console.log("Email is valid: " + email);
+    } else {
+        console.log("Email is NOT valid: " + email);
+    }
+
+    return isValid;
 }
 function deleteSMTPSettings() {
 		
@@ -483,7 +509,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 							
 						<div >
-                  			  <input type="text" id="from_email_id" name="from_email_id" placeholder="From email ID" required style="height: 17px" />
+                  			  <input type="text" id="from_email_id" name="from_email_id"  required style="height: 17px" />
                 		</div>
 					</div>
 					
@@ -492,7 +518,7 @@ roleValue = '<%=roleValue%>';
                 				<label for="password">Password:</label>
                 			</div>
                 			<div>	
-                				<input type="password" id="password" name="password" placeholder="Password" required style="height: 17px" />
+                				<input type="password" id="password" name="password"  required style="height: 17px" />
             				</div>
             		</div>
 					<div class="col-75-3" style="width: 18%;display:flex">
@@ -501,7 +527,7 @@ roleValue = '<%=roleValue%>';
 						</div>	
 							<div>
 								<input type="text" id="host" name="host"
-									placeholder="Host" required style="height: 17px" />
+									 required style="height: 17px" />
 							</div>
 					</div>
 					
@@ -529,7 +555,7 @@ roleValue = '<%=roleValue%>';
 							</div>
 							<div>	
 								<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port"
-									placeholder="SSL socket factory port" style="height: 17px" />
+									 style="height: 17px" />
 							</div>
 						</div>
 						
@@ -539,7 +565,7 @@ roleValue = '<%=roleValue%>';
 							</div>
 							<div>
 								<input type="text" id="ssl_port" name="ssl_port"
-									placeholder="SSL port" style="height: 17px" />
+									 style="height: 17px" />
 							</div>
 					</div>
 					<div class="col-75-7" style="width: 20%;display:flex">
@@ -567,7 +593,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>	
 							<input type="text" id="tls_port" name="tls_port"
-								placeholder="TLS port" style="height: 17px" />
+								 style="height: 17px" />
 						</div>
 					</div>	
 					
@@ -606,7 +632,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
      					   <input type="text" id="to_email_id" name="to_email_id"
-      					      placeholder="To email ID" required style="height: 17px; width: 325px;" />
+      					       required style="height: 17px; width: 325px;" />
    						 </div>
 					</div>
 					
@@ -616,7 +642,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
 							<input type="text" id="email_cc" name="email_cc"
-								placeholder="CC" required style="height: 17px; width: 325px;" />
+								  style="height: 17px; width: 325px;" />
 						</div>
 					</div>
 					
@@ -626,7 +652,7 @@ roleValue = '<%=roleValue%>';
 						</div>
 						<div>
 							<input type="text" id="email_bcc" name="email_bcc"
-							placeholder="BCC" required style="height: 17px;width: 280px;" />
+							  style="height: 17px;width: 280px;" />
 						</div>		
 					</div>
 				</div>	
