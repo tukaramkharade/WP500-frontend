@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -123,9 +124,119 @@ public class Dashboard extends HttpServlet {
 		Date endDate = null;
 		
 		
+		//current date time
+		Date currentDate = new Date();
+
+        // Create a Calendar object and set it to the current date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Set the time part to midnight (00:00:00)
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // Get the start of the day
+        Date startOfDay = calendar.getTime();
+
+        // Format the start of the day using SimpleDateFormat
+        String formattedStartOfDay = outputFormat.format(startOfDay);
+      
+        logger.info("Start of the day: " + formattedStartOfDay);
+        
+   
+        // Format the current date using SimpleDateFormat
+        String formattedDate = outputFormat.format(currentDate);
+
+        logger.info("Current Date: " + formattedDate);
 		
-		
-		
+		//---------------yesterday start date time---------------------------------------
+        
+        // Create a Calendar instance and set it to the current date
+         calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Subtract one day from the current date
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+
+        // Set the time part of the date to midnight (00:00:00)
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // Get the resulting date
+        Date yesterdayStartDate = calendar.getTime();
+
+        
+        // Format and print the result
+        String formattedDateStartYesterday = outputFormat.format(yesterdayStartDate);
+        
+     
+      //---------------yesterday end date time---------------------------------------
+        
+        // Create a Calendar instance and set it to the current date
+         calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Subtract one day from the current date
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+
+        // Set the time part of the date to the end of the day (23:59:59)
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        // Get the resulting date
+        Date yesterdayEndDate = calendar.getTime();
+
+        // Format and print the result
+        String formattedDateEndYesterday = outputFormat.format(yesterdayEndDate);
+        
+        //----------------current week start day-----------------------
+        
+        
+        Calendar calendar1 = Calendar.getInstance();
+
+        // Set Sunday as the first day of the week
+        calendar1.setFirstDayOfWeek(Calendar.SUNDAY);
+
+        // Set the current date and time to the start of the week
+        calendar1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        calendar1.set(Calendar.HOUR_OF_DAY, 0);
+        calendar1.set(Calendar.MINUTE, 0);
+        calendar1.set(Calendar.SECOND, 0);
+
+
+        // Format the current date and time as a string
+        String formattedDateWeekStart = outputFormat.format(calendar1.getTime());
+
+        
+        //----------------current month start day--------------------------------------
+        
+        Calendar calendar2 = Calendar.getInstance();
+
+        // Set the time to 12:00 midnight
+        calendar2.set(Calendar.HOUR_OF_DAY, 0);
+        calendar2.set(Calendar.MINUTE, 0);
+        calendar2.set(Calendar.SECOND, 0);
+        calendar2.set(Calendar.MILLISECOND, 0);
+
+        // Set the day of the month to 1 (start of the month)
+        calendar2.set(Calendar.DAY_OF_MONTH, 1);
+
+        // Get the Date object representing the start date and time of the current month
+         startDate = calendar2.getTime();
+
+       
+        // Format the date and print it
+        String formattedDateStartMonth = outputFormat.format(startDate);
+        
+        //-------------------------------------------------------------------
+        
+        
 		if(check_username != null){
 			
 			TCPClient client = new TCPClient();
@@ -212,57 +323,15 @@ public class Dashboard extends HttpServlet {
 						JSONObject jsonObject = new JSONObject(respStr);
 				        JSONObject dataObject = jsonObject.getJSONObject("data");
 				        
+				        System.out.println("Data obj : "+dataObject);
 				     
-
-//				     // Convert the keys to an array and iterate over them
-//				        String[] dateKeys = JSONObject.getNames(dataObject);
-//				        if (dateKeys != null) {
-//				            for (String date : dateKeys) {
-//				                System.out.println("Date: " + date);
-//
-//				                JSONObject innerObject = dataObject.getJSONObject(date);
-//
-//				                // Convert the inner keys to an array and iterate over them
-//				                String[] numberKeys = JSONObject.getNames(innerObject);
-//				                if (numberKeys != null) {
-//				                    for (String number : numberKeys) {
-//				                        int value = innerObject.getInt(number);
-//				                        System.out.println("Number " + number + ": " + value);
-//				                    }
-//				                }
-//				            }
-//				        }
-				        
-				        
-				     // Prepare the data for the bar chart
-				        JSONArray labels = new JSONArray(); // Labels for the bars (e.g., threat priorities)
-				        JSONArray data = new JSONArray();   // Data values (e.g., counts for each priority)
-				        String[] dateKeys = JSONObject.getNames(dataObject);
-
-				        // Populate the labels and data arrays based on your retrieved data
-				        for (String date : dateKeys) {
-				            JSONObject innerObject = dataObject.getJSONObject(date);
-
-				            // Assuming you have a specific format for threat priorities, e.g., "High", "Medium", "Low"
-				            String[] priorityLevels = { "High", "Medium", "Low" };
-				            for (String priority : priorityLevels) {
-				                int value = innerObject.optInt(priority, 0); // Use 0 as default if not found
-				                labels.put(priority);
-				                data.put(value);
-				            }
-				        }
-
-				        // Create a JSON object to hold the chart data
-				        JSONObject chartData = new JSONObject();
-				        chartData.put("labels", labels);
-				        chartData.put("values", data);
 
 				        // Set the response content type to JSON
 				        response.setContentType("application/json");
 
 				        // Write the JSON data to the response
 				        PrintWriter out = response.getWriter();
-				        out.print(chartData.toString());
+				        out.print(dataObject.toString());
 				        out.flush();
 						
 						
@@ -271,6 +340,344 @@ public class Dashboard extends HttpServlet {
 						logger.error("Error loading threats priority : "+e);
 					}
 					break;
+					
+				case "threat_today_line" :
+					
+			        try{
+			        	
+			        	json.put("operation", "get_count_Threats");
+						json.put("start_time", formattedStartOfDay);
+						json.put("end_time", formattedDate);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						 JSONObject jsonObject = new JSONObject(respStr);
+				         JSONObject dataObject = jsonObject.getJSONObject("data");
+				         
+				         String[] keys = JSONObject.getNames(dataObject);
+				         
+				         List<String> dateLabels = new ArrayList<>();
+				         List<Integer> threatCountValues = new ArrayList<>();
+
+				            if (keys != null) {
+				                // Iterate over the keys (dates)
+				            	for (String date : keys) {
+				                    int value = dataObject.getInt(date);
+
+				                    // Add date and value to respective arrays
+				                    dateLabels.add(date);
+				                    threatCountValues.add(value);
+				                }
+				            }
+				            
+				         // Prepare data for the line chart
+				            JSONObject chartData = new JSONObject();
+				            chartData.put("labels", dateLabels); // Use the dateLabels array
+				            chartData.put("values", threatCountValues); // Use the threatCountValues array
+
+				            
+				            // Set the response content type to JSON
+				            response.setContentType("application/json");
+				            
+				            // Write the JSON data to the response
+				            PrintWriter out = response.getWriter();
+				            out.print(chartData.toString());
+				            out.flush();
+				            
+			        	
+			        }catch(Exception e){
+			        	e.printStackTrace();
+			        	logger.error("Error fetching threat count data for current date : "+e);
+			        }
+			        break;
+			        
+				case "threat_today_bar" :
+					
+					try{
+						
+						json.put("operation", "get_count_Threats_priority");
+						json.put("start_time", formattedStartOfDay);
+						json.put("end_time", formattedDate);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						JSONObject jsonObject = new JSONObject(respStr);
+				        JSONObject dataObject = jsonObject.getJSONObject("data");
+				        
+				        System.out.println("Data obj : "+dataObject);
+				     
+
+				        // Set the response content type to JSON
+				        response.setContentType("application/json");
+
+				        // Write the JSON data to the response
+				        PrintWriter out = response.getWriter();
+				        out.print(dataObject.toString());
+				        out.flush();
+						
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat priority count for current date : "+e);
+					}
+					break;
+					
+				case "threat_yesterday_line" :
+					
+					try{
+						json.put("operation", "get_count_Threats");
+						json.put("start_time", formattedDateStartYesterday);
+						json.put("end_time", formattedDateEndYesterday);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						 JSONObject jsonObject = new JSONObject(respStr);
+				         JSONObject dataObject = jsonObject.getJSONObject("data");
+				         
+				         String[] keys = JSONObject.getNames(dataObject);
+				         
+				         List<String> dateLabels = new ArrayList<>();
+				         List<Integer> threatCountValues = new ArrayList<>();
+
+				            if (keys != null) {
+				                // Iterate over the keys (dates)
+				            	for (String date : keys) {
+				                    int value = dataObject.getInt(date);
+
+				                    // Add date and value to respective arrays
+				                    dateLabels.add(date);
+				                    threatCountValues.add(value);
+				                }
+				            }
+				            
+				         // Prepare data for the line chart
+				            JSONObject chartData = new JSONObject();
+				            chartData.put("labels", dateLabels); // Use the dateLabels array
+				            chartData.put("values", threatCountValues); // Use the threatCountValues array
+
+				            
+				            // Set the response content type to JSON
+				            response.setContentType("application/json");
+				            
+				            // Write the JSON data to the response
+				            PrintWriter out = response.getWriter();
+				            out.print(chartData.toString());
+				            out.flush();
+				            
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat count details for yesterday : "+e);
+					}
+					break;
+					
+				case "threat_yesterday_bar" :
+					
+					try{
+						
+						json.put("operation", "get_count_Threats_priority");
+						json.put("start_time", formattedDateStartYesterday);
+						json.put("end_time", formattedDateEndYesterday);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						JSONObject jsonObject = new JSONObject(respStr);
+				        JSONObject dataObject = jsonObject.getJSONObject("data");
+				        
+				        System.out.println("Data obj : "+dataObject);
+				     
+
+				        // Set the response content type to JSON
+				        response.setContentType("application/json");
+
+				        // Write the JSON data to the response
+				        PrintWriter out = response.getWriter();
+				        out.print(dataObject.toString());
+				        out.flush();
+						
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat priority details for yesterday : "+e);
+					}
+					break;
+					
+				case "threat_week_line" :
+					
+					try{
+						
+						json.put("operation", "get_count_Threats");
+						json.put("start_time", formattedDateWeekStart);
+						json.put("end_time", formattedDate);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						 JSONObject jsonObject = new JSONObject(respStr);
+				         JSONObject dataObject = jsonObject.getJSONObject("data");
+				         
+				         String[] keys = JSONObject.getNames(dataObject);
+				         
+				         List<String> dateLabels = new ArrayList<>();
+				         List<Integer> threatCountValues = new ArrayList<>();
+
+				            if (keys != null) {
+				                // Iterate over the keys (dates)
+				            	for (String date : keys) {
+				                    int value = dataObject.getInt(date);
+
+				                    // Add date and value to respective arrays
+				                    dateLabels.add(date);
+				                    threatCountValues.add(value);
+				                }
+				            }
+				            
+				         // Prepare data for the line chart
+				            JSONObject chartData = new JSONObject();
+				            chartData.put("labels", dateLabels); // Use the dateLabels array
+				            chartData.put("values", threatCountValues); // Use the threatCountValues array
+
+				            
+				            // Set the response content type to JSON
+				            response.setContentType("application/json");
+				            
+				            // Write the JSON data to the response
+				            PrintWriter out = response.getWriter();
+				            out.print(chartData.toString());
+				            out.flush();
+				            
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat count details for current week : "+e);
+					}
+					break;
+					
+				case "threat_week_bar" :
+					try{
+						
+						json.put("operation", "get_count_Threats_priority");
+						json.put("start_time", formattedDateWeekStart);
+						json.put("end_time", formattedDate);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						JSONObject jsonObject = new JSONObject(respStr);
+				        JSONObject dataObject = jsonObject.getJSONObject("data");
+				        
+				        System.out.println("Data obj : "+dataObject);
+				     
+
+				        // Set the response content type to JSON
+				        response.setContentType("application/json");
+
+				        // Write the JSON data to the response
+				        PrintWriter out = response.getWriter();
+				        out.print(dataObject.toString());
+				        out.flush();
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat priority details for current week : "+e);
+					}
+					break;
+					
+				case "threat_month_line" :
+					try{
+						json.put("operation", "get_count_Threats");
+						json.put("start_time", formattedDateStartMonth);
+						json.put("end_time", formattedDate);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						 JSONObject jsonObject = new JSONObject(respStr);
+				         JSONObject dataObject = jsonObject.getJSONObject("data");
+				         
+				         String[] keys = JSONObject.getNames(dataObject);
+				         
+				         List<String> dateLabels = new ArrayList<>();
+				         List<Integer> threatCountValues = new ArrayList<>();
+
+				            if (keys != null) {
+				                // Iterate over the keys (dates)
+				            	for (String date : keys) {
+				                    int value = dataObject.getInt(date);
+
+				                    // Add date and value to respective arrays
+				                    dateLabels.add(date);
+				                    threatCountValues.add(value);
+				                }
+				            }
+				            
+				         // Prepare data for the line chart
+				            JSONObject chartData = new JSONObject();
+				            chartData.put("labels", dateLabels); // Use the dateLabels array
+				            chartData.put("values", threatCountValues); // Use the threatCountValues array
+
+				            
+				            // Set the response content type to JSON
+				            response.setContentType("application/json");
+				            
+				            // Write the JSON data to the response
+				            PrintWriter out = response.getWriter();
+				            out.print(chartData.toString());
+				            out.flush();
+
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat count details for current month : "+e);
+					}
+					break;
+					
+				case "threat_month_bar" :
+					try{
+						json.put("operation", "get_count_Threats_priority");
+						json.put("start_time", formattedDateStartMonth);
+						json.put("end_time", formattedDate);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+						
+						JSONObject jsonObject = new JSONObject(respStr);
+				        JSONObject dataObject = jsonObject.getJSONObject("data");
+				        
+				        System.out.println("Data obj : "+dataObject);
+				     
+
+				        // Set the response content type to JSON
+				        response.setContentType("application/json");
+
+				        // Write the JSON data to the response
+				        PrintWriter out = response.getWriter();
+				        out.print(dataObject.toString());
+				        out.flush();
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error fetching threat priority details for current month : "+e);
+					}
+					break;
+					
 									
 				}
 			}
