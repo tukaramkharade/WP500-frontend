@@ -1,0 +1,16 @@
+diff a/WebContent/dashboard.jsp b/WebContent/dashboard.jsp	(rejected hunks)
+@@ -47,12 +47,13 @@
+      /* Border properties */
+     border: 2px solid #e74c3c; /* Border width, style, and color */
+     border-radius: 10px; /* Border radius for rounded corners */
+-   
++  
+ }
+ 
+ #dataList{
+ list-style: none;
+ padding: 0;
++ line-height: 2.5em;
+ 
+ }
+ 
