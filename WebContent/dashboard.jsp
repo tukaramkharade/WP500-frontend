@@ -47,12 +47,13 @@ width: 380px;
      /* Border properties */
     border: 2px solid #e74c3c; /* Border width, style, and color */
     border-radius: 10px; /* Border radius for rounded corners */
-   
+  
 }
 
 #dataList{
 list-style: none;
 padding: 0;
+ line-height: 2.5em;
 
 }
 
@@ -64,6 +65,7 @@ padding: 0;
     color: white;
     text-align: center;
     line-height: 20px;
+    margin-left: 20px;
     
 }
 
@@ -75,7 +77,7 @@ padding: 0;
     color: white;
     text-align: center;
     line-height: 20px;
-    
+     margin-left: 20px;
 }
 
 .yellow-box {
@@ -86,7 +88,7 @@ padding: 0;
     color: white;
     text-align: center;
     line-height: 20px;
-   
+    margin-left: 20px;
 }
 
 .green-text {
@@ -98,7 +100,7 @@ padding: 0;
 }
 
 .threats_count{
-width: 440px;
+    width: 50%; 
     height: 460px;
     color: black;
     font-size: 12px;
@@ -106,16 +108,20 @@ width: 440px;
 }
 
 .threats_priority{
-width: 380px;
-    height: 300px;
+ width: 50%; 
+    height: 460px;
     color: black;
     font-size: 12px;
     margin-left: 25px;
     
 }
 
+
 </style>
 <script>
+var chart = null;
+var barChart = null;
+
 
 function latestActiveThreats(){
 	$.ajax({
@@ -125,22 +131,23 @@ function latestActiveThreats(){
         success: function (data) {
             // Iterate through the data and populate the list
             var dataList = $("#dataList");
+            
             $.each(data, function (index, item) {
-				
-				var row = $('<tr>');
-				row.append($('<td>').text(item.timeStamp+ " "));
-				row.append($('<td>').text(item.alertMessage + " "));
-				row.append($('<td>').text(item.threat_id + " "));
-				
-				if(item.priority == '1'){							
-					row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
+                 var listItem = $("<li></li>");
+                
+                if(item.priority == '1'){	
+                	var priority = 'high';
+                	listItem.html(item.timeStamp + " " + item.alertMessage + "  " + item.threat_id + " <span class='red-box'>" + priority + "</span>");
 				}else if(item.priority == '2'){
-					row.append($('<td>').append($('<div>').addClass('orange-box').text('medium')));
+					var priority = 'medium';
+                	listItem.html(item.timeStamp + " " + item.alertMessage + "  " + item.threat_id + "  <span class='orange-box'>" + priority + "</span>");
 				}else if(item.priority == '3'){
-					row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
-				}
-					
-                dataList.append(row);
+					var priority = 'low';
+                	listItem.html(item.timeStamp + " "  + item.alertMessage + "  " + item.threat_id + "  <span class='yellow-box'>" + priority + "</span>");
+				} 
+            
+                dataList.append(listItem);
+                dataList.append("<hr>");
             });
         },
         error: function (error) {
@@ -177,8 +184,15 @@ function countDetails(){
 }
 
 	function updateLineChart(data) {
+		
+		if (chart) {
+			chart.destroy();
+		  }
+		
+		
 		var ctx = document.getElementById('lineChart').getContext('2d');
-		var chart = new Chart(ctx, {
+		
+		chart = new Chart(ctx, {
 		    type: 'line',
 		    data: {
 		    	
@@ -222,32 +236,399 @@ function countDetails(){
 
         }
 	
-	function updateBarChart(data){
-		var ctx = document.getElementById('barChart').getContext('2d');
+	function updateBarChart(){
+	
+	 var start_time = $('#start_time').val();
+	var end_time = $('#end_time').val();
+	
+	$.ajax({
+        url: 'dashboard',
+        type: 'POST',
+        data: {
+        	
+        	start_time : start_time,
+			end_time : end_time,
+            action: 'threat_priority' // Specify the action to retrieve data
+        },
+        success: function (data) {
+            // Extract data for the chart
+            var labels = Object.keys(data);
+            
+            labels.sort(function (a, b) {
+                return new Date(a) - new Date(b);
+            });
+            
+            var dataset1 = labels.map(function (date) {
+                return data[date]["1"];
+            });
+            var dataset2 = labels.map(function (date) {
+                return data[date]["2"];
+            });
+            var dataset3 = labels.map(function (date) {
+                return data[date]["3"];
+            });
+            
+           
+    		if (barChart) {
+    			barChart.destroy();
+    		  }
 
-        // Create a new bar chart using Chart.js
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.labels,
-                datasets: [{
-                    label: 'Threat Priority',
-                    data: data.values,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize the colors as needed
-                    borderColor: 'rgba(75, 192, 192, 1)',     // Customize the colors as needed
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-	}
+            // Create the bar chart
+            var ctx = document.getElementById("barChart").getContext("2d");
+            
+            
+             barChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [
+{
+    label: "High",
+    data: dataset1,
+    backgroundColor: "rgba(255, 0, 0, 1)",
+},
+{
+    label: "Medium",
+    data: dataset2,
+    backgroundColor: "rgba(255, 165, 0, 1)"
+},
+{
+    label: "Low",
+    data: dataset3,
+    backgroundColor: "rgba(0, 128, 0, 1)",
+},
+                    ],
+                },
+                options: {
+                    scales: {
+                    	
+                    	 x: {
+                             beginAtZero: true,
+                         },
+                         
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data:", error);
+        },
+    });
+	}	
+	
+	
+	function updateBarChartToday(){
 		
+		$.ajax({
+	        url: 'dashboard',
+	        type: 'POST',
+	        data: {
+	        
+	            action: 'threat_today_bar' // Specify the action to retrieve data
+	        },
+	        success: function (data) {
+	            // Extract data for the chart
+	            var labels = Object.keys(data);
+	            
+	            labels.sort(function (a, b) {
+	                return new Date(a) - new Date(b);
+	            });
+	            
+	            var dataset1 = labels.map(function (date) {
+	                return data[date]["1"];
+	            });
+	            var dataset2 = labels.map(function (date) {
+	                return data[date]["2"];
+	            });
+	            var dataset3 = labels.map(function (date) {
+	                return data[date]["3"];
+	            });
+
+	            
+	            
+	    		if (barChart) {
+	    			barChart.destroy();
+	    		  }
+	    		  
+	            // Create the bar chart
+	            var ctx = document.getElementById("barChart").getContext("2d");
+	            
+	            
+	            barChart = new Chart(ctx, {
+	                type: "bar",
+	                data: {
+	                    labels: labels,
+	                    datasets: [
+{
+    label: "High",
+    data: dataset1,
+    backgroundColor: "rgba(255, 0, 0, 1)",
+},
+{
+    label: "Medium",
+    data: dataset2,
+    backgroundColor: "rgba(255, 165, 0, 1)"
+},
+{
+    label: "Low",
+    data: dataset3,
+    backgroundColor: "rgba(0, 128, 0, 1)",
+},
+	                    ],
+	                },
+	                options: {
+	                    scales: {
+	                    	
+	                    	 x: {
+	                             beginAtZero: true,
+	                         },
+	                         
+	                        y: {
+	                            beginAtZero: true,
+	                        },
+	                    },
+	                },
+	            });
+	        },
+	        error: function (xhr, status, error) {
+	            console.error("Error fetching data:", error);
+	        },
+	    });
+		}	
+	
+function updateBarChartYesterday(){
+		
+		$.ajax({
+	        url: 'dashboard',
+	        type: 'POST',
+	        data: {
+	        
+	            action: 'threat_yesterday_bar' // Specify the action to retrieve data
+	        },
+	        success: function (data) {
+	            // Extract data for the chart
+	            var labels = Object.keys(data);
+	            
+	            labels.sort(function (a, b) {
+	                return new Date(a) - new Date(b);
+	            });
+	            
+	            var dataset1 = labels.map(function (date) {
+	                return data[date]["1"];
+	            });
+	            var dataset2 = labels.map(function (date) {
+	                return data[date]["2"];
+	            });
+	            var dataset3 = labels.map(function (date) {
+	                return data[date]["3"];
+	            });
+
+	          
+	    		if (barChart) {
+	    			barChart.destroy();
+	    		  }
+	    		
+	            // Create the bar chart
+	            var ctx = document.getElementById("barChart").getContext("2d");
+	            
+	            barChart = new Chart(ctx, {
+	                type: "bar",
+	                data: {
+	                    labels: labels,
+	                    datasets: [
+{
+    label: "High",
+    data: dataset1,
+    backgroundColor: "rgba(255, 0, 0, 1)",
+},
+{
+    label: "Medium",
+    data: dataset2,
+    backgroundColor: "rgba(255, 165, 0, 1)"
+},
+{
+    label: "Low",
+    data: dataset3,
+    backgroundColor: "rgba(0, 128, 0, 1)",
+},
+	                    ],
+	                },
+	                options: {
+	                    scales: {
+	                    	
+	                    	 x: {
+	                             beginAtZero: true,
+	                         },
+	                         
+	                        y: {
+	                            beginAtZero: true,
+	                        },
+	                    },
+	                },
+	            });
+	        },
+	        error: function (xhr, status, error) {
+	            console.error("Error fetching data:", error);
+	        },
+	    });
+		}	
+		
+function updateBarChartWeek(){
+	
+	$.ajax({
+        url: 'dashboard',
+        type: 'POST',
+        data: {
+        
+            action: 'threat_week_bar' // Specify the action to retrieve data
+        },
+        success: function (data) {
+            // Extract data for the chart
+            var labels = Object.keys(data);
+            
+            labels.sort(function (a, b) {
+                return new Date(a) - new Date(b);
+            });
+            
+            var dataset1 = labels.map(function (date) {
+                return data[date]["1"];
+            });
+            var dataset2 = labels.map(function (date) {
+                return data[date]["2"];
+            });
+            var dataset3 = labels.map(function (date) {
+                return data[date]["3"];
+            });
+
+          
+    		if (barChart) {
+    			barChart.destroy();
+    		  }
+    		
+            // Create the bar chart
+            var ctx = document.getElementById("barChart").getContext("2d");
+            
+            barChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [
+{
+    label: "High",
+    data: dataset1,
+    backgroundColor: "rgba(255, 0, 0, 1)",
+},
+{
+    label: "Medium",
+    data: dataset2,
+    backgroundColor: "rgba(255, 165, 0, 1)"
+},
+{
+    label: "Low",
+    data: dataset3,
+    backgroundColor: "rgba(0, 128, 0, 1)",
+},
+                    ],
+                },
+                options: {
+                    scales: {
+                    	
+                    	 x: {
+                             beginAtZero: true,
+                         },
+                         
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data:", error);
+        },
+    });
+	}	
+	
+function updateBarChartMonth(){
+	
+	$.ajax({
+        url: 'dashboard',
+        type: 'POST',
+        data: {
+        
+            action: 'threat_month_bar' // Specify the action to retrieve data
+        },
+        success: function (data) {
+            // Extract data for the chart
+            var labels = Object.keys(data);
+            
+            labels.sort(function (a, b) {
+                return new Date(a) - new Date(b);
+            });
+            
+            var dataset1 = labels.map(function (date) {
+                return data[date]["1"];
+            });
+            var dataset2 = labels.map(function (date) {
+                return data[date]["2"];
+            });
+            var dataset3 = labels.map(function (date) {
+                return data[date]["3"];
+            });
+
+          
+    		if (barChart) {
+    			barChart.destroy();
+    		  }
+    		
+            // Create the bar chart
+            var ctx = document.getElementById("barChart").getContext("2d");
+            
+            barChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "High",
+                            data: dataset1,
+                            backgroundColor: "rgba(255, 0, 0, 1)",
+                        },
+                        {
+                            label: "Medium",
+                            data: dataset2,
+                            backgroundColor: "rgba(255, 165, 0, 1)"
+                        },
+                        {
+                            label: "Low",
+                            data: dataset3,
+                            backgroundColor: "rgba(0, 128, 0, 1)",
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                    	
+                    	 x: {
+                             beginAtZero: true,
+                         },
+                         
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching data:", error);
+        },
+    });
+	}	
 	
  function threatCountsLineChart(){
 	 var start_time = $('#start_time').val();
@@ -275,51 +656,135 @@ function countDetails(){
 	            error: function(error) {
 	                console.error('Error fetching data:', error);
 	            }
-	        });
-	
+	        });	
  }
- 
- 
-	 function threatPriorityBarChart() {
-		 var start_time = $('#start_time').val();
-			var end_time = $('#end_time').val();
-			
-	     $.ajax({
-	         url: 'dashboard', // Replace with the URL of your servlet
-	         type: 'POST',
-	         data: {
-	             action: 'threat_priority', // Replace with your desired action
-	             start_time: start_time, // Replace with the actual start time
-	             end_time: end_time // Replace with the actual end time
-	         },
-	       
-	         success: function(response) {
-	        	 if (typeof response === 'object') {
-	        		 console.log("Data received:", response);
-	        		 updateBarChart(response); // Use the response object directly
+	 
+ function threatCountsLineChartToday(){
+		
+	        // AJAX request to fetch data from the servlet
+	        $.ajax({
+	            url: 'dashboard', // Replace with your servlet URL
+	            type: 'POST',
+	            data: {
+	                action: 'threat_today_line' // Specify the action to retrieve data
+	            },
+	            success: function(response) {
+	            	if (typeof response === 'object') {
+	                    updateLineChart(response); // Use the response object directly
 	                } else {
 	                    // Parse the JSON response
 	                    var data = JSON.parse(response);
-	                    console.log("Data received:", response);
-	                    updateBarChart(data); // Update the line chart with the fetched data
+	                    updateLineChart(data); // Update the line chart with the fetched data
 	                }
-	        	   
-	         },
-	         error: function (xhr, status, error) {
-	             console.error('Error: ' + error);
-	         }
-	     });
-	 }
-        
-
+	            },
+	            error: function(error) {
+	                console.error('Error fetching data:', error);
+	            }
+	        });	
+ }
+ 
+ function threatCountsLineChartYesterday(){
+		
+     // AJAX request to fetch data from the servlet
+     $.ajax({
+         url: 'dashboard', // Replace with your servlet URL
+         type: 'POST',
+         data: {
+             action: 'threat_yesterday_line' // Specify the action to retrieve data
+         },
+         success: function(response) {
+         	if (typeof response === 'object') {
+                 updateLineChart(response); // Use the response object directly
+             } else {
+                 // Parse the JSON response
+                 var data = JSON.parse(response);
+                 updateLineChart(data); // Update the line chart with the fetched data
+             }
+         },
+         error: function(error) {
+             console.error('Error fetching data:', error);
+         }
+     });	
+}
+ 
+ function threatCountsLineChartWeek(){
+		
+     // AJAX request to fetch data from the servlet
+     $.ajax({
+         url: 'dashboard', // Replace with your servlet URL
+         type: 'POST',
+         data: {
+             action: 'threat_week_line' // Specify the action to retrieve data
+         },
+         success: function(response) {
+         	if (typeof response === 'object') {
+                 updateLineChart(response); // Use the response object directly
+             } else {
+                 // Parse the JSON response
+                 var data = JSON.parse(response);
+                 updateLineChart(data); // Update the line chart with the fetched data
+             }
+         },
+         error: function(error) {
+             console.error('Error fetching data:', error);
+         }
+     });	
+}
+ 
+ function threatCountsLineChartMonth(){
+		
+     // AJAX request to fetch data from the servlet
+     $.ajax({
+         url: 'dashboard', // Replace with your servlet URL
+         type: 'POST',
+         data: {
+             action: 'threat_month_line' // Specify the action to retrieve data
+         },
+         success: function(response) {
+         	if (typeof response === 'object') {
+                 updateLineChart(response); // Use the response object directly
+             } else {
+                 // Parse the JSON response
+                 var data = JSON.parse(response);
+                 updateLineChart(data); // Update the line chart with the fetched data
+             }
+         },
+         error: function(error) {
+             console.error('Error fetching data:', error);
+         }
+     });	
+}
+ 
 $(document).ready(function() {
-//	latestActiveThreats();
-//	countDetails();
+	latestActiveThreats();
+	countDetails();
 	
 	$('#apply').click(function() {
 		threatCountsLineChart();
-		threatPriorityBarChart();
+		updateBarChart();
 	});
+	
+	
+	$('#today').click(function() {
+		threatCountsLineChartToday();
+		updateBarChartToday();
+	});
+	
+	$('#yesterday').click(function() {
+		threatCountsLineChartYesterday();
+		updateBarChartYesterday();
+	});
+	
+	$('#week').click(function() {
+		threatCountsLineChartWeek();
+		updateBarChartWeek();
+	});
+	
+	$('#month').click(function() {
+		threatCountsLineChartMonth();
+		updateBarChartMonth();		
+	});
+	
 	
 });
 </script>
@@ -358,7 +823,6 @@ $(document).ready(function() {
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					
-					
 					<div class="overview">
 						<h5>Overview</h5>
 						<p id="status"></p>
@@ -374,7 +838,7 @@ $(document).ready(function() {
 						<ul id="dataList">
         					<!-- List items will be populated here -->
     					</ul>
-						<input style="margin-left: 300px; margin-top: 40px;" type="button" value="Show all" id="show_all" /> 
+						<input style="margin-left: 300px; margin-top: 30px;" type="button" value="Show all" id="show_all" /> 
 						
 					</div>
 					
@@ -384,12 +848,12 @@ $(document).ready(function() {
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					<div class="threats_count">
 					<h5>Day wise threats count</h5>
-					 <canvas id="lineChart" width="300" height="400"></canvas>
+					 <canvas id="lineChart" ></canvas>
 					</div>
 					
 					<div class="threats_priority">
 					<h5>Day wise threats priority</h5>
-					  <canvas id="barChart" width="400" height="400"></canvas>
+					  <canvas id="barChart" ></canvas>
 					</div>
 					</div>
 				
