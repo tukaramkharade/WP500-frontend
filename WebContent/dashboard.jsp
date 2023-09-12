@@ -23,15 +23,18 @@
 
 <style type="text/css">
 
-.overview{
-	
-	width: 540px;
-    height: 200px;
+.overview{	
+	width: 45%;
+    height: 300px;
     color: black;
-    font-size: 12px;
+    font-size: 15px;
     /* Border properties */
     border: 2px solid #e74c3c; /* Border width, style, and color */
     border-radius: 10px; /* Border radius for rounded corners */
+}
+
+.overview h5{
+font-size: 13px;
 }
 
 p{
@@ -39,22 +42,31 @@ margin-left: 2%;
 }
 
 .last_threats{
-width: 380px;
-    height: 200px;
+width:45%;
+    height: 300px;
     color: black;
-    font-size: 12px;
     margin-left: 25px;
      /* Border properties */
     border: 2px solid #e74c3c; /* Border width, style, and color */
     border-radius: 10px; /* Border radius for rounded corners */
   
 }
+.last_threats h5{/* 
+padding-left:7px; */
+font-size: 13px;
+margin-left:5px;
+}
 
 #dataList{
 list-style: none;
-padding: 0;
- line-height: 2.5em;
+ line-height: 1.8em;
+font-size:14px;
+}
 
+#dataList li{
+display: flex;
+justify-content:space-between;
+margin-right:30px;
 }
 
 .red-box {
@@ -100,7 +112,7 @@ padding: 0;
 }
 
 .threats_count{
-    width: 50%; 
+    width: 45%; 
     height: 460px;
     color: black;
     font-size: 12px;
@@ -108,11 +120,11 @@ padding: 0;
 }
 
 .threats_priority{
- width: 50%; 
+ width: 45%; 
     height: 460px;
     color: black;
     font-size: 12px;
-    margin-left: 25px;
+  /*   margin-left: 25px; */
     
 }
 
@@ -838,14 +850,14 @@ $(document).ready(function() {
 						<ul id="dataList">
         					<!-- List items will be populated here -->
     					</ul>
-						<input style="margin-left: 300px; margin-top: 30px;" type="button" value="Show all" id="show_all" /> 
+						<input style="margin-left: 670px; margin-top: 80px;" type="button" value="Show all" id="show_all" /> 
 						
 					</div>
 					
 				</div>
 				
 				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
+					style="display: flex; flex-content: space-between; ">
 					<div class="threats_count">
 					<h5>Day wise threats count</h5>
 					 <canvas id="lineChart" ></canvas>
