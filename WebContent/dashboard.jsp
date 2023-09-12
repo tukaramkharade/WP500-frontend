@@ -25,7 +25,7 @@
 
 .overview{	
 	width: 45%;
-    height: 300px;
+  
     color: black;
     font-size: 15px;
     /* Border properties */
@@ -35,6 +35,7 @@
 
 .overview h5{
 font-size: 13px;
+margin-left:5px;
 }
 
 p{
@@ -43,7 +44,7 @@ margin-left: 2%;
 
 .last_threats{
 width:45%;
-    height: 300px;
+   
     color: black;
     margin-left: 25px;
      /* Border properties */
@@ -119,12 +120,12 @@ margin-right:30px;
    
 }
 
-.threats_priority{
- width: 45%; 
-    height: 460px;
+.threats_priority{ 
+width:45%;
+height:460px;
     color: black;
     font-size: 12px;
-  /*   margin-left: 25px; */
+     margin-left: 25px; 
     
 }
 
@@ -202,7 +203,7 @@ function countDetails(){
 		  }
 		
 		
-		var ctx = document.getElementById('lineChart').getContext('2d');
+		 var ctx = document.getElementById('lineChart').getContext('2d');
 		
 		chart = new Chart(ctx, {
 		    type: 'line',
@@ -244,8 +245,8 @@ function countDetails(){
 		            }
 		        }
 		    }
-		});
-
+		}); 
+		
         }
 	
 	function updateBarChart(){
@@ -833,7 +834,7 @@ $(document).ready(function() {
 				</div>
 				
 				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
+					style="display: flex; flex-content: space-between; margin-top: 10px;height:25%">
 					
 					<div class="overview">
 						<h5>Overview</h5>
@@ -850,7 +851,11 @@ $(document).ready(function() {
 						<ul id="dataList">
         					<!-- List items will be populated here -->
     					</ul>
-						<input style="margin-left: 670px; margin-top: 80px;" type="button" value="Show all" id="show_all" /> 
+    					
+    					<div style="display: flex; justify-content: right;margin-right:10px;margin-top:1px;">
+    					<input type="button" value="Show all" id="show_all" /> 
+    					
+    					</div>
 						
 					</div>
 					
@@ -865,7 +870,7 @@ $(document).ready(function() {
 					
 					<div class="threats_priority">
 					<h5>Day wise threats priority</h5>
-					  <canvas id="barChart" ></canvas>
+					  <canvas id="barChart"  ></canvas>
 					</div>
 					</div>
 				
