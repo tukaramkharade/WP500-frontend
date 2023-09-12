@@ -285,12 +285,12 @@ var roleValue;
 							row.append($('<td>').text(dispenserTrigger.side));
 							row.append($('<td>').text(dispenserTrigger.trigger_tag));
 							row.append($('<td>').text(dispenserTrigger.trigger_value));
-							row.append($('<td>').text(dispenserTrigger.start_pressesure));
+							/* row.append($('<td>').text(dispenserTrigger.start_pressesure));
 							row.append($('<td>').text(dispenserTrigger.end_pressure));
 							row.append($('<td>').text(dispenserTrigger.tempreture));
 							row.append($('<td>').text(dispenserTrigger.total));
 							row.append($('<td>').text(dispenserTrigger.unit_price));
-							row.append($('<td>').text(dispenserTrigger.quantity));
+							row.append($('<td>').text(dispenserTrigger.quantity)); */
 							row.append($('<td>').text(dispenserTrigger.broker_ip_address));
 							row.append($('<td>').text(dispenserTrigger.status));
 							row.append($('<td>').text(dispenserTrigger.unit_id));
@@ -911,7 +911,7 @@ var roleValue;
 							$('#serial_number').val('');
 							$('#side').val('Select side');
 							$('#broker_name').val('Select broker IP address');
-							$('#trigger_tag').val('');
+							$('#trigger_tag').val('Seslect trigger tag');
 							$('#trigger_value').val('Select trigger value');
 							$('#start_pressure').val('Select start pressure');
 							$('#end_pressure').val('Select end pressure');
@@ -921,6 +921,7 @@ var roleValue;
 							$('#unit_price').val('Select unit price');
 							$('#status').val('Select status');
 							$('#unit_id').val('');
+							$('#registerBtn').val('Add');
 
 						});
 
@@ -1083,12 +1084,12 @@ var roleValue;
 						<th>Side</th>
 						<th>Trigger Tag</th>
 						<th>Trigger Value</th>
-						<th>Start Pressure</th>
+					<!-- <th>Start Pressure</th>
 						<th>End Pressure</th>
 						<th>Temperature</th>
 						<th>Total</th>
 						<th>Unit Price</th>
-						<th>Quantity</th>
+						<th>Quantity</th> -->
 						<th>Broker IP Address</th>
 						<th>Status</th>
 						<th>Unit ID</th>

@@ -98,7 +98,7 @@
         <input required type="text" id="username" name="username" ><br>
         
         <label for="password" style="float: left;">Password:</label>
-        <input required type="password" id="password" name="password" ><br><br>
+        <input required type="password" id="password" name="password" onkeydown="if (event.key === 'Enter') document.getElementById('login').click();"><br><br>
       
         <input style="padding: 5px 140px; font-size: medium" type="button" value="Login" id="login" onclick="checkLogin();">
         

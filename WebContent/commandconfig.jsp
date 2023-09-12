@@ -411,7 +411,8 @@ var json = {};
 	  			$('#asset_id').val('');
 	  			$('#broker_type').val('Select broker type');
 	  			$('#broker_name').val('Select broker IP address');
-	  			$('#interval').val('Select interval');	    		
+	  			$('#interval').val('Select interval');	  
+	  			$('#addBtn').val('Add'); 
 	    	});
 	       	 
 	       	$("#delBtn").click(function () {
@@ -437,6 +438,7 @@ var json = {};
 			    const variable = row.cells[1].textContent;
 			    json[tag] = variable;
 			    console.log(json);
+			    
 			  }
 
 			  return json;
