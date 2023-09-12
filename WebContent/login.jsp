@@ -1,65 +1,52 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    
-   <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-<link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPConnex Web Configuration</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="nav-bar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function checkLogin() {
+            var username = $('#username').val();
+            var password = $('#password').val();
+            
+            $.ajax({
+                url: 'WP500Login',
+                type: 'POST',
+                data: {
+                    username: username,
+                    password: password
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Received data:", data.status);
 
- function checkLogin() {
-	
-	var username = $('#username').val();
-	var password = $('#password').val();
-	
-	$
-			.ajax({
-				
-				url : 'WP500Login',
-				type : 'POST',
-				data : {
-					username : username,
-					password : password
-				},
-				success : function(data) {
-					
-				//alert(data.msg);
-				
-				var json1 = JSON.stringify(data);
+                    if (data.status == 'fail') {
+                        //alert(data.msg);
+                        $('#message').html(data.msg);
+                    } else if (data.status == 'success') {
+                        // Display the success message in the 'message' div
+                        $('#message').html('Login successful.');
+                        window.location.href = 'overview.jsp';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error showing login data: ' + error);
+                }
+            });
+        }
 
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var confirmation = confirm(json.msg);
-							if (confirmation) {
-								//window.location.href = 'login.jsp';
-							}
-						}
-				
-				
-				
-				
-				
-			},
-				error : function(xhr, status, error) {
-					console.log('Error showing login data: ' + error);
-				}
-			});
-} 
-
-$(document).ready(function() {
-	//checkLogin();
-	
-});
-
-</script>
+        $(document).ready(function () {
+            // Uncomment this line to call the checkLogin function when the document is ready
+            // checkLogin();
+        });
+    </script>
     <style>
         body {
             display: flex;
@@ -98,30 +85,25 @@ $(document).ready(function() {
             padding: 5px 140px;
             font-size: medium;
         }
-    </style>       
-       
+    </style>
 </head>
 <body style="background-color: #2e3891d4;">
-    
-      <%-- Display error message if there is an error parameter in the URL --%>
-    <%-- <% if (request.getParameter("error") != null) { %>
-        <p style="color: red; margin-top: -25%; margin-left: 50%;">Invalid username or password.</p>
-    <% } %>   --%>
-    
-    <form action="WP500Login" method="post" class="container" style="width: 24em; border-radius: 30px; background-color: #ffffff8f;padding-bottom: 30px;">
+    <form action="WP500Login" method="post" class="container">
         <div>
-            <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo" style="width: 78%; float: center;"/>
+            <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo">
         </div>
         
         <p style="font-size: medium;"><b>WPConnex Web Configuration</b></p>
-            <label for="username" style="float: left;">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+        <label for="username" style="float: left;">Username:</label>
+        <input required type="text" id="username" name="username" ><br>
         
         <label for="password" style="float: left;">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+        <input required type="password" id="password" name="password" ><br><br>
       
-        <input style="padding: 5px 140px;font-size:medium" type="submit" value="Login" id="login">
+        <input style="padding: 5px 140px; font-size: medium" type="button" value="Login" id="login" onclick="checkLogin();">
+        
+        <!-- Add this div to display the message -->
+        <div id="message"></div>
     </form>
-   
 </body>
 </html>
