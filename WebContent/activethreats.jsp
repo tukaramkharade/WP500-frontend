@@ -127,31 +127,83 @@ function getActiveThreats() {
 
 
 
-function getThreats(){
-	
-	threats_type = $('#file_name').find(":selected").val();
-	alert('threats_type :'+threats_type);
-	
-	$.ajax({
-		url : 'activeThreatServlet',
-		type : 'POST',
-		data : {
-			threats_type : threats_type,
-			startdatetime : startdatetime,
-			enddatetime : enddatetime
+function getSearchThreats() {
+    // Get the values of startdatetime and enddatetime elements
+    var startdatetime = $('#startdatetime').val();
+    var enddatetime = $('#enddatetime').val();
+    
+    $.ajax({
+        url: 'activeThreatServlet',
+        type: 'POST',
+        data: {
+            startdatetime: startdatetime,
+            enddatetime: enddatetime,
+            action : 'get_threats'
+        },
+        success: function (data) {
+			var activeThreatsTable = $('#data-table tbody');
+			activeThreatsTable.empty();
 			
-			
-		},
-		success : function(data) {
-			// Display the registration status message
-				alert(data.message);
-			
-		},
-		error : function(xhr, status, error) {
-			console.log('Error acknowledging threats: ' + error);
-		}
-	});
+			 var json1 = JSON.stringify(data);
+
+			var json = JSON.parse(json1);
+
+			if (json.status == 'fail') {
+				var confirmation = confirm(json.msg);
+				if (confirmation) {
+					window.location.href = 'login.jsp';
+				}
+			} 
+
+				$.each(data, function(index, activeThreats) {
+					
+					
+						var row = $('<tr>');
+						row.append($('<td>').text(activeThreats.timestamp + ""));
+						
+						if(activeThreats.priority == '1'){							
+							row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
+						}else if(activeThreats.priority == '2'){
+							row.append($('<td>').append($('<div>').addClass('orange-box').text('medium')));
+						}else if(activeThreats.priority == '3'){
+							row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
+						}
+						
+						row.append($('<td>').text(activeThreats.threat_id + ""));
+						row.append($('<td>').text(activeThreats.alert_message + ""));						
+						row.append($('<td>').text(activeThreats.src_ip + ""));
+						row.append($('<td>').text(activeThreats.src_port + ""));
+						row.append($('<td>').text(activeThreats.dest_ip + ""));
+						row.append($('<td>').text(activeThreats.dest_port + ""));
+						row.append($('<td>').text(activeThreats.protocol_type + ""));
+						row.append($('<td>').text(activeThreats.ack_at + ""));
+						row.append($('<td>').text(activeThreats.ack_by + ""));
+						
+						var actions = $('<td>')
+						var ackButton = $(
+										'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+										.text('Acknowledge')
+										.click(
+												function() {
+													ackThreats(activeThreats.threat_id);
+												});
+						
+						actions.append(ackButton);
+					
+						row.append(actions);
+											
+						activeThreatsTable.append(row);
+					
+				});
+
+		
+        },
+        error: function (xhr, status, error) {
+            console.log('Error acknowledging threats: ' + error);
+        }
+    });
 }
+
 
 function ackThreats(threat_id){
 	
@@ -159,7 +211,8 @@ function ackThreats(threat_id){
 		url : 'activeThreatServlet',
 		type : 'POST',
 		data : {
-			threat_id : threat_id
+			threat_id : threat_id,
+			 action : 'get_ack_threats'
 			
 		},
 		success : function(data) {
@@ -172,24 +225,38 @@ function ackThreats(threat_id){
 		}
 	});
 }
+function checkDateField() {
+    var startdatetime = $('#startdatetime').val();
+    var enddatetime = $('#enddatetime').val();
+    var errorMessage = '';
+
+    // Check if startdatetime is empty
+    if (startdatetime.trim() === '') {
+        errorMessage += 'Start Date/Time is required.\n';
+    }
+
+    // Check if enddatetime is empty
+    if (enddatetime.trim() === '') {
+        errorMessage += 'End Date/Time is required.\n';
+    }
+
+    // Check if both startdatetime and enddatetime are not empty
+    if (errorMessage === '' && startdatetime !== '' && enddatetime !== '') {
+        getSearchThreats(); // Call the function when both fields have content
+    } else {
+        // Display the error message using an alert
+        alert(errorMessage);
+    }
+}
 
 $(document).ready(function() {
 	
 	getActiveThreats();
 	
 	$(document).on("click", "#loadThreats", function() {
+        checkDateField();
+    });
 	
-		/* if($("#threat_type").val('Active threats')){
-			getActiveThreats();
-		}else */ 
-		if($("#threat_type").val('Threat logs')){
-			//loadThreatLogs();
-		}
-		
-	});
-	
-	//AckThreats();
-
 });
 
 </script>
@@ -211,17 +278,6 @@ $(document).ready(function() {
 		<div class="row"
 			style="display: flex; flex-content: space-between; margin-top: 5px;">
 			
-			<div style="width: 20%;">
-				<label for="log_file">Select Threat Type:</label>
-			</div>
-			
-			<div style="width: 25%; margin-left: -11%;">
-				<select id="threats_type">
-					<option value="Select threat type">Select threat type</option>
-					<option value="Active threats">Active threats</option>
-					<option value="Threat logs">Threat logs</option>
-				</select>
-			</div>
 			
 			<div style="width: 20%;">
 				<label for="log_file">Choose a date:</label>
