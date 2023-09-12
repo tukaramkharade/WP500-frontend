@@ -486,7 +486,8 @@ var roleValue;
 			$('#asset_id').val('');
 			$('#broker_type').val('Select broker type');
 			$('#broker_name').val('Select broker IP address');
-			$('#interval').val('Select interval');	    		
+			$('#interval').val('Select interval');
+			 $('#addBtn').val('Add'); 
   	});
     	  
     	  $("#delBtn").click(function () {

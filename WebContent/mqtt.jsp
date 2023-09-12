@@ -636,9 +636,11 @@
 							$('#pub_topic').val('');
 							$('#sub_topic').val('');
 							$('#prefix').val('');
+							$("#prefix").prop("disabled", false);
 							$('#file_type').val('Select type');
 							$('#file_name').val('Select crt file');
 							$('#enable').val('Select status');
+							$('#registerBtn').val('Add');
 
 						});
 

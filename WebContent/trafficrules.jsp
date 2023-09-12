@@ -803,7 +803,7 @@ var roleValue;
 			$('#ip_addr').val('');
 			$('#type').val('Select type');
 			$('#action').val('ACCEPT');
-			
+			 $('#registerBtn').val('Add');
 			$('#ip_addr').prop('disabled', false);
 			$('#macAddress').prop('disabled', false);
 
