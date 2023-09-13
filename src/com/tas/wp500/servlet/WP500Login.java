@@ -18,7 +18,6 @@ import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/WP500Login")
 public class WP500Login extends HttpServlet {
-    private static final long serialVersionUID = 1L;
     final static Logger logger = Logger.getLogger(WP500Login.class);
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

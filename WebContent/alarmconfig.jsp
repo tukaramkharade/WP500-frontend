@@ -19,7 +19,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
-.modal {
+.modal-delete {
   display: none;
   position: fixed;
   z-index: 1;
@@ -34,7 +34,35 @@
   margin: 0;
 }
 
-.modal-content {
+.modal-content-delete {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -55,15 +83,26 @@ button {
   cursor: pointer;
 }
 
-#confirm-button {
+#confirm-button-delete {
   background-color: #4caf50;
   color: white;
 }
 
-#cancel-button {
+#cancel-button-delete {
   background-color: #f44336;
   color: white;
 }
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+} 
+
 </style>
 <script>
 	
@@ -143,9 +182,7 @@ var roleValue;
 							if (confirmation) {
 								window.location.href = 'login.jsp';
 							}
-						}
-			
-									
+						}		
 									var unit_id = $('#unit_id').val(data.unit_id);
 									var asset = $('#asset_id').val(data.asset_id);
 									var broker_type = $('#broker_type').val(data.broker_type);
@@ -206,37 +243,14 @@ var roleValue;
   	
   	} 
        
+   
        function deleteAlarm() {
-   		
-   		var confirmation = confirm('Are you sure you want to delete this alarm settings?');
-   		if (confirmation) {
-   			$.ajax({
-   				url : 'alarmConfigServlet',
-   				type : 'DELETE',
-   				dataType : 'json',
-   				success : function(data) {
-   					// Display the registration status message
-   					alert(data.message);
-
-   					// Refresh the user list
-   					loadAlarmSettings();
-   				},
-   				error : function(xhr, status, error) {
-   					// Handle the error response, if needed
-   					console.log('Error deleting alarm settings: '
-   							+ error);
-   				}
-   			});
-   		}
-   	}
-       
-       function CheckPopup() {
  		  // Display the custom modal dialog
- 		  var modal = document.getElementById('custom-modal');
+ 		  var modal = document.getElementById('custom-modal-delete');
  		  modal.style.display = 'block';
 
  		  // Handle the confirm button click
- 		  var confirmButton = document.getElementById('confirm-button');
+ 		  var confirmButton = document.getElementById('confirm-button-delete');
  		  confirmButton.onclick = function () {
  		    // Make the AJAX call to delete the user
  		    $.ajax({
@@ -244,9 +258,7 @@ var roleValue;
  		      type: 'DELETE',
  		     dataType : 'json',
  		      success: function (data) {
- 		        // Display the registration status message
- 		        alert(data.message);
-
+ 		    	  
  		        // Close the modal
  		        modal.style.display = 'none';
 
@@ -263,7 +275,7 @@ var roleValue;
  		  };
 
  		  // Handle the cancel button click
- 		  var cancelButton = document.getElementById('cancel-button');
+ 		  var cancelButton = document.getElementById('cancel-button-delete');
  		  cancelButton.onclick = function () {
  		    // Close the modal
  		    modal.style.display = 'none';
@@ -517,48 +529,61 @@ function tableToJson() {
 	}
 	
 function editAlarmConfig() {
+	
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-edit');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit');
+	  confirmButton.onclick = function () {
 
-	var tagData = tableToJson();
-	//alert('tag data : '+tagData)
+			var tagData = tableToJson();
+			var unit_id = $('#unit_id').val();
+		    var asset_id = $('#asset_id').val();
+		    var broker_type = $('#broker_type').find(":selected").val();
+		    var broker_name = $('#broker_name').find(":selected").val();
+		    var interval = $('#interval').find(":selected").val();
+		   
+		    $.ajax({
+				url : 'alarmConfigServlet',
+				type : 'POST',
+				data : {
+					unit_id : unit_id,
+					asset_id : asset_id,
+					broker_type : broker_type,
+					broker_name : broker_name,
+					interval : interval,
+					tagData: JSON.stringify(tagData),
+					action: 'update'
+					
+				},
+				success : function(data) {
+					modal.style.display = 'none';
 
-    var unit_id = $('#unit_id').val();
-    var asset_id = $('#asset_id').val();
-    var broker_type = $('#broker_type').find(":selected").val();
-    var broker_name = $('#broker_name').find(":selected").val();
-    var interval = $('#interval').find(":selected").val();
-   
-	$.ajax({
-		url : 'alarmConfigServlet',
-		type : 'POST',
-		data : {
-			unit_id : unit_id,
-			asset_id : asset_id,
-			broker_type : broker_type,
-			broker_name : broker_name,
-			interval : interval,
-			tagData: JSON.stringify(tagData),
-			action: 'update'
-			
-		},
-		success : function(data) {
-			// Display the registration status message
-			alert(data.message);
-
-			// Clear form fields
-			$('#unit_id').val('');
-			$('#asset_id').val('');
-			$('#broker_type').val('Select broker type');
-			$('#broker_name').val('Select broker IP address');
-			$('#interval').val('Select interval');
-			
-			location.reload();
-		},
-		error : function(xhr, status, error) {
-			console.log('Error updating alarm settings: ' + error);
-		}
-	});
-
-	$('#addBtn').val('Add');
+					// Clear form fields
+					$('#unit_id').val('');
+					$('#asset_id').val('');
+					$('#broker_type').val('Select broker type');
+					$('#broker_name').val('Select broker IP address');
+					$('#interval').val('Select interval');
+					
+					location.reload();
+				},
+				error : function(xhr, status, error) {
+					console.log('Error updating alarm settings: ' + error);
+				}
+			});
+		    
+		    $('#addBtn').val('Add');
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-edit');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	    $('#addBtn').val('Edit');
+	  };
 }
 
 function addAlarmConfig() {
@@ -714,11 +739,19 @@ function addAlarmConfig() {
 			</form>
 		</div>
 		
-		<div id="custom-modal" class="modal">
-				<div class="modal-content">
+		<div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
 				  <p>Are you sure you want to delete this alarm setting?</p>
-				  <button id="confirm-button">Yes</button>
-				  <button id="cancel-button">No</button>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this alarm setting?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
 				</div>
 			  </div>
 			  

@@ -106,6 +106,7 @@ margin-right:30px;
 
 .green-text {
     color: green;
+    font-size: 17px;
 }
 
 .red-text {
@@ -129,6 +130,10 @@ height:460px;
     
 }
 
+.overviewText{
+font-size: 17px;
+}
+
 
 </style>
 <script>
@@ -144,18 +149,19 @@ function latestActiveThreats(){
         success: function (data) {
             // Iterate through the data and populate the list
             var dataList = $("#dataList");
+            var prority = null;
             
             $.each(data, function (index, item) {
                  var listItem = $("<li></li>");
                 
                 if(item.priority == '1'){	
-                	var priority = 'high';
+                	 priority = 'high';
                 	listItem.html(item.timeStamp + " " + item.alertMessage + "  " + item.threat_id + " <span class='red-box'>" + priority + "</span>");
 				}else if(item.priority == '2'){
-					var priority = 'medium';
+					 priority = 'medium';
                 	listItem.html(item.timeStamp + " " + item.alertMessage + "  " + item.threat_id + "  <span class='orange-box'>" + priority + "</span>");
 				}else if(item.priority == '3'){
-					var priority = 'low';
+					 priority = 'low';
                 	listItem.html(item.timeStamp + " "  + item.alertMessage + "  " + item.threat_id + "  <span class='yellow-box'>" + priority + "</span>");
 				} 
             
@@ -183,11 +189,13 @@ function countDetails(){
     			var status = 'Stop';
     			$("#status").html("System Status: <span class='red-text'>" + status + "</span>");
 }
-			$("#last_update").text("Last Update: " + data.last_update);
-			$("#active_threat_count").text("Active threat count: " + data.active_threats_count);
-			$("#total_threat").text("Total threat: " + data.total_count);
-			$("#ack_count").text("Total acknowledged threat: " + data.threats_log_count);
-			$("#unack_count").text("Total unacknowledged threat: " + data.active_threats_count);
+		
+			
+			$("#last_update").html("Last Update: <span class='overviewText'>" + data.last_update + "</span>");
+			$("#active_threat_count").html("Active threat count: <span class='overviewText'>" + data.active_threats_count + "</span>");
+			$("#total_threat").html("Total threat: <span class='overviewText'>" + data.total_count + "</span>");
+			$("#ack_count").html("Total acknowledged threat: <span class='overviewText'>" + data.threats_log_count + "</span>");
+			$("#unack_count").html("Total unacknowledged threat: <span class='overviewText'>" + data.active_threats_count + "</span>");
 		},
 		error : function(xhr, status, error) {
 			// Handle any errors that occur during the AJAX request
@@ -776,8 +784,7 @@ $(document).ready(function() {
 		threatCountsLineChart();
 		updateBarChart();
 	});
-	
-	
+		
 	$('#today').click(function() {
 		threatCountsLineChartToday();
 		updateBarChartToday();
@@ -799,6 +806,12 @@ $(document).ready(function() {
 	});
 	
 	
+	$('#show_all').click(function() {
+		
+		window.location.href = 'activethreats.jsp';
+		
+	});
+		
 });
 </script>
 
@@ -872,9 +885,7 @@ $(document).ready(function() {
 					<h5>Day wise threats priority</h5>
 					  <canvas id="barChart"  ></canvas>
 					</div>
-					</div>
-				
-				
+					</div>					
 		
 		</div>
 		</section>

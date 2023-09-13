@@ -95,10 +95,10 @@
         
         <p style="font-size: medium;"><b>WPConnex Web Configuration</b></p>
         <label for="username" style="float: left;">Username:</label>
-        <input required type="text" id="username" name="username" ><br>
+        <input style="padding: 5px 5px;" required type="text" id="username" name="username" ><br>
         
         <label for="password" style="float: left;">Password:</label>
-        <input required type="password" id="password" name="password" onkeydown="if (event.key === 'Enter') document.getElementById('login').click();"><br><br>
+        <input style="padding: 5px 5px;" required type="password" id="password" name="password" onkeydown="if (event.key === 'Enter') document.getElementById('login').click();"><br><br>
       
         <input style="padding: 5px 140px; font-size: medium" type="button" value="Login" id="login" onclick="checkLogin();">
         

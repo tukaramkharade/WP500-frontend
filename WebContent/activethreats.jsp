@@ -51,10 +51,56 @@
    
 }
 
+.modal-ack {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-ack {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+#confirm-button-ack {
+  background-color: #4caf50;
+  color: white;
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#cancel-button-ack {
+  background-color: #f44336;
+  color: white;
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+
 </style>
 
 <script>
-var threats_type;
 
 function getActiveThreats() {
 	
@@ -125,8 +171,6 @@ function getActiveThreats() {
 	});
 }
 
-
-
 function getSearchThreats() {
     // Get the values of startdatetime and enddatetime elements
     var startdatetime = $('#startdatetime').val();
@@ -181,7 +225,7 @@ function getSearchThreats() {
 						
 						var actions = $('<td>')
 						var ackButton = $(
-										'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+										'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
 										.text('Acknowledge')
 										.click(
 												function() {
@@ -206,25 +250,43 @@ function getSearchThreats() {
 
 
 function ackThreats(threat_id){
-	
-	$.ajax({
-		url : 'activeThreatServlet',
-		type : 'POST',
-		data : {
-			threat_id : threat_id,
-			 action : 'get_ack_threats'
-			
-		},
-		success : function(data) {
-			// Display the registration status message
-				alert(data.message);
-			
-		},
-		error : function(xhr, status, error) {
-			console.log('Error acknowledging threats: ' + error);
-		}
-	});
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-ack');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-ack');
+	  confirmButton.onclick = function () {
+		  $.ajax({
+				url : 'activeThreatServlet',
+				type : 'POST',
+				data : {
+					threat_id : threat_id,
+					 action : 'get_ack_threats'
+					
+				},
+				success : function(data) {
+					
+					// Close the modal
+			        modal.style.display = 'none';
+					
+				},
+				error : function(xhr, status, error) {
+					console.log('Error acknowledging threats: ' + error);
+				}
+			});
+		  location.reload();
+		  
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-ack');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	    location.reload();
+	  };
 }
+
 function checkDateField() {
     var startdatetime = $('#startdatetime').val();
     var enddatetime = $('#enddatetime').val();
@@ -270,10 +332,8 @@ $(document).ready(function() {
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>THREATS</h3>
+		<h3>ACTIVE THREATS</h3>
 		<hr />
-		
-		<input type="hidden" id="thread_id_name" name="thread_id_name" value="">
 		
 		<div class="row"
 			style="display: flex; flex-content: space-between; margin-top: 5px;">
@@ -301,6 +361,14 @@ $(document).ready(function() {
 			</div>
 			
 			</div>
+			
+			<div id="custom-modal-ack" class="modal-ack">
+				<div class="modal-content-ack">
+				  <p>Are you sure you want to acknowledge this threat?</p>
+				  <button id="confirm-button-ack">Yes</button>
+				  <button id="cancel-button-ack">No</button>
+				</div>
+			  </div>
 		
 		<div class="container">
 

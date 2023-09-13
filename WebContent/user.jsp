@@ -13,7 +13,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
-.modal {
+.modal-delete {
   display: none;
   position: fixed;
   z-index: 1;
@@ -28,7 +28,35 @@
   margin: 0;
 }
 
-.modal-content {
+.modal-content-delete {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -49,12 +77,22 @@ button {
   cursor: pointer;
 }
 
-#confirm-button {
+#confirm-button-delete {
   background-color: #4caf50;
   color: white;
 }
 
-#cancel-button {
+#cancel-button-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
   background-color: #f44336;
   color: white;
 }
@@ -117,7 +155,7 @@ var roleValue;
 														.text('Delete')
 														.click(
 																function() {
-																	CheckPopup(user.username);
+																	deleteUser(user.username);
 																});
 
 												actions.append(editButton);
@@ -176,98 +214,6 @@ var roleValue;
 	function setRole(userId) {
 
 		$('#role').val(userId);
-	}
-
-	// Function to handle deleting a user
-	function deleteUser(userId) {
-		// Perform necessary actions to delete the user
-		// For example, make an AJAX call to a delete servlet
-		
-		var confirmation = confirm('Are you sure you want to delete this user?');
-		if (confirmation) {
-			$.ajax({
-				url : 'userServlet',
-				type : 'POST',
-				data : {
-					username : userId,
-					action: 'delete'
-				},
-				success : function(data) {
-					// Display the registration status message
-					
-					if(userId == 'tasm2m_admin'){
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var confirmation = confirm(json.msg);
-							if (confirmation) {
-								window.location.href = 'user.jsp';
-							}
-						}
-					}
-					
-					else{
-						
-						alert(data.message);
-					}
-				
-					// Refresh the user list
-					loadUserList();
-				},
-				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting user: ' + error);
-				}
-			});
-		}
-	}
-
-	function editUser() {
-
-		var confirmation = confirm('Are you sure you want to edit this user?');
-
-		if (confirmation) {
-			var username = $('#username').val();
-			var first_name = $('#first_name').val();
-			var last_name = $('#last_name').val();
-			var role = $('#role').find(":selected").val();
-
-			$.ajax({
-				url : 'userServlet',
-				type : 'POST',
-				data : {
-					username : username,
-					first_name : first_name,
-					last_name : last_name,
-					role : role,
-					action: 'update'
-				},
-				success : function(data) {
-					// Display the registration status message
-					alert(data.message);${data.message}
-					loadUserList();
-
-					// Clear form fields
-				$('#username').val('');
-		    $('#password').val('');
-		    $('#first_name').val('');
-		    $('#last_name').val('');
-		    $('#role').val('Select role');
-
-					$("#password").prop("disabled", false);
-
-					$("#username").prop("disabled", false);
-				},
-				error : function(xhr, status, error) {
-					console.log('Error updating user: ' + error);
-				}
-			});
-
-			$('#registerBtn').val('Add');
-		}
-		
 	}
 
 	// Function to handle form submission and add a new user
@@ -355,13 +301,13 @@ var roleValue;
         } 
     }
 	
-	function CheckPopup(userId) {
+	function deleteUser(userId) {
 		  // Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal');
+		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
 
 		  // Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button');
+		  var confirmButton = document.getElementById('confirm-button-delete');
 		  confirmButton.onclick = function () {
 		    // Make the AJAX call to delete the user
 		    $.ajax({
@@ -372,9 +318,7 @@ var roleValue;
 		        action: 'delete'
 		      },
 		      success: function (data) {
-		        // Display the registration status message
-		        alert(data.message);
-
+		       
 		        // Close the modal
 		        modal.style.display = 'none';
 
@@ -391,12 +335,75 @@ var roleValue;
 		  };
 
 		  // Handle the cancel button click
-		  var cancelButton = document.getElementById('cancel-button');
+		  var cancelButton = document.getElementById('cancel-button-delete');
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
 		  };
 		}
+	
+	
+	 function editUser() {
+
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  var username = $('#username').val();
+				var first_name = $('#first_name').val();
+				var last_name = $('#last_name').val();
+				var role = $('#role').find(":selected").val();
+				
+			  
+			  $.ajax({
+					url : 'userServlet',
+					type : 'POST',
+					data : {
+						username : username,
+						first_name : first_name,
+						last_name : last_name,
+						role : role,
+						action: 'update'
+					},
+					success : function(data) {
+					
+						// Close the modal
+				        modal.style.display = 'none';
+						
+						loadUserList();
+
+						// Clear form fields
+					$('#username').val('');
+			    $('#password').val('');
+			    $('#first_name').val('');
+			    $('#last_name').val('');
+			    $('#role').val('Select role');
+
+						$("#password").prop("disabled", false);
+
+						$("#username").prop("disabled", false);
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating user: ' + error);
+						 modal.style.display = 'none';
+					}
+				});
+			  $('#registerBtn').val('Add');
+			  
+		  };
+
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#registerBtn').val('Edit');
+		  };		
+	} 
+	
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -419,7 +426,6 @@ var roleValue;
 			changeButtonColor(true);
 		}
 
-
 		// Handle form submission
 		$('#userForm').submit(function(event) {
 			event.preventDefault();
@@ -435,50 +441,33 @@ var roleValue;
 				roleError.textContent = "Please select role";
 				return;
 			}
-
 			
 			if((user_name.length > 30)){
-
                 field_User_Error.textContent = "You can write upto 30 maximum characters."
                 	return;
-            }
-
-            else{
-
+            } else{
                 field_User_Error.textContent =""
-
             }  
 
             if((password.length > 30)){
-
                 field_Pass_Error.textContent = "You can write upto 30 maximum characters."
                 	return;
             }else{
-
                 field_Pass_Error.textContent =""
-
             }          
 
             if( (firstname.length > 30)){
-
                 field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
                 	return;
-            }
-
-            else{
-
+            }else{
                 field_FirstN_Error.textContent=""
-
             }
 
             if( (lastname.length > 30)){
-
                 field_LastN_Error.textContent = "You can write upto 30 maximum characters."
                 	return;
             }else{
-
                 field_LastN_Error.textContent =""
-
             }
 			
 		 var isDisabled = $("#password").prop("disabled");
@@ -489,13 +478,10 @@ var roleValue;
 					return;
 				}	
 		    }
-			
-					
+							
 			if (buttonText == 'Add') {
 				addUser();
-
 			} else {
-
 				editUser();
 			}
 		});
@@ -582,11 +568,19 @@ var roleValue;
 				</form>
 			</div>
 			
-			<div id="custom-modal" class="modal">
-				<div class="modal-content">
+			<div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
 				  <p>Are you sure you want to delete this user?</p>
-				  <button id="confirm-button">Yes</button>
-				  <button id="cancel-button">No</button>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this user?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
 				</div>
 			  </div>
 
