@@ -11,6 +11,93 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+.modal-delete {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-delete {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+/* Style for buttons */
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button-delete {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+</style>
+
 <script>
 	// Function to load user data and populate the user list table
 
@@ -258,41 +345,53 @@
 		});
 	}
 
-	 function deleteMqtt(prefix) {
-		
-		
-		var confirmation = confirm('Are you sure you want to delete this mqtt settings?');
-		if (confirmation) {
-			
-			$.ajax({
-				url : 'mqttServlet',
-				type : 'POST',
-				data : {
-					prefix : prefix,
-					action: 'delete'
-				},
-				success : function(data) {
-					// Display the registration status message
-					alert(data.message);
+	 
+	function deleteMqtt(prefix) {
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-delete');
+		  modal.style.display = 'block';
 
-					// Refresh the user list
-					loadMqttList();
-				},
-				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting mqtt settings: ' + error);
-				}
-			});
-		}
-	} 
-
-
-	function editMqtt() {
-
-		var confirmation = confirm('Are you sure you want to edit this mqtt settings?');
-		
-		if(confirmation){
-			var broker_ip_address = $('#broker_ip_address').val();
+		  // Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-delete');
+		  confirmButton.onclick = function () {
+			  $.ajax({
+					url : 'mqttServlet',
+					type : 'POST',
+					data : {
+						prefix : prefix,
+						action: 'delete'
+					},
+					success : function(data) {
+						
+						modal.style.display = 'none';
+						loadMqttList();
+					},
+					error : function(xhr, status, error) {
+						// Handle the error response, if needed
+						console.log('Error deleting mqtt settings: ' + error);
+					}
+				});
+			  
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-delete');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		  };
+		  
+	}
+ 
+ function editMqtt(){
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-edit');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit');
+	  confirmButton.onclick = function () {
+		  
+		  var broker_ip_address = $('#broker_ip_address').val();
 			var port_number = $('#port_number').val();
 			var username = $('#username').val();
 			var password = $('#password').val();
@@ -321,8 +420,8 @@
 
 				},
 				success : function(data) {
-					// Display the registration status message
-						alert(data.message);
+					
+					modal.style.display = 'none';
 					loadMqttList();
 
 					// Clear form fields
@@ -344,12 +443,19 @@
 					console.log('Error updating mqtt: ' + error);
 				}
 			});
-
 			$('#registerBtn').val('Add');
-		}
-
-	}
-
+			
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-edit');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	    $('#registerBtn').val('Edit');
+	  };	
+	 
+ }
+ 
 	// Function to handle form submission and add a new mqtt
 	function addMqtt() {
 		
@@ -360,7 +466,6 @@
 		var pub_topic = $('#pub_topic').val();
 		var sub_topic = $('#sub_topic').val();
 		var prefix = $('#prefix').val();
-		//var file_name = $('#file_name').find(":selected").val();
 		var enable = $('#enable').find(":selected").val();
 		var file_type = $('#file_type').find(":selected").val();
 		var file_name;
@@ -410,7 +515,6 @@
 				$('#enable').val('Select status');
 				
 				$('#file_name').prop('disabled', false);
-
 
 			},
 			error : function(xhr, status, error) {
@@ -641,7 +745,6 @@
 							$('#file_name').val('Select crt file');
 							$('#enable').val('Select status');
 							$('#registerBtn').val('Add');
-
 						});
 
 					});
@@ -756,6 +859,23 @@
 
 				</form>
 			</div>
+			
+			<div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
+				  <p>Are you sure you want to delete this mqtt setting?</p>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this mqtt setting?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
 
 			<h3>MQTT SERVER LIST</h3>
 			<hr>

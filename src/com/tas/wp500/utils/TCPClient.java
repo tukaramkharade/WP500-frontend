@@ -25,7 +25,7 @@ public class TCPClient {
 			System.out.println("Connecting..");
 			s = new Socket("192.168.1.53", 6801);
 			
-			//s = new Socket("127.0.0.1", 6801);
+		//	s = new Socket("127.0.0.1", 6801);
 
 			
 			// new

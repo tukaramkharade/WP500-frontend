@@ -2,15 +2,23 @@ package com.tas.wp500.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -264,31 +272,44 @@ public class Dashboard extends HttpServlet {
 						JSONObject jsonObject = new JSONObject(respStr);
 						JSONObject dataObject = jsonObject.getJSONObject("data");
 
-						String[] keys = JSONObject.getNames(dataObject);
+						 // Extract the keys (dates) into a list
+				        List<String> keys = new ArrayList<>();
+				        Iterator<String> iterator = dataObject.keys();
+				        while (iterator.hasNext()) {
+				            keys.add(iterator.next());
+				        }
+
+				        // Sort the list of keys
+				        Collections.sort(keys);
+
+				        // Create a new JSONObject with the sorted keys
+				        JSONObject sortedDataObject = new JSONObject();
+				        for (String key : keys) {
+				            sortedDataObject.put(key, dataObject.get(key));
+				        }
+			        
+				        String[] keys1 = JSONObject.getNames(sortedDataObject.toString(4));
 
 						List<String> dateLabels = new ArrayList<>();
 						List<Integer> threatCountValues = new ArrayList<>();
 
-						if (keys != null) {
+						if (keys1 != null) {
 							// Iterate over the keys (dates)
 							for (String date : keys) {
 								int value = dataObject.getInt(date);
 
 								// Add date and value to respective arrays
-
 								dateLabels.add(date);
 								threatCountValues.add(value);
+															
 							}
+							System.out.println(dateLabels + " " + threatCountValues);
 						}
 
 						// Prepare data for the line chart
 						JSONObject chartData = new JSONObject();
-						chartData.put("labels", dateLabels); // Use the
-																// dateLabels
-																// array
-						chartData.put("values", threatCountValues); // Use the
-																	// threatCountValues
-																	// array
+						chartData.put("labels", dateLabels); // Use the dateLabels array
+						chartData.put("values", threatCountValues); // Use the threatCountValues array
 
 						// Set the response content type to JSON
 						response.setContentType("application/json");
@@ -297,7 +318,7 @@ public class Dashboard extends HttpServlet {
 						PrintWriter out = response.getWriter();
 						out.print(chartData.toString());
 						out.flush();
-
+				        
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error loading threats count day wise data : " + e);
@@ -529,12 +550,28 @@ public class Dashboard extends HttpServlet {
 						JSONObject jsonObject = new JSONObject(respStr);
 						JSONObject dataObject = jsonObject.getJSONObject("data");
 
-						String[] keys = JSONObject.getNames(dataObject);
+						 // Extract the keys (dates) into a list
+				        List<String> keys = new ArrayList<>();
+				        Iterator<String> iterator = dataObject.keys();
+				        while (iterator.hasNext()) {
+				            keys.add(iterator.next());
+				        }
+
+				        // Sort the list of keys
+				        Collections.sort(keys);
+
+				        // Create a new JSONObject with the sorted keys
+				        JSONObject sortedDataObject = new JSONObject();
+				        for (String key : keys) {
+				            sortedDataObject.put(key, dataObject.get(key));
+				        }
+			        
+				        String[] keys1 = JSONObject.getNames(sortedDataObject.toString(4));
 
 						List<String> dateLabels = new ArrayList<>();
 						List<Integer> threatCountValues = new ArrayList<>();
 
-						if (keys != null) {
+						if (keys1 != null) {
 							// Iterate over the keys (dates)
 							for (String date : keys) {
 								int value = dataObject.getInt(date);
@@ -542,17 +579,15 @@ public class Dashboard extends HttpServlet {
 								// Add date and value to respective arrays
 								dateLabels.add(date);
 								threatCountValues.add(value);
+															
 							}
+							System.out.println(dateLabels + " " + threatCountValues);
 						}
 
 						// Prepare data for the line chart
 						JSONObject chartData = new JSONObject();
-						chartData.put("labels", dateLabels); // Use the
-																// dateLabels
-																// array
-						chartData.put("values", threatCountValues); // Use the
-																	// threatCountValues
-																	// array
+						chartData.put("labels", dateLabels); // Use the dateLabels array
+						chartData.put("values", threatCountValues); // Use the threatCountValues array
 
 						// Set the response content type to JSON
 						response.setContentType("application/json");
@@ -561,7 +596,7 @@ public class Dashboard extends HttpServlet {
 						PrintWriter out = response.getWriter();
 						out.print(chartData.toString());
 						out.flush();
-
+				        
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error fetching threat count details for current week : " + e);
@@ -611,8 +646,57 @@ public class Dashboard extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr));
 
 						JSONObject jsonObject = new JSONObject(respStr);
-						//String dataObject = jsonObject.getJSONObject("data").toString();
-						JSONObject dataObject = jsonObject.getJSONObject("data");
+						
+				        JSONObject dataObject = jsonObject.getJSONObject("data");
+
+				        // Extract the keys (dates) into a list
+				        List<String> keys = new ArrayList<>();
+				        Iterator<String> iterator = dataObject.keys();
+				        while (iterator.hasNext()) {
+				            keys.add(iterator.next());
+				        }
+
+				        // Sort the list of keys
+				        Collections.sort(keys);
+
+				        // Create a new JSONObject with the sorted keys
+				        JSONObject sortedDataObject = new JSONObject();
+				        for (String key : keys) {
+				            sortedDataObject.put(key, dataObject.get(key));
+				        }
+			        
+				        String[] keys1 = JSONObject.getNames(sortedDataObject.toString(4));
+
+						List<String> dateLabels = new ArrayList<>();
+						List<Integer> threatCountValues = new ArrayList<>();
+
+						if (keys1 != null) {
+							// Iterate over the keys (dates)
+							for (String date : keys) {
+								int value = dataObject.getInt(date);
+
+								// Add date and value to respective arrays
+								dateLabels.add(date);
+								threatCountValues.add(value);
+															
+							}
+							System.out.println(dateLabels + " " + threatCountValues);
+						}
+
+						// Prepare data for the line chart
+						JSONObject chartData = new JSONObject();
+						chartData.put("labels", dateLabels); // Use the dateLabels array
+						chartData.put("values", threatCountValues); // Use the threatCountValues array
+
+						// Set the response content type to JSON
+						response.setContentType("application/json");
+
+						// Write the JSON data to the response
+						PrintWriter out = response.getWriter();
+						out.print(chartData.toString());
+						out.flush();
+				        
+
 
 //						LinkedHashMap<String, Double> dataMap = new Gson().fromJson(dataObject, LinkedHashMap.class);
 //
@@ -623,38 +707,38 @@ public class Dashboard extends HttpServlet {
 //						}
 
 					
-						String[] keys = JSONObject.getNames(dataObject);
-
-						List<String> dateLabels = new ArrayList<>();
-						List<Integer> threatCountValues = new ArrayList<>();
-
-						if (keys != null) {
-							// Iterate over the keys (dates)
-							for (String date : keys) {
-								int value = dataObject.getInt(date);
-
-								// Add date and value to respective arrays
-								dateLabels.add(date);
-								threatCountValues.add(value);
-							}
-						}
-
-						// Prepare data for the line chart
-						JSONObject chartData = new JSONObject();
-						chartData.put("labels", dateLabels); // Use the
-																// dateLabels
-																// array
-						chartData.put("values", threatCountValues); // Use the
-																	// threatCountValues
-																	// array
-
-						// Set the response content type to JSON
-						response.setContentType("application/json");
-
-						// Write the JSON data to the response
-						PrintWriter out = response.getWriter();
-						out.print(chartData.toString());
-						out.flush();
+//						String[] keys = JSONObject.getNames(dataObject);
+//
+//						List<String> dateLabels = new ArrayList<>();
+//						List<Integer> threatCountValues = new ArrayList<>();
+//
+//						if (keys != null) {
+//							// Iterate over the keys (dates)
+//							for (String date : keys) {
+//								int value = dataObject.getInt(date);
+//
+//								// Add date and value to respective arrays
+//								dateLabels.add(date);
+//								threatCountValues.add(value);
+//							}
+//						}
+//
+//						// Prepare data for the line chart
+//						JSONObject chartData = new JSONObject();
+//						chartData.put("labels", dateLabels); // Use the
+//																// dateLabels
+//																// array
+//						chartData.put("values", threatCountValues); // Use the
+//																	// threatCountValues
+//																	// array
+//
+//						// Set the response content type to JSON
+//						response.setContentType("application/json");
+//
+//						// Write the JSON data to the response
+//						PrintWriter out = response.getWriter();
+//						out.print(chartData.toString());
+//						out.flush();
 
 					} catch (Exception e) {
 						e.printStackTrace();
