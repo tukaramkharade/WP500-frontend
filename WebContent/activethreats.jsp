@@ -310,15 +310,38 @@ function checkDateField() {
         alert(errorMessage);
     }
 }
+function getCurrentTimeInIndia() {
+    const date = new Date();
+    var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes
+    var offset = ISTOffset * 60 * 1000;
+    var ISTTime = new Date(date.getTime() + offset);
+
+    // Subtract 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds) from ISTTime
+    var ISTTime24HoursAgo = new Date(ISTTime.getTime() - (24 * 60 * 60 * 1000));
+ 
+    // Format both current ISTTime and ISTTime24HoursAgo as strings in "yyyy-MM-ddTHH:mm" format
+    var formattedCurrentTime = ISTTime.toISOString().slice(0, 16);
+    var formattedTime24HoursAgo = ISTTime24HoursAgo.toISOString().slice(0, 16);
+
+    // Set the current IST time as the value of the "enddatetime" input field
+    document.getElementById('enddatetime').value = formattedCurrentTime;
+
+    // Set the IST time 24 hours ago as the value of the "startdatetime" input field
+    document.getElementById('startdatetime').value = formattedTime24HoursAgo;
+
+    // Debugging: Log both calculated times to the console
+    console.log('Current IST time:', formattedCurrentTime);
+    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
+}
 
 $(document).ready(function() {
 	
 	getActiveThreats();
-	
-	$(document).on("click", "#loadThreats", function() {
+	getCurrentTimeInIndia();
+		$(document).on("click", "#loadThreats", function() {
         checkDateField();
     });
-	
+	setInterval(getCurrentTimeInIndia, 60000);
 });
 
 </script>
