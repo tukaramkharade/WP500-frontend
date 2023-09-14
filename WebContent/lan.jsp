@@ -14,6 +14,58 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" type="text/css" href="nav-bar.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit{
+  background-color: #f44336;
+  color: white;
+}
+
+
+</style>
+
 <script>
 	// Function to load user data and populate the user list table
 
@@ -21,13 +73,7 @@
 	var lan1_dhcp;
 	var lan2_dhcp;
 	var dhcp_type;
-	//var lan_type=1;
 	
-	//function loadDHCPButton0(){
-		
-		//lan_type = 'eth1';
-	//	alert('lan type : '+lan_type);
-	//}
 	function getDhcpSettings() {
 		var dhcp_type = 1;
 		  $.ajax({
@@ -123,120 +169,171 @@
 	}
 	
 	
+	
 	function editEth1() {
-		var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
-		console.log('eth1_dhcp1:', eth1_dhcp1);
-		var lan_type = 'eth1';
-		var eth1_ipaddr = $('#ip_addr_eth1').val();
-		var eth1_subnet = $('#subnet_mask_eth1').val();   
-		var eth1_gateway = $('#gateway_eth1').val();
-		var eth1_dns = $('#dns_ip_eth1').val();
-		//alert('eth1_dhcp : '+eth1_dhcp)
-		
-		
-		$.ajax({
-			
-			url : 'lanUpdateServlet', 
-			type : 'POST',
-			data : {
-				eth1_ipaddr : eth1_ipaddr,
-				eth1_subnet : eth1_subnet,
-				eth1_dhcp1 : eth1_dhcp1,
-				lan_type : lan_type,
-				eth1_gateway : eth1_gateway,
-				eth1_dns : eth1_dns
-			},
-			success : function(data) {
-					alert(data.message);
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
+				console.log('eth1_dhcp1:', eth1_dhcp1);
+				var lan_type = 'eth1';
+				var eth1_ipaddr = $('#ip_addr_eth1').val();
+				var eth1_subnet = $('#subnet_mask_eth1').val();   
+				var eth1_gateway = $('#gateway_eth1').val();
+				var eth1_dns = $('#dns_ip_eth1').val();
+				
+				$.ajax({
 					
-					//clear fields
-					$('#ip_addr_eth1').val('');
-					$('#subnet_mask_eth1').val('');
-					$('#gateway_eth1').val('');
-					$('#dns_ip_eth1').val('');
-			
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating lan : ' + error);
-			}
-		});
-
+					url : 'lanUpdateServlet', 
+					type : 'POST',
+					data : {
+						eth1_ipaddr : eth1_ipaddr,
+						eth1_subnet : eth1_subnet,
+						eth1_dhcp1 : eth1_dhcp1,
+						lan_type : lan_type,
+						eth1_gateway : eth1_gateway,
+						eth1_dns : eth1_dns
+					},
+					success : function(data) {
+						// Close the modal
+				        modal.style.display = 'none';
+							
+							//clear fields
+							$('#ip_addr_eth1').val('');
+							$('#subnet_mask_eth1').val('');
+							$('#gateway_eth1').val('');
+							$('#dns_ip_eth1').val('');
+					
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating lan : ' + error);
+					}
+				});
+			  
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    
+		  };
 	}
 	
 	function editLan1() {
-		var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
-		var lan1_type = 'lan1';
-		var lan1_ipaddr = $('#ip_addr_lan1').val();
-		var lan1_subnet = $('#subnet_mask_lan1').val();
-		var lan1_gateway = $('#gateway_lan1').val();
-		var lan1_dns = $('#dns_ip_lan1').val();
-		//alert('eth1_dhcp : '+eth1_dhcp)
-		$.ajax({
-			
-			url : 'upadateLan1', 
-			type : 'POST',
-			data : {
-				lan1_ipaddr : lan1_ipaddr,
-				lan1_subnet : lan1_subnet,
-				lan1_dhcp1 : lan1_dhcp1,
-				lan1_type : lan1_type,
-				lan1_gateway : lan1_gateway,
-				lan1_dns : lan1_dns
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
+				var lan1_type = 'lan1';
+				var lan1_ipaddr = $('#ip_addr_lan1').val();
+				var lan1_subnet = $('#subnet_mask_lan1').val();
+				var lan1_gateway = $('#gateway_lan1').val();
+				var lan1_dns = $('#dns_ip_lan1').val();
 				
-			},
-			success : function(data) {					
-					alert(data.message);
+				$.ajax({
 					
-					//clear fields
-					$('#ip_addr_lan1').val('');
-					$('#subnet_mask_lan1').val('');
-					$('#gateway_lan1').val('');
-					$('#dns_ip_lan1').val('');
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating lan : ' + error);
-			}
-		});
-
+					url : 'upadateLan1', 
+					type : 'POST',
+					data : {
+						lan1_ipaddr : lan1_ipaddr,
+						lan1_subnet : lan1_subnet,
+						lan1_dhcp1 : lan1_dhcp1,
+						lan1_type : lan1_type,
+						lan1_gateway : lan1_gateway,
+						lan1_dns : lan1_dns
+						
+					},
+					success : function(data) {					
+							
+						// Close the modal
+				        modal.style.display = 'none';
+						
+							//clear fields
+							$('#ip_addr_lan1').val('');
+							$('#subnet_mask_lan1').val('');
+							$('#gateway_lan1').val('');
+							$('#dns_ip_lan1').val('');
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating lan : ' + error);
+					}
+				});
+				
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    
+		  };
 	}
 	
 	function editLan2() {
-		var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
-		var lan2_type = 'lan2';
-		var lan2_ipaddr = $('#ip_addr_lan2').val();
-		var lan2_subnet = $('#subnet_mask_lan2').val();
-		var lan2_gateway = $('#gateway_lan2').val();
-		var lan2_dns = $('#dns_ip_lan2').val();
-		
-		//alert('eth1_dhcp : '+eth1_dhcp)
-		$.ajax({
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
 			
-			url : 'upadateLan2',  
-			type : 'POST',
-			data : {
-				lan2_ipaddr : lan2_ipaddr,
-				lan2_subnet : lan2_subnet,
-				lan1_dhcp2 : lan1_dhcp2,
-				lan2_type : lan2_type,
-				lan2_gateway : lan2_gateway,
-				lan2_dns : lan2_dns
-			},
-			success : function(data) {					
-					alert(data.message);
+			  var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
+				var lan2_type = 'lan2';
+				var lan2_ipaddr = $('#ip_addr_lan2').val();
+				var lan2_subnet = $('#subnet_mask_lan2').val();
+				var lan2_gateway = $('#gateway_lan2').val();
+				var lan2_dns = $('#dns_ip_lan2').val();
+				
+				$.ajax({
 					
-					//clear fields
-					$('#ip_addr_lan2').val('');
-					$('#subnet_mask_lan2').val('');
-					$('#gateway_lan2').val('');
-					$('#dns_ip_lan2').val('');			
+					url : 'upadateLan2',  
+					type : 'POST',
+					data : {
+						lan2_ipaddr : lan2_ipaddr,
+						lan2_subnet : lan2_subnet,
+						lan1_dhcp2 : lan1_dhcp2,
+						lan2_type : lan2_type,
+						lan2_gateway : lan2_gateway,
+						lan2_dns : lan2_dns
+					},
+					success : function(data) {					
+						// Close the modal
+				        modal.style.display = 'none';
+							
+							//clear fields
+							$('#ip_addr_lan2').val('');
+							$('#subnet_mask_lan2').val('');
+							$('#gateway_lan2').val('');
+							$('#dns_ip_lan2').val('');			
 
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating lan : ' + error);
-			}
-		});
-
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating lan : ' + error);
+					}
+				});
+				
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    
+		  };
 	}
+	
 	
 	function toggle0InputFields() {
         const toggle0 = document.getElementById("toggle_lan0");
@@ -299,10 +396,6 @@
         }
     }
 
-
-	//var eth1_dhcp;
-	//var lan1_dhcp;
-	//var lan2_dhcp;
 	$(document).ready(function() {
 
 		loadLanSettings();
@@ -312,34 +405,18 @@
 				getDhcpSettings();
 		 });	
 		
-		$('#eth1_button').click(function(){
-			//var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
-			//console.log('eth1_dhcp1:', eth1_dhcp1);
-			//if (eth1_dhcp === '1') {
-		       // alert('eth1 dhcp = 1 Cannot update IP address and subnet mask');
-		  // // } else {
-		    	editEth1();
-		   // }
+		$('#eth1_button').click(function(){	
+		    	editEth1();		  
+		});
+		
+		$('#lan1_button').click(function(){		
+			    	editLan1();		
 			
 		});
 		
-		$('#lan1_button').click(function(){
-			// if (lan1_dhcp === '1') {
-			  //      alert('lan1 dhcp = 1 Cannot update IP address and subnet mask');
-			//  //  } else {
-			    	editLan1();
-			 //   }
-			
-		});
         $('#lan2_button').click(function(){
-        //	if (lan2_dhcp === '1') {
-	//	        alert('lan2 dhcp = 1 Cannot update IP address and subnet mask');
-		// //    } else {
-		    	editLan2();
-		  //  }
-			
+		    	editLan2();	 
 		});
-		
 		
 	});
 </script>
@@ -559,6 +636,16 @@
 				</div>
 
 			</div>
+			
+			<div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this lan setting?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
+			  
 		</section>
 	</div>
 	<div class="footer">

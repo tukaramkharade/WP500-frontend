@@ -506,9 +506,6 @@ var roleValue;
 		getCurrentTimeInIndia();
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-			var confirmation = confirm('You do not have enough privileges for role VIEWER');
-			
-			
 			$('#setDateTime').prop('disabled', true);
 			$('#updateNtp').prop('disabled', true);
 			$('#saveButton').prop('disabled', true);

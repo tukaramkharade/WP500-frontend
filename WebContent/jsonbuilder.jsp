@@ -15,6 +15,131 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+.modal-delete {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-delete {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit-password {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit-password {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+/* Style for buttons */
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button-delete {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit-password {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit-password {
+  background-color: #f44336;
+  color: white;
+}
+
+</style>
 <script>
 
 var roleValue;	
@@ -190,8 +315,8 @@ var json_string_text;
 		$('#json_string_text').val(jsonBuilderId);
 	}
 
-	// Function to handle deleting a user
-	function deleteJsonBuilder(jsonBuilderId) {
+	
+	/* function deleteJsonBuilder(jsonBuilderId) {
 		// Perform necessary actions to delete the user
 		// For example, make an AJAX call to a delete servlet
 
@@ -219,22 +344,66 @@ var json_string_text;
 			});
 		}
 	}
+ */
+ 
+ function deleteJsonBuilder(jsonBuilderId) {
+	 // Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-delete');
+	  modal.style.display = 'block';
 
+	  // Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-delete');
+	  confirmButton.onclick = function () {
+		  $.ajax({
+				url : 'jsonBuilderServlet',
+				type : 'POST',
+				data : {
+					json_string_name : jsonBuilderId,
+					action: 'delete'
+				},
+				success : function(data) {
+					 // Close the modal
+			        modal.style.display = 'none';
+
+					// Refresh the user list
+					loadJsonBuilderList();
+				},
+				error : function(xhr, status, error) {
+					// Handle the error response, if needed
+					console.log('Error deleting json builder settings: '
+							+ error);
+				}
+			});  
+	  };
+	  
+	// Handle the cancel button click
+	  var cancelButton = document.getElementById('cancel-button-delete');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	  };
+ }
+	
+	
 	function editJsonBuilder() {
-
-		var confirmation = confirm('Are you sure you want to edit this json builder settings?');
-		
-		if(confirmation){
-			var json_string_name = $('#json_string_name').val();
-			var json_interval = $('#json_interval').find(":selected").val();
-			var broker_type = $('#broker_type').find(":selected").val();
-			var broker_name = $('#broker_name').find(":selected").val();
-			var publish_topic = $('#publish_topic').val();
-			var publishing_status = $('#publishing_status').find(":selected").val();
-			var storeAndForward = $('#storeAndForward').find(":selected").val();
-			 json_string_text = $('#json_string_validate').val();
-
-			$
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  var json_string_name = $('#json_string_name').val();
+				var json_interval = $('#json_interval').find(":selected").val();
+				var broker_type = $('#broker_type').find(":selected").val();
+				var broker_name = $('#broker_name').find(":selected").val();
+				var publish_topic = $('#publish_topic').val();
+				var publishing_status = $('#publishing_status').find(":selected").val();
+				var storeAndForward = $('#storeAndForward').find(":selected").val();
+				 json_string_text = $('#json_string_validate').val();
+				 
+				 $
 					.ajax({
 						url : 'jsonBuilderServlet',
 						type : 'POST',
@@ -250,8 +419,9 @@ var json_string_text;
 							action: 'update'
 						},
 						success : function(data) {
-							// Display the registration status message
-							alert(data.message);
+							// Close the modal
+					        modal.style.display = 'none';
+							
 							loadJsonBuilderList();
 
 							// Clear form fields
@@ -275,11 +445,18 @@ var json_string_text;
 									+ error);
 						}
 					});
-
-			$('#registerBtn').val('Add');
-		}
-		
+				 $('#registerBtn').val('Add');
+			  
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#registerBtn').val('Edit');
+		  };	
 	}
+	
 
 	// Function to handle form submission and add a new user
 	function addJsonBuilder() {
@@ -347,7 +524,7 @@ var json_string_text;
 			  json_string_text = json_string; // Assign the value here
 			  $('#json_string_validate').val(json_string_text)
 		  }else{
-			  alert('Check if JSON is valid or keys must duplicate!!')
+			  alert('Check if JSON is valid or duplicate keys must be present !!')
 			  
 			  $('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 		  }
@@ -389,13 +566,11 @@ var json_string_text;
 		    return false; // No duplicate keys found
 		}
 
-
-	
 	function validateSoreAndForward(storeAndForward) {
 		var storeAndForwardError = document
 				.getElementById("storeAndForwardError");
 
-		if (storeAndForward == 'Select Store and Forward') {
+		if (storeAndForward == 'Select store and forward') {
 
 			storeAndForwardError.textContent = "Please select store and forward";
 			return false;
@@ -421,7 +596,7 @@ var json_string_text;
 	function validateJSONInterval(jsonInterval) {
 		var jsonIntervalError = document.getElementById("jsonIntervalError");
 
-		if (jsonInterval == 'Select JSON Interval') {
+		if (jsonInterval == 'Select JSON interval') {
 
 			jsonIntervalError.textContent = "Please select json interval";
 			return false;
@@ -434,7 +609,7 @@ var json_string_text;
 	function validateBrokerType(broker_type) {
 		var brokerTypeError = document.getElementById("brokerTypeError");
 
-		if (broker_type == 'Select Broker Type') {
+		if (broker_type == 'Select broker type') {
 
 			brokerTypeError.textContent = "Please select broker type";
 			return false;
@@ -448,7 +623,7 @@ var json_string_text;
 		var brokerIPAddressError = document
 				.getElementById("brokerIPAddressError");
 
-		if (broker_name == 'Select Broker IP Address') {
+		if (broker_name == 'Select broker IP address') {
 
 			brokerIPAddressError.textContent = "Please select broker ip address";
 			return false;
@@ -458,8 +633,6 @@ var json_string_text;
 		}
 	}
 
-	
-	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
@@ -495,8 +668,6 @@ var json_string_text;
 
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-							var confirmation = confirm('You do not have enough privileges for role VIEWER');
-
 							$("#actions").hide();
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
@@ -515,26 +686,15 @@ var json_string_text;
 								.submit(
 										function(event) {
 											event.preventDefault();
-											var buttonText = $('#registerBtn')
-													.val();
+											var buttonText = $('#registerBtn').val();
 
-											var publishingStatus = $(
-													'#publishing_status').find(
-													":selected").val();
-											var storeAndForward = $(
-													'#storeAndForward').find(
-													":selected").val();
-											var json_interval = $(
-													'#json_interval').find(
-													":selected").val();
-											var broker_type = $('#broker_type')
-													.find(":selected").val();
-											var broker_name = $('#broker_name')
-													.find(":selected").val();
-											var json_string_name = $(
-													"#json_string_name").val();
-											var publish_topic = $(
-													"#publish_topic").val();
+											var publishingStatus = $('#publishing_status').find(":selected").val();
+											var storeAndForward = $('#storeAndForward').find(":selected").val();
+											var json_interval = $('#json_interval').find(":selected").val();
+											var broker_type = $('#broker_type').find(":selected").val();
+											var broker_name = $('#broker_name').find(":selected").val();
+											var json_string_name = $("#json_string_name").val();
+											var publish_topic = $("#publish_topic").val();
 
 											if (!validatePublishingStatus(publishingStatus)) {
 												publishingStatusError.textContent = "Please select publishing status";
@@ -573,7 +733,7 @@ var json_string_text;
 												json_string_name_error.textContent = "";
 											}
 
-											alert(json_string_text)
+										//	alert(json_string_text)
 											if (json_string_text) {
 												if (buttonText == 'Add') {
 													addJsonBuilder();
@@ -586,26 +746,18 @@ var json_string_text;
 
 										});
 
-						$('#clearBtn')
-								.click(
-										function() {
+						$('#clearBtn').click(function() {
 											$('#json_string_name').val('');
-											$('#json_interval').val(
-													'Select JSON Interval');
-											$('#broker_type').val(
-													'Select Broker Type');
-											$('#broker_name').val(
-													'Select Broker IP Address');
+											$("#json_string_name").prop("disabled", false);
+											$('#json_interval').val('Select JSON Interval');
+											$('#broker_type').val('Select Broker Type');
+											$('#broker_name').val('Select Broker IP Address');
 											$('#publish_topic').val('');
-											$('#publishing_status').val(
-													'Enable');
-											$('#storeAndForward').val(
-													'Select Store and Forward');
-											$('#json_string_text')
-													.val(
-															'{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
+											$('#publishing_status').val('Enable');
+											$('#storeAndForward').val('Select Store and Forward');
+											$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 											$('#json_string_validate').val('');
-
+											$('#registerBtn').val('Add');
 										});
 
 					});
@@ -630,7 +782,7 @@ var json_string_text;
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="json_string_name" name="json_string_name"
-							placeholder="JSON String Name" required style="height: 17px;"
+							placeholder="JSON string name" required style="height: 17px;"
 							maxlength="31" />
 						<p id="json_string_name_error" style="color: red;"></p>
 
@@ -639,8 +791,8 @@ var json_string_text;
 					<div class="col-75-2" style="width: 10%;">
 						<select class="json-interval-select" id="json_interval"
 							name="json_interval" style="height: 35px;" required>
-							<option value="Select JSON Interval">Select JSON
-								Interval</option>
+							<option value="Select JSON interval">Select JSON
+								interval</option>
 							<option value="30 sec">30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
@@ -657,7 +809,7 @@ var json_string_text;
 					<div class="col-75-3" style="width: 15%;">
 						<select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px;" required>
-							<option value="Select Broker Type">Select Broker Type</option>
+							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
 						</select> <span id="brokerTypeError" style="color: red;"></span>
@@ -666,14 +818,14 @@ var json_string_text;
 					<div class="col-75-4" style="width: 15%;">
 						<select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;" required>
-							<option value="Select Broker IP Address">Select Broker
-								IP Address</option>
+							<option value="Select Broker IP Address">Select broker
+								IP address</option>
 						</select> <span id="brokerIPAddressError" style="color: red;"></span>
 					</div>
 
 					<div class="col-75-5" style="width: 15%;">
 						<input type="text" id="publish_topic" name="publish_topic"
-							placeholder="Publish Topic" required style="height: 17px;"
+							placeholder="Publish topic" required style="height: 17px;"
 							maxlength="31">
 						<p id="publish_topic_error" style="color: red;"></p>
 					</div>
@@ -691,10 +843,10 @@ var json_string_text;
 					<div class="col-75-7" style="width: 12%;">
 						<select class="textBox" id="storeAndForward"
 							name="storeAndForward" style="height: 35px;" required>
-							<option value="Select Store and Forward">Select Store
-								and Forward</option>
-							<option value="enable">Enable</option>
-							<option value="disable">Disable</option>
+							<option value="Select store and forward">Select store
+								and forward</option>
+							<option value="Enable">Enable</option>
+							<option value="Disable">Disable</option>
 						</select> <span id="storeAndForwardError" style="color: red;"></span>
 					</div>
 
@@ -735,6 +887,22 @@ var json_string_text;
 
 			</form>
 		</div>
+		
+		<div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
+				  <p>Are you sure you want to delete this json builder setting?</p>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this json builder setting?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
 
 		<h3>JSON BUILDER SETTINGS LIST</h3>
 		<hr>
@@ -742,14 +910,14 @@ var json_string_text;
 			<table id="jsonBuilderListTable">
 				<thead>
 					<tr>
-						<th>JSON String Name</th>
-						<th>JSON Interval</th>
-						<th>Broker Type</th>
-						<th>Broker IP Address</th>
-						<th>Publish Topic Name</th>
-						<th>Publishing Status</th>
-						<th>Store And Forward</th>
-						<th>JSON String</th>
+						<th>JSON string name</th>
+						<th>JSON interval</th>
+						<th>Broker type</th>
+						<th>Broker IP address</th>
+						<th>Publish topic name</th>
+						<th>Publishing status</th>
+						<th>Store and forward</th>
+						<th>JSON string</th>
 						<th id="actions">Actions</th>
 					</tr>
 				</thead>

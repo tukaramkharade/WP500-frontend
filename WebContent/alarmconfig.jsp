@@ -391,7 +391,6 @@ var roleValue;
     	  
     	  if(roleValue == 'VIEWER' == roleValue == 'Viewer'){
     		  
-    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
     		  $("#actions").hide();
     		  $('#addBtn').prop('disabled', true);
     		  $('#clearBtn').prop('disabled', true); 
@@ -665,14 +664,15 @@ function addAlarmConfig() {
 							<p id="assetid_error" style="color: red;"></p>
 					</div>
 					
-					<div class="col-75-3" style="width: 15%;">
-						<select class="textBox" id="broker_type" name="broker_type"
-							style="height: 35px">
+					  <div class="col-75-3" style="width: 15%;">
+						<select class="textBox" id="broker_type" name="broker_type" style="height: 35px">
 							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
-						</select> <span id="brokerTypeError" style="color: red;"></span>
-					</div>
+						</select> 
+						<span id="brokerTypeError" style="color: red;"></span>
+					</div>  
+					
 					
 					<div class="col-75-4" style="width: 15%;">
 						<select class="textBox" id="broker_name" name="broker_name"

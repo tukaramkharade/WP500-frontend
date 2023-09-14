@@ -385,7 +385,6 @@ roleValue = '<%=roleValue%>';
 	
 	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-		var confirmation = confirm('You do not have enough privileges for role VIEWER');
 		$('#addBtn').prop('disabled', true);
 		$('#clearBtn').prop('disabled', true);
 		$('#delBtn').prop('disabled', true);
