@@ -81,6 +81,9 @@ function addSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
+	if (from_email_id && !validateEmails(from_email_id)) {
+        return; // Exit the function if email_cc is not blank and is invalid
+    }
 	// Check validation for email_cc if it is not blank
     if (email_cc && !validateEmails(email_cc)) {
         return; // Exit the function if email_cc is not blank and is invalid
@@ -166,6 +169,9 @@ function editSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
+	if (from_email_id && !validateEmails(from_email_id)) {
+        return; // Exit the function if email_cc is not blank and is invalid
+    }
 	// Check validation for email_cc if it is not blank
     if (email_cc && !validateEmails(email_cc)) {
         return; // Exit the function if email_cc is not blank and is invalid
@@ -237,6 +243,11 @@ function editSMTPSettings() {
 	$('#addBtn').val('Add');
 }
 function validatePortLength(port) {
+    // Check if port is a number
+    if (isNaN(port)) {
+        alert('Port must be a number.');
+        return false;
+    }
     if (port.length > 5) {
         alert('Port must not exceed 5 digits in length.');
         return false;
@@ -252,7 +263,8 @@ function validateEmails(emails) {
     var emailArray1 = emails.split(',').map(function (email) {
         return email.trim(); // Remove leading/trailing spaces
     });
-	
+    console.log("emailArray:", emailArray + " "+emailArray.length);
+    console.log("emailArray1:", emailArray1 + " "+emailArray1.length);
     if (emails.includes(' ')) {
         alert('Space is not allowed between email addresses: ' + emails);
         return false; // Space is not allowed between email addresses
@@ -261,14 +273,14 @@ function validateEmails(emails) {
     
     for (var i = 0; i < emailArray1.length; i++) {
         if (!isValidEmail(emailArray1[i])) {
-        	if (!emails.includes(',') && !emailArray.length > 1) {
+        	if (emails.includes(',') && !emailArray.length > 1) {
                 console.log("comma " + emailArray.length + " " + emails.length);
                 alert('Comma is required between email addresses:1' + emailArray1[i]);
                 return false; // Comma is required between multiple emails
             }
-        	else if(!emails.includes(',') && !isValidEmail(emailArray1[i])){
+        	else if(!emails.includes(',') && emails.includes('@')){
         		console.log("comma " + emailArray.length + " " + emails.length);
-                alert('Comma is required between email addresses and email address Invalid :2' + emailArray1[i]);
+                alert('Comma is required between email addresses:2' + emailArray1[i]);
                 return false; // Comma is required between multiple emails
         	}
         	alert('Invalid email address: ' + emailArray1[i]);
@@ -394,6 +406,7 @@ roleValue = '<%=roleValue%>';
 			$("#tls_port").val('');
 			$("#tls_auth").val('False');
 			$("#tls_enable").val('False');
+			$('#ssl_smtp_type').val('True');
 			
 			var isDisabled1 = $('#ssl_socket_factory_port').prop('disabled');
 			 
@@ -424,7 +437,9 @@ roleValue = '<%=roleValue%>';
 			
 			$("#ssl_socket_factory_port").val('');
 			$("#ssl_port").val('');
-			$("#ssl_smtp_type").val('True');
+			$('#ssl_smtp_type').val('False');
+			$("#tls_auth").val('True');
+			$("#tls_enable").val('True');
 			
 			var isDisabled1 = $('#tls_port').prop('disabled');
 			 
@@ -468,10 +483,13 @@ roleValue = '<%=roleValue%>';
 		$('#smtp_type').val('Select SMTP type');
 		$('#ssl_socket_factory_port').val('');
 		$('#ssl_port').val('');
-		$('#ssl_smtp_type').val('Select SSL SMTP type');
+		$('#ssl_smtp_type').val('True');
 		$('#tls_port').val('');
-		$('#tls_auth').val('Select TLS auth');
-		$('#tls_enable').val('Select TLS enable');
+		$('#tls_auth').val('True');
+		$('#tls_enable').val('True');
+		$('#to_email_id').val('');
+		$('#email_cc').val('');
+		$('#email_bcc').val('');
 	});
 	
 	$("#delBtn").click(function () {
@@ -547,7 +565,6 @@ roleValue = '<%=roleValue%>';
 					
 							
 				</div>
-				
 				<div class="row" style="display: flex; flex-content: space-between; margin-top: 15px;">
 						<div class="col-75-5" style="width: 27%;display:flex">
 							<div>
@@ -586,9 +603,9 @@ roleValue = '<%=roleValue%>';
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
 					
-					<div class="col-75-8" style="width: 25%;display:flex">
+					<div class="col-75-8" style="width: 27%;display:flex">
 						<div>
-								<label for="tls_port">TLS Port</label>
+								<label for="tls_port">TLS Port:</label>
 						</div>
 						<div>	
 							<input type="text" id="tls_port" name="tls_port"

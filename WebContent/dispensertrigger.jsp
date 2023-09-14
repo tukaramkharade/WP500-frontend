@@ -905,7 +905,7 @@ var roleValue;
 							$('#serial_number').val('');
 							$('#side').val('Select side');
 							$('#broker_name').val('Select broker IP address');
-							$('#trigger_tag').val('Seslect trigger tag');
+							$('#trigger_tag').val('Select trigger tag');
 							$('#trigger_value').val('Select trigger value');
 							$('#start_pressure').val('Select start pressure');
 							$('#end_pressure').val('Select end pressure');
