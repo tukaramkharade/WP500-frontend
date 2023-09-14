@@ -615,7 +615,6 @@ button {
 						
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-							var confirmation = confirm('You do not have enough privileges for role VIEWER');
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
 							

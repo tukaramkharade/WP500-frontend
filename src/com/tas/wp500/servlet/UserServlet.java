@@ -147,8 +147,6 @@ public class UserServlet extends HttpServlet {
 
 						json.put("username", username);
 
-						if (!username.equals("tasm2m_admin")) {
-
 							String respStr = client.sendMessage(json.toString());
 
 							System.out.println("res " + new JSONObject(respStr).getString("msg"));
@@ -167,27 +165,7 @@ public class UserServlet extends HttpServlet {
 							// Write the JSON object to the response
 							out.print(jsonObject.toString());
 							out.flush();
-						} else {
-
-							try {
-								JSONObject userObj = new JSONObject();
-								userObj.put("msg", "Cannot delete tasm2m_admin user !!");
-								userObj.put("status", "fail");
-
-								System.out.println(">>" + userObj);
-
-								// Set the response content type to JSON
-								resp.setContentType("application/json");
-
-								// Write the JSON data to the response
-								resp.getWriter().print(userObj.toString());
-
-							} catch (Exception e) {
-								e.printStackTrace();
-								logger.error("Error in deleting tasm2m user: " + e);
-
-							}
-						}
+						 
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -195,6 +173,47 @@ public class UserServlet extends HttpServlet {
 					}
 
 					break;
+					
+					
+				case "update_user_password":
+					username = request.getParameter("username");
+					password = request.getParameter("password");
+					
+					try{
+						
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "update_user_password");
+						json.put("user", check_username);
+						json.put("username", username);
+						json.put("password", password);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						resp.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = resp.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error in updating password: " + e);
+					}
+					break;
+				
 				}
 			}
 

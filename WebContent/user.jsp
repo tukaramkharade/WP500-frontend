@@ -69,6 +69,34 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
+.modal-edit-password {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit-password {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
 /* Style for buttons */
 button {
   margin: 5px;
@@ -96,6 +124,18 @@ button {
   background-color: #f44336;
   color: white;
 }
+
+#confirm-button-edit-password {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit-password {
+  background-color: #f44336;
+  color: white;
+}
+
+
 </style>
 <script>
 
@@ -157,9 +197,18 @@ var roleValue;
 																function() {
 																	deleteUser(user.username);
 																});
+												
+												var changePasswordButton = $(
+												'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
+												.text('Change password')
+												.click(
+														function() {
+															setUserForChangingPassword(user.username);													
+														});
 
 												actions.append(editButton);
 												actions.append(deleteButton);
+												actions.append(changePasswordButton);
 
 												row.append(actions);
 
@@ -189,6 +238,15 @@ var roleValue;
 						console.log('Error loading user data: ' + error);
 					}
 				});
+	}
+	
+	function setUserForChangingPassword(userId){
+		$('#username').val(userId);
+		$("#username").prop("disabled", true);
+		$("#first_name").prop("disabled", true);
+		$("#last_name").prop("disabled", true);
+		$("#role").prop("disabled", true);
+		$('#registerBtn').val('Edit Password');
 	}
 
 	function settUser(userId) {
@@ -392,8 +450,7 @@ var roleValue;
 						 modal.style.display = 'none';
 					}
 				});
-			  $('#registerBtn').val('Add');
-			  
+			  $('#registerBtn').val('Add');		  
 		  };
 
 		  var cancelButton = document.getElementById('cancel-button-edit');
@@ -403,7 +460,59 @@ var roleValue;
 		    $('#registerBtn').val('Edit');
 		  };		
 	} 
-	
+	 
+	 function editPassword() {
+		 var modal = document.getElementById('custom-modal-edit-password');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit-password');
+		  confirmButton.onclick = function () {
+			  
+			  var username = $('#username').val();
+			  var password = $('#password').val();
+			  
+			  $.ajax({
+					url : 'userServlet',
+					type : 'POST',
+					data : {
+						username : username,
+						password : password,
+						action: 'update_user_password'
+					},
+					success : function(data) {
+					
+						// Close the modal
+				        modal.style.display = 'none';
+						
+						loadUserList();
+
+						// Clear form fields
+					$('#username').val('');
+			    $('#password').val('');
+			    
+						$("#username").prop("disabled", false);
+						$("#first_name").prop("disabled", false);
+						$("#last_name").prop("disabled", false);
+						$("#role").prop("disabled", false);
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating password: ' + error);
+						 modal.style.display = 'none';
+					}
+				});
+			  $('#registerBtn').val('Add');
+				
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit-password');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#registerBtn').val('Edit Password');
+		  };
+		  
+	 }
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -437,11 +546,15 @@ var roleValue;
 			var lastname = $('#last_name').val();
 
 
-			if (!validateRole(role)) {
-				roleError.textContent = "Please select role";
-				return;
-			}
-			
+			 var isDisabledRole = $("#role").prop("disabled");
+			 
+			 if (!isDisabledRole) {
+				 if (!validateRole(role)) {
+						roleError.textContent = "Please select role";
+						return;
+					}
+			    }
+			 
 			if((user_name.length > 30)){
                 field_User_Error.textContent = "You can write upto 30 maximum characters."
                 	return;
@@ -481,8 +594,10 @@ var roleValue;
 							
 			if (buttonText == 'Add') {
 				addUser();
-			} else {
+			} else if(buttonText == 'Edit'){
 				editUser();
+			}else if(buttonText == 'Edit Password'){
+				editPassword();
 			}
 		});
 
@@ -492,8 +607,11 @@ var roleValue;
 			$('#password').val('');
 			$("#password").prop("disabled", false);
 			$('#first_name').val('');
+			$("#first_name").prop("disabled", false);
 		    $('#last_name').val('');
+		    $("#last_name").prop("disabled", false);
 		    $('#role').val('Select role');
+		    $("#role").prop("disabled", false);
 		    $('#registerBtn').val('Add');
 		});
 	});
@@ -564,7 +682,6 @@ var roleValue;
 							id="registerBtn" />
 					</div>
 					
-					
 				</form>
 			</div>
 			
@@ -581,6 +698,14 @@ var roleValue;
 				  <p>Are you sure you want to edit this user?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
+			   <div id="custom-modal-edit-password" class="modal-edit-password">
+				<div class="modal-content-edit-password">
+				  <p>Are you sure you want to edit the password?</p>
+				  <button id="confirm-button-edit-password">Yes</button>
+				  <button id="cancel-button-edit-password">No</button>
 				</div>
 			  </div>
 

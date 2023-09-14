@@ -402,8 +402,6 @@ var json = {};
 	       	  
 	      	 if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 	    		  
-	    		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
-	    		  
 	    		  $("#actions").hide(); 
 	    		  $('#addBtn').prop('disabled', true);
 	    		  $('#clearBtn').prop('disabled', true); 

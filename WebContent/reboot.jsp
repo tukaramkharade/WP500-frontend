@@ -73,8 +73,6 @@ var roleValue;
     	
     	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
   		  
-  		  var confirmation = confirm('You do not have enough privileges for role VIEWER');
-  		  
   		$('#reboot').prop('disabled', true);
   		  
   		  changeButtonColor(true);

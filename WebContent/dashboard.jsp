@@ -303,32 +303,38 @@ function countDetails(){
                 data: {
                     labels: labels,
                     datasets: [
-{
-    label: "High",
-    data: dataset1,
-    backgroundColor: "rgba(255, 0, 0, 1)",
-},
-{
-    label: "Medium",
-    data: dataset2,
-    backgroundColor: "rgba(255, 165, 0, 1)"
-},
-{
-    label: "Low",
-    data: dataset3,
-    backgroundColor: "rgba(0, 128, 0, 1)",
-},
+					{
+    					label: "High",
+    					data: dataset1,
+   						 backgroundColor: "rgba(255, 0, 0, 1)",
+					},
+					{
+   						 label: "Medium",
+    					 data: dataset2,
+   						 backgroundColor: "rgba(255, 165, 0, 1)"
+					},
+					{
+    					label: "Low",
+   						data: dataset3,
+    					backgroundColor: "rgba(0, 128, 0, 1)",
+					},
                     ],
                 },
                 options: {
                     scales: {
-                    	
-                    	 x: {
-                             beginAtZero: true,
-                         },
-                         
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Date', // Add the X-axis label here
+                            },
+                        },
                         y: {
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Threat Count Priority', // Add the Y-axis label here
+                            },
                         },
                     },
                 },
@@ -402,13 +408,19 @@ function countDetails(){
 	                },
 	                options: {
 	                    scales: {
-	                    	
-	                    	 x: {
-	                             beginAtZero: true,
-	                         },
-	                         
+	                        x: {
+	                            beginAtZero: true,
+	                            title: {
+	                                display: true,
+	                                text: 'Date', // Add the X-axis label here
+	                            },
+	                        },
 	                        y: {
 	                            beginAtZero: true,
+	                            title: {
+	                                display: true,
+	                                text: 'Threat Count Priority', // Add the Y-axis label here
+	                            },
 	                        },
 	                    },
 	                },
@@ -479,13 +491,19 @@ function updateBarChartYesterday(){
 	                },
 	                options: {
 	                    scales: {
-	                    	
-	                    	 x: {
-	                             beginAtZero: true,
-	                         },
-	                         
+	                        x: {
+	                            beginAtZero: true,
+	                            title: {
+	                                display: true,
+	                                text: 'Date', // Add the X-axis label here
+	                            },
+	                        },
 	                        y: {
 	                            beginAtZero: true,
+	                            title: {
+	                                display: true,
+	                                text: 'Threat Count Priority', // Add the Y-axis label here
+	                            },
 	                        },
 	                    },
 	                },
@@ -556,13 +574,19 @@ function updateBarChartWeek(){
                 },
                 options: {
                     scales: {
-                    	
-                    	 x: {
-                             beginAtZero: true,
-                         },
-                         
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Date', // Add the X-axis label here
+                            },
+                        },
                         y: {
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Threat Count Priority', // Add the Y-axis label here
+                            },
                         },
                     },
                 },
@@ -633,13 +657,19 @@ function updateBarChartMonth(){
                 },
                 options: {
                     scales: {
-                    	
-                    	 x: {
-                             beginAtZero: true,
-                         },
-                         
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Date', // Add the X-axis label here
+                            },
+                        },
                         y: {
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Threat Count Priority', // Add the Y-axis label here
+                            },
                         },
                     },
                 },
@@ -835,12 +865,22 @@ $(document).ready(function() {
 		<input type="hidden" id="action" name="action" value="">
 		
 		<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: -15px;">
+					style="display: flex; justify-content: right; margin-top: -15px;">
+		<label class="toggle"> <input id="toggle_lan0" name="toggle_lan0" onchange="toggle0InputFields()"
+								class="toggle-input" type="checkbox" >
+								 <span
+								class="toggle-label" data-off="IDS" data-on="IPS"></span> 
+								<span
+								class="toggle-handle"></span>
+						</label>
+		</div>
+		
+		<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 15px;">
 						<input type="button" value="Today" id="today"/> 
 						<input style="margin-left: 5px" type="button" value="Yesterday" id="yesterday" /> 
 						<input style="margin-left: 5px" type="button" value="Week" id="week" />
 						<input style="margin-left: 5px" type="button" value="Month" id="month" />
-						<input style="margin-left: 25px; width: 13%;" type="button" value="Custom" id="custom" />
 						<label style="margin-left: 5px;">From</label><input style="margin-left: 3px" type="datetime-local" id="start_time" name="start_time" />
 						<label style="margin-left: 5px;">To</label><input style="margin-left: 3px" type="datetime-local" id="end_time" name="end_time" />
 						<input style="margin-left: 15px" type="button" value="Apply" id="apply" />					

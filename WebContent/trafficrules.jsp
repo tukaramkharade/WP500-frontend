@@ -16,7 +16,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
-.modal {
+.modal-delete {
   display: none;
   position: fixed;
   z-index: 1;
@@ -31,7 +31,7 @@
   margin: 0;
 }
 
-.modal-content {
+.modal-content-delete {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -44,6 +44,91 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-delete-gen {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-delete-gen {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit-gen {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit-gen {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+
 /* Style for buttons */
 button {
   margin: 5px;
@@ -52,15 +137,46 @@ button {
   cursor: pointer;
 }
 
-#confirm-button {
+#confirm-button-delete {
   background-color: #4caf50;
   color: white;
 }
 
-#cancel-button {
+#cancel-button-delete {
   background-color: #f44336;
   color: white;
 }
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-delete-gen {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-delete-gen {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit-gen {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit-gen {
+  background-color: #f44336;
+  color: white;
+}
+
 </style>
 <script>
 
@@ -210,42 +326,14 @@ var roleValue;
 
 		$("#registerBtn").val("Add");
 	}
-
-	function deleteTrafficRules(trafficRulesId) {
-		// Perform necessary actions to delete the user
-		// For example, make an AJAX call to a delete servlet
-
-		var confirmation = confirm("Are you sure you want to delete this traffic rules?");
-		if (confirmation) {
-			$.ajax({
-				url : "trafficRulesServlet",
-				type : "POST",
-				data : {
-					name : trafficRulesId,
-					operation_action: 'delete'
-				},
-				success : function(data) {
-					// Display the registration status message
-					alert(data.message);
-
-					// Refresh the user list
-					loadTrafficRulesList();
-				},
-				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log("Error deleting traffic rules: " + error);
-				},
-			});
-		}
-	}
 	
-	function CheckPopup(trafficRulesId) {
+	function deleteTrafficRules(trafficRulesId) {
 		  // Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal');
+		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
 
 		  // Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button');
+		  var confirmButton = document.getElementById('confirm-button-delete');
 		  confirmButton.onclick = function () {
 		    // Make the AJAX call to delete the user
 		    $.ajax({
@@ -256,11 +344,8 @@ var roleValue;
 					operation_action: 'delete'
 		      },
 		      success: function (data) {
-		        // Display the registration status message
-		        alert(data.message);
-
-		        // Close the modal
-		        modal.style.display = 'none';
+		         // Close the modal
+		        modal.style.display = 'none';		        
 
 		        // Refresh the user list
 		        loadTrafficRulesList();
@@ -275,7 +360,7 @@ var roleValue;
 		  };
 
 		  // Handle the cancel button click
-		  var cancelButton = document.getElementById('cancel-button');
+		  var cancelButton = document.getElementById('cancel-button-delete');
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
@@ -300,72 +385,82 @@ var roleValue;
 			},
 		});
 	}
-
+	
 	function editTrafficRules() {
-
-		var confirmation = confirm('Are you sure you want to edit this traffic rule?');
-		
-		if(confirmation){
-			var name = $('#name').val();
-			var iface = $('#iface').find(":selected").val();
-			var portNumber = $('#portNumber').val();
-			var macAddress = $('#macAddress').val();
-			var protocol = $('#protocol').find(":selected").val();
-			var ip_addr = $('#ip_addr').val();
-			var type = $('#type').find(":selected").val();
-			var action = $('#action').find(":selected").val();
-			
-			if(type == 'ip'){
-				alert(type)
-				$("#macAddress").prop("disabled", true);
-			}else if(type == 'mac'){
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  var name = $('#name').val();
+				var iface = $('#iface').find(":selected").val();
+				var portNumber = $('#portNumber').val();
+				var macAddress = $('#macAddress').val();
+				var protocol = $('#protocol').find(":selected").val();
+				var ip_addr = $('#ip_addr').val();
+				var type = $('#type').find(":selected").val();
+				var action = $('#action').find(":selected").val();
 				
-				$("#ip_addr").prop("disabled", true);
-			}
-			
-			$.ajax({
-				url : 'trafficRulesServlet',
-				type : 'POST',
-				data : {
-					name : name,
-					iface : iface,
-					portNumber : portNumber,
-					macAddress : macAddress,
-					protocol : protocol,
-					ip_addr : ip_addr,
-					type : type,
-					action : action,
-					operation_action: 'update'
-				},
-				success : function(data) {
-					// Display the registration status message
-
-					alert(data.message);
-					loadTrafficRulesList();
-
-					// Clear form fields
-					$('#name').val('');
-					$('#iface').val('eth0');
-					$('#portNumber').val('');
-					$('#macAddress').val('');
-					$('#protocol').val('tcp');
-					$('#ip_addr').val('');
-					$('#type').val('Select type');
-					$('#action').val('ACCEPT');
-
-					$("#name").prop("disabled", false);
-					$('#ip_addr').prop('disabled', false);
-					$('#macAddress').prop('disabled', false);
-				},
-				error : function(xhr, status, error) {
-					console.log('Error updating traffic rule: ' + error);
+				if(type == 'ip'){
+					
+					$("#macAddress").prop("disabled", true);
+				}else if(type == 'mac'){
+					
+					$("#ip_addr").prop("disabled", true);
 				}
-			});
+				
+				$.ajax({
+					url : 'trafficRulesServlet',
+					type : 'POST',
+					data : {
+						name : name,
+						iface : iface,
+						portNumber : portNumber,
+						macAddress : macAddress,
+						protocol : protocol,
+						ip_addr : ip_addr,
+						type : type,
+						action : action,
+						operation_action: 'update'
+					},
+					success : function(data) {
+						// Close the modal
+				        modal.style.display = 'none';
+						
+						loadTrafficRulesList();
 
-			$('#registerBtn').val('Add');
-		}
+						// Clear form fields
+						$('#name').val('');
+						$('#iface').val('eth0');
+						$('#portNumber').val('');
+						$('#macAddress').val('');
+						$('#protocol').val('tcp');
+						$('#ip_addr').val('');
+						$('#type').val('Select type');
+						$('#action').val('ACCEPT');
 
+						$("#name").prop("disabled", false);
+						$('#ip_addr').prop('disabled', false);
+						$('#macAddress').prop('disabled', false);
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating traffic rule: ' + error);
+					}
+				});
+				$('#registerBtn').val('Add');
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#registerBtn').val('Edit');
+		  };
 	}
+	
 
 	function setName(trafficRulesId) {
 
@@ -488,44 +583,59 @@ var roleValue;
 	}
 
 	function editGeneralSettings() {
-		var input = $('#input').val();
-		var output = $('#output').val();
-		var forward = $('#forward').val();
-		var rule_drop = $('#rule_drop').val();
-		
-		$.ajax({
-			url : 'generalSettingsServlet',
-			type : 'POST',
-			data : {
-				input : input,
-				output : output,
-				forward : forward,
-				rule_drop : rule_drop,
-				operation_action: 'update'
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit-gen');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit-gen');
+		  confirmButton.onclick = function () {
+			  
+			  var input = $('#input').val();
+				var output = $('#output').val();
+				var forward = $('#forward').val();
+				var rule_drop = $('#rule_drop').val();
+				
+				$.ajax({
+					url : 'generalSettingsServlet',
+					type : 'POST',
+					data : {
+						input : input,
+						output : output,
+						forward : forward,
+						rule_drop : rule_drop,
+						operation_action: 'update'
 
-			},
-			success : function(data) {
-				// Display the registration status message
-				alert(data.message);
-				getGeneralSettings()
+					},
+					success : function(data) {
+						// Close the modal
+				        modal.style.display = 'none';
+						getGeneralSettings()
 
-				// Clear form fields
+						// Clear form fields
 
-				$('#input').val('');
-				$('#output').val('');
-				$('#forward').val('');
-				$('#rule_drop').val('');
+						$('#input').val('');
+						$('#output').val('');
+						$('#forward').val('');
+						$('#rule_drop').val('');
 
-			},
-			error : function(xhr, status, error) {
-				console.log('Error editing general setting: ' + error);
-			}
-		});
-
-		$('#registerBtnGenSettings').val('Add');
+					},
+					error : function(xhr, status, error) {
+						console.log('Error editing general setting: ' + error);
+					}
+				});
+				$('#registerBtnGenSettings').val('Add');		
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit-gen');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#registerBtnGenSettings').val('Edit');
+		  };
 	}
 
-	function deleteGeneralSettings() {
+	/* function deleteGeneralSettings() {
 
 		var input = $('#input').val();
 		var output = $('#output').val();
@@ -564,7 +674,62 @@ var roleValue;
 		$('#registerBtnGenSettings').val('Add');
 
 	}
+ */
+ 
+ function deleteGeneralSettings() {
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-delete-gen');
+	  modal.style.display = 'block';
 
+	  // Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-delete-gen');
+	  confirmButton.onclick = function () {
+		  
+		  var input = $('#input').val();
+			var output = $('#output').val();
+			var forward = $('#forward').val();
+			var rule_drop = $('#rule_drop').val();
+			
+			$.ajax({
+				url : 'generalSettingsServlet',
+				type : 'POST',
+				data : {
+					input : input,
+					output : output,
+					forward : forward,
+					rule_drop : rule_drop,
+					operation_action: 'delete'
+
+				},
+				success : function(data) {
+					// Display the registration status message
+					alert(data.message);
+					getGeneralSettings()
+
+					// Clear form fields
+
+					$('#input').val('');
+					$('#output').val('');
+					$('#forward').val('');
+					$('#rule_drop').val('');
+
+				},
+				error : function(xhr, status, error) {
+					console.log('Error deleting general setting: ' + error);
+				}
+			});
+		  
+			$('#registerBtnGenSettings').val('Add');
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-delete-gen');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	    $('#registerBtnGenSettings').val('Edit');
+	  };
+ }
+	
 	function applyGeneralSettings() {
 		var input = $('#input').val();
 		var output = $('#output').val();
@@ -662,8 +827,6 @@ var roleValue;
 		
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-			var confirmation = confirm('You do not have enough privileges for role VIEWER');
-			
 			 $("#actions").hide();
 			$('#registerBtn').prop('disabled', true);
 			$('#clearBtn').prop('disabled', true);
@@ -875,6 +1038,23 @@ var roleValue;
 
 			</form>
 		</div>
+		
+		<div id="custom-modal-delete-gen" class="modal-delete-gen">
+				<div class="modal-content-delete-gen">
+				  <p>Are you sure you want to delete this general setting?</p>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit-gen" class="modal-edit-gen">
+				<div class="modal-content-edit-gen">
+				  <p>Are you sure you want to edit this general setting?</p>
+				  <button id="confirm-button-edit-gen">Yes</button>
+				  <button id="cancel-button-edit-gen">No</button>
+				</div>
+			  </div>
+			  
 
 		<h3>TRAFFIC RULES</h3>
 		<hr>
@@ -963,11 +1143,19 @@ var roleValue;
 			</form>
 		</div>
 		
-		<div id="custom-modal" class="modal">
-				<div class="modal-content">
+		<div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
 				  <p>Are you sure you want to delete this traffic rule?</p>
-				  <button id="confirm-button">Yes</button>
-				  <button id="cancel-button">No</button>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this traffic rule?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
 				</div>
 			  </div>
 
