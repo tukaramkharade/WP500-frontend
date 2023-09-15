@@ -310,6 +310,7 @@ function checkDateField() {
         alert(errorMessage);
     }
 }
+
 function getCurrentTimeInIndia() {
     const date = new Date();
     var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes
@@ -363,7 +364,7 @@ $(document).ready(function() {
 			
 			
 			<div style="width: 20%;">
-				<label for="log_file">Choose a date:</label>
+				<label for="choose_date">Choose a date:</label>
 			</div>
 			
 			<div style="width: 25%; margin-left: -11%;margin-top: 5px;">
@@ -371,7 +372,7 @@ $(document).ready(function() {
 			</div>
 			
 			<div style="width: 10%; margin-left: -10%;">
-				<label for="log_file">  to  </label>
+				<label for="to">  to  </label>
 			</div>
 			
 			<div style="width: 25%; margin-left: -8%;margin-top: 5px;">

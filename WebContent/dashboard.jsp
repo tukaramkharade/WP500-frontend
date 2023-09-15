@@ -84,7 +84,7 @@ margin-right:30px;
 
 .orange-box {
     display: inline-block;
-    width: 40px;
+    width: 43px;
     height: 20px;
     background-color: orange;
     color: white;
@@ -134,6 +134,21 @@ height:460px;
 font-size: 17px;
 }
 
+.alert-high{
+margin-top: 18px;
+margin-left: -325px;
+}
+
+.alert-medium{
+margin-top: 18px;
+margin-left: -325px;
+}
+
+.alert-low{
+margin-top: 18px;
+margin-left: -325px;
+}
+
 
 </style>
 <script>
@@ -156,13 +171,13 @@ function latestActiveThreats(){
                 
                 if(item.priority == '1'){	
                 	 priority = 'high';
-                	listItem.html(item.timeStamp + " " + item.alertMessage + "  " + item.threat_id + " <span class='red-box'>" + priority + "</span>");
+                	listItem.html("<span class='time-high'>" +item.timeStamp + "</span>" + "<span class='alert-high'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='red-box'>" + priority + "</span>");
 				}else if(item.priority == '2'){
 					 priority = 'medium';
-                	listItem.html(item.timeStamp + " " + item.alertMessage + "  " + item.threat_id + "  <span class='orange-box'>" + priority + "</span>");
+                	listItem.html("<span class='time-medium'>" +item.timeStamp + "</span>" + "<span class='alert-medium'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='orange-box'>" + priority + "</span>");
 				}else if(item.priority == '3'){
 					 priority = 'low';
-                	listItem.html(item.timeStamp + " "  + item.alertMessage + "  " + item.threat_id + "  <span class='yellow-box'>" + priority + "</span>");
+                	listItem.html("<span class='time-low'>" +item.timeStamp + "</span>"  + "<span class='alert-low'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='yellow-box'>" + priority + "</span>");
 				} 
             
                 dataList.append(listItem);
@@ -188,9 +203,8 @@ function countDetails(){
 			} else {
     			var status = 'Stop';
     			$("#status").html("System Status: <span class='red-text'>" + status + "</span>");
-}
+	}
 		
-			
 			$("#last_update").html("Last Update: <span class='overviewText'>" + data.last_update + "</span>");
 			$("#active_threat_count").html("Active threat count: <span class='overviewText'>" + data.active_threats_count + "</span>");
 			$("#total_threat").html("Total threat: <span class='overviewText'>" + data.total_count + "</span>");
@@ -806,9 +820,57 @@ function updateBarChartMonth(){
      });	
 }
  
+ function getCurrentTimeInIndia() {
+	    const date = new Date();
+	    var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes
+	    var offset = ISTOffset * 60 * 1000;
+	    var ISTTime = new Date(date.getTime() + offset);
+
+	    // Subtract 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds) from ISTTime
+	    var ISTTime24HoursAgo = new Date(ISTTime.getTime() - (24 * 60 * 60 * 1000));
+	 
+	    // Format both current ISTTime and ISTTime24HoursAgo as strings in "yyyy-MM-ddTHH:mm" format
+	    var formattedCurrentTime = ISTTime.toISOString().slice(0, 16);
+	    var formattedTime24HoursAgo = ISTTime24HoursAgo.toISOString().slice(0, 16);
+
+	    // Set the current IST time as the value of the "enddatetime" input field
+	    document.getElementById('end_time').value = formattedCurrentTime;
+
+	    // Set the IST time 24 hours ago as the value of the "startdatetime" input field
+	    document.getElementById('start_time').value = formattedTime24HoursAgo;
+
+	    // Debugging: Log both calculated times to the console
+	    console.log('Current IST time:', formattedCurrentTime);
+	    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
+	}
+ 
+ function snortDetails(){
+	 var snort_type = $('#snort_type').find(":selected").val();
+	 
+	 $.ajax({
+			url : 'dashboard',
+			type : 'POST',
+			data : {
+				snort_type : snort_type,
+				action: 'snort_type'
+			},
+			success : function(data) {
+				// Display the registration status message
+				alert(data.message);
+
+			},
+			error : function(xhr, status, error) {
+				console.log('Error updating snort details: ' + error);
+			}
+		});
+	 
+ }
+ 
 $(document).ready(function() {
 	latestActiveThreats();
 	countDetails();
+	getCurrentTimeInIndia();
+	setInterval(getCurrentTimeInIndia, 60000);
 	
 	$('#apply').click(function() {
 		threatCountsLineChart();
@@ -837,9 +899,11 @@ $(document).ready(function() {
 	
 	
 	$('#show_all').click(function() {
-		
 		window.location.href = 'activethreats.jsp';
-		
+	});
+	
+	$('#snort_type').change(function() {
+		snortDetails();
 	});
 		
 });
@@ -864,16 +928,6 @@ $(document).ready(function() {
 		
 		<input type="hidden" id="action" name="action" value="">
 		
-		<div class="row"
-					style="display: flex; justify-content: right; margin-top: -15px;">
-		<label class="toggle"> <input id="toggle_lan0" name="toggle_lan0" onchange="toggle0InputFields()"
-								class="toggle-input" type="checkbox" >
-								 <span
-								class="toggle-label" data-off="IDS" data-on="IPS"></span> 
-								<span
-								class="toggle-handle"></span>
-						</label>
-		</div>
 		
 		<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 15px;">
@@ -883,7 +937,19 @@ $(document).ready(function() {
 						<input style="margin-left: 5px" type="button" value="Month" id="month" />
 						<label style="margin-left: 5px;">From</label><input style="margin-left: 3px" type="datetime-local" id="start_time" name="start_time" />
 						<label style="margin-left: 5px;">To</label><input style="margin-left: 3px" type="datetime-local" id="end_time" name="end_time" />
-						<input style="margin-left: 15px" type="button" value="Apply" id="apply" />					
+						<input style="margin-left: 15px" type="button" value="Apply" id="apply" />						
+						
+						 <div style="display: flex; justify-content: flex-end; width: 100%;">
+    						<div style="text-align: right; width: 15%;">
+        						<select class="snort_type" id="snort_type" name="snort_type" style="height: 33px; ">
+           							<option value="Select snort type">Select snort type</option>
+            						<option value="IDS">IDS</option>
+            						<option value="IPS">IPS</option>
+        						</select>
+    						</div>
+    						<span style="color: red; font-size: 12px;" id="snortError"></span>
+						</div> 
+										
 				</div>
 				
 				<div class="row"
@@ -908,10 +974,8 @@ $(document).ready(function() {
     					<div style="display: flex; justify-content: right;margin-right:10px;margin-top:1px;">
     					<input type="button" value="Show all" id="show_all" /> 
     					
-    					</div>
-						
-					</div>
-					
+    					</div>			
+					</div>					
 				</div>
 				
 				<div class="row"

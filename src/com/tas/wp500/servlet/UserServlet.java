@@ -210,10 +210,51 @@ public class UserServlet extends HttpServlet {
 						
 					}catch(Exception e){
 						e.printStackTrace();
-						logger.error("Error in updating password: " + e);
+						logger.error("Error in changing password: " + e);
 					}
 					break;
 				
+				case "update_old_password": 
+					
+					username = request.getParameter("username");
+					String old_password = request.getParameter("old_password");
+					String new_password = request.getParameter("new_parameter");
+					
+					try{
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+						
+						json.put("operation", "update_old_password");
+						json.put("user", check_username);
+						json.put("username", username);
+						json.put("old_password", old_password);
+						json.put("new_password", new_password);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						resp.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = resp.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+						
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error in updating old password to new password: "+e);
+					}
+					
 				}
 			}
 

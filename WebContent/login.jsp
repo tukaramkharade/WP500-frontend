@@ -27,7 +27,11 @@
                 success: function (data) {
                     console.log("Received data:", data.status);
 
-                    if (data.status == 'fail') {
+                    if(data.firstLogin === "firstLogin"){
+                    	//alert("Welcome! This is your first login.");
+                    	 window.location.href = 'changeoldpassword.jsp';
+                    }
+                    else if (data.status == 'fail') {
                         //alert(data.msg);
                         $('#message').html(data.msg);
                     } else if (data.status == 'success') {
@@ -77,7 +81,7 @@
         .container input[type="text"],
         .container input[type="password"] {
             width: 100%;
-            padding: 5px;
+            padding: 5px 0;
             margin-bottom: 10px;
         }
         
@@ -95,12 +99,12 @@
         
         <p style="font-size: medium;"><b>WPConnex Web Configuration</b></p>
         <label for="username" style="float: left;">Username:</label>
-        <input style="padding: 5px 5px;" required type="text" id="username" name="username" ><br>
+        <input required type="text" id="username" name="username" ><br>
         
         <label for="password" style="float: left;">Password:</label>
-        <input style="padding: 5px 5px;" required type="password" id="password" name="password" onkeydown="if (event.key === 'Enter') document.getElementById('login').click();"><br><br>
+        <input required type="password" id="password" name="password" onkeydown="if (event.key === 'Enter') document.getElementById('login').click();"><br><br>
       
-        <input style="padding: 5px 140px; font-size: medium" type="button" value="Login" id="login" onclick="checkLogin();">
+        <input font-size: medium" type="submit" value="Login" id="login" onclick="checkLogin();">
         
         <!-- Add this div to display the message -->
         <div id="message"></div>
