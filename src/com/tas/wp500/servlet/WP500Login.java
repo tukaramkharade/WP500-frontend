@@ -24,6 +24,9 @@ public class WP500Login extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+        boolean isFirstLogin = (session.getAttribute("firstLogin") == null);
+
+        
         session.setMaxInactiveInterval(1800);
 
         String username = request.getParameter("username");
@@ -46,7 +49,11 @@ public class WP500Login extends HttpServlet {
             JSONObject jsonResponse = new JSONObject(respStr);
             String status = jsonResponse.getString("status");
             
-            if (status.equals("success")) {
+            if (isFirstLogin) {
+            	// Set a session attribute to mark this as the first login.
+                session.setAttribute("firstLogin", true);
+                userObj.put("firstLogin", "firstLogin");
+            }else if(status.equals("success")) {
                 String role = jsonResponse.getString("role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);

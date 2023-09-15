@@ -314,37 +314,6 @@ var json_string_text;
 
 		$('#json_string_text').val(jsonBuilderId);
 	}
-
-	
-	/* function deleteJsonBuilder(jsonBuilderId) {
-		// Perform necessary actions to delete the user
-		// For example, make an AJAX call to a delete servlet
-
-		var confirmation = confirm('Are you sure you want to delete this json builder settings?');
-		if (confirmation) {
-			$.ajax({
-				url : 'jsonBuilderServlet',
-				type : 'POST',
-				data : {
-					json_string_name : jsonBuilderId,
-					action: 'delete'
-				},
-				success : function(data) {
-					// Display the registration status message
-					alert(data.message);
-
-					// Refresh the user list
-					loadJsonBuilderList();
-				},
-				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting json builder settings: '
-							+ error);
-				}
-			});
-		}
-	}
- */
  
  function deleteJsonBuilder(jsonBuilderId) {
 	 // Display the custom modal dialog
