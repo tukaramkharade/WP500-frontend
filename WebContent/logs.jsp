@@ -12,6 +12,40 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+.modal-session-timeout {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-session-timeout {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+ }
+ 
+#confirm-button-session-timeout {
+  background-color: #4caf50;
+  color: white;
+}
+</style>
 <script>
 
 var roleValue;
@@ -89,14 +123,9 @@ var roleValue;
 						
 						var json1 = JSON.stringify(data);
 
-							var json = JSON.parse(json1);
+						var json = JSON.parse(json1);
 
-							if (json.status == 'fail') {
-								var confirmation = confirm(json.msg);
-								if (confirmation) {
-									window.location.href = 'login.jsp';
-								}
-							}
+						handleStatus(json.status);
 							
 						if (data.log_file_result
 								&& Array.isArray(data.log_file_result)) {
@@ -130,6 +159,21 @@ var roleValue;
         } else {
             $load_button.css('background-color', '#2b3991'); // Reset to original color
         }
+	}
+	
+	function handleStatus(status) {
+	    if (status === 'fail') {
+	        var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
+
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function () {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
+	        };
+	    }
 	}
 	
 	//Function to execute on page load
@@ -263,6 +307,13 @@ var roleValue;
 					id="loadLogFileButton" value="Load Log File">
 			</div>
 
+		</div>
+		
+		<div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				  <p>Your session is timeout. Please login again</p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
 		</div>
 		
 	<!-- Table to display the log data -->
