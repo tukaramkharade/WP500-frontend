@@ -27,11 +27,7 @@
                 success: function (data) {
                     console.log("Received data:", data.status);
 
-                    if(data.firstLogin === "firstLogin"){
-                    	//alert("Welcome! This is your first login.");
-                    	 window.location.href = 'changeoldpassword.jsp';
-                    }
-                    else if (data.status == 'fail') {
+                    if (data.status == 'fail') {
                         //alert(data.msg);
                         $('#message').html(data.msg);
                     } else if (data.status == 'success') {
