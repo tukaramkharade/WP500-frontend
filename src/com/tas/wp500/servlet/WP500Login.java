@@ -53,8 +53,8 @@ public class WP500Login extends HttpServlet {
                 String role = jsonResponse.getString("role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
-
                 userObj.put("status", status);
+                
             } else if (status.equals("fail")) {
                 userObj.put("msg", "Invalid user. Please login again");
                 userObj.put("status", status);

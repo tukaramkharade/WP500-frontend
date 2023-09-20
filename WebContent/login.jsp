@@ -26,11 +26,14 @@
                 dataType: 'json',
                 success: function (data) {
                     console.log("Received data:", data.status);
+                    var json1 = JSON.stringify(data);
 
-                    if (data.status == 'fail') {
+					var json = JSON.parse(json1);
+
+                    if (json.status == 'fail') {
                         //alert(data.msg);
                         $('#message').html(data.msg);
-                    } else if (data.status == 'success') {
+                    } else if (json.status == 'success') {
                         // Display the success message in the 'message' div
                         $('#message').html('Login successful.');
                         window.location.href = 'overview.jsp';
