@@ -438,6 +438,9 @@ $(document).ready(function() {
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
+			
+			<p></p>
+			<p></p>
 		
 		<div class="container">
 
