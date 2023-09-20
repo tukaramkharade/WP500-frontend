@@ -2,6 +2,9 @@ package com.tas.wp500.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +19,9 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 @WebServlet("/WP500Login")
 public class WP500Login extends HttpServlet {
     final static Logger logger = Logger.getLogger(WP500Login.class);
@@ -24,7 +30,7 @@ public class WP500Login extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        boolean isFirstLogin = (session.getAttribute("firstLogin") == null);
+     //   boolean isFirstLogin = (session.getAttribute("firstLogin") == null);
 
         
         session.setMaxInactiveInterval(1800);
@@ -53,13 +59,31 @@ public class WP500Login extends HttpServlet {
                 String role = jsonResponse.getString("role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
-                userObj.put("status", status);
                 
-            } else if (status.equals("fail")) {
-                userObj.put("msg", "Invalid user. Please login again");
-                userObj.put("status", status);
-            }
+             // Generate a JWT token
+                String secretKey = "tasm2m_admin#Admin@123"; // Replace with a secure secret key
+                Map<String, Object> claims = new HashMap<>();
+                claims.put("username", username);
+                claims.put("role", role);
 
+                String token = Jwts.builder()
+                    .setClaims(claims)
+                    .setSubject(username)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // Token expires in 1 hour
+                    .signWith(SignatureAlgorithm.HS256, secretKey)
+                    .compact();
+                
+                userObj.put("status", status);
+                userObj.put("token", token);
+                
+                session.setAttribute("token", token);
+                
+          } else if (status.equals("fail")) {
+               userObj.put("msg", "Invalid user. Please login again");
+               userObj.put("status", status);
+           }
+            
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error in login : " + e);

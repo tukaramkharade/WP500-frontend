@@ -13,5 +13,9 @@
 	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/json-simple-1.1.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/org.json.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/jackson-annotations-2.15.2.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/jackson-core-2.15.2.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/jackson-databind-2.15.2.jar"/>
+	<classpathentry kind="lib" path="D:/eclipse_new/wp500_new/WebContent/WEB-INF/lib/jjwt-0.9.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

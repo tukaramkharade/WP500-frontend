@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function checkLogin() {
+         function checkLogin() {
             var username = $('#username').val();
             var password = $('#password').val();
             
@@ -30,20 +30,34 @@
 
 					var json = JSON.parse(json1);
 
-                    if (json.status == 'fail') {
+                     if (json.status == 'fail') {
                         //alert(data.msg);
                         $('#message').html(data.msg);
                     } else if (json.status == 'success') {
                         // Display the success message in the 'message' div
                         $('#message').html('Login successful.');
+                        
+                        // Store the token in a JavaScript variable
+                        var token = data.token;
+
+                        // Set the token in the header for future AJAX requests
+                        $.ajaxSetup({
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                            }
+                        });
+                        
                         window.location.href = 'overview.jsp';
-                    }
+                    } 
                 },
                 error: function (xhr, status, error) {
                     console.log('Error showing login data: ' + error);
                 }
             });
-        }
+        } 
+        
+        
+
 
         $(document).ready(function () {
             // Uncomment this line to call the checkLogin function when the document is ready

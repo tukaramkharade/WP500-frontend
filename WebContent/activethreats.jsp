@@ -133,12 +133,19 @@
 
 <script>
 
+var roleValue;
+var tokenValue;
+
 function getActiveThreats() {
+	console.log(tokenValue);
 	
 	$.ajax({
 		url : 'activeThreatServlet',
 		type : 'GET',
 		dataType : 'json',
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
 		success : function(data) {
 			var activeThreatsTable = $('#data-table tbody');
 			activeThreatsTable.empty();
@@ -147,9 +154,10 @@ function getActiveThreats() {
 			 var json = JSON.parse(json1);
 			 handleStatus(json.status); 
 
-				$.each(data, function(index, activeThreats) {
-					
-					
+			 if(roleValue == 'ADMIN' || roleValue == 'Admin'){
+				 $.each(data, function(index, activeThreats) {
+						
+						
 						var row = $('<tr>');
 						row.append($('<td>').text(activeThreats.timestamp + ""));
 						
@@ -187,6 +195,36 @@ function getActiveThreats() {
 						activeThreatsTable.append(row);
 					
 				});
+			 }else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+				 $.each(data, function(index, activeThreats) {
+						
+						
+						var row = $('<tr>');
+						row.append($('<td>').text(activeThreats.timestamp + ""));
+						
+						if(activeThreats.priority == '1'){							
+							row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
+						}else if(activeThreats.priority == '2'){
+							row.append($('<td>').append($('<div>').addClass('orange-box').text('medium')));
+						}else if(activeThreats.priority == '3'){
+							row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
+						}
+						
+						row.append($('<td>').text(activeThreats.threat_id + ""));
+						row.append($('<td>').text(activeThreats.alert_message + ""));						
+						row.append($('<td>').text(activeThreats.src_ip + ""));
+						row.append($('<td>').text(activeThreats.src_port + ""));
+						row.append($('<td>').text(activeThreats.dest_ip + ""));
+						row.append($('<td>').text(activeThreats.dest_port + ""));
+						row.append($('<td>').text(activeThreats.protocol_type + ""));
+						row.append($('<td>').text(activeThreats.ack_at + ""));
+						row.append($('<td>').text(activeThreats.ack_by + ""));
+						
+						
+											
+						activeThreatsTable.append(row);
+			 });
+			 }		
 
 		},
 		error : function(xhr, status, error) {
@@ -208,6 +246,9 @@ function getSearchThreats() {
             enddatetime: enddatetime,
             action : 'get_threats'
         },
+        beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
         success: function (data) {
 			var activeThreatsTable = $('#data-table tbody');
 			activeThreatsTable.empty();
@@ -375,7 +416,23 @@ function handleStatus(status) {
 
 $(document).ready(function() {
 	
+	<%// Access the session variable
+	HttpSession role = request.getSession();
+	String roleValue = (String) session.getAttribute("role");%>
+
+roleValue = '<%=roleValue%>';
+
+<%// Access the session variable
+HttpSession token = request.getSession();
+String tokenValue = (String) session.getAttribute("token");%>
+
+tokenValue = '<%=tokenValue%>';
+	
 	getActiveThreats();
+	
+	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+		$("#acknowledge").hide();
+	}
 	getCurrentTimeInIndia();
 		$(document).on("click", "#loadThreats", function() {
         checkDateField();
@@ -439,9 +496,6 @@ $(document).ready(function() {
 				</div>
 			</div>
 			
-			<b>gg</b>
-			<b>gg</b>
-		
 		<div class="container">
 
 				<table id="data-table">
@@ -458,7 +512,7 @@ $(document).ready(function() {
 							<th>Protocol type</th>
 							<th>Ack at</th>
 							<th>Ack by</th>
-							<th>Acknowledge</th>
+							<th id="acknowledge">Acknowledge</th>
 							
 						</tr>
 					</thead>
