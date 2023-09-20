@@ -172,15 +172,19 @@ button {
 <script>
 
 var roleValue;
+var tokenValue;
 
 	// Function to load user data and populate the user list table
 	function loadUserList() {
-		$
-				.ajax({
+		
+		$.ajax({
 					//	url : 'data',
 					url : 'userServlet',
 					type : 'GET',
 					dataType : 'json',
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
 					success : function(data) {
 						// Clear existing table rows
 						var userTable = $('#userListTable tbody');
@@ -563,6 +567,12 @@ var roleValue;
 		String roleValue = (String) session.getAttribute("role");%>
 	
 	roleValue = '<%=roleValue%>';
+	
+	<%// Access the session variable
+	HttpSession token = request.getSession();
+	String tokenValue = (String) session.getAttribute("token");%>
+
+	tokenValue = '<%=tokenValue%>';
 		
 		// Load user list
 		loadUserList();
