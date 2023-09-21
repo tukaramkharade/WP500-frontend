@@ -48,6 +48,10 @@
 }
 </style>
 <script>
+
+var roleValue;
+var tokenValue;
+
 	function searchSystemLogData() {
 		var searchQuery = document.getElementById("search_query").value.trim();
 
@@ -67,6 +71,9 @@
 				startdatetime : startdatetime,
 				enddatetime : enddatetime
 			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				if (data.system_log_result
 						&& Array.isArray(data.system_log_result)) {
@@ -127,6 +134,9 @@
 				enddatetime : enddatetime
 
 			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				if (data.system_log_result
 						&& Array.isArray(data.system_log_result)) {
@@ -176,6 +186,9 @@
 		$.ajax({
 			url : "loadSystemLog", // Replace this with the appropriate server-side URL to handle the AJAX GET
 			type : "GET", // Change the request method to GET
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				 var json1 = JSON.stringify(data);
 				 var json = JSON.parse(json1);
@@ -262,8 +275,43 @@
 	    }
 	}
 	
+	
+	
+	function changeButtonColor(isDisabled) {
+        var $load_button = $('#loadLogSysFileButton');       
+        
+         if (isDisabled) {
+            $load_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $load_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+    }
+	
 	//Function to execute on page load
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+	roleValue = '<%=roleValue%>';
+	
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+		
+		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+			
+			$('#loadLogSysFileButton').prop('disabled', true);
+			
+			
+			changeButtonColor(true);
+		}
+		
 		// Load log file list
 
 		loadSystemLog();

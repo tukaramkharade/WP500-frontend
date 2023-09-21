@@ -137,7 +137,7 @@ var roleValue;
 var tokenValue;
 
 function getActiveThreats() {
-	console.log(tokenValue);
+	
 	
 	$.ajax({
 		url : 'activeThreatServlet',
@@ -399,6 +399,7 @@ function getCurrentTimeInIndia() {
     console.log('Current IST time:', formattedCurrentTime);
     console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
 }
+
 function handleStatus(status) {
     if (status === 'fail') {
         var modal = document.getElementById('custom-modal-session-timeout');
@@ -411,6 +412,16 @@ function handleStatus(status) {
             modal.style.display = 'none';
             window.location.href = 'login.jsp';
         };
+    }
+}
+
+function changeButtonColor(isDisabled) {
+    var $loadThreatsbutton = $('#loadThreats');      
+    
+     if (isDisabled) {
+        $loadThreatsbutton.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $loadThreatsbutton.css('background-color', '#2b3991'); // Reset to original color
     }
 }
 
@@ -432,7 +443,12 @@ tokenValue = '<%=tokenValue%>';
 	
 	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 		$("#acknowledge").hide();
+		
+		$('#loadThreats').prop('disabled', true);
+		
+		changeButtonColor(true);
 	}
+	
 	getCurrentTimeInIndia();
 		$(document).on("click", "#loadThreats", function() {
         checkDateField();

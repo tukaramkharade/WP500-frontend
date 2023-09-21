@@ -49,6 +49,7 @@
 <script>
 
 var roleValue;
+var tokenValue;
 
 	function searchLogData() {
 		var searchQuery = document.getElementById("search_query").value.trim();
@@ -72,6 +73,9 @@ var roleValue;
 				search_query : searchQuery,
 				log_file : selectedLogFile,
 			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				if (data.log_search_result
 						&& Array.isArray(data.log_search_result)) {
@@ -187,6 +191,13 @@ var roleValue;
 	    	    	%>
 	    	    	
 	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+	    	    	
+	    	    	<%// Access the session variable
+	    	    	HttpSession token = request.getSession();
+	    	    	String tokenValue = (String) session.getAttribute("token");%>
+
+	    	    	tokenValue = '<%=tokenValue%>';
+	    	    	
 	    	    	
 	    	    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 	  	    		  

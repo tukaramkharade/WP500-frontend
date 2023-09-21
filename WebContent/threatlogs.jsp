@@ -83,12 +83,18 @@
 </style>
 
 <script>
+var roleValue;
+var tokenValue;
+
 	function loadThreatLogs() {
 
 		$.ajax({
 			url : 'threatLogsServlet',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				var json1 = JSON.stringify(data);
 				var json = JSON.parse(json1);
@@ -167,6 +173,9 @@
 				startdatetime : startdatetime,
 				enddatetime : enddatetime
 			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				var threatLogsTable = $('#data-table tbody');
 				threatLogsTable.empty();
@@ -296,8 +305,40 @@
 	    }
 	}
 
+	function changeButtonColor(isDisabled) {
+	    var $loadThreatsbutton = $('#loadThreats');       
+	   
+	    
+	     if (isDisabled) {
+	        $loadThreatsbutton.css('background-color', 'gray'); // Change to your desired color
+	    } else {
+	        $loadThreatsbutton.css('background-color', '#2b3991'); // Reset to original color
+	    }
+	}
+	
 	
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+	roleValue = '<%=roleValue%>';
+	
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+		
+		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+			
+			$('#loadThreats').prop('disabled', true);
+			
+			changeButtonColor(true);
+		}
+		
+		
 		loadThreatLogs();
 		getCurrentTimeInIndia();
 		$(document).on("click", "#loadThreats", function() {

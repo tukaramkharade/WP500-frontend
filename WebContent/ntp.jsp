@@ -288,6 +288,8 @@ p {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 var roleValue;
+var tokenValue;
+
 	// Function to fetch current time from the server and update the button text
 	function getCurrentTime() {
 		$.ajax({
@@ -311,6 +313,9 @@ var roleValue;
 			url : 'ntp',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 
 				var json1 = JSON.stringify(data);
@@ -378,6 +383,9 @@ var roleValue;
 			url : 'ntpDataUpadate',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				//alert(data.eth0_ipaddr + " " + data.eth0_subnet);
 
@@ -392,12 +400,7 @@ var roleValue;
 				$('#ntp_server3').val(data.ntp_server3);
 				$('#ntp_interval_1').val(data.ntp_interval);
 
-			//	console.log('lan1_ipaddr:', data.ntp_server1);
-	       //	console.log('lan1_subnet:', data.ntp_server2);
-
-		//		console.log('lan2_ipaddr:', data.ntp_server3);
-		//		console.log('lan2_subnet:', data.ntp_interval);
-
+			
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
@@ -534,6 +537,25 @@ var roleValue;
 	    }
 	}
 
+	function changeButtonColor(isDisabled) {
+	    
+	   var $updatentpbutton = $('#updatentp'); 
+	    var $savebutton = $('#saveButton'); 
+	    
+	     
+	     
+	     if (isDisabled) {
+		        $updatentpbutton.css('background-color', 'gray'); // Change to your desired color
+		    } else {
+		        $updatentpbutton.css('background-color', '#2b3991'); // Reset to original color
+		    }
+	      
+	     if (isDisabled) {
+		        $savebutton.css('background-color', 'gray'); // Change to your desired color
+		    } else {
+		        $savebutton.css('background-color', '#2b3991'); // Reset to original color
+		    }
+	}
 
 	$(document).ready(function() {
 		<%// Access the session variable
@@ -542,15 +564,23 @@ var roleValue;
 		    	
 		    	roleValue = '<%=roleValue%>';
 		    	
+		    	<%// Access the session variable
+		    	HttpSession token = request.getSession();
+		    	String tokenValue = (String) session.getAttribute("token");%>
+
+		    	tokenValue = '<%=tokenValue%>';
+		    	
 		loadNtpSettings();
 		getCurrentTimeInIndia();
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-			$('#setDateTime').prop('disabled', true);
-			$('#updateNtp').prop('disabled', true);
+			$('#updatentp').prop('disabled', true);
 			$('#saveButton').prop('disabled', true);
 			
+			changeButtonColor(true);
+			
 		}
+		
 		toggleDateTimeInput();
 		$("#get_current_time").click(function() {
 			getCurrentTime();
@@ -574,7 +604,7 @@ var roleValue;
 
 	});
 	setInterval(getCurrentTimeInIndia, 60000);
-//	setInterval(getCurrentTime, 60000);
+
 	
 </script>
 

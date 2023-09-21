@@ -138,6 +138,7 @@ button {
 <script>
 	
 var roleValue;
+var tokenValue;
 
 	var json = {};
 
@@ -177,7 +178,7 @@ var roleValue;
     	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
     	          var datalist = $("#variable");
     	          // Clear any existing options
-    	          datalist.empty();
+    	         // datalist.empty();
 
     	          // Loop through the data and add options to the datalist
     	          data.tag_list_result.forEach(function (tag) {
@@ -200,9 +201,10 @@ var roleValue;
   			url : 'alarmConfigServlet',
   			type : 'GET',
   			dataType : 'json',
+  			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
   			success : function(data) {
-				// Clear existing table rows
-				// Iterate through the user data and add rows to the table
 				
 				var json1 = JSON.stringify(data);
 
@@ -231,38 +233,43 @@ var roleValue;
 									var result = data.alarm_tag;
 
 									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-									$.each($.parseJSON(result), function(k, v) {
-									
-									if(k != null){
-										var newRow = $("<tr>")
-	    	        					.append($("<td>").text(k))
-	    	        					.append($("<td>").text(v))
-	    	        					.append(
-    	          $("<td>").html(
-    	            `<input
-    	                style="background-color :red"
-    	                type="button"
-    	                value="Delete"
-    	                onclick="deleteRow(this)"
-    	              />`
-    	          )
-									
-									    
-    	        );
-									}				
-	    	        					$("#table_data").append(newRow);
-									});
-									}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 										
 										$.each($.parseJSON(result), function(k, v) {
-										    
-										    var newRow = $("<tr>")
-		    	        					.append($("<td>").text(k))
-		    	        					.append($("<td>").text(v))
-		    	        					
-		    	        					$("#table_data").append(newRow);
-										});
-									}
+									
+														    
+														    var newRow = $("<tr>")
+						    	        					.append($("<td>").text(k))
+						    	        					.append($("<td>").text(v))
+						    	        					.append(
+					 	          $("<td>").html(
+					 	            `<input
+					 	                style="background-color :red"
+					 	                type="button"
+					 	                value="Delete"
+					 	                onclick="deleteRow(this)"
+					 	                addClass="tagDelBtn"
+					 	              />`
+					 	          )
+					 	        );
+															
+						    	        					$("#table_data").append(newRow);
+														});
+														
+										
+									 }
+								  else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+										
+										$.each($.parseJSON(result), function(k, v) {
+										
+														    
+														    var newRow = $("<tr>")
+						    	        					.append($("<td>").text(k))
+						    	        					.append($("<td>").text(v))
+						    	        					
+						    	        					$("#table_data").append(newRow);
+														});
+														
+									} 
 									
 									
 									if(unit_id != null){
@@ -388,7 +395,7 @@ var roleValue;
         var $delete_button = $('#delBtn');
         var $clear_button = $('#clearBtn');
         var $save_button = $('#saveBtn');
-        
+       
         
         if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
@@ -413,8 +420,9 @@ var roleValue;
         } else {
             $save_button.css('background-color', '#2b3991'); // Reset to original color
         }
-    }
-
+         
+	}
+	
       $(document).ready(function () {
     	  
     	  <%
@@ -425,17 +433,26 @@ var roleValue;
     	
     	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
     	
+    	<%// Access the session variable
+    	HttpSession token = request.getSession();
+    	String tokenValue = (String) session.getAttribute("token");%>
+
+    	tokenValue = '<%=tokenValue%>';
+    	
     	  loadAlarmSettings();
     	  
-    	  if(roleValue == 'VIEWER' == roleValue == 'Viewer'){
+    	  if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
     		  
-    		  $("#actions").hide();
+    		  $("#actions").hide(); 
     		  $('#addBtn').prop('disabled', true);
     		  $('#clearBtn').prop('disabled', true); 
     		  $('#delBtn').prop('disabled', true);
     		  $('#saveBtn').prop('disabled', true);
+    		 
     		  changeButtonColor(true);
     	  }
+       	  
+    	  
     	  
     	  loadBrokerIPList();
     	  loadTagList();
@@ -754,7 +771,7 @@ function addAlarmConfig() {
 					<div class="col-75-7" style="width: 15%;">
 						<select class="textBox" id="variable" name="variable"
 							style="height: 35px">
-							<option value=""></option>
+							<option value="Select variable">Select variable</option>
 						</select> <span id="variableError" style="color: red;"></span>
 					</div>
 				</div>

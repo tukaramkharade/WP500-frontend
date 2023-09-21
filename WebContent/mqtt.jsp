@@ -136,7 +136,8 @@ button {
 <script>
 	// Function to load user data and populate the user list table
 
-	var roleValue;						
+	var roleValue;	
+	var tokenValue;
 	
 	function loadCrtFilesList() {
 		$.ajax({
@@ -174,6 +175,9 @@ button {
 					url : 'mqttServlet',
 					type : 'GET',
 					dataType : 'json',
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
 					success : function(data) {
 						// Clear existing table rows
 						var mqttTable = $('#mqttListTable tbody');
@@ -649,7 +653,13 @@ button {
     	
     	roleValue = '<%=roleValue%>';
 
-						// This will insert the session value into the JavaScript code
+					
+						
+						<%// Access the session variable
+	HttpSession token = request.getSession();
+	String tokenValue = (String) session.getAttribute("token");%>
+
+	tokenValue = '<%=tokenValue%>';
 
 						loadMqttList();
 						

@@ -16,11 +16,17 @@
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+var tokenValue;
+
 	function loadConfig() {
 		$.ajax({
 			url : 'loadConfigurationServlet',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				alert(data.status);
 
@@ -34,6 +40,12 @@
 
 	$(document).ready(function() {
 
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+		
 		 $('#loadConfig').click(function(){		
 			 loadConfig();
 

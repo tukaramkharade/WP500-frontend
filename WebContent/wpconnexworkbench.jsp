@@ -47,11 +47,17 @@
 }
 </style>
 <script>
+
+var tokenValue;
+
 	function loadStratonLiveDataList() {
 		$.ajax({
 			url : 'stratonLiveDataServlet',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				// Clear existing table rows
 
@@ -97,6 +103,11 @@
 	}
 
 	$(document).ready(function() {
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
 		loadStratonLiveDataList();
 
 	});

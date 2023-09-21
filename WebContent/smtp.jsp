@@ -53,6 +53,7 @@
 
 <script>
 var roleValue; 
+var tokenValue;
 
 function getSMTPSettings() {
 
@@ -60,6 +61,9 @@ function getSMTPSettings() {
 		url : "SMTPServlet",
 		type : "GET",
 		dataType : "json",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
 		success : function(data) {
 			var json1 = JSON.stringify(data);
 			 var json = JSON.parse(json1);
@@ -431,6 +435,13 @@ $(document).ready(function() {
 	String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+<%// Access the session variable
+HttpSession token = request.getSession();
+String tokenValue = (String) session.getAttribute("token");%>
+
+tokenValue = '<%=tokenValue%>';
+
 	
 	getSMTPSettings();
 	
