@@ -102,6 +102,8 @@ button {
 	var lan1_dhcp;
 	var lan2_dhcp;
 	var dhcp_type;
+	var tokenValue;
+	var roleValue;
 	
 	function getDhcpSettings() {
 		var dhcp_type = 1;
@@ -129,6 +131,9 @@ button {
 			url : 'lan',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				//alert(data.eth0_ipaddr + " " + data.eth0_subnet);
 				
@@ -432,9 +437,86 @@ button {
 	    }
 	}
 
+	
+	
+	
+	
+	function changeButtonColor(isDisabled) {
+	    var $eth1button = $('#eth1_button');  
+	    var $lan1button = $('#lan1_button');
+	    var $lan2button = $('#lan2_button');
+	   
+	    var $discard1button = $('#discard1');  
+	    var $discard2button = $('#discard2');
+	    var $discard3button = $('#discard3');
+	    
+	     if (isDisabled) {
+	        $eth1button.css('background-color', 'gray'); // Change to your desired color
+	    } else {
+	        $eth1button.css('background-color', '#2b3991'); // Reset to original color
+	    }
+	     
+	     if (isDisabled) {
+		        $lan1button.css('background-color', 'gray'); // Change to your desired color
+		    } else {
+		        $lan1button.css('background-color', '#2b3991'); // Reset to original color
+		    }
+	     
+	     if (isDisabled) {
+		        $discard1button.css('background-color', 'gray'); // Change to your desired color
+		    } else {
+		        $discard1button.css('background-color', '#2b3991'); // Reset to original color
+		    }
+	     
+	     if (isDisabled) {
+		        $eth1button.css('background-color', 'gray'); // Change to your desired color
+		    } else {
+		        $eth1button.css('background-color', '#2b3991'); // Reset to original color
+		    }
+		     
+		     if (isDisabled) {
+			        $discard2button.css('background-color', 'gray'); // Change to your desired color
+			    } else {
+			        $discard2button.css('background-color', '#2b3991'); // Reset to original color
+			    }
+		     
+		     if (isDisabled) {
+			        $discard3button.css('background-color', 'gray'); // Change to your desired color
+			    } else {
+			        $discard3button.css('background-color', '#2b3991'); // Reset to original color
+			    }
+	}
+	
+	
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+	roleValue = '<%=roleValue%>';
+		
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
 
 		loadLanSettings();
+		
+		
+	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+			
+			$('#eth1_button').prop('disabled', true);
+			$('#lan1_button').prop('disabled', true);
+			$('#lan2_button').prop('disabled', true);
+			
+			$('#discard1').prop('disabled', true);
+			$('#discard2').prop('disabled', true);
+			$('#discard3').prop('disabled', true);
+			
+			changeButtonColor(true);
+		}
 		
 		
 		$('#get_dhcp_0').click(function(){		
@@ -538,7 +620,8 @@ button {
 				</table>
 				<div style="margin-top: 1%;">
 					<input type="button" value="Discard"
-						style="background-color: #ef0803;"> <input type="button"
+						style="background-color: #ef0803;" id="discard1"> 
+						<input type="button"
 						value="Apply changes" id="eth1_button">
 				</div>
 			</div>
@@ -603,7 +686,7 @@ button {
 
 				<div style="margin-top: 1%;">
 					<input type="button" style="background-color: #ef0803;"
-						value="Discard"> <input type="button"
+						value="Discard" id="discard2"> <input type="button"
 						value="Apply changes" id="lan1_button">
 				</div>
 			</div>
@@ -667,7 +750,7 @@ button {
 
 				<div style="margin-top: 1%;">
 					<input type="button" style="background-color: #ef0803;"
-						value="Discard"> <input type="button"
+						value="Discard" id="discard3"> <input type="button"
 						value="Apply changes" id="lan2_button">
 				</div>
 

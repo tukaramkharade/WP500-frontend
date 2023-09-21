@@ -137,6 +137,7 @@ button {
 <script>
 
 var roleValue;
+var tokenValue;
 
 var json = {};
 	function loadBrokerIPList() {
@@ -178,7 +179,7 @@ var json = {};
  	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
  	          var datalist = $("#variable");
  	          // Clear any existing options
- 	          datalist.empty();
+ 	         // datalist.empty();
 
  	          // Loop through the data and add options to the datalist
  	          data.tag_list_result.forEach(function (tag) {
@@ -201,10 +202,10 @@ var json = {};
 			url : 'commandConfigServlet',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
-				// Clear existing table rows
-				// Iterate through the user data and add rows to the table
-				
 				
 				var json1 = JSON.stringify(data);
 
@@ -422,8 +423,7 @@ var json = {};
 	            } else {
 	                $save_button.css('background-color', '#2b3991'); // Reset to original color
 	            }
-	            
-	            
+	             
 	    	}
 	    	
 	    	 $(document).ready(function () {
@@ -435,6 +435,12 @@ var json = {};
 	    	    	%>
 	    	    	
 	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+	    	    	
+	    	    	<%// Access the session variable
+	    	    	HttpSession token = request.getSession();
+	    	    	String tokenValue = (String) session.getAttribute("token");%>
+
+	    	    	tokenValue = '<%=tokenValue%>';
 	    	      
 	    		 
 	       	  // Load broker ip
@@ -771,7 +777,7 @@ var json = {};
 					<div class="col-75-7" style="width: 15%;">
 						<select class="textBox" id="variable" name="variable"
 							style="height: 35px">
-							<option value=""></option>
+							<option value="Select variable">Select variable</option>
 						</select> <span id="variableError" style="color: red;"></span>
 					</div>
 				</div>

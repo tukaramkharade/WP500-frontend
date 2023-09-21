@@ -49,6 +49,7 @@
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
  }
+ 
 .overview{	
 	width: 45%;
   
@@ -184,13 +185,16 @@ margin-left: -325px;
 <script>
 var chart = null;
 var barChart = null;
-
+var tokenValue;
 
 function latestActiveThreats(){
 	$.ajax({
         url: "dashboard",
         method: "GET",
         dataType: "json",
+        beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
         success: function (data) {
             // Iterate through the data and populate the list
             var dataList = $("#dataList");
@@ -229,6 +233,9 @@ function countDetails(){
 		url : "countDetailsServlet", // Replace with your server endpoint to get the current time
 		type : "GET",
 		dataType : "json",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
 		success : function(data) {
 			
 			if (data.status == 'success') {
@@ -916,6 +923,12 @@ function updateBarChartMonth(){
 	}
  
 $(document).ready(function() {
+	<%// Access the session variable
+	HttpSession token = request.getSession();
+	String tokenValue = (String) session.getAttribute("token");%>
+
+	tokenValue = '<%=tokenValue%>';
+	
 	latestActiveThreats();
 	countDetails();
 	getCurrentTimeInIndia();

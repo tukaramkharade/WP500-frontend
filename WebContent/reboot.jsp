@@ -18,6 +18,7 @@
 <script>
 
 var roleValue;	
+var tokenValue;
 
 	function reboot() {
 
@@ -28,6 +29,9 @@ var roleValue;
 				url : 'reboot',
 				type : 'GET',
 				dataType : 'json',
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+			    },
 				success : function(data) {
 					
 					var json1 = JSON.stringify(data);
@@ -70,6 +74,12 @@ var roleValue;
     	%>
     	
     	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	
+    	<%// Access the session variable
+    	HttpSession token = request.getSession();
+    	String tokenValue = (String) session.getAttribute("token");%>
+
+    	tokenValue = '<%=tokenValue%>';
     	
     	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
   		  

@@ -63,12 +63,16 @@
 	var currentPage = 1; // Initial page
 	var itemsPerPage = 100; // Items per page
 	var total_pages = 0;
+	var tokenValue;
 
 	function getStoreForwardData() {
 		$.ajax({
 			url : 'storeForwardDataServlet',
 			type : 'GET',
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				 var json1 = JSON.stringify(data);
 				 var json = JSON.parse(json1);
@@ -114,6 +118,9 @@
 				currentPage : currentPage
 			}, // Pass current page number
 			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 				total_pages = data.total_page; // Access the total_pages value
 				//         console.log("totalPageNo: " + total_pages);
@@ -169,6 +176,13 @@
 		$('#pageInfo').text('Page ' + currentPage);
 	}
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+		
 		getStoreForwardData();
 
 		$('#prevPage').on('click', function() {

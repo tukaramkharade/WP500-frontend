@@ -175,6 +175,7 @@ button {
 <script>
 
 var roleValue;
+var tokenValue;
 
 	function loadBrokerIPList() {
 		$.ajax({
@@ -415,6 +416,9 @@ var roleValue;
 					url : 'dispenserTriggerServlet',
 					type : 'GET',
 					dataType : 'json',
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
 					success : function(data) {
 						// Clear existing table rows
 						
@@ -748,35 +752,6 @@ var roleValue;
 		$('#registerBtn').val('Add');
 	}
 
-	/* function deleteDispenserTrigger(dispenserTriggerId1, dispenserTriggerId2) {
-		// Perform necessary actions to delete the user
-		// For example, make an AJAX call to a delete servlet
-
-		var confirmation = confirm('Are you sure you want to delete this dispenser trigger settings?');
-		if (confirmation) {
-			$.ajax({
-				url : 'dispenserTriggerServlet',
-				type : 'POST',
-				data : {
-					serial_number : dispenserTriggerId1,
-					side : dispenserTriggerId2,
-					action: 'delete'
-				},
-				success : function(data) {
-					// Display the registration status message
-					alert(data.message);
-
-					// Refresh the user list
-					loadDispenserTriggerList();
-				},
-				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting dispenser trigger settings: '
-							+ error);
-				}
-			});
-		}
-	} */
 	
 	function deleteDispenserTrigger(dispenserTriggerId1, dispenserTriggerId2) {
 		 // Display the custom modal dialog
@@ -987,6 +962,12 @@ var roleValue;
 		String roleValue = (String) session.getAttribute("role");%>
 	
 		roleValue = '<%=roleValue%>';
+		
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
 	
 
 						loadBrokerIPList();

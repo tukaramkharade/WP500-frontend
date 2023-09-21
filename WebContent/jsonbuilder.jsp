@@ -177,6 +177,7 @@ button {
 
 var roleValue;	
 var json_string_text;
+var tokenValue;
 
 	function loadBrokerIPList() {
 		$.ajax({
@@ -214,6 +215,9 @@ var json_string_text;
 					url : 'jsonBuilderServlet',
 					type : 'GET',
 					dataType : 'json',
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
 					success : function(data) {
 						// Clear existing table rows
 						var jsonBuilderTable = $('#jsonBuilderListTable tbody');
@@ -663,13 +667,18 @@ var json_string_text;
 	
 	// Function to execute on page load
 	$(document).ready(function() {
-		
-						
+			
 						<%// Access the session variable
 			HttpSession role = request.getSession();
 			String roleValue = (String) session.getAttribute("role");%>
 			    	
 			    	roleValue = '<%=roleValue%>';
+			    	
+			    	<%// Access the session variable
+			    	HttpSession token = request.getSession();
+			    	String tokenValue = (String) session.getAttribute("token");%>
+
+			    	tokenValue = '<%=tokenValue%>';
 
 						// Load user list
 						loadBrokerIPList();

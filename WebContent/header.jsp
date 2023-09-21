@@ -55,6 +55,8 @@ button {
 
 </style>
 <script>
+var roleValue;
+
 	function loadConfig() {
 		$.ajax({
 			url : 'loadConfigurationServlet',
@@ -75,6 +77,9 @@ button {
 
 	$(document).ready(function() {
 
+		
+	
+	
 		$('#loadConfig').click(function() {
 			loadConfig();
 		});

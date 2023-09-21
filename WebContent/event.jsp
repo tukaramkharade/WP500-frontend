@@ -49,12 +49,16 @@
 <script>
 var currentPage = 1;
 var total_pages=0;
+var tokenValue;
 
 function loadEventData() {
 	var tableBody = $("#log_table_body");
      $.ajax({
         url: "loadEventData", // Replace this with the appropriate server-side URL to handle the AJAX GET
         type: "GET", // Change the request method to GET
+        beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
         success: function(data) {
         	 var json1 = JSON.stringify(data);
 			 var json = JSON.parse(json1);
@@ -163,6 +167,13 @@ function handleStatus(status) {
         $('#log_table_body').empty();
     }
 	$(document).ready(function() {
+		
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+		
 		clearTable();
 		loadEventData();
 		$('#prevPage').on('click', function() {

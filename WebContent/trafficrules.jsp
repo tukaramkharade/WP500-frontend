@@ -212,6 +212,7 @@ button {
 <script>
 
 var roleValue; 
+var tokenValue;
 
 	function loadTrafficRulesList() {
 		$
@@ -219,6 +220,9 @@ var roleValue;
 					url : "trafficRulesServlet",
 					type : "GET",
 					dataType : "json",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
 					success : function(data) {
 						// Clear existing table rows
 
@@ -546,6 +550,9 @@ var roleValue;
 			url : "generalSettingsServlet",
 			type : "GET",
 			dataType : "json",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
 			success : function(data) {
 
 				$('#input').val(data.input);
@@ -660,47 +667,6 @@ var roleValue;
 		    $('#registerBtnGenSettings').val('Edit');
 		  };
 	}
-
-	/* function deleteGeneralSettings() {
-
-		var input = $('#input').val();
-		var output = $('#output').val();
-		var forward = $('#forward').val();
-		var rule_drop = $('#rule_drop').val();
-
-		$.ajax({
-			url : 'generalSettingsServlet',
-			type : 'POST',
-			data : {
-				input : input,
-				output : output,
-				forward : forward,
-				rule_drop : rule_drop,
-				operation_action: 'delete'
-
-			},
-			success : function(data) {
-				// Display the registration status message
-				alert(data.message);
-				getGeneralSettings()
-
-				// Clear form fields
-
-				$('#input').val('');
-				$('#output').val('');
-				$('#forward').val('');
-				$('#rule_drop').val('');
-
-			},
-			error : function(xhr, status, error) {
-				console.log('Error deleting general setting: ' + error);
-			}
-		});
-
-		$('#registerBtnGenSettings').val('Add');
-
-	}
- */
  
  function deleteGeneralSettings() {
 	// Display the custom modal dialog
@@ -862,6 +828,12 @@ var roleValue;
 		String roleValue = (String) session.getAttribute("role");%>
 		    	
 		    	roleValue = '<%=roleValue%>';
+		    	
+		    	<%// Access the session variable
+		    	HttpSession token = request.getSession();
+		    	String tokenValue = (String) session.getAttribute("token");%>
+
+		    	tokenValue = '<%=tokenValue%>';
 		    	
 		// Load traffic rules list
 		loadTrafficRulesList();
