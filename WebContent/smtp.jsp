@@ -17,6 +17,39 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0; 
+}
+
+.modal-content {
+   background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */ 
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+#close-popup {
+  background-color: #4caf50;
+  color: white;
+}
+
 .modal-session-timeout {
   display: none;
   position: fixed;
@@ -167,7 +200,7 @@ function addSMTPSettings() {
 		},
 		success : function(data) {
 			// Display the registration status message
-			alert(data.message);
+			showCustomPopup(data.message);
 			getSMTPSettings();
 
 			// Clear form fields
@@ -255,7 +288,7 @@ function editSMTPSettings() {
 		},
 		success : function(data) {
 			// Display the registration status message
-			alert(data.message);
+			showCustomPopup(data.message);
 			getSMTPSettings();
 
 			// Clear form fields
@@ -286,11 +319,11 @@ function editSMTPSettings() {
 function validatePortLength(port) {
     // Check if port is a number
     if (isNaN(port)) {
-        alert('Port must be a number.');
+        showCustomPopup('Port must be a number.');
         return false;
     }
     if (port.length > 5) {
-        alert('Port must not exceed 5 digits in length.');
+        showCustomPopup('Port must not exceed 5 digits in length.');
         return false;
     }
     return true;
@@ -307,7 +340,7 @@ function validateEmails(emails) {
     console.log("emailArray:", emailArray + " "+emailArray.length);
     console.log("emailArray1:", emailArray1 + " "+emailArray1.length);
     if (emails.includes(' ')) {
-        alert('Space is not allowed between email addresses: ' + emails);
+        showCustomPopup('Space is not allowed between email addresses: ' + emails);
         return false; // Space is not allowed between email addresses
     }
 
@@ -316,16 +349,16 @@ function validateEmails(emails) {
         if (!isValidEmail(emailArray1[i])) {
         	if (emails.includes(',') && !emailArray.length > 1) {
                 console.log("comma " + emailArray.length + " " + emails.length);
-                alert('Comma is required between email addresses:1' + emailArray1[i]);
+                showCustomPopup('Comma is required between email addresses:1' + emailArray1[i]);
                 return false; // Comma is required between multiple emails
             }
         	else if(!emails.includes(',') && emails.includes('@')){
         		console.log("comma " + emailArray.length + " " + emails.length);
-                alert('Comma is required between email addresses:2' + emailArray1[i]);
+                showCustomPopup('Comma is required between email addresses:2' + emailArray1[i]);
                 return false; // Comma is required between multiple emails
         	}
-        	alert('Invalid email address: ' + emailArray1[i]);
-            return false; // Stop and show an alert for the first invalid email
+        	showCustomPopup('Invalid email address: ' + emailArray1[i]);
+            return false; // Stop and show an showCustomPopup for the first invalid email
         	
             
         }
@@ -356,7 +389,7 @@ function deleteSMTPSettings() {
 				dataType : 'json',
 				success : function(data) {
 					// Display the registration status message
-					alert(data.message);
+					showCustomPopup(data.message);
 
 					// Refresh the user list
 					getSMTPSettings();
@@ -376,7 +409,7 @@ function testEmail() {
 			dataType : 'json',
 			success : function(data) {
 				// Display the registration status message
-				alert(data.message);
+				showCustomPopup(data.message);
 
 				// Refresh the user list
 				getSMTPSettings();
@@ -427,6 +460,11 @@ function handleStatus(status) {
             window.location.href = 'login.jsp';
         };
     }
+}
+
+function showCustomPopup(message) {
+    $('#popup-message').text(message);
+    $('#custom-popup').css('display', 'block');
 }
 
 $(document).ready(function() {
@@ -559,6 +597,9 @@ tokenValue = '<%=tokenValue%>';
 	$("#testEmailBtn").click(function () {
 		testEmail();
 	  });
+	$('#close-popup').click(function() {
+        $('#custom-popup').css('display', 'none');
+    });
 	
 });
 
@@ -707,6 +748,8 @@ tokenValue = '<%=tokenValue%>';
 					  <button id="confirm-button-session-timeout">OK</button>
 					</div>
 			   </div>
+			   
+			   
 				
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
@@ -754,6 +797,12 @@ tokenValue = '<%=tokenValue%>';
 		</div>
 		</section>
 		</div>
+				<div id="custom-popup" class="modal">
+ 					 <div class="modal-content">
+    					<p id="popup-message"></p>
+    					<button id="close-popup">OK</button>
+  					</div>
+				</div>
 		
 		<div class="footer">
 		<%@ include file="footer.jsp"%>

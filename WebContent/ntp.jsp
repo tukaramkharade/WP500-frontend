@@ -18,6 +18,48 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <style type="text/css">
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#close-popup {
+  background-color: #2b3991;
+  color: white;
+  border: none;
+  width: 100px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#close-popup:hover {
+  background-color: #1f2b6d;
+}
 .modal-session-timeout {
   display: none;
   position: fixed;
@@ -417,7 +459,8 @@ var tokenValue;
 	    var ntp_interval = $('#ntp_interval_1').val();
 	    var isValid=true;
 	    if (ntp_server1 === '' || ntp_server2 === '' || ntp_server3 === '' || ntp_interval === '') {
-	        alert('Please fill in all fields before saving.');
+	        //alert('Please fill in all fields before saving.');
+	        showCustomPopup('Please fill in all fields before saving.');
 	        return; // Prevent the AJAX request
 	    }
 	    $.ajax({
@@ -467,7 +510,7 @@ var tokenValue;
 
 		var datetime = $('#datetime').val();
 		if (datetime === '') {
-	        alert('Please enter a valid date and time.');
+			showCustomPopup('Please enter a valid date and time.');
 	        return; // Prevent the AJAX request
 	    }
 
@@ -556,6 +599,11 @@ var tokenValue;
 		        $savebutton.css('background-color', '#2b3991'); // Reset to original color
 		    }
 	}
+	
+	function showCustomPopup(message) {
+        $('#popup-message').text(message);
+        $('#custom-popup').css('display', 'block');
+    }
 
 	$(document).ready(function() {
 		<%// Access the session variable
@@ -601,6 +649,10 @@ var tokenValue;
 				updatentp();
 			}
 		});
+		
+		$('#close-popup').click(function() {
+	        $('#custom-popup').css('display', 'none');
+	    });
 
 	});
 	setInterval(getCurrentTimeInIndia, 60000);
@@ -721,13 +773,21 @@ var tokenValue;
 			</div>
 		</section>
 	</div>
+	
 	<div id="custom-modal-session-timeout" class="modal-session-timeout">
 		<div class="modal-content-session-timeout">
 				  <p1>Your session is timeout. Please login again</p1>
 				  <button id="confirm-button-session-timeout">OK</button>
 		</div>
 	</div>
-
+	
+	<div id="custom-popup" class="modal">
+ 		 <div class="modal-content">
+    		<p id="popup-message"></p>
+    		<button id="close-popup">OK</button>
+  		</div>
+	</div>
+	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
