@@ -528,19 +528,37 @@ var tokenValue;
 	function validateJSON() {
 		
 		const json_string = document.querySelector('textarea').value;
-		  
+		  if(json_string ===''){
+			  alert("Please fill the JsonSring");
+		  }
 		  var res_val = isValidJsonString(json_string);
 		  var res_dup = isJsonStringDuplicate(json_string);
-		  
+		  var res_emp = isJsonStringEmpty(json_string);
 		 
-		  if(res_val == true &&  res_dup == false){
+		  if(res_val == true &&  res_dup == false && res_emp == false){
 			  json_string_text = json_string; // Assign the value here
 			  $('#json_string_validate').val(json_string_text)
 		  }else{
-			  alert('Check if JSON is valid or duplicate keys must be present !!')
+			  alert('Check if JSON is valid or duplicate keys must be present !!');
 			  
 			  $('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 		  }
+	}
+	
+	function isJsonStringEmpty(jsonString) {
+	    console.log("Input JSON string:", jsonString);
+	    
+	    // Parse the JSON string into an object
+	    const jsonObject = JSON.parse(jsonString);
+	    
+	    // Check if the parsed object is empty
+	    if (Object.keys(jsonObject).length === 0) {
+	       
+	        return true; // JSON is empty
+	    } else {
+	        
+	        return false; // JSON is not empty
+	    }
 	}
 
 	function isValidJsonString(jsonString) {
