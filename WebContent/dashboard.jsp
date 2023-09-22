@@ -181,6 +181,82 @@ margin-left: -325px;
   color: white;
 }
 
+.modal-ids {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-ids {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-ips {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-ips {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+#confirm-button-ids {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-ids {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-ips {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-ips {
+  background-color: #f44336;
+  color: white;
+}
+
 </style>
 <script>
 var chart = null;
@@ -885,7 +961,7 @@ function updateBarChartMonth(){
 	    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
 	}
  
- function snortDetails(){
+/*  function snortDetails(){
 	 var snort_type = $('#snort_type').find(":selected").val();
 	 
 	 $.ajax({
@@ -897,7 +973,7 @@ function updateBarChartMonth(){
 			},
 			success : function(data) {
 				// Display the registration status message
-				alert(data.message);
+				//alert(data.message);
 
 			},
 			error : function(xhr, status, error) {
@@ -905,7 +981,100 @@ function updateBarChartMonth(){
 			}
 		});
 	 
+ } */
+ 
+ 
+ /* function snortDetails(){
+	 
+	 var snort_type = $('#snort_type').find(":selected").val();
+	 alert('snort type : '+snort_type);
+	 
+	 
+	 
+ } */
+ 
+ function snortDetails() {
+     var snort_type = $('#snort_type').val();
+     alert('Snort Type: ' + snort_type);
+     
+     if(snort_type == 'IDS'){
+    	 
+    	// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-ids');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-ids');
+		  confirmButton.onclick = function () {
+			  
+			  $.ajax({
+					url : 'dashboard',
+					type : 'POST',
+					data : {
+						snort_type : snort_type,
+						action: 'snort_type'
+					},
+					success : function(data) {
+						
+						// Close the modal
+				        modal.style.display = 'none';
+
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating snort details: ' + error);
+					}
+				});
+			  
+		  }
+		  
+		  var cancelButton = document.getElementById('cancel-button-ids');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#snort_type').val('Select snort type');
+		    
+		  };
+    	 
+     }else if(snort_type == 'IPS'){
+    	 
+    	// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-ips');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-ips');
+		  confirmButton.onclick = function () {
+			  
+			  $.ajax({
+					url : 'dashboard',
+					type : 'POST',
+					data : {
+						snort_type : snort_type,
+						action: 'snort_type'
+					},
+					success : function(data) {
+						
+						// Close the modal
+				        modal.style.display = 'none';
+
+					},
+					error : function(xhr, status, error) {
+						console.log('Error updating snort details: ' + error);
+					}
+				});
+			  
+		  }
+		  
+		  var cancelButton = document.getElementById('cancel-button-ips');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#snort_type').val('Select snort type');
+		  };
+     }
  }
+ 
+ 
  
  function handleStatus(status) {
 	    if (status === 'fail') {
@@ -1058,7 +1227,23 @@ $(document).ready(function() {
 						<p>Your session is timeout. Please login again</p>
 						<button id="confirm-button-session-timeout">OK</button>
 					</div>
-				 </div>				
+				 </div>			
+				 
+				 <div id="custom-modal-ids" class="modal-ids">
+					<div class="modal-content-ids">
+						<p>Are you sure you want to update to IDS</p>
+						<button id="confirm-button-ids">Yes</button>
+				  		<button id="cancel-button-ids">No</button>
+					</div>
+				 </div>		
+				 
+				 <div id="custom-modal-ips" class="modal-ips">
+					<div class="modal-content-ips">
+						<p>Are you sure you want to update to IPS</p>
+						<button id="confirm-button-ips">Yes</button>
+				  		<button id="cancel-button-ips">No</button>
+					</div>
+				 </div>			
 		
 		</div>
 		</section>

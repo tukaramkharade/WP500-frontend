@@ -73,6 +73,9 @@
         <label for="new_password" style="float: left;">New password:</label>
         <input required type="password" id="new_password" name="new_password" >
         
+        <label for="confirm_password" style="float: left;">Confirm password:</label>
+        <input required type="password" id="confirm_password" name="confirm_password" >
+        
         <input font-size: medium" type="submit" value="Submit" id="change_password">
 
 </form>
