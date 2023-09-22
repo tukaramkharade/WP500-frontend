@@ -54,8 +54,15 @@ public class WP500Login extends HttpServlet {
 
             JSONObject jsonResponse = new JSONObject(respStr);
             String status = jsonResponse.getString("status");
+            String first_login = jsonResponse.getString("first_login");
             
-            if(status.equals("success")) {
+            if(status.equals("success") && first_login.equals("true")){
+            	session.setAttribute("username", username);
+            	
+            	userObj.put("status", status);
+            	userObj.put("first_login", first_login);
+            	
+            } else if(status.equals("success") && first_login.equals("false")) {
                 String role = jsonResponse.getString("role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
@@ -75,6 +82,7 @@ public class WP500Login extends HttpServlet {
                     .compact();
                 
                 userObj.put("status", status);
+                userObj.put("first_login", first_login);
                 userObj.put("token", token);
                 
                 session.setAttribute("token", token);

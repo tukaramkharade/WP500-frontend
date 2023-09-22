@@ -28,7 +28,12 @@
         	            var json1 = JSON.stringify(data);
         	            var json = JSON.parse(json1);
 
-        	            if (json.status === 'success') {
+        	            if(json.status === 'success' && json.first_login === 'true'){
+        	            	
+        	            	
+        	            	window.location.href = 'changeoldpassword.jsp';
+        	            	
+        	            }else if (json.status === 'success' && json.first_login === 'false') {
         	                // Login successful
         	                $('#loginMessage').text('Login Successful').css('color', 'green');
         	                var token = data.token;
