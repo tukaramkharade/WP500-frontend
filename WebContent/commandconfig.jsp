@@ -317,6 +317,8 @@ var json = {};
 	   		        modal.style.display = 'none';
 	   		      }
 	   		    });
+	   		    
+	   		 $('#addBtn').val('Add');
 	   		  };
 
 	   		  // Handle the cancel button click
@@ -324,6 +326,7 @@ var json = {};
 	   		  cancelButton.onclick = function () {
 	   		    // Close the modal
 	   		    modal.style.display = 'none';
+	   		 $('#addBtn').val('Edit');
 	   		  };
 	       	}
 	       	
@@ -562,7 +565,7 @@ var json = {};
 	    	});
 	       	 
 	       	$("#delBtn").click(function () {
-	    		  deleteCommand();
+	       		deleteCommand();
 	    	  });
 	       	});
 	
