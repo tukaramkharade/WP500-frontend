@@ -38,7 +38,7 @@
   border-radius: 5px;
   text-align: center;
   position: relative;
-  width: 300px;
+  width: 500px;
   transform: translate(0, -50%); /* Center vertically */
   top: 50%; /* Center vertically */ 
   left: 50%; /* Center horizontally */

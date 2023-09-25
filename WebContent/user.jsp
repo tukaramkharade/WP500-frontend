@@ -10,6 +10,8 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
@@ -223,33 +225,32 @@ var tokenValue;
 												row.append($('<td>').text(user.role));
 
 												var actions = $('<td>');
-												var editButton = $(
-														'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-														.text('Edit')
-														.click(
-																function() {
-																	
-																	settUser(user.username);
-																	setFirstName(user.first_name);
-																	setLastName(user.last_name);
-																	setRole(user.role);
-
-																});
-												var deleteButton = $(
-														'<button style="background-color:red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-														.text('Delete')
-														.click(
-																function() {
-																	deleteUser(user.username);
-																});
 												
-												var changePasswordButton = $(
-												'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-												.text('Change password')
-												.click(
-														function() {
-															setUserForChangingPassword(user.username);													
-														});
+														
+														var editButton = $(
+							                            '<button data-toggle="tooltip" data-placement="top" title="Edit">'
+							                            )
+							                            .html('<i class="fas fa-edit"></i>')
+							                            .click(function() {
+							                                settUser(user.username);
+							                                setFirstName(user.first_name);
+							                                setLastName(user.last_name);
+							                                setRole(user.role);
+							                            });
+
+							                        var deleteButton = $(
+							                            '<button data-toggle="tooltip" data-placement="top" title="Delete">')
+							                            .html('<i class="fas fa-trash-alt"></i>')
+							                            .click(function() {
+							                                deleteUser(user.username);
+							                            });
+
+							                        var changePasswordButton = $(
+							                            '<button data-toggle="tooltip" data-placement="top" title="Change password">')
+							                            .html('<i class="fas fa-key"></i>')
+							                            .click(function() {
+							                                setUserForChangingPassword(user.username);
+							                            });
 
 												actions.append(editButton);
 												actions.append(deleteButton);
@@ -276,7 +277,9 @@ var tokenValue;
 								}
 											});
 						}
-							
+						
+						// Initialize tooltips using Bootstrap
+			            $('[data-toggle="tooltip"]').tooltip();
 						
 					},
 					error : function(xhr, status, error) {
