@@ -657,7 +657,7 @@ var tokenValue;
 						console.log('Error editing general setting: ' + error);
 					}
 				});
-				$('#registerBtnGenSettings').val('Add');		
+				$('#registerBtnGenSettings').val('Edit');		
 		  };
 		  
 		  var cancelButton = document.getElementById('cancel-button-edit-gen');

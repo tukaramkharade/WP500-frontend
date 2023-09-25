@@ -130,6 +130,29 @@ button {
   color: white;
 }
   
+  .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
   
 </style>
 
@@ -544,7 +567,13 @@ button {
 			success : function(data) {
 				// Display the registration status message
 				
-				alert(data.message);
+			//	alert(data.message);
+				
+				// Display the custom popup message
+     			$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
+
+      
 				loadMqttList();
 
 				// Clear form fields
@@ -567,6 +596,9 @@ button {
 				console.log('Error adding mqtt settings: ' + error);
 			}
 		});
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 
 		$('#registerBtn').val('Add');
 	}
@@ -934,6 +966,10 @@ button {
 				</div>
 			  </div>
 			  
+			  <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">Close</button>
+				</div>
 
 			<h3>MQTT SERVER LIST</h3>
 			<hr>

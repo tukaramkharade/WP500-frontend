@@ -288,7 +288,6 @@ var tokenValue;
   	
   	} 
        
-   
        function deleteAlarm() {
  		  // Display the custom modal dialog
  		  var modal = document.getElementById('custom-modal-delete');
@@ -317,6 +316,7 @@ var tokenValue;
  		        modal.style.display = 'none';
  		      }
  		    });
+ 		   $('#addBtn').val('Add');
  		  };
 
  		  // Handle the cancel button click
@@ -324,6 +324,7 @@ var tokenValue;
  		  cancelButton.onclick = function () {
  		    // Close the modal
  		    modal.style.display = 'none';
+ 		   $('#addBtn').val('Edit');
  		  };
  		}
        
@@ -629,7 +630,7 @@ function editAlarmConfig() {
 				}
 			});
 		    
-		    $('#addBtn').val('Add');
+		   
 	  };
 	  
 	  var cancelButton = document.getElementById('cancel-button-edit');

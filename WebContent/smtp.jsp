@@ -17,6 +17,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
+/* Modal Styles */
 .modal {
   display: none;
   position: fixed;
@@ -50,6 +51,7 @@
   color: white;
 }
 
+
 .modal-session-timeout {
   display: none;
   position: fixed;
@@ -82,6 +84,91 @@
   background-color: #4caf50;
   color: white;
 }
+
+.modal-delete {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-delete {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+/* Style for buttons */
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button-delete {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+
 </style>
 
 <script>
@@ -199,9 +286,15 @@ function addSMTPSettings() {
 
 		},
 		success : function(data) {
-			// Display the registration status message
-			showCustomPopup(data.message);
-			getSMTPSettings();
+			
+			
+			 showCustomPopup(data.message);
+				
+			 // Add a delay of 10 seconds (10000 milliseconds) before calling getSMTPSettings()
+			    setTimeout(function() {
+			        getSMTPSettings(); // This will be called after a 10-second delay
+			    }, 10000);
+
 
 			// Clear form fields
 
@@ -229,92 +322,116 @@ function addSMTPSettings() {
 	$('#addBtn').val('Add');
 }
 
+
+
+
 function editSMTPSettings() {
-	var from_email_id = $('#from_email_id').val();
-	var password = $('#password').val();
-	var host = $('#host').val();
-	var smtp_type = $('#smtp_type').find(":selected").val();
-	var ssl_socket_factory_port = $('#ssl_socket_factory_port').val();
-	var ssl_port = $('#ssl_port').val();
-	var ssl_smtp_type = $('#ssl_smtp_type').find(":selected").val();
-	var tls_port = $('#tls_port').val();
-	var tls_auth = $('#tls_auth').find(":selected").val();
-	var tls_enable = $('#tls_enable').find(":selected").val();
-	var to_email_id = $('#to_email_id').val();
-	var email_cc = $('#email_cc').val();
-	var email_bcc = $('#email_bcc').val();
-	if (from_email_id && !validateEmails(from_email_id)) {
-        return; // Exit the function if email_cc is not blank and is invalid
-    }
-	// Check validation for email_cc if it is not blank
-    if (email_cc && !validateEmails(email_cc)) {
-        return; // Exit the function if email_cc is not blank and is invalid
-    }
-
-    // Check validation for email_bcc if it is not blank
-    if (email_bcc && !validateEmails(email_bcc)) {
-        return; // Exit the function if email_bcc is not blank and is invalid
-    }
-
-    // Check validation for to_email_id
-    if (!validateEmails(to_email_id)) {
-        return; // Exit the function if to_email_id is invalid
-    }
 	
-	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
-        return;
-    }
-   
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-edit');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit');
+	  confirmButton.onclick = function () {
+		  var from_email_id = $('#from_email_id').val();
+			var password = $('#password').val();
+			var host = $('#host').val();
+			var smtp_type = $('#smtp_type').find(":selected").val();
+			var ssl_socket_factory_port = $('#ssl_socket_factory_port').val();
+			var ssl_port = $('#ssl_port').val();
+			var ssl_smtp_type = $('#ssl_smtp_type').find(":selected").val();
+			var tls_port = $('#tls_port').val();
+			var tls_auth = $('#tls_auth').find(":selected").val();
+			var tls_enable = $('#tls_enable').find(":selected").val();
+			var to_email_id = $('#to_email_id').val();
+			var email_cc = $('#email_cc').val();
+			var email_bcc = $('#email_bcc').val();
+			
+			if (from_email_id && !validateEmails(from_email_id)) {
+		        return; // Exit the function if email_cc is not blank and is invalid
+		    }
+			// Check validation for email_cc if it is not blank
+		    if (email_cc && !validateEmails(email_cc)) {
+		        return; // Exit the function if email_cc is not blank and is invalid
+		    }
+
+		    // Check validation for email_bcc if it is not blank
+		    if (email_bcc && !validateEmails(email_bcc)) {
+		        return; // Exit the function if email_bcc is not blank and is invalid
+		    }
+
+		    // Check validation for to_email_id
+		    if (!validateEmails(to_email_id)) {
+		        return; // Exit the function if to_email_id is invalid
+		    }
+			
+			if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
+		        return;
+		    }
+			
+			$.ajax({
+				url : 'SMTPServlet',
+				type : 'POST',
+				data : {
+					from_email_id : from_email_id,
+					password : password,
+					host : host,
+					smtp_type : smtp_type,
+					ssl_socket_factory_port : ssl_socket_factory_port,
+					ssl_port : ssl_port,
+					ssl_smtp_type : ssl_smtp_type,
+					tls_port : tls_port,
+					tls_auth : tls_auth,
+					tls_enable : tls_enable,
+					to_email_id : to_email_id,
+					email_cc : email_cc,
+					email_bcc : email_bcc,
+					action: 'update'
+
+				},
+				success : function(data) {
+					
+					// Close the modal
+			        modal.style.display = 'none';
+					
+			        getSMTPSettings();		        
+			        
+
+					// Clear form fields
+
+					$('#from_email_id').val('');
+					$('#password').val('');
+					$('#host').val('');
+					$('#smtp_type').val('Select SMTP type');
+					$('#ssl_socket_factory_port').val('');
+					$('#ssl_port').val('');
+					$('#ssl_smtp_type').val('Select SSL SMTP type');
+					$('#tls_port').val('');
+					$('#tls_auth').val('Select TLS auth');
+					$('#tls_enable').val('Select TLS enable');
+					$('#to_email_id').val('');
+					$('#email_cc').val('');
+					$('#email_bcc').val('');
+					location.reload();
+
+				},
+				error : function(xhr, status, error) {
+					console.log('Error editing SMTP setting: ' + error);
+				}
+				
+			});
+			
+			
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-edit');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	    $('#addBtn').val('Edit');
+	  };	
 	
-	$.ajax({
-		url : 'SMTPServlet',
-		type : 'POST',
-		data : {
-			from_email_id : from_email_id,
-			password : password,
-			host : host,
-			smtp_type : smtp_type,
-			ssl_socket_factory_port : ssl_socket_factory_port,
-			ssl_port : ssl_port,
-			ssl_smtp_type : ssl_smtp_type,
-			tls_port : tls_port,
-			tls_auth : tls_auth,
-			tls_enable : tls_enable,
-			to_email_id : to_email_id,
-			email_cc : email_cc,
-			email_bcc : email_bcc,
-			action: 'update'
-
-		},
-		success : function(data) {
-			// Display the registration status message
-			showCustomPopup(data.message);
-			getSMTPSettings();
-
-			// Clear form fields
-
-			$('#from_email_id').val('');
-			$('#password').val('');
-			$('#host').val('');
-			$('#smtp_type').val('Select SMTP type');
-			$('#ssl_socket_factory_port').val('');
-			$('#ssl_port').val('');
-			$('#ssl_smtp_type').val('Select SSL SMTP type');
-			$('#tls_port').val('');
-			$('#tls_auth').val('Select TLS auth');
-			$('#tls_enable').val('Select TLS enable');
-			$('#to_email_id').val('');
-			$('#email_cc').val('');
-			$('#email_bcc').val('');
-			location.reload();
-
-		},
-		error : function(xhr, status, error) {
-			console.log('Error editing SMTP setting: ' + error);
-		}
-	});
-
-	$('#addBtn').val('Add');
 }
 function validatePortLength(port) {
     // Check if port is a number
@@ -381,25 +498,39 @@ function isValidEmail(email) {
 }
 function deleteSMTPSettings() {
 		
-		var confirmation = confirm('Are you sure you want to delete this SMTP settings?');
-		if (confirmation) {
-			$.ajax({
-				url : 'SMTPServlet',
-				type : 'DELETE',
-				dataType : 'json',
-				success : function(data) {
-					// Display the registration status message
-					showCustomPopup(data.message);
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-delete');
+		  modal.style.display = 'block';
 
-					// Refresh the user list
-					getSMTPSettings();
-				},
-				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting SMTP settings: '+ error);
-				}
-			});
-		}
+		  // Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-delete');
+		  confirmButton.onclick = function () {
+			  $.ajax({
+					url : 'SMTPServlet',
+					type : 'DELETE',
+					dataType : 'json',
+					success : function(data) {
+						// Close the modal
+				        modal.style.display = 'none';
+
+						// Refresh the user list
+						getSMTPSettings();
+					},
+					error : function(xhr, status, error) {
+						// Handle the error response, if needed
+						console.log('Error deleting SMTP settings: '+ error);
+						modal.style.display = 'none';
+					}
+				});
+			  $('#addBtn').val('Add');
+		  };
+		// Handle the cancel button click
+		  var cancelButton = document.getElementById('cancel-button-delete');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		    $('#addBtn').val('Edit');
+		  };
 	}
 
 function testEmail() {
@@ -416,7 +547,7 @@ function testEmail() {
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
-				console.log('Error deleting SMTP settings: '+ error);
+				console.log('Error testing email: '+ error);
 			}
 		});
 	
@@ -464,8 +595,18 @@ function handleStatus(status) {
 
 function showCustomPopup(message) {
     $('#popup-message').text(message);
-    $('#custom-popup').css('display', 'block');
+
+    // Show the modal popup
+    $("#custom-popup").show();
+
+    // Attach a click event handler to the "OK" button
+    $('#close-popup').on('click', function() {
+        // Hide the modal popup when the button is clicked
+        $("#custom-popup").hide();
+
+    });
 }
+
 
 $(document).ready(function() {
 	<%// Access the session variable
@@ -797,12 +938,30 @@ tokenValue = '<%=tokenValue%>';
 		</div>
 		</section>
 		</div>
-				<div id="custom-popup" class="modal">
- 					 <div class="modal-content">
-    					<p id="popup-message"></p>
-    					<button id="close-popup">OK</button>
-  					</div>
+		
+		<div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
+				  <p>Are you sure you want to delete this user?</p>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
 				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this user?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
+				<!-- Modal Popup -->
+			<div id="custom-popup" class="modal">
+    			<div class="modal-content">
+        			<p id="popup-message"></p>
+        			<button id="close-popup">OK</button>
+    			</div>
+			</div>
 		
 		<div class="footer">
 		<%@ include file="footer.jsp"%>
