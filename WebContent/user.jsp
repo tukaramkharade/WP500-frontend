@@ -228,7 +228,7 @@ var tokenValue;
 												
 														
 														var editButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Edit">'
+							                            '<button data-toggle="tooltip" data-placement="top" title="Edit"style="color: #35449a;">'
 							                            )
 							                            .html('<i class="fas fa-edit"></i>')
 							                            .click(function() {
@@ -239,14 +239,14 @@ var tokenValue;
 							                            });
 
 							                        var deleteButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Delete">')
+							                            '<button data-toggle="tooltip" data-placement="top" title="Delete"style="color: red;">')
 							                            .html('<i class="fas fa-trash-alt"></i>')
 							                            .click(function() {
 							                                deleteUser(user.username);
 							                            });
 
 							                        var changePasswordButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Change password">')
+							                            '<button data-toggle="tooltip" data-placement="top" title="Change password"style="color: #35449a;">')
 							                            .html('<i class="fas fa-key"></i>')
 							                            .click(function() {
 							                                setUserForChangingPassword(user.username);

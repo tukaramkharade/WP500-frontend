@@ -181,8 +181,8 @@ function getActiveThreats() {
 						
 						var actions = $('<td>')
 						var ackButton = $(
-										'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-										.text('Acknowledge')
+										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+										.html('<i class="fas fa-check"></i>')
 										.click(
 												function() {
 													ackThreats(activeThreats.threat_id);
@@ -225,7 +225,8 @@ function getActiveThreats() {
 						activeThreatsTable.append(row);
 			 });
 			 }		
-
+				// Initialize tooltips using Bootstrap
+	            $('[data-toggle="tooltip"]').tooltip();
 		},
 		error : function(xhr, status, error) {
 			console.log('Error loading active threats data: ' + error);

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -10,6 +9,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
@@ -220,8 +220,8 @@ button {
 								var actions = $('<td>')
 								
 								var editButton = $(
-										'<button class="editBtn" style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-										.text('Edit')
+										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+										.html('<i class="fas fa-edit"></i>')
 										.click(
 												function() {
 													setMqtt(mqtt.prefix);
@@ -237,8 +237,8 @@ button {
 
 												});
 								var deleteButton = $(
-										'<button class="delBtn" style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-										.text('Delete')
+										'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red">')
+										.html('<i class="fas fa-trash-alt"></i>')
 										.click(
 												function() {
 												
@@ -246,8 +246,8 @@ button {
 													
 												});
 								var getStatusButton = $(
-										'<button class="statusBtn" style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
-										.text('Get Status')
+										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status"style="color: #35449a;">')
+										.html('<i class="fas fa-info-circle"></i>')
 										.click(
 												function() {
 													getMqttStatus(mqtt.broker_ip_address);
@@ -280,8 +280,8 @@ button {
 								
 								
 								var getStatusButton = $(
-										'<button class="statusBtn" style="background-color: #35449a; border: none; border-radius: 10px; margin-left: 5px; color: white">')
-										.text('Get Status')
+										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
+										.html('<i class="fas fa-info-circle"></i>')
 										.click(
 												function() {
 													getMqttStatus(mqtt.broker_ip_address);
@@ -295,7 +295,8 @@ button {
 
 							});
 						}
-						
+						// Initialize tooltips using Bootstrap
+			            $('[data-toggle="tooltip"]').tooltip();
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading mqtt data: ' + error);
