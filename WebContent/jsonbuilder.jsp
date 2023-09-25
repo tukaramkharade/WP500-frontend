@@ -14,6 +14,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
@@ -259,8 +260,8 @@ var tokenValue;
 
 										 var actions = $('<td>');
 										var editButton = $(
-												'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-												.text('Edit')
+												'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit"style="color: #35449a;">')
+												.html('<i class="fas fa-edit"></i>')
 												.click(
 														function() {
 															setJsonBuilder(jsonBuilder.json_string_name);
@@ -274,8 +275,8 @@ var tokenValue;
 														});
 
 										var deleteButton = $(
-												'<button style="background-color: red; border: none; border-radius: 5px; margin-left: 5px; color: white; margin-top: 3px;">')
-												.text('Delete')
+												'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red;">')
+												.html('<i class="fas fa-trash-alt"></i>')
 												.click(
 														function() {
 															deleteJsonBuilder(jsonBuilder.json_string_name);
@@ -305,7 +306,8 @@ var tokenValue;
 								jsonBuilderTable.append(row);
 						});
 						}	
-						
+						// Initialize tooltips using Bootstrap
+			            $('[data-toggle="tooltip"]').tooltip();
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading jsonBuilderTable data: '

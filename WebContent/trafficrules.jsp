@@ -252,8 +252,8 @@ var tokenValue;
 											var actions = $("<td>");
 
 											var editButton = $(
-													'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text('Edit')
+													'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+													.html('<i class="fas fa-edit"></i>')
 													.click(
 															function() {
 																setName(trafficrules.name);
@@ -268,8 +268,8 @@ var tokenValue;
 															});
 
 											var deleteButton = $(
-													'<button style="background-color:red; border: none; border-radius: 5px; margin-left: 5px; color: white">')
-													.text('Delete')
+													'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red">')
+													.html('<i class="fas fa-trash-alt"></i>')
 													.click(
 															function() {
 																deleteTrafficRules(trafficrules.name);
