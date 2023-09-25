@@ -129,10 +129,39 @@ button {
   background-color: #f44336;
   color: white;
 }
+
 #confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
 } 
+
+  .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+ 
+}
 
 </style>
 <script>
@@ -666,9 +695,12 @@ function addAlarmConfig() {
 			
 		},
 		success : function(data) {
-			// Display the registration status message
-			alert(data.message);
-
+			// Display the custom popup message
+ 			$("#popupMessage").text(data.message);
+  			$("#customPopup").show();
+			
+  			
+  			//Clear form fields
 			$('#unit_id').val('');
 			$('#asset_id').val('');
 			$('#broker_type').val('Select broker type');
@@ -682,6 +714,9 @@ function addAlarmConfig() {
 			console.log('Error adding alarm settings: ' + error);
 		}
 	});
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
 
 	$('#addBtn').val('Add');
 }
@@ -816,6 +851,11 @@ function addAlarmConfig() {
 				  <p>Your session is timeout. Please login again</p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
+			  </div>
+			  
+			  <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
 			  </div>
 			  
 		<hr />

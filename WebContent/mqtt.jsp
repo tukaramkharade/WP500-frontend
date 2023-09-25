@@ -136,22 +136,25 @@ button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
+  background-color: #d5d3d3;
   border: 1px solid #ccc;
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
 }
 
 /* Style for the close button */
 #closePopup {
-  display: block;
-  margin-top: 10px;
-  background-color: #007bff;
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
   color: #fff;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
+  margin-left: 40%;
 }
   
 </style>
@@ -260,7 +263,7 @@ button {
 
 												});
 								var deleteButton = $(
-										'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red">')
+										'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
 										.html('<i class="fas fa-trash-alt"></i>')
 										.click(
 												function() {
@@ -269,7 +272,7 @@ button {
 													
 												});
 								var getStatusButton = $(
-										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status"style="color: #35449a;">')
+										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
 										.html('<i class="fas fa-info-circle"></i>')
 										.click(
 												function() {
@@ -318,9 +321,7 @@ button {
 
 							});
 						}
-						// Initialize tooltips using Bootstrap
-			            $('[data-toggle="tooltip"]').tooltip();
-					},
+										},
 					error : function(xhr, status, error) {
 						console.log('Error loading mqtt data: ' + error);
 					}
@@ -399,11 +400,17 @@ button {
 				// Display the MQTT status message
 				
 				if(data.connection_status == 'true'){
-					alert(mqttId + ' : connected');
-					
+				
+					// Display the custom popup message
+	     			$("#popupMessage").text(mqttId + ' : connected');
+	      			$("#customPopup").show();
+	      			
 				}
 				else{
-					alert(mqttId + ' : disconnected');
+				
+					// Display the custom popup message
+	     			$("#popupMessage").text(mqttId + ' : disconnected');
+	      			$("#customPopup").show();
 				} 
 				
 			},
@@ -412,6 +419,10 @@ button {
 				console.log('Error retrieving MQTT status: ' + error);
 			}
 		});
+		
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 	}
 
 	 
@@ -565,9 +576,6 @@ button {
 				
 			},
 			success : function(data) {
-				// Display the registration status message
-				
-			//	alert(data.message);
 				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -602,6 +610,7 @@ button {
 
 		$('#registerBtn').val('Add');
 	}
+	
 	
 	function validateFiletype(type) {
 		var fileTypeError = document.getElementById("fileTypeError");
@@ -686,8 +695,6 @@ button {
     	
     	roleValue = '<%=roleValue%>';
 
-					
-						
 						<%// Access the session variable
 	HttpSession token = request.getSession();
 	String tokenValue = (String) session.getAttribute("token");%>
@@ -968,8 +975,8 @@ button {
 			  
 			  <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
-  				<button id="closePopup">Close</button>
-				</div>
+  				<button id="closePopup">OK</button>
+			  </div>
 
 			<h3>MQTT SERVER LIST</h3>
 			<hr>

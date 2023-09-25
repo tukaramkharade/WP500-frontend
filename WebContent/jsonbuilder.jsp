@@ -168,9 +168,37 @@ button {
   background-color: #f44336;
   color: white;
 }
+
 #confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
+}
+
+ .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
 }
 
 </style>
@@ -501,8 +529,13 @@ var tokenValue;
 						action: 'add'
 					},
 					success : function(data) {
-						// Display the registration status message
-						alert(data.message);
+						
+						
+						// Display the custom popup message
+     			$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
+
+      			
 						loadJsonBuilderList();
 
 						// Clear form fields
@@ -523,6 +556,10 @@ var tokenValue;
 						console.log('Error adding json builder: ' + error);
 					}
 				});
+		
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 
 		$('#registerBtn').val('Add');
 	}
@@ -531,7 +568,15 @@ var tokenValue;
 		
 		const json_string = document.querySelector('textarea').value;
 		  if(json_string ===''){
-			  alert("Please fill the JsonSring");
+			
+			// Display the custom popup message
+   			$("#popupMessage").text("Please fill the JsonSring");
+    			$("#customPopup").show();
+    			
+    			$("#closePopup").click(function () {
+    			    $("#customPopup").hide();
+    			  });
+
 		  }
 		  var res_val = isValidJsonString(json_string);
 		  var res_dup = isJsonStringDuplicate(json_string);
@@ -541,7 +586,16 @@ var tokenValue;
 			  json_string_text = json_string; // Assign the value here
 			  $('#json_string_validate').val(json_string_text)
 		  }else{
-			  alert('Check if JSON is valid or duplicate keys must be present !!');
+			
+			  
+			  // Display the custom popup message
+     			$("#popupMessage").text('Check if JSON is valid or duplicate keys must be present !!');
+      			$("#customPopup").show();
+      			
+      			$("#closePopup").click(function () {
+      			    $("#customPopup").hide();
+      			  });
+
 			  
 			  $('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 		  }
@@ -771,7 +825,7 @@ var tokenValue;
 												json_string_name_error.textContent = "";
 											}
 
-										//	alert(json_string_text)
+										
 											if (json_string_text) {
 												if (buttonText == 'Add') {
 													addJsonBuilder();
@@ -779,7 +833,15 @@ var tokenValue;
 													editJsonBuilder();
 												}
 											} else {
-												alert('First validate json!')
+											
+												// Display the custom popup message
+								     			$("#popupMessage").text('First validate json!');
+								      			$("#customPopup").show();
+								      			
+								      			$("#closePopup").click(function () {
+								      			    $("#customPopup").hide();
+								      			  });
+
 											}
 
 										});
@@ -947,6 +1009,11 @@ var tokenValue;
 				  <p>Your session is timeout. Please login again</p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
+			  </div>
+			  
+			   <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
 			  </div>
 
 		<h3>JSON BUILDER SETTINGS LIST</h3>

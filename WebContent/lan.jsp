@@ -135,7 +135,6 @@ button {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				//alert(data.eth0_ipaddr + " " + data.eth0_subnet);
 				
 				var json1 = JSON.stringify(data);
 				var json = JSON.parse(json1);
