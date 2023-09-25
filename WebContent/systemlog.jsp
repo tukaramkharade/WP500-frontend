@@ -46,6 +46,34 @@
   background-color: #4caf50;
   color: white;
 }
+
+  .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
+
 </style>
 <script>
 
@@ -58,7 +86,10 @@ var tokenValue;
 		var startdatetime = $('#startdatetime').val();
 		var enddatetime = $('#enddatetime').val();
 		if (searchQuery === "") {
-			alert("Please enter a search query.");
+			
+			// Display the custom popup message
+	     			$("#popupMessage").text("Please enter a search query.");
+	      			$("#customPopup").show();
 			return;
 		}
 		var tableBody = $("#log_table_body");
@@ -117,6 +148,9 @@ var tokenValue;
 				console.log("Error logs: " + error);
 			},
 		});
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 
 	}
 
@@ -384,6 +418,12 @@ var tokenValue;
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 		</div>
+		
+		<div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
+		
 
 		<!-- Table to display the log data -->
 		<div class="container" style="margin-top: 1%;">

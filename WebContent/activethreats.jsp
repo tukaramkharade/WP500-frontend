@@ -128,6 +128,32 @@
   color: white;
 }
 
+  .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
 
 </style>
 
@@ -372,8 +398,11 @@ function checkDateField() {
     if (errorMessage === '' && startdatetime !== '' && enddatetime !== '') {
         getSearchThreats(); // Call the function when both fields have content
     } else {
-        // Display the error message using an alert
-        alert(errorMessage);
+      
+    	// Display the custom popup message
+			$("#popupMessage").text(errorMessage);
+			$("#customPopup").show();
+         
     }
 }
 
@@ -455,6 +484,11 @@ tokenValue = '<%=tokenValue%>';
         checkDateField();
     });
 	setInterval(getCurrentTimeInIndia, 60000);
+	
+
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
 });
 
 </script>
@@ -512,6 +546,11 @@ tokenValue = '<%=tokenValue%>';
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
+			
+			 <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 			
 		<div class="container">
 

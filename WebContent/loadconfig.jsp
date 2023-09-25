@@ -15,27 +15,96 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style type="text/css">
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+
+</style>
 <script>
 
 var tokenValue;
 
 	function loadConfig() {
-		$.ajax({
-			url : 'loadConfigurationServlet',
-			type : 'GET',
-			dataType : 'json',
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-		    },
-			success : function(data) {
-				alert(data.status);
+		
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  $.ajax({
+					url : 'loadConfigurationServlet',
+					type : 'GET',
+					dataType : 'json',
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
+					success : function(data) {
+					
+						// Close the modal
+				        modal.style.display = 'none';
 
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
-			}
-		});
+					},
+					error : function(xhr, status, error) {
+						// Handle the error response, if needed
+						console.log('Error: ' + error);
+					}
+				});
+				
+		  };
+		
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		   
+		  };	
+		
 	}
 
 	$(document).ready(function() {
@@ -72,8 +141,19 @@ var tokenValue;
 
 			<input type="button" id="loadConfig" value="Load Configuration" />
 		</div>
+		
+		 <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to load the configuration?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
 		</section>
 	</div>
+	
+	
 
 	<div class="footer">
 		<%@ include file="footer.jsp"%>

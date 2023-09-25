@@ -17,40 +17,32 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-/* Modal Styles */
-.modal {
+  .popup {
   display: none;
   position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0; 
-}
-
-.modal-content {
-   background-color: #d5d3d3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
   padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 500px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */ 
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 25%;
 }
 
-#close-popup {
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
   background-color: #4caf50;
-  color: white;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
 }
-
 
 .modal-session-timeout {
   display: none;
@@ -288,12 +280,7 @@ function addSMTPSettings() {
 		success : function(data) {
 			
 			
-			 showCustomPopup(data.message);
-				
-			 // Add a delay of 10 seconds (10000 milliseconds) before calling getSMTPSettings()
-			    setTimeout(function() {
-			        getSMTPSettings(); // This will be called after a 10-second delay
-			    }, 10000);
+			alert
 
 
 			// Clear form fields
@@ -436,11 +423,21 @@ function editSMTPSettings() {
 function validatePortLength(port) {
     // Check if port is a number
     if (isNaN(port)) {
-        showCustomPopup('Port must be a number.');
+       
+       // Display the custom popup message
+	     			$("#popupMessage").text('Port must be a number.');
+	      			$("#customPopup").show();
+	      			
+	      			
         return false;
     }
     if (port.length > 5) {
-        showCustomPopup('Port must not exceed 5 digits in length.');
+
+       
+       // Display the custom popup message
+	     			$("#popupMessage").text('Port must not exceed 5 digits in length.');
+	      			$("#customPopup").show();
+	      			
         return false;
     }
     return true;
@@ -457,7 +454,12 @@ function validateEmails(emails) {
     console.log("emailArray:", emailArray + " "+emailArray.length);
     console.log("emailArray1:", emailArray1 + " "+emailArray1.length);
     if (emails.includes(' ')) {
-        showCustomPopup('Space is not allowed between email addresses: ' + emails);
+     
+     // Display the custom popup message
+	     			$("#popupMessage").text('Space is not allowed between email addresses: ' + emails);
+	      			$("#customPopup").show();
+	      			
+	      			
         return false; // Space is not allowed between email addresses
     }
 
@@ -465,16 +467,29 @@ function validateEmails(emails) {
     for (var i = 0; i < emailArray1.length; i++) {
         if (!isValidEmail(emailArray1[i])) {
         	if (emails.includes(',') && !emailArray.length > 1) {
-                console.log("comma " + emailArray.length + " " + emails.length);
-                showCustomPopup('Comma is required between email addresses:1' + emailArray1[i]);
+                console.log("comma " + emailArray.length + " " + emails.length);    
+               
+               // Display the custom popup message
+	     			$("#popupMessage").text('Comma is required between email addresses:1' + emailArray1[i]);
+	      			$("#customPopup").show();
+	      			
                 return false; // Comma is required between multiple emails
             }
         	else if(!emails.includes(',') && emails.includes('@')){
         		console.log("comma " + emailArray.length + " " + emails.length);
-                showCustomPopup('Comma is required between email addresses:2' + emailArray1[i]);
+            
+            // Display the custom popup message
+	     			$("#popupMessage").text('Comma is required between email addresses:2' + emailArray1[i]);
+	      			$("#customPopup").show();
+	      			
+	      			
                 return false; // Comma is required between multiple emails
-        	}
-        	showCustomPopup('Invalid email address: ' + emailArray1[i]);
+        	}    	
+        	
+        	// Display the custom popup message
+	     			$("#popupMessage").text('Invalid email address: ' + emailArray1[i]);
+	      			$("#customPopup").show();
+	      			
             return false; // Stop and show an showCustomPopup for the first invalid email
         	
             
@@ -539,8 +554,10 @@ function testEmail() {
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
-				// Display the registration status message
-				showCustomPopup(data.message);
+			
+				// Display the custom popup message
+     			$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
 
 				// Refresh the user list
 				getSMTPSettings();
@@ -550,6 +567,9 @@ function testEmail() {
 				console.log('Error testing email: '+ error);
 			}
 		});
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
 	
 }
 
@@ -592,21 +612,6 @@ function handleStatus(status) {
         };
     }
 }
-
-function showCustomPopup(message) {
-    $('#popup-message').text(message);
-
-    // Show the modal popup
-    $("#custom-popup").show();
-
-    // Attach a click event handler to the "OK" button
-    $('#close-popup').on('click', function() {
-        // Hide the modal popup when the button is clicked
-        $("#custom-popup").hide();
-
-    });
-}
-
 
 $(document).ready(function() {
 	<%// Access the session variable
@@ -738,9 +743,9 @@ tokenValue = '<%=tokenValue%>';
 	$("#testEmailBtn").click(function () {
 		testEmail();
 	  });
-	$('#close-popup').click(function() {
-        $('#custom-popup').css('display', 'none');
-    });
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
 	
 });
 
@@ -955,13 +960,10 @@ tokenValue = '<%=tokenValue%>';
 				</div>
 			  </div>
 			  
-				<!-- Modal Popup -->
-			<div id="custom-popup" class="modal">
-    			<div class="modal-content">
-        			<p id="popup-message"></p>
-        			<button id="close-popup">OK</button>
-    			</div>
-			</div>
+				 <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 		
 		<div class="footer">
 		<%@ include file="footer.jsp"%>

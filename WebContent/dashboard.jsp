@@ -961,41 +961,9 @@ function updateBarChartMonth(){
 	    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
 	}
  
-/*  function snortDetails(){
-	 var snort_type = $('#snort_type').find(":selected").val();
-	 
-	 $.ajax({
-			url : 'dashboard',
-			type : 'POST',
-			data : {
-				snort_type : snort_type,
-				action: 'snort_type'
-			},
-			success : function(data) {
-				// Display the registration status message
-				//alert(data.message);
-
-			},
-			error : function(xhr, status, error) {
-				console.log('Error updating snort details: ' + error);
-			}
-		});
-	 
- } */
- 
- 
- /* function snortDetails(){
-	 
-	 var snort_type = $('#snort_type').find(":selected").val();
-	 alert('snort type : '+snort_type);
-	 
-	 
-	 
- } */
  
  function snortDetails() {
      var snort_type = $('#snort_type').val();
-     alert('Snort Type: ' + snort_type);
      
      if(snort_type == 'IDS'){
     	 

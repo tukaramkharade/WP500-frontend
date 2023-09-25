@@ -165,9 +165,37 @@ button {
   background-color: #f44336;
   color: white;
 }
+
 #confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
+}
+
+  .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
 }
 
 </style>
@@ -723,8 +751,11 @@ var tokenValue;
 				action: 'add'
 			},
 			success : function(data) {
-				// Display the registration status message
-				alert(data.message);
+				
+				// Display the custom popup message
+     			$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
+
 				loadDispenserTriggerList();
 
 				// Clear form fields
@@ -750,6 +781,10 @@ var tokenValue;
 			}
 		});
 
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
+		
 		$('#registerBtn').val('Add');
 	}
 
@@ -1277,6 +1312,11 @@ var tokenValue;
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>
+			  
+			   <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 
 		<h3>DISPENSER TRIGGER LIST</h3>
 		<hr />
@@ -1290,12 +1330,6 @@ var tokenValue;
 						<th>Side</th>
 						<th>Trigger Tag</th>
 						<th>Trigger Value</th>
-					<!-- <th>Start Pressure</th>
-						<th>End Pressure</th>
-						<th>Temperature</th>
-						<th>Total</th>
-						<th>Unit Price</th>
-						<th>Quantity</th> -->
 						<th>Broker IP Address</th>
 						<th>Status</th>
 						<th>Unit ID</th>
