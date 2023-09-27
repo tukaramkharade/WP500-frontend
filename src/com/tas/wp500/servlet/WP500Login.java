@@ -30,8 +30,6 @@ public class WP500Login extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-     //   boolean isFirstLogin = (session.getAttribute("firstLogin") == null);
-
         
         session.setMaxInactiveInterval(1800);
 

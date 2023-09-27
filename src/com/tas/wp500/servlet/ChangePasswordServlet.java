@@ -31,6 +31,9 @@ public class ChangePasswordServlet extends HttpServlet {
 		JSONObject respJson = null;
 		
 		HttpSession session = request.getSession(true);
+		
+		// Check if the password is set in the session
+        boolean isPasswordSet = session.getAttribute("password_set") != null;
 
 		String check_username = (String) session.getAttribute("username");
 		
@@ -41,43 +44,45 @@ public class ChangePasswordServlet extends HttpServlet {
 			String old_password = request.getParameter("old_password");
 			String new_password = request.getParameter("new_password");
 			
-			System.out.println("username : "+username);
-			System.out.println("old password : "+old_password);
-			System.out.println("new password : "+new_password);
+			
+				try{
+					
+					json.put("operation", "update_old_password");
+					json.put("user", check_username);
+					json.put("username", username);
+					json.put("old_password", old_password);
+					json.put("new_password", new_password);
+					
+					String respStr = client.sendMessage(json.toString());
+
+					logger.info("res " + new JSONObject(respStr).getString("msg"));
+					
+					String message = new JSONObject(respStr).getString("msg");
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("message", message);
+					
+					// Set the content type of the response to
+					// application/json
+					response.setContentType("application/json");
+
+					// Get the response PrintWriter
+					PrintWriter out = response.getWriter();
+
+					// Write the JSON object to the response
+					out.print(jsonObject.toString());
+					out.flush();
+					
+					if (!isPasswordSet) {
+		                // Set the flag in the session to indicate that the password is set
+		                session.setAttribute("password_set", true);
+		            }
+					
+				}catch(Exception e){
+					e.printStackTrace();
+					logger.error("Error in updating old password to new password: "+e);
+				}
 			
 			
-			try{
-				
-				json.put("operation", "update_old_password");
-				json.put("user", check_username);
-				json.put("username", username);
-				json.put("old_password", old_password);
-				json.put("new_password", new_password);
-				
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to
-				// application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-				
-				
-			}catch(Exception e){
-				e.printStackTrace();
-				logger.error("Error in updating old password to new password: "+e);
-			}
 		}else{
 			try {
 				JSONObject userObj = new JSONObject();
