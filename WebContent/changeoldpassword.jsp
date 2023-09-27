@@ -52,8 +52,6 @@ button {
   cursor: pointer;
 }
 
-
-
 #confirm-button-edit {
   background-color: #4caf50;
   color: white;
@@ -71,8 +69,6 @@ button {
   height: 100%;
 }
 
-
-
 .changePassword {
   width: 28em;
   border-radius: 30px;
@@ -80,8 +76,7 @@ button {
   padding: 30px; /* Use padding instead of padding-bottom for spacing */
   text-align: center;
 }
-        
-        
+       
 .changePassword label {
    display: block;
    text-align: left;
@@ -101,50 +96,48 @@ button {
     font-size: medium;
  }
         
-.modal {
+.popup {
   display: none;
   position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0; 
-}
-
-.modal-content {
-   background-color: #d5d3d3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
   padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 500px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */ 
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 25%;
 }
 
-#close-popup {
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
   background-color: #4caf50;
-  color: white;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
 }
-
 
 </style>
 <script>
 
+var changePasswordValue;
+
 function updateOldPassword() {
+	
+	
 	// Get the values of new_password and confirm_password
 	var new_password = $('#new_password').val();
 	var confirm_password = $('#confirm_password').val();
+	 var old_password = $('#old_password').val();
 
-	// Check if the passwords match
-	if (new_password === confirm_password) {
+	
+	 if (new_password === confirm_password) {
 		// Display the custom modal dialog
 		var modal = document.getElementById('custom-modal-edit');
 		modal.style.display = 'block';
@@ -167,9 +160,23 @@ function updateOldPassword() {
 				},
 				success : function(data) {
 					
+					 if (old_password === new_password) {
+					      //  showCustomPopup(data.message);
+				
+							$("#popupMessage").text(data.message);
+								$("#customPopup").show();
+								
+								 $('#confirm_password').val('');
+								 $('#new_password').val('');
+					 }else{
+						 
+							
+						 window.location.href = 'login.jsp';
+					 }
+					
 					// Close the modal
 					modal.style.display = 'none';
-					window.location.href = 'login.jsp';
+					
 				},
 				error : function(xhr, status, error) {
 					console.log('Error updating user: ' + error);
@@ -185,50 +192,46 @@ function updateOldPassword() {
 		};
 	} else {
 		
-		showCustomPopup('New password and confirm password do not match.');
+		//showCustomPopup('New password and confirm password do not match.');
+		
+		$("#popupMessage").text('New password and confirm password do not match.');
+			$("#customPopup").show();
 		
 	}
 }
 
-function showCustomPopup(message) {
-    $('#popup-message').text(message);
+$(document).ready(function () {
+	
+	 <%// Access the session variable
+	
+	Boolean changePasswordValue = (Boolean) session.getAttribute("password_set");%>
 
-    // Show the modal popup
-    $("#custom-popup").show();
-
-    // Attach a click event handler to the "OK" button
-    $('#close-popup').on('click', function() {
-        // Hide the modal popup when the button is clicked
-        $("#custom-popup").hide();
-
-    });
-}
-
-
-
-$(document).ready(function() {
-
+	changePasswordValue = '<%=changePasswordValue%>'; 
+	
+	// Check if password_set is not set or is false, then redirect to another page
+    if (!changePasswordValue || changePasswordValue === 'false') {
+        window.location.href = 'changeoldpassword.jsp';
+    }
+	
+	
 	$('#changePasswordForm').submit(function(event) {
 		event.preventDefault(); // Prevent the default form submission
 		updateOldPassword();
 	});
 	
-	$('#close-popup').click(function() {
-        $('#custom-popup').css('display', 'none');
-    });
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
 
 });
+
 </script>
 </head>
 <body>
 
-	<div class="sidebar">
-		<%@ include file="common.jsp"%>
-	</div>
-	<div class="header">
-		<%@ include file="header.jsp"%>
-	</div>
-	<div class="content">
+	
+	
+	<div class="content1">
 		<section style="margin-left: 1em">
 			<h3>CHANGE PASSWORD</h3>
 			<hr>
@@ -265,12 +268,10 @@ $(document).ready(function() {
 				</div>
 			  </div>
 			  
-			 <div id="custom-popup" class="modal">
-    			<div class="modal-content">
-        			<p id="popup-message"></p>
-        			<button id="close-popup">OK</button>
-    			</div>
-			</div>
+			  <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 			
 		</section>
 	</div>
