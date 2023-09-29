@@ -44,7 +44,7 @@
                                 }
                             });
                             
-        	                window.location.href = 'overview.jsp';
+        	                window.location.href = 'totp.jsp';
         	                
         	            } else {
         	                // Login failed
@@ -77,46 +77,69 @@
 
         	    return result;
         	}
-      // Function to generate an image with the random number
-         function generateImageWithNumber() {
-             const randomNumber = generateRandomAlphanumeric();
+     
+        	
+        	function generateImageWithNumber() {
+        	    const randomNumber = generateRandomAlphanumeric();
 
-             // Get the canvas element
-             const canvas = document.createElement('canvas');
-             canvas.width = 200; // Adjust the canvas size as needed
-             canvas.height = 100;
+        	    // Get the canvas element
+        	    const canvas = document.createElement('canvas');
+        	    canvas.width = 220; // Adjust the canvas size as needed
+        	    canvas.height = 80;
 
-             // Get the drawing context
-             const ctx = canvas.getContext('2d');
+        	    // Get the drawing context
+        	    const ctx = canvas.getContext('2d');
 
-             // Customize the appearance of the text
-             ctx.fillStyle = 'white'; // Text color
-             ctx.fillRect(0, 0, canvas.width, canvas.height); // Background color
-             ctx.font = '24px Arial'; // Font size and family
-             ctx.fillStyle = 'black'; // Text color
+        	    // Customize the appearance of the text
+        	    ctx.fillStyle = 'white'; // Text color
+        	    ctx.fillRect(0, 0, canvas.width, canvas.height); // Background color
+        	    ctx.font = '24px Arial'; // Font size and family
+        	    ctx.fillStyle = 'black'; // Text color
 
-             // Center the text on the canvas
-             ctx.textAlign = 'center';
-             ctx.textBaseline = 'middle';
+        	    // Center the text on the canvas
+        	    ctx.textAlign = 'center';
+        	    ctx.textBaseline = 'middle';
 
-             // Draw the random number on the canvas
-             ctx.fillText(randomNumber.toString(), canvas.width / 2, canvas.height / 2);
+        	    // Calculate the space between characters
+        	    const characterSpacing = 10; // Adjust the space between characters as needed
 
-             // Create an image element
-             const img = new Image();
+        	    // Calculate the total width needed for the text
+        	    const totalTextWidth = (24 + characterSpacing) * randomNumber.length - characterSpacing;
 
-             // Set the source of the image to the canvas data URL
-             img.src = canvas.toDataURL('image/png');
+        	    // Calculate the starting position for the text
+        	    const startX = (canvas.width - totalTextWidth) / 2;
+        	    
+        	 // Draw a horizontal line in the middle of the canvas
+        	    ctx.beginPath();
+        	    ctx.moveTo(0, canvas.height / 2);
+        	    ctx.lineTo(canvas.width, canvas.height / 2);
+        	    ctx.stroke();
 
-             // Clear the previous image (if any)
-             const imageContainer = document.getElementById('imageContainer');
-             imageContainer.innerHTML = '';
+        	    // Draw each character with space between them
+        	    for (var i = 0; i < randomNumber.length; i++) {
+        	        const character = randomNumber.charAt(i);
+        	        ctx.fillText(character, startX + i * (24 + characterSpacing), canvas.height / 2);
+        	    }
 
-             // Append the new image to the container
-             imageContainer.appendChild(img);
-        	  // Store the generated random number in a data attribute
-             img.setAttribute('data-random-number', randomNumber);
-         }
+        	    // Create an image element
+        	    const img = new Image();
+
+        	    // Set the source of the image to the canvas data URL
+        	    img.src = canvas.toDataURL('image/png');
+
+        	    // Clear the previous image (if any)
+        	    const imageContainer = document.getElementById('imageContainer');
+        	    imageContainer.innerHTML = '';
+
+        	    // Append the new image to the container
+        	    imageContainer.appendChild(img);
+
+        	    // Store the generated random number in a data attribute
+        	    img.setAttribute('data-random-number', randomNumber);
+        	}
+
+
+
       
          function checkUserInput() {
              // Get the user's input
@@ -186,9 +209,10 @@
             padding: 5px 140px;
             font-size: medium;
         }
+        
        #imageContainer img {
-            height: 30%; 
-            width: 45%;
+          
+            width: 38%;
         }
     </style>
 </head>
