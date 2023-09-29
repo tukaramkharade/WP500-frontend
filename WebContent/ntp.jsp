@@ -18,44 +18,33 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <style type="text/css">
-.modal {
+.popup {
   display: none;
   position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
 }
 
-#close-popup {
-  background-color: #2b3991;
-  color: white;
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
   border: none;
-  width: 100px;
-  height: 30px;
-  border-radius: 4px;
+  padding: 10px 20px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-left: 40%;
 }
+
 
 #close-popup:hover {
   background-color: #1f2b6d;
@@ -447,7 +436,10 @@ var tokenValue;
 			},
 			success : function(data) {
 				
-				showCustomPopup(data.message);
+				// Display the custom popup message
+     			$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
+      			
 				getntp();
 			
 				// Clear form fields
@@ -508,7 +500,10 @@ var tokenValue;
 			    var isValid=true;
 			    if (ntp_server1 === '' || ntp_server2 === '' || ntp_server3 === '' || ntp_interval === '') {
 			       
-			        showCustomPopup('Please fill in all fields before saving.');
+			    
+				// Display the custom popup message
+     			$("#popupMessage").text('Please fill in all fields before saving.');
+      			$("#customPopup").show();
 			        return; // Prevent the AJAX request
 			    }
 			    
@@ -569,7 +564,10 @@ var tokenValue;
 
 		var datetime = $('#datetime').val();
 		if (datetime === '') {
-			showCustomPopup('Please enter a valid date and time.');
+			
+				// Display the custom popup message
+     			$("#popupMessage").text('Please enter a valid date and time.');
+      			$("#customPopup").show();
 	        return; // Prevent the AJAX request
 	    }
 
@@ -582,7 +580,9 @@ var tokenValue;
 			},
 			success : function(data) {
 				
-				showCustomPopup(data.message);
+				// Display the custom popup message
+     			$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
 
 				// Clear form fields
 
@@ -659,11 +659,6 @@ var tokenValue;
 		    }
 	}
 	
-	function showCustomPopup(message) {
-        $('#popup-message').text(message);
-        $('#custom-popup').css('display', 'block');
-    }
-
 	$(document).ready(function() {
 		<%// Access the session variable
 		HttpSession role = request.getSession();
@@ -709,9 +704,9 @@ var tokenValue;
 			}
 		});
 		
-		$('#close-popup').click(function() {
-	        $('#custom-popup').css('display', 'none');
-	    });
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 
 	});
 	setInterval(getCurrentTimeInIndia, 60000);
@@ -840,12 +835,10 @@ var tokenValue;
 		</div>
 	</div>
 	
-	<div id="custom-popup" class="modal">
- 		 <div class="modal-content">
-    		<p id="popup-message"></p>
-    		<button id="close-popup">OK</button>
-  		</div>
-	</div>
+	<div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 	
 	 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">

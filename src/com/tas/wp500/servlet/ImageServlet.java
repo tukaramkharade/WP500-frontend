@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
@@ -17,8 +18,10 @@ import java.util.Base64;
 
 @WebServlet("/imageServlet")
 public class ImageServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+	final static Logger logger = Logger.getLogger(ImageServlet.class);
+    
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	
         HttpSession session = request.getSession(false);
 
         if (session != null && session.getAttribute("username") != null) {
@@ -62,27 +65,26 @@ public class ImageServlet extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                logger.error("Error getting qr code and secret key: "+e);
             }
         } else {
-            try {
-                JSONObject userObj = new JSONObject();
-                userObj.put("msg", "Your session has timed out. Please log in again");
-                userObj.put("status", "fail");
+        	try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
 
-                System.out.println(">>" + userObj);
+				System.out.println(">>" + userObj);
 
-                // Set the response content type to JSON
-                response.setContentType("application/json");
+				// Set the response content type to JSON
+				response.setContentType("application/json");
 
-                // Write the JSON data to the response
-                PrintWriter out = response.getWriter();
-                out.print(userObj.toString());
-                out.flush();
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
         }
     }
     
@@ -92,9 +94,9 @@ public class ImageServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-
+		String check_username = (String) session.getAttribute("username");
+		if (check_username != null) {
+			
 			String otp = request.getParameter("otp");
 			String secretKey = request.getParameter("secretKey");
 			System.out.println("otp-->"+otp+"secretKey-->"+secretKey);
@@ -132,10 +134,27 @@ public class ImageServlet extends HttpServlet {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("Error geting totp authentication : "+e);
 		}
 		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
+			
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
 		}
 	}
     
