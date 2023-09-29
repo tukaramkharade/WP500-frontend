@@ -24,7 +24,6 @@ public class ChangePasswordServlet extends HttpServlet {
 		
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -32,9 +31,6 @@ public class ChangePasswordServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(true);
 		
-		// Check if the password is set in the session
-        boolean isPasswordSet = session.getAttribute("password_set") != null;
-
 		String check_username = (String) session.getAttribute("username");
 		
 		if (check_username != null) {
@@ -58,6 +54,9 @@ public class ChangePasswordServlet extends HttpServlet {
 					logger.info("res " + new JSONObject(respStr).getString("msg"));
 					
 					String message = new JSONObject(respStr).getString("msg");
+					String status = new JSONObject(respStr).getString("status");
+					System.out.println("status : "+status);
+					
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("message", message);
 					
@@ -72,10 +71,8 @@ public class ChangePasswordServlet extends HttpServlet {
 					out.print(jsonObject.toString());
 					out.flush();
 					
-					if (!isPasswordSet) {
-		                // Set the flag in the session to indicate that the password is set
-		                session.setAttribute("password_set", true);
-		            }
+					
+					
 					
 				}catch(Exception e){
 					e.printStackTrace();
