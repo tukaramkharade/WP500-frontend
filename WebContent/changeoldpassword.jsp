@@ -43,7 +43,6 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
-
 /* Style for buttons */
 button {
   margin: 5px;
@@ -126,10 +125,8 @@ button {
 </style>
 <script>
 
-var changePasswordValue;
 
 function updateOldPassword() {
-	
 	
 	// Get the values of new_password and confirm_password
 	var new_password = $('#new_password').val();
@@ -168,14 +165,16 @@ function updateOldPassword() {
 								
 								 $('#confirm_password').val('');
 								 $('#new_password').val('');
+								 
+								
 					 }else{
-						 
-							
+						// Close the modal
+							modal.style.display = 'none';
+						
+						
 						 window.location.href = 'login.jsp';
+						 
 					 }
-					
-					// Close the modal
-					modal.style.display = 'none';
 					
 				},
 				error : function(xhr, status, error) {
@@ -200,22 +199,86 @@ function updateOldPassword() {
 	}
 }
 
-$(document).ready(function () {
-	
-	 <%// Access the session variable
-	
-	Boolean changePasswordValue = (Boolean) session.getAttribute("password_set");%>
+function validateOldPassword(oldPassword) {
+	var oldPasswordError = document.getElementById("oldPasswordError");
+	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+	if (oldPassword.length < 8 || !strongRegex.test(oldPassword)) {
+		oldPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+		return false;
+	} else {
+		oldPasswordError.textContent = "";
+		return true;
+	}
+}
 
-	changePasswordValue = '<%=changePasswordValue%>'; 
-	
-	// Check if password_set is not set or is false, then redirect to another page
-    if (!changePasswordValue || changePasswordValue === 'false') {
-        window.location.href = 'changeoldpassword.jsp';
-    }
-	
+function validateNewPassword(newPassword) {
+	var newPasswordError = document.getElementById("newPasswordError");
+	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+	if (newPassword.length < 8 || !strongRegex.test(newPassword)) {
+		newPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+		return false;
+	} else {
+		newPasswordError.textContent = "";
+		return true;
+	}
+}
+
+function validateConfirmPassword(confirmPassword) {
+	var confirmPasswordError = document.getElementById("confirmPasswordError");
+	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+	if (confirmPassword.length < 8 || !strongRegex.test(confirmPassword)) {
+		confirmPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+		return false;
+	} else {
+		confirmPasswordError.textContent = "";
+		return true;
+	}
+}
+
+$(document).ready(function () {
 	
 	$('#changePasswordForm').submit(function(event) {
 		event.preventDefault(); // Prevent the default form submission
+		
+		var old_password = $('#old_password').val();
+		var new_password = $('#new_password').val();
+		var confirm_password = $('#confirm_password').val();
+		
+		if (!validateOldPassword(old_password)) {
+			oldPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+			return;
+		}	
+		
+		if (!validateNewPassword(new_password)) {
+			newPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+			return;
+		}	
+		
+		if (!validateConfirmPassword(confirm_password)) {
+			confirmPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+			return;
+		}	
+		
+		if((old_password.length > 30)){
+            field_Old_Pass_Error.textContent = "You can write upto 30 maximum characters."
+            	return;
+        }else{
+            field_Old_Pass_Error.textContent =""
+        }  
+		
+		if((new_password.length > 30)){
+            field_New_Pass_Error.textContent = "You can write upto 30 maximum characters."
+            	return;
+        }else{
+            field_New_Pass_Error.textContent =""
+        }  
+		
+		if((confirm_password.length > 30)){
+            field_Confirm_Pass_Error.textContent = "You can write upto 30 maximum characters."
+            	return;
+        }else{
+            field_Confirm_Pass_Error.textContent =""
+        }  
 		updateOldPassword();
 	});
 	
@@ -228,8 +291,6 @@ $(document).ready(function () {
 </script>
 </head>
 <body>
-
-	
 	
 	<div class="content1">
 		<section style="margin-left: 1em">
@@ -244,17 +305,24 @@ $(document).ready(function () {
 				
 
 				<label for="username" style="float: left;">Username:</label>
-				 <input required type="text" id="username" name="username"><br>
+				<input required type="text" id="username" name="username"><br>
 
 				<label for="old_password" style="float: left;">Old password:</label>
-				
 				<input required type="password" id="old_password" name="old_password" > 
+				<p id="oldPasswordError" style="color: red;"></p>
+				<p id="field_Old_Pass_Error" style="color: red;"></p>
 					
-					<label for="new_password" style="float: left;">New password:</label> 
-					<input required type="password" id="new_password" name="new_password" > 
-					<label for="confirm_password" style="float: left;">Confirm password:</label> 
-					<input required type="password" id="confirm_password" name="confirm_password" > 
-					<input type="submit" value="Submit" id="change_password">
+				<label for="new_password" style="float: left;">New password:</label> 
+				<input required type="password" id="new_password" name="new_password" >
+				<p id="newPasswordError" style="color: red;"></p>
+				<p id="field_New_Pass_Error" style="color: red;"></p> 
+					
+				<label for="confirm_password" style="float: left;">Confirm password:</label> 
+				<input required type="password" id="confirm_password" name="confirm_password" > 
+				<p id="confirmPasswordError" style="color: red;"></p>
+				<p id="field_Confirm_Pass_Error" style="color: red;"></p>
+					
+				<input type="submit" value="Submit" id="change_password">
 
 			</form>
 			

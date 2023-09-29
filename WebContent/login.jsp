@@ -30,7 +30,6 @@
 
         	            if(json.status === 'success' && json.first_login === 'true'){
         	            	
-        	            	
         	            	window.location.href = 'changeoldpassword.jsp';
         	            	
         	            }else if (json.status === 'success' && json.first_login === 'false') {
@@ -45,10 +44,8 @@
                                 }
                             });
                             
-                            
         	                window.location.href = 'overview.jsp';
         	                
-        	                // Redirect or perform other actions as needed
         	            } else {
         	                // Login failed
         	                $('#loginMessage').text(json.msg).css('color', 'red');
@@ -135,6 +132,7 @@
                  checkLogin();
              } else {
                  $('#loginMessage').text('CAPTCHA is incorrect. Please try again.').css('color', 'red');
+                 $('#userInputNumber').val('');
                  // Generate a new random number/image
                  generateImageWithNumber();
              }

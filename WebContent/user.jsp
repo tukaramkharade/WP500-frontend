@@ -422,7 +422,6 @@ var tokenValue;
 		}
 	}
 
-	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
