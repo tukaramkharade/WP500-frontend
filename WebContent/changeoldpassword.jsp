@@ -1,7 +1,7 @@
 
-
 <!DOCTYPE html>
 <html>
+
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
@@ -289,7 +289,7 @@ $(document).ready(function () {
 });
 
 </script>
-</head>
+
 <body>
 	
 	<div class="content1">
@@ -330,7 +330,7 @@ $(document).ready(function () {
 			
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit password of this user?</p>
+				  <p>Are you sure you want to change password?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

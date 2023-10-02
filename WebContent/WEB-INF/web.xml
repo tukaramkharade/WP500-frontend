@@ -4,4 +4,13 @@
   <welcome-file-list>
     <welcome-file>login.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>com.tas.wp500.UploadServlet</servlet-class>
+    <multipart-config>
+      <max-file-size>204857600</max-file-size>
+      <max-request-size>409715200</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+  </servlet>
 </web-app>
