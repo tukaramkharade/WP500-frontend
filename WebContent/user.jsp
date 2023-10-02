@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -207,7 +206,7 @@ var tokenValue;
 	function loadUserList() {
 		
 		$.ajax({
-					//	url : 'data',
+					
 					url : 'userServlet',
 					type : 'GET',
 					dataType : 'json',
@@ -703,7 +702,7 @@ var tokenValue;
 		});
 	});
 </script>
-</head>
+
 <body>
 
 	<div class="sidebar">

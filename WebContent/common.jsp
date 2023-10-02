@@ -24,7 +24,6 @@
       <nav class="sidebar-nav">
         <ul id="tabs">
 
-
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
@@ -43,11 +42,11 @@
                   <a href="user.jsp">User List</a>
                 </li>
                
-                
-                <!-- <li class="nav-item">
-                  <a href="#">Firmware</a>
+                 <li class="nav-item">
+                  <a href="firmwareUpdate.jsp">Firmware Update</a>
                 </li>
-                <li class="nav-item">
+                
+                <!--<li class="nav-item">
                   <a href="#">License</a>
                 </li>
                 <li class="nav-item">
@@ -85,6 +84,7 @@
               </ul>
             </div>
           </li>
+          
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
@@ -106,7 +106,7 @@
                 <a href="dispensertrigger.jsp">Dispenser Trigger</a>
               </li>
 
-                <!-- <li class="nav-item">
+                 <!-- <li class="nav-item">
                   <a class="dropdown-subbtn">Straton
                     <i class="fa fa-caret-down"></i>
                     
@@ -184,6 +184,28 @@
               </ul>
             </div>
           </li>
+          
+          <li class="nav-item">
+            <a class="dropdown-btn">
+              <div class="sidebar-title">
+                <img src="icons/cyberguard.png" />
+                <div class="sidebar-title">User Profile</div>
+              </div>
+            </a> 
+            
+            <div class="dropdown-container">
+              <ul>
+              <li class="nav-item">
+                  <a href="twofactorAuth.jsp">Two Factor Authentication</a>
+                </li>
+                <li class="nav-item">
+                  <a href="changeoldpassword.jsp">Change Password</a>
+                </li>
+                
+              </ul>
+            </div>
+            
+            </li>
 
         </ul>
       </nav>
