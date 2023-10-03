@@ -196,7 +196,7 @@
             <div class="dropdown-container">
               <ul>
               <li class="nav-item">
-                  <a href="twofactorAuth.jsp">Two Factor Authentication</a>
+                  <a href="twofactorAuth.jsp">2 Factor Auth</a>
                 </li>
                 <li class="nav-item">
                   <a href="changeoldpassword.jsp">Change Password</a>
@@ -211,12 +211,7 @@
       </nav>
     </aside>
   </section>
-  <!-- <section class="footer">
-        <footer>
-          <span>COPYRIGHT � TAS INDIA PVT LTD, 2023</span>
-        </footer>
-      </section> -->
-
+ 
   <script>
 
     function openExtLink() {

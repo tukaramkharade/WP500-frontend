@@ -25,7 +25,7 @@
     var secretKey;
    
         // Function to make an Ajax request
-        function getImageAndSecretKey() {
+        /* function getImageAndSecretKey() {
             $.ajax({
                 type: "GET",
                 url: "imageServlet", // URL of your servlet               
@@ -50,10 +50,10 @@
                     console.error("Ajax request failed");
                 }
             });
-        }
+        } */
         
         
-        function displayQRImage(base64Image) {
+        /* function displayQRImage(base64Image) {
             // Create an img element
             var imgElement = document.createElement("img");
 
@@ -63,7 +63,7 @@
             // Append the image to a container element in your HTML (e.g., a <div>)
             var container = document.getElementById("imageContainer"); // Replace "imageContainer" with the ID of your container element
             container.appendChild(imgElement);
-        }
+        } */
         
         function sendOTP() {
             // Get the OTP value from the input field
@@ -112,7 +112,7 @@
 			<div class="container">
 				
 				<div class="row" style="display: flex;   justify-content: center; align-items: center; margin-top: -20px;">
-					<input type="button" onclick="getImageAndSecretKey()" id="showQRCode" value="Get Image and Secret Key">
+					<!-- input type="button" onclick="getImageAndSecretKey()" id="showQRCode" value="Get Image and Secret Key">
     				<div id="imageContainer" style="margin-left: 1%">
     				
     				</div>
@@ -120,7 +120,7 @@
     				<div id="secretKeyContainer">
     					<span id="secretKeyDisplay"></span>
 					</div>
-    				
+    				 -->
     				
     				<input type="text" id="otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
     				
@@ -130,9 +130,9 @@
 				</div>
     			
 			
-			<div class="note">
+			<!-- <div class="note">
 				<p>Note: Please install <b>Authenticator App</b> on your mobile phone for scanning QR code.</p>
-			</div>
+			</div> -->
 			</div>
 			
 			

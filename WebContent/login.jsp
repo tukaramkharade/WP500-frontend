@@ -44,7 +44,7 @@
                                 }
                             });
                             
-        	                window.location.href = 'totp.jsp';
+        	                window.location.href = 'overview.jsp';
         	                
         	            } else {
         	                // Login failed
@@ -85,7 +85,7 @@
         	    // Get the canvas element
         	    const canvas = document.createElement('canvas');
         	    canvas.width = 220; // Adjust the canvas size as needed
-        	    canvas.height = 80;
+        	    canvas.height = 120;
 
         	    // Get the drawing context
         	    const ctx = canvas.getContext('2d');
@@ -93,7 +93,7 @@
         	    // Customize the appearance of the text
         	    ctx.fillStyle = 'white'; // Text color
         	    ctx.fillRect(0, 0, canvas.width, canvas.height); // Background color
-        	    ctx.font = '24px Arial'; // Font size and family
+        	    ctx.font = '36px Arial'; // Font size and family
         	    ctx.fillStyle = 'black'; // Text color
 
         	    // Center the text on the canvas
@@ -232,7 +232,7 @@
         <!-- The generated image will be displayed here -->
    		 </div>
         <label for="captcha" style="float: left;">CAPTCHA:</label>
-        <input required type="text" id="userInputNumber" placeholder="Enter the number"><br>
+        <input required type="text" id="userInputNumber" placeholder="Enter the captcha"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">
         
