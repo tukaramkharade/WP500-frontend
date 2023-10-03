@@ -87,61 +87,35 @@ button {
   color: white;
 }
 
+.toggle-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 10px; /* Adjust the spacing between text and switch */
+    width: 100px; /* Adjust the width as needed */
+}
+
+#enableText,
+#disableText {
+    font-size: 14px; /* Adjust the font size as needed */
+    color: #333; /* Text color */
+    margin: 0; /* Reset margin */
+    display: none; /* Initially hide the text */
+}
+
+/* Style for the enable text when active */
+.toggle-container.active + .toggle-text #enableText {
+    display: inline;
+    
+}
+
+
+.toggle-container.active + .toggle-text #disableText {
+    display: inline;
+    
+}
+
 </style>
-
-
-<!-- <script>
-
- function updateTOTP(){
-	
-	// Display the custom modal dialog
-	  var modal = document.getElementById('custom-modal-edit');
-	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
-	  var confirmButton = document.getElementById('confirm-button-edit');
-	  confirmButton.onclick = function () {
-		  
-		  var toggleContainer = document.querySelector('.toggle-container');
-
-		   toggleContainer.addEventListener('click', function () {
-		        toggleSwitch(this);
-		        // Get the current state of the toggle (enabled/disabled)
-		        var isActive = toggleContainer.classList.contains('active');
-		        
-		        
-		        alert('toggle state : '+isActive);
-		        $.ajax({
-		        	url : 'TOTPServlet',
-					type : 'POST',
-					data : {
-						toggleState: isActive 
-						
-					},
-					success : function(data) {
-						// Close the modal
-				        modal.style.display = 'none';
-						
-					}
-		    		
-		    	});
-		    	
-		        
-		  
-		   });
-		  
-	  };
-	  
-	  var cancelButton = document.getElementById('cancel-button-edit');
-	  cancelButton.onclick = function () {
-	    // Close the modal
-	    modal.style.display = 'none';
-	   
-	  }; 
-	
- }
-	
-</script> -->
 
 <script>
 
@@ -150,38 +124,88 @@ var isActive;
         
         function updateTOTP(element){
         	
-        	 element.classList.toggle('active');
-             
-             var toggleContainer = document.querySelector('.toggle-container');
-             isActive = toggleContainer.classList.contains('active');
-             
-             if (isActive) {
-                 // Toggle switch is enabled
-                 sendDataToServlet("enable");
-                 alert('Toggle switch is enabled');
-             } else {
-                 // Toggle switch is disabled
-                 sendDataToServlet("disable");
-                 alert('Toggle switch is disabled');
-             }
+        	element.classList.toggle('active');
+            var toggleContainer = document.querySelector('.toggle-container');
+            isActive = toggleContainer.classList.contains('active');
+            
+            var enableText = document.getElementById("enableText");
+            var disableText = document.getElementById("disableText");
+            
+            if (isActive) {
+                // Toggle switch is enabled
+                sendDataToServlet("enable");
+                enableText.style.display = "inline";
+                disableText.style.display = "none";
+            } else {
+                // Toggle switch is disabled
+                sendDataToServlet("disable");
+                enableText.style.display = "none";
+                disableText.style.display = "inline";
+            }
         }
         
-        function sendDataToServlet(status) {
-            $.ajax({
+        function sendDataToServlet(totp_authenticator) {
+        	
+        	// Display the custom modal dialog
+      	  var modal = document.getElementById('custom-modal-edit');
+      	  modal.style.display = 'block';
+      	  
+      	// Handle the confirm button click
+      	  var confirmButton = document.getElementById('confirm-button-edit');
+      	  confirmButton.onclick = function () {
+      		  
+      		$.ajax({
                 type: "POST",
                 url: "TOTPServlet",
                 data: { 
-                	status: status 
-                	}, // Send the status to the servlet
+                	totp_authenticator: totp_authenticator 
+                	},
                 success: function(response) {
-                    // Handle the response from the servlet if needed
-                    console.log("Data sent successfully");
+                	// Close the modal
+			        modal.style.display = 'none';
+                    
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     // Handle any errors that occur during the AJAX request
                     console.error("Error sending data: " + errorThrown);
                 }
             });
+      	  };
+      	 var cancelButton = document.getElementById('cancel-button-edit');
+   	  cancelButton.onclick = function () {
+   	    // Close the modal
+   	    modal.style.display = 'none';
+   	   
+   	  }; 
+            
+        }
+        
+        function getTOTPDetails(){
+        	
+        	 $.ajax({
+        	        type: "GET",
+        	        url: "TOTPServlet", // Replace with the actual URL to retrieve TOTP details
+        	        dataType: "json",
+        	        success: function(data) {
+        	            var enableText = document.getElementById("enableText");
+        	            var disableText = document.getElementById("disableText");
+
+        	            if (data.totp_authenticator === "enable") {
+        	                // If TOTP authenticator is enabled, show "Enable" and hide "Disable"
+        	                 $('.toggle-container').addClass('active');
+        	                enableText.style.display = "inline";
+        	                disableText.style.display = "none";
+        	            } else {
+        	                // If TOTP authenticator is disabled, show "Disable" and hide "Enable"
+        	                $('.toggle-container').removeClass('active');
+        	                enableText.style.display = "none";
+        	                disableText.style.display = "inline";
+        	            }
+        	        },
+        	        error: function(xhr, textStatus, errorThrown) {
+        	            console.error("Error fetching TOTP details: " + errorThrown);
+        	        }
+        	    });
         }
         
         $(document).ready(function() {
@@ -190,7 +214,7 @@ var isActive;
         		updateTOTP(this);
         	});
         	
-        	
+        	 getTOTPDetails();
         	
         });
     </script>
@@ -208,17 +232,22 @@ var isActive;
 	
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>TWO FACTOR AUTHENTICATION</h3>
+			<h3>2 FACTOR AUTHENTICATION</h3>
 			<hr>
 			
 			<div class="container">
 			
-			<input type="hidden" id="action" name="action" value="">
-			
 			<div class="toggle-container">
-        		<!-- The switch (circle) -->
-        	<div class="toggle-switch"></div>
-    		</div>
+    <div id="toggle-switch" class="toggle-switch"></div>
+	</div>
+	<div class="toggle-text">
+    	<span id="disableText">Disable</span>
+    	<span id="enableText">Enable</span>
+	</div>
+	
+	<div class="getQRcode">
+	<input type="button" id="getQR" value="Show QR code">
+	</div>
 			 	
 			</div>
 			

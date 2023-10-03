@@ -72,8 +72,7 @@ public class UserServlet extends HttpServlet {
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 
-						// Set the content type of the response to
-						// application/json
+						// Set the content type of the response to application/json
 						resp.setContentType("application/json");
 
 						// Get the response PrintWriter
@@ -155,8 +154,7 @@ public class UserServlet extends HttpServlet {
 							JSONObject jsonObject = new JSONObject();
 							jsonObject.put("message", message);
 
-							// Set the content type of the response to
-							// application/json
+							// Set the content type of the response to application/json
 							resp.setContentType("application/json");
 
 							// Get the response PrintWriter
@@ -197,8 +195,7 @@ public class UserServlet extends HttpServlet {
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 
-						// Set the content type of the response to
-						// application/json
+						// Set the content type of the response to application/json
 						resp.setContentType("application/json");
 
 						// Get the response PrintWriter
@@ -212,10 +209,7 @@ public class UserServlet extends HttpServlet {
 						e.printStackTrace();
 						logger.error("Error in changing password: " + e);
 					}
-					break;
-				
-				
-					
+					break;		
 				}
 			}
 
