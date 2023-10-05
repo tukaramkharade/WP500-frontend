@@ -181,6 +181,9 @@
                 <li class="nav-item">
                   <a href="smtp.jsp">SMTP Settings</a>
                 </li>
+                <li class="nav-item">
+                  <a href="process.jsp">Process</a>
+                </li>
               </ul>
             </div>
           </li>
