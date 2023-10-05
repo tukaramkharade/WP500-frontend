@@ -44,7 +44,7 @@
                                 }
                             });
                             
-        	                window.location.href = 'overview.jsp';
+        	                window.location.href = 'totp.jsp';
         	                
         	            } else {
         	                // Login failed
@@ -151,10 +151,10 @@
              // Check if the user's input matches the stored random number
              if (userInput === storedRandomNumber) {
                  // Call your checkLogin function or do whatever you want
-                 $('#loginMessage').text('CAPTCHA is correct. You may proceed.').css('color', 'green');
+                 $('#loginMessage').text('Captcha is correct. You may proceed.').css('color', 'green');
                  checkLogin();
              } else {
-                 $('#loginMessage').text('CAPTCHA is incorrect. Please try again.').css('color', 'red');
+                 $('#loginMessage').text('Captcha is incorrect. Please try again.').css('color', 'red');
                  $('#userInputNumber').val('');
                  // Generate a new random number/image
                  generateImageWithNumber();
@@ -231,7 +231,7 @@
      	<div id="imageContainer">
         <!-- The generated image will be displayed here -->
    		 </div>
-        <label for="captcha" style="float: left;">CAPTCHA:</label>
+        <label for="captcha" style="float: left;">Captcha:</label>
         <input required type="text" id="userInputNumber" placeholder="Enter the captcha"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">

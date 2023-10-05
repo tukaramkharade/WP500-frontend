@@ -191,7 +191,7 @@
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
-                <img src="icons/cyberguard.png" />
+                <img src="icons/user_profile.png" />
                 <div class="sidebar-title">User Profile</div>
               </div>
             </a> 
@@ -202,7 +202,7 @@
                   <a href="twofactorAuth.jsp">2 Factor Auth</a>
                 </li>
                 <li class="nav-item">
-                  <a href="changeoldpassword.jsp">Change Password</a>
+                  <a href="changeoldpassword.jsp">Reset Password</a>
                 </li>
                 
               </ul>

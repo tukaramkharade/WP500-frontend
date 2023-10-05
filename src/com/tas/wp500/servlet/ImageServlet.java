@@ -26,47 +26,110 @@ public class ImageServlet extends HttpServlet {
 
         if (session != null && session.getAttribute("username") != null) {
             String check_username = (String) session.getAttribute("username");
+            String action = request.getParameter("action");
+            
+            if (action != null) {
+            	switch (action) {
+            	case "generate":
+            		try {
+                        TCPClient client = new TCPClient();
+                        JSONObject json = new JSONObject();
 
-            try {
-                TCPClient client = new TCPClient();
-                JSONObject json = new JSONObject();
+                        json.put("operation", "generate_qr_code");
+                        json.put("user", check_username);
+                        json.put("username", check_username);
+                        
 
-                json.put("operation", "get_qr_code");
-                json.put("user", check_username);
+                        String respStr = client.sendMessage(json.toString());
 
-                String respStr = client.sendMessage(json.toString());
+                        System.out.println("res " + new JSONObject(respStr));
 
-                System.out.println("res " + new JSONObject(respStr));
+                        JSONObject result = new JSONObject(respStr);
 
-                JSONObject result = new JSONObject(respStr);
+                        String qr_image = result.getString("qr_image");
+                        System.out.println("qr_image :"+qr_image.toString());
+                        
+                        String user_secret_key = result.getString("user_secret_key");
+                        System.out.println("secret_key :"+user_secret_key.toString());
 
-                String qr_image = result.getString("qr_image");
-                System.out.println("qr_image :"+qr_image.toString());
-                
-                String secret_key = result.getString("secret_key");
-                System.out.println("secret_key :"+secret_key.toString());
+                        if (!qr_image.isEmpty()) {
+                            // Create a JSON object to hold the image and secret_key
+                            JSONObject responseJson = new JSONObject();
+                            responseJson.put("qr_image", qr_image);
+                            responseJson.put("user_secret_key", user_secret_key);
 
-                if (!qr_image.isEmpty()) {
-                    // Create a JSON object to hold the image and secret_key
-                    JSONObject responseJson = new JSONObject();
-                    responseJson.put("qr_image", qr_image);
-                    responseJson.put("secret_key", secret_key);
+                            // Set the response content type to JSON
+                            response.setContentType("application/json");
 
-                    // Set the response content type to JSON
-                    response.setContentType("application/json");
+                            // Write the JSON data to the response
+                            PrintWriter out = response.getWriter();
+                            out.print(responseJson.toString());
+                            out.flush();
+                        } else {
+                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        logger.error("Error getting qr code and secret key: "+e);
+                    }
+            		break;
+            		
+            	case "get":
+            		try {
+                        TCPClient client = new TCPClient();
+                        JSONObject json = new JSONObject();
 
-                    // Write the JSON data to the response
-                    PrintWriter out = response.getWriter();
-                    out.print(responseJson.toString());
-                    out.flush();
-                } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                logger.error("Error getting qr code and secret key: "+e);
+                        json.put("operation", "get_user_qr");
+                        json.put("user", check_username);
+                        json.put("username", check_username);
+                        
+
+                        String respStr = client.sendMessage(json.toString());
+
+                        System.out.println("res " + new JSONObject(respStr));
+
+                        JSONObject result = new JSONObject(respStr);
+
+                        String qr_image = result.getString("qr_image");
+                        System.out.println("qr_image :"+qr_image.toString());
+                        
+                        String user_secret_key = result.getString("user_secret_key");
+                        System.out.println("secret_key :"+user_secret_key.toString());
+                        
+                        String qr_status = result.getString("qr_status");
+                        System.out.println("qr_status :"+qr_status.toString());
+
+                        if (!qr_image.isEmpty()) {
+                            // Create a JSON object to hold the image and secret_key
+                            JSONObject responseJson = new JSONObject();
+                            responseJson.put("qr_image", qr_image);
+                            responseJson.put("user_secret_key", user_secret_key);
+                            responseJson.put("qr_status", qr_status);
+
+                            // Set the response content type to JSON
+                            response.setContentType("application/json");
+
+                            // Write the JSON data to the response
+                            PrintWriter out = response.getWriter();
+                            out.print(responseJson.toString());
+                            out.flush();
+                        } else {
+                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        logger.error("Error getting qr code and secret key: "+e);
+                    }
+            		break;
+            	}
+            	
+            }else{
+            	logger.error("No action specified : ");
             }
+
+            
         } else {
         	try {
 				JSONObject userObj = new JSONObject();
@@ -95,47 +158,96 @@ public class ImageServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String action = request.getParameter("action");
+		
 		if (check_username != null) {
 			
 			String otp = request.getParameter("otp");
 			String secretKey = request.getParameter("secretKey");
 			System.out.println("otp-->"+otp+"secretKey-->"+secretKey);
-
-		try {
-			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-
-			json.put("operation", "totp_authenticator");
-			json.put("secret_key", secretKey);
-			json.put("otp", otp);
-
-
-			String respStr = client.sendMessage(json.toString());
-
-            System.out.println("res " + new JSONObject(respStr));
-
-            JSONObject result = new JSONObject(respStr);
-
-            String otp_result = result.getString("otp_result");
 			
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("otp_result", otp_result);
+			if (action != null) {
+				switch (action) {
+				
+				case "totp-authentication":
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
+						json.put("operation", "totp_authenticator");
+						json.put("secret_key", secretKey);
+						json.put("otp", otp);
 
-			// Get the response PrintWriter
-			PrintWriter out1 = response.getWriter();
 
-			// Write the JSON object to the response
-			out1.print(jsonObject.toString());
-			out1.flush();
+						String respStr = client.sendMessage(json.toString());
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error("Error geting totp authentication : "+e);
-		}
+			            System.out.println("res " + new JSONObject(respStr));
+
+			            JSONObject result = new JSONObject(respStr);
+
+			            String otp_result = result.getString("otp_result");
+						
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("otp_result", otp_result);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out1 = response.getWriter();
+
+						// Write the JSON object to the response
+						out1.print(jsonObject.toString());
+						out1.flush();
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error("Error geting totp authentication : "+e);
+					}
+					break;
+					
+				case "test-totp":
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "test_totp_authenticator");
+						json.put("secret_key", secretKey);
+						json.put("otp", otp);
+
+
+						String respStr = client.sendMessage(json.toString());
+
+			            System.out.println("res " + new JSONObject(respStr));
+
+			            JSONObject result = new JSONObject(respStr);
+
+			            String otp_result = result.getString("otp_result");
+						
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("otp_result", otp_result);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out1 = response.getWriter();
+
+						// Write the JSON object to the response
+						out1.print(jsonObject.toString());
+						out1.flush();
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error("Error geting totp authentication : "+e);
+					}
+					break;
+				}
+			}
+
+		
 		}else{
 			
 			try {
