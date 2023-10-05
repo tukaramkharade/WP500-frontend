@@ -29,45 +29,56 @@ public class TOTPServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String action = request.getParameter("action");
 		
 		if (check_username != null) {
-			try{
-				
-				json.put("operation", "get_totp_details");
-				json.put("username", check_username);
-				json.put("user", check_username);
-				
-				String respStr = client.sendMessage(json.toString());
-
-				JSONObject respJson = new JSONObject(respStr);
-
-				logger.info("res " + respJson.toString());
-				
-				for (int i = 0; i < respJson.length(); i++) {
-					String totp_authenticator = respJson.getString("totp_authenticator");
+			if (action != null) {
+				switch (action) {
+				case "getTOTPDetails":
 					
 					try{
 						
-						jsonObject.put("totp_authenticator", totp_authenticator);
+						json.put("operation", "get_totp_details");
+						json.put("username", check_username);
+						json.put("user", check_username);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						JSONObject respJson = new JSONObject(respStr);
+
+						logger.info("res " + respJson.toString());
+						
+						for (int i = 0; i < respJson.length(); i++) {
+							String totp_authenticator = respJson.getString("totp_authenticator");
+							
+							try{
+								
+								jsonObject.put("totp_authenticator", totp_authenticator);
+								
+							}catch(Exception e){
+								e.printStackTrace();
+								logger.error("Error in putting totp details in json object :"+e);
+							}
+						}
+						
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+						
 						
 					}catch(Exception e){
 						e.printStackTrace();
-						logger.error("Error in putting totp details in json object :"+e);
+						logger.error("Error in getting totp details : "+e);
 					}
+					break;
+					
+				
 				}
-				
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-				
-				
-			}catch(Exception e){
-				e.printStackTrace();
-				logger.error("Error in getting totp details : "+e);
 			}
+			
 			
 			
 		}else{

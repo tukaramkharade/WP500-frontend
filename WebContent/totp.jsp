@@ -24,57 +24,36 @@
     <script>
     var secretKey;
    
-        // Function to make an Ajax request
-        /* function getImageAndSecretKey() {
-            $.ajax({
-                type: "GET",
-                url: "imageServlet", // URL of your servlet               
-                success: function (data) {
-                    // Handle the response data (data.qr_image and data.secret_key)
-                    if (data.qr_image && data.secret_key) {
-                    	secretKey = data.secret_key;
-                        // You can use data.qr_image and data.secret_key here
-                        displayQRImage(data.qr_image);
-                        
-                        var secretKeyDisplay = document.getElementById("secretKeyDisplay");
-                        secretKeyDisplay.innerHTML = "Secret Key: " +data.secret_key;
-                        
-                        // Update your HTML elements with the data if needed
-                    } else {
-                        // Handle the case where the response does not contain the expected data
-                        console.error("Invalid response data");
-                    }
-                },
-                error: function () {
-                    // Handle errors here
-                    console.error("Ajax request failed");
-                }
-            });
-        } */
-        
-        
-        /* function displayQRImage(base64Image) {
-            // Create an img element
-            var imgElement = document.createElement("img");
+        function getSecretKey(){
+        	$.ajax({
 
-            // Set the src attribute with the base64 image data
-            imgElement.src = "data:image/png;base64," + base64Image; // Assuming the image is in PNG format
-
-            // Append the image to a container element in your HTML (e.g., a <div>)
-            var container = document.getElementById("imageContainer"); // Replace "imageContainer" with the ID of your container element
-            container.appendChild(imgElement);
-        } */
+    			type : "GET",
+    			url : "TOTPOTPServlet", // URL of your servlet 
+    			dataType : 'json',
+    			success : function(data) {
+    				
+    					secretKey = data.totp_key;
+    					
+    			},
+    			error : function() {
+    				// Handle errors here
+    				console.error("Ajax request failed");
+    			}
+    		});
+        }
         
         function sendOTP() {
             // Get the OTP value from the input field
             var otpValue = document.getElementById("otp").value;
             console.log("OTP -->"+otpValue);
+          
             $.ajax({
     			url : "imageServlet",
     			type : "POST",
     			data : {
     				otp: otpValue,
-    				secretKey: secretKey    				
+    				secretKey: secretKey,
+    				action: 'totp-authentication'
     			},
                 success: function (response) {
                     // Handle the response from the server, if needed
@@ -87,7 +66,7 @@
                     	// Display an error message on the same page
                         document.getElementById("error-message").innerHTML = "Incorrect OTP. Please try again.";
                         $('#otp').val('');
-                    	//window.location.href = 'totp.jsp';
+                    	
                     }
                     
                 },
@@ -98,7 +77,13 @@
             });
         }
         
+        $(document).ready(function() {
+        	getSecretKey();
+        	
+        });
+        
     </script>
+    
     
    
 </head>
@@ -112,27 +97,15 @@
 			<div class="container">
 				
 				<div class="row" style="display: flex;   justify-content: center; align-items: center; margin-top: -20px;">
-					<!-- input type="button" onclick="getImageAndSecretKey()" id="showQRCode" value="Get Image and Secret Key">
-    				<div id="imageContainer" style="margin-left: 1%">
-    				
-    				</div>
-    				
-    				<div id="secretKeyContainer">
-    					<span id="secretKeyDisplay"></span>
-					</div>
-    				 -->
+					
+    				 <input type="hidden" id="action" name="action" value="">
     				
     				<input type="text" id="otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
-    				
-    
-    				<input type="button" onclick="sendOTP()" id="sendOTP" value="Send OTP" style="margin-left: 1%">
+    				<input type="button" id="sendOTP" onclick="sendOTP();" value="Send OTP" style="margin-left: 1%">
 					<div id="error-message" style="color: red; margin-left: 2%;"></div>
 				</div>
     			
 			
-			<!-- <div class="note">
-				<p>Note: Please install <b>Authenticator App</b> on your mobile phone for scanning QR code.</p>
-			</div> -->
 			</div>
 			
 			

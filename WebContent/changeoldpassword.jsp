@@ -82,14 +82,22 @@ button {
    margin-left: 5.5%;
 }
         
-.changePassword input[type="text"],
-.changePassword input[type="password"] {
+.changePassword input[type="text"]
+ {
     width: 85%;
     padding: 5px 0;
-    margin-bottom: 10px;
+    
     margin-left: -3%;
 }
-        
+       
+ .changePassword input[type="password"]
+ {
+    width: 85%;
+    padding: 5px 0;
+   
+    margin-left: -3%;
+} 
+
 .changePassword input[type="submit"] {
     padding: 5px 140px;
     font-size: medium;
@@ -120,6 +128,10 @@ button {
   padding: 10px 20px;
   cursor: pointer;
   margin-left: 40%;
+}
+
+#old_password_label{
+margin-top: 15px;
 }
 
 </style>
@@ -162,6 +174,9 @@ function updateOldPassword() {
 				
 							$("#popupMessage").text(data.message);
 								$("#customPopup").show();
+								
+								// Close the modal
+								modal.style.display = 'none';
 								
 								 $('#confirm_password').val('');
 								 $('#new_password').val('');
@@ -294,20 +309,17 @@ $(document).ready(function () {
 	
 	<div class="content1">
 		<section style="margin-left: 1em">
-			<h3>CHANGE PASSWORD</h3>
+			<h3>RESET PASSWORD</h3>
 			<hr>
 
 			<div class="container">
 			
 				<form id="changePasswordForm" class="changePassword">
 
-				<p style="font-size: medium;">Please change your old password</p>
-				
-
 				<label for="username" style="float: left;">Username:</label>
 				<input required type="text" id="username" name="username"><br>
 
-				<label for="old_password" style="float: left;">Old password:</label>
+				<label for="old_password" style="float: left;" id="old_password_label">Old password:</label>
 				<input required type="password" id="old_password" name="old_password" > 
 				<p id="oldPasswordError" style="color: red;"></p>
 				<p id="field_Old_Pass_Error" style="color: red;"></p>
@@ -330,7 +342,7 @@ $(document).ready(function () {
 			
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to change password?</p>
+				  <p>Are you sure you want to reset password?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
