@@ -161,6 +161,10 @@ button {
   color: white;
 }
 
+#password_label{
+margin-left: -225%;
+}
+
 </style>
 
 <script>
@@ -278,11 +282,7 @@ function addSMTPSettings() {
 
 		},
 		success : function(data) {
-			
-			
-			alert
-
-
+	
 			// Clear form fields
 
 			$('#from_email_id').val('');
@@ -308,9 +308,6 @@ function addSMTPSettings() {
 
 	$('#addBtn').val('Add');
 }
-
-
-
 
 function editSMTPSettings() {
 	
@@ -771,7 +768,7 @@ tokenValue = '<%=tokenValue%>';
 					
 					<div class="col-75-1" style="width: 22%; display:flex;">
 						<div >
-							<label for="from_email_id" >From Email ID:</label>
+							<label for="from_email_id" id="from_email_id_label">From Email ID:</label>
 						</div>
 							
 						<div >
@@ -781,7 +778,7 @@ tokenValue = '<%=tokenValue%>';
 					
 					<div class="col-75-2" style="width: 20%;display:flex">
 							<div>
-                				<label for="password">Password:</label>
+                				<label for="password" id="password_label">Password:</label>
                 			</div>
                 			<div>	
                 				<input type="password" id="password" name="password"  required style="height: 17px" />

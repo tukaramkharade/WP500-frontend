@@ -137,6 +137,7 @@ margin-top: 15px;
 </style>
 <script>
 
+var user;
 
 function updateOldPassword() {
 	
@@ -251,51 +252,68 @@ function validateConfirmPassword(confirmPassword) {
 }
 
 $(document).ready(function () {
+	<%// Access the session variable
 	
-	$('#changePasswordForm').submit(function(event) {
-		event.preventDefault(); // Prevent the default form submission
-		
-		var old_password = $('#old_password').val();
-		var new_password = $('#new_password').val();
-		var confirm_password = $('#confirm_password').val();
-		
-		if (!validateOldPassword(old_password)) {
-			oldPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
-			return;
-		}	
-		
-		if (!validateNewPassword(new_password)) {
-			newPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
-			return;
-		}	
-		
-		if (!validateConfirmPassword(confirm_password)) {
-			confirmPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
-			return;
-		}	
-		
-		if((old_password.length > 30)){
-            field_Old_Pass_Error.textContent = "You can write upto 30 maximum characters."
-            	return;
-        }else{
-            field_Old_Pass_Error.textContent =""
-        }  
-		
-		if((new_password.length > 30)){
-            field_New_Pass_Error.textContent = "You can write upto 30 maximum characters."
-            	return;
-        }else{
-            field_New_Pass_Error.textContent =""
-        }  
-		
-		if((confirm_password.length > 30)){
-            field_Confirm_Pass_Error.textContent = "You can write upto 30 maximum characters."
-            	return;
-        }else{
-            field_Confirm_Pass_Error.textContent =""
-        }  
-		updateOldPassword();
-	});
+	String user = (String) session.getAttribute("username");%>
+
+	user = '<%=user%>';
+	
+	// Set the value of the 'username' input field to the 'user' variable
+    $('#username').val(user);
+	
+	
+ // Check if the user is equal to "tasm2m_admin"
+    if (user === 'tasm2m_admin') {
+        // Disable the form or show a message indicating that the password cannot be changed
+        // For example, you can disable the form like this:
+        $('#changePasswordForm input').prop('disabled', true);
+    } else {
+    	$('#changePasswordForm').submit(function(event) {
+    		event.preventDefault(); // Prevent the default form submission
+    		
+    		var old_password = $('#old_password').val();
+    		var new_password = $('#new_password').val();
+    		var confirm_password = $('#confirm_password').val();
+    		
+    		if (!validateOldPassword(old_password)) {
+    			oldPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+    			return;
+    		}	
+    		
+    		if (!validateNewPassword(new_password)) {
+    			newPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+    			return;
+    		}	
+    		
+    		if (!validateConfirmPassword(confirm_password)) {
+    			confirmPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+    			return;
+    		}	
+    		
+    		if((old_password.length > 30)){
+                field_Old_Pass_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }else{
+                field_Old_Pass_Error.textContent =""
+            }  
+    		
+    		if((new_password.length > 30)){
+                field_New_Pass_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }else{
+                field_New_Pass_Error.textContent =""
+            }  
+    		
+    		if((confirm_password.length > 30)){
+                field_Confirm_Pass_Error.textContent = "You can write upto 30 maximum characters."
+                	return;
+            }else{
+                field_Confirm_Pass_Error.textContent =""
+            }  
+    		updateOldPassword();
+    	});
+    }
+
 	
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();

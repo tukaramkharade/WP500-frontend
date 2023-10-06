@@ -32,7 +32,7 @@
         	            	
         	            	window.location.href = 'changeoldpassword.jsp';
         	            	
-        	            }else if (json.status === 'success' && json.first_login === 'false') {
+        	            }else if (json.status === 'success' && json.first_login === 'false' && json.totp_authenticator === 'enable') {
         	                // Login successful
         	                $('#loginMessage').text('Login Successful').css('color', 'green');
         	                var token = data.token;
@@ -46,7 +46,26 @@
                             
         	                window.location.href = 'totp.jsp';
         	                
-        	            } else {
+        	            } 
+        	            
+        	            
+        	            else if(json.status === 'success' && json.first_login === 'false' && json.totp_authenticator === 'disable'){
+        	            	// Login successful
+        	                $('#loginMessage').text('Login Successful').css('color', 'green');
+        	                var token = data.token;
+        	                
+        	             // Set the token in the header for future AJAX requests
+                            $.ajaxSetup({
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                                }
+                            });
+                            
+        	                window.location.href = 'overview.jsp';
+        	            	
+        	            }
+        	            
+        	            else {
         	                // Login failed
         	                $('#loginMessage').text(json.msg).css('color', 'red');
         	                window.location.href = 'login.jsp';
