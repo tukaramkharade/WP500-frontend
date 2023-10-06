@@ -100,15 +100,12 @@
 					
     				 <input type="hidden" id="action" name="action" value="">
     				
-    				<input type="text" id="otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
-    				<input type="button" id="sendOTP" onclick="sendOTP();" value="Send OTP" style="margin-left: 1%">
+    				<input type="password" id="otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
+    				<input type="button" id="sendOTP" onclick="sendOTP();" value="Validate OTP" style="margin-left: 1%">
 					<div id="error-message" style="color: red; margin-left: 2%;"></div>
 				</div>
     			
-			
 			</div>
-			
-			
 			
 	</section>
 	</div>

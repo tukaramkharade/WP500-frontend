@@ -394,8 +394,6 @@ margin-top: 15px;
 	});
 </script>
 
-
-
 <body>
 
 	<div class="sidebar">
@@ -429,8 +427,8 @@ margin-top: 15px;
 				
 				<div class="test-totp">
 					 <input type="button" id="test-totp" value="Test TOTP">
-					 <input type="text" id="otp" placeholder="Enter OTP" style="width: 15%;">
-    				<input type="button" id="sendOTP" value="Send OTP" style="margin-left: 1%">
+					 <input type="password" id="otp" placeholder="Enter OTP" style="width: 15%;">
+    				<input type="button" id="sendOTP" value="Validate OTP" style="margin-left: 1%">
     				<div id="message" style="margin-left: 2%;"></div>
 					
 				</div>

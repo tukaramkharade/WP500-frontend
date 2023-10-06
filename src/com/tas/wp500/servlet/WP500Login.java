@@ -53,6 +53,7 @@ public class WP500Login extends HttpServlet {
             JSONObject jsonResponse = new JSONObject(respStr);
             String status = jsonResponse.getString("status");
             String first_login = jsonResponse.getString("first_login");
+            String totp_authenticator = jsonResponse.getString("totp_authenticator");
             
             if(status.equals("success") && first_login.equals("true")){
             	session.setAttribute("username", username);
@@ -60,7 +61,7 @@ public class WP500Login extends HttpServlet {
             	userObj.put("status", status);
             	userObj.put("first_login", first_login);
             	
-            } else if(status.equals("success") && first_login.equals("false")) {
+            } else if(status.equals("success") && first_login.equals("false") && totp_authenticator.equals("enable")) {
                 String role = jsonResponse.getString("role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
@@ -81,11 +82,41 @@ public class WP500Login extends HttpServlet {
                 
                 userObj.put("status", status);
                 userObj.put("first_login", first_login);
+                userObj.put("totp_authenticator", totp_authenticator);
                 userObj.put("token", token);
                 
                 session.setAttribute("token", token);
                 
-          } else if (status.equals("fail")) {
+          }  else if(status.equals("success") && first_login.equals("false") && totp_authenticator.equals("disable")){
+        	  
+        	  String role = jsonResponse.getString("role");
+              session.setAttribute("username", username);
+              session.setAttribute("role", role);
+              
+           // Generate a JWT token
+              String secretKey = "tasm2m_admin#Admin@123"; // Replace with a secure secret key
+              Map<String, Object> claims = new HashMap<>();
+              claims.put("username", username);
+              claims.put("role", role);
+
+              String token = Jwts.builder()
+                  .setClaims(claims)
+                  .setSubject(username)
+                  .setIssuedAt(new Date())
+                  .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // Token expires in 1 hour
+                  .signWith(SignatureAlgorithm.HS256, secretKey)
+                  .compact();
+              
+              userObj.put("status", status);
+              userObj.put("first_login", first_login);
+              userObj.put("totp_authenticator", totp_authenticator);
+              userObj.put("token", token);
+              
+              session.setAttribute("token", token);
+              
+          }
+            
+            else if (status.equals("fail")) {
                userObj.put("msg", "Invalid user. Please login again");
                userObj.put("status", status);
            }
