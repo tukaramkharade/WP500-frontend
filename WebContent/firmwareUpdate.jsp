@@ -37,6 +37,18 @@
         		<input type="button" value="Firmware update">
     		</form>
 			</div>
+			
+			<h3>UPLOAD CRT FILE</h3>
+			<hr>
+			<div class="container">
+			
+			<form action="UploadServlet" method="post" enctype="multipart/form-data">
+        		<input type="file" name="file">
+        		<input type="submit" value="Upload" onclick="redirectToFirmwareUpdate();">
+        		
+        		
+    		</form>
+			</div>
 			</section>
 			</div>
 	
