@@ -30,7 +30,7 @@ public class ProcessGetData extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
-
+			
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		if (check_username != null) {	
