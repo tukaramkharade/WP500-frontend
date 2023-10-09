@@ -752,7 +752,7 @@ var tokenValue;
 								<p id="field_LastN_Error" style="color: red;"></p>
 						</div>
 					
-						<div class="col-75-5" style="width: 7%;">
+						<div class="col-75-5" style="width: 10%;">
 							<select class="role" id="role" name="role" style="height: 33px;">
 								<option value="Select role">Select role</option>
 								<option value="ADMIN">ADMIN</option>
