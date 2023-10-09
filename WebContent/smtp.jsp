@@ -188,6 +188,42 @@ margin-left: -135%;
 width: 80%;
 }
 
+#ssl_port_label{
+margin-left: -490%;
+}
+
+#ssl_port{
+margin-left: -180%;
+width: 80%;
+}
+
+#ssl_smtp_type_label{
+margin-left: -280%;
+}
+
+#ssl_smtp_type{
+margin-left: -350%;
+width: 100%;
+}
+
+#tls_auth_label{
+margin-left: -730%;
+}
+
+#tls_auth{
+margin-left: -640%;
+width: 100%;
+}
+
+#tls_enable_label{
+margin-left: -570%;
+}
+
+#tls_enable{
+margin-left: -560%;
+width: 100%;
+}
+
 </style>
 
 <script>
@@ -785,9 +821,9 @@ tokenValue = '<%=tokenValue%>';
 			<input type="hidden" id="action" name="action" value="">
 			
 			<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: -20px;">
+					style="display: flex; flex-content: space-between; margin-top: -20px; width:100%">
 					
-					<div class="col-75-1" style="width: 22%; display:flex;">
+					<div class="col-75-1" style="width: 22%; display:flex; flex-content: space-between; width:25%">
 						<div >
 							<label for="from_email_id" id="from_email_id_label">From Email ID:</label>
 						</div>
@@ -797,7 +833,7 @@ tokenValue = '<%=tokenValue%>';
                 		</div>
 					</div>
 					
-					<div class="col-75-2" style="display:flex">
+					<div class="col-75-2" style="display:flex;flex-content: space-between; width:25%">
 							<div>
                 				<label for="password" id="password_label">Password:</label>
                 			</div>
@@ -805,7 +841,7 @@ tokenValue = '<%=tokenValue%>';
                 				<input type="password" id="password" name="password"  required style="height: 17px" />
             				</div>
             		</div>
-					<div class="col-75-3" style="display:flex">
+					<div class="col-75-3" style="display:flex;flex-content: space-between; width:25%">
 						<div>
 							<label for="host" id="host_label">Host:</label>
 						</div>	
@@ -815,14 +851,14 @@ tokenValue = '<%=tokenValue%>';
 							</div>
 					</div>
 					
-					<div class="col-75-4" style="display:flex">
+					<div class="col-75-4" style="display:flex;flex-content: space-between; width:25%">
 						<div>
 							<label for="smtp_type" id="smtp_type_label">SMTP Type:</label>
 						</div>
 						<div>
 							<select class="smtp_type" id="smtp_type" name="smtp_type"
 								style="height: 35px" required>
-								<option value="Select SMTP type">Select SMTP type</option>
+								<option value="Select SMTP type">Select SMTP type:</option>
 								<option value="SSL">SSL</option>
 								<option value="TLS">TLS</option>
 							</select>
@@ -831,10 +867,10 @@ tokenValue = '<%=tokenValue%>';
 					
 							
 				</div>
-				<div class="row" style="display: flex; flex-content: space-between; margin-top: 15px;">
-						<div class="col-75-5" style="width: 27%;display:flex">
+				<div class="row" style="display: flex; flex-content: space-around; margin-top: 15px;width:100%">
+						<div class="col-75-5" style="display:flex;flex-content: space-between; width:25%">
 							<div>
-								<label for="ssl_socket_factory_port">SSL Socket Factory Port:</label>
+								<label for="ssl_socket_factory_port" id="ssl_socket_factory_port_label">SSL Socket Factory Port:</label>
 							</div>
 							<div>	
 								<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port"
@@ -842,18 +878,18 @@ tokenValue = '<%=tokenValue%>';
 							</div>
 						</div>
 						
-						<div class="col-75-6" style="width: 20%;display:flex">
+						<div class="col-75-6" style="display:flex;flex-content: space-around; width:25%">
 							<div>
-								<label for="ssl_port">SSL Port:</label>
+								<label for="ssl_port" id="ssl_port_label">SSL Port:</label>
 							</div>
 							<div>
 								<input type="text" id="ssl_port" name="ssl_port"
 									 style="height: 17px" required/>
 							</div>
 					</div>
-					<div class="col-75-7" style="width: 20%;display:flex">
+					<div class="col-75-7" style="display:flex;flex-content: space-around; width:25%">
 						<div>
-							<label for="ssl_smtp_type">SSL Smtp Type</label>
+							<label for="ssl_smtp_type" id="ssl_smtp_type_label">SSL Smtp Type:</label>
 						</div>
 						<div>
 							<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type"
@@ -867,9 +903,9 @@ tokenValue = '<%=tokenValue%>';
 					
 				
 				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
+					style="display: flex; flex-content: space-between; margin-top: 10px;width:100%">
 					
-					<div class="col-75-8" style="width: 27%;display:flex">
+					<div class="col-75-8" style="display:flex;flex-content: space-between; width:25%">
 						<div>
 								<label for="tls_port">TLS Port:</label>
 						</div>
@@ -879,9 +915,9 @@ tokenValue = '<%=tokenValue%>';
 						</div>
 					</div>	
 					
-					<div class="col-75-9" style="width: 20%;display:flex">
+					<div class="col-75-9" style="display:flex;flex-content: space-between; width:25%">
 						<div>
-							<label for="tls_auth">TLS Auth</label>
+							<label for="tls_auth" id="tls_auth_label">TLS Auth:</label>
 						</div>
 						<div>
 							<select class="tls_auth" id="tls_auth" name="tls_auth"
@@ -892,9 +928,9 @@ tokenValue = '<%=tokenValue%>';
 						</div>
 					</div>
 					
-					<div class="col-75-10" style="width: 20%;display:flex">
+					<div class="col-75-10" style="display:flex;flex-content: space-between; width:25%">
 						<div>
-							<label for="tls_enable">TLS Enable</label>
+							<label for="tls_enable" id="tls_enable_label">TLS Enable:</label>
 						</div>
 						<div>
 							<select class="tls_enable" id="tls_enable" name="tls_enable"
@@ -917,7 +953,7 @@ tokenValue = '<%=tokenValue%>';
 				
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
-					<div class="col-75-1" style="width: 38%;display:flex">
+					<div class="col-75-1" style="width: 38%;display:flex;flex-content: space-between;">
 						<div>
 							<label for="to_email_id">TO Email ID</label>
 						</div>
@@ -927,7 +963,7 @@ tokenValue = '<%=tokenValue%>';
    						 </div>
 					</div>
 					
-					<div class="col-75-1" style="width: 33.5%;display:flex">
+					<div class="col-75-1" style="width: 33.5%;display:flex;flex-content: space-between; ">
 						<div>
 							<label for="email_cc">CC</label>
 						</div>
@@ -937,7 +973,7 @@ tokenValue = '<%=tokenValue%>';
 						</div>
 					</div>
 					
-					<div class="col-75-1" style="width: 25%;display:flex">
+					<div class="col-75-1" style="width: 25%;display:flex;flex-content: space-between; width:25%">
 						<div>
 							<label for="email_cc">BCC</label>
 						</div>

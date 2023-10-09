@@ -110,6 +110,14 @@ h3 {
     margin-left: 5px;
 }
 
+.green-text {
+    color: green; 
+}
+
+.red-text {
+    color: red; 
+}
+
 </style>
 <script>
 
@@ -138,6 +146,7 @@ function getProcessData() {
         }
     });
 }
+
     $("#closePopup").click(function () {
         $("#customPopup").hide();
     });
@@ -145,21 +154,19 @@ function getProcessData() {
     function populateTable(data, tableId) {
         var tableBody = $("#" + tableId + "_body");
         tableBody.empty();
-
+        var textColorClass = (tableId === "white_list_table") ? "green-text" : "red-text";
+		
         if (data && Array.isArray(data)) {
             data.forEach(function(row) {
                 var tableRow = $("<tr>");
                 Object.values(row).forEach(function(cellValue) {
-                    var cell = $("<td>").text(cellValue);
+                    var cell = $("<td>").text(cellValue).addClass(textColorClass);
                     tableRow.append(cell);
-                });
+                }); 
                 tableBody.append(tableRow);
             });
         }
     }
-
-
-	
 
 	function changeButtonColor(isDisabled) {
         var $load_button = $('#loadLogFileButton');
