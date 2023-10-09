@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WP500 Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -162,7 +162,30 @@ button {
 }
 
 #password_label{
-margin-left: -225%;
+margin-left: -355%;
+}
+
+#password{
+margin-left: -145%;
+width: 80%;
+}
+
+#host_label{
+margin-left: -545%;
+}
+
+#host{
+margin-left: -135%;
+width: 80%;
+}
+
+#smtp_type_label{
+margin-left: -255%;
+}
+
+#smtp_type{
+margin-left: -135%;
+width: 80%;
 }
 
 </style>
@@ -667,9 +690,7 @@ tokenValue = '<%=tokenValue%>';
 			 if(isDisabled3){
 				 $("#ssl_smtp_type").prop("disabled", false);
 			 } 
-			
 			 
-			
 		} 
 		 else if ($(this).val() == 'tls' || $(this).val() == 'TLS') {
 			$("#ssl_socket_factory_port").prop("disabled", true);
@@ -776,17 +797,17 @@ tokenValue = '<%=tokenValue%>';
                 		</div>
 					</div>
 					
-					<div class="col-75-2" style="width: 20%;display:flex">
+					<div class="col-75-2" style="display:flex">
 							<div>
                 				<label for="password" id="password_label">Password:</label>
                 			</div>
-                			<div>	
+                			<div > 	
                 				<input type="password" id="password" name="password"  required style="height: 17px" />
             				</div>
             		</div>
-					<div class="col-75-3" style="width: 18%;display:flex">
+					<div class="col-75-3" style="display:flex">
 						<div>
-							<label for="host">Host:</label>
+							<label for="host" id="host_label">Host:</label>
 						</div>	
 							<div>
 								<input type="text" id="host" name="host"
@@ -794,9 +815,9 @@ tokenValue = '<%=tokenValue%>';
 							</div>
 					</div>
 					
-					<div class="col-75-4" style="width: 20%;display:flex">
+					<div class="col-75-4" style="display:flex">
 						<div>
-							<label  for="smtp_type" >SMTP Type:</label>
+							<label for="smtp_type" id="smtp_type_label">SMTP Type:</label>
 						</div>
 						<div>
 							<select class="smtp_type" id="smtp_type" name="smtp_type"
