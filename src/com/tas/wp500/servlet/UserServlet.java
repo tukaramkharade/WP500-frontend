@@ -264,7 +264,9 @@ public class UserServlet extends HttpServlet {
 					JSONObject jsObj = jsonArray.getJSONObject(i);
 
 					String first_name = jsObj.getString("first_name");
+					System.out.println("first name : "+first_name);
 					String last_name = jsObj.getString("last_name");
+					System.out.println("last name : "+last_name);
 					String username = jsObj.getString("username");
 					String role = jsObj.getString("role");
 
@@ -277,6 +279,7 @@ public class UserServlet extends HttpServlet {
 						userObj.put("role", role);
 
 						resJsonArray.put(userObj);
+						System.out.println("response array : "+resJsonArray.toString());
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in putting user data in json array : " + e);

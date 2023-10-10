@@ -13,4 +13,14 @@
       <file-size-threshold>0</file-size-threshold>
     </multipart-config>
   </servlet>
+  
+  <servlet>
+    <servlet-name>CRTFileUploadServlet</servlet-name>
+    <servlet-class>com.tas.wp500.CRTFileUploadServlet</servlet-class>
+    <multipart-config>
+      <max-file-size>204857600</max-file-size>
+      <max-request-size>409715200</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+  </servlet>
 </web-app>

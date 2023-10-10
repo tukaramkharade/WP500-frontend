@@ -249,6 +249,9 @@ var tokenValue;
 												row.append($('<td>').text(user.first_name));
 												row.append($('<td>').text(user.last_name));
 												row.append($('<td>').text(user.role));
+												
+												alert(user.username);
+												console.log(user.username);
 
 												var actions = $('<td>');
 												
@@ -304,8 +307,7 @@ var tokenValue;
 											});
 						}
 						
-						// Initialize tooltips using Bootstrap
-			            $('[data-toggle="tooltip"]').tooltip();
+					
 						
 					},
 					error : function(xhr, status, error) {

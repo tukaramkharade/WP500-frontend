@@ -55,7 +55,7 @@ public class WP500Login extends HttpServlet {
             String first_login = jsonResponse.getString("first_login");
             String totp_authenticator = jsonResponse.getString("totp_authenticator");
             
-            if(status.equals("success") && first_login.equals("true")){
+            if(status.equals("success") && first_login.equals("true") && totp_authenticator.equals("disable")){
             	session.setAttribute("username", username);
             	
             	userObj.put("status", status);
