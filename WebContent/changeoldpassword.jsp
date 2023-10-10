@@ -264,9 +264,8 @@ $(document).ready(function () {
 	
  // Check if the user is equal to "tasm2m_admin"
     if (user === 'tasm2m_admin') {
-        // Disable the form or show a message indicating that the password cannot be changed
-        // For example, you can disable the form like this:
-        $('#changePasswordForm input').prop('disabled', true);
+        
+    	 window.location.href = 'overview.jsp';
     } else {
     	$('#changePasswordForm').submit(function(event) {
     		event.preventDefault(); // Prevent the default form submission

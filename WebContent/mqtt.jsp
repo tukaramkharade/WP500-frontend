@@ -501,7 +501,9 @@ button {
 				},
 				success : function(data) {
 					
-					modal.style.display = 'none';
+					// Close the modal
+				    modal.style.display = 'none';
+					
 					loadMqttList();
 
 					// Clear form fields
@@ -729,16 +731,12 @@ button {
 						// Handle form submission
 						$('#mqttForm').submit(function(event) {
 											event.preventDefault();
-											var buttonText = $('#registerBtn')
-													.val();
-											var broker_ip_address = $(
-											'#broker_ip_address').val();
-										var type = $('#file_type').find(
-											":selected").val();
-										var port_number = $('#port_number')
-											.val();
-										var file_name = $('#file_name')
-											.find(":selected").val();
+											var buttonText = $('#registerBtn').val();
+											
+											var broker_ip_address = $('#broker_ip_address').val();
+										var type = $('#file_type').find(":selected").val();
+										var port_number = $('#port_number').val();
+										var file_name = $('#file_name').find(":selected").val();
 										var broker_ip_address = $('#broker_ip_address').val();
 										var port_number = $('#port_number').val();
 										var username = $('#username').val();
