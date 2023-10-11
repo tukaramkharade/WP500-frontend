@@ -403,7 +403,7 @@ var tokenValue;
 					id="loadLogFileButton" value="Load Log File">
 			</div>
 			<div>
-    			<input style="margin-left: 10px; margin-top: 5%;flex-content: space-between;" type="button" id="exportButton" value="Export Log File">
+    			<input style="margin-left: 10%; margin-top: 5%;flex-content: space-between;" type="button" id="exportButton" value="Export Log File">
 			</div>
 
 		</div>

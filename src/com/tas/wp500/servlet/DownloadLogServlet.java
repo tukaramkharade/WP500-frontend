@@ -28,7 +28,7 @@ public class DownloadLogServlet extends HttpServlet {
             throw new ServletException("File Name can't be null or empty");
         }
 
-        String logDirectoryPath = "C:\\Users\\sanke\\Desktop\\New folder (2)";
+        String logDirectoryPath = "/var/log";
         File logDirectory = new File(logDirectoryPath);
         File[] files = logDirectory.listFiles();
         boolean fileFound = false;

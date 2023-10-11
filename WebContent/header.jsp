@@ -189,7 +189,7 @@ button {
 		
 		<input style="margin-right: 10px; height: 40px" type="button" id="loadConfig" value="Update Configuration" />
 		<div style="margin-right: 10px;">${username}
-			<i class="fa fa-sign-out" style="font-size: 20px; margin-left: 5px" id="logoutBtn"></i>
+			<i class="fa fa-sign-out" style="font-size: 20px; margin-left: 5px" id="logoutBtn" title="Logout"></i>
 		</div>
 		
 		

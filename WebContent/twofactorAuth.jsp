@@ -144,63 +144,75 @@ margin-top: 15px;
 	var qr_status;
 	var secretKey;
 
+	
+	
 	function updateTOTP(element) {
+	    var toggleContainer = document.querySelector('.toggle-container');
+	    var enableText = document.getElementById("enableText");
+	    var disableText = document.getElementById("disableText");
+	    var modal = document.getElementById('custom-modal-edit');
+	    
+	 // Display the custom modal dialog
+	    modal.style.display = 'block';
 
-		element.classList.toggle('active');
-		var toggleContainer = document.querySelector('.toggle-container');
-		isActive = toggleContainer.classList.contains('active');
+	    // Handle the confirm button click
+	    var confirmButton = document.getElementById('confirm-button-edit');
+	    confirmButton.onclick = function() {
+	        sendDataToServlet(toggleContainer.classList.contains('active') ? "enable" : "disable");
+	        modal.style.display = 'none';
+	    };
 
-		var enableText = document.getElementById("enableText");
-		var disableText = document.getElementById("disableText");
+	    
 
-		if (isActive) {
-			// Toggle switch is enabled
-			sendDataToServlet("enable");
-			enableText.style.display = "inline";
-			disableText.style.display = "none";
-		} else {
-			// Toggle switch is disabled
-			sendDataToServlet("disable");
-			enableText.style.display = "none";
-			disableText.style.display = "inline";
-		}
+	    if (toggleContainer.classList.contains('active')) {
+	        // Toggle switch is enabled, so we want to disable it
+	        toggleContainer.classList.remove('active');
+	        enableText.style.display = "none";
+	        disableText.style.display = "inline";
+	        
+	      
+	    } else {
+	        // Toggle switch is disabled, so we want to enable it
+	        toggleContainer.classList.add('active');
+	        enableText.style.display = "inline";
+	        disableText.style.display = "none";
+	    }
+	    
+	    var cancelButton = document.getElementById('cancel-button-edit');
+	    cancelButton.onclick = function() {
+	        // Revert the toggle switch state when Cancel is clicked
+	        if (toggleContainer.classList.contains('active')) {
+	        	toggleContainer.classList.remove('active');
+	            enableText.style.display = "none";
+	            disableText.style.display = "inline";
+	        } else {
+	        	toggleContainer.classList.add('active');
+	            enableText.style.display = "inline";
+	            disableText.style.display = "none";
+	        }
+	        modal.style.display = 'none';
+	    };
+
+	    
 	}
 
 	function sendDataToServlet(totp_authenticator) {
-
-		// Display the custom modal dialog
-		var modal = document.getElementById('custom-modal-edit');
-		modal.style.display = 'block';
-
-		// Handle the confirm button click
-		var confirmButton = document.getElementById('confirm-button-edit');
-		confirmButton.onclick = function() {
-
-			$.ajax({
-				type : "POST",
-				url : "TOTPServlet",
-				data : {
-					totp_authenticator : totp_authenticator
-				},
-				success : function(response) {
-					// Close the modal
-					modal.style.display = 'none';
-
-				},
-				error : function(xhr, textStatus, errorThrown) {
-					// Handle any errors that occur during the AJAX request
-					console.error("Error sending data: " + errorThrown);
-				}
-			});
-		};
-		var cancelButton = document.getElementById('cancel-button-edit');
-		cancelButton.onclick = function() {
-			// Close the modal
-			modal.style.display = 'none';
-
-		};
-
+	    $.ajax({
+	        type: "POST",
+	        url: "TOTPServlet",
+	        data: {
+	            totp_authenticator: totp_authenticator
+	        },
+	        success: function(response) {
+	            // Do something with the response if needed
+	        },
+	        error: function(xhr, textStatus, errorThrown) {
+	            // Handle any errors that occur during the AJAX request
+	            console.error("Error sending data: " + errorThrown);
+	        }
+	    });
 	}
+
 
 	function getTOTPDetails() {
 
@@ -433,14 +445,11 @@ margin-top: 15px;
 					
 				</div>
 				
-				
-
 				<div class="note">
 					<p>Note: Please install <b>Authenticator App</b> on your mobile phone for scanning QR code and save this QR code for further use.</p>
 					
 				</div>
 				
-
 			</div>
 
 			<div id="custom-modal-edit" class="modal-edit">
