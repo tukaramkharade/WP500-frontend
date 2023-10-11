@@ -68,7 +68,7 @@
         	            else {
         	                // Login failed
         	                $('#loginMessage').text(json.msg).css('color', 'red');
-        	                window.location.href = 'login.jsp';
+        	               
         	            }
         	        },
         	        error: function(xhr, status, error) {

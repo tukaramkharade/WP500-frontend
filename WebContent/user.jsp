@@ -248,11 +248,8 @@ var tokenValue;
 												row.append($('<td>').text(user.username));
 												row.append($('<td>').text(user.first_name));
 												row.append($('<td>').text(user.last_name));
-												row.append($('<td>').text(user.role));
+												row.append($('<td>').text(user.role));									
 												
-												alert(user.username);
-												console.log(user.username);
-
 												var actions = $('<td>');
 												
 														

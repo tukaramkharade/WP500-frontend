@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WP500 Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32"
+	href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -17,211 +18,151 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-  .popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #d5d3d3;
-  border: 1px solid #ccc;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  text-align: center; /* Center-align the content */
-  width: 25%;
+.popup {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #d5d3d3;
+	border: 1px solid #ccc;
+	padding: 20px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+	text-align: center; /* Center-align the content */
+	width: 25%;
 }
 
 /* Style for the close button */
 #closePopup {
-  display: block; /* Display as to center horizontally */
-  margin-top: 30px; /* Adjust the top margin as needed */
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-left: 40%;
+	display: block; /* Display as to center horizontally */
+	margin-top: 30px; /* Adjust the top margin as needed */
+	background-color: #4caf50;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	margin-left: 40%;
 }
 
 .modal-session-timeout {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .modal-content-session-timeout {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
- }
- 
- #confirm-button-session-timeout {
-  background-color: #4caf50;
-  color: white;
+	background-color: #d5d3d3;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+	width: 300px;
+	transform: translate(0, -50%); /* Center vertically */
+	top: 50%; /* Center vertically */
+	left: 50%; /* Center horizontally */
+	transform: translate(-50%, -50%);
+	/* Center horizontally and vertically */
+}
+
+#confirm-button-session-timeout {
+	background-color: #4caf50;
+	color: white;
 }
 
 .modal-delete {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .modal-content-delete {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+	background-color: #d5d3d3;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+	width: 300px;
+	transform: translate(0, -50%); /* Center vertically */
+	top: 50%; /* Center vertically */
+	left: 50%; /* Center horizontally */
+	transform: translate(-50%, -50%);
+	/* Center horizontally and vertically */
 }
 
 .modal-edit {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .modal-content-edit {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+	background-color: #d5d3d3;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+	width: 300px;
+	transform: translate(0, -50%); /* Center vertically */
+	top: 50%; /* Center vertically */
+	left: 50%; /* Center horizontally */
+	transform: translate(-50%, -50%);
+	/* Center horizontally and vertically */
 }
 
 /* Style for buttons */
 button {
-  margin: 5px;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
+	margin: 5px;
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
 }
 
 #confirm-button-delete {
-  background-color: #4caf50;
-  color: white;
+	background-color: #4caf50;
+	color: white;
 }
 
 #cancel-button-delete {
-  background-color: #f44336;
-  color: white;
+	background-color: #f44336;
+	color: white;
 }
 
 #confirm-button-edit {
-  background-color: #4caf50;
-  color: white;
+	background-color: #4caf50;
+	color: white;
 }
 
 #cancel-button-edit {
-  background-color: #f44336;
-  color: white;
-}
-
-#password_label{
-margin-left: -355%;
-}
-
-#password{
-margin-left: -145%;
-width: 80%;
-}
-
-#host_label{
-margin-left: -545%;
-}
-
-#host{
-margin-left: -135%;
-width: 80%;
-}
-
-#smtp_type_label{
-margin-left: -255%;
-}
-
-#smtp_type{
-margin-left: -135%;
-width: 80%;
-}
-
-#ssl_port_label{
-margin-left: -490%;
-}
-
-#ssl_port{
-margin-left: -180%;
-width: 80%;
-}
-
-#ssl_smtp_type_label{
-margin-left: -280%;
-}
-
-#ssl_smtp_type{
-margin-left: -350%;
-width: 100%;
-}
-
-#tls_auth_label{
-margin-left: -730%;
-}
-
-#tls_auth{
-margin-left: -640%;
-width: 100%;
-}
-
-#tls_enable_label{
-margin-left: -570%;
-}
-
-#tls_enable{
-margin-left: -560%;
-width: 100%;
+	background-color: #f44336;
+	color: white;
 }
 
 </style>
@@ -671,355 +612,301 @@ function handleStatus(status) {
 
 $(document).ready(function() {
 	<%// Access the session variable
-	HttpSession role = request.getSession();
-	String roleValue = (String) session.getAttribute("role");%>
+			HttpSession role = request.getSession();
+			String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
 
 <%// Access the session variable
-HttpSession token = request.getSession();
-String tokenValue = (String) session.getAttribute("token");%>
+			HttpSession token = request.getSession();
+			String tokenValue = (String) session.getAttribute("token");%>
 
 tokenValue = '<%=tokenValue%>';
 
-	
-	getSMTPSettings();
-	
-	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						getSMTPSettings();
 
-		$('#addBtn').prop('disabled', true);
-		$('#clearBtn').prop('disabled', true);
-		$('#delBtn').prop('disabled', true);
-		
-		changeButtonColor(true);
-	}
-	
-	
-	$("#smtp_type").change(function(event) {
+						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
-		if ($(this).val() == 'ssl' || $(this).val() == 'SSL') {
-			 
-			$("#tls_port").prop("disabled", true);
-			
-			 $("#tls_auth").prop("disabled", true);
-			$("#tls_enable").prop("disabled", true);
-			
-			$("#tls_port").val('');
-			$("#tls_auth").val('False');
-			$("#tls_enable").val('False');
-			$('#ssl_smtp_type').val('True');
-			
-			var isDisabled1 = $('#ssl_socket_factory_port').prop('disabled');
-			 
-			 if(isDisabled1){
-				 $("#ssl_socket_factory_port").prop("disabled", false);
-			 }
-			 
-			var isDisabled2 = $('#ssl_port').prop('disabled');
-			 
-			 if(isDisabled2){
-				 $("#ssl_port").prop("disabled", false);
-			 }
-			 
-			var isDisabled3 = $('#ssl_smtp_type').prop('disabled');
-			 
-			 if(isDisabled3){
-				 $("#ssl_smtp_type").prop("disabled", false);
-			 } 
-			 
-		} 
-		 else if ($(this).val() == 'tls' || $(this).val() == 'TLS') {
-			$("#ssl_socket_factory_port").prop("disabled", true);
-			$("#ssl_port").prop("disabled", true);
-			$("#ssl_smtp_type").prop("disabled", true);
-			
-			
-			$("#ssl_socket_factory_port").val('');
-			$("#ssl_port").val('');
-			$('#ssl_smtp_type').val('False');
-			$("#tls_auth").val('True');
-			$("#tls_enable").val('True');
-			
-			var isDisabled1 = $('#tls_port').prop('disabled');
-			 
-			 if(isDisabled1){
-				 $("#tls_port").prop("disabled", false);
-			 }
-			 
-			var isDisabled2 = $('#tls_auth').prop('disabled');
-			 
-			 if(isDisabled2){
-				 $("#tls_auth").prop("disabled", false);
-			 }
-			 
-			var isDisabled3 = $('#tls_enable').prop('disabled');
-			 
-			 if(isDisabled3){
-				 $("#tls_enable").prop("disabled", false);
-			 }  
-			
-			 
-		} 
-	}); 
+							$('#addBtn').prop('disabled', true);
+							$('#clearBtn').prop('disabled', true);
+							$('#delBtn').prop('disabled', true);
 
-	
-	$('#smtpForm').submit(function(event) {
-		event.preventDefault();
-		var buttonText = $('#addBtn').val();
-		
-		if (buttonText == 'Add') {
-			addSMTPSettings();
-		} else {
-			editSMTPSettings();
-		}
-		
-	});
-	
-	$('#clearBtn').click(function() {
-		$('#from_email_id').val('');
-		$('#password').val('');
-		$('#host').val('');
-		$('#smtp_type').val('Select SMTP type');
-		$('#ssl_socket_factory_port').val('');
-		$('#ssl_port').val('');
-		$('#ssl_smtp_type').val('True');
-		$('#tls_port').val('');
-		$('#tls_auth').val('True');
-		$('#tls_enable').val('True');
-		$('#to_email_id').val('');
-		$('#email_cc').val('');
-		$('#email_bcc').val('');
-	});
-	
-	$("#delBtn").click(function () {
-		deleteSMTPSettings();
-	  });
-	$("#testEmailBtn").click(function () {
-		testEmail();
-	  });
-	$("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
-	
-});
+							changeButtonColor(true);
+						}
 
+						$("#smtp_type")
+								.change(
+										function(event) {
+
+											if ($(this).val() == 'ssl'
+													|| $(this).val() == 'SSL') {
+
+												$("#tls_port").prop("disabled",
+														true);
+
+												$("#tls_auth").prop("disabled",
+														true);
+												$("#tls_enable").prop(
+														"disabled", true);
+
+												$("#tls_port").val('');
+												$("#tls_auth").val('False');
+												$("#tls_enable").val('False');
+												$('#ssl_smtp_type').val('True');
+
+												var isDisabled1 = $(
+														'#ssl_socket_factory_port')
+														.prop('disabled');
+
+												if (isDisabled1) {
+													$(
+															"#ssl_socket_factory_port")
+															.prop("disabled",
+																	false);
+												}
+
+												var isDisabled2 = $('#ssl_port')
+														.prop('disabled');
+
+												if (isDisabled2) {
+													$("#ssl_port").prop(
+															"disabled", false);
+												}
+
+												var isDisabled3 = $(
+														'#ssl_smtp_type').prop(
+														'disabled');
+
+												if (isDisabled3) {
+													$("#ssl_smtp_type").prop(
+															"disabled", false);
+												}
+
+											} else if ($(this).val() == 'tls'
+													|| $(this).val() == 'TLS') {
+												$("#ssl_socket_factory_port")
+														.prop("disabled", true);
+												$("#ssl_port").prop("disabled",
+														true);
+												$("#ssl_smtp_type").prop(
+														"disabled", true);
+
+												$("#ssl_socket_factory_port")
+														.val('');
+												$("#ssl_port").val('');
+												$('#ssl_smtp_type')
+														.val('False');
+												$("#tls_auth").val('True');
+												$("#tls_enable").val('True');
+
+												var isDisabled1 = $('#tls_port')
+														.prop('disabled');
+
+												if (isDisabled1) {
+													$("#tls_port").prop(
+															"disabled", false);
+												}
+
+												var isDisabled2 = $('#tls_auth')
+														.prop('disabled');
+
+												if (isDisabled2) {
+													$("#tls_auth").prop(
+															"disabled", false);
+												}
+
+												var isDisabled3 = $(
+														'#tls_enable').prop(
+														'disabled');
+
+												if (isDisabled3) {
+													$("#tls_enable").prop(
+															"disabled", false);
+												}
+
+											}
+										});
+
+						$('#smtpForm').submit(function(event) {
+							event.preventDefault();
+							var buttonText = $('#addBtn').val();
+
+							if (buttonText == 'Add') {
+								addSMTPSettings();
+							} else {
+								editSMTPSettings();
+							}
+
+						});
+
+						$('#clearBtn').click(function() {
+							$('#from_email_id').val('');
+							$('#password').val('');
+							$('#host').val('');
+							$('#smtp_type').val('Select SMTP type');
+							$('#ssl_socket_factory_port').val('');
+							$('#ssl_port').val('');
+							$('#ssl_smtp_type').val('True');
+							$('#tls_port').val('');
+							$('#tls_auth').val('True');
+							$('#tls_enable').val('True');
+							$('#to_email_id').val('');
+							$('#email_cc').val('');
+							$('#email_bcc').val('');
+						});
+
+						$("#delBtn").click(function() {
+							deleteSMTPSettings();
+						});
+						$("#testEmailBtn").click(function() {
+							testEmail();
+						});
+						$("#closePopup").click(function() {
+							$("#customPopup").hide();
+						});
+
+					});
 </script>
 
 </head>
 <body>
-<div class="sidebar"><%@ include file="common.jsp"%></div>
+	<div class="sidebar"><%@ include file="common.jsp"%></div>
 	<div class="header"><%@ include file="header.jsp"%></div>
-	
+
 	<div class="content">
 		<section style="margin-left: 1em">
 		<h3>SMTP SETTINGS</h3>
 		<hr />
-		
+
 		<div class="container">
 			<form id="smtpForm">
-			
-			<input type="hidden" id="action" name="action" value="">
-			
-			<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: -20px; width:100%">
-					
-					<div class="col-75-1" style="width: 22%; display:flex; flex-content: space-between; width:25%">
-						<div >
-							<label for="from_email_id" id="from_email_id_label">From Email ID:</label>
-						</div>
-							
-						<div >
-                  			  <input type="text" id="from_email_id" name="from_email_id"  required style="height: 17px" />
-                		</div>
-					</div>
-					
-					<div class="col-75-2" style="display:flex;flex-content: space-between; width:25%">
-							<div>
-                				<label for="password" id="password_label">Password:</label>
-                			</div>
-                			<div > 	
-                				<input type="password" id="password" name="password"  required style="height: 17px" />
-            				</div>
-            		</div>
-					<div class="col-75-3" style="display:flex;flex-content: space-between; width:25%">
-						<div>
-							<label for="host" id="host_label">Host:</label>
-						</div>	
-							<div>
-								<input type="text" id="host" name="host"
-									 required style="height: 17px" />
-							</div>
-					</div>
-					
-					<div class="col-75-4" style="display:flex;flex-content: space-between; width:25%">
-						<div>
-							<label for="smtp_type" id="smtp_type_label">SMTP Type:</label>
-						</div>
-						<div>
-							<select class="smtp_type" id="smtp_type" name="smtp_type"
-								style="height: 35px" required>
-								<option value="Select SMTP type">Select SMTP type:</option>
-								<option value="SSL">SSL</option>
-								<option value="TLS">TLS</option>
-							</select>
-						</div>
-					</div>
-					
-							
-				</div>
-				<div class="row" style="display: flex; flex-content: space-around; margin-top: 15px;width:100%">
-						<div class="col-75-5" style="display:flex;flex-content: space-between; width:25%">
-							<div>
-								<label for="ssl_socket_factory_port" id="ssl_socket_factory_port_label">SSL Socket Factory Port:</label>
-							</div>
-							<div>	
-								<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port"
-									 style="height: 17px" required />
-							</div>
-						</div>
+
+				<input type="hidden" id="action" name="action" value="">
+
+				
+				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 2%;">
+					<div style="display: flex; flex-content: space-between;">
 						
-						<div class="col-75-6" style="display:flex;flex-content: space-around; width:25%">
-							<div>
-								<label for="ssl_port" id="ssl_port_label">SSL Port:</label>
-							</div>
-							<div>
-								<input type="text" id="ssl_port" name="ssl_port"
-									 style="height: 17px" required/>
-							</div>
+						<label id="from_email_id_label" style="width: 20%; ">From Email ID:</label> 
+						<input type="text" id="from_email_id" name="from_email_id" style="height: 17px; width: 20%;" required />
+						
+						<label for="password" id="password_label" style="width: 7%; margin-left: 1px;">Password:</label> 
+						<input type="password" id="passwords" name="passwords" style="height: 17px; width: 20%;" required />
+						
+						<label for="host_id" id="host_label" style="width: 7%; margin-left: 1px;">Host:</label> 
+						<input type="text" id="host_id" name="host_id" style="height: 17px; width: 20%;" required />
+						
+						
+						<label style="width: 7%; margin-left: 1px;" id="smtp_type_label" for="smtp_type_">SMTP Type:</label> 
+						<select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 35px; width: 20%; margin-left: 1px" required>
+							<option value="Select SMTP type">Select SMTP type:</option>
+							<option value="SSL">SSL</option>
+							<option value="TLS">TLS</option>
+						</select>
+							
+						
 					</div>
-					<div class="col-75-7" style="display:flex;flex-content: space-around; width:25%">
-						<div>
-							<label for="ssl_smtp_type" id="ssl_smtp_type_label">SSL Smtp Type:</label>
-						</div>
-						<div>
-							<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type"
-								style="height: 35px" required>
+				</div>
+				
+				
+
+				<div class="row" style="margin-top: 20px; width: 60%;  margin-left: 2%;">
+					<div style="display: flex; flex-content: space-between;">
+						<label id="ssl_socket_factory_port_label" style="width: 20%; ">SSL Socket Factory Port:</label> 
+						<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 17px; width: 20%;" required />
+						
+						<label for="ssl_port" id="ssl_port_label" style="width: 7%; margin-left: 1px;">SSL Port:</label> 
+						<input type="text" id="ssl_port" name="ssl_port" style="height: 17px; width: 20%;" required />
+						
+						
+						<label style="width: 10%; margin-left: 1px;" id="smtp_type_label" for="ssl_smtp_type">SSL SMTP Type:</label> 
+						<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 35px; width: 20%;" required>
 								<option value="True" selected>True</option>
 								<option value="False">False</option>
-							</select>
-						</div>	
+						</select>
 					</div>
 				</div>
-					
+
 				
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;width:100%">
-					
-					<div class="col-75-8" style="display:flex;flex-content: space-between; width:25%">
-						<div>
-								<label for="tls_port">TLS Port:</label>
-						</div>
-						<div>	
-							<input type="text" id="tls_port" name="tls_port"
-								 style="height: 17px" required/>
-						</div>
-					</div>	
-					
-					<div class="col-75-9" style="display:flex;flex-content: space-between; width:25%">
-						<div>
-							<label for="tls_auth" id="tls_auth_label">TLS Auth:</label>
-						</div>
-						<div>
-							<select class="tls_auth" id="tls_auth" name="tls_auth"
-								style="height: 35px" required>
+				<div class="row" style="margin-top: 20px; width: 60%; margin-left: 2%;">
+					<div style="display: flex; flex-content: space-between;">
+						<label id="tls_port_label" style="width: 20%;">TLS Port:</label> 
+						<input type="text" id="tls_port" name="tls_port" style="height: 17px; width: 20%;" required />
+						
+						<label for="tls_auth" id="tls_auth_label" style="width: 7%; margin-left: 1px;">TLS Auth:</label> 
+						<select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 35px; width: 20%;" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
-							</select>
-						</div>
+						</select>
+						
+						
+						<label style="width: 10%; margin-left: 1px;" id="tls_enable_label" for="tls_enable">TLS Enable:</label> 
+						<select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 35px; width: 20%;" required>
+								<option value="True">True</option>
+								<option value="False" selected>False</option>
+						</select>
 					</div>
-					
-					<div class="col-75-10" style="display:flex;flex-content: space-between; width:25%">
-						<div>
-							<label for="tls_enable" id="tls_enable_label">TLS Enable:</label>
-						</div>
-						<div>
-							<select class="tls_enable" id="tls_enable" name="tls_enable"
-							style="height: 35px" required>
-							<option value="True">True</option>
-							<option value="False" selected>False</option>
-							</select>
-						</div>
-					</div>					
 				</div>
 				
-				<div id="custom-modal-session-timeout" class="modal-session-timeout">
-					<div class="modal-content-session-timeout">
-					  <p>Your session is timeout. Please login again</p>
-					  <button id="confirm-button-session-timeout">OK</button>
-					</div>
-			   </div>
-			   
-			   
 				
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-					<div class="col-75-1" style="width: 38%;display:flex;flex-content: space-between;">
-						<div>
-							<label for="to_email_id">TO Email ID</label>
-						</div>
-						<div>
-     					   <input type="text" id="to_email_id" name="to_email_id"
-      					       required style="height: 17px; width: 325px;" />
-   						 </div>
+				<div class="row" style="margin-top: 20px; width: 90%;  margin-left: 2%;">
+					<div style="display: flex; flex-content: space-between;">
+						<label id="to_email_id_label" style="width: 25%;">TO Email ID:</label> 
+						<input type="text" id="to_email_id" name="to_email_id" required style="height: 17px; width: 100%;" />
+						
+						<label id="email_cc_label" style="width: 7%; margin-left: 1px;">CC:</label> 
+						<input type="text" id="email_cc" name="email_cc" style="height: 17px; width: 100%;" />
+						
+						
+						<label style="width: 10%; margin-left: 1px;" id="email_bcc_label">BCC:</label> 
+						<input type="text" id="email_bcc" name="email_bcc" style="height: 17px; width: 100%;" />
 					</div>
-					
-					<div class="col-75-1" style="width: 33.5%;display:flex;flex-content: space-between; ">
-						<div>
-							<label for="email_cc">CC</label>
-						</div>
-						<div>
-							<input type="text" id="email_cc" name="email_cc"
-								  style="height: 17px; width: 325px;" />
-						</div>
-					</div>
-					
-					<div class="col-75-1" style="width: 25%;display:flex;flex-content: space-between; width:25%">
-						<div>
-							<label for="email_cc">BCC</label>
-						</div>
-						<div>
-							<input type="text" id="email_bcc" name="email_bcc"
-							  style="height: 17px;width: 280px;" />
-						</div>		
-					</div>
-				</div>	
-				
+				</div>
+
 				<div class="row" style="display: flex; justify-content: right;">
 					<input style="margin-top: 10px; margin-left: 5px" type="button"
-						value="Clear" id="clearBtn"/> 
-						<input style="margin-top: 10px; margin-left: 5px" type="submit"
-						value="Add" id="addBtn" /> 
-						<input style="margin-top: 10px; margin-left: 5px" type="button"
+						value="Clear" id="clearBtn" /> <input
+						style="margin-top: 10px; margin-left: 5px" type="submit"
+						value="Add" id="addBtn" /> <input
+						style="margin-top: 10px; margin-left: 5px" type="button"
 						value="Delete" id="delBtn" onClick="window.location.reload();" />
-						<input style="margin-top: 10px; margin-left: 5px" type="button" value="Test Email" id="testEmailBtn" />
+					<input style="margin-top: 10px; margin-left: 5px" type="button"
+						value="Test Email" id="testEmailBtn" />
 				</div>
 			</form>
 		</div>
 		</section>
+	</div>
+
+	<div id="custom-modal-delete" class="modal-delete">
+		<div class="modal-content-delete">
+			<p>Are you sure you want to delete this user?</p>
+			<button id="confirm-button-delete">Yes</button>
+			<button id="cancel-button-delete">No</button>
 		</div>
-		
-		<div id="custom-modal-delete" class="modal-delete">
-				<div class="modal-content-delete">
-				  <p>Are you sure you want to delete this user?</p>
-				  <button id="confirm-button-delete">Yes</button>
-				  <button id="cancel-button-delete">No</button>
-				</div>
-			  </div>
-			  
-			  <div id="custom-modal-edit" class="modal-edit">
-				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this user?</p>
-				  <button id="confirm-button-edit">Yes</button>
-				  <button id="cancel-button-edit">No</button>
-				</div>
-			  </div>
-			  
-				 <div id="customPopup" class="popup">
-  				<span class="popup-content" id="popupMessage"></span>
-  				<button id="closePopup">OK</button>
-			  </div>
-		
-		<div class="footer">
+	</div>
+
+	<div id="custom-modal-edit" class="modal-edit">
+		<div class="modal-content-edit">
+			<p>Are you sure you want to edit this user?</p>
+			<button id="confirm-button-edit">Yes</button>
+			<button id="cancel-button-edit">No</button>
+		</div>
+	</div>
+	
+	<div id="custom-modal-session-timeout" class="modal-session-timeout">
+		<div class="modal-content-session-timeout">
+			<p>Your session is timeout. Please login again</p>
+			<button id="confirm-button-session-timeout">OK</button>
+		</div>
+	</div>
+
+	<div id="customPopup" class="popup">
+		<span class="popup-content" id="popupMessage"></span>
+		<button id="closePopup">OK</button>
+	</div>
+
+	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
 </body>
