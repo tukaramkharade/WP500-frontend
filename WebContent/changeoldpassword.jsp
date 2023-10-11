@@ -262,11 +262,7 @@ $(document).ready(function () {
     $('#username').val(user);
 	
 	
- // Check if the user is equal to "tasm2m_admin"
-    if (user === 'tasm2m_admin') {
-        
-    	 window.location.href = 'overview.jsp';
-    } else {
+ 
     	$('#changePasswordForm').submit(function(event) {
     		event.preventDefault(); // Prevent the default form submission
     		
@@ -311,9 +307,7 @@ $(document).ready(function () {
             }  
     		updateOldPassword();
     	});
-    }
-
-	
+    
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
