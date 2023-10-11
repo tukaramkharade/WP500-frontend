@@ -214,6 +214,8 @@ var tokenValue;
 	    }
 	}
 	
+	
+	
 	//Function to execute on page load
 	$(document).ready(function() {
 		// Load log file list
@@ -240,7 +242,49 @@ var tokenValue;
 	  	    		  changeButtonColor(true);
 	  	    	  }
 		loadLogFileList();
-		
+		/* $("#exportButton").click(function() {		   
+		    var selectedLogFile = document.getElementById("log_file").value;
+
+		    if (selectedLogFile !== "") {
+		       
+		        $.ajax({
+		            type: "POST",
+		            url: "DownloadLogServlet",
+		            log_file: selectedLogFile,
+		            success: function(response) {
+		                // Handle the success response, if needed
+		                if (response.log_file_result === "success") {
+		                    // Handle successful download
+		                    // You can access the log content with response.log_content
+		                    console.log("Log content:", response.log_content);
+		                } else {
+		                    // Handle error cases
+		                    console.error("Error: " + response.message);
+		                }
+		            },
+		            error: function(xhr, status, error) {
+		                // Handle errors, if any
+		                console.error("Error: " + error);
+		            }
+		        });
+		    } else {
+		        // Handle the case when no log file is selected
+		        $("#popupMessage").text("Please select a log file first.");
+		        $("#customPopup").show();
+		    }
+		}); */
+		$("#exportButton").click(function() {
+	        var selectedLogFile = $("#log_file").val();
+
+	        if (selectedLogFile !== "") {
+	            // Redirect to the servlet URL to trigger the download
+	            window.location.href = "DownloadLogServlet?log_file=" + selectedLogFile;
+	        } else {
+	            // Handle the case when no log file is selected
+	            $("#popupMessage").text("Please select a log file first.");
+	            $("#customPopup").show();
+	        }
+	    });		
 		
 		$(document).on("click", "#loadLogFileButton", function() {
 			var searchQuery = $("#search_query").val().trim();
@@ -357,6 +401,9 @@ var tokenValue;
 			<div>
 				<input style="margin-left: 1%; margin-top: 5%;" type="button"
 					id="loadLogFileButton" value="Load Log File">
+			</div>
+			<div>
+    			<input style="margin-left: 10px; margin-top: 5%;flex-content: space-between;" type="button" id="exportButton" value="Export Log File">
 			</div>
 
 		</div>
