@@ -48,13 +48,6 @@ public class CRTFileUploadServlet extends HttpServlet {
             Files.copy(input, Paths.get(uploadPath, fileName), StandardCopyOption.REPLACE_EXISTING);
         }
 
-        // You can now process the uploaded file as needed.
-        
-        System.out.println("crt file uploaded successfully!");
-        System.out.println("upload path: "+uploadPath);
-        
-        System.out.println("file name : "+fileName);
-
         response.getWriter().println("File uploaded successfully.");
      
         // Redirect to firmwarUpdate.jsp

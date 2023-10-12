@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -132,6 +132,27 @@ function getProcessData() {
             xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
         },
         success: function(data) {
+        	
+        	var json1 = JSON.stringify(data);
+
+			var json = JSON.parse(json1);
+
+			if (json.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			}
+			
             populateTable(data.white_list_process, "white_list_table");
             populateTable(data.black_list_process, "black_list_table");
             

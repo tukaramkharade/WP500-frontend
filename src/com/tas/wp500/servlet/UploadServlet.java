@@ -49,9 +49,6 @@ public class UploadServlet extends HttpServlet {
             Files.copy(input, Paths.get(uploadPath, fileName), StandardCopyOption.REPLACE_EXISTING);
         }
 
-        System.out.println("file uploaded successfully!");
-        // You can now process the uploaded file as needed.
-
         response.getWriter().println("File uploaded successfully.");
      
         // Redirect to firmwarUpdate.jsp
