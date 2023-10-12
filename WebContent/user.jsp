@@ -196,6 +196,10 @@ button {
   margin-left: 40%;
 }
 
+#userListTable tr.userTableRow{
+height: 10px;
+}
+
 </style>
 <script>
 
@@ -238,12 +242,11 @@ var tokenValue;
 								  
 						}
 
-						
 						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
 								if (user.username !== 'tasm2m_admin') {
-											var row = $('<tr>');
+											var row = $('<tr>').addClass('userTableRow');
 												
 												row.append($('<td>').text(user.username));
 												row.append($('<td>').text(user.first_name));
@@ -251,10 +254,9 @@ var tokenValue;
 												row.append($('<td>').text(user.role));									
 												
 												var actions = $('<td>');
-												
-														
+										
 														var editButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Edit"style="color: #35449a;">'
+							                            '<button data-toggle="tooltip" data-placement="top" title="Edit" style="color: #35449a;">'
 							                            )
 							                            .html('<i class="fas fa-edit"></i>')
 							                            .click(function() {
@@ -265,14 +267,14 @@ var tokenValue;
 							                            });
 
 							                        var deleteButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Delete"style="color: red;">')
+							                            '<button data-toggle="tooltip" data-placement="top" title="Delete" style="color: red;">')
 							                            .html('<i class="fas fa-trash-alt"></i>')
 							                            .click(function() {
 							                                deleteUser(user.username);
 							                            });
 
 							                        var changePasswordButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Change password"style="color: #35449a;">')
+							                            '<button data-toggle="tooltip" data-placement="top" title="Change password" style="color: #35449a;">')
 							                            .html('<i class="fas fa-key"></i>')
 							                            .click(function() {
 							                                setUserForChangingPassword(user.username);
@@ -292,7 +294,7 @@ var tokenValue;
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
 								if (user.username !== 'tasm2m_admin') {
-												var row = $('<tr>');
+												var row = $('<tr>').addClass('userTableRow');
 												
 												row.append($('<td>').text(user.username));
 												row.append($('<td>').text(user.first_name));
@@ -812,9 +814,9 @@ var tokenValue;
 				<table id="userListTable">
 					<thead>
 						<tr>
-							<th>User Name</th>
-							<th>First Name</th>
-							<th>Last Name</th>
+							<th>User name</th>
+							<th>First name</th>
+							<th>Last name</th>
 							<th>Role</th>
 							<th id="actions">Actions</th>
 						</tr>

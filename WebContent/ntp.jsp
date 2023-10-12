@@ -1,6 +1,3 @@
-
-<!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -819,7 +816,7 @@ var tokenValue;
 				<p id="ist_time"></p>
 				<p id="utc_time"></p>
 
-				<label for="datetime">Select Date-Time:</label> <input
+				<label for="datetime">Select Date-Time</label> <input
 					type="datetime-local" id="datetime" name="datetime" required
 					onchange="toggleDateTimeInput()">
 				<button id="setDateTime">Submit</button>

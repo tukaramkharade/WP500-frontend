@@ -139,9 +139,9 @@ var tokenValue;
 				<table id="data-table">
 					<thead>
 						<tr>
-							<th>Tag Name</th>
+							<th>Tag name</th>
 							<th>Value</th>
-							<th>ExtError</th>
+							<th>Exterror</th>
 							<th>Access</th>
 							<th>Error</th>
 						</tr>

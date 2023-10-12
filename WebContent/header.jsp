@@ -11,8 +11,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
 
-
-
 <style>
 .modal-logout {
 	display: none;
@@ -80,25 +78,84 @@ button {
 	font-size: 12px;
 	font-weight: bold;
 }
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+
+
 </style>
 <script>
 	var roleValue;
 
 	function loadConfig() {
-		$.ajax({
-			url : 'loadConfigurationServlet',
-			type : 'GET',
-			dataType : 'json',
-			success : function(data) {
-				alert(data.status);
+		
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit');
+		  confirmButton.onclick = function () {
+			  
+			  $.ajax({
+					url : 'loadConfigurationServlet',
+					type : 'GET',
+					dataType : 'json',
+					success : function(data) {
+						//alert(data.status);
 
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
-			}
-		});
+					},
+					error : function(xhr, status, error) {
+						// Handle the error response, if needed
+						console.log('Error: ' + error);
+					}
+				});
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		  
+		  };	
+		
 	}
+	
 	function getProcessData1() {
 		$.ajax({
 			url : "processGetData",
@@ -188,7 +245,7 @@ button {
 		</div>
 		
 		<input style="margin-right: 10px; height: 40px" type="button" id="loadConfig" value="Update Configuration" />
-		<div style="margin-right: 10px;">${username}
+		<div style="margin-right: 10px;">${username} (Role - ${role})
 			<i class="fa fa-sign-out" style="font-size: 20px; margin-left: 5px" id="logoutBtn" title="Logout"></i>
 		</div>
 		
@@ -202,6 +259,15 @@ button {
 			<button id="cancel-button-logout">No</button>
 		</div>
 	</div>
+	
+	<div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to load configuration?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+	 </div>
+	
 </header>
 
 </head>

@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -1325,12 +1323,12 @@ var tokenValue;
 			<table id="dispenserTriggerListTable">
 				<thead>
 					<tr>
-						<th>Station Name</th>
-						<th>Serial Number</th>
+						<th>Station name</th>
+						<th>Serial number</th>
 						<th>Side</th>
-						<th>Trigger Tag</th>
-						<th>Trigger Value</th>
-						<th>Broker IP Address</th>
+						<th>Trigger tag</th>
+						<th>Trigger value</th>
+						<th>Broker IP address</th>
 						<th>Status</th>
 						<th>Unit ID</th>
 						<th id="actions">Actions</th>

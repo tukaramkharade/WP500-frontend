@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -373,7 +371,7 @@ var tokenValue;
 				$('#iface').val('eth0');
 				$('#portNumber').val('');
 				$('#macAddress').val('');
-				$('#protocol').val('tcp');
+				$('#protocol').val('TCP');
 				$('#ip_addr').val('');
 				$('#type').val('Select type');
 				$('#action').val('ACCEPT');
@@ -475,10 +473,10 @@ var tokenValue;
 				var type = $('#type').find(":selected").val();
 				var action = $('#action').find(":selected").val();
 				
-				if(type == 'ip'){
+				if(type == 'IP'){
 					
 					$("#macAddress").prop("disabled", true);
-				}else if(type == 'mac'){
+				}else if(type == 'MAC'){
 					
 					$("#ip_addr").prop("disabled", true);
 				}
@@ -508,7 +506,7 @@ var tokenValue;
 						$('#iface').val('eth0');
 						$('#portNumber').val('');
 						$('#macAddress').val('');
-						$('#protocol').val('tcp');
+						$('#protocol').val('TCP');
 						$('#ip_addr').val('');
 						$('#type').val('Select type');
 						$('#action').val('ACCEPT');
@@ -571,10 +569,10 @@ var tokenValue;
 
 		$('#type').val(trafficRulesId);
 		
-		if(trafficRulesId == 'ip'){
+		if(trafficRulesId == 'IP'){
 			
 			$("#macAddress").prop("disabled", true);
-		}else if(trafficRulesId == 'mac'){
+		}else if(trafficRulesId == 'MAC'){
 			
 			$("#ip_addr").prop("disabled", true);
 		}
@@ -1026,7 +1024,7 @@ var tokenValue;
 			$('#iface').val('eth0');
 			$('#portNumber').val('');
 			$('#macAddress').val('');
-			$('#protocol').val('tcp');
+			$('#protocol').val('TCP');
 			$('#ip_addr').val('');
 			$('#type').val('Select type');
 			$('#action').val('ACCEPT');
@@ -1057,7 +1055,7 @@ var tokenValue;
 			<form id="generalSettingsForm">
 			<input type="hidden" id="operation_action" name="operation_action" value="">
 
-				<div class="row"
+				<!-- <div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -25px;">
 
 					<div class="col-75-2" style="width: 10%; text-align: left;">
@@ -1088,11 +1086,44 @@ var tokenValue;
 							<option value="Off">Off</option>
 						</select> <span id="forwardError" style="color: red;"></span>
 					</div>
+				</div> -->
+				
+				
+				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
+					<div style="display: flex; flex-content: space-between;">
+						
+						<label id="input_label">Input</label> 
+						<select class="textBox" id="input" name="input" style="height: 35px; width: 120px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="inputError" style="color: red;"></span>
+						
+						<label for="output" id="output_label" style="margin-left: 1em;">Output</label> 
+						<select class="textBox" id="output" name="output" style="height: 35px; width: 120px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="outputError" style="color: red;"></span>
+						
+						<label for="forward" id="forward_label" style="margin-left: 1em;">Forward</label> 
+						<select class="textBox" id="forward" name="forward" style="height: 35px; width: 120px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="forwardError" style="color: red;"></span>
+						
+						
+						<label style="margin-left: 1em;" id="drop_invalid_packets_label" for="drop_invalid_packets">Drop invalid packets</label> 
+						<select class="textBox" id="rule_drop" name="rule_drop" style="height: 35px; width: 120px;">
+							<option value="On">On</option>
+							<option value="Off">Off</option>
+						</select> <span id="forwardError" style="color: red;"></span>
+							
+						
+					</div>
 				</div>
 
 
 				<div class="row"
-					style="display: flex; justify-content: right; margin-top: -1%;">
+					style="display: flex; justify-content: right; margin-top: 1%;">
 					<input type="button" value="Apply" id="applyBtnGenSettings" /> 
 					<input type="submit" value="Add" id="registerBtnGenSettings"
 						style="margin-left: 5px;" /> 
@@ -1153,8 +1184,8 @@ var tokenValue;
 						<select class="textBox" id="type" name="type"
 							style="height: 35px;">
 							<option value="Select type">Select type</option>
-							<option value="ip">ip</option>
-							<option value="mac">mac</option>
+							<option value="IP">IP</option>
+							<option value="MAC">MAC</option>
 
 						</select>
 					</div>
@@ -1169,8 +1200,8 @@ var tokenValue;
 						<select class="textBox" id="protocol" name="protocol"
 							style="height: 35px;">
 							<option value="Select protocol">Select protocol</option>
-							<option value="tcp">tcp</option>
-							<option value="udp">udp</option>
+							<option value="TCP">TCP</option>
+							<option value="UDP">UDP</option>
 
 						</select>
 					</div>
@@ -1183,7 +1214,7 @@ var tokenValue;
 
 					<div class="col-75-1" style="width: 10%;">
 						<input type="text" id="portNumber" name="portNumber"
-							placeholder="Destination Port" maxlength="6"/>
+							placeholder="Destination port" maxlength="6"/>
 							<p id="destPortError" style="color: red;"></p>
 					</div>
 					

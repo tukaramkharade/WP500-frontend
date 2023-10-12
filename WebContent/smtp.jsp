@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -784,21 +782,21 @@ tokenValue = '<%=tokenValue%>';
 				<input type="hidden" id="action" name="action" value="">
 
 				
-				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 2%;">
+				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
 					<div style="display: flex; flex-content: space-between;">
 						
-						<label id="from_email_id_label" style="width: 20%; ">From Email ID:</label> 
-						<input type="text" id="from_email_id" name="from_email_id" style="height: 17px; width: 20%;" required />
+						<label id="from_email_id_label">From Email ID</label> 
+						<input type="text" id="from_email_id" name="from_email_id" style="height: 17px; width: 120px;" required />
 						
-						<label for="password" id="password_label" style="width: 7%; margin-left: 1px;">Password:</label> 
-						<input type="password" id="passwords" name="passwords" style="height: 17px; width: 20%;" required />
+						<label for="password" id="password_label" style="margin-left: 1em;">Password</label> 
+						<input type="password" id="passwords" name="passwords" style="height: 17px; width: 120px;" required />
 						
-						<label for="host_id" id="host_label" style="width: 7%; margin-left: 1px;">Host:</label> 
-						<input type="text" id="host_id" name="host_id" style="height: 17px; width: 20%;" required />
+						<label for="host_id" id="host_label" style="margin-left: 1em;">Host</label> 
+						<input type="text" id="host_id" name="host_id" style="height: 17px; width: 120px;" required />
 						
 						
-						<label style="width: 7%; margin-left: 1px;" id="smtp_type_label" for="smtp_type_">SMTP Type:</label> 
-						<select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 35px; width: 20%; margin-left: 1px" required>
+						<label style="margin-left: 1em;" id="smtp_type_label" for="smtp_type_">SMTP Type</label> 
+						<select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 35px; width: 140px;" required>
 							<option value="Select SMTP type">Select SMTP type:</option>
 							<option value="SSL">SSL</option>
 							<option value="TLS">TLS</option>
@@ -808,19 +806,17 @@ tokenValue = '<%=tokenValue%>';
 					</div>
 				</div>
 				
-				
-
-				<div class="row" style="margin-top: 20px; width: 60%;  margin-left: 2%;">
+				<div class="row" style="margin-top: 20px; width: 60%;  margin-left: 1em;">
 					<div style="display: flex; flex-content: space-between;">
-						<label id="ssl_socket_factory_port_label" style="width: 20%; ">SSL Socket Factory Port:</label> 
-						<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 17px; width: 20%;" required />
+						<label id="ssl_socket_factory_port_label">SSL Socket Factory Port</label> 
+						<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 17px; width: 120px;" required />
 						
-						<label for="ssl_port" id="ssl_port_label" style="width: 7%; margin-left: 1px;">SSL Port:</label> 
-						<input type="text" id="ssl_port" name="ssl_port" style="height: 17px; width: 20%;" required />
+						<label for="ssl_port" id="ssl_port_label" style="margin-left: 1em;">SSL Port</label> 
+						<input type="text" id="ssl_port" name="ssl_port" style="height: 17px; width: 120px;" required />
 						
 						
-						<label style="width: 10%; margin-left: 1px;" id="smtp_type_label" for="ssl_smtp_type">SSL SMTP Type:</label> 
-						<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 35px; width: 20%;" required>
+						<label style="margin-left: 1em;" id="smtp_type_label" for="ssl_smtp_type">SSL SMTP Type</label> 
+						<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 35px; width: 120px;" required>
 								<option value="True" selected>True</option>
 								<option value="False">False</option>
 						</select>
@@ -828,20 +824,20 @@ tokenValue = '<%=tokenValue%>';
 				</div>
 
 				
-				<div class="row" style="margin-top: 20px; width: 60%; margin-left: 2%;">
+				<div class="row" style="margin-top: 20px; width: 60%; margin-left: 1em;">
 					<div style="display: flex; flex-content: space-between;">
-						<label id="tls_port_label" style="width: 20%;">TLS Port:</label> 
-						<input type="text" id="tls_port" name="tls_port" style="height: 17px; width: 20%;" required />
+						<label id="tls_port_label">TLS Port</label> 
+						<input type="text" id="tls_port" name="tls_port" style="height: 17px; width: 120px;" required />
 						
-						<label for="tls_auth" id="tls_auth_label" style="width: 7%; margin-left: 1px;">TLS Auth:</label> 
-						<select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 35px; width: 20%;" required>
+						<label for="tls_auth" id="tls_auth_label" style="margin-left: 1em;">TLS Auth</label> 
+						<select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 35px; width: 120px;" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
 						</select>
 						
 						
-						<label style="width: 10%; margin-left: 1px;" id="tls_enable_label" for="tls_enable">TLS Enable:</label> 
-						<select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 35px; width: 20%;" required>
+						<label style="margin-left: 1em;" id="tls_enable_label" for="tls_enable">TLS Enable</label> 
+						<select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 35px; width: 120px;" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
 						</select>
@@ -849,17 +845,17 @@ tokenValue = '<%=tokenValue%>';
 				</div>
 				
 				
-				<div class="row" style="margin-top: 20px; width: 90%;  margin-left: 2%;">
+				<div class="row" style="margin-top: 20px; width: 90%;  margin-left: 1em;">
 					<div style="display: flex; flex-content: space-between;">
-						<label id="to_email_id_label" style="width: 25%;">TO Email ID:</label> 
-						<input type="text" id="to_email_id" name="to_email_id" required style="height: 17px; width: 100%;" />
+						<label id="to_email_id_label">To Email ID</label> 
+						<input type="text" id="to_email_id" name="to_email_id" required style="height: 17px; width: 400px;" />
 						
-						<label id="email_cc_label" style="width: 7%; margin-left: 1px;">CC:</label> 
-						<input type="text" id="email_cc" name="email_cc" style="height: 17px; width: 100%;" />
+						<label id="email_cc_label" style="margin-left: 1em;">CC</label> 
+						<input type="text" id="email_cc" name="email_cc" style="height: 17px; width: 400px;" />
 						
 						
-						<label style="width: 10%; margin-left: 1px;" id="email_bcc_label">BCC:</label> 
-						<input type="text" id="email_bcc" name="email_bcc" style="height: 17px; width: 100%;" />
+						<label style="margin-left: 1em;" id="email_bcc_label">BCC</label> 
+						<input type="text" id="email_bcc" name="email_bcc" style="height: 17px; width: 400px;" />
 					</div>
 				</div>
 

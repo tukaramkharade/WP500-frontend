@@ -240,10 +240,10 @@
 				<table id="data-table">
 					<thead>
 						<tr>
-							<th>Date Time</th>
-							<th>Data String</th>
-							<th>Broker Ip</th>
-							<th>Publish Topic Ip</th>
+							<th>Date time</th>
+							<th>Data string</th>
+							<th>Broker IP</th>
+							<th>Publish topic IP</th>
 
 
 						</tr>

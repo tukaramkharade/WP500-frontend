@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
@@ -400,10 +400,10 @@ var tokenValue;
 			</div>
 			<div>
 				<input style="margin-left: 1%; margin-top: 5%;" type="button"
-					id="loadLogFileButton" value="Load Log File">
+					id="loadLogFileButton" value="Load log file">
 			</div>
 			<div>
-    			<input style="margin-left: 10%; margin-top: 5%;flex-content: space-between;" type="button" id="exportButton" value="Export Log File">
+    			<input style="margin-left: 10%; margin-top: 5%;flex-content: space-between;" type="button" id="exportButton" value="Export log file">
 			</div>
 
 		</div>
@@ -426,9 +426,9 @@ var tokenValue;
 		<table id="log_table">
 			<thead>
 				<tr>
-					<th style="width: 15%">Date and Time</th>
-					<th style="width: 8%">Log Type</th>
-					<th style="width: 15%">Line Number</th>
+					<th style="width: 15%">Date and time</th>
+					<th style="width: 8%">Log type</th>
+					<th style="width: 15%">Line number</th>
 					<th>Class</th>
 					<th style="width: 55%">Message</th>
 

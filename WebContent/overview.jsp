@@ -41,51 +41,51 @@
         <div class="container" style="width: 60%;margin-left: 1%;height: 400;" >
           <table >
             <tr>
-              <th colspan="2">General Data</th>
+              <th colspan="2">General data</th>
             </tr>
 
             <tr>
-              <td>Manufactured By</td>
+              <td>Manufactured by</td>
               <td>TAS INDIA PRIVATE LIMITED</td>
             </tr>
 
             <tr>
-              <td>Manufacturing Address</td>
+              <td>Manufacturing address</td>
               <td>PUNE, INDIA</td>
             </tr>
 
             <tr>
-              <td>Web Address</td>
+              <td>Web address</td>
               <td>http://www.tasm2m.com</td>
             </tr>
 
             <tr>
-              <td>Model Number</td>
+              <td>Model number</td>
               <td>WP500</td>
             </tr>
 
             <tr>
-              <td>Customer Order Number</td>
+              <td>Customer order number</td>
               <td>2404267</td>
             </tr>
 
             <tr>
-              <td>Serial No.</td>
+              <td>Serial no.</td>
               <td>1364211569</td>
             </tr>
 
             <tr>
-              <td>Firmware Revision</td>
+              <td>Firmware revision</td>
               <td>2022.6.0(22.6.0.43)</td>
             </tr>
 
             <tr>
-              <td>Hardware Revision</td>
+              <td>Hardware revision</td>
               <td>02</td>
             </tr>
 
             <tr>
-              <td>Web app Version</td>
+              <td>Web app version</td>
               <td>1.0</td>
             </tr>
           </table>

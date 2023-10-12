@@ -1,5 +1,3 @@
-<!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%> -->
 <!DOCTYPE html>
 <html>
 
@@ -548,12 +546,12 @@ button {
 
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>LAN Setting</h3>
+			<h3>LAN SETTINGS</h3>
 			<hr>
 			<div class="container">
 				<table>
 					<tr>
-						<th>TCP/IP(LAN 0)- Switched Mode</th>
+						<th>TCP/IP(LAN 0)- Switched mode</th>
 						<th>Current IP</th>
 						<th>New IP</th>
 					</tr>
@@ -576,7 +574,7 @@ button {
 					</tr>
 
 					<tr>
-						<td>IP Address</td>
+						<td>IP address</td>
 
 						<td><input id="ip_addr_dis_0" class="status" disabled
 							type='text' name="ip_addr_dis_0" style="width: 18%;"></td>
@@ -586,7 +584,7 @@ button {
 							name="ip_addr_eth1" style="width: 18%;"></td>
 					</tr>
 					<tr>
-						<td>Subnet Mask</td>
+						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_0" class="status" disabled
 							type='text' name="subnet_mask_dis_0" style="width: 18%;"></td>
 							
@@ -605,7 +603,7 @@ button {
 							name="gateway_eth1" style="width: 18%;"></td>
 					</tr>
 					<tr>
-						<td>Dns Address</td>
+						<td>DNS address</td>
 
 						<td><input id="dns_dis_0" class="status" disabled
 							type='text' name="dns_dis_0" style="width: 18%;"></td>
@@ -629,7 +627,7 @@ button {
 			<div class="container" style="margin-top: 1%;">
 				<table>
 					<tr>
-						<th>TCP/IP(LAN 1)- Switched Mode</th>
+						<th>TCP/IP(LAN 1)- Switched mode</th>
 						<th>Current IP</th>
 						<th>New IP</th>
 					</tr>
@@ -645,7 +643,7 @@ button {
 					</tr>
 
 					<tr>
-						<td>IP Address</td>
+						<td>IP address</td>
 
 						<td><input id="ip_addr_dis_1" class="status" disabled
 							type='text' name="ip_addr_dis_1" style="width: 18%;"></td>
@@ -653,7 +651,7 @@ button {
 							name="ip_addr_lan1" style="width: 18%;"></td>
 					</tr>
 					<tr>
-						<td>Subnet Mask</td>
+						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_1" class="status" disabled
 							type='text' name="subnet_mask_dis_1" style="width: 18%;"></td>
 						<td><input id="subnet_mask_lan1" class="config" type='text'
@@ -670,7 +668,7 @@ button {
 							name="gateway_lan1" style="width: 18%;"></td>
 					</tr>
 					<tr>
-						<td>Dns Address</td>
+						<td>DNS address</td>
 
 						<td><input id="dns_dis_1" class="status" disabled
 							type='text' name="dns_dis_1" style="width: 18%;"></td>
@@ -693,7 +691,7 @@ button {
 			<div class="container" style="margin-top: 1%;">
 				<table>
 					<tr>
-						<th>TCP/IP(LAN 2)- Switched Mode</th>
+						<th>TCP/IP(LAN 2)- Switched mode</th>
 						<th>Current IP</th>
 						<th>New IP</th>
 					</tr>
@@ -708,7 +706,7 @@ button {
 					</tr>
 
 					<tr>
-						<td>IP Address</td>
+						<td>IP address</td>
 
 						<td><input id="ip_addr_dis_2" class="status" disabled
 							type='text' name="ip_addr_dis_2" style="width: 18%;"></td>
@@ -716,7 +714,7 @@ button {
 							name="ip_addr_lan2" style="width: 18%;"></td>
 					</tr>
 					<tr>
-						<td>Subnet Mask</td>
+						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_2" class="status" disabled
 							type='text' name="subnet_mask_dis_2" style="width: 18%;"></td>
 						<td><input id="subnet_mask_lan2" class="config" type='text'
@@ -733,7 +731,7 @@ button {
 							name="gateway_lan2" style="width: 18%;"></td>
 					</tr>
 					<tr>
-						<td>Dns Address</td>
+						<td>DNS address</td>
 
 						<td><input id="dns_dis_2" class="status" disabled
 							type='text' name="dns_dis_2" style="width: 18%;"></td>

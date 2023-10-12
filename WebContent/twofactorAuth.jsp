@@ -137,6 +137,44 @@ margin-top: 15px;
     display: none;
 }
 
+#auth_app{
+height: 50px;
+width: 50px;
+}
+
+.modal-session-timeout {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-session-timeout {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+#confirm-button-session-timeout {
+  background-color: #4caf50;
+  color: white;
+}
+
 </style>
 
 <script>
@@ -144,7 +182,6 @@ margin-top: 15px;
 	var qr_status;
 	var secretKey;
 
-	
 	
 	function updateTOTP(element) {
 	    var toggleContainer = document.querySelector('.toggle-container');
@@ -170,7 +207,14 @@ margin-top: 15px;
 	        enableText.style.display = "none";
 	        disableText.style.display = "inline";
 	        
-	      
+	        var container = document.getElementById("imageContainer");
+	    	while (container.firstChild) {
+	        	container.removeChild(container.firstChild);
+	    	}
+	    	
+	    	$('#generateQR').val('Generate QR code');
+	    	
+	    	
 	    } else {
 	        // Toggle switch is disabled, so we want to enable it
 	        toggleContainer.classList.add('active');
@@ -204,7 +248,8 @@ margin-top: 15px;
 	            totp_authenticator: totp_authenticator
 	        },
 	        success: function(response) {
-	            // Do something with the response if needed
+	        	
+
 	        },
 	        error: function(xhr, textStatus, errorThrown) {
 	            // Handle any errors that occur during the AJAX request
@@ -224,6 +269,27 @@ margin-top: 15px;
 	            action: 'getTOTPDetails'
 	        },
 			success : function(data) {
+				
+				var json1 = JSON.stringify(data);
+
+				var json = JSON.parse(json1);
+
+				if (json.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				}
+				
 				var enableText = document.getElementById("enableText");
 				var disableText = document.getElementById("disableText");
 
@@ -280,17 +346,6 @@ margin-top: 15px;
 		});
 	}
 	
-	function changeButtonColor(isDisabled) {
-        var $generateQR_button = $('#generateQR');       
-        
-        
-        if (isDisabled) {
-            $generateQR_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $generateQR_button.css('background-color', '#2b3991'); // Reset to original color
-        } 
-    }
-	
 	
 	function getQRCode() {
  
@@ -343,19 +398,18 @@ margin-top: 15px;
 			},
             success: function (response) {
                 // Handle the response from the server, if needed
-                console.log("OTP -->"+response.otp_result);
-                
+              
                 var message = document.getElementById("message");
                
                 if(response.otp_result === 'true'){
                 	message.style.color = "green";
-                    message.innerHTML = "OTP is correct.";
+                    message.innerHTML = "Your OTP is correct; you can now log in with TOTP.";
                 }else{
                 	// OTP is incorrect, display in red
                     message.style.color = "red";
-                    message.innerHTML = "Incorrect OTP. Please try again.";
+                    message.innerHTML = "Incorrect OTP. Please try again or check device time.";
                     $('#otp').val('');
-                	//window.location.href = 'totp.jsp';
+                	
                 }
                 
             },
@@ -441,12 +495,16 @@ margin-top: 15px;
 					 <input type="button" id="test-totp" value="Test TOTP">
 					 <input type="password" id="otp" placeholder="Enter OTP" style="width: 15%;">
     				<input type="button" id="sendOTP" value="Validate OTP" style="margin-left: 1%">
-    				<div id="message" style="margin-left: 2%;"></div>
+    				<div id="message"></div>
 					
 				</div>
 				
 				<div class="note">
-					<p>Note: Please install <b>Authenticator App</b> on your mobile phone for scanning QR code and save this QR code for further use.</p>
+					<p>Note: Please install <b>Authenticator App</b> <img id="auth_app" src="images/auth.png" alt="Authenticator App image"> on your mobile phone for scanning QR code and save this QR code for further use. 
+					</p>
+					
+					<p>Note: To ensure proper functionality of TOTP, <b>time</b> must be correctly synchronized with the device.  </p>
+					
 					
 				</div>
 				
@@ -459,6 +517,13 @@ margin-top: 15px;
 					<button id="cancel-button-edit">No</button>
 				</div>
 			</div>
+			
+			<div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				  <p>Your session is timeout. Please login again</p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
+			  </div>
 
 		</section>
 	</div>

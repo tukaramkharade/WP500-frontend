@@ -242,15 +242,15 @@
         </div>
         
         <p style="font-size: medium;"><b>WPConnex Web Configuration</b></p>
-        <label for="username" style="float: left;">Username:</label>
+        <label for="username" style="float: left;">Username</label>
         <input required type="text" id="username" name="username" ><br>
         
-        <label for="password" style="float: left;">Password:</label>
+        <label for="password" style="float: left;">Password</label>
         <input required type="password" id="password" name="password" ><br><br>
      	<div id="imageContainer">
         <!-- The generated image will be displayed here -->
    		 </div>
-        <label for="captcha" style="float: left;">Captcha:</label>
+        <label for="captcha" style="float: left;">Captcha</label>
         <input required type="text" id="userInputNumber" placeholder="Enter the captcha"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">

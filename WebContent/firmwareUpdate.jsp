@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -14,6 +12,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+.note {
+    color: red;
+    margin-top: 5%; 
+   
+}
+</style>
 <body>
 
 <div class="sidebar">
@@ -45,9 +51,14 @@
 			<form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data">
         		<input type="file" name="file">
         		<input type="submit" value="Upload" onclick="redirectToFirmwareUpdate();">
-        		
-        		
+        			
     		</form>
+    		
+    		<div class="note">
+					<p>Note: You can check uploaded CRT file in MQTT Server Settings.</p>
+					
+					
+				</div>
 			</div> 
 			</section>
 			</div>
