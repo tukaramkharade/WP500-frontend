@@ -175,6 +175,10 @@ width: 50px;
   color: white;
 }
 
+h3{
+margin-top: 68px;
+}
+
 </style>
 
 <script>
@@ -182,7 +186,6 @@ width: 50px;
 	var qr_status;
 	var secretKey;
 
-	
 	function updateTOTP(element) {
 	    var toggleContainer = document.querySelector('.toggle-container');
 	    var enableText = document.getElementById("enableText");
@@ -196,23 +199,22 @@ width: 50px;
 	    var confirmButton = document.getElementById('confirm-button-edit');
 	    confirmButton.onclick = function() {
 	        sendDataToServlet(toggleContainer.classList.contains('active') ? "enable" : "disable");
+	        
 	        modal.style.display = 'none';
 	    };
-
 	    
-
 	    if (toggleContainer.classList.contains('active')) {
 	        // Toggle switch is enabled, so we want to disable it
 	        toggleContainer.classList.remove('active');
 	        enableText.style.display = "none";
 	        disableText.style.display = "inline";
 	        
-	        var container = document.getElementById("imageContainer");
+	         var container = document.getElementById("imageContainer");
 	    	while (container.firstChild) {
 	        	container.removeChild(container.firstChild);
 	    	}
 	    	
-	    	$('#generateQR').val('Generate QR code');
+	    	$('#generateQR').val('Generate QR code'); 
 	    	
 	    	
 	    } else {
@@ -298,6 +300,8 @@ width: 50px;
 					$('.toggle-container').addClass('active');
 					enableText.style.display = "inline";
 					disableText.style.display = "none";
+					
+					
 				} else {
 					// If TOTP authenticator is disabled, show "Disable" and hide "Enable"
 					$('.toggle-container').removeClass('active');
@@ -366,11 +370,11 @@ width: 50px;
 	                displayQRImage(data.qr_image);
 
 	                // Check qr_status and disable the button if true
-	                if (qr_status) {
+	                 if (qr_status) {
 	                	$('#generateQR').val('Regenerate QR Code');
 	                } else {
 	                	$('#generateQR').val('Generate QR code');
-	                }
+	                } 
 	            } else {
 	                // Handle the case where the response does not contain the expected data
 	                console.error("Invalid response data");
@@ -439,7 +443,8 @@ width: 50px;
 		});
 
 		getTOTPDetails();
-
+		
+	
 		$('#generateQR').click(function() {
 			generateQRCode();
 		});
@@ -500,6 +505,7 @@ width: 50px;
 				</div>
 				
 				<div class="note">
+				<p>Note: Please click on the 'Generate QR Code' button to generate your QR code when enabling 2-Factor authentication</p>
 					<p>Note: Please install <b>Authenticator App</b> <img id="auth_app" src="images/auth.png" alt="Authenticator App image"> on your mobile phone for scanning QR code and save this QR code for further use. 
 					</p>
 					

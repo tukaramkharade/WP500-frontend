@@ -3,7 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32"
+	href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
 <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
@@ -15,109 +16,123 @@
 
 <style>
 .modal-session-timeout {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .modal-content-session-timeout {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
- }
- 
-#confirm-button-session-timeout {
-  background-color: #4caf50;
-  color: white;
+	background-color: #d5d3d3;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+	width: 300px;
+	transform: translate(0, -50%); /* Center vertically */
+	top: 50%; /* Center vertically */
+	left: 50%; /* Center horizontally */
+	transform: translate(-50%, -50%);
+	/* Center horizontally and vertically */
 }
 
- .popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #d5d3d3;
-  border: 1px solid #ccc;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  text-align: center; /* Center-align the content */
-  width: 20%;
+#confirm-button-session-timeout {
+	background-color: #4caf50;
+	color: white;
+}
+
+.popup {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #d5d3d3;
+	border: 1px solid #ccc;
+	padding: 20px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+	text-align: center; /* Center-align the content */
+	width: 20%;
 }
 
 /* Style for the close button */
 #closePopup {
-  display: block; /* Display as to center horizontally */
-  margin-top: 30px; /* Adjust the top margin as needed */
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-left: 40%;
+	display: block; /* Display as to center horizontally */
+	margin-top: 30px; /* Adjust the top margin as needed */
+	background-color: #4caf50;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	margin-left: 40%;
 }
-.data-table {
 
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+.data-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
 }
 
 .data-table th, .data-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
 }
 
 .data-table th {
-    background-color: #f2f2f2;
-}
-h3 {
-    color: #2b3991; /* Set your desired color */
-    margin-bottom: 10px; /* Add some spacing between heading and table */
-    font-size: 18px; /* Adjust font size as needed */
-    margin-left: 5px;
-    margin-top: 2px;
-}
-.table-container {
-	
-    display: flex;
-    margin-top: 10px; /* You can adjust this value to control the space between the tables */
+	background-color: #f2f2f2;
 }
 
+h3 {
+	color: #2b3991; /* Set your desired color */
+	margin-bottom: 10px; /* Add some spacing between heading and table */
+	font-size: 18px; /* Adjust font size as needed */
+	margin-left: 5px;
+	margin-top: 2px;
+}
+.table-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Updated styles for individual tables */
 .white-list,
 .black-list {
-	border : 0.5px solid black;
-    flex: 1;
-    margin-right: 20px; /* You can adjust this value to control the space between the tables */
-    margin-left: 5px;
+  border: 0.5px solid black;
+  flex: 1;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  width: calc(50% - 12.5px);
+  overflow-x: auto; /* Add horizontal scroll for small screens */
+}
+
+/* Adjust the width of each column */
+.white-list th,
+.white-list td,
+.black-list th,
+.black-list td {
+  min-width: 100px; /* Set the desired column width */
+  max-width: 200px; /* Set the desired column width */
+  word-wrap: break-word; /* Allow text to wrap in case it's too long */
 }
 
 .green-text {
-    color: green; 
+	color: green;
 }
 
 .red-text {
-    color: red; 
+	color: red;
 }
-
 </style>
 <script>
 
@@ -218,100 +233,115 @@ function getProcessData() {
 	$(document).ready(function() {
 		// Load log file list
 		
-		<%
-	    	    	// Access the session variable
-	    	    	HttpSession role = request.getSession();
-	    	    	String roleValue = (String) session.getAttribute("role");
-	    	    	%>
+		<%// Access the session variable
+			HttpSession role = request.getSession();
+			String roleValue = (String) session.getAttribute("role");%>
 	    	    	
-	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+	    	    	roleValue = '<%=roleValue%>'; // This will insert the session value into the JavaScript code
 	    	    	
 	    	    	<%// Access the session variable
-	    	    	HttpSession token = request.getSession();
-	    	    	String tokenValue = (String) session.getAttribute("token");%>
+			HttpSession token = request.getSession();
+			String tokenValue = (String) session.getAttribute("token");%>
 
 	    	    	tokenValue = '<%=tokenValue%>';
-	    	    	
-	    	    	
-	    	    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
-	  	    		  
-	  	    		$('#loadLogFileButton').prop('disabled', true);
-	  	    		  
-	  	    		  changeButtonColor(true);
-	  	    	  }
-		
-	    	    	getProcessData();
-		
-		
-	});
 
-	
+						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+							$('#loadLogFileButton').prop('disabled', true);
+
+							changeButtonColor(true);
+						}
+
+						getProcessData();
+
+					});
 </script>
 
 </head>
 <body>
-    <div class="sidebar">
-        <%@ include file="common.jsp"%>
-    </div>
-    <div class="header">
-        <%@ include file="header.jsp"%>
-    </div>
-    <div class="content">
-        <section style="margin-left: 1em">
-            <h3>Process</h3>
-            <hr />
+	<div class="sidebar">
+		<%@ include file="common.jsp"%>
+	</div>
+	<div class="header">
+		<%@ include file="header.jsp"%>
+	</div>
+	<div class="content">
+		<section style="margin-left: 1em">
+			<h3 style="margin-top: 68px;">Process</h3>
+			<hr />
 
-            <div id="custom-modal-session-timeout" class="modal-session-timeout">
-                <div class="modal-content-session-timeout">
-                    <p>Your session is timeout. Please login again</p>
-                    <button id="confirm-button-session-timeout">OK</button>
-                </div>
-            </div>
+			<div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+					<p>Your session is timeout. Please login again</p>
+					<button id="confirm-button-session-timeout">OK</button>
+				</div>
+			</div>
 
-            <div id="customPopup" class="popup">
-                <span class="popup-content" id="popupMessage"></span>
-                <button id="closePopup">OK</button>
-            </div>
+			<div id="customPopup" class="popup">
+				<span class="popup-content" id="popupMessage"></span>
+				<button id="closePopup">OK</button>
+			</div>
 
-            <div class="table-container" style="display: flex; ">
-                <!-- White List Table -->
-                <div class="white-list">
-                    <h3>White List Process</h3>
-                    <table id="white_list_table">
-                        <thead>
-                            <tr>
-                                <th>PID</th>
-                                <th>Time</th>
-                                <th>Command</th>
-                                <th>User</th>
-                            </tr>
-                        </thead>
-                        <tbody id="white_list_table_body"></tbody>
-                    </table>
-                </div>
+			<div class="table-container" style="display: flex;">
+				<!-- White List Table -->
+				<div class="white-list">
+					<h3>White List Process</h3>
+					<table id="white_list_table">
+						<colgroup>
+							<col style="width: 10%;">
+							<!-- Adjust the width as needed -->
+							<col style="width: 20%;">
+							<!-- Adjust the width as needed -->
+							<col style="width: 30%;">
+							<!-- Adjust the width as needed -->
+							<col style="width: 10%;">
+							<!-- Adjust the width as needed -->
+						</colgroup>
+						<thead>
+							<tr>
+								<th>PID</th>
+								<th>Time</th>
+								<th>Command</th>
+								<th>User</th>
+							</tr>
+						</thead>
+						<tbody id="white_list_table_body"></tbody>
+					</table>
 
-                <!-- Black List Table -->
-                <div class="black-list">
-                    <h3>Black List Process</h3>
-                    <table id="black_list_table">
-                        <thead>
-                            <tr>
-                                <th>PID</th>
-                                <th>Time</th>
-                                <th>Command</th>
-                                <th>User</th>
-                            </tr>
-                        </thead>
-                        <tbody id="black_list_table_body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </div>
+				</div>
 
-    <div class="footer">
-        <%@ include file="footer.jsp"%>
-    </div>
+				<!-- Black List Table -->
+				<div class="black-list">
+					<h3>Black List Process</h3>
+					<table id="black_list_table">
+						<colgroup>
+							<col style="width: 10%;">
+							<!-- Adjust the width as needed -->
+							<col style="width: 20%;">
+							<!-- Adjust the width as needed -->
+							<col style="width: 30%;">
+							<!-- Adjust the width as needed -->
+							<col style="width: 10%;">
+							<!-- Adjust the width as needed -->
+						</colgroup>
+						<thead>
+							<tr>
+								<th>PID</th>
+								<th>Time</th>
+								<th>Command</th>
+								<th>User</th>
+							</tr>
+						</thead>
+						<tbody id="black_list_table_body"></tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<div class="footer">
+		<%@ include file="footer.jsp"%>
+	</div>
 </body>
 
 

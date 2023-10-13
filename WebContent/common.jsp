@@ -153,9 +153,9 @@
                 <li class="nav-item">
                   <a href="systemlog.jsp">System Logs</a>
                 </li>
-                 <li class="nav-item">
+                 <!-- <li class="nav-item">
                 <a href="event.jsp">Events</a>
-              </li> 
+              </li>  -->
               </ul>
             </div>
           </li>

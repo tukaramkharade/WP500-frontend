@@ -200,6 +200,10 @@ button {
 height: 10px;
 }
 
+h3{
+margin-top: 68px;
+}
+
 </style>
 <script>
 
@@ -414,7 +418,7 @@ var tokenValue;
 		var passwordError = document.getElementById("passwordError");
 		const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 		if (password.length < 8 || !strongRegex.test(password)) {
-			passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+			passwordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
 			return false;
 		} else {
 			passwordError.textContent = "";
@@ -674,7 +678,7 @@ var tokenValue;
 		 
 		 if (!isDisabled) {
 			 if (!validatePassword(password)) {
-					passwordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+					passwordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
 					return;
 				}	
 		    }
@@ -790,7 +794,7 @@ var tokenValue;
 			  
 			   <div id="custom-modal-edit-password" class="modal-edit-password">
 				<div class="modal-content-edit-password">
-				  <p>Are you sure you want to edit the password?</p>
+				  <p>Are you sure you want to change the password?</p>
 				  <button id="confirm-button-edit-password">Yes</button>
 				  <button id="cancel-button-edit-password">No</button>
 				</div>
@@ -808,7 +812,7 @@ var tokenValue;
   				<button id="closePopup">OK</button>
 			  </div>
 
-			<h3>USER LIST</h3>
+			<h3 style="margin-top: 15px;">USER LIST</h3>
 			<hr>
 			<div class="container">
 				<table id="userListTable">

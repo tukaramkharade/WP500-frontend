@@ -196,6 +196,10 @@ button {
   margin-left: 40%;
 }
 
+h3{
+margin-top: 68px;
+}
+
 </style>
 
 <script>
@@ -1154,7 +1158,7 @@ var tokenValue;
 
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>DISPENSER TRIGGER</h3>
+		<h3>ADD DISPENSER TRIGGER</h3>
 		<hr />
 		<div class="container">
 			<form id="dispensortriggerform">
@@ -1316,7 +1320,7 @@ var tokenValue;
   				<button id="closePopup">OK</button>
 			  </div>
 
-		<h3>DISPENSER TRIGGER LIST</h3>
+		<h3 style="margin-top: 15px;">DISPENSER TRIGGER LIST</h3>
 		<hr />
 
 		<div class="container">

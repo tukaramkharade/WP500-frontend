@@ -14,6 +14,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
+h3{
+margin-top: 75px;
+}
+
 .modal-session-timeout {
   display: none;
   position: fixed;
@@ -434,10 +438,6 @@ button {
 	    }
 	}
 
-	
-	
-	
-	
 	function changeButtonColor(isDisabled) {
 	    var $eth1button = $('#eth1_button');  
 	    var $lan1button = $('#lan1_button');
@@ -466,9 +466,9 @@ button {
 		    }
 	     
 	     if (isDisabled) {
-		        $eth1button.css('background-color', 'gray'); // Change to your desired color
+		        $lan2button.css('background-color', 'gray'); // Change to your desired color
 		    } else {
-		        $eth1button.css('background-color', '#2b3991'); // Reset to original color
+		        $lan2button.css('background-color', '#2b3991'); // Reset to original color
 		    }
 		     
 		     if (isDisabled) {
@@ -577,40 +577,40 @@ button {
 						<td>IP address</td>
 
 						<td><input id="ip_addr_dis_0" class="status" disabled
-							type='text' name="ip_addr_dis_0" style="width: 18%;"></td>
+							type='text' name="ip_addr_dis_0" style="width: 30%;"></td>
 							
 						<td>
 						<input id="ip_addr_eth1" class="config" type='text'
-							name="ip_addr_eth1" style="width: 18%;"></td>
+							name="ip_addr_eth1" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_0" class="status" disabled
-							type='text' name="subnet_mask_dis_0" style="width: 18%;"></td>
+							type='text' name="subnet_mask_dis_0" style="width: 30%;"></td>
 							
 						<td><input id="subnet_mask_eth1" class="config" type='text'
-							name="subnet_mask_eth1" style="width: 18%;"></td>
+							name="subnet_mask_eth1" style="width: 30%;"></td>
 					</tr>
 					
 					<tr>
 						<td>Gateway</td>
 
 						<td><input id="gateway_dis_0" class="status" disabled
-							type='text' name="gateway_dis_0" style="width: 18%;"></td>
+							type='text' name="gateway_dis_0" style="width: 30%;"></td>
 							
 						<td>
 						<input id="gateway_eth1" class="config" type='text'
-							name="gateway_eth1" style="width: 18%;"></td>
+							name="gateway_eth1" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
 
 						<td><input id="dns_dis_0" class="status" disabled
-							type='text' name="dns_dis_0" style="width: 18%;"></td>
+							type='text' name="dns_dis_0" style="width: 30%;"></td>
 							
 						<td>
 						<input id="dns_ip_eth1" class="config" type='text'
-							name="dns_ip_eth1" style="width: 18%;"></td>
+							name="dns_ip_eth1" style="width: 30%;"></td>
 					</tr>
 
 
@@ -646,36 +646,36 @@ button {
 						<td>IP address</td>
 
 						<td><input id="ip_addr_dis_1" class="status" disabled
-							type='text' name="ip_addr_dis_1" style="width: 18%;"></td>
+							type='text' name="ip_addr_dis_1" style="width: 30%;"></td>
 						<td><input id="ip_addr_lan1" class="config" type='text'
-							name="ip_addr_lan1" style="width: 18%;"></td>
+							name="ip_addr_lan1" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_1" class="status" disabled
-							type='text' name="subnet_mask_dis_1" style="width: 18%;"></td>
+							type='text' name="subnet_mask_dis_1" style="width: 30%;"></td>
 						<td><input id="subnet_mask_lan1" class="config" type='text'
-							name="subnet_mask_lan1" style="width: 18%;"></td>
+							name="subnet_mask_lan1" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
 
 						<td><input id="gateway_dis_1" class="status" disabled
-							type='text' name="gateway_dis_1" style="width: 18%;"></td>
+							type='text' name="gateway_dis_1" style="width: 30%;"></td>
 							
 						<td>
 						<input id="gateway_lan1" class="config" type='text'
-							name="gateway_lan1" style="width: 18%;"></td>
+							name="gateway_lan1" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
 
 						<td><input id="dns_dis_1" class="status" disabled
-							type='text' name="dns_dis_1" style="width: 18%;"></td>
+							type='text' name="dns_dis_1" style="width: 30%;"></td>
 							
 						<td>
 						<input id="dns_ip_lan1" class="config" type='text'
-							name="dns_ip_lan1" style="width: 18%;"></td>
+							name="dns_ip_lan1" style="width: 30%;"></td>
 					</tr>
 
 
@@ -709,36 +709,36 @@ button {
 						<td>IP address</td>
 
 						<td><input id="ip_addr_dis_2" class="status" disabled
-							type='text' name="ip_addr_dis_2" style="width: 18%;"></td>
+							type='text' name="ip_addr_dis_2" style="width: 30%;"></td>
 						<td><input id="ip_addr_lan2" class="config" type='text'
-							name="ip_addr_lan2" style="width: 18%;"></td>
+							name="ip_addr_lan2" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_2" class="status" disabled
-							type='text' name="subnet_mask_dis_2" style="width: 18%;"></td>
+							type='text' name="subnet_mask_dis_2" style="width: 30%;"></td>
 						<td><input id="subnet_mask_lan2" class="config" type='text'
-							name="subnet_mask_lan2" style="width: 18%;"></td>
+							name="subnet_mask_lan2" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
 
 						<td><input id="gateway_dis_2" class="status" disabled
-							type='text' name="gateway_dis_2" style="width: 18%;"></td>
+							type='text' name="gateway_dis_2" style="width: 30%;"></td>
 							
 						<td>
 						<input id="gateway_lan2" class="config" type='text'
-							name="gateway_lan2" style="width: 18%;"></td>
+							name="gateway_lan2" style="width: 30%;"></td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
 
 						<td><input id="dns_dis_2" class="status" disabled
-							type='text' name="dns_dis_2" style="width: 18%;"></td>
+							type='text' name="dns_dis_2" style="width: 30%;"></td>
 							
 						<td>
 						<input id="dns_ip_lan2" class="config" type='text'
-							name="dns_ip_lan2" style="width: 18%;"></td>
+							name="dns_ip_lan2" style="width: 30%;"></td>
 					</tr>
 
 
