@@ -14,11 +14,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
-.note {
-    color: red;
-    margin-top: 5%; 
-   
+
+h3{
+margin-top: 68px;
 }
+
 </style>
 <body>
 
@@ -37,29 +37,13 @@
 			<div class="container">
 			
 			<form action="UploadServlet" method="post" enctype="multipart/form-data">
-        		<input type="file" name="file">
-        		<input type="submit" value="Upload" onclick="redirectToFirmwareUpdate();">
+        		<input type="file" name="file" id="fileInput">
+        		<input type="submit" value="Upload" id="file_upload" onclick="redirectToFirmwareUpdate();">
         		
-        		<input type="button" value="Firmware update">
+        		<input type="button" value="Firmware update" id="firmware_update">
     		</form>
 			</div>
 			
-			 <h3>UPLOAD CRT FILE</h3>
-			<hr>
-			<div class="container">
-			
-			<form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data">
-        		<input type="file" name="file">
-        		<input type="submit" value="Upload" onclick="redirectToFirmwareUpdate();">
-        			
-    		</form>
-    		
-    		<div class="note">
-					<p>Note: You can check uploaded CRT file in MQTT Server Settings.</p>
-					
-					
-				</div>
-			</div> 
 			</section>
 			</div>
 	
@@ -79,22 +63,51 @@
         window.location.href = 'firmwareUpdate.jsp';
     }
  
-        // Function to show a custom popup with a message
-        function showPopup(message) {
-            var popup = document.getElementById("customPopup");
-            var popupMessage = document.getElementById("popupMessage");
-            
-            // Set the message content
-            popupMessage.innerHTML = message;
-            
-            // Show the popup
-            popup.style.display = "block";
-            
-            // Hide the popup after 3 seconds (adjust the timeout as needed)
-            setTimeout(function() {
-                popup.style.display = "none";
-            }, 3000);
+    
+ 
+    function changeButtonColor(isDisabled) {
+        var $file_upload_button = $('#file_upload');       
+        var $firmware_update_button = $('#firmware_update');
+      
+        
+        
+         if (isDisabled) {
+            $file_upload_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $file_upload_button.css('background-color', '#2b3991'); // Reset to original color
         }
+        
+        if (isDisabled) {
+            $firmware_update_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+       
+    }
+    
+ 
+    $(document).ready(function() {
+    	 <%
+     	// Access the session variable
+     	HttpSession role = request.getSession();
+     	String roleValue = (String) session.getAttribute("role");
+     	%>
+     	
+     	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+     	
+    
+     	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+     		
+     		$('#file_upload').prop('disabled', true);
+			$('#firmware_update').prop('disabled', true);
+			$('#crt_file_upload').prop('disabled', true);		
+			$('#fileInput').prop('disabled', true); 
+			
+			
+			changeButtonColor(true);
+     	}
+    });
     </script>
 </body>
 </html>

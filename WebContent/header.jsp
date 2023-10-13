@@ -79,7 +79,7 @@ button {
 	font-weight: bold;
 }
 
-.modal-edit {
+.modal-load-config {
   display: none;
   position: fixed;
   z-index: 1;
@@ -94,7 +94,7 @@ button {
   margin: 0;
 }
 
-.modal-content-edit {
+.modal-content-load-config {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -107,29 +107,41 @@ button {
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
-#confirm-button-edit {
+#confirm-button-load-config {
   background-color: #4caf50;
   color: white;
 }
 
-#cancel-button-edit {
+#cancel-button-load-config {
   background-color: #f44336;
   color: white;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+  margin-top: -10px;
+}
+
+.user-info i {
+  margin-left: 10px;
 }
 
 
 </style>
 <script>
-	var roleValue;
+var roleValu1e;
 
 	function loadConfig() {
 		
 		// Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal-edit');
+		  var modal = document.getElementById('custom-modal-load-config');
 		  modal.style.display = 'block';
 		  
 		// Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-edit');
+		  var confirmButton = document.getElementById('confirm-button-load-config');
 		  confirmButton.onclick = function () {
 			  
 			  $.ajax({
@@ -147,7 +159,7 @@ button {
 				});
 		  };
 		  
-		  var cancelButton = document.getElementById('cancel-button-edit');
+		  var cancelButton = document.getElementById('cancel-button-load-config');
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
@@ -171,9 +183,39 @@ button {
 			}
 		});
 	}
+	
+	function changeButtonColor1(isDisabled) {
+        var $load_conifg_button = $('#loadConfig'); 
+       
+        
+         if (isDisabled) {
+            $load_conifg_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $load_conifg_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+         
+        
+         
+    }
 
-	$(document).ready(
-			function() {
+	$(document).ready(function() {
+		
+		<%// Access the session variable
+		
+		String roleValue1 = (String) session.getAttribute("role");%>
+	
+	roleValue1 = '<%=roleValue1%>';
+	
+	if (roleValue1 == 'VIEWER' || roleValue1 == 'Viewer') {
+
+		
+		$('#loadConfig').prop('disabled', true);
+	
+		
+		changeButtonColor1(true);
+	}
+	
+	
 				getProcessData1();
 
 				$('#loadConfig').click(function() {
@@ -229,7 +271,8 @@ button {
 	});
 	setInterval(getProcessData1, 300000);//300,000 milliseconds = 5 minutes
 </script>
-<!-- <div class="header"> -->
+
+
 <header>
 
 	<div class="row" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 0.5%">
@@ -238,15 +281,19 @@ button {
 			<button id="redirectButton" data-toggle="tooltip" class="editBtn"
 				data-placement="top" title="Process"
 				style="color: #35449a; height: 40px; padding: 0 10px;">
-				<i class="material-icons" style="font-size: 24px;">notifications</i>
+				<i class="material-icons" id="notification-bell" style="font-size: 24px;">notifications</i>
 			</button>
 			<span id="notification-bell-count" class="badge"
 				style="height: 15px;">0</span>
 		</div>
 		
-		<input style="margin-right: 10px; height: 40px" type="button" id="loadConfig" value="Update Configuration" />
-		<div style="margin-right: 10px;">${username} (Role - ${role})
-			<i class="fa fa-sign-out" style="font-size: 20px; margin-left: 5px" id="logoutBtn" title="Logout"></i>
+		<input style="margin-right: 10px; height: 35px; margin-bottom: 10px;" type="button" id="loadConfig" value="Update Configuration" />
+		<div class="user-info">
+  			<div style="font-size: 15px;"> 
+    		${username}
+    		<div style="font-size: 13px;">(Role - ${role})</div>
+  		</div>
+  		<i class="fa fa-sign-out" style="font-size: 20px; cursor: pointer;" id="logoutBtn" title="Logout"></i>
 		</div>
 		
 		
@@ -260,11 +307,11 @@ button {
 		</div>
 	</div>
 	
-	<div id="custom-modal-edit" class="modal-edit">
-				<div class="modal-content-edit">
+	<div id="custom-modal-load-config" class="modal-load-config">
+				<div class="modal-content-load-config">
 				  <p>Are you sure you want to load configuration?</p>
-				  <button id="confirm-button-edit">Yes</button>
-				  <button id="cancel-button-edit">No</button>
+				  <button id="confirm-button-load-config">Yes</button>
+				  <button id="cancel-button-load-config">No</button>
 				</div>
 	 </div>
 	

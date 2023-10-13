@@ -42,15 +42,15 @@ public class ImageServlet extends HttpServlet {
 
                         String respStr = client.sendMessage(json.toString());
 
-                        System.out.println("res " + new JSONObject(respStr));
+                       // System.out.println("res " + new JSONObject(respStr));
 
                         JSONObject result = new JSONObject(respStr);
 
                         String qr_image = result.getString("qr_image");
-                        System.out.println("qr_image :"+qr_image.toString());
+                       
                         
                         String user_secret_key = result.getString("user_secret_key");
-                        System.out.println("secret_key :"+user_secret_key.toString());
+                        
 
                         if (!qr_image.isEmpty()) {
                             // Create a JSON object to hold the image and secret_key

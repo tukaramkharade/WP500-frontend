@@ -25,6 +25,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
+  
+  <style>
+  h3{
+margin-top: 68px;
+}
+
+  </style>
   <body>
     <div class="sidebar">
       <%@ include file="common.jsp"%>

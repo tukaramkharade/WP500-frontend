@@ -11,6 +11,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
@@ -233,6 +234,10 @@ button {
   cursor: pointer;
   margin-left: 40%;
 }
+
+h3{
+margin-top: 68px;
+}
   
 </style>
 <script>
@@ -294,10 +299,11 @@ var tokenValue;
 															});
 
 											var deleteButton = $(
-													'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red">')
+													'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
 													.html('<i class="fas fa-trash-alt"></i>')
 													.click(
 															function() {
+																
 																deleteTrafficRules(trafficrules.name);
 															});
 
@@ -342,7 +348,7 @@ var tokenValue;
 		var type = $('#type').find(":selected").val();
 		var action = $('#action').find(":selected").val();
 		
-		
+	
 		$.ajax({
 			url : "trafficRulesServlet",
 			type : "POST",
@@ -391,7 +397,9 @@ var tokenValue;
 		$("#registerBtn").val("Add");
 	}
 	
-	function deleteTrafficRules(trafficRulesId) {
+	 /* function deleteTrafficRules(trafficRulesId) {
+		 
+		 alert(trafficRulesId);
 		  // Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -408,8 +416,9 @@ var tokenValue;
 					operation_action: 'delete'
 		      },
 		      success: function (data) {
-		         // Close the modal
-		        modal.style.display = 'none';		        
+		         		        
+		    	// Close the modal
+			        modal.style.display = 'none';
 
 		        // Refresh the user list
 		        loadTrafficRulesList();
@@ -430,7 +439,51 @@ var tokenValue;
 		    modal.style.display = 'none';
 		  };
 		}
+ */
+ 
+ function deleteTrafficRules(trafficRulesId) {
+	 
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-delete');
+	  modal.style.display = 'block';
 
+	  // Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-delete');
+	  confirmButton.onclick = function () {
+		  
+		  $.ajax({
+			  url: 'trafficRulesServlet',
+		      type: 'POST',
+		      data: {
+		    	  name : trafficRulesId,
+					operation_action: 'delete'
+		      },
+		      success: function (data) {
+   		        
+		    	  // Close the modal
+			        modal.style.display = 'none';
+
+			        // Refresh the user list
+			        loadTrafficRulesList();
+			      },
+			      error: function (xhr, status, error) {
+			        // Handle the error response, if needed
+			        console.log('Error deleting traffic rules: ' + error);
+			        // Close the modal
+			        modal.style.display = 'none';
+			      }
+			    });
+		  
+	  };
+	  
+	  // Handle the cancel button click
+	  var cancelButton = document.getElementById('cancel-button-delete');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	  };
+ }
+ 
 	function applyTrafficRules() {
 
 		$.ajax({
@@ -1055,39 +1108,6 @@ var tokenValue;
 			<form id="generalSettingsForm">
 			<input type="hidden" id="operation_action" name="operation_action" value="">
 
-				<!-- <div class="row"
-					style="display: flex; flex-content: space-between; margin-top: -25px;">
-
-					<div class="col-75-2" style="width: 10%; text-align: left;">
-						<label>Input</label> <select class="textBox" id="input"
-							name="input" style="height: 35px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
-						</select> <span id="inputError" style="color: red;"></span>
-					</div>
-					<div class="col-75-2" style="width: 10%; text-align: left;">
-						<label>Output</label> <select class="textBox" id="output"
-							name="output" style="height: 35px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
-						</select> <span id="outputError" style="color: red;"></span>
-					</div>
-					<div class="col-75-2" style="width: 10%; text-align: left;">
-						<label>Forward</label> <select class="textBox" id="forward"
-							name="forward" style="height: 35px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
-						</select> <span id="forwardError" style="color: red;"></span>
-					</div>
-					<div class="col-75-2" style="width: 10%; text-align: left;">
-						<label>Drop invalid packets</label> <select class="textBox"
-							id="rule_drop" name="rule_drop" style="height: 35px;">
-							<option value="On">On</option>
-							<option value="Off">Off</option>
-						</select> <span id="forwardError" style="color: red;"></span>
-					</div>
-				</div> -->
-				
 				
 				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
 					<div style="display: flex; flex-content: space-between;">
@@ -1137,8 +1157,8 @@ var tokenValue;
 		<div id="custom-modal-delete-gen" class="modal-delete-gen">
 				<div class="modal-content-delete-gen">
 				  <p>Are you sure you want to delete this general setting?</p>
-				  <button id="confirm-button-delete">Yes</button>
-				  <button id="cancel-button-delete">No</button>
+				  <button id="confirm-button-delete-gen">Yes</button>
+				  <button id="cancel-button-delete-gen">No</button>
 				</div>
 			  </div>
 			  
@@ -1151,12 +1171,12 @@ var tokenValue;
 			  </div>
 			  
 
-		<h3>TRAFFIC RULES</h3>
+		<h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
 		<hr>
 		<div class="container">
 
 			<form id="trafficRulesForm">
-			<input type="hidden" id="action" name="action" value="">
+			<input type="hidden" id="operation_action" name="operation_action" value="">
 
 				<div class="row"
 					style="display: flex; flex-content: space-between; margin-top: 10px;">
@@ -1267,7 +1287,7 @@ var tokenValue;
 			  </div>
 
 
-		<h3>TRAFFIC RULES LIST</h3>
+		<h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
 		<hr>
 		<div class="container">
 			<table id="trafficRulesListTable">

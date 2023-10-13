@@ -73,6 +73,10 @@
   margin-left: 40%;
 }
 
+h3{
+margin-top: 68px;
+}
+
 </style>
 <script>
 
@@ -191,11 +195,19 @@ var tokenValue;
 
 	function changeButtonColor(isDisabled) {
         var $load_button = $('#loadLogFileButton');
+        var $export_button = $('#exportButton');
+        
         
         if (isDisabled) {
             $load_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $load_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $export_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $export_button.css('background-color', '#2b3991'); // Reset to original color
         }
 	}
 	
@@ -238,41 +250,13 @@ var tokenValue;
 	    	    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 	  	    		  
 	  	    		$('#loadLogFileButton').prop('disabled', true);
+	  	    		$('#exportButton').prop('disabled', true);
+	  	    		
 	  	    		  
 	  	    		  changeButtonColor(true);
 	  	    	  }
 		loadLogFileList();
-		/* $("#exportButton").click(function() {		   
-		    var selectedLogFile = document.getElementById("log_file").value;
-
-		    if (selectedLogFile !== "") {
-		       
-		        $.ajax({
-		            type: "POST",
-		            url: "DownloadLogServlet",
-		            log_file: selectedLogFile,
-		            success: function(response) {
-		                // Handle the success response, if needed
-		                if (response.log_file_result === "success") {
-		                    // Handle successful download
-		                    // You can access the log content with response.log_content
-		                    console.log("Log content:", response.log_content);
-		                } else {
-		                    // Handle error cases
-		                    console.error("Error: " + response.message);
-		                }
-		            },
-		            error: function(xhr, status, error) {
-		                // Handle errors, if any
-		                console.error("Error: " + error);
-		            }
-		        });
-		    } else {
-		        // Handle the case when no log file is selected
-		        $("#popupMessage").text("Please select a log file first.");
-		        $("#customPopup").show();
-		    }
-		}); */
+		
 		$("#exportButton").click(function() {
 	        var selectedLogFile = $("#log_file").val();
 
@@ -370,6 +354,7 @@ var tokenValue;
   			  });
 		}
 	}
+	
 </script>
 
 </head>

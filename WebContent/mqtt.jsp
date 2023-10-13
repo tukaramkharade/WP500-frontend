@@ -156,6 +156,20 @@ button {
   cursor: pointer;
   margin-left: 40%;
 }
+
+.note {
+    color: red;
+    margin-top: 5%; 
+   
+}
+
+#crtFileInput{
+margin-left: -103em;
+}
+
+h3{
+margin-top: 70px;
+}
   
 </style>
 
@@ -234,10 +248,8 @@ button {
 							$.each(data,function(index, mqtt) {
 								var row = $('<tr>');
 								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
-								row.append($('<td>').text(mqtt.port_number + ""));
-								row.append($('<td>').text(mqtt.username + ""));
-								row.append($('<td>').text(mqtt.publish_topic + ""));
-								row.append($('<td>').text(mqtt.subscribe_topic + ""));
+								row.append($('<td>').text(mqtt.port_number + ""));							
+								row.append($('<td>').text(mqtt.publish_topic + ""));								
 								row.append($('<td>').text(mqtt.prefix + ""));
 								row.append($('<td>').text(mqtt.file_type + ""));
 								row.append($('<td>').text(mqtt.file_name + ""));
@@ -293,10 +305,8 @@ button {
 							$.each(data,function(index, mqtt) {
 								var row = $('<tr>');
 								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
-								row.append($('<td>').text(mqtt.port_number + ""));
-								row.append($('<td>').text(mqtt.username + ""));
-								row.append($('<td>').text(mqtt.publish_topic + ""));
-								row.append($('<td>').text(mqtt.subscribe_topic + ""));
+								row.append($('<td>').text(mqtt.port_number + ""));							
+								row.append($('<td>').text(mqtt.publish_topic + ""));								
 								row.append($('<td>').text(mqtt.prefix + ""));
 								row.append($('<td>').text(mqtt.file_type + ""));
 								row.append($('<td>').text(mqtt.file_name + ""));
@@ -672,6 +682,7 @@ button {
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
+        var $crt_file_upload_button = $('#crt_file_upload');
         
         
          if (isDisabled) {
@@ -686,7 +697,17 @@ button {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
+        if (isDisabled) {
+            $crt_file_upload_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $crt_file_upload_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
     }
+	
+	 function redirectToMQTT() {
+	        window.location.href = 'mqtt.jsp';
+	    }
 
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -710,6 +731,7 @@ button {
 
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
+							$('#crtFileInput').prop('disabled', true); 
 							
 							changeButtonColor(true);
 						}
@@ -849,7 +871,7 @@ button {
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>MQTT SERVER SETTINGS</h3>
+			<h3>ADD MQTT SERVER</h3>
 			<hr>
 
 			<div class="container">
@@ -876,14 +898,14 @@ button {
 
 						<div class="col-75-3" style="width: 15%; height: 20%">
 							<input type="text" id="username" name="username" placeholder="Username" maxlength="31"
-								required />
+								 />
 							<p id="username_error" style="color: red;"></p>
 
 						</div>
 
 						<div class="col-75-4" style="width: 15%; height: 20%">
 							<input type="password" id="password" name="password" placeholder="Password" maxlength="31"
-								required />
+								 />
 							<p id="password_error" style="color: red;"></p>
 
 						</div>
@@ -893,6 +915,7 @@ button {
 								maxlength="30" required />
 							<p id="pub_topic_error" style="color: red;"></p>
 						</div>
+						
 						<div class="col-75-10" style="width: 10%;">
 							<select class="textBox" id="enable" name="enable" style="height: 35px;">
 								<option value="Select status">Select status</option>
@@ -902,6 +925,7 @@ button {
 							</select>
 							<span id="statusError" style="color: red;"></span>
 						</div>
+						
 						<div class="col-75-8" style="width: 10%;">
 
 							<select class="textBox" id="file_type" name="file_type" style="height: 35px;">
@@ -937,6 +961,12 @@ button {
 							<p id="prefix_error" style="color: red;"></p>
 
 						</div>
+						
+						<div class="col-75-8" style="width: 20%;">
+							<input type="text" id="publishing_format" name="publishing_format" maxlength="31" placeholder="Publishing format" required />
+							
+
+						</div>
 
 					</div>
 
@@ -946,6 +976,21 @@ button {
 					</div>
 
 				</form>
+				
+				<h3>UPLOAD CRT FILE</h3>
+		
+			
+			<form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data">
+        		<input type="file" name="file" id="crtFileInput">
+        		<input type="submit" value="Upload" id="crt_file_upload" onclick="redirectToMQTT();">
+        			
+    		</form>
+    		
+    		<div class="note">
+					<p>Note: Please upload CRT file first and you will find that file in crt file dropdown.</p>
+				</div>
+    		
+    		
 			</div>
 			
 			<div id="custom-modal-delete" class="modal-delete">
@@ -976,17 +1021,15 @@ button {
   				<button id="closePopup">OK</button>
 			  </div>
 
-			<h3>MQTT SERVER LIST</h3>
+			<h3 style="margin-top: 15px;">MQTT SERVER LIST</h3>
 			<hr>
 			<div class="container">
 				<table id="mqttListTable">
 					<thead>
 						<tr>
 							<th>Broker IP address</th>
-							<th>Port Number</th>
-							<th>Username</th>
-							<th>Published topic</th>
-							<th>Subscribed topic</th>
+							<th>Port</th>						
+							<th>Published topic</th>						
 							<th>Prefix</th>
 							<th>Type</th>
 							<th>File name</th>

@@ -58,6 +58,10 @@
   background-color: #4caf50;
   color: white;
 }
+
+h3{
+margin-top: 68px;
+}
 </style>
 <script>
 	var currentPage = 1; // Initial page
@@ -215,7 +219,7 @@
 	<div class="header"><%@ include file="header.jsp"%></div>
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>STORE FORWARD DATA</h3>
+			<h3>STORE AND FORWARD</h3>
 			<button onClick="window.location.reload();"
 				style="cursor: pointer; background-color: #35449a; border-radius: 5px; border: none; color: white; font-size: small">Refresh
 				Page</button>

@@ -142,6 +142,8 @@ public class TrafficRulesServlet extends HttpServlet {
 					 type = request.getParameter("type");
 					 action = request.getParameter("action");
 
+					 
+					 System.out.println("action : "+action);
 					try {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();

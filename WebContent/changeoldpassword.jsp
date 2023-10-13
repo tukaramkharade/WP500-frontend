@@ -133,6 +133,10 @@ button {
 margin-top: 15px;
 }
 
+h3{
+margin-top: 68px;
+}
+
 </style>
 <script>
 
@@ -218,7 +222,7 @@ function validateOldPassword(oldPassword) {
 	var oldPasswordError = document.getElementById("oldPasswordError");
 	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 	if (oldPassword.length < 8 || !strongRegex.test(oldPassword)) {
-		oldPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+		oldPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
 		return false;
 	} else {
 		oldPasswordError.textContent = "";
@@ -230,7 +234,7 @@ function validateNewPassword(newPassword) {
 	var newPasswordError = document.getElementById("newPasswordError");
 	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 	if (newPassword.length < 8 || !strongRegex.test(newPassword)) {
-		newPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+		newPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
 		return false;
 	} else {
 		newPasswordError.textContent = "";
@@ -242,7 +246,7 @@ function validateConfirmPassword(confirmPassword) {
 	var confirmPasswordError = document.getElementById("confirmPasswordError");
 	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 	if (confirmPassword.length < 8 || !strongRegex.test(confirmPassword)) {
-		confirmPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+		confirmPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
 		return false;
 	} else {
 		confirmPasswordError.textContent = "";
@@ -270,17 +274,17 @@ $(document).ready(function () {
     		var confirm_password = $('#confirm_password').val();
     		
     		if (!validateOldPassword(old_password)) {
-    			oldPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+    			oldPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
     			return;
     		}	
     		
     		if (!validateNewPassword(new_password)) {
-    			newPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+    			newPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
     			return;
     		}	
     		
     		if (!validateConfirmPassword(confirm_password)) {
-    			confirmPasswordError.textContent = "Password must be at least 8 characters long and contain special characters.";
+    			confirmPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
     			return;
     		}	
     		
@@ -326,20 +330,20 @@ $(document).ready(function () {
 			
 				<form id="changePasswordForm" class="changePassword">
 
-				<label for="username" style="float: left;">Username:</label>
+				<label for="username" style="float: left;">Username</label>
 				<input required type="text" id="username" name="username"><br>
 
-				<label for="old_password" style="float: left;" id="old_password_label">Old password:</label>
+				<label for="old_password" style="float: left;" id="old_password_label">Old password</label>
 				<input required type="password" id="old_password" name="old_password" > 
 				<p id="oldPasswordError" style="color: red;"></p>
 				<p id="field_Old_Pass_Error" style="color: red;"></p>
 					
-				<label for="new_password" style="float: left;">New password:</label> 
+				<label for="new_password" style="float: left;">New password</label> 
 				<input required type="password" id="new_password" name="new_password" >
 				<p id="newPasswordError" style="color: red;"></p>
 				<p id="field_New_Pass_Error" style="color: red;"></p> 
 					
-				<label for="confirm_password" style="float: left;">Confirm password:</label> 
+				<label for="confirm_password" style="float: left;">Confirm password</label> 
 				<input required type="password" id="confirm_password" name="confirm_password" > 
 				<p id="confirmPasswordError" style="color: red;"></p>
 				<p id="field_Confirm_Pass_Error" style="color: red;"></p>

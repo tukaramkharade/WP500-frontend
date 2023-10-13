@@ -199,6 +199,10 @@ button {
   margin-left: 40%;
 }
 
+h3{
+margin-top: 68px;
+}
+
 </style>
 <script>
 
@@ -282,7 +286,7 @@ var tokenValue;
 										row.append($('<td>').text(jsonBuilder.publish_topic_name));
 										row.append($('<td>').text(jsonBuilder.publishing_status));
 										row.append($('<td>').text(jsonBuilder.store_n_forward));
-										row.append($('<td>').text(jsonBuilder.json_string));
+										//row.append($('<td>').text(jsonBuilder.json_string));
 
 										 var actions = $('<td>');
 										var editButton = $(
@@ -327,7 +331,7 @@ var tokenValue;
 								row.append($('<td>').text(jsonBuilder.publish_topic_name));
 								row.append($('<td>').text(jsonBuilder.publishing_status));
 								row.append($('<td>').text(jsonBuilder.store_n_forward));
-								row.append($('<td>').text(jsonBuilder.json_string));
+								//row.append($('<td>').text(jsonBuilder.json_string));
 
 								jsonBuilderTable.append(row);
 						});
@@ -468,12 +472,12 @@ var tokenValue;
 							// Clear form fields
 
 							$('#json_string_name').val('');
-							$('#json_interval').val('Select JSON Interval');
-							$('#broker_type').val('Select Broker Type');
-							$('#broker_name').val('Select Broker IP Address');
+							$('#json_interval').val('Select interval');
+							$('#broker_type').val('Select broker type');
+							$('#broker_name').val('Select broker IP address');
 							$('#publish_topic').val('');
 							$('#publishing_status').val('Enable');
-							$('#storeAndForward').val('Enter Store and Forward');
+							$('#storeAndForward').val('Enter store and forward');
 							$('#json_string_text')
 									.val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 							$('#json_string_validate').val('');
@@ -539,12 +543,12 @@ var tokenValue;
 						// Clear form fields
 
 						$('#json_string_name').val('');
-						$('#json_interval').val('Select JSON Interval');
-						$('#broker_type').val('Select Broker Type');
-						$('#broker_name').val('Select Broker IP Address');
+						$('#json_interval').val('Select interval');
+						$('#broker_type').val('Select broker type');
+						$('#broker_name').val('Select broker IP address');
 						$('#publish_topic').val('');
 						$('#publishing_status').val('Enable');
-						$('#storeAndForward').val('Select Store and Forward');
+						$('#storeAndForward').val('Select store and forward');
 						$('#json_string_text')
 								.val(
 										'{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
@@ -582,20 +586,31 @@ var tokenValue;
 		 
 		  if(res_val == true &&  res_dup == false && res_emp == false){
 			  json_string_text = json_string; // Assign the value here
-			  $('#json_string_validate').val(json_string_text)
+			  
+			 // $('#json_string_validate').val(json_string_text);
+			  
+			// Format and display the JSON in the json_validate element
+	            try {
+	                const formattedJson = JSON.stringify(JSON.parse(json_string), null, 2);
+	                $('#json_string_validate').val(formattedJson);
+	            } catch (error) {
+	                // Handle JSON parsing error
+	                $("#popupMessage").text("JSON parsing error: " + error);
+	                $("#customPopup").show();
+	            }
+			  
+			  
 		  }else{
 			
 			  
 			  // Display the custom popup message
-     			$("#popupMessage").text('Check if JSON is valid or duplicate keys must be present !!');
+     			$("#popupMessage").text('Check if the JSON is valid and ensure that duplicate keys are not present !!');
       			$("#customPopup").show();
       			
       			$("#closePopup").click(function () {
       			    $("#customPopup").hide();
       			  });
 
-			  
-			  $('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 		  }
 	}
 	
@@ -681,9 +696,9 @@ var tokenValue;
 	function validateJSONInterval(jsonInterval) {
 		var jsonIntervalError = document.getElementById("jsonIntervalError");
 
-		if (jsonInterval == 'Select JSON interval') {
+		if (jsonInterval == 'Select interval') {
 
-			jsonIntervalError.textContent = "Please select json interval";
+			jsonIntervalError.textContent = "Please select interval";
 			return false;
 		} else {
 			jsonIntervalError.textContent = "";
@@ -721,6 +736,8 @@ var tokenValue;
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
+        var $validate_button = $('#validateBtn');
+        
         
         
          if (isDisabled) {
@@ -733,6 +750,12 @@ var tokenValue;
             $clear_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $validate_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $validate_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
     }
@@ -761,6 +784,8 @@ var tokenValue;
 							$("#actions").hide();
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
+							$('#validateBtn').prop('disabled', true);
+							
 
 							changeButtonColor(true);
 						}
@@ -797,7 +822,7 @@ var tokenValue;
 											}
 
 											if (!validateJSONInterval(json_interval)) {
-												jsonIntervalError.textContent = "Please select json interval";
+												jsonIntervalError.textContent = "Please select interval";
 												return;
 											}
 
@@ -847,12 +872,12 @@ var tokenValue;
 						$('#clearBtn').click(function() {
 											$('#json_string_name').val('');
 											$("#json_string_name").prop("disabled", false);
-											$('#json_interval').val('Select JSON Interval');
-											$('#broker_type').val('Select Broker Type');
-											$('#broker_name').val('Select Broker IP Address');
+											$('#json_interval').val('Select interval');
+											$('#broker_type').val('Select broker type');
+											$('#broker_name').val('Select broker IP address');
 											$('#publish_topic').val('');
 											$('#publishing_status').val('Enable');
-											$('#storeAndForward').val('Select Store and Forward');
+											$('#storeAndForward').val('Select store and forward');
 											$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 											$('#json_string_validate').val('');
 											$('#registerBtn').val('Add');
@@ -870,7 +895,7 @@ var tokenValue;
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-		<h3>JSON BUILDER SETTINGS</h3>
+		<h3>ADD JSON STRING</h3>
 		<hr>
 
 		<div class="container">
@@ -889,8 +914,7 @@ var tokenValue;
 					<div class="col-75-2" style="width: 10%;">
 						<select class="json-interval-select" id="json_interval"
 							name="json_interval" style="height: 35px;" required>
-							<option value="Select JSON interval">Select JSON
-								interval</option>
+							<option value="Select interval">Select interval</option>
 							<option value="30 sec">30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
@@ -923,7 +947,7 @@ var tokenValue;
 
 					<div class="col-75-5" style="width: 15%;">
 						<input type="text" id="publish_topic" name="publish_topic"
-							placeholder="Publish topic" required style="height: 17px;"
+							placeholder="Publish topic" style="height: 17px;"
 							maxlength="31">
 						<p id="publish_topic_error" style="color: red;"></p>
 					</div>
@@ -988,7 +1012,7 @@ var tokenValue;
 		
 		<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
-				  <p>Are you sure you want to delete this json builder setting?</p>
+				  <p>Are you sure you want to delete this json string?</p>
 				  <button id="confirm-button-delete">Yes</button>
 				  <button id="cancel-button-delete">No</button>
 				</div>
@@ -996,7 +1020,7 @@ var tokenValue;
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this json builder setting?</p>
+				  <p>Are you sure you want to edit this json string?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
@@ -1014,7 +1038,7 @@ var tokenValue;
   				<button id="closePopup">OK</button>
 			  </div>
 
-		<h3>JSON BUILDER SETTINGS LIST</h3>
+		<h3 style="margin-top: 15px;">JSON STRING LIST</h3>
 		<hr>
 		<div class="container">
 			<table id="jsonBuilderListTable">
@@ -1027,7 +1051,7 @@ var tokenValue;
 						<th>Publish topic name</th>
 						<th>Publishing status</th>
 						<th>Store and forward</th>
-						<th>JSON string</th>
+						
 						<th id="actions">Actions</th>
 					</tr>
 				</thead>

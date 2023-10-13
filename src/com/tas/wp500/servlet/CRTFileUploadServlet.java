@@ -51,7 +51,7 @@ public class CRTFileUploadServlet extends HttpServlet {
         response.getWriter().println("File uploaded successfully.");
      
         // Redirect to firmwarUpdate.jsp
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/firmwareUpdate.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/mqtt.jsp");
         dispatcher.forward(request, response);
 	}
 
