@@ -817,22 +817,12 @@ var json = {};
 							<option value="Select variable">Select variable</option>
 						</select> <span id="variableError" style="color: red;"></span>
 					</div>
-				</div>
-
-				<div class="row">
-
-					<input style="margin-top: -31px; margin-left: 10%;" type="button"
-						value="+" id="saveBtn" />
-
-				</div>
-
-				<div class="row" style="display: flex; justify-content: right;">
-					<input style="margin-top: -31px; margin-left: 5px" type="button"
-						value="Clear" id="clearBtn"/> <input
-						style="margin-top: -31px; margin-left: 5px" type="submit"
-						value="Add" id="addBtn" /> <input
-						style="margin-top: -31px; margin-left: 5px" type="button"
-						value="Delete" id="delBtn" onClick="window.location.reload();" />
+					
+					<input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" />
+					
+					<input style="margin-left: 24%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
+						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" onClick="window.location.reload();" />
 				</div>
 
 			</form>
@@ -848,7 +838,7 @@ var json = {};
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this command setting?</p>
+				  <p>Are you sure you want to modify this command setting?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

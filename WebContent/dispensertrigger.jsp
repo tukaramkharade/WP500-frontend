@@ -1302,7 +1302,7 @@ var tokenValue;
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this dispenser trigger?</p>
+				  <p>Are you sure you want to modify this dispenser trigger?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
