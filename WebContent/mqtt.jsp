@@ -163,13 +163,12 @@ button {
    
 }
 
-#crtFileInput{
-margin-left: -103em;
-}
 
 h3{
 margin-top: 70px;
 }
+
+
   
 </style>
 
@@ -964,17 +963,12 @@ margin-top: 70px;
 						
 						<div class="col-75-8" style="width: 20%;">
 							<input type="text" id="publishing_format" name="publishing_format" maxlength="31" placeholder="Publishing format" required />
-							
-
 						</div>
+						
+						<input style="margin-left: 10%; height: 26px;" type="button" value="Clear" id="clearBtn" /> 
+						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
 
 					</div>
-
-					<div class="row" style="display: flex; justify-content: right;margin-top: -2%; ">
-						<input type="button" value="Clear" id="clearBtn" /> <input style="margin-left: 5px;"
-							type="submit" value="Add" id="registerBtn" />
-					</div>
-
 				</form>
 				
 				<h3>UPLOAD CRT FILE</h3>
@@ -1003,7 +997,7 @@ margin-top: 70px;
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this mqtt setting?</p>
+				  <p>Are you sure you want to modify this mqtt setting?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

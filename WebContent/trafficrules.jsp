@@ -1268,7 +1268,7 @@ var tokenValue;
 			  
 		 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this traffic rule?</p>
+				  <p>Are you sure you want to modify this traffic rule?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

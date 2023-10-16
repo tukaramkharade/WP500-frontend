@@ -331,20 +331,20 @@ $(document).ready(function () {
 				<form id="changePasswordForm" class="changePassword">
 
 				<label for="username" style="float: left;">Username</label>
-				<input required type="text" id="username" name="username"><br>
+				<input required type="text" id="username" name="username" style="padding-left: 5px;"><br>
 
 				<label for="old_password" style="float: left;" id="old_password_label">Old password</label>
-				<input required type="password" id="old_password" name="old_password" > 
+				<input required type="password" id="old_password" name="old_password" style="padding-left: 5px;"> 
 				<p id="oldPasswordError" style="color: red;"></p>
 				<p id="field_Old_Pass_Error" style="color: red;"></p>
 					
 				<label for="new_password" style="float: left;">New password</label> 
-				<input required type="password" id="new_password" name="new_password" >
+				<input required type="password" id="new_password" name="new_password" style="padding-left: 5px;">
 				<p id="newPasswordError" style="color: red;"></p>
 				<p id="field_New_Pass_Error" style="color: red;"></p> 
 					
 				<label for="confirm_password" style="float: left;">Confirm password</label> 
-				<input required type="password" id="confirm_password" name="confirm_password" > 
+				<input required type="password" id="confirm_password" name="confirm_password" style="padding-left: 5px;"> 
 				<p id="confirmPasswordError" style="color: red;"></p>
 				<p id="field_Confirm_Pass_Error" style="color: red;"></p>
 					

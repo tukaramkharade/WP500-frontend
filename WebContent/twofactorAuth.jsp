@@ -518,7 +518,7 @@ margin-top: 68px;
 
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-					<p>Are you sure you want to edit the TOTP authentication?</p>
+					<p>Are you sure you want to modify the TOTP authentication?</p>
 					<button id="confirm-button-edit">Yes</button>
 					<button id="cancel-button-edit">No</button>
 				</div>

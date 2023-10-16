@@ -755,7 +755,7 @@ button {
 			
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this lan setting?</p>
+				  <p>Are you sure you want to modfiy this lan setting?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

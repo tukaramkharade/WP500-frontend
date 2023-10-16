@@ -764,13 +764,9 @@ var tokenValue;
 								<option value="VIEWER">VIEWER</option>
 							</select> <span style="color: red; font-size: 12px;" id="roleError"></span>
 						</div>
-					</div>
-
-					<div class="row"
-						style="display: flex; justify-content: right; margin-top: -2%;">
-						<input type="button" value="Clear" id="clearBtn"/> <input
-							style="margin-left: 5px;" type="submit" value="Add"
-							id="registerBtn" />
+						
+						<input style="margin-left: 10%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
 					</div>
 					
 				</form>
@@ -786,7 +782,7 @@ var tokenValue;
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this user?</p>
+				  <p>Are you sure you want to modify this user?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
