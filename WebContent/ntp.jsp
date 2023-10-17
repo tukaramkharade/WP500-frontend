@@ -499,14 +499,14 @@ var tokenValue;
 			    var ntp_server3 = $('#ntp_server3').val();
 			    var ntp_interval = $('#ntp_interval_1').val();
 			    var isValid=true;
-			    if (ntp_server1 === '' || ntp_server2 === '' || ntp_server3 === '' || ntp_interval === '') {
+			    /* if (ntp_server1 === '' || ntp_server2 === '' || ntp_server3 === '' || ntp_interval === '') {
 			       
 			    
 				// Display the custom popup message
      			$("#popupMessage").text('Please fill in all fields before saving.');
       			$("#customPopup").show();
 			        return; // Prevent the AJAX request
-			    }
+			    } */
 			    
 			    $.ajax({
 			        url: 'ntpDataUpadate',
@@ -586,8 +586,8 @@ var tokenValue;
       			$("#customPopup").show();
 
 				// Clear form fields
-
-				$('#datetime').val('');
+				getCurrentTimeInIndia();
+				//$('#datetime').val('');
 
 			},
 			error : function(xhr, status, error) {
@@ -791,10 +791,22 @@ var tokenValue;
 								<div>
 									<label>NTP Interval</label>
 								</div>
-								<div>
-									<input type="text" id="ntp_interval_1" name="ntp_interval_1"
-										placeholder="NTP Interval" maxlength="31" />
-								</div>
+								<div  style="width: %;">
+							<select class="ntp-interval-select" id="ntp_interval_1"
+									name="ntp_interval_1" style="height: 35px;" required>
+										<option value="Select interval">Select interval</option>
+										<option value="5 sec">5 sec</option>
+										<option value="10 sec">10 sec</option>
+										<option value="15 sec">15 sec</option>
+										<option value="25 sec">20 sec</option>
+										<option value="25 sec">25 sec</option>
+										<option value="30 sec">30 sec</option>
+										<option value="1 min">1 min</option>
+										<option value="5 min">5 min</option>
+										<option value="10 min">10 min</option>							
+
+						</select> <span id="jsonIntervalError" style="color: red;"></span>
+					</div>
 						</div>
 					</div>
 
@@ -823,7 +835,9 @@ var tokenValue;
 				<label for="datetime">Select Date-Time</label> <input
 					type="datetime-local" id="datetime" name="datetime" required
 					onchange="toggleDateTimeInput()">
-				<button id="setDateTime">Submit</button>
+					<input type="button" id="setDateTime" 
+								value="Submit"/>
+				<!-- <button id="setDateTime">Submit</button> -->
 
 			</div>
 		</section>
@@ -843,7 +857,7 @@ var tokenValue;
 	
 	 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to modify this NTP?</p>
+				  <p>Are you sure you want to edit thisNTP?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

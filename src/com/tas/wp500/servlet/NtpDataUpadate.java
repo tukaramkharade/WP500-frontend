@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import com.tas.wp500.utils.IntervalMapper;
 import com.tas.wp500.utils.TCPClient;
 
 	
@@ -64,8 +65,10 @@ import com.tas.wp500.utils.TCPClient;
 				
 				
 				String ntp_interval = ntp.getString("ntp_interval");
-				System.out.println("ntp_interval : "+ntp_interval);
-				logger.info("ntp_interval : "+ntp_interval);
+				int intervalValue = Integer.parseInt(ntp_interval);
+				String ntpIntervalString = IntervalMapper.getIntervalByValue(intervalValue);
+				System.out.println("ntp_interval : "+ntpIntervalString);
+				logger.info("ntp_interval : "+ntpIntervalString);
 				
 				
 				JSONObject jsonObject = new JSONObject();
@@ -73,7 +76,7 @@ import com.tas.wp500.utils.TCPClient;
 			    jsonObject.put("ntp_server1", ntp_server1);
 			    jsonObject.put("ntp_server2", ntp_server2);
 			    jsonObject.put("ntp_server3", ntp_server3);
-			    jsonObject.put("ntp_interval",ntp_interval );
+			    jsonObject.put("ntp_interval",ntp_interval);
 			    
 			    
 			    response.setContentType("application/json");
@@ -124,21 +127,21 @@ import com.tas.wp500.utils.TCPClient;
 			String check_username = (String) session.getAttribute("username");
 			
 			if(check_username != null){
-				
+			String ntpIntervalValue = null;
 			
 
 			String ntp_server1 = request.getParameter("ntp_server1");
 			String ntp_server2 = request.getParameter("ntp_server2");
 			String ntp_server3 = request.getParameter("ntp_server2");
 			String ntp_interval = request.getParameter("ntp_interval");
-			
+			 ntpIntervalValue = IntervalMapper.getIntervalByString(ntp_interval);
 
 			try {
 
 				System.out.println("ntp_server1-->: "+ntp_server1);
 				System.out.println("ntp_server2-->: "+ntp_server2);
 				System.out.println("ntp_server3-->: "+ntp_server3);
-				System.out.println("ntp_interval-->: "+ntp_interval);
+				System.out.println("ntp_interval-->:"+ntpIntervalValue);
 				
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
@@ -149,9 +152,9 @@ import com.tas.wp500.utils.TCPClient;
 				json.put("ntp_server1", ntp_server1);
 				json.put("ntp_server2", ntp_server2);
 				json.put("ntp_server3", ntp_server3);
-				json.put("ntp_interval", ntp_interval);
+				json.put("ntp_interval", ntpIntervalValue);
 			
-				System.out.println("eth1-->"+json);
+				System.out.println("ntp-->"+json);
 				String respStr = client.sendMessage(json.toString());
 
 				System.out.println("response : " + respStr);

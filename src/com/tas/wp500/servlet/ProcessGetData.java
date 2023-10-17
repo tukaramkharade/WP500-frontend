@@ -26,13 +26,19 @@ public class ProcessGetData extends HttpServlet {
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at:
 		// ").append(request.getContextPath());
 			
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String processType = request.getParameter("process_type");
 		if (check_username != null) {	
 
 			TCPClient client = new TCPClient();
@@ -40,21 +46,29 @@ public class ProcessGetData extends HttpServlet {
 
 			try {
 				json.put("operation", "get_process_list");
+				json.put("process_type", processType);
 				
 				String respStr = client.sendMessage(json.toString());
 
 				System.out.println("res " + new JSONObject(respStr));
-				logger.info("res " + new JSONObject(respStr));
-
-				JSONObject white_list_process = new JSONObject(respStr);
-				JSONObject black_list_process = new JSONObject(respStr);
+				logger.info("res " + new JSONObject(respStr));				
 				
-				JSONArray white_list_process1 = white_list_process.getJSONArray("white_list_process");
-				JSONArray black_list_process1 = black_list_process.getJSONArray("black_list_process");
 				
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("white_list_process", white_list_process1);
-				jsonObject.put("black_list_process", black_list_process1);
+				
+				if ( processType.equals("process_list")) {
+					JSONObject white_list_process = new JSONObject(respStr);
+					JSONObject black_list_process = new JSONObject(respStr);					
+					
+					JSONArray white_list_process1 = white_list_process.getJSONArray("white_list_process");
+					JSONArray black_list_process1 = black_list_process.getJSONArray("black_list_process");					
+					jsonObject.put("white_list_process", white_list_process1);
+					jsonObject.put("black_list_process", black_list_process1);
+				}else if ( processType.equals("process_count")) {
+					JSONObject black_list_process = new JSONObject(respStr);
+					String black_list_process_count = black_list_process.getString("black_list_process");					
+					jsonObject.put("black_list_process_count", black_list_process_count);
+				}
 				
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
@@ -88,11 +102,7 @@ public class ProcessGetData extends HttpServlet {
 				logger.error("Error in session timeout : " + e);
 			}
 		}
-	}
-
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
 		
 	}
 

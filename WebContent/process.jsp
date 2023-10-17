@@ -140,9 +140,10 @@ var roleValue;
 var tokenValue;
 
 function getProcessData() {
-    $.ajax({
+	$.ajax({
         url: "processGetData", // URL to your servlet or server endpoint
-        type: "GET",
+        type: "POST", // Change the request type to POST
+        data: { process_type: "process_list" }, // Pass the process_type parameter
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
         },
