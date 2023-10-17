@@ -4,9 +4,6 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
@@ -171,9 +168,10 @@ var roleValu1e;
 	function getProcessData1() {
 		$.ajax({
 			url : "processGetData",
-			type : "GET",
+			type : "POST", // Change the request type to POST
+			data : { process_type: "process_count" },
 			success : function(data) {
-				var blackListCount = data.black_list_process.length;
+				var blackListCount = data.black_list_process_count;
 				$('#notification-bell-count').text(blackListCount); // Update the notification bell count inside the span
 
 			},
