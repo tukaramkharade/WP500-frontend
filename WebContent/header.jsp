@@ -126,6 +126,16 @@ button {
   margin-left: 10px;
 }
 
+ #countdown {
+  
+    color: black; /* Choose your desired text color */
+    margin-top: 15px; /* Adjust the margin as needed */
+    margin-left:-17px;
+  }
+  
+#logoutBtn{
+margin-top: -16px;
+}
 
 </style>
 <script>
@@ -192,9 +202,38 @@ var roleValu1e;
             $load_conifg_button.css('background-color', '#2b3991'); // Reset to original color
         }
          
-        
-         
     }
+	
+	
+	function startCountdown() {
+	    var countdownElement = document.getElementById('countdown');
+	    var logoutTime = new Date();
+	    logoutTime.setHours(logoutTime.getHours() + 1);
+
+	    function updateCountdownDisplay() {
+	        var currentTime = new Date();
+	        var timeDiff = logoutTime - currentTime;
+
+	        if (timeDiff <= 0) {
+	            // Redirect to "login.jsp" when the timer reaches 00:00
+	            window.location.href = 'login.jsp';
+	        } else {
+	            var minutes = Math.floor((timeDiff % 3600000) / 60000);
+	            var seconds = Math.floor((timeDiff % 60000) / 1000);
+
+	            var countdownText = 'Logout in ' +
+	                (minutes < 10 ? '0' : '') + minutes + ':' +
+	                (seconds < 10 ? '0' : '') + seconds;
+	            countdownElement.textContent = countdownText;
+	        }
+	    }
+
+	    // Call updateCountdownDisplay immediately to avoid the "00:00" display
+	    updateCountdownDisplay();
+
+	    // Update the countdown every second
+	    setInterval(updateCountdownDisplay, 1000);
+	}
 
 	$(document).ready(function() {
 		
@@ -213,7 +252,7 @@ var roleValu1e;
 		changeButtonColor1(true);
 	}
 	
-	
+				startCountdown();
 				getProcessData1();
 
 				$('#loadConfig').click(function() {
@@ -267,7 +306,7 @@ var roleValu1e;
 			window.location.href = "process.jsp";
 		});
 	});
-	setInterval(getProcessData1, 300000);//300,000 milliseconds = 5 minutes
+	setInterval(getProcessData1, 300000);
 </script>
 
 
@@ -292,6 +331,7 @@ var roleValu1e;
     		<div style="font-size: 13px;">(Role - ${role})</div>
   		</div>
   		<i class="fa fa-sign-out" style="font-size: 20px; cursor: pointer;" id="logoutBtn" title="Logout"></i>
+  		<div id="countdown" style="font-size: 13px;"></div>
 		</div>
 		
 		

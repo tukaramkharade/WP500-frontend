@@ -167,6 +167,29 @@ h3{
 margin-top: 68px;
 }
 
+ .container {
+    border-collapse: collapse;
+    
+    
+  }
+
+table{
+margin-top: -30px;
+
+}
+  .container th, .container td {
+    border: 1px solid #ccc; /* Light gray border */
+    
+    text-align: left;
+    
+  }
+
+ .container th{
+ background-color: #e2e6f9;
+
+ }
+ 
+
 </style>
 
 <script>
@@ -211,7 +234,7 @@ function getSMTPSettings() {
 		    console.log("Email BCC Value:", data.email_bcc);
 		    
 			if ($('#from_email_id').val(data.from_email_id) != null) {
-				$('#addBtn').val('Edit');
+				$('#addBtn').val('Update');
 			} else {
 				$('#addBtn').val('Add');
 			}
@@ -415,7 +438,7 @@ function editSMTPSettings() {
 	  cancelButton.onclick = function () {
 	    // Close the modal
 	    modal.style.display = 'none';
-	    $('#addBtn').val('Edit');
+	    $('#addBtn').val('Update');
 	  };	
 	
 }
@@ -543,7 +566,7 @@ function deleteSMTPSettings() {
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
-		    $('#addBtn').val('Edit');
+		    $('#addBtn').val('Update');
 		  };
 	}
 
@@ -780,102 +803,6 @@ tokenValue = '<%=tokenValue%>';
 		<h3>SMTP SETTINGS</h3>
 	<hr />
 
-		<!-- <div class="container">
-			<form id="smtpForm">
-
-				<input type="hidden" id="action" name="action" value="">
-
-				
-				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
-					<div style="display: flex; flex-content: space-between;">
-						
-						<label id="from_email_id_label">From Email ID</label> 
-						<input type="text" id="from_email_id" name="from_email_id" style="height: 17px; width: 120px;" required />
-						
-						<label for="password" id="password_label" style="margin-left: 1em;">Password</label> 
-						<input type="password" id="passwords" name="passwords" style="height: 17px; width: 120px;" required />
-						
-						<label for="host_id" id="host_label" style="margin-left: 1em;">Host</label> 
-						<input type="text" id="host_id" name="host_id" style="height: 17px; width: 120px;" required />
-						
-						
-						<label style="margin-left: 1em;" id="smtp_type_label" for="smtp_type_">SMTP Type</label> 
-						<select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 35px; width: 140px;" required>
-							<option value="Select SMTP type">Select SMTP type:</option>
-							<option value="SSL">SSL</option>
-							<option value="TLS">TLS</option>
-						</select>
-							
-						
-					</div>
-				</div>
-				
-				<div class="row" style="margin-top: 20px; width: 60%;  margin-left: 1em;">
-					<div style="display: flex; flex-content: space-between;">
-						<label id="ssl_socket_factory_port_label">SSL Socket Factory Port</label> 
-						<input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 17px; width: 120px;" required />
-						
-						<label for="ssl_port" id="ssl_port_label" style="margin-left: 1em;">SSL Port</label> 
-						<input type="text" id="ssl_port" name="ssl_port" style="height: 17px; width: 120px;" required />
-						
-						
-						<label style="margin-left: 1em;" id="smtp_type_label" for="ssl_smtp_type">SSL SMTP Type</label> 
-						<select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 35px; width: 120px;" required>
-								<option value="True" selected>True</option>
-								<option value="False">False</option>
-						</select>
-					</div>
-				</div>
-
-				
-				<div class="row" style="margin-top: 20px; width: 60%; margin-left: 1em;">
-					<div style="display: flex; flex-content: space-between;">
-						<label id="tls_port_label">TLS Port</label> 
-						<input type="text" id="tls_port" name="tls_port" style="height: 17px; width: 120px;" required />
-						
-						<label for="tls_auth" id="tls_auth_label" style="margin-left: 1em;">TLS Auth</label> 
-						<select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 35px; width: 120px;" required>
-								<option value="True">True</option>
-								<option value="False" selected>False</option>
-						</select>
-						
-						
-						<label style="margin-left: 1em;" id="tls_enable_label" for="tls_enable">TLS Enable</label> 
-						<select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 35px; width: 120px;" required>
-								<option value="True">True</option>
-								<option value="False" selected>False</option>
-						</select>
-					</div>
-				</div>
-				
-				
-				<div class="row" style="margin-top: 20px; width: 90%;  margin-left: 1em;">
-					<div style="display: flex; flex-content: space-between;">
-						<label id="to_email_id_label">To Email ID</label> 
-						<input type="text" id="to_email_id" name="to_email_id" required style="height: 17px; width: 400px;" />
-						
-						<label id="email_cc_label" style="margin-left: 1em;">CC</label> 
-						<input type="text" id="email_cc" name="email_cc" style="height: 17px; width: 400px;" />
-						
-						
-						<label style="margin-left: 1em;" id="email_bcc_label">BCC</label> 
-						<input type="text" id="email_bcc" name="email_bcc" style="height: 17px; width: 400px;" />
-					</div>
-				</div>
-
-				<div class="row" style="display: flex; justify-content: right;">
-					<input style="margin-top: 10px; margin-left: 5px" type="button"
-						value="Clear" id="clearBtn" /> <input
-						style="margin-top: 10px; margin-left: 5px" type="submit"
-						value="Add" id="addBtn" /> <input
-						style="margin-top: 10px; margin-left: 5px" type="button"
-						value="Delete" id="delBtn" onClick="window.location.reload();" />
-					<input style="margin-top: 10px; margin-left: 5px" type="button"
-						value="Test Email" id="testEmailBtn" />
-				</div>
-			</form>
-		</div> -->
-		
 		<div class="container">
 		<form id="smtpForm">
 
@@ -884,7 +811,11 @@ tokenValue = '<%=tokenValue%>';
 				<table>
 				
 				<tr>
-					<th  colspan="2">Email Configuration</th>
+					<th  colspan="2">
+					
+        					Email Configuration
+    					
+  					</th>
 				</tr>
 				
 				<tr>
