@@ -208,6 +208,16 @@ button {
   color: white;
 }
 
+
+select,
+option {
+  
+  padding: 4px;
+  
+  font-size: small;
+  
+}
+
   .popup {
   display: none;
   position: fixed;
@@ -238,6 +248,46 @@ button {
 h3{
 margin-top: 68px;
 }
+
+.container {
+    border-collapse: collapse;
+    
+    
+  }
+
+table{
+margin-top: -20px;
+
+}
+  .container th, .container td {
+    border: 1px solid #ccc; /* Light gray border */
+    
+    text-align: left;
+    
+  }
+  
+  /* styles.css */
+.tab {
+            display: none;
+        }
+        
+        .tab-button {
+            background-color: #f2f2f2;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background-color: #2b3991;
+            color: white;
+        }
+        
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+  
   
 </style>
 <script>
@@ -396,50 +446,6 @@ var tokenValue;
 
 		$("#registerBtn").val("Add");
 	}
-	
-	 /* function deleteTrafficRules(trafficRulesId) {
-		 
-		 alert(trafficRulesId);
-		  // Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal-delete');
-		  modal.style.display = 'block';
-
-		  // Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-delete');
-		  confirmButton.onclick = function () {
-		    // Make the AJAX call to delete the user
-		    $.ajax({
-		      url: 'trafficRulesServlet',
-		      type: 'POST',
-		      data: {
-		    	  name : trafficRulesId,
-					operation_action: 'delete'
-		      },
-		      success: function (data) {
-		         		        
-		    	// Close the modal
-			        modal.style.display = 'none';
-
-		        // Refresh the user list
-		        loadTrafficRulesList();
-		      },
-		      error: function (xhr, status, error) {
-		        // Handle the error response, if needed
-		        console.log('Error deleting traffic rules: ' + error);
-		        // Close the modal
-		        modal.style.display = 'none';
-		      }
-		    });
-		  };
-
-		  // Handle the cancel button click
-		  var cancelButton = document.getElementById('cancel-button-delete');
-		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		  };
-		}
- */
  
  function deleteTrafficRules(trafficRulesId) {
 	 
@@ -923,6 +929,27 @@ var tokenValue;
 	    }
 	}
 	
+	function openTab(tabId, button) {
+        var tabs = document.getElementsByClassName("tab");
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = "none";
+        }
+
+        var tab = document.getElementById(tabId);
+        if (tab) {
+            tab.style.display = "block";
+        }
+
+        var tabButtons = document.getElementsByClassName("tab-button");
+        for (var i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
+
+        if (button) {
+            button.classList.add("active");
+        }
+    }
+	
 	//Function to execute on page load
 	$(document).ready(function() {
 		
@@ -1109,7 +1136,7 @@ var tokenValue;
 			<input type="hidden" id="operation_action" name="operation_action" value="">
 
 				
-				<div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
+				<!-- <div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
 					<div style="display: flex; flex-content: space-between;">
 						
 						<label id="input_label">Input</label> 
@@ -1139,7 +1166,45 @@ var tokenValue;
 							
 						
 					</div>
-				</div>
+				</div> -->
+				
+				
+				<table>
+				<tr>
+				
+				<td>Input</td>
+				<td><select class="textBox" id="input" name="input" style="height: 33px; width: 120px; ">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="inputError" style="color: red;"></span></td>
+				</tr>
+				
+				<tr>
+				<td>Output</td>
+				<td>
+				<select class="textBox" id="output" name="output" style="height: 33px; width: 120px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="outputError" style="color: red;"></span>
+				</td>
+				</tr>
+				
+				<tr>
+				<td>Forward</td>
+				<td> <select class="textBox" id="forward" name="forward" style="height: 33px; width: 120px;">
+							<option value="Accept">Accept</option>
+							<option value="Reject">Reject</option>
+						</select> <span id="forwardError" style="color: red;"></span></td>
+				</tr>
+				
+				<tr>
+				<td>Drop invalid packets</td>
+				<td><select class="textBox" id="rule_drop" name="rule_drop" style="height: 33px; width: 120px;">
+							<option value="On">On</option>
+							<option value="Off">Off</option>
+						</select> <span id="forwardError" style="color: red;"></span></td>
+				</tr>
+				</table>
 
 
 				<div class="row"
@@ -1164,14 +1229,14 @@ var tokenValue;
 			  
 			  <div id="custom-modal-edit-gen" class="modal-edit-gen">
 				<div class="modal-content-edit-gen">
-				  <p>Are you sure you want to edit this general setting?</p>
+				  <p>Are you sure you want to modify this general setting?</p>
 				  <button id="confirm-button-edit-gen">Yes</button>
 				  <button id="cancel-button-edit-gen">No</button>
 				</div>
 			  </div>
 			  
 
-		<h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
+		<!-- <h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
 		<hr>
 		<div class="container">
 
@@ -1190,9 +1255,8 @@ var tokenValue;
 						
 						<select class="textBox" id="iface" name="iface"
 							style="height: 35px;">
-							<option value="Select interface">Select interface</option>
-							<option value="eth0">eth0</option>
-							<option value="eth1">eth1</option>
+							<option value="Select interface">Select interface</option>	
+							<option value="lan0">lan0</option>
 							<option value="lan1">lan1</option>
 							<option value="lan2">lan2</option>
 
@@ -1256,17 +1320,351 @@ var tokenValue;
 					<input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
 				</div>
 			</form>
-		</div>
+		</div> -->
 		
-		<div id="custom-modal-delete" class="modal-delete">
-				<div class="modal-content-delete">
-				  <p>Are you sure you want to delete this traffic rule?</p>
-				  <button id="confirm-button-delete">Yes</button>
-				  <button id="cancel-button-delete">No</button>
+		<div class="container">
+		
+		<div class="tab-container">
+    <button class="tab-button active" onclick="openTab('basic-config', this)">Basic Configuration</button>
+    <button class="tab-button" onclick="openTab('user-config', this)">User Configuration</button>
+
+    <div id="basic-config" class="tab" style="display: block;">
+        <div class="container">
+        
+        <table>
+        <colgroup>
+    <col style="width: 10%;">
+    <col style="width: 20%;">
+    <col style="width: 15%;">
+    <col style="width: 10%;">
+    <col style="width: 25%;">
+    <col style="width: 15%;">
+  </colgroup>
+        <tr>
+        
+        <th>Seq.</th>
+        <th>Direction</th>
+        <th>Protocol</th>
+        <th>To port</th>
+        <th>Comment</th>
+        <th>Action</th>
+       
+        </tr>
+        
+        <tr>
+        
+        <td>1</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="UDP" disabled/></td>
+        <td><input type="text" value="123" disabled/></td>
+        <td><input type="text" value="NTP (Network Time Protocol)" disabled/></td>
+        <td><select class="textBox" id="action" name="action"
+							style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+         <tr>
+        
+        <td>2</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="41100" disabled/></td>
+        <td><input type="text" value="Remoting" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        
+        <tr>
+        
+        <td>3</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="22" disabled/></td>
+        <td><input type="text" value="SSH" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        <tr>
+        
+        <td>4</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="80" disabled/></td>
+        <td><input type="text" value="HTTP" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        <tr>
+        
+        <td>5</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="80" disabled/></td>
+        <td><input type="text" value="HTTPs, Proficloud, eHMI" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        <tr>
+        
+        <td>6</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="4840" disabled/></td>
+        <td><input type="text" value="OPC UA" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        <tr>
+        
+        <td>7</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="17725" disabled/></td>
+        <td><input type="text" value="(Standard-port) External mode matlab simulink" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        <tr>
+        
+        <td>8</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="UDP" disabled/></td>
+        <td><input type="text" value="161" disabled/></td>
+        <td><input type="text" value="SNMP (Simple Network Management Protocol)" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        <tr>
+        
+        <td>9</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="INPUT" selected="selected">INPUT</option>
+							<option value="OUTPUT">OUTPUT</option>
+
+						</select></td>
+        <td><input type="text" value="UDP" disabled/></td>
+        <td><input type="text" value="34962-34964" disabled/></td>
+        <td><input type="text" value="Profinet Uni-/Multicast ports" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="ACCEPT" selected="selected">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        </table>
+        </div>
+    </div>
+
+
+    <div id="user-config" class="tab">
+    <h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
+    <hr/>
+        <div class="container">
+        <form id="trafficRulesForm">
+			<input type="hidden" id="operation_action" name="operation_action" value="">
+
+				<div class="row"
+					style="display: flex; flex-content: space-between; margin-top: 10px;">
+
+					<div class="col-75-5" style="width: 15%;">
+						<input type="text" id="name" name="name" placeholder="Name" maxlength="31"/>
+						<p id="nameError" style="color: red;"></p>
+					</div>
+
+					<div class="col-75-4" style="width: 10%;">
+						
+						<select class="textBox" id="iface" name="iface"
+							style="height: 35px;">
+							<option value="Select interface">Select interface</option>	
+							<option value="lan0">lan0</option>
+							<option value="lan1">lan1</option>
+							<option value="lan2">lan2</option>
+
+						</select>
+
+					</div>
+
+					<div class="col-75-2" style="width: 10%;">
+						<select class="textBox" id="type" name="type"
+							style="height: 35px;">
+							<option value="Select type">Select type</option>
+							<option value="IP">IP</option>
+							<option value="MAC">MAC</option>
+
+						</select>
+					</div>
+
+					<div class="col-75-1" style="width: 15%;">
+						<input type="text" id="macAddress" name="macAddress"
+							placeholder="Source MAC address" maxlength="31"/>
+							<p id="macAddrError" style="color: red;"></p>
+					</div>
+
+					<div class="col-75-2" style="width: 10%;">
+						<select class="textBox" id="protocol" name="protocol"
+							style="height: 35px;">
+							<option value="Select protocol">Select protocol</option>
+							<option value="TCP">TCP</option>
+							<option value="UDP">UDP</option>
+
+						</select>
+					</div>
+					
+					<div class="col-75-3" style="width: 15%;">
+						<input type="text" id="ip_addr" name="ip_addr"
+							placeholder="Source IP address" maxlength="31"/>
+							<p id="sourceIpError" style="color: red;"></p>
+					</div>
+
+					<div class="col-75-1" style="width: 10%;">
+						<input type="text" id="portNumber" name="portNumber"
+							placeholder="Destination port" maxlength="6"/>
+							<p id="destPortError" style="color: red;"></p>
+					</div>
+					
+					<div class="col-75-2" style="width: 10%;">
+						<select class="textBox" id="action" name="action"
+							style="height: 35px;">
+							<option value="ACCEPT">ACCEPT</option>
+							<option value="REJECT">REJECT</option>
+
+						</select>
+					</div>
 				</div>
+
+				
+				<div class="row"
+					style="display: flex; justify-content: right; margin-top: 2%;">
+					<input type="button" value="Apply" id="applyBtnRules" /> 
+					<input style="margin-left: 5px;" type="button" value="Clear" id="clearBtn" /> 
+					<input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
+				</div>
+			</form>
+        
+        </div>
+        
+    <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to modify this traffic rule?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+		 </div>
+		 
+		 <div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				  <p>Your session is timeout. Please login again</p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
+		 </div>
+		 
+		  <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
+			  
+			  <h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
+		<hr>
+		<div class="container">
+			<table id="trafficRulesListTable">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Protocol</th>
+						<th>Interface</th>
+						<th>Source IP address</th>
+						<th>MAC address</th>
+						<th>Destination port</th>
+						<th>Action</th>
+						<th>Type</th>
+						<th id="actions">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+				</tbody>
+			</table>
 		</div>
 			  
-		 <div id="custom-modal-edit" class="modal-edit">
+        
+    </div>
+</div>
+		</div>
+			  
+		 <!-- <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modify this traffic rule?</p>
 				  <button id="confirm-button-edit">Yes</button>
@@ -1286,8 +1684,8 @@ var tokenValue;
   				<button id="closePopup">OK</button>
 			  </div>
 
-
-		<h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
+ -->
+		<!-- <h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
 		<hr>
 		<div class="container">
 			<table id="trafficRulesListTable">
@@ -1305,10 +1703,10 @@ var tokenValue;
 					</tr>
 				</thead>
 				<tbody>
-					<!-- User list table rows will be populated dynamically using JavaScript -->
+					User list table rows will be populated dynamically using JavaScript
 				</tbody>
 			</table>
-		</div>
+		</div> -->
 		</section>
 	</div>
 <div class="footer">

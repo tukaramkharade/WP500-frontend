@@ -31,7 +31,7 @@ public class WP500Login extends HttpServlet {
 
         HttpSession session = request.getSession();
         
-        session.setMaxInactiveInterval(1800);
+        session.setMaxInactiveInterval(3600);
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
