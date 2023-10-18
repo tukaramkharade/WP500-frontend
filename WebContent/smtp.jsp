@@ -890,23 +890,23 @@ tokenValue = '<%=tokenValue%>';
 				<tr>
 				
 				<td>From Email ID</td>
-				<td><input type="text" id="from_email_id" name="from_email_id" style="height: 17px; width: 30%;" required /></td>
+				<td><input type="text" id="from_email_id" name="from_email_id" style="height: 10px; width: 30%;" required /></td>
 				
 				</tr>
 				
 				<tr>
 				<td>Password</td>
-				<td><input type="password" id="passwords" name="passwords" style="height: 17px; width: 20%;" required /></td>
+				<td><input type="password" id="passwords" name="passwords" style="height: 10px; width: 20%;" required /></td>
 				</tr>
 				
 				<tr>
 				<td>Host</td>
-				<td><input type="text" id="host_id" name="host_id" style="height: 17px; width: 10%;" required /></td>
+				<td><input type="text" id="host_id" name="host_id" style="height: 10px; width: 10%;" required /></td>
 				</tr>
 				
 				<tr>
 				<td>SMTP Type</td>
-				<td><select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 35px; width: 15%;" required>
+				<td><select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 31px; width: 15%;" required>
 							<option value="Select SMTP type">Select SMTP type</option>
 							<option value="SSL">SSL</option>
 							<option value="TLS">TLS</option>
@@ -920,18 +920,18 @@ tokenValue = '<%=tokenValue%>';
 				<tr>
 				
 				<td>SSL Socket Factory Port</td>
-				<td><input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 17px; width: 20%;" required /></td>
+				<td><input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 10px; width: 20%;" required /></td>
 				
 				</tr>
 				
 				<tr>
 				<td>SSL Port</td>
-				<td><input type="text" id="ssl_port" name="ssl_port" style="height: 17px; width: 20%;" required /></td>
+				<td><input type="text" id="ssl_port" name="ssl_port" style="height: 10px; width: 20%;" required /></td>
 				</tr>
 				
 				<tr>
 				<td>SSL SMTP Type</td>
-				<td><select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 35px; width: 20%;" required>
+				<td><select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 31px; width: 20%;" required>
 								<option value="True" selected>True</option>
 								<option value="False">False</option>
 						</select></td>
@@ -944,13 +944,13 @@ tokenValue = '<%=tokenValue%>';
 				<tr>
 				
 				<td>TLS Port</td>
-				<td><input type="text" id="tls_port" name="tls_port" style="height: 17px; width: 8%;" required /></td>
+				<td><input type="text" id="tls_port" name="tls_port" style="height: 10px; width: 8%;" required /></td>
 				
 				</tr>
 				
 				<tr>
 				<td>TLS Auth</td>
-				<td><select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 35px; width: 15%;" required>
+				<td><select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 31px; width: 15%;" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
 						</select></td>
@@ -958,7 +958,7 @@ tokenValue = '<%=tokenValue%>';
 				
 				<tr>
 				<td>TLS Enable</td>
-				<td><select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 35px; width: 15%;" required>
+				<td><select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 31px; width: 15%;" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
 						</select></td>
@@ -973,18 +973,18 @@ tokenValue = '<%=tokenValue%>';
 				<tr>
 				
 				<td>To Email ID</td>
-				<td><input type="text" id="to_email_id" name="to_email_id" required style="height: 17px; width: 60%;" /></td>
+				<td><input type="text" id="to_email_id" name="to_email_id" required style="height: 10px; width: 60%;" /></td>
 				
 				</tr>
 				
 				<tr>
 				<td>CC</td>
-				<td><input type="text" id="email_cc" name="email_cc" style="height: 17px; width: 60%;" /></td>
+				<td><input type="text" id="email_cc" name="email_cc" style="height: 10px; width: 60%;" /></td>
 				</tr>
 				
 				<tr>
 				<td>BCC</td>
-				<td><input type="text" id="email_bcc" name="email_bcc" style="height: 17px; width: 60%;" /></td>
+				<td><input type="text" id="email_bcc" name="email_bcc" style="height: 10px; width: 60%;" /></td>
 				</tr>
 				
 				
