@@ -59,15 +59,11 @@ button {
 	color: red;
 }
 
-.notification-container {
-	position: relative;
-	display: inline-block;
-}
 
 .badge {
 	position: absolute;
-	top: 0; /* Adjust this value to position the badge as needed */
-	right: 5px; /* Adjust this value to position the badge as needed */
+	top: -7px; /* Adjust this value to position the badge as needed */
+	right: 2px; /* Adjust this value to position the badge as needed */
 	background-color: white;
 	color: white;
 	border-radius: 50%;
@@ -114,27 +110,51 @@ button {
   color: white;
 }
 
+.notification-container {
+    position: relative;
+    display: inline-block;
+     
+}
+
+button#loadConfig {
+    height: 35px;
+    margin-bottom: 10px;
+    margin-right: 10px; /* Adjust the margin as needed */
+    margin-top: -8px;
+    margin-left: -10px;
+    background-color: #f7f7f7;
+}
+
 .user-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-right: 10px;
-  margin-top: -10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: -10px; /* Adjust the margin as needed */
+    margin-top: -10px;
 }
 
-.user-info i {
-  margin-left: 10px;
+#countdown {
+    font-size: 13px;
+    color: black;
+    margin-right: 10px; /* Adjust the margin as needed */
+    margin-left: 10px;
+    margin-top: -10px;
 }
 
- #countdown {
-  
-    color: black; /* Choose your desired text color */
-    margin-top: 15px; /* Adjust the margin as needed */
-    margin-left:-17px;
-  }
-  
-#logoutBtn{
-margin-top: -16px;
+#logoutBtn {
+    margin-right: -4px;
+    margin-left: 2px;
+    margin-top: -15px;
+}
+
+.logout-container {
+    display: flex;
+    align-items: center;
+}
+
+#redirectButton{
+margin-top: -5px;
+background-color: #f7f7f7;
 }
 
 </style>
@@ -207,8 +227,8 @@ var roleValu1e;
 	
 	function startCountdown() {
 	    var countdownElement = document.getElementById('countdown');
-	    var logoutTime = new Date();
-	    logoutTime.setHours(logoutTime.getHours() + 1);
+	    var currentTime = new Date();
+	    var logoutTime = new Date(currentTime.getTime() + 3599000); // Set logoutTime to 1 hour from the current time
 
 	    function updateCountdownDisplay() {
 	        var currentTime = new Date();
@@ -218,7 +238,7 @@ var roleValu1e;
 	            // Redirect to "login.jsp" when the timer reaches 00:00
 	            window.location.href = 'login.jsp';
 	        } else {
-	            var minutes = Math.floor((timeDiff % 3600000) / 60000);
+	            var minutes = Math.floor(timeDiff / 60000); // Calculate minutes directly from timeDiff
 	            var seconds = Math.floor((timeDiff % 60000) / 1000);
 
 	            var countdownText = 'Logout in ' +
@@ -234,6 +254,8 @@ var roleValu1e;
 	    // Update the countdown every second
 	    setInterval(updateCountdownDisplay, 1000);
 	}
+
+
 
 	$(document).ready(function() {
 		
@@ -310,29 +332,34 @@ var roleValu1e;
 </script>
 
 
-<header>
+ <header>
 
 	<div class="row" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 0.5%">
-	
-	<div class="notification-container">
-			<button id="redirectButton" data-toggle="tooltip" class="editBtn"
-				data-placement="top" title="Process"
-				style="color: #35449a; height: 40px; padding: 0 10px;">
-				<i class="material-icons" id="notification-bell" style="font-size: 24px;">notifications</i>
-			</button>
-			<span id="notification-bell-count" class="badge"
-				style="height: 15px;">0</span>
-		</div>
 		
-		<input style="margin-right: 10px; height: 35px; margin-bottom: 10px;" type="button" id="loadConfig" value="Update Configuration" />
+		<div class="notification-container">
+    <button id="redirectButton" data-toggle="tooltip" class="editBtn"
+        data-placement="top" title="Process"
+        style="color: #35449a; height: 40px; padding: 0 10px;">
+        <i class="material-icons" id="notification-bell" style="font-size: 24px;">notifications</i>
+    </button>
+    <span id="notification-bell-count" class="badge"
+        style="height: 15px;">0</span>
+</div>
+
+<button style="height: 35px; margin-bottom: 10px;" id="loadConfig" title="Update Configuration">
+    <i class="fa fa-upload" style="font-size: 20px;"></i>
+</button>
+	
 		<div class="user-info">
-  			<div style="font-size: 15px;"> 
-    		${username}
-    		<div style="font-size: 13px;">(Role - ${role})</div>
-  		</div>
-  		<i class="fa fa-sign-out" style="font-size: 20px; cursor: pointer;" id="logoutBtn" title="Logout"></i>
-  		<div id="countdown" style="font-size: 13px;"></div>
-		</div>
+    <div style="font-size: 15px;"> 
+        ${username}
+        <div style="font-size: 13px;">(Role - ${role})</div>
+    </div>
+    <div class="logout-container">
+        <div id="countdown" style="font-size: 13px;"></div>
+        <i class="fa fa-sign-out" style="font-size: 20px; cursor: pointer;" id="logoutBtn" title="Logout"></i>
+    </div>
+</div>
 		
 		
 	</div>
@@ -354,7 +381,7 @@ var roleValu1e;
 	 </div>
 	
 </header>
-
+ 
 </head>
 
 </html>

@@ -251,12 +251,13 @@ margin-top: 68px;
 
 .container {
     border-collapse: collapse;
+   
     
     
   }
 
 table{
-margin-top: -20px;
+margin-top: 1px;
 
 }
   .container th, .container td {
@@ -1135,40 +1136,6 @@ var tokenValue;
 			<form id="generalSettingsForm">
 			<input type="hidden" id="operation_action" name="operation_action" value="">
 
-				
-				<!-- <div class="row" style="margin-top: -20px; width: 80%;  margin-left: 1em;">
-					<div style="display: flex; flex-content: space-between;">
-						
-						<label id="input_label">Input</label> 
-						<select class="textBox" id="input" name="input" style="height: 35px; width: 120px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
-						</select> <span id="inputError" style="color: red;"></span>
-						
-						<label for="output" id="output_label" style="margin-left: 1em;">Output</label> 
-						<select class="textBox" id="output" name="output" style="height: 35px; width: 120px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
-						</select> <span id="outputError" style="color: red;"></span>
-						
-						<label for="forward" id="forward_label" style="margin-left: 1em;">Forward</label> 
-						<select class="textBox" id="forward" name="forward" style="height: 35px; width: 120px;">
-							<option value="Accept">Accept</option>
-							<option value="Reject">Reject</option>
-						</select> <span id="forwardError" style="color: red;"></span>
-						
-						
-						<label style="margin-left: 1em;" id="drop_invalid_packets_label" for="drop_invalid_packets">Drop invalid packets</label> 
-						<select class="textBox" id="rule_drop" name="rule_drop" style="height: 35px; width: 120px;">
-							<option value="On">On</option>
-							<option value="Off">Off</option>
-						</select> <span id="forwardError" style="color: red;"></span>
-							
-						
-					</div>
-				</div> -->
-				
-				
 				<table>
 				<tr>
 				
@@ -1235,92 +1202,6 @@ var tokenValue;
 				</div>
 			  </div>
 			  
-
-		<!-- <h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
-		<hr>
-		<div class="container">
-
-			<form id="trafficRulesForm">
-			<input type="hidden" id="operation_action" name="operation_action" value="">
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-					<div class="col-75-5" style="width: 15%;">
-						<input type="text" id="name" name="name" placeholder="Name" maxlength="31"/>
-						<p id="nameError" style="color: red;"></p>
-					</div>
-
-					<div class="col-75-4" style="width: 10%;">
-						
-						<select class="textBox" id="iface" name="iface"
-							style="height: 35px;">
-							<option value="Select interface">Select interface</option>	
-							<option value="lan0">lan0</option>
-							<option value="lan1">lan1</option>
-							<option value="lan2">lan2</option>
-
-						</select>
-
-					</div>
-
-					<div class="col-75-2" style="width: 10%;">
-						<select class="textBox" id="type" name="type"
-							style="height: 35px;">
-							<option value="Select type">Select type</option>
-							<option value="IP">IP</option>
-							<option value="MAC">MAC</option>
-
-						</select>
-					</div>
-
-					<div class="col-75-1" style="width: 15%;">
-						<input type="text" id="macAddress" name="macAddress"
-							placeholder="Source MAC address" maxlength="31"/>
-							<p id="macAddrError" style="color: red;"></p>
-					</div>
-
-					<div class="col-75-2" style="width: 10%;">
-						<select class="textBox" id="protocol" name="protocol"
-							style="height: 35px;">
-							<option value="Select protocol">Select protocol</option>
-							<option value="TCP">TCP</option>
-							<option value="UDP">UDP</option>
-
-						</select>
-					</div>
-					
-					<div class="col-75-3" style="width: 15%;">
-						<input type="text" id="ip_addr" name="ip_addr"
-							placeholder="Source IP address" maxlength="31"/>
-							<p id="sourceIpError" style="color: red;"></p>
-					</div>
-
-					<div class="col-75-1" style="width: 10%;">
-						<input type="text" id="portNumber" name="portNumber"
-							placeholder="Destination port" maxlength="6"/>
-							<p id="destPortError" style="color: red;"></p>
-					</div>
-					
-					<div class="col-75-2" style="width: 10%;">
-						<select class="textBox" id="action" name="action"
-							style="height: 35px;">
-							<option value="ACCEPT">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
-
-						</select>
-					</div>
-				</div>
-
-				
-				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 2%;">
-					<input type="button" value="Apply" id="applyBtnRules" /> 
-					<input style="margin-left: 5px;" type="button" value="Clear" id="clearBtn" /> 
-					<input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
-				</div>
-			</form>
-		</div> -->
 		
 		<div class="container">
 		
@@ -1331,15 +1212,15 @@ var tokenValue;
     <div id="basic-config" class="tab" style="display: block;">
         <div class="container">
         
-        <table>
-        <colgroup>
+        <table style="margin-left: -15px; width: 102.2%;">
+         <colgroup>
     <col style="width: 10%;">
     <col style="width: 20%;">
     <col style="width: 15%;">
     <col style="width: 10%;">
-    <col style="width: 25%;">
+    <col style="width: 30%;">
     <col style="width: 15%;">
-  </colgroup>
+  </colgroup> 
         <tr>
         
         <th>Seq.</th>
@@ -1355,8 +1236,8 @@ var tokenValue;
         
         <td>1</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="UDP" disabled/></td>
@@ -1364,8 +1245,10 @@ var tokenValue;
         <td><input type="text" value="NTP (Network Time Protocol)" disabled/></td>
         <td><select class="textBox" id="action" name="action"
 							style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
@@ -1375,36 +1258,38 @@ var tokenValue;
         
         <td>2</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="41100" disabled/></td>
-        <td><input type="text" value="Remoting" disabled/></td>
+        <td><input type="text" value="1200" disabled/></td>
+        <td><input type="text" value="WPConnex" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
         </tr>
-        
-        
+              
         <tr>
         
         <td>3</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
-
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 						</select></td>
         <td><input type="text" value="TCP" disabled/></td>
         <td><input type="text" value="22" disabled/></td>
         <td><input type="text" value="SSH" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
@@ -1414,16 +1299,18 @@ var tokenValue;
         
         <td>4</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="TCP" disabled/></td>
         <td><input type="text" value="80" disabled/></td>
         <td><input type="text" value="HTTP" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
@@ -1433,16 +1320,18 @@ var tokenValue;
         
         <td>5</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="TCP" disabled/></td>
         <td><input type="text" value="80" disabled/></td>
         <td><input type="text" value="HTTPs, Proficloud, eHMI" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
@@ -1452,17 +1341,18 @@ var tokenValue;
         
         <td>6</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="TCP" disabled/></td>
         <td><input type="text" value="4840" disabled/></td>
         <td><input type="text" value="OPC UA" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
-
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 						</select>
 		</td>
         </tr>
@@ -1471,16 +1361,18 @@ var tokenValue;
         
         <td>7</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="TCP" disabled/></td>
         <td><input type="text" value="17725" disabled/></td>
         <td><input type="text" value="(Standard-port) External mode matlab simulink" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
@@ -1490,16 +1382,18 @@ var tokenValue;
         
         <td>8</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="UDP" disabled/></td>
         <td><input type="text" value="161" disabled/></td>
         <td><input type="text" value="SNMP (Simple Network Management Protocol)" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
@@ -1509,22 +1403,53 @@ var tokenValue;
         
         <td>9</td>
         <td><select style="height: 33px;" disabled>
-							<option value="INPUT" selected="selected">INPUT</option>
-							<option value="OUTPUT">OUTPUT</option>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
 
 						</select></td>
         <td><input type="text" value="UDP" disabled/></td>
         <td><input type="text" value="34962-34964" disabled/></td>
         <td><input type="text" value="Profinet Uni-/Multicast ports" disabled/></td>
         <td><select class="textBox" style="height: 33px; ">
-							<option value="ACCEPT" selected="selected">ACCEPT</option>
-							<option value="REJECT">REJECT</option>
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
 
 						</select>
 		</td>
         </tr>
         
+        <tr>
+        
+        <td>10</td>
+        <td><select style="height: 33px;" disabled>
+							<option value="Input" selected="selected">Input</option>
+							<option value="Output">Output</option>
+
+						</select></td>
+        <td><input type="text" value="TCP" disabled/></td>
+        <td><input type="text" value="502" disabled/></td>
+        <td><input type="text" value="Modbus" disabled/></td>
+        <td><select class="textBox" style="height: 33px; ">
+							<option value="Accept" selected="selected">Accept</option>
+							<option value="Reject">Reject</option>
+							<option value="Drop">Drop</option>
+							<option value="Continue">Continue</option>
+
+						</select>
+		</td>
+        </tr>
+        
+        
         </table>
+        
+        <div class="row"
+					style="display: flex; justify-content: right; margin-top: 2%;">
+					<input type="button" value="Apply" id="applyBtnBasicConf" /> 
+					
+				</div>
+				
         </div>
     </div>
 
@@ -1577,7 +1502,7 @@ var tokenValue;
 						<select class="textBox" id="protocol" name="protocol"
 							style="height: 35px;">
 							<option value="Select protocol">Select protocol</option>
-							<option value="TCP">TCP</option>
+							<option value="TCP" selected="selected">TCP</option>
 							<option value="UDP">UDP</option>
 
 						</select>
@@ -1639,7 +1564,7 @@ var tokenValue;
 			  <h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
 		<hr>
 		<div class="container">
-			<table id="trafficRulesListTable">
+			<table id="trafficRulesListTable" style="margin-left: -15px; width: 102.2%;">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -1663,50 +1588,7 @@ var tokenValue;
     </div>
 </div>
 		</div>
-			  
-		 <!-- <div id="custom-modal-edit" class="modal-edit">
-				<div class="modal-content-edit">
-				  <p>Are you sure you want to modify this traffic rule?</p>
-				  <button id="confirm-button-edit">Yes</button>
-				  <button id="cancel-button-edit">No</button>
-				</div>
-		 </div>
-		 
-		 <div id="custom-modal-session-timeout" class="modal-session-timeout">
-				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
-				  <button id="confirm-button-session-timeout">OK</button>
-				</div>
-		 </div>
-		 
-		  <div id="customPopup" class="popup">
-  				<span class="popup-content" id="popupMessage"></span>
-  				<button id="closePopup">OK</button>
-			  </div>
-
- -->
-		<!-- <h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
-		<hr>
-		<div class="container">
-			<table id="trafficRulesListTable">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Protocol</th>
-						<th>Interface</th>
-						<th>Source IP address</th>
-						<th>MAC address</th>
-						<th>Destination port</th>
-						<th>Action</th>
-						<th>Type</th>
-						<th id="actions">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					User list table rows will be populated dynamically using JavaScript
-				</tbody>
-			</table>
-		</div> -->
+		
 		</section>
 	</div>
 <div class="footer">

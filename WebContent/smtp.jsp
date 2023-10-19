@@ -431,7 +431,6 @@ function editSMTPSettings() {
 				
 			});
 			
-			
 	  };
 	  
 	  var cancelButton = document.getElementById('cancel-button-edit');
@@ -827,12 +826,12 @@ tokenValue = '<%=tokenValue%>';
 				
 				<tr>
 				<td>Password</td>
-				<td><input type="password" id="passwords" name="passwords" style="height: 10px; width: 20%;" required /></td>
+				<td><input type="password" id="password" name="password" style="height: 10px; width: 20%;" required /></td>
 				</tr>
 				
 				<tr>
 				<td>Host</td>
-				<td><input type="text" id="host_id" name="host_id" style="height: 10px; width: 10%;" required /></td>
+				<td><input type="text" id="host" name="host" style="height: 10px; width: 10%;" required /></td>
 				</tr>
 				
 				<tr>
