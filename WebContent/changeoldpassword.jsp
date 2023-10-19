@@ -173,27 +173,12 @@ function updateOldPassword() {
 				},
 				success : function(data) {
 					
-					 if (old_password === new_password) {
-					      //  showCustomPopup(data.message);
-				
-							$("#popupMessage").text(data.message);
-								$("#customPopup").show();
-								
-								// Close the modal
-								modal.style.display = 'none';
-								
-								 $('#confirm_password').val('');
-								 $('#new_password').val('');
-								 
-								
-					 }else{
 						// Close the modal
 							modal.style.display = 'none';
 						
 						
 						 window.location.href = 'login.jsp';
-						 
-					 }
+					
 					
 				},
 				error : function(xhr, status, error) {
@@ -263,6 +248,23 @@ $(document).ready(function () {
 	
 	// Set the value of the 'username' input field to the 'user' variable
     $('#username').val(user);
+	
+ // Add a "keyup" event listener to the new_password input field
+    $('#new_password').on('keyup', function() {
+        var new_password = $(this).val();
+        var old_password = $('#old_password').val();
+        var messageSpan = $('#newPasswordMessage');
+        
+        if (new_password === old_password) {
+            // Display a message in the message span
+            messageSpan.text('The new password is same as the old password. Please try with a new password.');
+            $(this).css('border', '2px solid red'); // You can use different styling
+        } else {
+            // Clear the message and reset the styling
+            messageSpan.text('');
+            $(this).css('border', ''); // Remove the red border
+        }
+    });
 	
 	
  
@@ -337,11 +339,14 @@ $(document).ready(function () {
 				<input required type="password" id="old_password" name="old_password" style="padding-left: 5px;"> 
 				<p id="oldPasswordError" style="color: red;"></p>
 				<p id="field_Old_Pass_Error" style="color: red;"></p>
-					
+				
 				<label for="new_password" style="float: left;">New password</label> 
 				<input required type="password" id="new_password" name="new_password" style="padding-left: 5px;">
 				<p id="newPasswordError" style="color: red;"></p>
 				<p id="field_New_Pass_Error" style="color: red;"></p> 
+				
+				<!-- Add a span to display the message -->
+				<span id="newPasswordMessage" style="color: red;"></span>
 					
 				<label for="confirm_password" style="float: left;">Confirm password</label> 
 				<input required type="password" id="confirm_password" name="confirm_password" style="padding-left: 5px;"> 

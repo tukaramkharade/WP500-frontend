@@ -204,6 +204,26 @@ h3{
 margin-top: 68px;
 }
 
+table{
+margin-top: -30px;
+}
+ 
+  .form-container {
+    float: left;
+    width: 50%;
+  }
+
+  .table-container {
+    float: left;
+    width: 50%;
+  }
+
+  .bordered-table {
+    width: 100%;
+    margin: 10px;
+    border: 1px solid #ccc;
+  }
+
 </style>
 <script>
 
@@ -710,7 +730,7 @@ var tokenValue;
 
 <body>
 
-	<div class="sidebar">
+	 <div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
@@ -719,58 +739,70 @@ var tokenValue;
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>ADD USER</h3>
-			<hr>
+			
 
-			<div class="container">
+			<div class="form-container">
 				<form id="userForm">
 				
 				<input type="hidden" id="action" name="action" value="">
 				
-					<div class="row"
-						style="display: flex; flex-content: space-between; margin-top: -20px;">
-						<div class="col-75-1" style="width: 15%;">
-							<input type="text" id="username" name="username"
-								placeholder="Username" required maxlength="31"/>
+				
+				
+				
+				<table class="bordered-table" style="margin-top: -1px; width: 50%">
+					<tr>
+						<td>Username</td>
+						<td>
+						<input type="text" id="username" name="username" placeholder="Username" required maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<p id="field_User_Error" style="color: red;"></p>
-
-						</div>
-						
-						<div class="col-75-2" style="width: 15%;">
-							<input type="password" id="password" name="password"
-								placeholder="Password" required maxlength="31">
-								
+						</td>
+					</tr>
+				
+					<tr>
+						<td>Password</td>
+						<td>
+						<input type="password" id="password" name="password" placeholder="Password" required maxlength="31" style="height: 10px; max-width: 200px;">
 								<p id="passwordError" style="color: red;"></p>
 								<p id="field_Pass_Error" style="color: red;"></p>
-								
-						</div>
-						
-						<div class="col-75-3" style="width: 15%;">
-							<input type="text" id="first_name" name="first_name"
-								placeholder="Firstname" maxlength="31"/>
-								<p id="field_FirstN_Error" style="color: red;"></p>
-
-						</div>
-						
-						<div class="col-75-4" style="width: 15%;">
-							<input type="text" id="last_name" name="last_name"
-								placeholder="Lastname" maxlength="31"/>
-								<p id="field_LastN_Error" style="color: red;"></p>
-						</div>
+						</td>
+					</tr>
 					
-						<div class="col-75-5" style="width: 10%;">
-							<select class="role" id="role" name="role" style="height: 33px;">
+					<tr>			
+						<td>First name</td>
+						<td>
+						<input type="text" id="first_name" name="first_name" placeholder="Firstname" maxlength="31" style="height: 10px; max-width: 200px;"/>
+								<p id="field_FirstN_Error" style="color: red;"></p>
+						</td>
+						
+					</tr>
+						
+					<tr>		
+						<td>Last name</td>
+						<td>
+						<input type="text" id="last_name" name="last_name" placeholder="Lastname" maxlength="31" style="height: 10px; max-width: 200px;"/>
+								<p id="field_LastN_Error" style="color: red;"></p>
+						</td>
+					</tr>
+							
+					<tr>	
+						<td>Role</td>
+						<td>
+						<select class="role" id="role" name="role" style="height: 33px; max-width: 200px;">
 								<option value="Select role">Select role</option>
 								<option value="ADMIN">ADMIN</option>
 								<option value="VIEWER">VIEWER</option>
-							</select> <span style="color: red; font-size: 12px;" id="roleError"></span>
-						</div>
-						
-						<input style="margin-left: 10%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
-						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
-					</div>
+						</select> <span style="color: red; font-size: 12px;" id="roleError"></span>
+						</td>
+					</tr>
+				</table>
 					
+				<div class="row" style="display: flex; justify-content: left; margin-bottom: 2%; margin-top: 1%;">
+					
+					<input style="margin-left: 10%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+					<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
+				</div>
+				
 				</form>
-			</div>
 			
 			<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
@@ -808,10 +840,12 @@ var tokenValue;
   				<button id="closePopup">OK</button>
 			  </div>
 
-			<h3 style="margin-top: 15px;">USER LIST</h3>
-			<hr>
-			<div class="container">
-				<table id="userListTable">
+</div>
+<div class="table-container">
+			<h3 style="margin-top: -25px;">USER LIST</h3>
+			
+			
+				<table id="userListTable" class="bordered-table" style="width: 100%; float: left;">
 					<thead>
 						<tr>
 							<th>User name</th>
@@ -826,8 +860,14 @@ var tokenValue;
 					</tbody>
 				</table>
 			</div>
+			
 		</section>
-	</div>
+	</div> 
+	
+	
+
+	
+	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
