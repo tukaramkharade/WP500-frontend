@@ -203,27 +203,31 @@ height: 10px;
 h3{
 margin-top: 68px;
 }
-
-table{
-margin-top: -30px;
-}
  
-  .form-container {
-    float: left;
+  .container {
+    margin: 0 auto;
     width: 50%;
   }
 
-  .table-container {
-    float: left;
+ .bordered-table {
+  border-collapse: collapse; /* Optional: To collapse table borders */
+  margin: 0 auto; /* Center the table horizontally */
+}
+
+.bordered-table td {
+  border: 1px solid #ccc; /* Light gray border */
+  text-align: center;
+   vertical-align: middle;
+}
+
+   .form-container {
+    margin: 0 auto;
     width: 50%;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+     border-radius: 5px;
+  padding: 20px;
   }
-
-  .bordered-table {
-    width: 100%;
-    margin: 10px;
-    border: 1px solid #ccc;
-  }
-
 </style>
 <script>
 
@@ -739,30 +743,25 @@ var tokenValue;
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>ADD USER</h3>
+			<hr />
 			
-
 			<div class="form-container">
 				<form id="userForm">
 				
 				<input type="hidden" id="action" name="action" value="">
 				
-				
-				
-				
-				<table class="bordered-table" style="margin-top: -1px; width: 50%">
+				<table class="bordered-table" style="margin-top: -1px;">
 					<tr>
 						<td>Username</td>
 						<td>
-						<input type="text" id="username" name="username" placeholder="Username" required maxlength="31" style="height: 10px; max-width: 200px;"/>
+						<input type="text" id="username" name="username" required maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<p id="field_User_Error" style="color: red;"></p>
 						</td>
-					</tr>
-				
-					<tr>
+					
 						<td>Password</td>
 						<td>
-						<input type="password" id="password" name="password" placeholder="Password" required maxlength="31" style="height: 10px; max-width: 200px;">
-								<p id="passwordError" style="color: red;"></p>
+						<input type="password" id="password" name="password" required maxlength="31" style="height: 10px; max-width: 200px;">
+								<span id="passwordError" style="color: red;"></span>
 								<p id="field_Pass_Error" style="color: red;"></p>
 						</td>
 					</tr>
@@ -770,16 +769,14 @@ var tokenValue;
 					<tr>			
 						<td>First name</td>
 						<td>
-						<input type="text" id="first_name" name="first_name" placeholder="Firstname" maxlength="31" style="height: 10px; max-width: 200px;"/>
+						<input type="text" id="first_name" name="first_name" maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<p id="field_FirstN_Error" style="color: red;"></p>
 						</td>
 						
-					</tr>
 						
-					<tr>		
 						<td>Last name</td>
 						<td>
-						<input type="text" id="last_name" name="last_name" placeholder="Lastname" maxlength="31" style="height: 10px; max-width: 200px;"/>
+						<input type="text" id="last_name" name="last_name"  maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<p id="field_LastN_Error" style="color: red;"></p>
 						</td>
 					</tr>
@@ -793,12 +790,14 @@ var tokenValue;
 								<option value="VIEWER">VIEWER</option>
 						</select> <span style="color: red; font-size: 12px;" id="roleError"></span>
 						</td>
+						<td></td>
+						<td></td>
 					</tr>
 				</table>
 					
-				<div class="row" style="display: flex; justify-content: left; margin-bottom: 2%; margin-top: 1%;">
+				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
 					
-					<input style="margin-left: 10%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+					<input style="height: 26px;" type="button" value="Clear" id="clearBtn"/> 
 					<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
 				</div>
 				
@@ -842,10 +841,10 @@ var tokenValue;
 
 </div>
 <div class="table-container">
-			<h3 style="margin-top: -25px;">USER LIST</h3>
+			<h3 style="margin-top: 15px;">USER LIST</h3>
 			
-			
-				<table id="userListTable" class="bordered-table" style="width: 100%; float: left;">
+			<hr />
+				<table id="userListTable" style="width: 100%; margin-top: 30px;">
 					<thead>
 						<tr>
 							<th>User name</th>
@@ -863,10 +862,6 @@ var tokenValue;
 			
 		</section>
 	</div> 
-	
-	
-
-	
 	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>

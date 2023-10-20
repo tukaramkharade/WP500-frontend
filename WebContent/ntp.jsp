@@ -362,6 +362,26 @@ h3{
 margin-top: 68px;
 }
 
+.bordered-table {
+  border-collapse: collapse; /* Optional: To collapse table borders */
+  margin: 0 auto; /* Center the table horizontally */
+}
+
+.bordered-table td {
+  border: 1px solid #ccc; /* Light gray border */
+  text-align: center;
+   vertical-align: middle;
+}
+
+   .form-container {
+    margin: 0 auto;
+    width: 50%;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+     border-radius: 5px;
+  padding: 20px;
+  }
+  
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -728,7 +748,7 @@ var tokenValue;
 		<section style="margin-left: 1em">
 			<h3>NTP SETTINGS</h3>
 			<hr>
-			<div class="container">
+			<div class="form-container">
 				<form id="updateNtp" method="post">
 
 					<div class="row">
@@ -751,48 +771,20 @@ var tokenValue;
 						</div>
 					</div>
 					<br />
-
-
-					<div class="row"
-					style="display: flex; flex-content: space-between;">
-						<div style="width: 22%; margin-top: 0;display:flex;">
-							<div>
-							<label>NTP Server 1</label>
-							</div>
-							<div>
-							<input type="text" id="ntp_server1" name="ntp_server1"
-								placeholder="NTP Server" maxlength="31"/>
-							</div>
-						</div>
 					
-						<div style="width: 21%; margin-top: 0;display:flex;">
-							<div>
-							<label>NTP Server 2</label>
-							</div>
-							<div>
-								<input type="text" id="ntp_server2" name="ntp_server2"
-								placeholder="NTP Server" maxlength="31"/>
-							</div>
-						</div>	
-					</div>					
-					<div class="row"
-					style="display: flex; flex-content: space-between;">
-						<div style="width: 22%; margin-top: 2px;display:flex;">
-							<div>
-								<label>NTP Server 3</label>
-							</div>
-							<div>	
-								<input type="text" id="ntp_server3" name="ntp_server3"
-								placeholder="NTP Server" maxlength="31"/>
-							</div>
-						</div>
-						
-						<div style="width: 22%; margin-top: 2px;display:flex; margin-left: 4px;">
-								<div>
-									<label>NTP Interval</label>
-								</div>
-								<div  style="width: %;">
-							<select class="ntp-interval-select" id="ntp_interval_1"
+					<table class="bordered-table" style="margin-top: -1px;">
+					<tr>
+					<td>NTP Server 1</td>
+					<td><input type="text" id="ntp_server1" name="ntp_server1" maxlength="31"/></td>
+					<td>NTP Server 2</td>
+					<td><input type="text" id="ntp_server2" name="ntp_server2" maxlength="31"/></td>
+					</tr>
+					
+					<tr>
+					<td>NTP Server 3</td>
+					<td><input type="text" id="ntp_server3" name="ntp_server3" maxlength="31"/></td>
+					<td>NTP Interval</td>
+					<td><select class="ntp-interval-select" id="ntp_interval_1"
 									name="ntp_interval_1" style="height: 35px;" required>
 										<option value="Select interval">Select interval</option>
 										<option value="5 sec">5 sec</option>
@@ -805,20 +797,16 @@ var tokenValue;
 										<option value="5 min">5 min</option>
 										<option value="10 min">10 min</option>							
 
-						</select> <span id="jsonIntervalError" style="color: red;"></span>
-					</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div
-							style="width: 40%; margin-top: 6px; justify-content: left; display: flex;">
+						</select> <span id="jsonIntervalError" style="color: red;"></span></td>
+					</tr>
+					
+				</table>
+				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
 							<input type="button" id="saveButton" onclick="editNtpData()"
 								value="Save"/>
 
 						</div>
-					</div>
-
+					
 					
 				</form>
 			</div>

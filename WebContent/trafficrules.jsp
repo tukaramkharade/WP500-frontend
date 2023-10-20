@@ -252,8 +252,6 @@ margin-top: 68px;
 .container {
     border-collapse: collapse;
    
-    
-    
   }
 
 table{
@@ -288,6 +286,21 @@ margin-top: 1px;
             padding: 20px;
             border: 1px solid #ccc;
         }
+        
+        .form-container {
+    margin: 0 auto;
+    width: 50%;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+     border-radius: 5px;
+  padding: 20px;
+  }
+  
+  
+  .form-container td{
+    border: 1px solid #ccc; /* Light gray border */
+  }
+  
   
   
 </style>
@@ -1132,8 +1145,8 @@ var tokenValue;
 		<h3>GENERAL SETTINGS</h3>
 		<hr>
 
-		<div class="container">
-			<form id="generalSettingsForm">
+		<div class="form-container">
+			<form id="generalSettingsForm" style="width: 100%;">
 			<input type="hidden" id="operation_action" name="operation_action" value="">
 
 				<table>
@@ -1144,9 +1157,7 @@ var tokenValue;
 							<option value="Accept">Accept</option>
 							<option value="Reject">Reject</option>
 						</select> <span id="inputError" style="color: red;"></span></td>
-				</tr>
 				
-				<tr>
 				<td>Output</td>
 				<td>
 				<select class="textBox" id="output" name="output" style="height: 33px; width: 120px;">
@@ -1162,9 +1173,7 @@ var tokenValue;
 							<option value="Accept">Accept</option>
 							<option value="Reject">Reject</option>
 						</select> <span id="forwardError" style="color: red;"></span></td>
-				</tr>
 				
-				<tr>
 				<td>Drop invalid packets</td>
 				<td><select class="textBox" id="rule_drop" name="rule_drop" style="height: 33px; width: 120px;">
 							<option value="On">On</option>
@@ -1175,12 +1184,10 @@ var tokenValue;
 
 
 				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 1%;">
+					style="display: flex; justify-content: center; margin-top: 1%;">
 					<input type="button" value="Apply" id="applyBtnGenSettings" /> 
-					<input type="submit" value="Add" id="registerBtnGenSettings"
-						style="margin-left: 5px;" /> 
-						<input type="button" value="Delete"
-						id="delBtnGenSettings" style="margin-left: 5px;" />
+					<input type="submit" value="Add" id="registerBtnGenSettings" style="margin-left: 5px;" /> 
+					<input type="button" value="Delete" id="delBtnGenSettings" style="margin-left: 5px;" />
 				</div>
 
 			</form>
@@ -1457,82 +1464,65 @@ var tokenValue;
     <div id="user-config" class="tab">
     <h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
     <hr/>
-        <div class="container">
+        <div class="form-container">
         <form id="trafficRulesForm">
 			<input type="hidden" id="operation_action" name="operation_action" value="">
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-					<div class="col-75-5" style="width: 15%;">
-						<input type="text" id="name" name="name" placeholder="Name" maxlength="31"/>
-						<p id="nameError" style="color: red;"></p>
-					</div>
-
-					<div class="col-75-4" style="width: 10%;">
-						
-						<select class="textBox" id="iface" name="iface"
-							style="height: 35px;">
+			
+			<table class="bordered-table" style="margin-top: -1px;">
+			
+			<tr>
+			<td>Name</td>
+			<td><input type="text" id="name" name="name" maxlength="31" style="height: 10px;"/>
+						<p id="nameError" style="color: red;"></p></td>
+			<td>Interface</td>
+			<td><select class="textBox" id="iface" name="iface"
+							style="height: 33px;">
 							<option value="Select interface">Select interface</option>	
 							<option value="lan0">lan0</option>
 							<option value="lan1">lan1</option>
 							<option value="lan2">lan2</option>
-
-						</select>
-
-					</div>
-
-					<div class="col-75-2" style="width: 10%;">
-						<select class="textBox" id="type" name="type"
-							style="height: 35px;">
+						</select></td>
+			</tr>
+			
+			<tr>
+			<td>Type</td>
+			<td><select class="textBox" id="type" name="type"
+							style="height: 33px;">
 							<option value="Select type">Select type</option>
 							<option value="IP">IP</option>
 							<option value="MAC">MAC</option>
-
-						</select>
-					</div>
-
-					<div class="col-75-1" style="width: 15%;">
-						<input type="text" id="macAddress" name="macAddress"
-							placeholder="Source MAC address" maxlength="31"/>
-							<p id="macAddrError" style="color: red;"></p>
-					</div>
-
-					<div class="col-75-2" style="width: 10%;">
-						<select class="textBox" id="protocol" name="protocol"
-							style="height: 35px;">
+						</select></td>
+			<td>Source MAC address</td>
+			<td><input type="text" id="macAddress" name="macAddress" maxlength="31" style="height: 10px;"/>
+							<p id="macAddrError" style="color: red;"></p></td>
+			</tr>
+			
+			<tr>
+			<td>Protocol</td>
+			<td><select class="textBox" id="protocol" name="protocol" style="height: 33px;">
 							<option value="Select protocol">Select protocol</option>
 							<option value="TCP" selected="selected">TCP</option>
 							<option value="UDP">UDP</option>
-
-						</select>
-					</div>
-					
-					<div class="col-75-3" style="width: 15%;">
-						<input type="text" id="ip_addr" name="ip_addr"
-							placeholder="Source IP address" maxlength="31"/>
-							<p id="sourceIpError" style="color: red;"></p>
-					</div>
-
-					<div class="col-75-1" style="width: 10%;">
-						<input type="text" id="portNumber" name="portNumber"
-							placeholder="Destination port" maxlength="6"/>
-							<p id="destPortError" style="color: red;"></p>
-					</div>
-					
-					<div class="col-75-2" style="width: 10%;">
-						<select class="textBox" id="action" name="action"
-							style="height: 35px;">
+						</select></td>
+			<td>Source IP address</td>
+			<td><input type="text" id="ip_addr" name="ip_addr" maxlength="31"/>
+							<p id="sourceIpError" style="color: red;"></p></td>
+			</tr>
+			
+			<tr>
+			<td>Port</td>
+			<td><input type="text" id="portNumber" name="portNumber" maxlength="6"/>
+							<p id="destPortError" style="color: red;"></p></td>
+			<td>Action</td>
+			<td><select class="textBox" id="action" name="action" style="height: 33px;">
 							<option value="ACCEPT">ACCEPT</option>
 							<option value="REJECT">REJECT</option>
-
-						</select>
-					</div>
-				</div>
-
+						</select></td>
+			</tr>
 				
-				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 2%;">
+				</table>
+				
+				<div class="row" style="display: flex; justify-content: center; margin-top: 1%;">
 					<input type="button" value="Apply" id="applyBtnRules" /> 
 					<input style="margin-left: 5px;" type="button" value="Clear" id="clearBtn" /> 
 					<input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
@@ -1563,7 +1553,7 @@ var tokenValue;
 			  
 			  <h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
 		<hr>
-		<div class="container">
+		<div class="table-container">
 			<table id="trafficRulesListTable" style="margin-left: -15px; width: 102.2%;">
 				<thead>
 					<tr>
