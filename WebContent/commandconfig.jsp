@@ -162,6 +162,26 @@ h3{
 margin-top: 68px;
 }
 
+.bordered-table {
+  border-collapse: collapse; /* Optional: To collapse table borders */
+  margin: 0 auto; /* Center the table horizontally */
+}
+
+.bordered-table td {
+  border: 1px solid #ccc; /* Light gray border */
+  text-align: center;
+   vertical-align: middle;
+}
+
+   .form-container {
+    margin: 0 auto;
+    width: 50%;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+     border-radius: 5px;
+  padding: 20px;
+  }
+
 </style>
 <script>
 
@@ -745,11 +765,11 @@ var json = {};
 		<section style="margin-left: 1em">
 		<h3>COMMAND CONFIG SETTINGS</h3>
 		<hr>
-		<div class="container">
+		<div class="form-container">
 			<form id="commandConfigForm">
 			
 			<input type="hidden" id="action" name="action" value="">
-				<div class="row"
+				<!-- <div class="row"
 					style="display: flex; flex-content: space-between; margin-top: -20px;">
 					<div class="col-75-1" style="width: 15%;">
 						<input type="text" id="unit_id" name="unit_id"
@@ -824,7 +844,82 @@ var json = {};
 						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
 						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" onClick="window.location.reload();" />
 				</div>
-
+ -->
+ 
+ 
+ <table class="bordered-table" style="margin-top: -1px;">
+			
+			<tr>
+			<td>Unit ID</td>
+			<td><input type="text" id="unit_id" name="unit_id" required style="height: 10px" maxlength="31"/>
+							<p id="unitid_error" style="color: red;"></p></td>
+			<td>Asset ID</td>
+			<td><input type="text" id="asset_id" name="asset_id" required style="height: 10px" maxlength="31"/>
+							<p id="assetid_error" style="color: red;"></p></td>
+			</tr>
+			
+			<tr>
+			<td>Broker type</td>
+			<td><select class="textBox" id="broker_type" name="broker_type" style="height: 33px">
+							<option value="Select broker type">Select broker type</option>
+							<option value="mqtt">mqtt</option>
+							<option value="iothub">iothub</option>
+						</select> 
+						<span id="brokerTypeError" style="color: red;"></span></td>
+			<td>Broker IP address</td>
+			<td><select class="textBox" id="broker_name" name="broker_name"
+							style="height: 33px">
+							<option value="Select broker IP address">Select broker
+								IP address</option>
+						</select> <span id="brokerIPAddressError" style="color: red;"></span></td>
+			</tr>
+			
+			<tr>
+			<td>Interval</td>
+			<td colspan="3"><select class="interval-select" id="interval" name="interval"
+							style="height: 35px">
+							<option value="Select interval">Select interval</option>
+							<option value="5 sec">5 sec</option>
+							<option value="10 sec">10 sec</option>
+							<option value="15 sec">15 sec</option>
+							<option value="20 sec">20 sec</option>
+							<option value="25 sec">25 sec</option>
+							<option value="30 sec">30 sec</option>
+							<option value="1 min">1 min</option>
+							<option value="5 min">5 min</option>
+							<option value="10 min">10 min</option>
+							<option value="15 min">15 min</option>
+							<option value="20 min">20 min</option>
+							<option value="25 min">25 min</option>
+							<option value="30 min">30 min</option>
+							<option value="1 hour">1 hour</option>
+						</select> <span id="intervalError" style="color: red;"></span></td>
+			
+			
+			</tr>
+			
+			<tr>
+			<td>Tag name</td>
+			<td><input type="text" id="tag_name" name="tag_name" style="height: 10px" maxlength="31"/> 
+					<span id="tagnameError" style="color: red;"></span>
+					<p id="tagname_error" style="color: red;"></p></td>
+			<td>Variable</td>
+			<td><select class="textBox" id="variable" name="variable" style="height: 33px">
+							<option value="Select variable">Select variable</option>
+						</select> <span id="variableError" style="color: red;"></span></td>
+			</tr>
+				
+				</table>
+				
+				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
+					
+					<input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" />
+					
+					<input style="margin-left: 24%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
+						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" onClick="window.location.reload();" />
+						
+					</div>
 			</form>
 		</div>
 		

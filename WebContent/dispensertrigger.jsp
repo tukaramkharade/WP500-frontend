@@ -200,6 +200,22 @@ h3{
 margin-top: 68px;
 }
 
+.container {
+    margin: 0 auto;
+    width: 80%;
+  }
+
+ .bordered-table {
+  border-collapse: collapse; /* Optional: To collapse table borders */
+  margin: 0 auto; /* Center the table horizontally */
+}
+
+.bordered-table td {
+  border: 1px solid #ccc; /* Light gray border */
+  text-align: center;
+   vertical-align: middle;
+}
+
 </style>
 
 <script>
@@ -1163,132 +1179,94 @@ var tokenValue;
 		<div class="container">
 			<form id="dispensortriggerform">
 			<input type="hidden" id="action" name="action" value="">
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: -20px;">
-					<div class="col-75-1" style="width: 15%;">
-						<input type="text" id="station_name" name="station_name"
-							placeholder="Station Name" required style="height: 17px" maxlength="31"/>
+			
+			<table class="bordered-table" style="margin-top: -1px;">
+			
+			<tr>
+			<td>Station name</td>
+			<td><input type="text" id="station_name" name="station_name" required style="height: 10px;" maxlength="31"/>
 							<p id="station_name_error" style="color: red;"></p>
-					</div>
-					
-					<div class="col-75-2" style="width: 15%;">
-						<input type="text" id="serial_number" name="serial_number"
-							placeholder="Serial Number" required style="height: 17px" maxlength="31"/> 
+			</td>
+			<td>Serial number</td>
+			<td><input type="text" id="serial_number" name="serial_number" required style="height: 10px" maxlength="31"/> 
 							<p id="serial_number_error" style="color: red;"></p>
-					</div>
-					
-					<div class="col-75-14" style="width: 15%;">
-						<input type="text" id="unit_id" name="unit_id"
-							placeholder="Unit ID" required maxlength="31"/>
+			</td>
+			
+			<td>Unit ID</td>
+			<td><input type="text" id="unit_id" name="unit_id" required maxlength="31" style="height: 10px;"/>
 							<p id="unitid_error" style="color: red;"></p>
-					</div>
-
-					 <div class="col-75-3" style="width: 7%;">
-						<select class="textBox" id="side" name="side" style="height: 35px"
+			</td>
+			<td>Side</td>
+			<td><select class="textBox" id="side" name="side" style="height: 33px"
 							required>
 							<option value="Select side">Select side</option>
 							<option value="a">A</option>
 							<option value="b">B</option>
 							<option value="c">C</option>
 							<option value="d">D</option>
-						</select> <span id="sideError" style="color: red"></span>
-					</div> 
-					
-					<div class="col-75-4" style="width: 13%;">
-							
-						<select class="textBox" id=trigger_tag name="trigger_tag"
-							style="height: 35px;">
+						</select> <span id="sideError" style="color: red"></span></td>
+			
+			<td>Trigger tag</td>
+			<td><select class="textBox" id=trigger_tag name="trigger_tag" style="height: 33px;">
 							<option value="Select trigger tag">Select trigger tag</option>
-						</select> <span id="triggerTagError" style="color: red"></span>
+						</select> <span id="triggerTagError" style="color: red"></span></td>
 						
-					</div>
-
-					<div class="col-75-5" style="width: 13%;">
-						<select class="textBox" id="trigger_value" name="trigger_value"
-							style="height: 35px" required>
-							<option value="Select trigger value">Select Trigger
-								Value</option>
+						</tr>
+						<tr>
+			<td>Trigger value</td>
+			<td><select class="textBox" id="trigger_value" name="trigger_value" style="height: 33px" required>
+							<option value="Select trigger value">Select trigger value</option>
 							<option value="0">0</option>
 							<option value="1">1</option>
-
-						</select> <span id="triggerValueError" style="color: red"></span>
-					</div>
-					
-					<div class="col-75-1" style="width: 13%;">
-						<select class="textBox" id="start_pressure" name="start_pressure"
-							style="height: 35px;">
-							<option value="Select start pressure">Select start
-								pressure</option>
-						</select> <span id="startPressureError" style="color: red"></span>
-					</div>
-				</div>
-
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-					<div class="col-75-2" style="width: 13%;">
-						<select class="textBox" id="end_pressure" name="end_pressure"
-							style="height: 35px;">
+						</select> <span id="triggerValueError" style="color: red"></span></td>
+			
+			<td>Start pressure</td>
+			<td><select class="textBox" id="start_pressure" name="start_pressure" style="height: 33px;">
+							<option value="Select start pressure">Select start pressure</option>
+						</select> <span id="startPressureError" style="color: red"></span></td>
+			<td>End pressure</td>
+			<td><select class="textBox" id="end_pressure" name="end_pressure" style="height: 33px;">
 							<option value="Select end pressure">Select end pressure</option>
-						</select> <span id="endPressureError" style="color: red"></span>
-					</div>
-
-
-					<div class="col-75-3" style="width: 13%;">
-						<select class="textBox" id="temperature" name="temperature"
-							style="height: 35px;">
+						</select> <span id="endPressureError" style="color: red"></span></td>
+			
+			<td>temperature</td>
+			<td><select class="textBox" id="temperature" name="temperature" style="height: 33px;">
 							<option value="Select temperature">Select temperature</option>
-						</select> <span id="temperatureError" style="color: red"></span>
-					</div>
-
-
-					<div class="col-75-4" style="width: 13%;">
-						<select class="textBox" id="total" name="total"
-							style="height: 35px;">
+						</select> <span id="temperatureError" style="color: red"></span></td>
+			<td>total</td>
+			<td><select class="textBox" id="total" name="total" style="height: 33px;">
 							<option value="Select total">Select total</option>
-						</select> <span id="totalError" style="color: red"></span>
-					</div>
-
-					<div class="col-75-5" style="width: 13%;">
-						<select class="textBox" id="quantity" name="quantity"
-							style="height: 35px;">
+						</select> <span id="totalError" style="color: red"></span></td>
+						</tr>
+						<tr>
+			
+			<td>Quantity</td>
+			<td><select class="textBox" id="quantity" name="quantity" style="height: 33px;">
 							<option value="Select quantity">Select quantity</option>
-						</select> <span id="quantityError" style="color: red"></span>
-					</div>
-					
-					<div class="col-75-6" style="width: 13%;">
-						<select class="textBox" id="unit_price" name="unit_price"
-							style="height: 35px;">
+						</select> <span id="quantityError" style="color: red"></span></td>
+			<td>Unit price</td>
+			<td><select class="textBox" id="unit_price" name="unit_price" style="height: 33px;">
 							<option value="Select unit price">Select unit price</option>
-						</select> <span id="unitPriceError" style="color: red"></span>
-					</div>
-
-					<div class="col-75-3" style="width: 13%;">
-						<select class="textBox" id="status" name="status"
-							style="height: 35px" required>
+						</select> <span id="unitPriceError" style="color: red"></span></td>
+			
+			<td>Status</td>
+			<td><select class="textBox" id="status" name="status" style="height: 33px" required>
 							<option value="Select status">Select status</option>
 							<option value="Enable">Enable</option>
 							<option value="Disable">Disable</option>
-						</select> <span id="statusError" style="color: red"></span>
-					</div>
-
-					<div class="col-75-4" style="width: 13%;">
-						<select class="textBox" id="broker_name" name="broker_name"
-							style="height: 35px;">
-							<option value="Select broker IP address">Select broker
-								IP address</option>
-						</select> <span id="brokerIPAddressError" style="color: red;"></span>
-					</div>
-					</div>
-				
-
-				<div class="row"
-					style="display: flex; justify-content: right; margin-top: -2%;">
-					<input type="button" value="Clear" id="clearBtn" /> <input
-						style="margin-left: 5px;" type="submit" value="Add"
-						id="registerBtn" />
-				</div>
-
+						</select> <span id="statusError" style="color: red"></span></td>
+			<td>Broker IP address</td>
+			<td colspan="3"><select class="textBox" id="broker_name" name="broker_name" style="height: 33px;">
+							<option value="Select broker IP address">Select broker IP address</option>
+						</select> <span id="brokerIPAddressError" style="color: red;"></span></td>
+			</tr>
+			
+			</table>
+			
+			<div class="row" style="display: flex; justify-content: center; margin-top: 1%;">
+					<input type="button" value="Clear" id="clearBtn" /> 
+					<input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
+			</div>
 			</form>
 		</div>
 		
@@ -1323,7 +1301,7 @@ var tokenValue;
 		<h3 style="margin-top: 15px;">DISPENSER TRIGGER LIST</h3>
 		<hr />
 
-		<div class="container">
+		<div class="class="table-container"">
 			<table id="dispenserTriggerListTable">
 				<thead>
 					<tr>

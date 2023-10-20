@@ -203,6 +203,21 @@ h3{
 margin-top: 68px;
 }
 
+.container {
+    margin: 0 auto;
+    width: 80%;
+  }
+
+ .bordered-table {
+  border-collapse: collapse; /* Optional: To collapse table borders */
+  margin: 0 auto; /* Center the table horizontally */
+}
+
+.bordered-table td {
+  border: 1px solid #ccc; /* Light gray border */
+}
+
+
 </style>
 <script>
 
@@ -901,18 +916,15 @@ var tokenValue;
 		<div class="container">
 			<form id="jsonBuilderForm">
 				<input type="hidden" id="action" name="action" value="">
-				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: -20px;">
-					<div class="col-75-1" style="width: 15%;">
-						<input type="text" id="json_string_name" name="json_string_name"
-							placeholder="JSON string name" required style="height: 17px;"
-							maxlength="31" />
-						<p id="json_string_name_error" style="color: red;"></p>
-
-					</div>
-
-					<div class="col-75-2" style="width: 10%;">
-						<select class="json-interval-select" id="json_interval"
+				
+				<table class="bordered-table" style="margin-top: -1px;">
+				
+				<tr>
+				<td>JSON string name</td>
+				<td><input type="text" id="json_string_name" name="json_string_name" required style="height: 17px;" maxlength="31" />
+						<p id="json_string_name_error" style="color: red;"></p></td>
+				<td>Interval</td>
+				<td><select class="json-interval-select" id="json_interval"
 							name="json_interval" style="height: 35px;" required>
 							<option value="Select interval">Select interval</option>
 							<option value="30 sec">30 sec</option>
@@ -925,88 +937,70 @@ var tokenValue;
 							<option value="30 min">30 min</option>
 							<option value="1 hour">1 hour</option>
 
-						</select> <span id="jsonIntervalError" style="color: red;"></span>
-					</div>
-
-					<div class="col-75-3" style="width: 15%;">
-						<select class="textBox" id="broker_type" name="broker_type"
+						</select> <span id="jsonIntervalError" style="color: red;"></span></td>
+				
+				<td>Broker type</td>
+				<td><select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px;" required>
 							<option value="Select broker type">Select broker type</option>
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
-						</select> <span id="brokerTypeError" style="color: red;"></span>
-					</div>
-
-					<div class="col-75-4" style="width: 15%;">
-						<select class="textBox" id="broker_name" name="broker_name"
+						</select> <span id="brokerTypeError" style="color: red;"></span></td>
+				<td>Broker IP address</td>
+				<td><select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;" required>
-							<option value="Select Broker IP Address">Select broker
+							<option value="Select Broker IP address">Select broker
 								IP address</option>
-						</select> <span id="brokerIPAddressError" style="color: red;"></span>
-					</div>
-
-					<div class="col-75-5" style="width: 15%;">
-						<input type="text" id="publish_topic" name="publish_topic"
-							placeholder="Publish topic" style="height: 17px;"
-							maxlength="31">
-						<p id="publish_topic_error" style="color: red;"></p>
-					</div>
+						</select> <span id="brokerIPAddressError" style="color: red;"></span></td>
+				</tr>
 				
-					<div class="col-75-6" style="width: 10%;">
-						<select class="textBox" id="publishing_status"
+					<tr>
+					<td>Publish topic</td>
+					<td><input type="text" id="publish_topic" name="publish_topic" style="height: 17px;" maxlength="31">
+						<p id="publish_topic_error" style="color: red;"></p></td>
+					<td>Publishing status</td>
+					<td><select class="textBox" id="publishing_status"
 							name="publishing_status" style="height: 35px;" required>
-							<option value="Select publishing status">Select
-								publishing status</option>
+							<option value="Select publishing status">Select publishing status</option>
 							<option value="Enable" selected>Enable</option>
 							<option value="Disable">Disable</option>
-						</select> <span id="publishingStatusError" style="color: red;"></span>
-					</div>
-
-					<div class="col-75-7" style="width: 12%;">
-						<select class="textBox" id="storeAndForward"
+						</select> <span id="publishingStatusError" style="color: red;"></span></td>
+					
+				<td>Store and forward</td>
+				<td colspan="3"><select class="textBox" id="storeAndForward"
 							name="storeAndForward" style="height: 35px;" required>
-							<option value="Select store and forward">Select store
-								and forward</option>
+							<option value="Select store and forward">Select store and forward</option>
 							<option value="Enable">Enable</option>
 							<option value="Disable">Disable</option>
-						</select> <span id="storeAndForwardError" style="color: red;"></span>
-					</div>
-
-				</div>
-
-				<div class="row">
-
-					<div class="col-75-8" style="margin-top: 10px; width: 100%">
-
-						<textarea id="json_string_text" name="json_string_text" rows="10"
-							cols="100" required>{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}</textarea>
-
-					</div>
-				</div>
-
-
-				<div class="row">
-					<input style="margin-top: 1%;" type="button" value="Validate"
-						id="validateBtn" />
-				</div>
-
-				<div class="row">
-
-					<div class="col-75-9" style="margin-top: 10px; width: 100%">
-
-						<textarea id="json_string_validate" name="json_string_validate"
+						</select> <span id="storeAndForwardError" style="color: red;"></span></td>
+				</tr>
+							
+				<tr>
+				<td>JSON String</td>
+				<td colspan="7">
+					<textarea id="json_string_text" name="json_string_text" rows="10"
+							cols="100" required>{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}</textarea></td>
+				</tr>
+		
+				<tr>
+				
+				<td colspan="8"  style="text-align: center;"><input style="margin-top: 1%;" type="button" value="Validate"
+						id="validateBtn" /></td>			
+				</tr>
+				
+				<tr>
+				<td>JSON string validate</td>
+				<td colspan="7"><textarea id="json_string_validate" name="json_string_validate"
 							rows="10" cols="100" placeholder="Validate String" disabled></textarea>
-
-					</div>
+				</td>
+				</tr>
+				
+				</table>
+				
+				<div class="row" style="display: flex; justify-content: center; margin-top: 2%;">
+					<input type="button" value="Clear" id="clearBtn" />
+					 <input style="margin-left: 5px;" type="submit" value="Add" id="registerBtn" />
 				</div>
-
-				<div class="row"
-					style="display: flex; justify-content: right; margin-top: 2%;">
-					<input type="button" value="Clear" id="clearBtn" /> <input
-						style="margin-left: 5px;" type="submit" value="Add"
-						id="registerBtn" />
-				</div>
-
 			</form>
 		</div>
 		
@@ -1040,7 +1034,7 @@ var tokenValue;
 
 		<h3 style="margin-top: 15px;">JSON STRING LIST</h3>
 		<hr>
-		<div class="container">
+		<div class="table-container">
 			<table id="jsonBuilderListTable">
 				<thead>
 					<tr>

@@ -160,16 +160,26 @@ button {
 .note {
     color: red;
     margin-top: 5%; 
-   
 }
-
 
 h3{
 margin-top: 70px;
 }
 
+.container {
+    margin: 0 auto;
+    width: 80%;
+  }
 
-  
+ .bordered-table {
+  border-collapse: collapse; /* Optional: To collapse table borders */
+  margin: 0 auto; /* Center the table horizontally */
+}
+
+.bordered-table td {
+  border: 1px solid #ccc; /* Light gray border */
+}
+
 </style>
 
 <script>
@@ -877,95 +887,71 @@ margin-top: 70px;
 				<form id="mqttForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					<table class="bordered-table" style="margin-top: -1px;">
 
-					<div class="row" style="display: flex; flex-content: space-between; margin-top: -20px;">
-
-						<div class="col-75-1" style="width: 15%; height: 20%">
-							<input type="text" id="broker_ip_address" maxlength="31" name="broker_ip_address"
-								placeholder="Hostname" required />
+					<tr>
+					<td>Broker IP address</td>
+					<td><input type="text" id="broker_ip_address" maxlength="31" name="broker_ip_address" required />
 							<p id="broker_ip_error" style="color: red;"></p>
-
-						</div>
-
-						<div class="col-75-2" style="width: 10%;">
-							<input type="text" id="port_number" name="port_number" maxlength="6"
-								placeholder="Port number" required /> <span style="color: red; font-size: 12px;"
+					</td>
+					
+					<td>Port</td>
+					<td><input type="text" id="port_number" name="port_number" maxlength="6" required /> <span style="color: red; font-size: 12px;"
 								id="portNoError"></span>
-							<p id="port_number_error" style="color: red;"></p>
-
-						</div>
-
-						<div class="col-75-3" style="width: 15%; height: 20%">
-							<input type="text" id="username" name="username" placeholder="Username" maxlength="31"
-								 />
-							<p id="username_error" style="color: red;"></p>
-
-						</div>
-
-						<div class="col-75-4" style="width: 15%; height: 20%">
-							<input type="password" id="password" name="password" placeholder="Password" maxlength="31"
-								 />
-							<p id="password_error" style="color: red;"></p>
-
-						</div>
-
-						<div class="col-75-5" style="width: 15%; height: 20%">
-							<input type="text" id="pub_topic" name="pub_topic" placeholder="Published topic"
-								maxlength="30" required />
-							<p id="pub_topic_error" style="color: red;"></p>
-						</div>
-						
-						<div class="col-75-10" style="width: 10%;">
-							<select class="textBox" id="enable" name="enable" style="height: 35px;">
+							<p id="port_number_error" style="color: red;"></p></td>
+					
+					<td>Username</td>
+					<td><input type="text" id="username" name="username" maxlength="31"/>
+							<p id="username_error" style="color: red;"></p></td>
+					<td>Password</td>
+					<td><input type="password" id="password" name="password" maxlength="31"/>
+							<p id="password_error" style="color: red;"></p></td>
+					
+					<td>Published topic</td>
+					<td><input type="text" id="pub_topic" name="pub_topic" maxlength="30" required />
+							<p id="pub_topic_error" style="color: red;"></p></td>
+							</tr>
+							<tr>
+					<td>Status</td>
+					<td><select class="textBox" id="enable" name="enable" style="height: 35px;">
 								<option value="Select status">Select status</option>
 								<option value="True">True</option>
 								<option value="False">False</option>
-
 							</select>
-							<span id="statusError" style="color: red;"></span>
-						</div>
-						
-						<div class="col-75-8" style="width: 10%;">
-
-							<select class="textBox" id="file_type" name="file_type" style="height: 35px;">
+							<span id="statusError" style="color: red;"></span></td>
+					
+					<td>Type</td>
+					<td><select class="textBox" id="file_type" name="file_type" style="height: 35px;">
 								<option value="Select type">Select type</option>
 								<option>SSL</option>
 								<option>TCP</option>
-
-							</select> <span id="fileTypeError" style="color: red;"></span>
-						</div>
-
-						<div class="col-75-9" style="width: 10%;">
-
-							<select class="textBox" id="file_name" name="file_name" style="height: 35px;">
+							</select> <span id="fileTypeError" style="color: red;"></span></td>
+					<td>CRT file</td>
+					<td><select class="textBox" id="file_name" name="file_name" style="height: 35px;">
 								<option value="Select crt file">Select crt file</option>
 
-							</select> <span id="crtFileError" style="color: red;"></span>
-
-						</div>
-					</div>
-
-
-					<div class="row" style="display: flex; flex-content: space-between; margin-top: 10px;">
-
-						<div class="col-75-6" style="width: 15%;">
-							<input type="text" id="sub_topic" name="sub_topic" placeholder="Subscribed topic"
-								maxlength="31" required />
-							<p id="sub_topic_error" style="color: red;"></p>
-
-						</div>
-
-						<div class="col-75-7" style="width: 10%;">
-							<input type="text" id="prefix" name="prefix" maxlength="31" placeholder="Prefix" required />
+							</select> <span id="crtFileError" style="color: red;"></span></td>
+					
+					<td>Subscribed topic</td>
+					<td><input type="text" id="sub_topic" name="sub_topic" maxlength="31" required />
+							<p id="sub_topic_error" style="color: red;"></p></td>
+					<td>Prefix</td>
+					<td><input type="text" id="prefix" name="prefix" maxlength="31" required />
 							<p id="prefix_error" style="color: red;"></p>
-
-						</div>
-						
-						<div class="col-75-8" style="width: 20%;">
-							<input type="text" id="publishing_format" name="publishing_format" maxlength="31" placeholder="Publishing format" required />
-						</div>
-						
-						<input style="margin-left: 10%; height: 26px;" type="button" value="Clear" id="clearBtn" /> 
+					</td>
+					</tr>
+					
+					<!-- <tr>
+					<td>Publishing format</td>
+					<td><input type="text" id="publishing_format" name="publishing_format" maxlength="31" placeholder="Publishing format" required /></td>
+					<td></td>
+					<td></td>
+					</tr> -->
+								
+					</table>
+					
+					<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">			
+						<input style="height: 26px;" type="button" value="Clear" id="clearBtn" /> 
 						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
 
 					</div>
@@ -1017,7 +1003,7 @@ margin-top: 70px;
 
 			<h3 style="margin-top: 15px;">MQTT SERVER LIST</h3>
 			<hr>
-			<div class="container">
+			<div class="table-container">
 				<table id="mqttListTable">
 					<thead>
 						<tr>
