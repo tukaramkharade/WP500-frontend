@@ -353,7 +353,7 @@ margin-top: 70px;
 
 		$('#prefix').val(mqttId);
 		$("#prefix").prop("disabled", true);
-		$('#registerBtn').val('Edit');
+		$('#registerBtn').val('Update');
 	}
 
 	function setBrokerIPAddress(mqttId) {
@@ -552,7 +552,7 @@ margin-top: 70px;
 	  cancelButton.onclick = function () {
 	    // Close the modal
 	    modal.style.display = 'none';
-	    $('#registerBtn').val('Edit');
+	    $('#registerBtn').val('Update');
 	  };	
 	 
  }
@@ -913,7 +913,7 @@ margin-top: 70px;
 							</tr>
 							<tr>
 					<td>Status</td>
-					<td><select class="textBox" id="enable" name="enable" style="height: 35px;">
+					<td><select class="textBox" id="enable" name="enable" style="height: 33px;">
 								<option value="Select status">Select status</option>
 								<option value="True">True</option>
 								<option value="False">False</option>
@@ -921,13 +921,13 @@ margin-top: 70px;
 							<span id="statusError" style="color: red;"></span></td>
 					
 					<td>Type</td>
-					<td><select class="textBox" id="file_type" name="file_type" style="height: 35px;">
+					<td><select class="textBox" id="file_type" name="file_type" style="height: 33px;">
 								<option value="Select type">Select type</option>
 								<option>SSL</option>
 								<option>TCP</option>
 							</select> <span id="fileTypeError" style="color: red;"></span></td>
 					<td>CRT file</td>
-					<td><select class="textBox" id="file_name" name="file_name" style="height: 35px;">
+					<td><select class="textBox" id="file_name" name="file_name" style="height: 33px;">
 								<option value="Select crt file">Select crt file</option>
 
 							</select> <span id="crtFileError" style="color: red;"></span></td>

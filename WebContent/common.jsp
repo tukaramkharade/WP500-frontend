@@ -134,6 +134,10 @@
                   <a href="storeforward.jsp">Store and Forward</a>
                 </li>
                 
+                <li class="nav-item">
+                <a href="opcuaClient.jsp">OPCUA Client</a>
+              </li>
+                
               </ul>
             </div>
           </li>

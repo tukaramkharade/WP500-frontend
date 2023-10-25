@@ -209,7 +209,7 @@ function getActiveThreats() {
 						
 						var actions = $('<td>')
 						var ackButton = $(
-										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Acknowledge" style="color: #35449a;">')
 										.html('<i class="fas fa-check"></i>')
 										.click(
 												function() {

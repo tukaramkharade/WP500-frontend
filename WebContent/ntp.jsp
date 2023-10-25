@@ -369,8 +369,7 @@ margin-top: 68px;
 
 .bordered-table td {
   border: 1px solid #ccc; /* Light gray border */
-  text-align: center;
-   vertical-align: middle;
+ 
 }
 
    .form-container {
@@ -751,28 +750,18 @@ var tokenValue;
 			<div class="form-container">
 				<form id="updateNtp" method="post">
 
-					<div class="row">
-						<div
-							style="width: 40%; margin-top: 6px; display: flex; justify-content: left;">
-							<label for="enableToggle">Enable NTP Client</label>
-
-							<div style="width: 20%;">
-								<label class="switch"> <input type="checkbox"
+					
+					<table class="bordered-table" style="margin-top: -1px;">
+					<tr>
+					<td>Enable NTP Client</td>
+					<td><label class="switch"> <input type="checkbox"
 									id="ntp_client" name="ntp_client"
 									onchange="toggleDateTimeInput()" value="1" checked> <span
 									class="slider round"></span>
-								</label>
-
-							</div>
-							<div class="row">
-								<input style="margin-left: 95%;" type="submit" value="Add"
-								id="updatentp" />
-							</div>
-						</div>
-					</div>
-					<br />
-					
-					<table class="bordered-table" style="margin-top: -1px;">
+								</label></td>
+					<td><input type="submit" value="Add"
+								id="updatentp" /></td>
+					</tr>
 					<tr>
 					<td>NTP Server 1</td>
 					<td><input type="text" id="ntp_server1" name="ntp_server1" maxlength="31"/></td>
@@ -845,7 +834,7 @@ var tokenValue;
 	
 	 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit thisNTP?</p>
+				  <p>Are you sure you want to edit this NTP?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
