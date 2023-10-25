@@ -273,7 +273,7 @@ var tokenValue;
 						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
-								if (user.username !== 'tasm2m_admin') {
+								if (user.username !== 'wp500') {
 											var row = $('<tr>').addClass('userTableRow');
 												
 												row.append($('<td>').text(user.username));
@@ -321,7 +321,7 @@ var tokenValue;
 							
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
-								if (user.username !== 'tasm2m_admin') {
+								if (user.username !== 'wp500') {
 												var row = $('<tr>').addClass('userTableRow');
 												
 												row.append($('<td>').text(user.username));
@@ -349,7 +349,7 @@ var tokenValue;
 		$("#first_name").prop("disabled", true);
 		$("#last_name").prop("disabled", true);
 		$("#role").prop("disabled", true);
-		$('#registerBtn').val('Edit Password');
+		$('#registerBtn').val('Update Password');
 	}
 
 	function settUser(userId) {
@@ -358,7 +358,7 @@ var tokenValue;
 		$("#password").prop("disabled", true);
 		$('#username').val(userId);
 		$("#username").prop("disabled", true);
-		$('#registerBtn').val('Edit');
+		$('#registerBtn').val('Update');
 
 	}
 
@@ -566,7 +566,7 @@ var tokenValue;
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
-		    $('#registerBtn').val('Edit');
+		    $('#registerBtn').val('Update');
 		  };		
 	} 
 	 
@@ -618,7 +618,7 @@ var tokenValue;
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
-		    $('#registerBtn').val('Edit Password');
+		    $('#registerBtn').val('Update Password');
 		  };
 		  
 	 }
@@ -709,9 +709,9 @@ var tokenValue;
 							
 			if (buttonText == 'Add') {
 				addUser();
-			} else if(buttonText == 'Edit'){
+			} else if(buttonText == 'Update'){
 				editUser();
-			}else if(buttonText == 'Edit Password'){
+			}else if(buttonText == 'Update Password'){
 				editPassword();
 			}
 		});

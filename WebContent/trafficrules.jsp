@@ -289,7 +289,7 @@ margin-top: 1px;
         
         .form-container {
     margin: 0 auto;
-    width: 50%;
+    width: 80%;
     border-collapse: collapse;
     background-color: #f2f2f2;
      border-radius: 5px;
@@ -310,8 +310,7 @@ var roleValue;
 var tokenValue;
 
 	function loadTrafficRulesList() {
-		$
-				.ajax({
+		$.ajax({
 					url : "trafficRulesServlet",
 					type : "GET",
 					dataType : "json",
@@ -599,7 +598,7 @@ var tokenValue;
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
-		    $('#registerBtn').val('Edit');
+		    $('#registerBtn').val('Update');
 		  };
 	}
 	
@@ -608,7 +607,7 @@ var tokenValue;
 
 		$('#name').val(trafficRulesId);
 		$("#name").prop("disabled", true);
-		$('#registerBtn').val('Edit');
+		$('#registerBtn').val('Update');
 
 	}
 
@@ -673,7 +672,7 @@ var tokenValue;
 				$('#rule_drop').val(data.rule_drop);
 
 				if ($('#input').val(data.input) != null) {
-					$('#registerBtnGenSettings').val('Edit');
+					$('#registerBtnGenSettings').val('Update');
 				} else {
 					$('#registerBtnGenSettings').val('Add');
 				}
@@ -775,14 +774,14 @@ var tokenValue;
 						console.log('Error editing general setting: ' + error);
 					}
 				});
-				$('#registerBtnGenSettings').val('Edit');		
+				$('#registerBtnGenSettings').val('Update');		
 		  };
 		  
 		  var cancelButton = document.getElementById('cancel-button-edit-gen');
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
-		    $('#registerBtnGenSettings').val('Edit');
+		    $('#registerBtnGenSettings').val('Update');
 		  };
 	}
  
@@ -835,7 +834,7 @@ var tokenValue;
 	  cancelButton.onclick = function () {
 	    // Close the modal
 	    modal.style.display = 'none';
-	    $('#registerBtnGenSettings').val('Edit');
+	    $('#registerBtnGenSettings').val('Update');
 	  };
  }
 	
@@ -881,6 +880,69 @@ var tokenValue;
 
 	}
 
+	function getBasicConfiguration(){
+		
+		$.ajax({
+			url : "BasicConfigurationServlet",
+			type : "GET",
+			dataType : "json",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
+		    success : function(data) {
+				// Clear existing table rows
+
+				var basicConfigTable = $("#basic-config-table tbody");
+				basicConfigTable.empty();
+
+				var json1 = JSON.stringify(data);
+
+				var json = JSON.parse(json1);
+
+				handleStatus(json.status);
+
+					$.each(data,function(index, basicConfig) {
+									var row = $("<tr>");
+									row.append($("<td>").text(basicConfig.id));
+									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.direction).prop("disabled", true)));
+									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.lan_type).prop("disabled", true)));
+									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.protocol).prop("disabled", true)));
+									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.to_port).prop("disabled", true)));
+									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.comment).prop("disabled", true)));
+									
+									// Assuming you have a table row (row) and a variable basicConfig with a property: action
+									var actionOptions = ["ACCEPT", "REJECT", "DROP", "CONTINUE"];
+									var select = $("<select>");
+
+									// Loop through the options and create <option> elements
+									for (var i = 0; i < actionOptions.length; i++) {
+									    var option = $("<option>").text(actionOptions[i]);
+									    select.append(option);
+									}
+
+									// Set the selected option based on the value of basicConfig.action
+									select.val(basicConfig.action);
+
+									// Create the <td> element and append the <select> element
+									var td = $("<td>").append(select);
+									row.append(td);
+
+
+
+									basicConfigTable.append(row);
+								});
+				
+			},
+			error : function(xhr, status, error) {
+				console.log("Error loading basic configuration data: "+ error);
+			},
+		    
+		    
+		});
+		
+	}
+	
+	
 	function changeButtonColor(isDisabled) {
         var $add_button_tr = $('#registerBtn');       
         var $clear_button_tr = $('#clearBtn');
@@ -978,6 +1040,9 @@ var tokenValue;
 		    	String tokenValue = (String) session.getAttribute("token");%>
 
 		    	tokenValue = '<%=tokenValue%>';
+		    	
+		    	
+		    	getBasicConfiguration();
 		    	
 		// Load traffic rules list
 		loadTrafficRulesList();
@@ -1209,7 +1274,8 @@ var tokenValue;
 				</div>
 			  </div>
 			  
-		
+		<h3>CONFIGURATION</h3>
+		<hr /> 
 		<div class="container">
 		
 		<div class="tab-container">
@@ -1219,7 +1285,7 @@ var tokenValue;
     <div id="basic-config" class="tab" style="display: block;">
         <div class="container">
         
-        <table style="margin-left: -15px; width: 102.2%;">
+        <!-- <table style="margin-left: -15px; width: 102.2%;">
          <colgroup>
     <col style="width: 10%;">
     <col style="width: 20%;">
@@ -1449,7 +1515,41 @@ var tokenValue;
         </tr>
         
         
+        </table> -->
+        
+       <table id="basic-config-table" style="margin-left: -15px; width: 102.2%;">
+         <colgroup>
+    <col style="width: 5%;">
+    <col style="width: 20%;">
+    <col style="width: 5%;">
+    <col style="width: 15%;">
+    <col style="width: 10%;">
+    <col style="width: 30%;">
+    <col style="width: 15%;">
+  </colgroup> 
+  
+  <thead>
+  <tr>
+  <th>Seq</th>
+  <th>Direction</th>
+  <th>LAN Type</th>
+  <th>Protocol</th>
+  <th>To Port</th>
+  <th>Comment</th>
+  <th>Action</th>
+   
+  
+  </tr>
+  </thead>
+  
+  <tbody>
+						<!-- User list table rows will be populated dynamically using JavaScript -->
+					</tbody>
+  
+        
         </table>
+        
+        
         
         <div class="row"
 					style="display: flex; justify-content: right; margin-top: 2%;">
@@ -1482,9 +1582,7 @@ var tokenValue;
 							<option value="lan1">lan1</option>
 							<option value="lan2">lan2</option>
 						</select></td>
-			</tr>
 			
-			<tr>
 			<td>Type</td>
 			<td><select class="textBox" id="type" name="type"
 							style="height: 33px;">
@@ -1507,9 +1605,7 @@ var tokenValue;
 			<td>Source IP address</td>
 			<td><input type="text" id="ip_addr" name="ip_addr" maxlength="31"/>
 							<p id="sourceIpError" style="color: red;"></p></td>
-			</tr>
 			
-			<tr>
 			<td>Port</td>
 			<td><input type="text" id="portNumber" name="portNumber" maxlength="6"/>
 							<p id="destPortError" style="color: red;"></p></td>

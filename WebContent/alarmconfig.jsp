@@ -171,8 +171,7 @@ margin-top: 68px;
 
 .bordered-table td {
   border: 1px solid #ccc; /* Light gray border */
-  text-align: center;
-   vertical-align: middle;
+ 
 }
 
    .form-container {
@@ -323,7 +322,7 @@ var tokenValue;
 									
 									
 									if(unit_id != null){
-										$('#addBtn').val('Edit');
+										$('#addBtn').val('Update');
 									}
 									else{
 										$('#addBtn').val('Add');
@@ -374,7 +373,7 @@ var tokenValue;
  		  cancelButton.onclick = function () {
  		    // Close the modal
  		    modal.style.display = 'none';
- 		   $('#addBtn').val('Edit');
+ 		   $('#addBtn').val('Update');
  		  };
  		}
        
@@ -402,7 +401,7 @@ var tokenValue;
    		}
    	}
    	
-   	function validateInterval(interval) {
+    	function validateInterval(interval) {
 		var intervalError = document.getElementById("intervalError");
 
 		if (interval == 'Select interval'){
@@ -439,7 +438,7 @@ var tokenValue;
 			brokerIPAddressError.textContent = "";
 			return true;
 		}
-	}
+	} 
      
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#addBtn');
@@ -576,7 +575,7 @@ var tokenValue;
 				tagname_error.textContent = ""
 			}
 			
-			if (!validateInterval(interval)) {
+			 if (!validateInterval(interval)) {
 				intervalError.textContent = "Please select interval";
 				return;
 			}
@@ -589,7 +588,7 @@ var tokenValue;
 			if (!validateBrokerIPAddress(broker_name)) {
 				brokerIPAddressError.textContent = "Please select broker ip address ";
 				return;
-			}
+			} 
 
 			if (buttonText == 'Add') {
 				addAlarmConfig();
@@ -601,9 +600,9 @@ var tokenValue;
       	$('#clearBtn').click(function(){
   		  $('#unit_id').val('');
 			$('#asset_id').val('');
-			$('#broker_type').val('Select broker type');
+			$('#broker_type1').val('Select broker type');
 			$('#broker_name').val('Select broker IP address');
-			$('#interval').val('Select interval');
+			$('#interval1').val('Select interval');
 			 $('#addBtn').val('Add'); 
   	});
     	  
@@ -656,9 +655,9 @@ function editAlarmConfig() {
 				data : {
 					unit_id : unit_id,
 					asset_id : asset_id,
-					broker_type : broker_type,
+					broker_type1 : broker_type1,
 					broker_name : broker_name,
-					interval : interval,
+					interval1 : interval1,
 					tagData: JSON.stringify(tagData),
 					action: 'update'
 					
@@ -687,7 +686,7 @@ function editAlarmConfig() {
 	  cancelButton.onclick = function () {
 	    // Close the modal
 	    modal.style.display = 'none';
-	    $('#addBtn').val('Edit');
+	    $('#addBtn').val('Update');
 	  };
 }
 
@@ -767,7 +766,7 @@ function addAlarmConfig() {
 			
 			<tr>
 			<td>Unit ID</td>
-			<td><input type="text" id="unit_id" name="unit_id" required style="height: 10px" maxlength="31"/>
+			<td style="padding: 5px;"><input type="text" id="unit_id" name="unit_id" required style="height: 10px; " maxlength="31"/>
 							<p id="unitid_error" style="color: red;"></p></td>
 			<td>Asset ID</td>
 			<td><input type="text" id="asset_id" name="asset_id" required style="height: 10px" maxlength="31"/>
@@ -781,19 +780,21 @@ function addAlarmConfig() {
 							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
 						</select> 
-						<span id="brokerTypeError" style="color: red;"></span></td>
+						</td>
+						
 			<td>Broker IP address</td>
 			<td><select class="textBox" id="broker_name" name="broker_name"
 							style="height: 33px">
 							<option value="Select broker IP address">Select broker
 								IP address</option>
+							
 						</select> <span id="brokerIPAddressError" style="color: red;"></span></td>
 			</tr>
 			
 			<tr>
 			<td>Interval</td>
-			<td colspan="3"><select class="interval-select" id="interval" name="interval"
-							style="height: 35px">
+			<td><select class="interval-select" id="interval" name="interval"
+							style="height: 33px">
 							<option value="Select interval">Select interval</option>
 							<option value="5 sec">5 sec</option>
 							<option value="10 sec">10 sec</option>
@@ -809,10 +810,25 @@ function addAlarmConfig() {
 							<option value="25 min">25 min</option>
 							<option value="30 min">30 min</option>
 							<option value="1 hour">1 hour</option>
-						</select> <span id="intervalError" style="color: red;"></span></td>
-			
+							</select>
+							</td>
+						
+			<td></td>
+			<td></td>
 			
 			</tr>
+			
+			</table>
+			
+			<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
+					
+					<input style="height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
+						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" onClick="window.location.reload();" />
+						
+					</div>
+					
+			<table class="bordered-table">
 			
 			<tr>
 			<td>Tag name</td>
@@ -823,19 +839,13 @@ function addAlarmConfig() {
 			<td><select class="textBox" id="variable" name="variable" style="height: 33px">
 							<option value="Select variable">Select variable</option>
 						</select> <span id="variableError" style="color: red;"></span></td>
+						
+						<td><input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" /></td>
 			</tr>
 				
 				</table>
 				
-				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-					
-					<input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" />
-					
-					<input style="margin-left: 24%; height: 26px;" type="button" value="Clear" id="clearBtn"/> 
-						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
-						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" onClick="window.location.reload();" />
-						
-					</div>
+				
 			</form>
 		</div>
 		

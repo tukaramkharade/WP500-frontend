@@ -255,8 +255,7 @@ public class MQTTServlet extends HttpServlet {
 
 				case "delete":
 					prefix = request.getParameter("prefix");
-					System.out.println("prefix : " + prefix);
-
+					
 					try {
 
 						TCPClient client = new TCPClient();

@@ -16,54 +16,54 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-@WebServlet("/mqttCrtFileListServlet")
-public class MQTTCrtFileListServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(MQTTCrtFileListServlet.class);
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+@WebServlet("/FirmwareListServlet")
+public class FirmwareListServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(FirmwareListServlet.class);
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-
+		
 		if (check_username != null) {
+			
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+			
+			try{
+				
+				json.put("operation", "file_manager");				
+				json.put("operation_type", "firmware_file_list");
+				json.put("user", check_username);
+				
+				String respStr = client.sendMessage(json.toString());
 
-		TCPClient client = new TCPClient();
-		JSONObject json = new JSONObject();
+				logger.info("res " + new JSONObject(respStr));
 
-		try {
+				JSONObject result = new JSONObject(respStr);
 
-			json.put("operation", "protocol");
-			json.put("protocol_type", "mqtt");
-			json.put("operation_type", "get_crt_files");
-			json.put("user", check_username);
+				JSONArray firmware_files_result = result.getJSONArray("files");
 
-			String respStr = client.sendMessage(json.toString());
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("firmware_files_result", firmware_files_result);
 
-			logger.info("res " + new JSONObject(respStr));
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
 
-			JSONObject result = new JSONObject(respStr);
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
 
-			JSONArray crt_files_result = result.getJSONArray("result");
-
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("crt_files_result", crt_files_result);
-
-			// Set the content type of the response to application/json
-			response.setContentType("application/json");
-
-			// Get the response PrintWriter
-			PrintWriter out = response.getWriter();
-
-			// Write the JSON object to the response
-			out.print(jsonObject.toString());
-			out.flush();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error in getting firmware files : "+e);
-		}
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+				
+				
+			}catch(Exception e){
+				e.printStackTrace();
+				logger.error("Error in getting firmware files : "+e);
+			}
+			
 		}else{
 			try {
 				JSONObject userObj = new JSONObject();
@@ -83,33 +83,37 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 				logger.error("Error in session timeout: " + e);
 			}
 		}
-}
+	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(false);
+
 		String check_username = (String) session.getAttribute("username");
-
+		
 		if (check_username != null) {
-
-			String broker_ip_address = request.getParameter("broker_ip_address");
-
+			
+			String file = request.getParameter("file");
+			
 			try {
+
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
-				json.put("operation", "get_mqtt_status");
+				json.put("operation", "file_manager");
+				json.put("operation_type", "firmware_file_delete");
+				json.put("firmware_file_name", file);
 				json.put("user", check_username);
-				json.put("ip_address", broker_ip_address);
+			;
 
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr).getString("connection_status"));
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-				String connection_status = new JSONObject(respStr).getString("connection_status");
+				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("connection_status", connection_status);
+				jsonObject.put("message", message);
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
@@ -123,10 +127,11 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in getting mqtt status : " + e);
-
+				logger.error("Error in deleting mqtt : " + e);
 			}
-		} else {
+
+			
+		}else{
 			try {
 				JSONObject userObj = new JSONObject();
 				userObj.put("msg", "Your session is timeout. Please login again");
@@ -146,4 +151,5 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 			}
 		}
 	}
+
 }

@@ -31,7 +31,7 @@ import javax.servlet.annotation.MultipartConfig;
 public class UploadServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     //    String uploadPath = "E:\\ftpupload"; // Specify the directory where you want to save uploaded files.
-    	String uploadPath = "/file_upload_test";
+    	String uploadPath = "/test";
      
         // Create the directory if it doesn't exist.
         File uploadDir = new File(uploadPath);

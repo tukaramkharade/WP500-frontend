@@ -101,33 +101,9 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
-.modal-edit-password {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
 
-.modal-content-edit-password {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
+
+
 
 /* Style for buttons */
 button {
@@ -153,16 +129,6 @@ button {
 }
 
 #cancel-button-edit {
-  background-color: #f44336;
-  color: white;
-}
-
-#confirm-button-edit-password {
-  background-color: #4caf50;
-  color: white;
-}
-
-#cancel-button-edit-password {
   background-color: #f44336;
   color: white;
 }
@@ -367,7 +333,7 @@ var tokenValue;
 		$('#json_string_name').val(jsonBuilderId);
 		$("#json_string_name").prop("disabled", true);
 
-		$('#registerBtn').val('Edit');
+		$('#registerBtn').val('Update');
 
 	}
 
@@ -513,7 +479,7 @@ var tokenValue;
 		  cancelButton.onclick = function () {
 		    // Close the modal
 		    modal.style.display = 'none';
-		    $('#registerBtn').val('Edit');
+		    $('#registerBtn').val('Update');
 		  };	
 	}
 	
