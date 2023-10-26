@@ -308,6 +308,9 @@ margin-top: 1px;
 
 var roleValue; 
 var tokenValue;
+var globalId;
+var globalAction;
+var globalData = [];
 
 	function loadTrafficRulesList() {
 		$.ajax({
@@ -925,11 +928,17 @@ var tokenValue;
 
 									// Create the <td> element and append the <select> element
 									var td = $("<td>").append(select);
+									
+									select.on("change", function() {
+									    globalAction = $(this).val();
+									    globalId = basicConfig.id; // Get the associated id from basicConfig
+									  //  alert("Selected value: " + globalAction + " for id: " + globalId);
+									});
 									row.append(td);
 
-
-
 									basicConfigTable.append(row);
+									
+									
 								});
 				
 			},
@@ -1026,6 +1035,33 @@ var tokenValue;
         }
     }
 	
+	
+	function sendToServer(globalId, globalAction) {
+	    var requestData = {
+	        globalId: globalId,
+	        globalAction: globalAction
+	    };
+
+	    $.ajax({
+	        url: "BasicConfigurationServlet", // Replace with your servlet URL
+	        type: "POST",
+	        data: JSON.stringify(requestData),
+	        contentType: "application/json",
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	        },
+	        success: function(response) {
+	            // Handle the response from the server if needed
+	           alert("GlobalId and GlobalAction sent successfully." +response.message);
+	            
+	            getBasicConfiguration();
+	        },
+	        error: function(xhr, status, error) {
+	            console.log("Error sending GlobalId and GlobalAction: " + error);
+	        }
+	    });
+	}
+	
 	//Function to execute on page load
 	$(document).ready(function() {
 		
@@ -1100,6 +1136,29 @@ var tokenValue;
 		$("#delBtnGenSettings").click(function() {
 			deleteGeneralSettings();
 		});
+		
+		$("#applyButton").click(function() {
+		    // Get the selected global ID and global action values
+		  //  var selectedGlobalId = $("#yourGlobalIdSelect").val(); // Assuming you have a select element for global IDs
+		//    var selectedGlobalAction = $("#yourGlobalActionSelect").val(); // Assuming you have a select element for global actions
+
+		    // Iterate through the selected values and create JSON objects
+		    for (var i = 0; i < selectedGlobalId.length; i++) {
+		        var globalId = selectedGlobalId[i];
+		        for (var j = 0; j < selectedGlobalAction.length; j++) {
+		            var globalAction = selectedGlobalAction[j];
+		            var data = {
+		                globalId: globalId,
+		                globalAction: globalAction
+		            };
+		            globalData.push(data);
+		        }
+		    }
+
+		    // Call the sendToServer function with the collected data
+		    sendToServer(globalData);
+		});
+
 
 		$('#generalSettingsForm').submit(function(event) {
 			event.preventDefault();
@@ -1285,238 +1344,7 @@ var tokenValue;
     <div id="basic-config" class="tab" style="display: block;">
         <div class="container">
         
-        <!-- <table style="margin-left: -15px; width: 102.2%;">
-         <colgroup>
-    <col style="width: 10%;">
-    <col style="width: 20%;">
-    <col style="width: 15%;">
-    <col style="width: 10%;">
-    <col style="width: 30%;">
-    <col style="width: 15%;">
-  </colgroup> 
-        <tr>
-        
-        <th>Seq.</th>
-        <th>Direction</th>
-        <th>Protocol</th>
-        <th>To port</th>
-        <th>Comment</th>
-        <th>Action</th>
        
-        </tr>
-        
-        <tr>
-        
-        <td>1</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="UDP" disabled/></td>
-        <td><input type="text" value="123" disabled/></td>
-        <td><input type="text" value="NTP (Network Time Protocol)" disabled/></td>
-        <td><select class="textBox" id="action" name="action"
-							style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-         <tr>
-        
-        <td>2</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="1200" disabled/></td>
-        <td><input type="text" value="WPConnex" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-              
-        <tr>
-        
-        <td>3</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="22" disabled/></td>
-        <td><input type="text" value="SSH" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>4</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="80" disabled/></td>
-        <td><input type="text" value="HTTP" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>5</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="80" disabled/></td>
-        <td><input type="text" value="HTTPs, Proficloud, eHMI" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>6</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="4840" disabled/></td>
-        <td><input type="text" value="OPC UA" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>7</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="17725" disabled/></td>
-        <td><input type="text" value="(Standard-port) External mode matlab simulink" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>8</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="UDP" disabled/></td>
-        <td><input type="text" value="161" disabled/></td>
-        <td><input type="text" value="SNMP (Simple Network Management Protocol)" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>9</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="UDP" disabled/></td>
-        <td><input type="text" value="34962-34964" disabled/></td>
-        <td><input type="text" value="Profinet Uni-/Multicast ports" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        <tr>
-        
-        <td>10</td>
-        <td><select style="height: 33px;" disabled>
-							<option value="Input" selected="selected">Input</option>
-							<option value="Output">Output</option>
-
-						</select></td>
-        <td><input type="text" value="TCP" disabled/></td>
-        <td><input type="text" value="502" disabled/></td>
-        <td><input type="text" value="Modbus" disabled/></td>
-        <td><select class="textBox" style="height: 33px; ">
-							<option value="Accept" selected="selected">Accept</option>
-							<option value="Reject">Reject</option>
-							<option value="Drop">Drop</option>
-							<option value="Continue">Continue</option>
-
-						</select>
-		</td>
-        </tr>
-        
-        
-        </table> -->
-        
        <table id="basic-config-table" style="margin-left: -15px; width: 102.2%;">
          <colgroup>
     <col style="width: 5%;">
