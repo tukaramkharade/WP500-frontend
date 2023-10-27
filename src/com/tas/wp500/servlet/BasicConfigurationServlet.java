@@ -1,5 +1,6 @@
 package com.tas.wp500.servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -121,31 +122,31 @@ public class BasicConfigurationServlet extends HttpServlet {
 	            TCPClient client = new TCPClient();
 	            JSONObject json = new JSONObject();
 
-	            JSONArray dataArray = new JSONArray();
+	            JSONArray responseDataArray = new JSONArray();
 
 	            json.put("operation", "update_iptable_basic_settings");
 	            json.put("user", check_username);
-	        
 
-	            JSONArray responseDataArray = new JSONArray();
+	            // Read the JSON data from the request
+	            StringBuilder jsonPayload = new StringBuilder();
+	            try (BufferedReader reader = request.getReader()) {
+	                String line;
+	                while ((line = reader.readLine()) != null) {
+	                    jsonPayload.append(line);
+	                }
+	            }
 
-	            for (int i = 0; i < dataArray.length(); i++) {
-	                JSONObject dataObj = dataArray.getJSONObject(i);
-	                
-	                // Validate that 'id' is a number
-	                if (dataObj.has("id") && dataObj.get("id") instanceof Number) {
-	                    int id = dataObj.getInt("id");
-	                    String action = dataObj.getString("action");
+	            // Parse the incoming JSON data
+	            JSONObject requestData = new JSONObject(jsonPayload.toString());
 
-	                    // Create a JSON object to store key-value pairs
-	                    JSONObject jsonObject = new JSONObject();
-	                    jsonObject.put("id", id);
-	                    jsonObject.put("action", action);
+	            if (requestData.has("data")) {
+	                JSONArray dataArray = requestData.getJSONArray("data");
 
-	                    responseDataArray.put(jsonObject);
-	                } else {
-	                    // Handle the case where 'id' is not a valid number
-	                    // You can log an error, skip this data, or take other appropriate action
+	                for (int i = 0; i < dataArray.length(); i++) {
+	                    JSONObject dataObj = dataArray.getJSONObject(i);
+
+	                    // Extract the data you need and add it to responseDataArray
+	                    responseDataArray.put(dataObj);
 	                }
 	            }
 
@@ -172,8 +173,24 @@ public class BasicConfigurationServlet extends HttpServlet {
 	            e.printStackTrace();
 	        }
 	    } else {
-	        // Handle the case when the user is not authenticated
-	        // ...
+	        
+	    	try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout : " + e);
+			}
 	    }
 	}
 }
