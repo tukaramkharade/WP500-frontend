@@ -154,6 +154,33 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
+.modal-edit-basic-conf {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit-basic-conf {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+ }
 
 /* Style for buttons */
 button {
@@ -199,6 +226,16 @@ button {
 }
 
 #cancel-button-edit-gen {
+  background-color: #f44336;
+  color: white;
+}
+
+#confirm-button-edit-basic-conf {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit-basic-conf {
   background-color: #f44336;
   color: white;
 }
@@ -311,6 +348,7 @@ var tokenValue;
 var globalId;
 var globalAction;
 var globalData = [];
+
 
 	function loadTrafficRulesList() {
 		$.ajax({
@@ -906,6 +944,11 @@ var globalData = [];
 
 					$.each(data,function(index, basicConfig) {
 									var row = $("<tr>");
+									
+									// Add the data-basic-config-id attribute with the basicConfigId value
+								    row.attr("data-basic-config-id", basicConfig.basicConfigId);
+
+									
 									row.append($("<td>").text(basicConfig.id));
 									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.direction).prop("disabled", true)));
 									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.lan_type).prop("disabled", true)));
@@ -929,11 +972,11 @@ var globalData = [];
 									// Create the <td> element and append the <select> element
 									var td = $("<td>").append(select);
 									
-									select.on("change", function() {
+									 select.on("change", function() {
 									    globalAction = $(this).val();
 									    globalId = basicConfig.id; // Get the associated id from basicConfig
 									  //  alert("Selected value: " + globalAction + " for id: " + globalId);
-									});
+									}); 
 									row.append(td);
 
 									basicConfigTable.append(row);
@@ -1035,11 +1078,30 @@ var globalData = [];
         }
     }
 	
+	var globalData = [];
+
+	// This function sends the accumulated data when you call it
+	function sendAccumulatedData() {
+	    if (globalData && globalData.length > 0) {
+	        sendToServer(globalData);
+	        // Clear the globalData array after sending the data if needed
+	        globalData = [];
+	    }
+	}
 	
-	function sendToServer(globalId, globalAction) {
+	function sendToServer(dataArray) {
+		
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-edit-basic-conf');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-edit-basic-conf');
+		  confirmButton.onclick = function () {
+			  
+		  
 	    var requestData = {
-	        globalId: globalId,
-	        globalAction: globalAction
+	        data: dataArray
 	    };
 
 	    $.ajax({
@@ -1051,16 +1113,56 @@ var globalData = [];
 	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	        },
 	        success: function(response) {
-	            // Handle the response from the server if needed
-	           alert("GlobalId and GlobalAction sent successfully." +response.message);
-	            
+	        	// Close the modal
+			    modal.style.display = 'none';
+	           
 	            getBasicConfiguration();
 	        },
 	        error: function(xhr, status, error) {
-	            console.log("Error sending GlobalId and GlobalAction: " + error);
+	            console.log("Error sending global data: " + error);
 	        }
 	    });
+	    
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-edit-basic-conf');
+		  cancelButton.onclick = function () {
+		      // Close the modal
+		      modal.style.display = 'none';
+
+		      // Get the previously selected value for a specific basicConfigId
+		      var previousValue = getValueFromTable(globalId);
+
+		      // Set the value back in the table for the same basicConfigId
+		      setValueInTable(globalId, previousValue);
+		      
+		   // Reload the page
+		      window.location.reload();
+		  }
+
 	}
+	
+	function addSelectedAction(id, action) {
+	    var data = {
+	        id: globalId,
+	        action: globalAction
+	    };
+	    globalData.push(data);
+	}
+	
+	function getValueFromTable(basicConfigId) {
+	    // Assuming each row has a data-basic-config-id attribute
+	    var cell = $("td[data-basic-config-id='" + basicConfigId + "']");
+	    return cell.text();
+	}
+
+	
+	function setValueInTable(basicConfigId, value) {
+	    // Assuming each row has a data-basic-config-id attribute
+	    var cell = $("td[data-basic-config-id='" + basicConfigId + "']");
+	    cell.text(value);
+	}
+
 	
 	//Function to execute on page load
 	$(document).ready(function() {
@@ -1082,6 +1184,8 @@ var globalData = [];
 		    	
 		// Load traffic rules list
 		loadTrafficRulesList();
+		
+		
 		
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
@@ -1137,28 +1241,28 @@ var globalData = [];
 			deleteGeneralSettings();
 		});
 		
-		$("#applyButton").click(function() {
-		    // Get the selected global ID and global action values
-		  //  var selectedGlobalId = $("#yourGlobalIdSelect").val(); // Assuming you have a select element for global IDs
-		//    var selectedGlobalAction = $("#yourGlobalActionSelect").val(); // Assuming you have a select element for global actions
+		
+		
+		$("#applyBtnBasicConf").click(function() {
+			 var newData = []; // Create an array to store the current data
 
-		    // Iterate through the selected values and create JSON objects
-		    for (var i = 0; i < selectedGlobalId.length; i++) {
-		        var globalId = selectedGlobalId[i];
-		        for (var j = 0; j < selectedGlobalAction.length; j++) {
-		            var globalAction = selectedGlobalAction[j];
-		            var data = {
-		                globalId: globalId,
-		                globalAction: globalAction
-		            };
-		            globalData.push(data);
-		        }
-		    }
+			    // Iterate through the table rows to collect data for each row
+			    $("#basic-config-table tbody tr").each(function() {
+			        var id = $(this).find("td:eq(0)").text(); // Get the ID
+			        var action = $(this).find("td:eq(6) select").val(); // Get the action from the select element
 
-		    // Call the sendToServer function with the collected data
-		    sendToServer(globalData);
+			        newData.push({ id: id, action: action }); // Add the data to the newData array
+			    });
+
+			 // Now, you can merge the current data with the existing globalData
+			    if (!globalData) {
+			        globalData = [];
+			    }
+			    globalData = globalData.concat(newData);
+		    
+		    sendAccumulatedData();
 		});
-
+		
 
 		$('#generalSettingsForm').submit(function(event) {
 			event.preventDefault();
@@ -1386,6 +1490,14 @@ var globalData = [];
 				</div>
 				
         </div>
+        
+         <div id="custom-modal-edit-basic-conf" class="modal-edit-basic-conf">
+				<div class="modal-content-edit-basic-conf">
+				  <p>Are you sure you want to modify the basic configuration?</p>
+				  <button id="confirm-button-edit-basic-conf">Yes</button>
+				  <button id="cancel-button-edit-basic-conf">No</button>
+				</div>
+			  </div>
     </div>
 
 

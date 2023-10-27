@@ -868,7 +868,6 @@ margin-top: 70px;
 
 					});
 </script>
-</head>
 
 <body>
 
@@ -906,12 +905,13 @@ margin-top: 70px;
 					<td>Password</td>
 					<td><input type="password" id="password" name="password" maxlength="31"/>
 							<p id="password_error" style="color: red;"></p></td>
-					
+					</tr>
+					<tr>
 					<td>Published topic</td>
 					<td><input type="text" id="pub_topic" name="pub_topic" maxlength="30" required />
 							<p id="pub_topic_error" style="color: red;"></p></td>
-							</tr>
-							<tr>
+							
+							
 					<td>Status</td>
 					<td><select class="textBox" id="enable" name="enable" style="height: 33px;">
 								<option value="Select status">Select status</option>
@@ -931,7 +931,8 @@ margin-top: 70px;
 								<option value="Select crt file">Select crt file</option>
 
 							</select> <span id="crtFileError" style="color: red;"></span></td>
-					
+					</tr>
+					<tr>
 					<td>Subscribed topic</td>
 					<td><input type="text" id="sub_topic" name="sub_topic" maxlength="31" required />
 							<p id="sub_topic_error" style="color: red;"></p></td>
@@ -939,6 +940,10 @@ margin-top: 70px;
 					<td><input type="text" id="prefix" name="prefix" maxlength="31" required />
 							<p id="prefix_error" style="color: red;"></p>
 					</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
 					</tr>
 					
 					<!-- <tr>

@@ -933,12 +933,14 @@ var tokenValue;
 						</select> <span id="publishingStatusError" style="color: red;"></span></td>
 					
 				<td>Store and forward</td>
-				<td colspan="3"><select class="textBox" id="storeAndForward"
+				<td><select class="textBox" id="storeAndForward"
 							name="storeAndForward" style="height: 35px;" required>
 							<option value="Select store and forward">Select store and forward</option>
 							<option value="Enable">Enable</option>
 							<option value="Disable">Disable</option>
 						</select> <span id="storeAndForwardError" style="color: red;"></span></td>
+						<td></td>
+						<td></td>
 				</tr>
 							
 				<tr>

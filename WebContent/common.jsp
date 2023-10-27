@@ -137,6 +137,10 @@
                 <li class="nav-item">
                 <a href="opcuaClient.jsp">OPCUA Client</a>
               </li>
+              
+              <li class="nav-item">
+                <a href="certificate.jsp">Certificate</a>
+              </li>
                 
               </ul>
             </div>

@@ -335,7 +335,7 @@ function editOPCUA(){
 		  var endURL = $('#endURL').val();
 			var username = $('#username').val();
 			var password = $('#password').val();
-			var security = $('#security').val();
+			var security = $('#security').find(":selected").val();
 			var actionType = $('#actionType').find(":selected").val();
 			var prefix = $('#prefix').val();
 			
@@ -396,7 +396,7 @@ function addOPCUA(){
 	var endURL = $('#endURL').val();
 	var username = $('#username').val();
 	var password = $('#password').val();
-	var security = $('#security').val();
+	var security = $('#security').find(":selected").val();
 	var actionType = $('#actionType').find(":selected").val();
 	var prefix = $('#prefix').val();
 	
@@ -585,12 +585,23 @@ $(document).ready(function() {
 					
 					<tr>
 					<td>Security</td>
-					<td><input type="text" id="security" name="security" maxlength="31"/>
-							<p id="security_error" style="color: red;"></p></td>
+					<td>
+					<!-- <input type="text" id="security" name="security" maxlength="31"/>
+							<p id="security_error" style="color: red;"></p> -->
+							
+							<select class="textBox" id="security" name="security">
+								<option value="Select security">Select security</option>
+								<option value="None,None">None,None</option>
+								<option value="Basic128rsa15,Sign and Encrypt">Basic128rsa15,Sign and Encrypt</option>
+								<option value="Basic256,Sign and Encrypt">Basic256,Sign and Encrypt</option>
+								<option value="Basic256sha256,Sign and Encrypt">Basic256sha256,Sign and Encrypt</option>
+							</select>
+							
+							</td>
 					<td>Action type</td>
 					<td><select class="textBox" id="actionType" name="actionType" style="height: 33px;">
-								
-								<option value="Enable" selected="selected">Enable</option>
+								<option value="Select action type">Select action type</option>
+								<option value="Enable">Enable</option>
 								<option value="Disable">Disable</option>
 							</select>
 							<span id="actionTypeError" style="color: red;"></span></td>

@@ -1169,14 +1169,14 @@ var tokenValue;
 							<option value="c">C</option>
 							<option value="d">D</option>
 						</select> <span id="sideError" style="color: red"></span></td>
-			
+			</tr>
+			<tr>
 			<td>Trigger tag</td>
 			<td><select class="textBox" id=trigger_tag name="trigger_tag" style="height: 33px;">
 							<option value="Select trigger tag">Select trigger tag</option>
 						</select> <span id="triggerTagError" style="color: red"></span></td>
 						
-						</tr>
-						<tr>
+						
 			<td>Trigger value</td>
 			<td><select class="textBox" id="trigger_value" name="trigger_value" style="height: 33px" required>
 							<option value="Select trigger value">Select trigger value</option>
@@ -1193,6 +1193,8 @@ var tokenValue;
 							<option value="Select end pressure">Select end pressure</option>
 						</select> <span id="endPressureError" style="color: red"></span></td>
 			
+			</tr>
+			<tr>
 			<td>temperature</td>
 			<td><select class="textBox" id="temperature" name="temperature" style="height: 33px;">
 							<option value="Select temperature">Select temperature</option>
@@ -1201,8 +1203,7 @@ var tokenValue;
 			<td><select class="textBox" id="total" name="total" style="height: 33px;">
 							<option value="Select total">Select total</option>
 						</select> <span id="totalError" style="color: red"></span></td>
-						</tr>
-						<tr>
+						
 			
 			<td>Quantity</td>
 			<td><select class="textBox" id="quantity" name="quantity" style="height: 33px;">
@@ -1213,6 +1214,8 @@ var tokenValue;
 							<option value="Select unit price">Select unit price</option>
 						</select> <span id="unitPriceError" style="color: red"></span></td>
 			
+			</tr>
+			<tr>
 			<td>Status</td>
 			<td><select class="textBox" id="status" name="status" style="height: 33px" required>
 							<option value="Select status">Select status</option>
@@ -1220,9 +1223,14 @@ var tokenValue;
 							<option value="Disable">Disable</option>
 						</select> <span id="statusError" style="color: red"></span></td>
 			<td>Broker IP address</td>
-			<td colspan="3"><select class="textBox" id="broker_name" name="broker_name" style="height: 33px;">
+			<td><select class="textBox" id="broker_name" name="broker_name" style="height: 33px;">
 							<option value="Select broker IP address">Select broker IP address</option>
 						</select> <span id="brokerIPAddressError" style="color: red;"></span></td>
+						
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
 			</tr>
 			
 			</table>
