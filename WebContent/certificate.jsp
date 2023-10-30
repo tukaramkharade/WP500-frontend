@@ -32,11 +32,229 @@ margin-top: 70px;
 .delete-icon-td {
    cursor: pointer;
 }
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-session-timeout {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-session-timeout {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+#confirm-button-session-timeout {
+  background-color: #4caf50;
+  color: white;
+}
         
 </style>
 
 <script>
+
+var roleValue;
+var tokenValue;
+
+function generateCertificate(){
+	
+	var common_name = $('#common_name').val();
+	var organization = $('#organization').val();
+	var organizational_unit = $('#organizational_unit').val();
+	var location = $('#location').val();
+	var state = $('#state').val();
+	var country = $('#country').val();
+	var validity = $('#validity').val();
+	
+	// Collect IP addresses and DNS names into arrays
+    var ipAddresses = [];
+    var dnsNames = [];
+    
+    $('select[name="sub-alt-type"]').each(function() {
+        var selectValue = $(this).val();
+        var input = $(this).closest('tr').find('input[name="alt-name"]').val();
+        
+        if (selectValue === 'IP address' && input) {
+            ipAddresses.push(input);
+        } else if (selectValue === 'DNS name' && input) {
+            dnsNames.push(input);
+        }
+    });
+    
+ // Convert IP addresses and DNS names arrays to JSON strings
+    var ipAddressesJson = JSON.stringify(ipAddresses);
+    var dnsNamesJson = JSON.stringify(dnsNames);
+	
+	$.ajax({
+		url : 'CertificateServlet',
+		type : 'POST',
+		data : {
+			common_name : common_name,
+			organization : organization,
+			organizational_unit : organizational_unit,
+			state : state,
+			location : location,
+			country : country,
+			validity : validity,
+			ipAddresses: ipAddressesJson,
+            dnsNames: dnsNamesJson
+			
+			
+		},
+		dataType: 'json', // Specify the expected data type as JSON
+		 
+		success : function(data) {
+			
+			
+			// Display the custom popup message
+ 			$("#popupMessage").text(data.message);
+  			$("#customPopup").show();
+	
+	        
+			$('#common_name').val('');
+		    $('#organization').val('');
+		    $('#organizational_unit').val('');
+		    $('#state').val('');
+		    $('#location').val('');
+		    $('#country').val('');
+		    $('#validity').val('');
+		    $('input[name="alt-name"]').val('');
+	        $('select[name="sub-alt-type"]').val('Select type of subject alternative name');
+
+	        
+	     // Remove extra rows for IP addresses except the first one
+	        $('tr:has(td:has(select[name="sub-alt-type"][value="IP address"])):gt(0)').remove();
+
+	        // Remove extra rows for DNS names except the first one
+	        $('tr:has(td:has(select[name="sub-alt-type"][value="DNS name"])):gt(0)').remove();
+	    
+	        
+
+		},
+		error : function(xhr, status, error) {
+			console.log('Error generating certificate: ' + error);
+		}
+	});
+	
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
+	
+}
+
+function applyCertificate(){
+	
+	$.ajax({
+		
+		type : "GET",
+		url : "CertificateServlet", // Replace with the actual URL to retrieve TOTP details
+		dataType : "json",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
+	    success : function(data) {
+			
+			var json1 = JSON.stringify(data);
+
+			var json = JSON.parse(json1);
+
+			if (json.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			}
+			
+			// Display the custom popup message
+ 			$("#popupMessage").text(data.message);
+  			$("#customPopup").show();
+			
+	    },
+	    error : function(xhr, textStatus, errorThrown) {
+			console.error("Error appying certificate: " + errorThrown);
+		}
+	    
+	});
+	
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
+}
+
 $(document).ready(function () {
+	
+	<%// Access the session variable
+	HttpSession role = request.getSession();
+	String roleValue = (String) session.getAttribute("role");%>
+
+roleValue = '<%=roleValue%>';
+
+<%// Access the session variable
+HttpSession token = request.getSession();
+String tokenValue = (String) session.getAttribute("token");%>
+
+tokenValue = '<%=tokenValue%>';
+
     $("#identity-store").change(function () {
         var selectedValue = $(this).val();
         if (selectedValue === "OPC UA-self-signed") {
@@ -54,6 +272,9 @@ $(document).ready(function () {
     
  // Trigger the change event on page load to handle the initial selection
     $("#identity-store").trigger("change");
+ 
+    var ipAddresses = [];
+    var dnsNames = [];
  
     var addBtn = document.getElementById('addBtn');
     addBtn.addEventListener('click', function () {
@@ -111,6 +332,19 @@ $(document).ready(function () {
       // Insert the new row before the addBtn
       var table = addBtn.parentNode.parentNode.parentNode;
       table.insertBefore(newRow, addBtn.parentNode.parentNode);
+      
+     
+    });
+    
+   
+    
+    
+    $('#regenerateBtn').click(function() {
+    	generateCertificate();
+    });
+    
+    $('#apply').click(function() {
+    	applyCertificate();
     });
 });
 </script>
@@ -220,7 +454,7 @@ $(document).ready(function () {
 				
 				
 				<tr>
-				<td colspan="3"><input style="height: 26px; margin-top: 15px; margin-bottom: 15px;" type="submit" value="Re-generate HTTPS certificate" id="regenerateBtn" /></td>
+				<td colspan="3"><input style="height: 26px; margin-top: 15px; margin-bottom: 15px;" type="button" value="Re-generate HTTPS certificate" id="regenerateBtn" /></td>
 				</tr>
 				
 				<tr>
@@ -246,6 +480,18 @@ $(document).ready(function () {
 				
 				</form>
 				</div>
+				
+				<div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				  <p>Your session is timeout. Please login again</p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
+			  </div>
+				
+				<div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 		</section>
 		</div>
 
