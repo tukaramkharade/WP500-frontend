@@ -201,12 +201,12 @@ height: 10px;
 }
 
 h3{
-margin-top: 68px;
+margin-top: 18px;
 }
  
   .container {
-    margin: 0 auto;
-    width: 50%;
+    margin: -16px auto;
+    width: 100%;
   }
 
  .bordered-table {
@@ -228,6 +228,29 @@ margin-top: 68px;
      border-radius: 5px;
   padding: 20px;
   }
+  
+    /* styles.css */
+.tab {
+            display: none;
+        }
+        
+        .tab-button {
+            background-color: #f2f2f2;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background-color: #2b3991;
+            color: white;
+        }
+        
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        
 </style>
 <script>
 
@@ -466,6 +489,27 @@ var tokenValue;
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
+    }
+	
+	function openTab(tabId, button) {
+        var tabs = document.getElementsByClassName("tab");
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = "none";
+        }
+
+        var tab = document.getElementById(tabId);
+        if (tab) {
+            tab.style.display = "block";
+        }
+
+        var tabButtons = document.getElementsByClassName("tab-button");
+        for (var i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
+
+        if (button) {
+            button.classList.add("active");
+        }
     }
 	
 	function deleteUser(userId) {
@@ -742,7 +786,18 @@ var tokenValue;
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>ADD USER</h3>
+				
+
+		<div class="container">
+		
+		<div class="tab-container">
+		
+		 <button class="tab-button active" onclick="openTab('add-user', this)">Add User</button>
+    <button class="tab-button" onclick="openTab('password-policy', this)">Password Policy</button>
+		
+		<div id="add-user" class="tab" style="display: block;">
+		
+		 <h3>ADD USER</h3>
 			<hr />
 			
 			<div class="form-container">
@@ -855,11 +910,23 @@ var tokenValue;
 						</tr>
 					</thead>
 					<tbody>
-						<!-- User list table rows will be populated dynamically using JavaScript -->
+						
 					</tbody>
 				</table>
 			</div>
-			
+			 
+		</div>
+		
+		 <div id="password-policy" class="tab">
+		 <div class="container">
+		 <h3>Password Policy</h3>
+		 <hr>
+		 </div>
+		 
+		 </div>
+		</div>
+		</div>	 
+			 
 		</section>
 	</div> 
 	

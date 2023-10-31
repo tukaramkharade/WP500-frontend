@@ -103,7 +103,6 @@ public class OPCUAClientServlet extends HttpServlet {
 			logger.error("Error in getting opcua list : " + e);
 		}
 		
-		
 	}
 
 	
