@@ -141,6 +141,10 @@
               <li class="nav-item">
                 <a href="certificate.jsp">Certificate</a>
               </li>
+              
+              <li class="nav-item">
+                <a href="quickclient.jsp">Quick Client</a>
+              </li>
                 
               </ul>
             </div>
