@@ -60,10 +60,40 @@ button {
   cursor: pointer;
 }
 
-#treeview li {
-    list-style: none;
-    cursor: pointer;
+#treeview ul {
+    list-style-type: none;
+    padding-left: 20px;
 }
+
+#treeview li {
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+#treeview li::before {
+    content: "\25B6"; /* Unicode character for a right-pointing triangle */
+    margin-right: 5px;
+}
+
+#treeview li.expanded::before {
+    content: "\25BE"; /* Unicode character for a down-pointing triangle */
+}
+
+#treeview li > ul {
+    display: none;
+}
+
+#treeview li.expanded > ul {
+    display: block;
+}
+
+/* Style your modal and other elements as needed */
+
+
+
+
+
+
 
 </style>
 
@@ -105,7 +135,7 @@ function getOpcuaClientList(){
 			var treeData = data.data; // Assuming your data is structured as an array
 
             // Call populateTreeView with the treeData
-            populateTreeView(treeData, $("#treeview"));
+            populateTreeView(treeData, $("#root"));
 	    },
 	    
 	    error : function(xhr, status, error) {
@@ -127,32 +157,50 @@ function populateTreeView(nodes, container) {
     }
 }
 
-function getOPCNodes(opcname){
-	
-	
-	$.ajax({
-	      type: 'POST',
-	      url: 'QuickClientServlet', // Replace with the actual server endpoint
-	      data: {
-	    	  opcname : opcname
-	      },
-	      success: function (response) {
-	        // Check the response status and handle it accordingly
-	        /* if (response.status === 'success' && response.data && response.data[0].displayName) {
-	          var displayName = response.data[0].displayName;
-	          $('#display-displayName').text('Display Name: ' + displayName);
-	          $('#display-displayName').show();
-	        } else {
-	          $('#display-displayName').text('Display Name Not Found');
-	          $('#display-displayName').show();
-	        } */
-	      },
-	      error: function () {
-	     //   alert('Error fetching displayName');
-	      }
-	    });
-	
+
+function getOPCNodes(opcname) {
+    $.ajax({
+        type: 'POST',
+        url: 'QuickClientServlet',
+        data: {
+            opcname: opcname
+        },
+        success: function (response) {
+            if (response.displayNames) {
+                var root = document.getElementById("root");
+
+                if (root) {
+                    // Check if ul already exists
+                    var ul = root.querySelector("ul");
+                    if (!ul) {
+                        ul = document.createElement("ul");
+                        ul.classList.add("populated"); // Add a class to mark as populated
+                        root.appendChild(ul);
+                    } else if (ul.classList.contains("populated")) {
+                        // If ul is already populated, don't add again
+                        return;
+                    }
+
+                    response.displayNames.forEach(function (displayName) {
+                        var li = document.createElement("li");
+                        li.classList.add("arrow", "parent");
+                        li.textContent = displayName;
+                        ul.appendChild(li);
+                    });
+
+                    ul.classList.add("populated"); // Mark ul as populated
+                } else {
+                    console.error("Root element not found.");
+                }
+            }
+        },
+        error: function () {
+            alert('Error fetching displayNames');
+        }
+    });
 }
+
+
 
 $(document).ready(function() {
 	<%// Access the session variable
@@ -168,30 +216,57 @@ String tokenValue = (String) session.getAttribute("token");%>
 tokenValue = '<%=tokenValue%>';
 
 //Hide child nodes initially
-$("#treeview ul").hide();
+$("#root ul").hide();
 
 // Toggle child nodes when clicking on parent nodes
-$("#treeview li:has(ul)").click(function(e) {
+$("#root li:has(ul)").click(function(e) {
     e.stopPropagation();
     $(this).children("ul").slideToggle();
 });
 
-/* $('#treeview').on('mouseover', 'li', function() {
-     textContent = $(this).text();
-     getOPCNodes(textContent);
-   
-  }); */
   
-  $('#treeview').on('click', 'li', function() {
-	    var textContent = $(this).text();
-	    getOPCNodes(textContent);
+  $('#root').on('click', 'li', function() {
+	  var textContent = $(this).text();
+      var ul = $(this).children("ul");
+
+      if (ul.length === 0) {
+          getOPCNodes(textContent);
+      }
 	});
 
-  // Hide the displayed text when the mouse moves away from the tree view item
-  $('#treeview').on('mouseout', 'li', function() {
-    $('#display-hovered-text').hide();
+  $('#root').on('click', function() {
+      var ul = $(this).find("ul");
+      var isExpanded = ul.is(":visible");
+
+      if (isExpanded) {
+          ul.slideUp();
+      } else {
+          ul.slideDown();
+      }
+
+      $(this).toggleClass("expanded"); // Toggle the expanded class
   });
   
+  // Hide the displayed text when the mouse moves away from the tree view item
+  /* $('#root').on('mouseout', 'li', function() {
+    $('#display-hovered-text').hide();
+  }); */
+  
+  document.addEventListener("DOMContentLoaded", function () {
+	    var treeView = document.getElementById("treeview");
+
+	    // Add click event to expand/collapse nodes
+	    treeView.addEventListener("click", function (event) {
+	        if (event.target.tagName === "LI" && event.target !== treeView) {
+	            event.stopPropagation();
+	            var ul = event.target.querySelector("ul");
+	            if (ul) {
+	                ul.style.display = ul.style.display === "none" ? "block" : "none";
+	                event.target.classList.toggle("expanded");
+	            }
+	        }
+	    });
+	});
   
 getOpcuaClientList();
 
@@ -216,13 +291,13 @@ getOpcuaClientList();
 			
 			<div class="treeview-container">
 			
-			 <ul id="treeview">
-        		<li id="root"></li>
-    		</ul>
-    		<div id="display-hovered-text" style="display: none;"></div>
-    		 <!-- <div id="display">
-    			<div id="display-displayName" style="display: none;"></div>
-  			</div> -->
+			 <div id="treeview">
+    			<ul id="root">
+        			<li></li>
+    			</ul>
+			</div>
+    		<!-- <div id="display-hovered-text" style="display: none;"></div> -->
+    		
 			
 			</div>
 			

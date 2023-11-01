@@ -2,6 +2,8 @@ package com.tas.wp500.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -121,46 +123,84 @@ public class QuickClientServlet extends HttpServlet {
 				
 				System.out.println("data array : "+dataArr);
 				
-				for (int i = 0; i < dataArr.length(); i++) {
-				    String nodeDataString = dataArr.getString(i);
+//				for (int i = 0; i < dataArr.length(); i++) {
+//				    String nodeDataString = dataArr.getString(i);
+//
+//				    // Split the nodeDataString based on commas
+//				    String[] parts = nodeDataString.split(",");
+//
+//				    String displayName = null;
+//				    
+//				    // Iterate through the parts to find the one containing 'displayName'
+//				    for (String part : parts) {
+//				        if (part.contains("displayName")) {
+//				            // Extract the displayName value
+//				            displayName = part.trim().replace("displayName=", "");
+//				            // Remove the trailing ']' using replaceAll
+//				            displayName = displayName.replaceAll("\\]$", "");
+//				            break;
+//				        }
+//				    }
+//
+//				    if (displayName != null) {
+//				        System.out.println("displayName: " + displayName);
+//				        // You can use the 'displayName' value as needed in your servlet code.
+//				    }
+//				}
+//
+//				
+//				JSONObject jsonObject = new JSONObject();
+//
+//				// Set the content type of the response to application/json
+//				response.setContentType("application/json");
+//
+//				// Get the response PrintWriter
+//				PrintWriter out = response.getWriter();
+//
+//				// Write the JSON object to the response
+//				out.print(jsonObject.toString());
+//				out.flush();
+				
+				
+				 List<String> displayNamesList = new ArrayList<>();
 
-				    // Split the nodeDataString based on commas
-				    String[] parts = nodeDataString.split(",");
+				    for (int i = 0; i < dataArr.length(); i++) {
+				        String nodeDataString = dataArr.getString(i);
 
-				    String displayName = null;
-				    
-				    // Iterate through the parts to find the one containing 'displayName'
-				    for (String part : parts) {
-				        if (part.contains("displayName")) {
-				            // Extract the displayName value
-				            displayName = part.trim().replace("displayName=", "");
-				            break;
+				        // Split the nodeDataString based on commas
+				        String[] parts = nodeDataString.split(",");
+
+				        String displayName = null;
+
+				        // Iterate through the parts to find the one containing 'displayName'
+				        for (String part : parts) {
+				            if (part.contains("displayName")) {
+				                // Extract the displayName value
+				                displayName = part.trim().replace("displayName=", "");
+				                // Remove the trailing ']' using replaceAll
+				                displayName = displayName.replaceAll("\\]$", "");
+				                break;
+				            }
+				        }
+
+				        if (displayName != null) {
+				            displayNamesList.add(displayName);
 				        }
 				    }
 
-				    if (displayName != null) {
-				        System.out.println("displayName: " + displayName);
-				        // You can use the 'displayName' value as needed in your servlet code.
-				    }
-				}
+				    // Create a JSON object to hold the displayNames
+				    JSONObject jsonResponse = new JSONObject();
+				    jsonResponse.put("displayNames", displayNamesList);
 
-				//logger.info("res " + new JSONObject(respStr).getString("msg"));
+				    // Set the content type of the response to application/json
+				    response.setContentType("application/json");
 
-		//		String message = new JSONObject(respStr).getString("msg");
-				
-				
-				JSONObject jsonObject = new JSONObject();
-		//		jsonObject.put("message", message);
+				    // Get the response PrintWriter
+				    PrintWriter out = response.getWriter();
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+				    // Write the JSON object to the response
+				    out.print(jsonResponse.toString());
+				    out.flush();
 			
 				
 				
