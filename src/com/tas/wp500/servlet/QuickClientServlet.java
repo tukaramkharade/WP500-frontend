@@ -3,6 +3,7 @@ package com.tas.wp500.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.tas.wp500.entity.NodeData;
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/QuickClientServlet")
@@ -93,122 +95,165 @@ public class QuickClientServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 
 		TCPClient client = new TCPClient();
+		JSONArray displayNamesArray = new JSONArray();
 		JSONObject json = new JSONObject();
+		String nodeid = null;
+		 HashMap<String, String> nodeidMap = new HashMap<>();
 		
 		if (check_username != null) {
 			
 			try {
 				
+				
+				// display name 
+				
 				String opcname = request.getParameter("opcname");
-				
-				json.put("operation", "get_opc_nodes");
-				json.put("user", check_username);
-				
-				JSONObject json_opc_node = new JSONObject();
-				
-				json_opc_node.put("dataType", "string");
-				json_opc_node.put("nodeid", "Objects");
-				json_opc_node.put("opcname", opcname);
-				JSONObject json_value = new JSONObject();
+				System.out.println("opcname : "+opcname);
 				
 				
-				json_opc_node.put("value", json_value);
+				if(!opcname.equals("Objects") && !opcname.equals("Types") && !opcname.equals("Views")){
+					
+					json.put("operation", "get_opc_nodes");
+					json.put("user", check_username);
+					
+					JSONObject json_opc_node = new JSONObject();
+					
+					json_opc_node.put("dataType", "string");
+					json_opc_node.put("nodeid", "Objects");
+					json_opc_node.put("opcname", opcname);
+					JSONObject json_value = new JSONObject();
+					
+					
+					json_opc_node.put("value", json_value);
+					
+					json.put("opc_node", json_opc_node);
+					
+					String respStr = client.sendMessage(json.toString());
+					JSONObject respJson = new JSONObject(respStr);
+					System.out.println(respJson.toString());
+					
+					String dataString = respJson.getString("data");
+		            JSONArray dataArr = new JSONArray(dataString);
 				
-				json.put("opc_node", json_opc_node);
+					// Parse the JSON data into an array of NodeData objects
+	                List<NodeData> nodeDataList = new ArrayList<>();
+	                for (int i = 0; i < dataArr.length(); i++) {
+	                    JSONObject nodeJson = dataArr.getJSONObject(i);
+	                    NodeData nodeData = new NodeData();
+	                    nodeData.setType(nodeJson.getString("type"));
+	                    nodeData.setNodeid(nodeJson.getString("nodeid"));
+	                    nodeData.setBrowsename(nodeJson.getString("browsename"));
+	                    nodeData.setOpcname(nodeJson.getString("opcname"));
+	                    nodeData.setDisplayName(nodeJson.getString("displayName"));
+	                    nodeDataList.add(nodeData);
+	                    
+	                    nodeid = nodeJson.getString("nodeid");
+	                }
 				
-				String respStr = client.sendMessage(json.toString());
-				JSONObject respJson = new JSONObject(respStr);
-				
-				JSONArray dataArr = respJson.getJSONArray("data");
-				
-				System.out.println("data array : "+dataArr);
-				
-//				for (int i = 0; i < dataArr.length(); i++) {
-//				    String nodeDataString = dataArr.getString(i);
-//
-//				    // Split the nodeDataString based on commas
-//				    String[] parts = nodeDataString.split(",");
-//
-//				    String displayName = null;
-//				    
-//				    // Iterate through the parts to find the one containing 'displayName'
-//				    for (String part : parts) {
-//				        if (part.contains("displayName")) {
-//				            // Extract the displayName value
-//				            displayName = part.trim().replace("displayName=", "");
-//				            // Remove the trailing ']' using replaceAll
-//				            displayName = displayName.replaceAll("\\]$", "");
-//				            break;
-//				        }
-//				    }
-//
-//				    if (displayName != null) {
-//				        System.out.println("displayName: " + displayName);
-//				        // You can use the 'displayName' value as needed in your servlet code.
-//				    }
+	               
+	                for (NodeData nodeData : nodeDataList) {
+	                    nodeidMap.put(nodeData.getBrowsename(), nodeData.getNodeid());
+	                    
+	                }
+                
+	                System.out.println("node id : "+nodeid);
+	                
+	                for (NodeData nodeData : nodeDataList) {
+	                    displayNamesArray.put(nodeData.getDisplayName());
+	                }
+
+	                // Include the displayNamesArray in the JSON response
+	                JSONObject jsonResponse = new JSONObject();
+	                jsonResponse.put("data", displayNamesArray);
+
+	                // Set the response content type to JSON
+	                response.setContentType("application/json");
+
+	                // Write the JSON data to the response
+	                PrintWriter out = response.getWriter();
+	                out.print(jsonResponse.toString());
+	                out.flush();
+					
+				}
+	                else if(opcname.equals("Objects")){
+	                	
+	                	if (nodeidMap.containsKey(opcname)) {
+	                        nodeid = nodeidMap.get(opcname);
+	                        System.out.println("objects nodeid: " + nodeid);
+	                    }
+	                   // System.out.println("objects nodeid: "+nodeid);
+	                    
+	                	json.put("operation", "get_opc_nodes");
+						json.put("user", check_username);
+						
+						JSONObject json_opc_node = new JSONObject();
+						
+						json_opc_node.put("dataType", "string");
+						json_opc_node.put("nodeid", nodeid);
+						json_opc_node.put("opcname", opcname);
+						JSONObject json_value = new JSONObject();
+						
+						
+						json_opc_node.put("value", json_value);
+						
+						json.put("opc_node", json_opc_node);
+						
+						String respStr = client.sendMessage(json.toString());
+						JSONObject respJson = new JSONObject(respStr);
+						System.out.println(respJson.toString());
+						
+						String dataString = respJson.getString("data");
+			            JSONArray dataArr = new JSONArray(dataString);
+					
+						// Parse the JSON data into an array of NodeData objects
+		                List<NodeData> nodeDataList = new ArrayList<>();
+		                for (int i = 0; i < dataArr.length(); i++) {
+		                    JSONObject nodeJson = dataArr.getJSONObject(i);
+		                    NodeData nodeData = new NodeData();
+		                    nodeData.setType(nodeJson.getString("type"));
+		                    nodeData.setNodeid(nodeJson.getString("nodeid"));
+		                    nodeData.setBrowsename(nodeJson.getString("browsename"));
+		                    nodeData.setOpcname(nodeJson.getString("opcname"));
+		                    nodeData.setDisplayName(nodeJson.getString("displayName"));
+		                    nodeDataList.add(nodeData);
+		                }
+					
+		                //HashMap<String, String> nodeidMap = new HashMap<>();
+		                for (NodeData nodeData : nodeDataList) {
+		                    nodeidMap.put(nodeData.getBrowsename(), nodeData.getNodeid());
+		                }
+//		                
+		             
+		                
+		                for (NodeData nodeData : nodeDataList) {
+		                    displayNamesArray.put(nodeData.getDisplayName());
+		                }
+
+		                // Include the displayNamesArray in the JSON response
+		                JSONObject jsonResponse = new JSONObject();
+		                jsonResponse.put("data", displayNamesArray);
+
+		                // Set the response content type to JSON
+		                response.setContentType("application/json");
+
+		                // Write the JSON data to the response
+		                PrintWriter out = response.getWriter();
+		                out.print(jsonResponse.toString());
+		                out.flush();
+
+					
+				}
+	         //       else if(){
+//					
+//				}else if(){
+//					
 //				}
-//
-//				
-//				JSONObject jsonObject = new JSONObject();
-//
-//				// Set the content type of the response to application/json
-//				response.setContentType("application/json");
-//
-//				// Get the response PrintWriter
-//				PrintWriter out = response.getWriter();
-//
-//				// Write the JSON object to the response
-//				out.print(jsonObject.toString());
-//				out.flush();
-				
-				
-				 List<String> displayNamesList = new ArrayList<>();
-
-				    for (int i = 0; i < dataArr.length(); i++) {
-				        String nodeDataString = dataArr.getString(i);
-
-				        // Split the nodeDataString based on commas
-				        String[] parts = nodeDataString.split(",");
-
-				        String displayName = null;
-
-				        // Iterate through the parts to find the one containing 'displayName'
-				        for (String part : parts) {
-				            if (part.contains("displayName")) {
-				                // Extract the displayName value
-				                displayName = part.trim().replace("displayName=", "");
-				                // Remove the trailing ']' using replaceAll
-				                displayName = displayName.replaceAll("\\]$", "");
-				                break;
-				            }
-				        }
-
-				        if (displayName != null) {
-				            displayNamesList.add(displayName);
-				        }
-				    }
-
-				    // Create a JSON object to hold the displayNames
-				    JSONObject jsonResponse = new JSONObject();
-				    jsonResponse.put("displayNames", displayNamesList);
-
-				    // Set the content type of the response to application/json
-				    response.setContentType("application/json");
-
-				    // Get the response PrintWriter
-				    PrintWriter out = response.getWriter();
-
-				    // Write the JSON object to the response
-				    out.print(jsonResponse.toString());
-				    out.flush();
-			
-				
-				
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("Error in getting opc nodes list: "+e);
 			}
-			
+				
+							
 			
 		}else{
 			try {
