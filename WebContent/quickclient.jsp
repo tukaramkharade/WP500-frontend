@@ -60,39 +60,39 @@ button {
   cursor: pointer;
 }
 
-#treeview ul {
-    list-style-type: none;
-    padding-left: 20px;
+#treeview .indented {
+    margin-left: 10px; /* Adjust the margin as needed */
 }
 
-#treeview li {
-    cursor: pointer;
-    margin-bottom: 5px;
-}
+ #treeview ul {
+        list-style-type: none;
+        padding-left: 30px;
+    }
 
-#treeview li::before {
-    content: "\25B6"; /* Unicode character for a right-pointing triangle */
-    margin-right: 5px;
-}
 
-#treeview li.expanded::before {
-    content: "\25BE"; /* Unicode character for a down-pointing triangle */
-}
+    #treeview li {
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
 
-#treeview li > ul {
-    display: none;
-}
+    #treeview li::before {
+        content: "\25B6"; /* Unicode character for a right-pointing triangle */
+        margin-right: 5px;
+    }
 
-#treeview li.expanded > ul {
-    display: block;
-}
+    #treeview li.expanded::before {
+        content: "\25BE"; /* Unicode character for a down-pointing triangle */
+    }
+
+    #treeview li > ul {
+        display: none;
+    }
+
+    #treeview li.expanded > ul {
+        display: block;
+    }
 
 /* Style your modal and other elements as needed */
-
-
-
-
-
 
 
 </style>
@@ -102,6 +102,7 @@ button {
 var roleValue;	
 var tokenValue;
 var textContent;
+var textContent1;
 
 function getOpcuaClientList(){
 	
@@ -135,7 +136,7 @@ function getOpcuaClientList(){
 			var treeData = data.data; // Assuming your data is structured as an array
 
             // Call populateTreeView with the treeData
-            populateTreeView(treeData, $("#root"));
+            populateTreeView(treeData, $("#treeview"));
 	    },
 	    
 	    error : function(xhr, status, error) {
@@ -146,19 +147,87 @@ function getOpcuaClientList(){
 	
 }
 
+/* function populateTreeView(nodes, container) {
+    container.empty(); // Clear the existing content before populating
+
+    
+    
+    for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var ul = document.createElement("ul");
+        container.append(ul);
+
+        var li = document.createElement("li");
+        li.textContent = node;
+        ul.appendChild(li);
+        
+
+        // Add a click event handler for the dynamically generated <ul> elements
+        ul.onclick = function (e) {
+            e.stopPropagation();
+             textContent = e.target.textContent.trim();
+             //alert(textContent);
+             getOPCNodes(textContent);
+             
+           
+        };
+        
+        
+    }
+}  */
+
 function populateTreeView(nodes, container) {
     container.empty(); // Clear the existing content before populating
 
     for (var i = 0; i < nodes.length; i++) {
         var node = nodes[i];
-        var listItem = $("<li>").text(node);
+        var ul = document.createElement("ul");
+        container.append(ul);
 
-        container.append(listItem);
+        var li = document.createElement("li");
+        li.textContent = node; // You can leave this empty if the nodes have no specific property
+
+        if (node.children && node.children.length > 0) {
+            // Create an arrow icon if the node has children
+            var arrow = document.createElement("span");
+            arrow.classList.add("arrow");
+            arrow.textContent = "\u25B6"; // Right-pointing triangle
+            li.appendChild(arrow);
+            li.addEventListener("click", function () {
+                ul.classList.toggle("expanded");
+                arrow.textContent = ul.classList.contains("expanded") ? "\u25BE" : "\u25B6";
+            });
+        }
+
+        ul.appendChild(li);
+        
+     // Add a click event handler for the dynamically generated <ul> elements
+          ul.onclick = function (e) {
+            e.stopPropagation();
+             textContent = e.target.textContent.trim();
+             //alert(textContent);
+             getOPCNodes(textContent);
+             
+           
+        };  
+
+         /* if (node.children && node.children.length > 0) {
+            // If the node has children, recursively populate them
+            populateTreeView(node.children, ul);
+        }  */
+         
+        
+        
     }
 }
 
 
-function getOPCNodes(opcname) {
+
+
+
+
+
+/* function getOPCNodes(opcname) {
     $.ajax({
         type: 'POST',
         url: 'QuickClientServlet',
@@ -166,8 +235,10 @@ function getOPCNodes(opcname) {
             opcname: opcname
         },
         success: function (response) {
-            if (response.displayNames) {
-                var root = document.getElementById("root");
+        	
+       	alert(response.data);
+        	if (response.data) {
+                var root = document.getElementById("treeview");
 
                 if (root) {
                     // Check if ul already exists
@@ -181,9 +252,9 @@ function getOPCNodes(opcname) {
                         return;
                     }
 
-                    response.displayNames.forEach(function (displayName) {
+                    response.data.forEach(function (displayName) {
                         var li = document.createElement("li");
-                        li.classList.add("arrow", "parent");
+                        li.classList.add("arrow", "parent", "indented"); // Add "indented" class
                         li.textContent = displayName;
                         ul.appendChild(li);
                     });
@@ -199,6 +270,70 @@ function getOPCNodes(opcname) {
         }
     });
 }
+ */
+ 
+ 
+ function getOPCNodes(opcname) {
+	    $.ajax({
+	        type: 'POST',
+	        url: 'QuickClientServlet',
+	        data: {
+	            opcname: opcname
+	        },
+	        success: function (response) {
+	            alert(response.data);
+
+	            if (response.data) {
+	                var root = document.getElementById("treeview");
+
+	                if (root) {
+	                    // Check if ul already exists
+	                    var ul = root.querySelector("ul");
+	                    if (!ul) {
+	                        ul = document.createElement("ul");
+	                        ul.classList.add("populated"); // Add a class to mark as populated
+	                        root.appendChild(ul);
+	                    } else if (ul.classList.contains("populated")) {
+	                        // If ul is already populated, don't add again
+	                        return;
+	                    }
+
+	                    // Remove the 'selected' class from all nodes
+	                    var selectedNodes = root.querySelectorAll('.selected');
+	                    selectedNodes.forEach(function (node) {
+	                        node.classList.remove('selected');
+	                    });
+
+	                    response.data.forEach(function (displayName) {
+	                        var li = document.createElement("li");
+	                        li.classList.add("arrow", "parent", "indented"); // Add "indented" class
+	                        li.textContent = displayName;
+	                        ul.appendChild(li);
+
+	                        // Add a click event handler for the dynamically generated li elements
+	                        li.addEventListener('click', function (event) {
+	                            // Remove the 'selected' class from all nodes
+	                            var nodes = root.querySelectorAll('.selected');
+	                            nodes.forEach(function (node) {
+	                                node.classList.remove('selected');
+	                            });
+
+	                            // Add the 'selected' class to the clicked node
+	                            li.classList.add('selected');
+	                        });
+	                    });
+
+	                    ul.classList.add("populated"); // Mark ul as populated
+	                } else {
+	                    console.error("Root element not found.");
+	                }
+	            }
+	        },
+	        error: function () {
+	            alert('Error fetching displayNames');
+	        }
+	    });
+	}
 
 
 
@@ -215,61 +350,14 @@ String tokenValue = (String) session.getAttribute("token");%>
 
 tokenValue = '<%=tokenValue%>';
 
-//Hide child nodes initially
-$("#root ul").hide();
 
-// Toggle child nodes when clicking on parent nodes
-$("#root li:has(ul)").click(function(e) {
-    e.stopPropagation();
-    $(this).children("ul").slideToggle();
-});
-
-  
-  $('#root').on('click', 'li', function() {
-	  var textContent = $(this).text();
-      var ul = $(this).children("ul");
-
-      if (ul.length === 0) {
-          getOPCNodes(textContent);
-      }
-	});
-
-  $('#root').on('click', function() {
-      var ul = $(this).find("ul");
-      var isExpanded = ul.is(":visible");
-
-      if (isExpanded) {
-          ul.slideUp();
-      } else {
-          ul.slideDown();
-      }
-
-      $(this).toggleClass("expanded"); // Toggle the expanded class
-  });
-  
-  // Hide the displayed text when the mouse moves away from the tree view item
-  /* $('#root').on('mouseout', 'li', function() {
-    $('#display-hovered-text').hide();
-  }); */
-  
-  document.addEventListener("DOMContentLoaded", function () {
-	    var treeView = document.getElementById("treeview");
-
-	    // Add click event to expand/collapse nodes
-	    treeView.addEventListener("click", function (event) {
-	        if (event.target.tagName === "LI" && event.target !== treeView) {
-	            event.stopPropagation();
-	            var ul = event.target.querySelector("ul");
-	            if (ul) {
-	                ul.style.display = ul.style.display === "none" ? "block" : "none";
-	                event.target.classList.toggle("expanded");
-	            }
-	        }
-	    });
-	});
-  
 getOpcuaClientList();
 
+$("#treeview").on("click", "ul", function (e) {
+    e.stopPropagation();
+    $(this).toggleClass("expanded");
+    $(this).find("li").toggleClass("expanded");
+});
 
 });
 </script>
@@ -292,11 +380,8 @@ getOpcuaClientList();
 			<div class="treeview-container">
 			
 			 <div id="treeview">
-    			<ul id="root">
-        			<li></li>
-    			</ul>
+    			
 			</div>
-    		<!-- <div id="display-hovered-text" style="display: none;"></div> -->
     		
 			
 			</div>

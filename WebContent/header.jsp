@@ -178,6 +178,8 @@ var roleValu1e;
 					success : function(data) {
 						//alert(data.status);
 
+						
+						modal.style.display = 'none';
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
