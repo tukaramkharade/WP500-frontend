@@ -368,7 +368,7 @@ tokenValue = '<%=tokenValue%>';
 				
 				<table class="bordered-table">
 				<tr>
-				<th colspan="2">HTTPS Certificate</th>
+				<th colspan="2">Securtiy Certificate</th>
 				</tr>
 				
 				<tr>
