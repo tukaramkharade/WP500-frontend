@@ -143,7 +143,7 @@
               </li>
               
               <li class="nav-item">
-                <a href="quickclient.jsp">Quick Client</a>
+                <a href="browsequickclient.jsp">Quick Client</a>
               </li>
                 
               </ul>
