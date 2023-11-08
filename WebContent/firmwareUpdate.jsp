@@ -97,6 +97,32 @@ button {
   background-color: #4caf50;
   color: white;
 }
+ .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
 
 </style>
 
@@ -189,6 +215,53 @@ function loadFirmwareFiles() {
         },
     });
 }
+function validateAndUpload(fileInputId, allowedExtension) {
+    var fileInput = document.getElementById(fileInputId);
+    var file = fileInput.files[0];
+
+    if (file) {
+        var fileName = file.name;
+        var fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+
+        if (fileExtension === allowedExtension) {
+            // Valid file extension, perform upload logic
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                url: 'UploadServlet', 
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                	if (data.status === 'success') {
+                        $("#popupMessage").text('File uploaded successfully.');
+              			$("#customPopup").show();	                           
+                        loadStratonFiles();  // Refresh the Straton file list
+                    } else {
+                        $("#popupMessage").text('Error uploading file: ' +data.message);
+              			$("#customPopup").show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response, if needed
+                    console.log('Error uploading file: ' + error);
+                }
+            });
+            
+        } else {
+            $("#popupMessage").text('Invalid file extension. Please select a file with ' + allowedExtension + ' extension.');
+  			$("#customPopup").show();
+        }
+    } else {
+        $("#popupMessage").text('Please select a file to upload.');
+			$("#customPopup").show();
+    }
+    $("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
+}
 
 
 </script>
@@ -210,7 +283,7 @@ function loadFirmwareFiles() {
 			
 			<form action="UploadServlet" method="post" enctype="multipart/form-data">
         		<input type="file" name="file" id="fileInput">
-        		<input type="submit" value="Upload" id="file_upload" onclick="redirectToFirmwareUpdate();">
+        		<input type="submit" value="Upload" id="firmwareUpdateButton">
         		
         		<input type="button" value="Firmware update" id="firmware_update">
     		</form>
@@ -256,10 +329,10 @@ function loadFirmwareFiles() {
 		<%@ include file="footer.jsp"%>
 	</div>
 	
-	<!-- Custom Popup -->
-    <div id="customPopup" class="popup">
-        <span class="popup-content" id="popupMessage"></span>
-    </div>
+			<div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			</div>
     
     <script>
     
@@ -312,6 +385,10 @@ function loadFirmwareFiles() {
 			
 			changeButtonColor(true);
      	}
+     	$('#firmwareUpdateButton').click(function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            validateAndUpload('fileInput', '.swu');
+        });	
      	
      	loadFirmwareFiles();
     });
