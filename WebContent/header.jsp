@@ -116,7 +116,7 @@ button {
      
 }
 
-button#loadConfig {
+#loadConfig {
     height: 35px;
     margin-bottom: 10px;
     margin-right: 10px; /* Adjust the margin as needed */
@@ -349,7 +349,7 @@ var roleValu1e;
 </div>
 
 <button style="height: 35px; margin-bottom: 10px;" id="loadConfig" title="Update Configuration">
-    <i class="fa fa-upload" style="font-size: 20px;"></i>
+    <i class="fa fa-upload" style="font-size: 20px; color: #35449a"></i>
 </button>
 	
 		<div class="user-info">

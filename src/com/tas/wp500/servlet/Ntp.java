@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
@@ -30,12 +31,80 @@ public class Ntp extends HttpServlet {
 	JSONObject json = new JSONObject();
 	JSONObject respJson = null;
 
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
 
-	}
+				throws ServletException, IOException {
 
+			HttpSession session = request.getSession(true);
+	 
+				String check_username = (String) session.getAttribute("username");
+
+				JSONObject jsonObject = new JSONObject();
+	 
+				if (check_username != null) {
+	 
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+	 
+						json.put("operation", "get_ntp_details");
+						json.put("user", check_username);
+	 
+						String respStr = client.sendMessage(json.toString()); 
+						String ntp_service = new JSONObject(respStr).getString("ntp_service");
+						String system_clock_synchronized = new JSONObject(respStr).getString("system_clock_synchronized");
+
+						System.out.println("ntp_service : " + ntp_service);
+						System.out.println("system_clock_synchronized : " + system_clock_synchronized);
+
+						jsonObject.put("ntp_service", ntp_service);
+						jsonObject.put("system_clock_synchronized", system_clock_synchronized);
+
+	 					System.out.println(jsonObject);
+	 
+						// Set the content type of the response to application/json
+	 					response.setContentType("application/json");
+	 
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+	 
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();					
+
+					} catch (JSONException e) {
+
+						// TODO Auto-generated catch block
+
+						e.printStackTrace();
+
+					}
+
+				} else {
+
+					try {
+
+						JSONObject userObj = new JSONObject();
+						userObj.put("msg", "Your session is timeout. Please login again");
+						userObj.put("status", "fail");
+	 
+						System.out.println(">>" + userObj);
+	 
+						// Set the response content type to JSON
+						response.setContentType("application/json");
+	 
+						// Write the JSON data to the response
+						response.getWriter().print(userObj.toString());
+	 
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in session timeout : " + e);
+
+					}
+				}	 
+			}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

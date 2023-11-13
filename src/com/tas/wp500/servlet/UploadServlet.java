@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,60 +26,109 @@ import javax.servlet.annotation.MultipartConfig;
 public class UploadServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// String uploadPath = "E:\\ftpupload"; // Specify the directory where
-		// you want to save uploaded files.
-		String uploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder3";
-//		String uploadPath = "\test";
-		File uploadDir = new File(uploadPath);
+		try {
+			Part filePart = request.getPart("file");
 
-		if (!uploadDir.exists()) {
-			uploadDir.mkdirs();
-		}
+			String uploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder3";
 
-		Part filePart = request.getPart("file");
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
+			String fileName = getFileName(filePart);
+			String filePath = uploadPath + File.separator + fileName;
 
-		// Get the filename from the filePart.
-		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-		String filePath = Paths.get(uploadPath, fileName).toString();
+			HttpSession session = request.getSession();
+			long fileSize = filePart.getSize();
+			long uploadedBytes = 0;
+			byte[] buffer = new byte[8192]; // 8KB buffer
+			int bytesRead;
 
-		try (InputStream input = filePart.getInputStream()) {
-			Files.copy(input, Paths.get(uploadPath, fileName), StandardCopyOption.REPLACE_EXISTING);
+			try (InputStream input = filePart.getInputStream()) {
+				while ((bytesRead = input.read(buffer)) != -1) {
+					// Write the data to the file
+					try (java.io.OutputStream out = new java.io.FileOutputStream(filePath, true)) {
+						out.write(buffer, 0, bytesRead);
+					}
+					uploadedBytes += bytesRead;
 
-			// Create a JSON object for success response
+					// Ensure uploadedBytes does not exceed fileSize
+					if (uploadedBytes > fileSize) {
+						uploadedBytes = fileSize;
+					}
+
+					// Calculate the progress
+					int progress = (int) ((uploadedBytes * 100) / fileSize);
+
+					// Set progress to 100% when upload is completed
+					if (uploadedBytes == fileSize) {
+						progress = 100;
+					}
+
+					// Update the progress attribute in session
+					session.setAttribute("uploadProgress", progress);
+				}			
+			}
+
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("status", "success");
 			jsonObject.put("message", "File uploaded successfully.");
 
-			// Set the content type of the response to application/json
 			response.setContentType("application/json");
 
-			// Get the response PrintWriter
 			PrintWriter out = response.getWriter();
 
-			// Write the JSON object to the response
 			out.print(jsonObject.toString());
 			out.flush();
 		} catch (IOException | JSONException e) {
-			// Create a JSON object for error response
 			JSONObject jsonObject = new JSONObject();
 			try {
 				jsonObject.put("status", "error");
-				jsonObject.put("message", "Error uploading file.");
+				jsonObject.put("message", "Error uploading file: " + e.getMessage());
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
-			// Set the content type of the response to application/json
 			response.setContentType("application/json");
 
-			// Get the response PrintWriter
 			PrintWriter out = response.getWriter();
 
-			// Write the JSON object to the response
 			out.print(jsonObject.toString());
 			out.flush();
 		}
+	}
 
+	private String getFileName(final Part part) {
+		for (String content : part.getHeader("content-disposition").split(";")) {
+			if (content.trim().startsWith("filename")) {
+				return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+			}
+		}
+		return null;
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		int progress = (int) session.getAttribute("uploadProgress");
+		
+		// Create a JSON object for progress response
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("progress", progress);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Set the content type of the response to application/json
+		response.setContentType("application/json");
+
+		// Get the response PrintWriter
+		PrintWriter out = response.getWriter();
+
+		// Write the JSON object to the response
+		out.print(jsonObject.toString());
+		out.flush();
 	}
 }

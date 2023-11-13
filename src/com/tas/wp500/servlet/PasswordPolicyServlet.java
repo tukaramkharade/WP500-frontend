@@ -45,25 +45,23 @@ public class PasswordPolicyServlet extends HttpServlet {
 				logger.info("res " + respJson.toString());
 
 				for (int i = 0; i < respJson.length(); i++) {
-					String password_policy = respJson.getString("password_policy");
+					
 					String characters_count = respJson.getString("characters_count");
-					String password_policy_role = respJson.getString("password_policy_role");
 					JSONArray password_blocked_list = respJson.getJSONArray("password_blocked_list");
-					String ascii_ch_count = respJson.getString("password_policy");
+					String ascii_ch_count = respJson.getString("ascii_ch_count");
 					String number_count = respJson.getString("characters_count");
-					int id = respJson.getInt("id");
+				//	int id = respJson.getInt("id");
 					String mixed_ch_count = respJson.getString("mixed_ch_count");
 					String allowed_special_ch = respJson.getString("allowed_special_ch");
 					String special_ch_count = respJson.getString("special_ch_count");
 
 					try {
-						jsonObject.put("password_policy", password_policy);
+						
 						jsonObject.put("characters_count", characters_count);
-						jsonObject.put("password_policy_role", password_policy_role);
 						jsonObject.put("password_blocked_list", password_blocked_list);
 						jsonObject.put("ascii_ch_count", ascii_ch_count);
 						jsonObject.put("number_count", number_count);
-						jsonObject.put("id", id);
+						//jsonObject.put("id", id);
 						jsonObject.put("mixed_ch_count", mixed_ch_count);
 						jsonObject.put("allowed_special_ch", allowed_special_ch);
 						jsonObject.put("special_ch_count", special_ch_count);
@@ -71,15 +69,22 @@ public class PasswordPolicyServlet extends HttpServlet {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+					// Set the content type of the response to application/json
+					response.setContentType("application/json");
+
 
 					// Get the response PrintWriter
 					PrintWriter out = response.getWriter();
 
+					System.out.println("json obj : "+jsonObject.toString());
 					// Write the JSON object to the response
-					out.print(jsonObject.toString());
+					// Trim the JSON data before sending
+					out.print(jsonObject.toString().trim());
+
 					out.flush();
 
-				}
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,8 +119,6 @@ public class PasswordPolicyServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 
-		String password_policy = null;
-		String password_policy_role = null;
 		String min_asccii_char_count = null;
 		String min_mix_char_count = null;
 		String min_num_count = null;
@@ -130,10 +133,8 @@ public class PasswordPolicyServlet extends HttpServlet {
 			if (password_policy_action != null) {
 				switch (password_policy_action) {
 
-				case "addPassword":
+				case "updatePassword":
 
-					password_policy = request.getParameter("password_policy");
-					password_policy_role = request.getParameter("password_policy_role");
 					min_asccii_char_count = request.getParameter("min_asccii_char_count");
 					min_mix_char_count = request.getParameter("min_mix_char_count");
 					min_num_count = request.getParameter("min_num_count");
@@ -142,8 +143,6 @@ public class PasswordPolicyServlet extends HttpServlet {
 					min_char_count = request.getParameter("min_char_count");
 
 					String blockedPasswordJson = request.getParameter("password_blocked_list");
-
-					System.out.println("password policy : " + password_policy);
 
 					JSONArray password_blocked_list = null;
 					try {
@@ -159,11 +158,9 @@ public class PasswordPolicyServlet extends HttpServlet {
 						JSONObject json = new JSONObject();
 
 						json.put("operation", "password_policy");
-						json.put("operation_type", "add_password");
+						json.put("operation_type", "update_password");
 						json.put("user", check_username);
 
-						json.put("password_policy", password_policy);
-						json.put("password_policy_role", password_policy_role);
 						json.put("ascii_ch_count", min_asccii_char_count);
 						json.put("mixed_ch_count", min_mix_char_count);
 						json.put("number_count", min_num_count);
