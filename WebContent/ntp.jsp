@@ -404,6 +404,43 @@ var tokenValue;
 			}
 		});
 	}
+	
+	
+	function getNtpDetails() {
+
+			$.ajax({
+				url: 'ntp',
+				type: 'GET',
+				dataType: 'json',
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				},
+				success: function(data) {
+					console.log("ntp_service " + data.ntp_service);
+					console.log("system_clock_synchronized " + data.system_clock_synchronized);
+
+					document.getElementById('ntp-service-cell').textContent = data.ntp_service;
+	                document.getElementById('system-clock-cell').textContent = data.system_clock_synchronized;
+
+					var json1 = JSON.stringify(data);	 
+					var json = JSON.parse(json1);
+
+					if (json.status == 'fail') {
+						var confirmation = confirm(json.msg);
+
+						if (confirmation) {
+							window.location.href = 'login.jsp';
+						}
+					}	
+				},
+
+				error : function(xhr, status, error) {
+					console.log('Error: ' + error);
+				}
+			});
+
+		}
+
 
 	function getntp() {
 		$.ajax({
@@ -419,10 +456,17 @@ var tokenValue;
 
 				var json = JSON.parse(json1);
 				if (json.status == 'fail') {
-					var confirmation = confirm(json.msg);
-					if (confirmation) {
-						window.location.href = 'login.jsp';
-					}
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
 				}
 			
 				//$('#ntp_client').prop('checked', data.ntp_client);
@@ -787,6 +831,13 @@ var tokenValue;
 										<option value="10 min">10 min</option>							
 
 						</select> <span id="jsonIntervalError" style="color: red;"></span></td>
+					</tr>
+					
+					<tr>
+						<td>NTP Service</td>
+						<td id="ntp-service-cell"></td>
+						<td >Clock Synchronized</td>
+						<td id="system-clock-cell"></td>
 					</tr>
 					
 				</table>

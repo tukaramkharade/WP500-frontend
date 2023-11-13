@@ -123,6 +123,32 @@ button {
   cursor: pointer;
   margin-left: 40%;
 }
+#progress-bar-container {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#progress-bar {
+    width: 0;
+    height: 30px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    border-radius: 5px;
+    transition: width 0.3s ease-in-out;
+}
+
+#progress-bar-container:hover #progress-bar {
+    background-color: #45a049;
+}
+
+#progress-bar-container:hover {
+    background-color: #e0e0e0;
+}
 
 </style>
 
@@ -188,11 +214,10 @@ function loadFirmwareFiles() {
 					  
 					  // Handle the confirm button click
 					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
+					  confirmButton.onclick = function () {					  
+						
 					        modal.style.display = 'none';
-					        window.location.href = 'login.jsp';
+					        window.location.href = 'login.jsp';					           			           
 					  };
 				}
 
@@ -215,6 +240,8 @@ function loadFirmwareFiles() {
         },
     });
 }
+var progressInterval;
+
 function validateAndUpload(fileInputId, allowedExtension) {
     var fileInput = document.getElementById(fileInputId);
     var file = fileInput.files[0];
@@ -224,44 +251,73 @@ function validateAndUpload(fileInputId, allowedExtension) {
         var fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
 
         if (fileExtension === allowedExtension) {
-            // Valid file extension, perform upload logic
             var formData = new FormData();
             formData.append('file', file);
 
             $.ajax({
-                url: 'UploadServlet', 
+                url: 'UploadServlet',
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                	if (data.status === 'success') {
+                    clearInterval(progressInterval); // Stop the progress interval
+                    if (data.status === 'success') {
+                        // File uploaded successfully logic
                         $("#popupMessage").text('File uploaded successfully.');
-              			$("#customPopup").show();	                           
+                        $("#customPopup").show();
                         loadStratonFiles();  // Refresh the Straton file list
                     } else {
-                        $("#popupMessage").text('Error uploading file: ' +data.message);
-              			$("#customPopup").show();
+                        // Error uploading file logic
+                        $("#popupMessage").text('Error uploading file: ' + data.message);
+                        $("#customPopup").show();
                     }
                 },
                 error: function(xhr, status, error) {
-                    // Handle error response, if needed
+                    clearInterval(progressInterval); // Stop the progress interval on error
                     console.log('Error uploading file: ' + error);
                 }
             });
-            
+
+            // Start the progress interval only if a file is being uploaded
+            progressInterval = setInterval(updateProgress, 1000);
         } else {
             $("#popupMessage").text('Invalid file extension. Please select a file with ' + allowedExtension + ' extension.');
-  			$("#customPopup").show();
+            $("#customPopup").show();
         }
     } else {
         $("#popupMessage").text('Please select a file to upload.');
-			$("#customPopup").show();
+        $("#customPopup").show();
     }
     $("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
+        $("#customPopup").hide();
+        $('#progress-bar').css('width', '0%');
+        $('#progress-bar').text('');	
+    });
 }
+function updateProgress() {
+	 console.log('updateProgress');
+    $.ajax({
+        url: 'UploadServlet', // Replace with your servlet URL
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+        	console.log('updateProgress'+data.progress);
+            var progress = data.progress;
+            
+            $('#progress-bar').css('width', progress + '%');
+            $('#progress-bar').text(progress + '%');
+            if (progress === 100) {
+                $('#progress-bar').css('width', '0%');
+                $('#progress-bar').text('');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching progress:', error);
+        }
+    });
+}
+
 
 
 </script>
@@ -286,6 +342,10 @@ function validateAndUpload(fileInputId, allowedExtension) {
         		<input type="submit" value="Upload" id="firmwareUpdateButton">
         		
         		<input type="button" value="Firmware update" id="firmware_update">
+        		<h3>File Upload Progress</h3>
+   					 <div id="progress-bar-container">
+       					 <div id="progress-bar"></div>
+    				</div>
     		</form>
 			</div>
 			

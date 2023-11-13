@@ -188,10 +188,15 @@ margin-top: 70px;
 
 	var roleValue;	
 	var tokenValue;
+	var nodeid;
 	
 	
 
-	function loadMqttList() {
+	function loadTagList() {
+		
+		
+		var pv_address = $('#pv_address').val(nodeid);
+	//	$("#pv_address").prop("disabled", true);
 		
 		$.ajax({
 					url : 'tagMapping',
@@ -202,8 +207,8 @@ margin-top: 70px;
 				    },
 					success : function(data) {
 						// Clear existing table rows
-						var mqttTable = $('#mqttListTable tbody');
-						mqttTable.empty();
+						var tagTable = $('#tagListTable tbody');
+						tagTable.empty();
 						
 						var json1 = JSON.stringify(data);
 
@@ -227,10 +232,10 @@ margin-top: 70px;
 						
 						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
-							$.each(data,function(index, mqtt) {
+							$.each(data,function(index, tag) {
 								var row = $('<tr>');
-								row.append($('<td>').text(mqtt.tag_name+ ""));
-								row.append($('<td>').text(mqtt.pv_address + ""));							
+								row.append($('<td>').text(tag.tag_name+ ""));
+								row.append($('<td>').text(tag.pv_address + ""));							
 																
 								var actions = $('<td>')
 								
@@ -239,9 +244,9 @@ margin-top: 70px;
 										.html('<i class="fas fa-edit"></i>')
 										.click(
 												function() {
-													setMqtt(mqtt.prefix);
-													setBrokerIPAddress(mqtt.tag_name);
-													setPortNumber(mqtt.pv_address);
+													
+													setBrokerIPAddress(tag.tag_name);
+													setPortNumber(tag.pv_address);
 													
 												});
 								var deleteButton = $(
@@ -250,7 +255,7 @@ margin-top: 70px;
 										.click(
 												function() {
 												
-												deleteMqtt(mqtt.tag_name);
+												deleteTag(tag.tag_name);
 													
 												});
 								
@@ -258,65 +263,47 @@ margin-top: 70px;
 								actions.append(deleteButton);
 								row.append(actions);
 									
-								mqttTable.append(row);
+								tagTable.append(row);
 
 							});
 							
 						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
-							$.each(data,function(index, mqtt) {
+							$.each(data,function(index, tag) {
 								var row = $('<tr>');
-								row.append($('<td>').text(mqtt.tag_name+ ""));
-								row.append($('<td>').text(mqtt.pv_address + ""));							
+								row.append($('<td>').text(tag.tag_name+ ""));
+								row.append($('<td>').text(tag.pv_address + ""));							
 																
-								var actions = $('<td>')
 								
-								
-								var getStatusButton = $(
-										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
-										.html('<i class="fas fa-info-circle"></i>')
-										.click(
-												function() {
-													getMqttStatus(mqtt.tag_name);
-												});
-
-															actions.append(getStatusButton);
-
-								row.append(actions);
 									
-								mqttTable.append(row);
+								tagTable.append(row);
 
 							});
 						}
 										},
 					error : function(xhr, status, error) {
-						console.log('Error loading mqtt data: ' + error);
+						console.log('Error loading tag data: ' + error);
 					}
 				});
 	}
 
 
-	function setMqtt(mqttId) {
-		// Make an AJAX GET request to retrieve user details for editing
+	
 
-		$('#prefix').val(mqttId);
-		$("#prefix").prop("disabled", true);
+	function setBrokerIPAddress(tagId) {
+
+		$('#tag_name').val(tagId);
+	}
+
+	function setPortNumber(tagId) {
+
+		$('#pv_address').val(tagId);
 		$('#registerBtn').val('Update');
-	}
-
-	function setBrokerIPAddress(mqttId) {
-
-		$('#tag_name').val(mqttId);
-	}
-
-	function setPortNumber(mqttId) {
-
-		$('#pv_address').val(mqttId);
 	}
 
 	
 
 	 
-	function deleteMqtt(tag_name) {
+	function deleteTag(tag_name) {
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -334,11 +321,11 @@ margin-top: 70px;
 					success : function(data) {
 						
 						modal.style.display = 'none';
-						loadMqttList();
+						loadTagList();
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
-						console.log('Error deleting mqtt settings: ' + error);
+						console.log('Error deleting tag: ' + error);
 					}
 				});
 			  
@@ -369,15 +356,15 @@ margin-top: 70px;
 	            }
 	        },
 	        error: function (xhr, status, error) {
-	            console.log('Error loading mqtt data: ' + error);
+	            console.log('Error loading tag data: ' + error);
 	        }
 	    });
 	}
 	function exportToExcel(data) {
         var excelData = [];
         // Iterate through the data and push to excelData array
-        data.forEach(function (mqtt) {
-            var rowData = [mqtt.tag_name, mqtt.pv_address];
+        data.forEach(function (tag) {
+            var rowData = [tag.tag_name, tag.pv_address];
             excelData.push(rowData);
         });
 
@@ -391,7 +378,7 @@ margin-top: 70px;
     }
 
  
- function editMqtt(){
+ function editTag(){
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -417,14 +404,14 @@ margin-top: 70px;
 					// Close the modal
 				    modal.style.display = 'none';
 					
-					loadMqttList();
+				    loadTagList();
 
 					// Clear form fields
 					$('#tag_name').val('');
 					$('#pv_address').val('');
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating mqtt: ' + error);
+					console.log('Error updating tag: ' + error);
 				}
 			});
 			$('#registerBtn').val('Add');
@@ -440,8 +427,10 @@ margin-top: 70px;
 	 
  }
  
-	// Function to handle form submission and add a new mqtt
-	function addMqtt() {
+	// Function to handle form submission and add a new tag
+	function addTag() {
+		
+		
 		
 		var tag_name = $('#tag_name').val();
 		var pv_address = $('#pv_address').val();
@@ -462,7 +451,7 @@ margin-top: 70px;
       			$("#customPopup").show();
 
       
-				loadMqttList();
+      			loadTagList();
 
 				// Clear form fields
 
@@ -471,7 +460,7 @@ margin-top: 70px;
 				
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding mqtt settings: ' + error);
+				console.log('Error adding tag: '+ error);
 			}
 		});
 		$("#closePopup").click(function () {
@@ -505,9 +494,7 @@ margin-top: 70px;
         
     }
 	
-	 function redirectToMQTT() {
-	        window.location.href = 'mqtt.jsp';
-	    }
+	 
 
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -523,8 +510,16 @@ margin-top: 70px;
 	String tokenValue = (String) session.getAttribute("token");%>
 
 	tokenValue = '<%=tokenValue%>';
+	
+	
+	<%// Access the session variable
+	HttpSession node = request.getSession();
+	String nodeid = (String) session.getAttribute("nodeid");%>
 
-						loadMqttList();
+	nodeid = '<%=nodeid%>';
+	
+
+	loadTagList();
 						
 						
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
@@ -537,16 +532,16 @@ margin-top: 70px;
 						}										
 
 						// Handle form submission
-						$('#mqttForm').submit(function(event) {
+						$('#tagForm').submit(function(event) {
 											event.preventDefault();
 											var buttonText = $('#registerBtn').val();
 											
 											var tag_name = $('#tag_name').val();										
 										    var pv_address = $('#pv_address').val();							
 										    if (buttonText == 'Add') {
-												addMqtt();
+												addTag();
 											} else {
-												editMqtt();
+												editTag();
 											}									
 										});
 						
@@ -577,7 +572,7 @@ margin-top: 70px;
 			<hr>
 
 			<div class="container">
-				<form id="mqttForm">
+				<form id="tagForm">
 
 					<input type="hidden" id="action" name="action" value="">
 					<table class="bordered-table" style="margin-top: -1px;">
@@ -596,13 +591,7 @@ margin-top: 70px;
 							<p id="pv_address_error" style="color: red;"></p></td>
 					</tr>
 					
-					<!-- <tr>
-					<td>Publishing format</td>
-					<td><input type="text" id="publishing_format" name="publishing_format" maxlength="31" placeholder="Publishing format" required /></td>
-					<td></td>
-					<td></td>
-					</tr> -->
-								
+						
 					</table>
 					
 					<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">			
@@ -618,7 +607,7 @@ margin-top: 70px;
 			
 			<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
-				  <p>Are you sure you want to delete this mqtt setting?</p>
+				  <p>Are you sure you want to delete this tag?</p>
 				  <button id="confirm-button-delete">Yes</button>
 				  <button id="cancel-button-delete">No</button>
 				</div>
@@ -626,7 +615,7 @@ margin-top: 70px;
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to modify this mqtt setting?</p>
+				  <p>Are you sure you want to modify this tag?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
@@ -647,11 +636,11 @@ margin-top: 70px;
 			<h3 style="margin-top: 15px;">TAG MAPPING LIST</h3>
 			<hr>
 			<div class="table-container">
-				<table id="mqttListTable">
+				<table id="tagListTable">
 					<thead>
 						<tr>
 							<th>Tag Name</th>
-							<th>Pv address</th>						
+							<th>PV address</th>						
 							<th> Actions</th>
 						</tr>
 					</thead>

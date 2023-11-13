@@ -418,7 +418,7 @@ var tokenValue;
                 <div class="tab-container">
                     <button class="tab-button active" onclick="openTab('straton-live-data-content', this)">STRATON LIVE DATA</button>
                     <button class="tab-button" onclick="openTab('straton-update', this)">STRATON UPDATE</button>
-                    <div id="straton-live-data-content" class="tab-content" style="display: none;">
+                    <div id="straton-live-data-content" class="tab-content" style="display: block;">
                         <h3>STRATON LIVE DATA</h3>
                         <button onClick="window.location.reload();" style="cursor: pointer; background-color: #35449a; border-radius: 5px; border: none; color: white; font-size: small">Refresh Page</button>
                         <div id="search">

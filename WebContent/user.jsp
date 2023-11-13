@@ -70,6 +70,34 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
+.modal-updatePasswordPolicy {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-updatePasswordPolicy {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
 .modal-session-timeout {
   display: none;
   position: fixed;
@@ -153,6 +181,19 @@ button {
   background-color: #f44336;
   color: white;
 }
+
+
+
+#confirm-button-updatePasswordPolicy {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-updatePasswordPolicy {
+  background-color: #f44336;
+  color: white;
+}
+
 
 #confirm-button-edit-password {
   background-color: #4caf50;
@@ -673,60 +714,83 @@ var tokenValue;
 		  
 	 }
 	 
-	 function addPasswordPolicy(){
+	 function updatePasswordPolicy(){
 		 
-		 var password_policy = $('#password_policy').find(":selected").val();;
-			var password_policy_role = $('#password_policy_role').find(":selected").val();;
-			var min_asccii_char_count = $('#min_asccii_char_count').val();
-			var min_mix_char_count = $('#min_mix_char_count').val();
-			var min_num_count = $('#min_num_count').val();
-			var min_spl_char_count = $('#min_spl_char_count').val();
-			var allowed_spl_char = $('#allowed_spl_char').val();
-			var min_char_count = $('#min_char_count').val();
-			
-			
-			 var password_blocked_list = [];
-			 
-			 var input = $(this).closest('tr').find('input[name="blocked_password"]').val();
-		        
-		        if (input) {
-		        	password_blocked_list.push(input);
-		        }
-		        
-		        var blockedPasswordJson = JSON.stringify(password_blocked_list);
-		        
-		        $.ajax({
-		        	url : 'PasswordPolicyServlet',
-		    		type : 'POST',
-		    		data : {
-		    			password_policy : password_policy,
-		    			password_policy_role : password_policy_role,
-		    			min_asccii_char_count : min_asccii_char_count,
-		    			min_mix_char_count : min_mix_char_count,
-		    			min_num_count : min_num_count,
-		    			min_spl_char_count : min_spl_char_count,
-		    			allowed_spl_char: allowed_spl_char,
-		    			min_char_count : min_char_count,
-		    			password_blocked_list : blockedPasswordJson,
-		    			password_policy_action : 'addPassword'
-		    						
-		    		},
-		    		
-		    		
-		    		success : function(data) {
-		    			
-		    			alert(data.message);
-		    			
-		    		},
-		    		error : function(xhr, status, error) {
-		    			console.log('Error adding password policy: ' + error);
-		    		}
-		        	
-		        });
+		 var modal = document.getElementById('custom-modal-updatePasswordPolicy');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-updatePasswordPolicy');
+		  confirmButton.onclick = function () {
+			  
+			  event.preventDefault();
+			  
+				var min_asccii_char_count = $('#min_asccii_char_count').val();
+				var min_mix_char_count = $('#min_mix_char_count').val();
+				var min_num_count = $('#min_num_count').val();
+				var min_spl_char_count = $('#min_spl_char_count').val();
+				var allowed_spl_char = $('#allowed_spl_char').val();
+				var min_char_count = $('#min_char_count').val();
+				
+				
+				 var password_blocked_list = [];
+				 
+				// Find all input fields with name "blocked_password" in the table
+				  $('#block-list input[name="blocked_password"]').each(function(index, input) {
+				    var value = $(input).val();
+
+				    if (value) {
+				      password_blocked_list.push(value);
+				    }
+				  });
+
+			        
+			        var blockedPasswordJson = JSON.stringify(password_blocked_list);
+			        
+			        $.ajax({
+			        	url : 'PasswordPolicyServlet',
+			    		type : 'POST',
+			    		data : {
+			    			min_asccii_char_count : min_asccii_char_count,
+			    			min_mix_char_count : min_mix_char_count,
+			    			min_num_count : min_num_count,
+			    			min_spl_char_count : min_spl_char_count,
+			    			allowed_spl_char: allowed_spl_char,
+			    			min_char_count : min_char_count,
+			    			password_blocked_list : blockedPasswordJson,
+			    			password_policy_action : 'updatePassword'
+			    						
+			    		},
+			    		
+			    		
+			    		success : function(data) {
+			    			
+			    			// Close the modal
+					        modal.style.display = 'none';
+			    			
+			    			getPasswordPolicy();
+			    			
+			    		},
+			    		error : function(xhr, status, error) {
+			    			console.log('Error updating password policy: ' + error);
+			    		}
+			        	
+			        });
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-updatePasswordPolicy');
+		  cancelButton.onclick = function () {
+			  event.preventDefault();
+		    // Close the modal
+		    modal.style.display = 'none';
+		    
+		    window.location.reload();
+		   
+		  };
 			
 	 }
 	 
-	/*  function handleStatus(status) {
+	  function handleStatus(status) {
 		    if (status === 'fail') {
 		        var modal = document.getElementById('custom-modal-session-timeout');
 		        modal.style.display = 'block';
@@ -739,61 +803,116 @@ var tokenValue;
 		            window.location.href = 'login.jsp';
 		        };
 		    }
-		} */
+		} 
 	 
-	 function getPasswordPolicy(){
-		 $.ajax({
-			 
-			 url : "PasswordPolicyServlet",
-				type : "GET",
-				dataType : "json",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-			    },
-			    
-			    success : function(data) {
-			    	
-			    	
-					 var json1 = JSON.stringify(data);
+	
+	  function addRow() {
+		    var table = document.getElementById('block-list');
+		    
+		    // Create a new row
+		    var newRow = table.insertRow(table.rows.length - 1);
 
-						var json = JSON.parse(json1);
+		    // Create cells for the new row
+		    var cell1 = newRow.insertCell(0);
+		    var cell2 = newRow.insertCell(1);
+		    var cell3 = newRow.insertCell(2);
 
-						if (json.status == 'fail') {
-							
-							 var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
-							  
-							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
-								  
-								// Close the modal
-							        modal.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };
-								  
-						}
-					 
-					 alert(data.password_policy);
-					 
-					 $('#password_policy').val(data.password_policy);
+		    // Create input element for the new row
+		    var input = document.createElement('input');
+		    input.type = 'text';
+		    input.name = 'blocked_password';
+		    input.style.height = '10px';
+		    input.style.width = '900px';
+
+		    // Create delete button for the new row
+		    var deleteBtn = document.createElement('input');
+		    deleteBtn.type = 'button';
+		    deleteBtn.value = 'X';
+		    deleteBtn.className = 'deleteBtn';
+		    deleteBtn.style.height = '22px';
+		    deleteBtn.title = 'Remove block list entry';
+		    deleteBtn.onclick = function () {
+		        removeRow(this);
+		    };
+
+		    // Append input and delete button to cells
+		    cell1.appendChild(input);
+		    cell2.appendChild(document.createTextNode('')); // Empty cell
+		    cell3.appendChild(deleteBtn);
+
+		    // Move the "+" button row to the end
+		 //   table.appendChild(table.rows[table.rows.length - 1]);
+		}
+
+		  function removeRow(button) {
+		    var row = button.parentNode.parentNode;
+		    row.parentNode.removeChild(row);
+		  }
+		  
+		  function populateBlockList(passwordBlockedList) {
+			    var table = document.getElementById('block-list');
+
+			    // Clear existing rows and header
+			    while (table.rows.length > 0) {
+			        table.deleteRow(0);
+			    }
+
+			    // Add header row
+			    var headerRow = table.insertRow(0);
+			    var headerCell1 = headerRow.insertCell(0);
+			    var headerCell2 = headerRow.insertCell(1);
+			    var headerCell3 = headerRow.insertCell(2);
+			   
+			    headerRow.style.backgroundColor = '#e2e6f9';
+			    headerCell1.innerHTML = '<b style="color: #283587;">Block Passwords</b>';
+			    headerCell2.innerHTML = ''; // Empty cell
+			    headerCell3.innerHTML = '<b style="color: #283587;">Actions</b>';
+
+			    // Populate with new rows
+			    for (var i = 0; i < passwordBlockedList.length; i++) {
+			        var newRow = table.insertRow(i + 1);
+			        var cell1 = newRow.insertCell(0);
+			        var cell2 = newRow.insertCell(1);
+			        var cell3 = newRow.insertCell(2);
+
+			        cell1.innerHTML = '<input type="text" name="blocked_password" style="width: 900px; height: 10px;" value="' + passwordBlockedList[i] + '" />';
+			        cell2.innerHTML = ''; // Empty cell
+			        cell3.innerHTML = '<input type="button" value="X" class="deleteBtn" style="height: 22px;" title="Remove block list entry" onclick="removeRow(this)" />';
+			    }
+
+			    // Add an additional row with the "+" button
+			    var addButtonRow = table.insertRow(table.rows.length);
+			    var addButtonCell = addButtonRow.insertCell(0);
+			    addButtonCell.innerHTML = '<input type="button" value="+" style="height: 22px;" title="Add block list entry" onclick="addRow()" />';
+			}
+
+
+		  
+		  function getPasswordPolicy() {
+			  $.ajax({
+				  url : 'PasswordPolicyServlet',
+					type : 'GET',
+					dataType : 'json',
+					success : function(data) {
+						
 						$('#min_char_count').val(data.characters_count);
-						$('#password_policy_role').val(data.password_policy_role);
 						$('#min_asccii_char_count').val(data.ascii_ch_count);
 						$('#min_num_count').val(data.number_count);
 						$('#min_mix_char_count').val(data.mixed_ch_count);
 						$('#allowed_spl_char').val(data.allowed_special_ch);
-						$('#min_spl_char_count').val(data.special_ch_count);	    	
-			    },
-			    error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log("Error loading password policy: " + error);
-				},
-			    
-		 });
-	 }
-	 
-	 
+						$('#min_spl_char_count').val(data.special_ch_count);
+						 var passwordBlockedList = data.password_blocked_list;
+				            populateBlockList(passwordBlockedList);
+						
+					},
+					error : function(xhr, status, error) {
+						// Handle the error response, if needed
+						console.log("Error loading password policy: " + error);
+					},
+			  });
+			 }
+		  
+		  
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -902,53 +1021,19 @@ var tokenValue;
 		    $('#registerBtn').val('Add');
 		});
 		
-		 $('#passwordPolicyForm').submit(function(event) {
-				//event.preventDefault();
-				var buttonText = $('#addPassword').val();
-				
-				if(buttonText == 'Add'){
-					addPasswordPolicy();
-				}
+		  
+		  $('#applyPassword').click(function() {
+			  updatePasswordPolicy();
+		  });
+		  
+		 
+		  getPasswordPolicy();
+		  
+		  
+		  $('#resetPasswordPolicy').click(function() {
+			  getPasswordPolicy();
 		  });
 	});
-	
-	function addRow() {
-	    var table = document.getElementById('block-list');
-	    var newRow = table.insertRow(table.rows.length - 1);
-	    
-	    var cell1 = newRow.insertCell(0);
-	    var cell2 = newRow.insertCell(1);
-	    var cell3 = newRow.insertCell(2);
-	    
-	    var input = document.createElement('input');
-	    input.type = 'text';
-	    input.name = 'blocked-password';
-	    input.style.height = '10px';
-	    input.style.width = '900px';
-	    
-	    var deleteBtn = document.createElement('input');
-	    deleteBtn.type = 'button';
-	    deleteBtn.value = 'X';
-	    deleteBtn.className = 'deleteBtn';
-	    deleteBtn.style.height = '22px';
-	    deleteBtn.title = 'Remove block list entry';
-	    deleteBtn.onclick = function () {
-	      removeRow(this);
-	    };
-
-	    cell1.appendChild(input);
-	    cell2.appendChild(document.createTextNode('')); // Empty cell
-	    cell3.appendChild(deleteBtn);
-	  }
-
-	  function removeRow(button) {
-	    var row = button.parentNode.parentNode;
-	    row.parentNode.removeChild(row);
-	  }
-	  
-	  getPasswordPolicy();
-	  
-	 
 	  
 </script>
 
@@ -1094,6 +1179,7 @@ var tokenValue;
 		</div>
 		
 		 <div id="password-policy" class="tab">
+		 
 		 <div class="container">
 		 <h3>Password Policy</h3>
 		 <hr>
@@ -1103,32 +1189,9 @@ var tokenValue;
 		 <input type="hidden" id="password_policy_action" name="password_policy_action" value="">
 		 
 		 <table class="bordered-table">
-		 <tr>
-				<th colspan="3">Roles Configuration</th>
-				</tr>
-				
+		 		
 				<tr>
-				<td>Password policy</td>
-				<td colspan="2"><select class="password_policy" id="password_policy" name="password_policy" style="height: 34px; width: 20%;" required>
-							<option value="Select password policy">Select password policy</option>
-							<option value="Enable">Enable</option>
-							<option value="Disable" selected="selected">Disable</option>
-						</select>
-						</td>
-				</tr>
-				
-				<tr>
-				<td>Password policy role</td>
-				<td colspan="2"><select class="password_policy_role" id="password_policy_role" name="password_policy_role" style="height: 34px; width: 20%;" required>
-							<option value="Select password policy role">Select password policy role</option>
-							<option value="Admin ruleset" selected="selected">Admin ruleset</option>
-							<option value="Default ruleset">Default ruleset</option>
-						</select>
-						</td>
-				</tr>
-				
-				<tr>
-				<th colspan="3">Password Conplexity rules</th>
+				<th colspan="3">Password Complexity rules</th>
 				</tr>
 				
 				<tr>
@@ -1168,7 +1231,8 @@ var tokenValue;
 				</tr>
 				 </table>
 				
-	<table id="block-list">
+	<table id="block-list" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
+
 	<tr>
 	<th colspan="3">Blocked passwords</th>
 	</tr>
@@ -1184,13 +1248,22 @@ var tokenValue;
 
 	<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
 					
-					<input style="height: 26px;" type="button" value="Delete" id="delPasswordPolicy"/> 
-					<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addPassword" />
+					 <input style="height: 26px;" type="button" value="Reset" id="resetPasswordPolicy"/> 
+					<input style="margin-left: 5px; height: 26px;" type="submit" value="Apply" id="applyPassword" />
 				</div>
 
 		
 		 </form>
 		 </div>
+		 
+		 <div id="custom-modal-updatePasswordPolicy" class="modal-updatePasswordPolicy">
+				<div class="modal-content-updatePasswordPolicy">
+				  <p>Are you sure you want to modify this password policy?</p>
+				  <button id="confirm-button-updatePasswordPolicy">Yes</button>
+				  <button id="cancel-button-updatePasswordPolicy">No</button>
+				</div>
+			  </div>
+			  
 		 
 		 </div>
 		</div>

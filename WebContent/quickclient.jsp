@@ -53,314 +53,198 @@ margin-top: 70px;
   color: white;
 }
 
-button {
-  margin: 5px;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
+ul.tree {
+	list-style: none;
 }
 
-#treeview .indented {
-    margin-left: 10px; /* Adjust the margin as needed */
+ul.tree li {
+	padding-left: 20px;
 }
 
- #treeview ul {
-        list-style-type: none;
-        padding-left: 30px;
-    }
+.expandable:before {
+	content: "▶";
+	margin-right: 5px;
+	cursor: pointer;
+}
 
+.expandable.collapsed:before {
+	content: "▼";
+}
 
-    #treeview li {
-        cursor: pointer;
-        margin-bottom: 5px;
-    }
+.button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px; /* Add margin as needed */
+        }
 
-    #treeview li::before {
-        content: "\25B6"; /* Unicode character for a right-pointing triangle */
-        margin-right: 5px;
-    }
-
-    #treeview li.expanded::before {
-        content: "\25BE"; /* Unicode character for a down-pointing triangle */
-    }
-
-    #treeview li > ul {
-        display: none;
-    }
-
-    #treeview li.expanded > ul {
-        display: block;
-    }
-
-/* Style your modal and other elements as needed */
+        button {
+            cursor: pointer;
+            background-color: #35449a;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            font-size: small;
+            margin-right: 10px;
+             padding: 10px 20px;
+        }
 
 
 </style>
 
 <script>
-
-var roleValue;	
-var tokenValue;
-var textContent;
-var textContent1;
-
-function getOpcuaClientList(){
-	
-	$.ajax({
-		
-		url : 'QuickClientServlet',
-		type : 'GET',
-		dataType : 'json',
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-	    },
-	    success : function(data) {
-	    	var json1 = JSON.stringify(data);
-
-			var json = JSON.parse(json1);
-
-			if (json.status == 'fail') {
-				var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
-				        modal.style.display = 'none';
-				        window.location.href = 'login.jsp';
-				  };
-			}
-			
-			var treeData = data.data; // Assuming your data is structured as an array
-
-            // Call populateTreeView with the treeData
-            populateTreeView(treeData, $("#treeview"));
-	    },
-	    
-	    error : function(xhr, status, error) {
-			console.log('Error loading opcua client data: ' + error);
-		}
-	    
-	});
-	
-}
-
-/* function populateTreeView(nodes, container) {
-    container.empty(); // Clear the existing content before populating
-
-    
-    
-    for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        var ul = document.createElement("ul");
-        container.append(ul);
-
-        var li = document.createElement("li");
-        li.textContent = node;
-        ul.appendChild(li);
-        
-
-        // Add a click event handler for the dynamically generated <ul> elements
-        ul.onclick = function (e) {
-            e.stopPropagation();
-             textContent = e.target.textContent.trim();
-             //alert(textContent);
-             getOPCNodes(textContent);
-             
-           
-        };
-        
-        
-    }
-}  */
-
-function populateTreeView(nodes, container) {
-    container.empty(); // Clear the existing content before populating
-
-    for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        var ul = document.createElement("ul");
-        container.append(ul);
-
-        var li = document.createElement("li");
-        li.textContent = node; // You can leave this empty if the nodes have no specific property
-
-        if (node.children && node.children.length > 0) {
-            // Create an arrow icon if the node has children
-            var arrow = document.createElement("span");
-            arrow.classList.add("arrow");
-            arrow.textContent = "\u25B6"; // Right-pointing triangle
-            li.appendChild(arrow);
-            li.addEventListener("click", function () {
-                ul.classList.toggle("expanded");
-                arrow.textContent = ul.classList.contains("expanded") ? "\u25BE" : "\u25B6";
-            });
-        }
-
-        ul.appendChild(li);
-        
-     // Add a click event handler for the dynamically generated <ul> elements
-          ul.onclick = function (e) {
-            e.stopPropagation();
-             textContent = e.target.textContent.trim();
-             //alert(textContent);
-             getOPCNodes(textContent);
-             
-           
-        };  
-
-         /* if (node.children && node.children.length > 0) {
-            // If the node has children, recursively populate them
-            populateTreeView(node.children, ul);
-        }  */
-         
-        
-        
-    }
-}
-
-
-
-
-
-
-
-/* function getOPCNodes(opcname) {
-    $.ajax({
-        type: 'POST',
-        url: 'QuickClientServlet',
-        data: {
-            opcname: opcname
-        },
-        success: function (response) {
-        	
-       	alert(response.data);
-        	if (response.data) {
-                var root = document.getElementById("treeview");
-
-                if (root) {
-                    // Check if ul already exists
-                    var ul = root.querySelector("ul");
+        document.getElementById('addNodeButton').addEventListener('click', function(event) {
+            const newNodeText = document.getElementById('newNodeName').value;
+            if (newNodeText) {
+                const selectedNode = document.querySelector('.selected');
+                if (selectedNode) {
+                    const ul = selectedNode.querySelector('ul');
                     if (!ul) {
-                        ul = document.createElement("ul");
-                        ul.classList.add("populated"); // Add a class to mark as populated
-                        root.appendChild(ul);
-                    } else if (ul.classList.contains("populated")) {
-                        // If ul is already populated, don't add again
-                        return;
+                        const newUl = document.createElement('ul');
+                        selectedNode.appendChild(newUl);
                     }
 
-                    response.data.forEach(function (displayName) {
-                        var li = document.createElement("li");
-                        li.classList.add("arrow", "parent", "indented"); // Add "indented" class
-                        li.textContent = displayName;
-                        ul.appendChild(li);
-                    });
-
-                    ul.classList.add("populated"); // Mark ul as populated
-                } else {
-                    console.error("Root element not found.");
+                    const li = document.createElement('li');
+                    li.textContent = newNodeText;
+                    li.classList.add('expandable');
+                    ul.appendChild(li);
                 }
             }
-        },
-        error: function () {
-            alert('Error fetching displayNames');
-        }
-    });
-}
- */
- 
- 
- function getOPCNodes(opcname) {
-	    $.ajax({
-	        type: 'POST',
-	        url: 'QuickClientServlet',
-	        data: {
-	            opcname: opcname
-	        },
-	        success: function (response) {
-	            alert(response.data);
+        });
 
-	            if (response.data) {
-	                var root = document.getElementById("treeview");
+        const tree = document.getElementById('tree');
+        tree.addEventListener('click', function(event) {
+            if (event.target.tagName === 'LI') {
+                // Toggle the 'collapsed' class
+                event.target.classList.toggle('collapsed');
+                // Remove the 'selected' class from all nodes
+                const nodes = document.querySelectorAll('.selected');
+                nodes.forEach((node) => {
+                    node.classList.remove('selected');
+                });
+                // Add the 'selected' class to the clicked node
+                event.target.classList.add('selected');
+                
+                const clickedNodeName = event.target.textContent;
+                //alert('Clicked node name: ' + clickedNodeName);
+          
+                const nodeid = event.target.dataset.nodeid;
+                const opcname = event.target.dataset.opcname;
+                const type = event.target.dataset.type;
+                const browsename = event.target.dataset.browsename;
+                
+                loadopcnodesList(nodeid,opcname,type,browsename);
+                event.target.classList.toggle('collapsed');
+            }
+            
+        });
+        
+        
+        
+ function loadopcnodesList(nodeid,opcname,type,browsename) {
+        	
+    		$.ajax({
+    					url : 'BrowseQuickCLient',
+    					type : 'POST',
+    					dataType : 'json',
+    					data : {
+    						node : nodeid,
+    						type : type,
+    						opcname : opcname,
+    						browsename : browsename
+    					},
+    					success : function(response) {
+    						
+				    			const selectedNode = document.querySelector('.selected');
+				                if (selectedNode) {
+				                    const ul = selectedNode.querySelector('ul');
+				                    
+				                    if (!ul) {
+				                        const newUl = document.createElement('ul');
+				                        selectedNode.appendChild(newUl);
+				                    }else {
+				                        // Clear the existing <ul> by removing its child nodes
+				                        while (ul.firstChild) {
+				                            ul.removeChild(ul.firstChild);
+				                        }
+				                    }
+				
+				                    $.each(response.data,function(index, node) {
+		 		                      ///  alert(node.nodeid); // For debugging
+		 		                        
+		 		                       const li = document.createElement('li');
+					                    li.textContent = node.browsename;
+					                    li.dataset.opcname = node.opcname; // Store nodeid as a data attribute
+					                    li.dataset.browsename = node.browsename;
+					                    li.dataset.type = node.type;
+					                    li.dataset.nodeid = node.nodeid;
 
-	                if (root) {
-	                    // Check if ul already exists
-	                    var ul = root.querySelector("ul");
-	                    if (!ul) {
-	                        ul = document.createElement("ul");
-	                        ul.classList.add("populated"); // Add a class to mark as populated
-	                        root.appendChild(ul);
-	                    } else if (ul.classList.contains("populated")) {
-	                        // If ul is already populated, don't add again
-	                        return;
-	                    }
-
-	                    // Remove the 'selected' class from all nodes
-	                    var selectedNodes = root.querySelectorAll('.selected');
-	                    selectedNodes.forEach(function (node) {
-	                        node.classList.remove('selected');
-	                    });
-
-	                    response.data.forEach(function (displayName) {
-	                        var li = document.createElement("li");
-	                        li.classList.add("arrow", "parent", "indented"); // Add "indented" class
-	                        li.textContent = displayName;
-	                        ul.appendChild(li);
-
-	                        // Add a click event handler for the dynamically generated li elements
-	                        li.addEventListener('click', function (event) {
-	                            // Remove the 'selected' class from all nodes
-	                            var nodes = root.querySelectorAll('.selected');
-	                            nodes.forEach(function (node) {
-	                                node.classList.remove('selected');
-	                            });
-
-	                            // Add the 'selected' class to the clicked node
-	                            li.classList.add('selected');
-	                        });
-	                    });
-
-	                    ul.classList.add("populated"); // Mark ul as populated
-	                } else {
-	                    console.error("Root element not found.");
-	                }
-	            }
-	        },
-	        error: function () {
-	            alert('Error fetching displayNames');
-	        }
-	    });
-	}
-
-
-
-$(document).ready(function() {
-	<%// Access the session variable
-	HttpSession role = request.getSession();
-	String roleValue = (String) session.getAttribute("role");%>
-
-roleValue = '<%=roleValue%>';
-
-				<%// Access the session variable
-HttpSession token = request.getSession();
-String tokenValue = (String) session.getAttribute("token");%>
-
-tokenValue = '<%=tokenValue%>';
+					                    
+					                    li.classList.add('expandable');
+					                    ul.appendChild(li);
+		 		                    });
+				                    
+				                }
+    					},
+    					error : function(xhr, status, error) {
+    						console.log('Error loading user data: ' + error);
+    					}
+    				});
+    	}
 
 
-getOpcuaClientList();
+        
+      
+        function loadopcList() {
+        	
+    		$.ajax({
+    					url : 'BrowseQuickCLient',
+    					type : 'GET',
+    					dataType : 'json',
+    					
+    					success : function(response) {
+    						const root = document.getElementById('root');
+    		                if (root) {
+    		                    let ul = root.querySelector('ul');
+    		                    if (!ul) {
+    		                        ul = document.createElement('ul');
+    		                        root.appendChild(ul);
+    		                    }else {
+    		                        // Clear the existing <ul> by removing its child nodes
+    		                        while (ul.firstChild) {
+    		                            ul.removeChild(ul.firstChild);
+    		                        }
+    		                    }
 
-$("#treeview").on("click", "ul", function (e) {
-    e.stopPropagation();
-    $(this).toggleClass("expanded");
-    $(this).find("li").toggleClass("expanded");
-});
+    		                    response.data.forEach(function(displayName) {
+    		                     //   alert(displayName); // For debugging
+    		                        const li = document.createElement('li');
+    		                        li.textContent = displayName;
+    		                        
+    		                        li.classList.add('expandable');
+    		                        
+    		                        li.dataset.opcname = displayName; // Store nodeid as a data attribute
+				                    li.dataset.browsename = displayName;
+				                    li.dataset.type = 'server';
+				                    li.dataset.nodeid = 'server';
+    		                       
+    		                        ul.appendChild(li);
+    		                    });
+    		                } else {
+    		                    console.log('Element with ID "root" not found');
+    		                }
+    			            
+    					},
+    					error : function(xhr, status, error) {
+    						console.log('Error loading user data: ' + error);
+    					}
+    				});
+    	}
 
-});
-</script>
+        
+        $(document).ready(function() {
+        	loadopcList();
+        });
+    </script>
 
 
 <body>
@@ -377,14 +261,22 @@ $("#treeview").on("click", "ul", function (e) {
 		<h3>QUICK CLIENT</h3>
 			<hr>
 			
-			<div class="treeview-container">
+			 <div class="button-container">
+        <button onClick="window.location.reload();">Reload</button>
+    </div>
+    
+    <div class="container">
+    <ul id="tree" class="tree">
+		<li class="expandable" id="root">OPC Servers</li>
+	</ul>
+	
+	<button id="addNodeButton">Add Child Node 000</button>
+	<input type="text" id="newNodeName" placeholder="Enter child node name">
+    
+    
+    </div>
+                        
 			
-			 <div id="treeview">
-    			
-			</div>
-    		
-			
-			</div>
 			
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
