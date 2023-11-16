@@ -41,6 +41,36 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
+
+.modal-delete-crt-files {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-delete-crt-files {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+
 .modal-edit {
   display: none;
   position: fixed;
@@ -83,6 +113,17 @@ button {
 }
 
 #cancel-button-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+
+#confirm-button-delete-crt-files {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-delete-crt-files {
   background-color: #f44336;
   color: white;
 }
@@ -217,6 +258,38 @@ margin-top: 70px;
 			},
 		});
 	}
+	
+	
+	function loadCrtFilesListToDelete() {
+		$.ajax({
+			url : "mqttCrtFileListServlet",
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+				if (data.crt_files_result
+						&& Array.isArray(data.crt_files_result)) {
+
+					var selectElement = $("#file_name_delete");
+					// Clear any existing options
+					//selectElement.empty();
+
+					// Loop through the data and add options to the select element
+					data.crt_files_result.forEach(function(filename) {
+						var option = $("<option>", {
+							value : filename,
+							text : filename,
+						});
+						selectElement.append(option);
+					});
+
+				}
+			},
+			error : function(xhr, status, error) {
+				console.log("Error showing crt files list : " + error);
+			},
+		});
+	}
+
 
 	function loadMqttList() {
 		
@@ -717,6 +790,41 @@ margin-top: 70px;
 	 function redirectToMQTT() {
 	        window.location.href = 'mqtt.jsp';
 	    }
+	 
+	 function deleteCrtFiles(crt_file_name){
+		 
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-delete-crt-files');
+		  modal.style.display = 'block';
+
+		  // Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-delete-crt-files');
+		  confirmButton.onclick = function () {
+		 
+		 $.ajax({
+             url: 'mqttServlet', // Replace with the actual server endpoint
+             type: 'POST',
+             data: { 
+            	 crt_file_name: crt_file_name,
+            	 action : 'crt_file_delete'
+           },
+             success: function (response) {
+            	 modal.style.display = 'none';
+                 loadCrtFilesListToDelete();
+             },
+             error: function (xhr, status, error) {
+                 console.error('Error deleting CRT File:', error);
+                 // Handle error scenarios
+             }
+         });
+		  };
+		  
+		  var cancelButton = document.getElementById('cancel-button-delete-crt-files');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		  };
+	 }
 
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -746,7 +854,15 @@ margin-top: 70px;
 						}
 
 						loadCrtFilesList();
-
+						
+						loadCrtFilesListToDelete();
+						
+						$('#delete_crt_file').on('click', function () {
+				            var selectedFile = $('#file_name_delete').val();
+				            deleteCrtFiles(selectedFile);
+				          
+						});
+						
 						$("#file_type").change(function(event) {
 									
 									if ($(this).val() == 'SSL'
@@ -971,6 +1087,17 @@ margin-top: 70px;
         			
     		</form>
     		
+    		<div class="delete_crt">
+    		<h3>DELETE CRT FILE</h3>
+    		<select class="textBox" id="file_name_delete" name="file_name_delete" style="height: 33px; width: 200px; margin-top: 10px;">
+								
+
+							</select>
+					
+							<input style="height: 26px; margin-left: 10px;" type="button" value="Delete CRT file" id="delete_crt_file" /> 
+    		
+    		</div>
+    		
     		<div class="note">
 					<p>Note: Please upload CRT file first and you will find that file in crt file dropdown.</p>
 				</div>
@@ -1004,6 +1131,14 @@ margin-top: 70px;
 			  <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
+			  </div>
+			  
+			  <div id="custom-modal-delete-crt-files" class="modal-delete-crt-files">
+				<div class="modal-content-delete-crt-files">
+				  <p>Are you sure you want to delete this crt file?</p>
+				  <button id="confirm-button-delete-crt-files">Yes</button>
+				  <button id="cancel-button-delete-crt-files">No</button>
+				</div>
 			  </div>
 
 			<h3 style="margin-top: 15px;">MQTT SERVER LIST</h3>

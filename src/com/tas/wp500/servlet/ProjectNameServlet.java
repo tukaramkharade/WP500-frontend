@@ -15,48 +15,63 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-
-@WebServlet("/ResetPasswordPolicyServlet")
-public class ResetPasswordPolicyServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(ResetPasswordPolicyServlet.class);
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@WebServlet("/projectNameServlet")
+public class ProjectNameServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(ProjectNameServlet.class);
 	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		HttpSession session = request.getSession(false);
+		JSONObject jsonObject = new JSONObject();
 
 		String check_username = (String) session.getAttribute("username");
-		if (check_username != null) {			
-			try{
+		if (check_username != null) {	
+			
+try{
 				
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
-
-				json.put("operation", "password_policy");
-				json.put("operation_type", "reset_password");
+				
+				json.put("operation", "get_straton_status");
 				json.put("user", check_username);
 				
+
 				String respStr = client.sendMessage(json.toString());
+				JSONObject respJson = new JSONObject(respStr);
 
-				logger.info("res " + new JSONObject(respStr).getString("message"));
-
-				String message = new JSONObject(respStr).getString("message");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
+				logger.info("res " + respJson.toString());
+				
+				for (int i = 0; i < respJson.length(); i++) {
+					String sys_appname = respJson.getString("sys.appname");
+					
+					try{
+						jsonObject.put("sys_appname", sys_appname);
+						
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+					
+					session.setAttribute("sys_appname", sys_appname);
+				}
+				
 				response.setContentType("application/json");
+
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
+				System.out.println("json obj : "+jsonObject.toString());
 				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();	
+				// Trim the JSON data before sending
+				out.print(jsonObject.toString().trim());
+
+				out.flush();
 				
 			}catch(Exception e){
-				e.printStackTrace();
-				logger.error("Error in applying traffic rules : "+e);
-			}	
+				
+			}
+
+			
 		}else{
 			try {
 				JSONObject userObj = new JSONObject();
@@ -73,12 +88,13 @@ public class ResetPasswordPolicyServlet extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
+				logger.error("Error in session timeout : " + e);
 			}
 		}
-
+		
 	}
 
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}

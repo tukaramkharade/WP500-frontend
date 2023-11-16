@@ -29,7 +29,8 @@ public class UploadServlet extends HttpServlet {
 		try {
 			Part filePart = request.getPart("file");
 
-			String uploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder3";
+			//String uploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder3";
+			String uploadPath = "D:\\cod files";
 
 			File uploadDir = new File(uploadPath);
 			if (!uploadDir.exists()) {

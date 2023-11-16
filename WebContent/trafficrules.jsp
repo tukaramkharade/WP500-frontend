@@ -1567,6 +1567,16 @@ var globalData = [];
         
         </div>
         
+        <div id="custom-modal-delete" class="modal-delete">
+				<div class="modal-content-delete">
+				  <p>Are you sure you want to delete this traffic rule?</p>
+				  <button id="confirm-button-delete">Yes</button>
+				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  
+			  
+        
     <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modify this traffic rule?</p>
