@@ -157,6 +157,37 @@ margin-top: -5px;
 background-color: #f7f7f7;
 }
 
+.center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Allow the container to grow and take available space */
+        }
+
+        .project_name {
+            text-align: center;
+        }
+        
+        #helpDropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px; /* Adjust as needed */
+        }
+
+        .help-content {
+            display: none;
+            position: absolute;
+            background-color: #f7f7f7;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #helpDropdown:hover .help-content {
+            display: block;
+        }
+
 </style>
 <script>
 var roleValu1e;
@@ -196,6 +227,24 @@ var roleValu1e;
 		  };	
 		
 	}
+	
+	 function getProjectName(){
+		 $.ajax({
+			 
+			 url : 'projectNameServlet',
+				type : 'GET',
+				dataType : 'json',
+				success : function(data) {
+					
+				},
+				error : function(xhr, status, error) {
+					// Handle the error response, if needed
+					console.log('Error: ' + error);
+				}
+			    
+		 });
+		
+	} 
 	
 	function getProcessData1() {
 		$.ajax({
@@ -278,6 +327,7 @@ var roleValu1e;
 	
 				startCountdown();
 				getProcessData1();
+				getProjectName();
 
 				$('#loadConfig').click(function() {
 					loadConfig();
@@ -337,6 +387,21 @@ var roleValu1e;
  <header>
 
 	<div class="row" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 0.5%">
+	
+	 <div id="helpDropdown">
+            <button title="Help" style="border: none;"><b>Help</b></button>
+            <div class="help-content">
+                <p><a href="#">Option A</a></p>
+                <p><a href="#">Option B</a></p>
+                <p><a href="#">Option C</a></p>
+            </div>
+        </div>
+        
+	<div class="center-container">
+            <div class="project_name">
+                <p>Project Name - ${sys_appname}</p>
+            </div>
+        </div>
 		
 		<div class="notification-container">
     <button id="redirectButton" data-toggle="tooltip" class="editBtn"

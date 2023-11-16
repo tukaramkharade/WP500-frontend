@@ -291,6 +291,44 @@ public class MQTTServlet extends HttpServlet {
 					}
 
 					break;
+					
+				case "crt_file_delete" :
+					
+					String crt_file_name = request.getParameter("crt_file_name");
+					System.out.println("crt file name: "+crt_file_name);
+					
+					try{
+						
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+						
+						json.put("operation", "file_manager");
+						json.put("operation_type", "crt_file_delete");
+						json.put("user", check_username);
+						json.put("crt_file_name", crt_file_name);
+						
+						String respStr = client.sendMessage(json.toString());
+
+						//logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+					//	String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+				//		jsonObject.put("message", message);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						logger.error("Error in deleting crt file : " + e);
+					}
 				}
 			}
 		} else {
