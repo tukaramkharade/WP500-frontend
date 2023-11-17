@@ -221,6 +221,18 @@ margin-top: 70px;
   border: 1px solid #ccc; /* Light gray border */
 }
 
+.delete_crt {
+            text-align: center;
+        }
+        
+        .delete_crt h3 {
+            text-align: left;
+        }
+
+        .delete_crt > div {
+            display: inline-block;
+            text-align: left;
+        }
 </style>
 
 <script>
@@ -825,6 +837,48 @@ margin-top: 70px;
 		    modal.style.display = 'none';
 		  };
 	 }
+	 
+	 function crtFileUpload(){
+		 var inputFile = $("#crtFileInput");
+         var fileName = inputFile.val();
+
+         // Check if a file is selected
+         if (fileName) {
+             // Check if the file has a ".crt" extension
+             if (/\.(crt)$/i.test(fileName)) {
+                 // File has a valid extension, proceed with the form submission
+                 var formData = new FormData($("#crtUploadForm")[0]);
+
+                 $.ajax({
+                     type: "POST",
+                     url: "CRTFileUploadServlet",
+                     data: formData,
+                     processData: false,
+                     contentType: false,
+                     success: function (response) {
+                        
+                         redirectToMQTT();
+                     },
+                     error: function (error) {
+                         // Handle the error response
+                         console.error("Error uploading file:", error);
+                     }
+                 });
+             } else {
+                 // File does not have a valid extension
+             	$("#popupMessage").text('Invalid file extension. Please select a file with .crt extension.');
+	      			$("#customPopup").show();
+             }
+         } else {
+         	$("#popupMessage").text('Please select a file.');
+   			$("#customPopup").show();
+         }
+         
+         $("#closePopup").click(function () {
+			    $("#customPopup").hide();
+			  });
+		 
+	 }
 
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -862,6 +916,12 @@ margin-top: 70px;
 				            deleteCrtFiles(selectedFile);
 				          
 						});
+						
+						$("#crtUploadForm").submit(function (e) {
+				            e.preventDefault(); // Prevent the default form submission
+
+				            crtFileUpload();
+				        });
 						
 						$("#file_type").change(function(event) {
 									
@@ -1081,20 +1141,28 @@ margin-top: 70px;
 				<h3>UPLOAD CRT FILE</h3>
 		
 			
-			<form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data">
+			<!-- <form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data">
         		<input type="file" name="file" id="crtFileInput">
         		<input type="submit" value="Upload" id="crt_file_upload" onclick="redirectToMQTT();">
         			
-    		</form>
+    		</form> -->
+    		
+    		<form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data" id="crtUploadForm">
+    <input type="file" name="file" id="crtFileInput">
+    <input type="submit" value="Upload" id="crt_file_upload">
+</form>
+    		
     		
     		<div class="delete_crt">
     		<h3>DELETE CRT FILE</h3>
+    		<div>
     		<select class="textBox" id="file_name_delete" name="file_name_delete" style="height: 33px; width: 200px; margin-top: 10px;">
 								
-
 							</select>
 					
 							<input style="height: 26px; margin-left: 10px;" type="button" value="Delete CRT file" id="delete_crt_file" /> 
+    		</div>
+    		
     		
     		</div>
     		

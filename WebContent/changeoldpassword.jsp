@@ -141,6 +141,7 @@ margin-top: 68px;
 <script>
 
 var user;
+var formSubmitted = false; // Flag to track form submission
 
 function updateOldPassword() {
 	
@@ -176,8 +177,12 @@ function updateOldPassword() {
 						// Close the modal
 							modal.style.display = 'none';
 						
+							// Set the flag to true on successful form submission
+		                    formSubmitted = true;
 						
 						 window.location.href = 'login.jsp';
+						 
+						
 					
 					
 				},
@@ -316,6 +321,13 @@ $(document).ready(function () {
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
+	
+	 // Block manual redirection by checking the flag
+    $(window).on('beforeunload', function() {
+        if (!formSubmitted) {
+            return 'You have unsaved changes. Are you sure you want to leave?';
+        }
+    }); 
 
 });
 

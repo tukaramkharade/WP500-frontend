@@ -7,6 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
 
 <style>
 .modal-logout {
@@ -157,6 +158,11 @@ margin-top: -5px;
 background-color: #f7f7f7;
 }
 
+#redirectButtonCyberguard{
+margin-top: -5px;
+background-color: #f7f7f7;
+}
+
 .center-container {
             display: flex;
             justify-content: center;
@@ -274,9 +280,58 @@ var roleValu1e;
         }
          
     }
-	
-	
+
 	function startCountdown() {
+	    var countdownElement = document.getElementById('countdown');
+
+	    // Check if the initial time is already set in sessionStorage
+	    var logoutTime = sessionStorage.getItem('startTime');
+
+	    if (!logoutTime) {
+	        // If not set, calculate the initial logout time and store it
+	        var currentTime = new Date();
+	        logoutTime = new Date(currentTime.getTime() + 3599000);
+	        sessionStorage.setItem('startTime', logoutTime);
+	    } else {
+	        // If already set, parse the stored time to ensure it's a Date object
+	        logoutTime = new Date(logoutTime);
+	    }
+
+	    function updateCountdownDisplay() {
+	        var currentTime = new Date();
+	        var timeDiff = logoutTime - currentTime;
+
+	        if (timeDiff <= 0) {
+	            // Redirect to "login.jsp" when the timer reaches 00:00
+	            window.location.href = 'login.jsp';
+	        } else {
+	            var minutes = Math.floor(timeDiff / 60000); // Calculate minutes directly from timeDiff
+	            var seconds = Math.floor((timeDiff % 60000) / 1000);
+
+	            var countdownText = 'Logout in ' +
+	                (minutes < 10 ? '0' : '') + minutes + ':' +
+	                (seconds < 10 ? '0' : '') + seconds;
+	            countdownElement.textContent = countdownText;
+	        }
+	    }
+
+	    // Update the countdown every second
+	    var countdownInterval = setInterval(updateCountdownDisplay, 1000);
+
+	    // Call updateCountdownDisplay immediately to avoid the "00:00" display
+	    updateCountdownDisplay();
+
+	    // Add an event listener to clear the interval and remove the stored time on logout
+	    window.addEventListener('unload', function () {
+	        clearInterval(countdownInterval);
+	        sessionStorage.removeItem('startTime');
+	    });
+	}
+	
+
+
+	// set to 60 mins after every refresh ----------------------------------------------
+	/* function startCountdown() {
 	    var countdownElement = document.getElementById('countdown');
 	    var currentTime = new Date();
 	    var logoutTime = new Date(currentTime.getTime() + 3599000); // Set logoutTime to 1 hour from the current time
@@ -304,7 +359,7 @@ var roleValu1e;
 
 	    // Update the countdown every second
 	    setInterval(updateCountdownDisplay, 1000);
-	}
+	} */
 
 
 
@@ -325,6 +380,9 @@ var roleValu1e;
 		changeButtonColor1(true);
 	}
 	
+	// Call the startCountdown function when the page loads
+	//document.addEventListener('DOMContentLoaded', startCountdown);
+	
 				startCountdown();
 				getProcessData1();
 				getProjectName();
@@ -332,6 +390,8 @@ var roleValu1e;
 				$('#loadConfig').click(function() {
 					loadConfig();
 				});
+				
+				
 
 				$("#logoutBtn").click(
 						function() {
@@ -381,6 +441,19 @@ var roleValu1e;
 		});
 	});
 	setInterval(getProcessData1, 300000);
+	
+	
+
+ document.addEventListener("DOMContentLoaded", function() {
+	// Get the button element by its id
+	var redirectButton = document.getElementById("redirectButtonCyberguard");
+	// Add click event listener to the button
+	redirectButton.addEventListener("click", function() {
+		// Redirect the user to process.jsp page
+		window.location.href = "dashboard.jsp";
+	});
+}); 
+	
 </script>
 
 
@@ -402,6 +475,15 @@ var roleValu1e;
                 <p>Project Name - ${sys_appname}</p>
             </div>
         </div>
+		
+		<div class="cyberguard-notification-container">
+    <button id="redirectButtonCyberguard" data-toggle="tooltip" class="editBtn"
+        data-placement="top" title="Cyberguard"
+        style="color: #35449a; height: 40px; padding: 0 10px;">
+        <i class="material-icons" id="warning" style="font-size: 24px;">warning</i>
+    </button>
+    
+</div>
 		
 		<div class="notification-container">
     <button id="redirectButton" data-toggle="tooltip" class="editBtn"
