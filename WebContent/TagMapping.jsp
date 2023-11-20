@@ -188,14 +188,14 @@ margin-top: 70px;
 
 	var roleValue;	
 	var tokenValue;
-	var nodeid;
+	//var nodeid;
 	
 	
 
 	function loadTagList() {
 		
 		
-		var pv_address = $('#pv_address').val(nodeid);
+	//	var pv_address = $('#pv_address').val(nodeid);
 	//	$("#pv_address").prop("disabled", true);
 		
 		$.ajax({
@@ -245,8 +245,8 @@ margin-top: 70px;
 										.click(
 												function() {
 													
-													setBrokerIPAddress(tag.tag_name);
-													setPortNumber(tag.pv_address);
+													setTagName(tag.tag_name);
+													setPVAddress(tag.pv_address);
 													
 												});
 								var deleteButton = $(
@@ -289,12 +289,12 @@ margin-top: 70px;
 
 	
 
-	function setBrokerIPAddress(tagId) {
+	function setTagName(tagId) {
 
 		$('#tag_name').val(tagId);
 	}
 
-	function setPortNumber(tagId) {
+	function setPVAddress(tagId) {
 
 		$('#pv_address').val(tagId);
 		$('#registerBtn').val('Update');
@@ -428,9 +428,7 @@ margin-top: 70px;
  }
  
 	// Function to handle form submission and add a new tag
-	function addTag() {
-		
-		
+	function addTag() {		
 		
 		var tag_name = $('#tag_name').val();
 		var pv_address = $('#pv_address').val();
@@ -512,11 +510,11 @@ margin-top: 70px;
 	tokenValue = '<%=tokenValue%>';
 	
 	
-	<%// Access the session variable
+	<%-- <%// Access the session variable
 	HttpSession node = request.getSession();
 	String nodeid = (String) session.getAttribute("nodeid");%>
 
-	nodeid = '<%=nodeid%>';
+	nodeid = '<%=nodeid%>'; --%>
 	
 
 	loadTagList();

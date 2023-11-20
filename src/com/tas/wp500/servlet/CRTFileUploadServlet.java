@@ -31,8 +31,8 @@ public class CRTFileUploadServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		String uploadPath = "D:\\crt files";
-		//String uploadPath = "/home/tas/WP500_setup/WP500/crt_files";
+	//	String uploadPath = "D:\\crt files";
+		String uploadPath = "/home/tas/WP500_setup/WP500/crt_files";
         // Create the directory if it doesn't exist.
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
