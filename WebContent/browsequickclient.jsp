@@ -9,7 +9,6 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -20,17 +19,10 @@ ul.tree {
 
 ul.tree li {
 	padding-left: 20px;
+	 cursor: pointer;
 }
 
-.expandable:before {
-	content: "▶";
-	margin-right: 5px;
-	cursor: pointer;
-}
 
-.expandable.collapsed:before {
-	content: "▼";
-}
 
 h3{
 margin-top: 10px;
@@ -76,6 +68,34 @@ textarea {
             margin-right: 10px;
              padding: 10px 20px;
         }
+        
+        
+  .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
         
 </style>
 </head>
@@ -150,13 +170,21 @@ textarea {
 	
 	</table>
 	
-	<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-					
-					<input style="height: 26px;" type="button" value="Add Tag" id="addTag"/> 
-					
-				</div>
+	<div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2%; margin-top: 1%;">
+    <label for="tag_name" style="margin-right: 10px;">Add tag</label>
+    
+    <input type="text" id="tag_name" name="tag_name" maxlength="31" placeholder="Enter tag" style="height: 26px; max-width: 200px;"/>
+    
+    <input style="height: 26px;" type="button" value="Add Tag" id="addTag"/> 
+</div>
+	
 	
 	</div>
+	
+	 <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
 	
 		
 		
@@ -210,6 +238,47 @@ textarea {
             
         });
         
+        
+        function addTag() {		
+    		
+    		var tag_name = $('#tag_name').val();
+    		var pv_address = $('#node').val();
+    	
+    		$.ajax({
+    			url : 'tagMapping',
+    			type : 'POST',
+    			data : {
+    				tag_name : tag_name,
+    				pv_address : pv_address,
+    				action: 'add'
+    				
+    			},
+    			success : function(data) {
+    				
+    				// Display the custom popup message
+         			$("#popupMessage").text(data.message);
+          			$("#customPopup").show();
+
+          
+          			//loadTagList();
+
+    				// Clear form fields
+
+    				$('#tag_name').val('Add tag');
+    				//$('#pv_address').val('');
+    				
+    			},
+    			error : function(xhr, status, error) {
+    				console.log('Error adding tag: '+ error);
+    			}
+    		});
+    		$("#closePopup").click(function () {
+    		    $("#customPopup").hide();
+    		  });
+
+    		
+    	}	
+
         
         
  function loadopcnodesList(nodeid,opcname,type,browsename) {
@@ -341,9 +410,9 @@ textarea {
         	loadopcList();
         	
         	
-        	 $('#addTag').click(function() {
-        		 window.location.href = "TagMapping.jsp";
-   		  });
+        	  $('#addTag').click(function() {
+        		  addTag();
+   		  }); 
         });
     </script>
 </body>

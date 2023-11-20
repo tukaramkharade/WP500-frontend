@@ -241,7 +241,10 @@ var roleValu1e;
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
-					
+					var projectName = data.sys_appname;
+
+		            // Update the content of the <p> element with the retrieved project name
+		            $(".project_name p").text("Project Name - " + projectName);
 				},
 				error : function(xhr, status, error) {
 					// Handle the error response, if needed
@@ -281,57 +284,7 @@ var roleValu1e;
          
     }
 
-	function startCountdown() {
-	    var countdownElement = document.getElementById('countdown');
-
-	    // Check if the initial time is already set in sessionStorage
-	    var logoutTime = sessionStorage.getItem('startTime');
-
-	    if (!logoutTime) {
-	        // If not set, calculate the initial logout time and store it
-	        var currentTime = new Date();
-	        logoutTime = new Date(currentTime.getTime() + 3599000);
-	        sessionStorage.setItem('startTime', logoutTime);
-	    } else {
-	        // If already set, parse the stored time to ensure it's a Date object
-	        logoutTime = new Date(logoutTime);
-	    }
-
-	    function updateCountdownDisplay() {
-	        var currentTime = new Date();
-	        var timeDiff = logoutTime - currentTime;
-
-	        if (timeDiff <= 0) {
-	            // Redirect to "login.jsp" when the timer reaches 00:00
-	            window.location.href = 'login.jsp';
-	        } else {
-	            var minutes = Math.floor(timeDiff / 60000); // Calculate minutes directly from timeDiff
-	            var seconds = Math.floor((timeDiff % 60000) / 1000);
-
-	            var countdownText = 'Logout in ' +
-	                (minutes < 10 ? '0' : '') + minutes + ':' +
-	                (seconds < 10 ? '0' : '') + seconds;
-	            countdownElement.textContent = countdownText;
-	        }
-	    }
-
-	    // Update the countdown every second
-	    var countdownInterval = setInterval(updateCountdownDisplay, 1000);
-
-	    // Call updateCountdownDisplay immediately to avoid the "00:00" display
-	    updateCountdownDisplay();
-
-	    // Add an event listener to clear the interval and remove the stored time on logout
-	    window.addEventListener('unload', function () {
-	        clearInterval(countdownInterval);
-	        sessionStorage.removeItem('startTime');
-	    });
-	}
-	
-
-
-	// set to 60 mins after every refresh ----------------------------------------------
-	/* function startCountdown() {
+	 function startCountdown() {
 	    var countdownElement = document.getElementById('countdown');
 	    var currentTime = new Date();
 	    var logoutTime = new Date(currentTime.getTime() + 3599000); // Set logoutTime to 1 hour from the current time
@@ -359,7 +312,7 @@ var roleValu1e;
 
 	    // Update the countdown every second
 	    setInterval(updateCountdownDisplay, 1000);
-	} */
+	} 
 
 
 
@@ -472,7 +425,7 @@ var roleValu1e;
         
 	<div class="center-container">
             <div class="project_name">
-                <p>Project Name - ${sys_appname}</p>
+                <p></p>
             </div>
         </div>
 		

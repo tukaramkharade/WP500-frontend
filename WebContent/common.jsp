@@ -145,6 +145,10 @@
               <li class="nav-item">
                 <a href="browsequickclient.jsp">Quick Client</a>
               </li>
+              
+               <li class="nav-item">
+                <a href="TagMapping.jsp">Tag Mapping</a>
+              </li>
                 
               </ul>
             </div>
