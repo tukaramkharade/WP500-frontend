@@ -303,10 +303,10 @@ input:checked+.slider:before {
 .slider.round:before {
 	border-radius: 50%;
 }
-p {
+/* p {
     font-weight: bold;
     font-size: 16px; 
- }
+ } */
 
 #confirm-button-session-timeout {
   background-color: #4caf50;
@@ -747,6 +747,8 @@ var tokenValue;
 			
 		}
 		
+		getNtpDetails();
+		
 		toggleDateTimeInput();
 		$("#get_current_time").click(function() {
 			getCurrentTime();
@@ -857,8 +859,8 @@ var tokenValue;
 			<div class="container">
 
 				<input type="button" id="get_current_time" value="Get Current Time" />
-				<p id="ist_time"></p>
-				<p id="utc_time"></p>
+				<p id="ist_time" style="font-weight: bold; font-size: 16px;"></p>
+				<p id="utc_time" style="font-weight: bold; font-size: 16px;"></p>
 
 				<label for="datetime">Select Date-Time</label> <input
 					type="datetime-local" id="datetime" name="datetime" required

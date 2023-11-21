@@ -134,8 +134,13 @@ public class CertificateServlet extends HttpServlet {
 	            json.put("state", state);
 	            json.put("country", country);
 	            json.put("validity", validity);
-	            json.put("ipAddresses", ipAddresses);
-	            json.put("dnsNames", dnsNames);
+	            
+	            
+	            if (dnsNames.length() > 0) {
+	            	json.put("dnsNames", dnsNames);
+	            } else if(ipAddresses.length() > 0) {	              
+	            	json.put("ipAddresses", ipAddresses);
+	            }
 
 	            String respStr = client.sendMessage(json.toString());
 

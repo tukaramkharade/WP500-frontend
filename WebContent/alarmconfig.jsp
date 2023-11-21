@@ -401,7 +401,7 @@ var tokenValue;
    		}
    	}
    	
-    	function validateInterval(interval) {
+    	/* function validateInterval(interval) {
 		var intervalError = document.getElementById("intervalError");
 
 		if (interval == 'Select interval'){
@@ -411,10 +411,10 @@ var tokenValue;
 		} else {
 			intervalError.textContent = "";
 			return true;
-		}
-	}
+		} */
+	//}
 	
-	function validateBrokerType(broker_type) {
+	/* function validateBrokerType(broker_type) {
 		var brokerTypeError = document.getElementById("brokerTypeError");
 
 		if (broker_type == 'Select broker type'){
@@ -438,7 +438,7 @@ var tokenValue;
 			brokerIPAddressError.textContent = "";
 			return true;
 		}
-	} 
+	}  */
      
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#addBtn');
@@ -472,6 +472,33 @@ var tokenValue;
         }
          
 	}
+	
+	function addDynamicRow() {
+	    var tagName = $('#dynamic_tag_name').val();
+	    var variable = $('#variable').val();
+
+	    if (tagName.trim() !== "" && variable.trim() !== "Select variable") {
+	        var newRow = $("<tr>")
+	            .append($("<td>").text(tagName))
+	            .append($("<td>").text(variable))
+	            .append($("<td>").html('<input type="button" value="Delete" onclick="deleteDynamicRow(this)" />'));
+
+	        $("#dynamic_table").append(newRow);
+
+	        // Clear input fields after adding a row
+	        $('#dynamic_tag_name').val('');
+	        $('#variable').val('Select variable');
+	    } else {
+	        // Handle validation or show an error message
+	        alert("Please enter valid Tag Name and Variable");
+	    }
+	}
+	
+	function deleteDynamicRow(button) {
+	    var confirmation = confirm('Are you sure you want to delete this dynamic row?');
+	    if (confirmation) {
+	        $(button).closest("tr").remove();
+	    }
 	
       $(document).ready(function () {
     	  
@@ -508,7 +535,7 @@ var tokenValue;
     	  loadTagList();
     	  
     	  
-    	  $("#saveBtn").click(function () {
+    	  /* $("#saveBtn").click(function () {
     	    var tagName = $("#tag_name").val();
     	    var value = $("#variable").val();
     	    
@@ -541,7 +568,7 @@ var tokenValue;
 			}
     	     
     	  });
-    	  
+ */    	  
     	  
       	$('#alarmConfigForm').submit(function(event) {
 			event.preventDefault();
@@ -575,12 +602,12 @@ var tokenValue;
 				tagname_error.textContent = ""
 			}
 			
-			 if (!validateInterval(interval)) {
+			 /* if (!validateInterval(interval)) {
 				intervalError.textContent = "Please select interval";
 				return;
-			}
+			} */
 			
-			if (!validateBrokerType(broker_type)) {
+			/* if (!validateBrokerType(broker_type)) {
 				brokerTypeError.textContent = "Please select broker type";
 				return;
 			}
@@ -588,7 +615,7 @@ var tokenValue;
 			if (!validateBrokerIPAddress(broker_name)) {
 				brokerIPAddressError.textContent = "Please select broker ip address ";
 				return;
-			} 
+			}  */
 
 			if (buttonText == 'Add') {
 				addAlarmConfig();
@@ -742,6 +769,7 @@ function addAlarmConfig() {
 }
 
 
+
     </script>
 </head>
 
@@ -830,7 +858,7 @@ function addAlarmConfig() {
 					
 			<table class="bordered-table">
 			
-			<tr>
+			<!-- <tr>
 			<td>Tag name</td>
 			<td><input type="text" id="tag_name" name="tag_name" style="height: 10px" maxlength="31"/> 
 					<span id="tagnameError" style="color: red;"></span>
@@ -841,7 +869,18 @@ function addAlarmConfig() {
 						</select> <span id="variableError" style="color: red;"></span></td>
 						
 						<td><input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" /></td>
-			</tr>
+			</tr> -->
+			
+			
+			<tr>
+    <td><input type="text" id="dynamic_tag_name" placeholder="Tag Name" /></td>
+    <td>
+        <select class="textBox" id="variable" name="variable">
+            <option value="Select variable">Select variable</option>
+        </select>
+    </td>
+    <td><input type="button" value="+" id="addDynamicRow" onclick="addDynamicRow()" /></td>
+</tr>
 				
 				</table>
 				
@@ -882,14 +921,23 @@ function addAlarmConfig() {
 
 		<section style="margin-left: 1em">
 		<div class="container">
-			<table id="table_data">
+			<!-- <table id="table_data">
 				<tr>
 					<th>Tag Name</th>
 					<th>Variable</th>
 					<th id="actions">Action</th>
 				</tr>
-			</table>
+			</table> -->
+			
+			<table id="table_data" class="bordered-table">
+    <tr>
+        <th>Tag Name</th>
+        <th>Variable</th>
+        <th>Action</th>
+    </tr>
+</table>
 		</div>
+		
 		</section>
 	</div>
 

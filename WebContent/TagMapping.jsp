@@ -168,7 +168,7 @@ margin-top: 70px;
 
 .container {
     margin: 0 auto;
-    width: 80%;
+    width: 40%;
   }
 
  .bordered-table {
@@ -577,19 +577,17 @@ margin-top: 70px;
 
 					<tr>
 					<td>Tag Name</td>
-					<td><input type="text" id="tag_name" maxlength="31" name="tag_name" required />
+					<td><input type="text" id="tag_name" maxlength="31" name="tag_name" required style="width: 200px;"/>
 							<p id="broker_ip_error" style="color: red;"></p>
 					</td>	
 					
-					</tr>
-					<tr>
 					<td>PV address</td>
-					<td><input type="text" id="pv_address" name="pv_address" maxlength="31" required /> <span style="color: red; font-size: 12px;"
+					<td><input type="text" id="pv_address" name="pv_address" maxlength="31" required style="width: 200px;"/> <span style="color: red; font-size: 12px;"
 								id="portNoError"></span>
 							<p id="pv_address_error" style="color: red;"></p></td>
+					
 					</tr>
 					
-						
 					</table>
 					
 					<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">			

@@ -1131,7 +1131,7 @@ $(document).ready(function() {
 		
 		
 		<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 15px;">
+					style="display: flex; flex-content: space-between; margin-top: -10px; margin-left: -10px;">
 						<input type="button" value="Today" id="today"/> 
 						<input style="margin-left: 5px" type="button" value="Yesterday" id="yesterday" /> 
 						<input style="margin-left: 5px" type="button" value="Week" id="week" />
@@ -1154,7 +1154,7 @@ $(document).ready(function() {
 				</div>
 				
 				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px;height:25%">
+					style="display: flex; flex-content: space-between; margin-top: 10px; height:25%; margin-left: -10px;">
 					
 					<div class="overview">
 						<h5>Overview</h5>

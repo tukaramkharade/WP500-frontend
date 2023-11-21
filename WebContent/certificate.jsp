@@ -361,14 +361,14 @@ tokenValue = '<%=tokenValue%>';
 		<section style="margin-left: 1em">
 		
 		<h3>GENERATE CERTIFICATE</h3>
-			<hr>
+			<hr />
 
 			<div class="container">
-				<form id="certificateForm">
+				<form id="certificateForm" style="margin-top: 0">
 				
 				<table class="bordered-table">
 				<tr>
-				<th colspan="2">Securtiy Certificate</th>
+				<th colspan="2">Security Certificate</th>
 				</tr>
 				
 				<tr>

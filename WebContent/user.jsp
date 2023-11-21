@@ -246,8 +246,9 @@ margin-top: 18px;
 }
  
   .container {
-    margin: -16px auto;
-    width: 95%;
+    margin: -16px;
+    width: 99%;
+   
   }
 
  .bordered-table {
@@ -790,6 +791,23 @@ var tokenValue;
 			
 	 }
 	 
+	 function resetPasswordPolicy(){
+		 $.ajax({
+			  url : 'ResetPasswordPolicyServlet',
+				type : 'GET',
+				dataType : 'json',
+				success : function(data) {
+					
+					getPasswordPolicy();
+					
+				},
+				error : function(xhr, status, error) {
+					// Handle the error response, if needed
+					console.log("Error resetting password policy: " + error);
+				},
+		  });
+	 }
+	 
 	  function handleStatus(status) {
 		    if (status === 'fail') {
 		        var modal = document.getElementById('custom-modal-session-timeout');
@@ -1031,7 +1049,8 @@ var tokenValue;
 		  
 		  
 		  $('#resetPasswordPolicy').click(function() {
-			  getPasswordPolicy();
+			  resetPasswordPolicy();
+			  
 		  });
 	});
 	  
@@ -1053,7 +1072,7 @@ var tokenValue;
 		
 		<div class="tab-container">
 		
-		 <button class="tab-button active" onclick="openTab('add-user', this)">Add User</button>
+		 <button class="tab-button active" onclick="openTab('add-user', this)" style="margin-left: -1px;">Add User</button>
     <button class="tab-button" onclick="openTab('password-policy', this)">Password Policy</button>
 		
 		<div id="add-user" class="tab" style="display: block;">
@@ -1160,7 +1179,7 @@ var tokenValue;
 			<h3 style="margin-top: 15px;">USER LIST</h3>
 			
 			<hr />
-				<table id="userListTable" style="width: 100%; margin-top: 30px;">
+				<table id="userListTable" style="width: 100%; margin-top: 5px;">
 					<thead>
 						<tr>
 							<th>User name</th>

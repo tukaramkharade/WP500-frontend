@@ -169,9 +169,7 @@ margin-top: 68px;
 
  .container {
     border-collapse: collapse;
-    
-    
-  }
+    }
 
 table{
 margin-top: -30px;
