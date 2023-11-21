@@ -76,7 +76,7 @@
 }
 
 h3 {
-	margin-top: 68px;
+	margin-top: -8px;
 }
 
 .tab {
@@ -97,7 +97,7 @@ h3 {
 
 .tab-content {
 	padding: 20px;
-	border: 1px solid #ccc;
+	
 }
  .popup {
   display: none;
@@ -134,6 +134,8 @@ h3 {
   background-color: #f44336;
   color: white;
 }
+
+
 </style>
 <script>
 
@@ -414,17 +416,18 @@ var tokenValue;
     </div>
     <div class="content">
         <section style="margin-left: 1em">
-            <div class="container">
-                <div class="tab-container">
-                    <button class="tab-button active" onclick="openTab('straton-live-data-content', this)">STRATON LIVE DATA</button>
+            <div class="container" style="margin-left: -22px;">
+                <div class="tab-container" style="margin-top: -15px;">
+                    <button class="tab-button active" onclick="openTab('straton-live-data-content', this)" style="margin-left: 5px;">STRATON LIVE DATA</button>
                     <button class="tab-button" onclick="openTab('straton-update', this)">STRATON UPDATE</button>
-                    <div id="straton-live-data-content" class="tab-content" style="display: block;">
+                    <div id="straton-live-data-content" class="tab-content" style="display: block; margin-left: -15px;">
                         <h3>STRATON LIVE DATA</h3>
+                        <hr />
                         <button onClick="window.location.reload();" style="cursor: pointer; background-color: #35449a; border-radius: 5px; border: none; color: white; font-size: small">Refresh Page</button>
                         <div id="search">
-                            <input id="searchInput" type="text" placeholder="Search" onkeyup="myFunction()" style="margin-top: 5px;">
+                            <input id="searchInput" type="text" placeholder="Search" onkeyup="myFunction()" style="margin-top: 5px; margin-bottom: 10px; width: 400px;">
                         </div>
-                        <hr />
+                        
                         <table id="data-table">
                             <thead>
                                 <tr>
@@ -450,7 +453,7 @@ var tokenValue;
                 <input type="file" name="file" id="fileInput">
                 <input type="submit" value="Upload" id="stratonUpdateButton">
 
-                <input type="button" value="Straton update" id="firmware_update">
+                <!-- <input type="button" value="Straton update" id="firmware_update"> -->
                 <div id="custom-straton-modal-delete" class="modal-delete">
 				
 			  </div>
@@ -473,7 +476,7 @@ var tokenValue;
         <hr />
 
         <div class="container">
-            <table id="straton_list_table">
+            <table id="straton_list_table" style="margin-left: -17px;">
                 <thead>
                     <tr>
                         <th>File</th>

@@ -368,7 +368,7 @@ function updateProgress() {
 			<hr />
 			
 			<div class="container">
-			<table id="firmware_list_table">
+			<table id="firmware_list_table" style="margin-left: -17px;">
 			<thead>
 			<tr>
 			<th>File</th>

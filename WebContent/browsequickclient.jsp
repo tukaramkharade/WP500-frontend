@@ -60,10 +60,9 @@ textarea {
 
         button {
             cursor: pointer;
-            background-color: #35449a;
             border-radius: 5px;
             border: none;
-            color: white;
+         
             font-size: small;
             margin-right: 10px;
              padding: 10px 20px;
@@ -115,7 +114,7 @@ textarea {
 		
 		
 		 <div class="button-container">
-        <button onClick="window.location.reload();">Reload</button>
+        <button onClick="window.location.reload();" style="color:white; background-color: #2b3991">Reload</button>
     </div>
     
 		
@@ -138,46 +137,44 @@ textarea {
 	<hr/>
 	
 	<table class="bordered-table" style="margin-top: -1px;">
-	<tr>
-	<td>Read Status:</td>
-	<td><p id="read_status"></p></td>
-	</tr>
+	
 	
 	<tr>
 	<td>Node</td>
 	<td><textarea id="node"></textarea></td>
+	<td></td>
 	</tr>
 	
 	<tr>
 	<td>Value:</td>
 	<td><p id="value"></p></td>
+	<td></td>
 	</tr>
 	
 	<tr>
 	<td>Quality:</td>
 	<td><p id="quality"></p></td>
+	<td></td>
 	</tr>
 	
 	<tr>
 	<td>Data Type:</td>
 	<td><p id="datatype"></p></td>
+	<td></td>
 	</tr>
 	
 	<tr>
 	<td>Timestamp:</td>
 	<td><p id="timestamp"></p></td>
+	<td></td>
 	</tr>
 	
+	<tr>
+	<td>Add tag name</td>
+	<td><input type="text" id="tag_name" name="tag_name" maxlength="31" style="width: 200px;"/></td>
+	<td><input style="height: 26px;" type="button" value="Add Tag" id="addTag"/></td>
+	</tr>
 	</table>
-	
-	<div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2%; margin-top: 1%;">
-    <label for="tag_name" style="margin-right: 10px;">Add tag</label>
-    
-    <input type="text" id="tag_name" name="tag_name" maxlength="31" placeholder="Enter tag" style="height: 26px; max-width: 200px;"/>
-    
-    <input style="height: 26px;" type="button" value="Add Tag" id="addTag"/> 
-</div>
-	
 	
 	</div>
 	
@@ -264,7 +261,7 @@ textarea {
 
     				// Clear form fields
 
-    				$('#tag_name').val('Add tag');
+    				$('#tag_name').val('');
     				//$('#pv_address').val('');
     				
     			},
@@ -312,7 +309,7 @@ textarea {
     					        $('#value').text(value !== "null" ? value : '');
     					        $('#timestamp').text(timestamp);
     					        $('#datatype').text(dataType);
-    					        $('#quality').text(quality);
+    					        $('#quality').text(status);
     							
     						}else{
     							

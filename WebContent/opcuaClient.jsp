@@ -652,7 +652,7 @@ $(document).ready(function() {
 			<h3 style="margin-top: 15px;">OPCUA CLIENT LIST</h3>
 			
 			<hr />
-				<table id="opcuaListTable" style="width: 100%; margin-top: 30px;">
+				<table id="opcuaListTable" style="width: 100%; margin-top: 5px;">
 					<thead>
 						<tr>
 						<th>End URL</th>

@@ -59,7 +59,6 @@ public class ProjectNameServlet extends HttpServlet {
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
-				System.out.println("json obj : " + jsonObject.toString());
 				// Write the JSON object to the response
 				// Trim the JSON data before sending
 				out.print(jsonObject.toString().trim());

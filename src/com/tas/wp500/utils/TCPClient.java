@@ -23,7 +23,7 @@ public class TCPClient {
 			
 			logger.info("Connecting.......");
 			System.out.println("Connecting..");
-			s = new Socket("192.168.1.72", 6801);
+			s = new Socket("192.168.1.73", 6801);
 
 
 			

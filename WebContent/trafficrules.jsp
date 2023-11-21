@@ -288,7 +288,7 @@ margin-top: 68px;
 
 .container {
     border-collapse: collapse;
-   
+  
   }
 
 table{
@@ -312,6 +312,7 @@ margin-top: 1px;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
+            margin-left: -5px;
         }
         
         .tab-button.active {
@@ -1442,10 +1443,10 @@ var globalData = [];
 		<div class="container">
 		
 		<div class="tab-container">
-    <button class="tab-button active" onclick="openTab('basic-config', this)">Basic Configuration</button>
+    <button class="tab-button active" onclick="openTab('basic-config', this)" style="margin-left: -15px;">Basic Configuration</button>
     <button class="tab-button" onclick="openTab('user-config', this)">User Configuration</button>
 
-    <div id="basic-config" class="tab" style="display: block;">
+    <div id="basic-config" class="tab" style="display: block; margin-left: -19px;">
         <div class="container">
         
        
@@ -1501,7 +1502,7 @@ var globalData = [];
     </div>
 
 
-    <div id="user-config" class="tab">
+    <div id="user-config" class="tab" style="margin-left: -15px;">
     <h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
     <hr/>
         <div class="form-container">
@@ -1600,7 +1601,7 @@ var globalData = [];
 			  <h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
 		<hr>
 		<div class="table-container">
-			<table id="trafficRulesListTable" style="margin-left: -15px; width: 102.2%;">
+			<table id="trafficRulesListTable" style="margin-left: -1px; width: 100%;">
 				<thead>
 					<tr>
 						<th>Name</th>
