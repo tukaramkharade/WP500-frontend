@@ -65,6 +65,7 @@ public class WP500Login extends HttpServlet {
                 String role = jsonResponse.getString("role");
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
+                session.setAttribute("totp_authenticator", totp_authenticator);
                 
              // Generate a JWT token
                 String secretKey = "tasm2m_admin#Admin@123"; // Replace with a secure secret key
@@ -127,7 +128,7 @@ public class WP500Login extends HttpServlet {
            
             try {
             	 userObj.put("status", "error");
-				userObj.put("msg", "An error occurred during login.");
+				userObj.put("msg", "Invalid user.");
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

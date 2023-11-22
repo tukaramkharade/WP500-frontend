@@ -176,8 +176,7 @@ margin-top: 68px;
 
 .bordered-table td {
   border: 1px solid #ccc; /* Light gray border */
-  text-align: center;
-   vertical-align: middle;
+ 
 }
 
 </style>
