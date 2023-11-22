@@ -269,13 +269,13 @@ margin-top: 18px;
  border: 1px solid #ccc;
 }
 
-   .form-container {
+   .container {
     margin: 0 auto;
     width: 50%;
     border-collapse: collapse;
     background-color: #f2f2f2;
      border-radius: 5px;
-  padding: 20px;
+ 
   }
   
 .tab {
@@ -283,7 +283,7 @@ margin-top: 18px;
         }
         
         .tab-button {
-            background-color: #f2f2f2;
+          
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -295,8 +295,13 @@ margin-top: 18px;
         }
         
         .tab-content {
-            padding: 20px;
+           
             border: 1px solid #ccc;
+        }
+        
+        .tab-container{
+       
+        margin-left: -18px;
         }
         
 </style>
@@ -1068,19 +1073,19 @@ var tokenValue;
 		<section style="margin-left: 1em">
 				
 
-		<div class="container">
+		
 		
 		<div class="tab-container">
 		
-		 <button class="tab-button active" onclick="openTab('add-user', this)" style="margin-left: -1px;">Add User</button>
+		 <button class="tab-button active" onclick="openTab('add-user', this)" style="margin-left: 16px; margin-top: 10px;">Add User</button>
     <button class="tab-button" onclick="openTab('password-policy', this)">Password Policy</button>
 		
-		<div id="add-user" class="tab" style="display: block;">
+		<div id="add-user" class="tab" style="display: block; margin-left: 15px;">
 		
 		 <h3>ADD USER</h3>
 			<hr />
 			
-			<div class="form-container">
+			<div class="container">
 				<form id="userForm">
 				
 				<input type="hidden" id="action" name="action" value="">
@@ -1199,7 +1204,7 @@ var tokenValue;
 		
 		 <div id="password-policy" class="tab">
 		 
-		 <div class="container">
+		 <div class="container" style="width: 97%;">
 		 <h3>Password Policy</h3>
 		 <hr>
 		 
@@ -1286,7 +1291,7 @@ var tokenValue;
 		 
 		 </div>
 		</div>
-		</div>	 
+			 
 			 
 		</section>
 	</div> 

@@ -135,6 +135,10 @@
                 </li>
                 
                 <li class="nav-item">
+                <a href=""></a>
+              </li>
+                
+                <li class="nav-item">
                 <a href="opcuaClient.jsp">OPCUA Client</a>
               </li>
               

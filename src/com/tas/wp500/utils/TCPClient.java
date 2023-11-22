@@ -19,22 +19,13 @@ public class TCPClient {
 		BufferedReader input = null;
 		BufferedWriter output = null;
 		try {
-
-			
+	
 			logger.info("Connecting.......");
 			System.out.println("Connecting..");
-			s = new Socket("192.168.1.73", 6801);
+			s = new Socket("192.168.1.72", 6801);
 
-
-			
-			// new
-																			// Socket("192.168.1.149",
-																			// 6881);
-			// Step 1 read length
-			// s.setSoTimeout(1000);
 			if (s.isConnected()) {
 
-				// JSONObject obj = new JSONObject();
 				input = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				output = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 				logger.info("Writing......." + data);
@@ -44,15 +35,11 @@ public class TCPClient {
 
 				while (true) {
 					String response = input.readLine();
-					// System.out.println("Read data " + response);
+					
 					if (response != null) {
 						return new String(response);
 					} 
-			//		logger.error("response is null:");
-//					else {
-//						return new String("Ok");
-//					}
-
+		
 				}
 			}
 
@@ -65,7 +52,7 @@ public class TCPClient {
 		} catch (IOException e) {
 			System.out.println("IO:" + e.getMessage());
 			logger.error("IO:" + e.getMessage());
-			// e.printStackTrace();
+			
 		} finally {
 			try {
 				if (input != null) {

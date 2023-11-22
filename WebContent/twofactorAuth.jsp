@@ -187,60 +187,75 @@ margin-top: 68px;
 	var secretKey;
 
 	function updateTOTP(element) {
+	    // Get references to necessary elements
 	    var toggleContainer = document.querySelector('.toggle-container');
 	    var enableText = document.getElementById("enableText");
 	    var disableText = document.getElementById("disableText");
 	    var modal = document.getElementById('custom-modal-edit');
-	    
-	 // Display the custom modal dialog
+
+	    // Display the custom modal dialog
 	    modal.style.display = 'block';
 
 	    // Handle the confirm button click
 	    var confirmButton = document.getElementById('confirm-button-edit');
-	    confirmButton.onclick = function() {
+	    confirmButton.onclick = function () {
+	        // Check if the toggle switch is enabled and call generateQRCode if true
+	        if (toggleContainer.classList.contains('active')) {
+	        	//location.reload();
+	            generateQRCode();
+	        }
+
+	        // Send data to the server based on the toggle switch state
 	        sendDataToServlet(toggleContainer.classList.contains('active') ? "enable" : "disable");
-	        
+
+	        // Close the modal
 	        modal.style.display = 'none';
+	        
+	     // If the toggle switch is enabled, refresh the page
+	        if (toggleContainer.classList.contains('active')) {
+	        	generateQRCode();
+	        }
 	    };
-	    
+
+	    // Toggle the switch state and update text accordingly
 	    if (toggleContainer.classList.contains('active')) {
 	        // Toggle switch is enabled, so we want to disable it
 	        toggleContainer.classList.remove('active');
 	        enableText.style.display = "none";
 	        disableText.style.display = "inline";
-	        
-	         var container = document.getElementById("imageContainer");
-	    	while (container.firstChild) {
-	        	container.removeChild(container.firstChild);
-	    	}
-	    	
-	    	$('#generateQR').val('Generate QR code'); 
-	    	
-	    	
+
+	        // Clear the image container and update the button text
+	        var container = document.getElementById("imageContainer");
+	        while (container.firstChild) {
+	            container.removeChild(container.firstChild);
+	        }
+	        $('#generateQR').val('Generate QR code');
 	    } else {
 	        // Toggle switch is disabled, so we want to enable it
 	        toggleContainer.classList.add('active');
 	        enableText.style.display = "inline";
 	        disableText.style.display = "none";
 	    }
-	    
+
+	    // Handle the cancel button click
 	    var cancelButton = document.getElementById('cancel-button-edit');
-	    cancelButton.onclick = function() {
+	    cancelButton.onclick = function () {
 	        // Revert the toggle switch state when Cancel is clicked
 	        if (toggleContainer.classList.contains('active')) {
-	        	toggleContainer.classList.remove('active');
+	            toggleContainer.classList.remove('active');
 	            enableText.style.display = "none";
 	            disableText.style.display = "inline";
 	        } else {
-	        	toggleContainer.classList.add('active');
+	            toggleContainer.classList.add('active');
 	            enableText.style.display = "inline";
 	            disableText.style.display = "none";
 	        }
+
+	        // Close the modal
 	        modal.style.display = 'none';
 	    };
-
-	    
 	}
+
 
 	function sendDataToServlet(totp_authenticator) {
 	    $.ajax({

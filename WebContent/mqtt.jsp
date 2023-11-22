@@ -221,7 +221,7 @@ margin-top: 70px;
   border: 1px solid #ccc; /* Light gray border */
 }
 
-.delete_crt {
+/* .delete_crt {
             text-align: center;
         }
         
@@ -232,7 +232,17 @@ margin-top: 70px;
         .delete_crt > div {
             display: inline-block;
             text-align: left;
-        }
+        } */
+        
+         .upload-crt-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .delete-crt-container {
+        margin-right: 233px; /* Adjust margin as needed */
+    }
 </style>
 
 <script>
@@ -1138,33 +1148,23 @@ margin-top: 70px;
 					</div>
 				</form>
 				
-				<h3>UPLOAD CRT FILE</h3>
-		
-			
-			<!-- <form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data">
-        		<input type="file" name="file" id="crtFileInput">
-        		<input type="submit" value="Upload" id="crt_file_upload" onclick="redirectToMQTT();">
-        			
-    		</form> -->
-    		
-    		<form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data" id="crtUploadForm">
-    <input type="file" name="file" id="crtFileInput">
-    <input type="submit" value="Upload" id="crt_file_upload">
-</form>
-    		
-    		
-    		<div class="delete_crt">
-    		<h3>DELETE CRT FILE</h3>
-    		<div>
-    		<select class="textBox" id="file_name_delete" name="file_name_delete" style="height: 33px; width: 200px; margin-top: 10px;">
-								
-							</select>
-					
-							<input style="height: 26px; margin-left: 10px;" type="button" value="Delete CRT file" id="delete_crt_file" /> 
-    		</div>
-    		
-    		
-    		</div>
+			<div class="upload-crt-container">
+    <div>
+        <h3>UPLOAD CRT FILE</h3>
+        <form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data" id="crtUploadForm">
+            <input type="file" name="file" id="crtFileInput">
+            <input type="submit" value="Upload" id="crt_file_upload">
+        </form>
+    </div>
+
+    <div class="delete-crt-container">
+        <h3>DELETE CRT FILE</h3>
+        <div>
+            <select class="textBox" id="file_name_delete" name="file_name_delete" style="height: 33px; width: 200px; margin-top: 10px;"></select>
+            <input style="height: 26px; margin-left: 5px;" type="button" value="Delete CRT file" id="delete_crt_file" />
+        </div>
+    </div>
+</div>
     		
     		<div class="note">
 					<p>Note: Please upload CRT file first and you will find that file in crt file dropdown.</p>

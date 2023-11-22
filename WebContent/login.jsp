@@ -233,6 +233,13 @@
           
             width: 38%;
         }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"]{
+        margin-left: -5px;
+        }
+        
     </style>
 </head>
 <body style="background-color: #2e3891d4;">
