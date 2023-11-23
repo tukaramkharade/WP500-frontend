@@ -493,15 +493,6 @@ button {
 	
 	roleValue = '<%=roleValue%>';
 		
-		<%// Access the session variable
-		HttpSession token = request.getSession();
-		String tokenValue = (String) session.getAttribute("token");%>
-
-		tokenValue = '<%=tokenValue%>';
-
-		loadLanSettings();
-		
-		
 	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 			
 			$('#eth1_button').prop('disabled', true);
@@ -514,24 +505,44 @@ button {
 			
 			changeButtonColor(true);
 		}
-		
+	
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
+
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    } else{
+    	<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+
+		loadLanSettings();
 		
 		$('#get_dhcp_0').click(function(){		
-				getDhcpSettings();
-		 });	
+			getDhcpSettings();
+	 });	
+	
+	$('#eth1_button').click(function(){	
+	    	editEth1();		  
+	});
+	
+	$('#lan1_button').click(function(){		
+		    	editLan1();		
 		
-		$('#eth1_button').click(function(){	
-		    	editEth1();		  
-		});
-		
-		$('#lan1_button').click(function(){		
-			    	editLan1();		
-			
-		});
-		
-        $('#lan2_button').click(function(){
-		    	editLan2();	 
-		});
+	});
+	
+    $('#lan2_button').click(function(){
+	    	editLan2();	 
+	});
+    }
 		
 	});
 </script>

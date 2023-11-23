@@ -238,48 +238,62 @@ var tokenValue;
 	    	    	String roleValue = (String) session.getAttribute("role");
 	    	    	%>
 	    	    	
-	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
-	    	    	
-	    	    	<%// Access the session variable
-	    	    	HttpSession token = request.getSession();
-	    	    	String tokenValue = (String) session.getAttribute("token");%>
-
-	    	    	tokenValue = '<%=tokenValue%>';
-	    	    	
+	    	    	roleValue = '<%= roleValue %>';
 	    	    	
 	    	    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
-	  	    		  
-	  	    		$('#loadLogFileButton').prop('disabled', true);
-	  	    		$('#exportButton').prop('disabled', true);
-	  	    		
-	  	    		  
-	  	    		  changeButtonColor(true);
-	  	    	  }
-		loadLogFileList();
-		
-		$("#exportButton").click(function() {
-	        var selectedLogFile = $("#log_file").val();
+		  	    		  
+		  	    		$('#loadLogFileButton').prop('disabled', true);
+		  	    		$('#exportButton').prop('disabled', true);
+		  	    		
+		  	    		  changeButtonColor(true);
+		  	    	  }
+	    	    	
+	    	    	if (roleValue === "null") {
+	    		        var modal = document.getElementById('custom-modal-session-timeout');
+	    		        modal.style.display = 'block';
 
-	        if (selectedLogFile !== "") {
-	            // Redirect to the servlet URL to trigger the download
-	            window.location.href = "DownloadLogServlet?log_file=" + selectedLogFile;
-	        } else {
-	            // Handle the case when no log file is selected
-	            $("#popupMessage").text("Please select a log file first.");
-	            $("#customPopup").show();
-	        }
-	    });		
-		
-		$(document).on("click", "#loadLogFileButton", function() {
-			var searchQuery = $("#search_query").val().trim();
-			if (searchQuery !== "") {
-				console.log("searchQuery: " + searchQuery.length);
-				searchLogData();
-			} else {
-				loadLogFile();
-			}
-		});
+	    		        // Handle the confirm button click
+	    		        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	    		        confirmButton.onclick = function() {
+	    		            // Close the modal
+	    		            modal.style.display = 'none';
+	    		            window.location.href = 'login.jsp';
+	    		        };
+	    		    }else{
+	    		    	<%// Access the session variable
+		    	    	HttpSession token = request.getSession();
+		    	    	String tokenValue = (String) session.getAttribute("token");%>
 
+		    	    	tokenValue = '<%=tokenValue%>';
+		    	    	
+		    	    	
+		    	    	
+			loadLogFileList();
+			
+			$("#exportButton").click(function() {
+		        var selectedLogFile = $("#log_file").val();
+
+		        if (selectedLogFile !== "") {
+		            // Redirect to the servlet URL to trigger the download
+		            window.location.href = "DownloadLogServlet?log_file=" + selectedLogFile;
+		        } else {
+		            // Handle the case when no log file is selected
+		            $("#popupMessage").text("Please select a log file first.");
+		            $("#customPopup").show();
+		        }
+		    });		
+			
+			$(document).on("click", "#loadLogFileButton", function() {
+				var searchQuery = $("#search_query").val().trim();
+				if (searchQuery !== "") {
+					console.log("searchQuery: " + searchQuery.length);
+					searchLogData();
+				} else {
+					loadLogFile();
+				}
+			});
+	    		    }
+	  	    	
 	});
 
 	function loadLogFile() {

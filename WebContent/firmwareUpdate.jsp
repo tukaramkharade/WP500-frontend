@@ -154,6 +154,9 @@ button {
 
 <script type="text/javascript">
 
+var roleValue;
+var tokenValue;
+
 function deleteFile(file){
 	
 	// Display the custom modal dialog
@@ -197,6 +200,9 @@ function loadFirmwareFiles() {
         url: "FirmwareListServlet",
         type: "GET",
         dataType: "json",
+        beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
         success: function (data) {
             if (data.firmware_files_result && Array.isArray(data.firmware_files_result)) {
                 var table = $("#firmware_list_table tbody");
@@ -445,12 +451,36 @@ function updateProgress() {
 			
 			changeButtonColor(true);
      	}
-     	$('#firmwareUpdateButton').click(function(event) {
-            event.preventDefault(); // Prevent the form from submitting
-            validateAndUpload('fileInput', '.swu');
-        });	
      	
-     	loadFirmwareFiles();
+     	if (roleValue === "null") {
+	        var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
+
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function() {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
+	        };
+	    }
+     	
+     	else{
+     		<%// Access the session variable
+			HttpSession token = request.getSession();
+			String tokenValue = (String) session.getAttribute("token");%>
+
+			tokenValue = '<%=tokenValue%>';
+     		
+     		$('#firmwareUpdateButton').click(function(event) {
+                event.preventDefault(); // Prevent the form from submitting
+                validateAndUpload('fileInput', '.swu');
+            });	
+         	
+         	loadFirmwareFiles();
+     		
+     	}
+     	
     });
     </script>
 </body>

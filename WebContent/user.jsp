@@ -182,8 +182,6 @@ button {
   color: white;
 }
 
-
-
 #confirm-button-updatePasswordPolicy {
   background-color: #4caf50;
   color: white;
@@ -244,12 +242,6 @@ height: 10px;
 h3{
 margin-top: 18px;
 }
- 
-  .container {
-    margin: -16px;
-    width: 99%;
-   
-  }
 
  .bordered-table {
   border-collapse: collapse; /* Optional: To collapse table borders */
@@ -275,8 +267,18 @@ margin-top: 18px;
     border-collapse: collapse;
     background-color: #f2f2f2;
      border-radius: 5px;
- 
+  position: relative; /* Add this line */
   }
+  
+  .password-toggle {
+        position: absolute;
+    right: 100px; /* Adjust the positioning as needed */
+    top: 22%; /* Adjusted top to center the eye symbol vertically */
+    transform: translateY(-50%); /* Center the eye symbol vertically */
+    cursor: pointer;
+    }
+    
+   
   
 .tab {
         display: none;
@@ -304,11 +306,27 @@ margin-top: 18px;
         margin-left: -18px;
         }
         
+        
+        
 </style>
 <script>
 
 var roleValue;
 var tokenValue;
+
+function togglePassword() {
+    var passwordInput = $('#password');
+    var passwordToggle = $('#password-toggle');
+
+    if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        passwordToggle.html('<i class="fa fa-eye-slash"></i>'); // Change to eye-slash icon
+    } else {
+        passwordInput.attr('type', 'password');
+        passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+    }
+}
+
 
 	// Function to load user data and populate the user list table
 	function loadUserList() {
@@ -946,15 +964,6 @@ var tokenValue;
 	
 	roleValue = '<%=roleValue%>';
 	
-	<%// Access the session variable
-	HttpSession token = request.getSession();
-	String tokenValue = (String) session.getAttribute("token");%>
-
-	tokenValue = '<%=tokenValue%>';
-		
-		// Load user list
-		loadUserList();
-		
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 			$("#actions").hide();
@@ -963,100 +972,129 @@ var tokenValue;
 			
 			changeButtonColor(true);
 		}
-
-		// Handle form submission
-		$('#userForm').submit(function(event) {
-			event.preventDefault();
-			var buttonText = $('#registerBtn').val();
-			var role = $('#role').find(":selected").val();
-			var password = $('#password').val();
-			var user_name = $('#username').val();
-			var firstname = $('#first_name').val();
-			var lastname = $('#last_name').val();
-
-
-			 var isDisabledRole = $("#role").prop("disabled");
-			 
-			 if (!isDisabledRole) {
-				 if (!validateRole(role)) {
-						roleError.textContent = "Please select role";
-						return;
-					}
-			    }
-			 
-			if((user_name.length > 30)){
-                field_User_Error.textContent = "You can write upto 30 maximum characters."
-                	return;
-            } else{
-                field_User_Error.textContent =""
-            }  
-
-            if((password.length > 30)){
-                field_Pass_Error.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }else{
-                field_Pass_Error.textContent =""
-            }          
-
-            if( (firstname.length > 30)){
-                field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }else{
-                field_FirstN_Error.textContent=""
-            }
-
-            if( (lastname.length > 30)){
-                field_LastN_Error.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }else{
-                field_LastN_Error.textContent =""
-            }
-			
-		 var isDisabled = $("#password").prop("disabled");
-		 
-		 if (!isDisabled) {
-			 if (!validatePassword(password)) {
-					passwordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-					return;
-				}	
-		    }
-							
-			if (buttonText == 'Add') {
-				addUser();
-			} else if(buttonText == 'Update'){
-				editUser();
-			}else if(buttonText == 'Update Password'){
-				editPassword();
-			}
-		});
-
-		$('#clearBtn').click(function() {
-			$('#username').val('');
-			$("#username").prop("disabled", false);
-			$('#password').val('');
-			$("#password").prop("disabled", false);
-			$('#first_name').val('');
-			$("#first_name").prop("disabled", false);
-		    $('#last_name').val('');
-		    $("#last_name").prop("disabled", false);
-		    $('#role').val('Select role');
-		    $("#role").prop("disabled", false);
-		    $('#registerBtn').val('Add');
-		});
 		
-		  
-		  $('#applyPassword').click(function() {
-			  updatePasswordPolicy();
-		  });
-		  
-		 
-		  getPasswordPolicy();
-		  
-		  
-		  $('#resetPasswordPolicy').click(function() {
-			  resetPasswordPolicy();
-			  
-		  });
+		if (roleValue === "null") {
+	        var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
+
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function() {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
+	        };
+	    }
+		else{
+			<%// Access the session variable
+			HttpSession token = request.getSession();
+			String tokenValue = (String) session.getAttribute("token");%>
+
+			tokenValue = '<%=tokenValue%>';
+				
+				// Load user list
+				loadUserList();
+				
+				// Handle form submission
+				$('#userForm').submit(function(event) {
+					event.preventDefault();
+					var buttonText = $('#registerBtn').val();
+					var role = $('#role').find(":selected").val();
+					var password = $('#password').val();
+					var user_name = $('#username').val();
+					var firstname = $('#first_name').val();
+					var lastname = $('#last_name').val();
+
+
+					 var isDisabledRole = $("#role").prop("disabled");
+					 
+					 if (!isDisabledRole) {
+						 if (!validateRole(role)) {
+								roleError.textContent = "Please select role";
+								return;
+							}
+					    }
+					 
+					if((user_name.length > 30)){
+		                field_User_Error.textContent = "You can write upto 30 maximum characters."
+		                	return;
+		            } else{
+		                field_User_Error.textContent =""
+		            }  
+
+		            if((password.length > 30)){
+		                field_Pass_Error.textContent = "You can write upto 30 maximum characters."
+		                	return;
+		            }else{
+		                field_Pass_Error.textContent =""
+		            }          
+
+		            if( (firstname.length > 30)){
+		                field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
+		                	return;
+		            }else{
+		                field_FirstN_Error.textContent=""
+		            }
+
+		            if( (lastname.length > 30)){
+		                field_LastN_Error.textContent = "You can write upto 30 maximum characters."
+		                	return;
+		            }else{
+		                field_LastN_Error.textContent =""
+		            }
+					
+				 var isDisabled = $("#password").prop("disabled");
+				 
+				 if (!isDisabled) {
+					 if (!validatePassword(password)) {
+							passwordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
+							return;
+						}	
+				    }
+									
+					if (buttonText == 'Add') {
+						addUser();
+					} else if(buttonText == 'Update'){
+						editUser();
+					}else if(buttonText == 'Update Password'){
+						editPassword();
+					}
+				});
+
+				$('#clearBtn').click(function() {
+					$('#username').val('');
+					$("#username").prop("disabled", false);
+					$('#password').val('');
+					$("#password").prop("disabled", false);
+					$('#first_name').val('');
+					$("#first_name").prop("disabled", false);
+				    $('#last_name').val('');
+				    $("#last_name").prop("disabled", false);
+				    $('#role').val('Select role');
+				    $("#role").prop("disabled", false);
+				    $('#registerBtn').val('Add');
+				});
+				
+				  
+				  $('#applyPassword').click(function() {
+					  updatePasswordPolicy();
+				  });
+				  
+				 
+				  getPasswordPolicy();
+				  
+				  
+				  $('#resetPasswordPolicy').click(function() {
+					  resetPasswordPolicy();
+					  
+				  });
+				  
+				  $('#password-toggle').click(function () {
+		                togglePassword();
+		            });
+		}
+
+		
 	});
 	  
 </script>
@@ -1072,9 +1110,6 @@ var tokenValue;
 	<div class="content">
 		<section style="margin-left: 1em">
 				
-
-		
-		
 		<div class="tab-container">
 		
 		 <button class="tab-button active" onclick="openTab('add-user', this)" style="margin-left: 16px; margin-top: 10px;">Add User</button>
@@ -1101,6 +1136,7 @@ var tokenValue;
 						<td>Password</td>
 						<td>
 						<input type="password" id="password" name="password" required maxlength="31" style="height: 10px; max-width: 200px;">
+						 <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
 								<span id="passwordError" style="color: red;"></span>
 								<p id="field_Pass_Error" style="color: red;"></p>
 						</td>

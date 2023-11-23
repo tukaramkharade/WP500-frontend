@@ -980,16 +980,6 @@ var tokenValue;
 	
 		roleValue = '<%=roleValue%>';
 		
-		<%// Access the session variable
-		HttpSession token = request.getSession();
-		String tokenValue = (String) session.getAttribute("token");%>
-
-		tokenValue = '<%=tokenValue%>';
-	
-
-						loadBrokerIPList();
-						loadDispenserTriggerList();
-						
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 							$("#actions").hide(); 
 							
@@ -999,131 +989,153 @@ var tokenValue;
 							changeButtonColor(true);
 						}
 						
-						loadTagListTriggerTag();
-						loadTagListStartPressure();
-						loadTagListEndPressure();
-						loadTagListTemperature();
-						loadTagListTotal();
-						loadTagListQuantity();
-						loadTagListUnitPrice();
+						if (roleValue === "null") {
+					        var modal = document.getElementById('custom-modal-session-timeout');
+					        modal.style.display = 'block';
 
-						$('#dispensortriggerform').submit(function(event) {
-											event.preventDefault();
-											var buttonText = $('#registerBtn').val();
-											var side = $('#side').find(":selected").val();
-											var status = $('#status').find(":selected").val();
-											var trigger_value = $('#trigger_value').find(":selected").val();
-											var broker_name = $('#broker_name').find(":selected").val();
-											var start_pressure = $('#start_pressure').find(":selected").val();
-											var end_pressure = $('#end_pressure').find(":selected").val();
-											var temperature = $('#temperature').find(":selected").val();
-											var total = $('#total').find(":selected").val();
-											var quantity = $('#quantity').find(":selected").val();
-											var unit_price = $('#unit_price').find(":selected").val();
-											var trigger_tag = $('#trigger_tag').find(":selected").val();
-											var station_name = $('#station_name').val();
-											var serial_number = $('#serial_number').val();
-											var unit_id = $('#unit_id').val();
-											
-											if ((station_name.length > 30)) {
-												station_name_error.textContent = "You can write upto 30 maximum characters."
-											}
-											else {
-												station_name_error.textContent = ""
-											}
+					        // Handle the confirm button click
+					        var confirmButton = document.getElementById('confirm-button-session-timeout');
+					        confirmButton.onclick = function() {
+					            // Close the modal
+					            modal.style.display = 'none';
+					            window.location.href = 'login.jsp';
+					        };
+					    }else{
+					    	<%// Access the session variable
+							HttpSession token = request.getSession();
+							String tokenValue = (String) session.getAttribute("token");%>
 
-											if ((serial_number.length > 30)) {
-												serial_number_error.textContent = "You can write upto 30 maximum characters."
-											} else {
-												serial_number_error.textContent = ""
-											}
+							tokenValue = '<%=tokenValue%>';
+							
 
-											if ((unit_id.length > 30)) {
-												unitid_error.textContent = "You can write upto 30 maximum characters."
-											}
-											else {
-												unitid_error.textContent = ""
-											}
+							loadBrokerIPList();
+							loadDispenserTriggerList();
+							
+							loadTagListTriggerTag();
+							loadTagListStartPressure();
+							loadTagListEndPressure();
+							loadTagListTemperature();
+							loadTagListTotal();
+							loadTagListQuantity();
+							loadTagListUnitPrice();
 
-											if (!validateSide(side)) {
-												sideError.textContent = "Please select side";
-												return;
-											}
+							$('#dispensortriggerform').submit(function(event) {
+												event.preventDefault();
+												var buttonText = $('#registerBtn').val();
+												var side = $('#side').find(":selected").val();
+												var status = $('#status').find(":selected").val();
+												var trigger_value = $('#trigger_value').find(":selected").val();
+												var broker_name = $('#broker_name').find(":selected").val();
+												var start_pressure = $('#start_pressure').find(":selected").val();
+												var end_pressure = $('#end_pressure').find(":selected").val();
+												var temperature = $('#temperature').find(":selected").val();
+												var total = $('#total').find(":selected").val();
+												var quantity = $('#quantity').find(":selected").val();
+												var unit_price = $('#unit_price').find(":selected").val();
+												var trigger_tag = $('#trigger_tag').find(":selected").val();
+												var station_name = $('#station_name').val();
+												var serial_number = $('#serial_number').val();
+												var unit_id = $('#unit_id').val();
+												
+												if ((station_name.length > 30)) {
+													station_name_error.textContent = "You can write upto 30 maximum characters."
+												}
+												else {
+													station_name_error.textContent = ""
+												}
 
-											if (!validateStatus(status)) {
-												statusError.textContent = "Please select status";
-												return;
-											}
+												if ((serial_number.length > 30)) {
+													serial_number_error.textContent = "You can write upto 30 maximum characters."
+												} else {
+													serial_number_error.textContent = ""
+												}
 
-											if (!validateTriggerValue(trigger_value)) {
-												triggerValueError.textContent = "Please select trigger value";
-												return;
-											}
+												if ((unit_id.length > 30)) {
+													unitid_error.textContent = "You can write upto 30 maximum characters."
+												}
+												else {
+													unitid_error.textContent = ""
+												}
 
-											if (!validateBrokerIPAddress(broker_name)) {
-												brokerIPAddressError.textContent = "Please select broker ip address ";
-												return;
-											}
+												if (!validateSide(side)) {
+													sideError.textContent = "Please select side";
+													return;
+												}
 
-											if (!validateStartPressure(start_pressure)) {
-												startPressureError.textContent = "Please select start pressure ";
-												return;
-											}
+												if (!validateStatus(status)) {
+													statusError.textContent = "Please select status";
+													return;
+												}
 
-											if (!validateEndPressure(end_pressure)) {
-												endPressureError.textContent = "Please select end pressure ";
-												return;
-											}
+												if (!validateTriggerValue(trigger_value)) {
+													triggerValueError.textContent = "Please select trigger value";
+													return;
+												}
 
-											if (!validateTemperature(temperature)) {
-												temperatureError.textContent = "Please select temperature ";
-												return;
-											}
+												if (!validateBrokerIPAddress(broker_name)) {
+													brokerIPAddressError.textContent = "Please select broker ip address ";
+													return;
+												}
 
-											if (!validateTotal(total)) {
-												totalError.textContent = "Please select total ";
-												return;
-											}
-											if (!validateQuantity(quantity)) {
-												quantityError.textContent = "Please select quantity ";
-												return;
-											}
-											if (!validateUnitPrice(unit_price)) {
-												unitPriceError.textContent = "Please select unit price ";
-												return;
-											}
-											
-											if (!validateTriggerTag(trigger_tag)) {
-												triggerTagError.textContent = "Please select trigger tag ";
-												return;
-											}
+												if (!validateStartPressure(start_pressure)) {
+													startPressureError.textContent = "Please select start pressure ";
+													return;
+												}
 
-											if (buttonText == 'Add') {
-												addDispenserTrigger();
-											} else {
-												editDispenserTrigger();
-											}
-										});
+												if (!validateEndPressure(end_pressure)) {
+													endPressureError.textContent = "Please select end pressure ";
+													return;
+												}
 
-						$('#clearBtn').click(function() {
-							$('#station_name').val('');
-							$('#serial_number').val('');
-							$('#side').val('Select side');
-							$('#broker_name').val('Select broker IP address');
-							$('#trigger_tag').val('Select trigger tag');
-							$('#trigger_value').val('Select trigger value');
-							$('#start_pressure').val('Select start pressure');
-							$('#end_pressure').val('Select end pressure');
-							$('#temperature').val('Select temperature');
-							$('#total').val('Select total');
-							$('#quantity').val('Select quantity');
-							$('#unit_price').val('Select unit price');
-							$('#status').val('Select status');
-							$('#unit_id').val('');
-							$('#registerBtn').val('Add');
+												if (!validateTemperature(temperature)) {
+													temperatureError.textContent = "Please select temperature ";
+													return;
+												}
 
-						});
+												if (!validateTotal(total)) {
+													totalError.textContent = "Please select total ";
+													return;
+												}
+												if (!validateQuantity(quantity)) {
+													quantityError.textContent = "Please select quantity ";
+													return;
+												}
+												if (!validateUnitPrice(unit_price)) {
+													unitPriceError.textContent = "Please select unit price ";
+													return;
+												}
+												
+												if (!validateTriggerTag(trigger_tag)) {
+													triggerTagError.textContent = "Please select trigger tag ";
+													return;
+												}
 
+												if (buttonText == 'Add') {
+													addDispenserTrigger();
+												} else {
+													editDispenserTrigger();
+												}
+											});
+
+							$('#clearBtn').click(function() {
+								$('#station_name').val('');
+								$('#serial_number').val('');
+								$('#side').val('Select side');
+								$('#broker_name').val('Select broker IP address');
+								$('#trigger_tag').val('Select trigger tag');
+								$('#trigger_value').val('Select trigger value');
+								$('#start_pressure').val('Select start pressure');
+								$('#end_pressure').val('Select end pressure');
+								$('#temperature').val('Select temperature');
+								$('#total').val('Select total');
+								$('#quantity').val('Select quantity');
+								$('#unit_price').val('Select unit price');
+								$('#status').val('Select status');
+								$('#unit_id').val('');
+								$('#registerBtn').val('Add');
+
+							});
+					    }					
 					});
 </script>
 </head>

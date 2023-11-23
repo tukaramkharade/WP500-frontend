@@ -199,9 +199,7 @@ var tokenValue;
           success: function (data) {
             if (data.broker_ip_result && Array.isArray(data.broker_ip_result)) {
               var selectElement = $("#broker_name");
-              // Clear any existing options
-           //   selectElement.empty();
-
+             
               // Loop through the data and add options to the select element
               data.broker_ip_result.forEach(function (filename) {
                 var option = $("<option>", {
@@ -401,45 +399,6 @@ var tokenValue;
    		}
    	}
    	
-    	/* function validateInterval(interval) {
-		var intervalError = document.getElementById("intervalError");
-
-		if (interval == 'Select interval'){
-			
-			intervalError.textContent = "Please select interval";
-			return false;
-		} else {
-			intervalError.textContent = "";
-			return true;
-		} */
-	//}
-	
-	/* function validateBrokerType(broker_type) {
-		var brokerTypeError = document.getElementById("brokerTypeError");
-
-		if (broker_type == 'Select broker type'){
-			
-			brokerTypeError.textContent = "Please select broker type";
-			return false;
-		} else {
-			brokerTypeError.textContent = "";
-			return true;
-		}
-	}
-	
-	function validateBrokerIPAddress(broker_name) {
-		var brokerIPAddressError = document.getElementById("brokerIPAddressError");
-
-		if (broker_name == 'Select broker IP address'){
-			
-			brokerIPAddressError.textContent = "Please select broker ip address";
-			return false;
-		} else {
-			brokerIPAddressError.textContent = "";
-			return true;
-		}
-	}  */
-     
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#addBtn');
         var $delete_button = $('#delBtn');
@@ -510,13 +469,7 @@ var tokenValue;
     	
     	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
     	
-    	<%// Access the session variable
-    	HttpSession token = request.getSession();
-    	String tokenValue = (String) session.getAttribute("token");%>
-
-    	tokenValue = '<%=tokenValue%>';
     	
-    	  loadAlarmSettings();
     	  
     	  if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
     		  
@@ -528,114 +481,118 @@ var tokenValue;
     		 
     		  changeButtonColor(true);
     	  }
-       	  
     	  
-    	  
-    	  loadBrokerIPList();
-    	  loadTagList();
-    	  
-    	  
-    	  /* $("#saveBtn").click(function () {
-    	    var tagName = $("#tag_name").val();
-    	    var value = $("#variable").val();
-    	    
-    	    // Check if tagName and value are not empty
-    	    if (tagName.trim() !== "" && value.trim() !== "") {
-    	      var newRow = $("<tr>")
-    	        .append($("<td>").text(tagName))
-    	        .append($("<td>").text(value))
-    	        .append(
-    	          $("<td>").html(
-    	            `<input
-    	                style="background-color :red"
-    	                type="button"
-    	                value="Delete"
-    	                onclick="deleteRow(this)"
-    	              />`
-    	          )
-    	        );
+    	  if (roleValue === "null") {
+  	        var modal = document.getElementById('custom-modal-session-timeout');
+  	        modal.style.display = 'block';
 
-    	      $("#table_data").append(newRow);
-    	      $("#tag_name").val("");
-    	      $("#variable").val("");
-    	    } else  if (!validatefields(tagName)) {
-				tagnameError.textContent = "Please enter tag name.";
-				return;
-			}
-    	    else if (!validateOption(value)) {
-				variableError.textContent = "Please select variable.";
-				return;
-			}
-    	     
-    	  });
- */    	  
-    	  
-      	$('#alarmConfigForm').submit(function(event) {
-			event.preventDefault();
-			var buttonText = $('#addBtn').val();
-			
-			var interval = $('#interval').find(":selected").val();
-			var broker_type = $('#broker_type').find(":selected").val();
-			var broker_name = $('#broker_name').find(":selected").val();
-			var unit_id = $('#unit_id').val();
-			var asset_id = $('#asset_id').val();
-			var tag_name = $('#tag_name').val();
-			
-			
-			if ((unit_id.length > 30)) {
-				unitid_error.textContent = "You can write upto 30 maximum characters."
-			}
-			else {
-				unitid_error.textContent = ""
-			}
+  	        // Handle the confirm button click
+  	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+  	        confirmButton.onclick = function() {
+  	            // Close the modal
+  	            modal.style.display = 'none';
+  	            window.location.href = 'login.jsp';
+  	        };
+  	    } else{
+  	    	
+  	    	<%// Access the session variable
+  	    	HttpSession token = request.getSession();
+  	    	String tokenValue = (String) session.getAttribute("token");%>
 
-			if ((asset_id.length > 30)) {
-				assetid_error.textContent = "You can write upto 30 maximum characters."
-			} else {
-				assetid_error.textContent = ""
-			}
-
-			if ((tag_name.length > 30)) {
-				tagname_error.textContent = "You can write upto 30 maximum characters."
-			}
-			else {
-				tagname_error.textContent = ""
-			}
-			
-			 /* if (!validateInterval(interval)) {
-				intervalError.textContent = "Please select interval";
-				return;
-			} */
-			
-			/* if (!validateBrokerType(broker_type)) {
-				brokerTypeError.textContent = "Please select broker type";
-				return;
-			}
-			
-			if (!validateBrokerIPAddress(broker_name)) {
-				brokerIPAddressError.textContent = "Please select broker ip address ";
-				return;
-			}  */
-
-			if (buttonText == 'Add') {
-				addAlarmConfig();
-			} else {
-				editAlarmConfig();
-			}
-		});
+  	    	tokenValue = '<%=tokenValue%>';
+  	    	
+  	    	  loadAlarmSettings();
+  	    
+  	    	loadBrokerIPList();
+      	  loadTagList(); 	  
       	  
-      	$('#clearBtn').click(function(){
-  		  $('#unit_id').val('');
-			$('#asset_id').val('');
-			$('#broker_type1').val('Select broker type');
-			$('#broker_name').val('Select broker IP address');
-			$('#interval1').val('Select interval');
-			 $('#addBtn').val('Add'); 
-  	});
-    	  
-    	  $("#delBtn").click(function () {
-    		  deleteAlarm();
-    	  });
+      	   $("#saveBtn").click(function () {
+      	    var tagName = $("#tag_name").val();
+      	    var value = $("#variable").val();
+      	    
+      	    // Check if tagName and value are not empty
+      	    if (tagName.trim() !== "" && value.trim() !== "") {
+      	      var newRow = $("<tr>")
+      	        .append($("<td>").text(tagName))
+      	        .append($("<td>").text(value))
+      	        .append(
+      	          $("<td>").html(
+      	            `<input
+      	                style="background-color :red"
+      	                type="button"
+      	                value="Delete"
+      	                onclick="deleteRow(this)"
+      	              />`
+      	          )
+      	        );
+
+      	      $("#table_data").append(newRow);
+      	      $("#tag_name").val("");
+      	      $("#variable").val("");
+      	    } else  if (!validatefields(tagName)) {
+  				tagnameError.textContent = "Please enter tag name.";
+  				return;
+  			}
+      	    else if (!validateOption(value)) {
+  				variableError.textContent = "Please select variable.";
+  				return;
+  			}
+      	     
+      	  });
+       	  
+        	$('#alarmConfigForm').submit(function(event) {
+  			event.preventDefault();
+  			var buttonText = $('#addBtn').val();
+  			
+  			var interval = $('#interval').find(":selected").val();
+  			var broker_type = $('#broker_type').find(":selected").val();
+  			var broker_name = $('#broker_name').find(":selected").val();
+  			var unit_id = $('#unit_id').val();
+  			var asset_id = $('#asset_id').val();
+  			var tag_name = $('#tag_name').val();
+  			
+  			
+  			if ((unit_id.length > 30)) {
+  				unitid_error.textContent = "You can write upto 30 maximum characters."
+  			}
+  			else {
+  				unitid_error.textContent = ""
+  			}
+
+  			if ((asset_id.length > 30)) {
+  				assetid_error.textContent = "You can write upto 30 maximum characters."
+  			} else {
+  				assetid_error.textContent = ""
+  			}
+
+  			if ((tag_name.length > 30)) {
+  				tagname_error.textContent = "You can write upto 30 maximum characters."
+  			}
+  			else {
+  				tagname_error.textContent = ""
+  			}
+  			
+  			if (buttonText == 'Add') {
+  				addAlarmConfig();
+  			} else {
+  				editAlarmConfig();
+  			}
+  		});
+        	  
+        	$('#clearBtn').click(function(){
+    		  $('#unit_id').val('');
+  			$('#asset_id').val('');
+  			$('#broker_type1').val('Select broker type');
+  			$('#broker_name').val('Select broker IP address');
+  			$('#interval1').val('Select interval');
+  			 $('#addBtn').val('Add'); 
+    	});
+      	  
+      	  $("#delBtn").click(function () {
+      		  deleteAlarm();
+      	  });
+  	    }
+       	  
       });
 
 function deleteRow(button) {
@@ -858,7 +815,7 @@ function addAlarmConfig() {
 					
 			<table class="bordered-table">
 			
-			<!-- <tr>
+			 <tr>
 			<td>Tag name</td>
 			<td><input type="text" id="tag_name" name="tag_name" style="height: 10px" maxlength="31"/> 
 					<span id="tagnameError" style="color: red;"></span>
@@ -869,22 +826,10 @@ function addAlarmConfig() {
 						</select> <span id="variableError" style="color: red;"></span></td>
 						
 						<td><input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" /></td>
-			</tr> -->
-			
-			
-			<tr>
-    <td><input type="text" id="dynamic_tag_name" placeholder="Tag Name" /></td>
-    <td>
-        <select class="textBox" id="variable" name="variable">
-            <option value="Select variable">Select variable</option>
-        </select>
-    </td>
-    <td><input type="button" value="+" id="addDynamicRow" onclick="addDynamicRow()" /></td>
-</tr>
+			</tr> 
 				
 				</table>
-				
-				
+					
 			</form>
 		</div>
 		
@@ -921,21 +866,15 @@ function addAlarmConfig() {
 
 		<section style="margin-left: 1em">
 		<div class="container">
-			<!-- <table id="table_data">
+			<table id="table_data">
 				<tr>
 					<th>Tag Name</th>
 					<th>Variable</th>
 					<th id="actions">Action</th>
 				</tr>
-			</table> -->
+			</table> 
 			
-			<table id="table_data" class="bordered-table">
-    <tr>
-        <th>Tag Name</th>
-        <th>Variable</th>
-        <th>Action</th>
-    </tr>
-</table>
+	
 		</div>
 		
 		</section>

@@ -128,15 +128,15 @@ var tokenValue;
 						var json = JSON.parse(json1);
 
 						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
+							var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
 							  
 							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
 								  
 								// Close the modal
-							        modal.style.display = 'none';
+							        modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };
 						}
@@ -178,13 +178,8 @@ var tokenValue;
     	String roleValue = (String) session.getAttribute("role");
     	%>
     	
-    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	roleValue = '<%= roleValue %>';
     	
-    	<%// Access the session variable
-    	HttpSession token = request.getSession();
-    	String tokenValue = (String) session.getAttribute("token");%>
-
-    	tokenValue = '<%=tokenValue%>';
     	
     	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
   		  
@@ -193,10 +188,31 @@ var tokenValue;
   		  changeButtonColor(true);
   	  }
     	
-		$('#reboot').click(function() {
-			reboot();
+    	if (roleValue === "null") {
+	        var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
 
-		});
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function() {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
+	        };
+	    }else{
+	    	<%// Access the session variable
+	    	HttpSession token = request.getSession();
+	    	String tokenValue = (String) session.getAttribute("token");%>
+
+	    	tokenValue = '<%=tokenValue%>';
+	    	
+	    	$('#reboot').click(function() {
+				reboot();
+
+			});
+	    }
+    	
+		
 
 	});
 </script>

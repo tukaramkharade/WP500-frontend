@@ -238,22 +238,35 @@ function getProcessData() {
 			HttpSession role = request.getSession();
 			String roleValue = (String) session.getAttribute("role");%>
 	    	    	
-	    	    	roleValue = '<%=roleValue%>'; // This will insert the session value into the JavaScript code
+	    	    	roleValue = '<%=roleValue%>'; 
 	    	    	
-	    	    	<%// Access the session variable
-			HttpSession token = request.getSession();
-			String tokenValue = (String) session.getAttribute("token");%>
-
-	    	    	tokenValue = '<%=tokenValue%>';
-
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 							$('#loadLogFileButton').prop('disabled', true);
 
 							changeButtonColor(true);
 						}
+						
+						if (roleValue === "null") {
+					        var modal = document.getElementById('custom-modal-session-timeout');
+					        modal.style.display = 'block';
 
-						getProcessData();
+					        // Handle the confirm button click
+					        var confirmButton = document.getElementById('confirm-button-session-timeout');
+					        confirmButton.onclick = function() {
+					            // Close the modal
+					            modal.style.display = 'none';
+					            window.location.href = 'login.jsp';
+					        };
+					    }else{
+					    	<%// Access the session variable
+							HttpSession token = request.getSession();
+							String tokenValue = (String) session.getAttribute("token");%>
+
+					    	    	tokenValue = '<%=tokenValue%>';
+					    	    	
+					    	    	getProcessData();
+					    }
 
 					});
 </script>

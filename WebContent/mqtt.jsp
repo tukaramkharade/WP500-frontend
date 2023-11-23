@@ -899,13 +899,7 @@ margin-top: 70px;
     	
     	roleValue = '<%=roleValue%>';
 
-						<%// Access the session variable
-	HttpSession token = request.getSession();
-	String tokenValue = (String) session.getAttribute("token");%>
-
-	tokenValue = '<%=tokenValue%>';
-
-						loadMqttList();
+						
 						
 						
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
@@ -916,141 +910,163 @@ margin-top: 70px;
 							
 							changeButtonColor(true);
 						}
-
-						loadCrtFilesList();
 						
-						loadCrtFilesListToDelete();
-						
-						$('#delete_crt_file').on('click', function () {
-				            var selectedFile = $('#file_name_delete').val();
-				            deleteCrtFiles(selectedFile);
-				          
-						});
-						
-						$("#crtUploadForm").submit(function (e) {
-				            e.preventDefault(); // Prevent the default form submission
+						if (roleValue === "null") {
+					        var modal = document.getElementById('custom-modal-session-timeout');
+					        modal.style.display = 'block';
 
-				            crtFileUpload();
-				        });
-						
-						$("#file_type").change(function(event) {
-									
-									if ($(this).val() == 'SSL'
-											|| $(this).val() == 'ssl') {
-										$("#file_name").prop("disabled", false);
-									} else if ($(this).val() == 'TCP'
-											|| $(this).val() == 'tcp') {
-										$("#file_name").prop("disabled", true);
-										$('#file_name').val('');
-									}
-								});
+					        // Handle the confirm button click
+					        var confirmButton = document.getElementById('confirm-button-session-timeout');
+					        confirmButton.onclick = function() {
+					            // Close the modal
+					            modal.style.display = 'none';
+					            window.location.href = 'login.jsp';
+					        };
+					    } else{
+					    	<%// Access the session variable
+					    	HttpSession token = request.getSession();
+					    	String tokenValue = (String) session.getAttribute("token");%>
 
-						// Handle form submission
-						$('#mqttForm').submit(function(event) {
-											event.preventDefault();
-											var buttonText = $('#registerBtn').val();
-											
-											var broker_ip_address = $('#broker_ip_address').val();
-										var type = $('#file_type').find(":selected").val();
-										var port_number = $('#port_number').val();
-										var file_name = $('#file_name').find(":selected").val();
-										var broker_ip_address = $('#broker_ip_address').val();
-										var port_number = $('#port_number').val();
-										var username = $('#username').val();
-										var password = $('#password').val();
-										var pub_topic = $('#pub_topic').val();
-										var sub_topic = $('#sub_topic').val();
-										var prefix = $('#prefix').val();
+					    	tokenValue = '<%=tokenValue%>';
 
-										if ((prefix.length > 30)) {
-											prefix_error.textContent = "You can write upto 30 maximum characters."
-										}
-										else {
-											prefix_error.textContent = ""
-										}
+					    						loadMqttList();
+					    						
+					    						loadCrtFilesList();
+					    						
+					    						loadCrtFilesListToDelete();
+					    						
+					    						$('#delete_crt_file').on('click', function () {
+					    				            var selectedFile = $('#file_name_delete').val();
+					    				            deleteCrtFiles(selectedFile);
+					    				          
+					    						});
+					    						
+					    						$("#crtUploadForm").submit(function (e) {
+					    				            e.preventDefault(); // Prevent the default form submission
 
-										if ((sub_topic.length > 30)) {
-											sub_topic_error.textContent = "You can write upto 30 maximum characters."
-										} else {
-											sub_topic_error.textContent = ""
-										}
+					    				            crtFileUpload();
+					    				        });
+					    						
+					    						$("#file_type").change(function(event) {
+					    									
+					    									if ($(this).val() == 'SSL'
+					    											|| $(this).val() == 'ssl') {
+					    										$("#file_name").prop("disabled", false);
+					    									} else if ($(this).val() == 'TCP'
+					    											|| $(this).val() == 'tcp') {
+					    										$("#file_name").prop("disabled", true);
+					    										$('#file_name').val('');
+					    									}
+					    								});
 
-										if ((pub_topic.length > 30)) {
-											pub_topic_error.textContent = "You can write upto 30 maximum characters."
-										}
-										else {
-											pub_topic_error.textContent = ""
-										}
+					    						// Handle form submission
+					    						$('#mqttForm').submit(function(event) {
+					    											event.preventDefault();
+					    											var buttonText = $('#registerBtn').val();
+					    											
+					    											var broker_ip_address = $('#broker_ip_address').val();
+					    										var type = $('#file_type').find(":selected").val();
+					    										var port_number = $('#port_number').val();
+					    										var file_name = $('#file_name').find(":selected").val();
+					    										var broker_ip_address = $('#broker_ip_address').val();
+					    										var port_number = $('#port_number').val();
+					    										var username = $('#username').val();
+					    										var password = $('#password').val();
+					    										var pub_topic = $('#pub_topic').val();
+					    										var sub_topic = $('#sub_topic').val();
+					    										var prefix = $('#prefix').val();
 
-										if ((password.length > 30)) {
-											password_error.textContent = "You can write upto 30 maximum characters."
-										} else {
-											password_error.textContent = ""
-										}
-										if ((username.length > 30)) {
-											username_error.textContent = "You can write upto 30 maximum characters."
-										} else {
-											username_error.textContent = ""
-										}
+					    										if ((prefix.length > 30)) {
+					    											prefix_error.textContent = "You can write upto 30 maximum characters."
+					    										}
+					    										else {
+					    											prefix_error.textContent = ""
+					    										}
 
-										if ((port_number.length > 5)) {
-											port_number_error.textContent = "You can write upto 5 maximum characters."
-										}
-										else {
-											port_number_error.textContent = ""
-										}
+					    										if ((sub_topic.length > 30)) {
+					    											sub_topic_error.textContent = "You can write upto 30 maximum characters."
+					    										} else {
+					    											sub_topic_error.textContent = ""
+					    										}
 
-										if ((broker_ip_address.length > 30)) {
-											broker_ip_error.textContent = "You can write upto 30 maximum characters."
-										} else {
-											broker_ip_error.textContent = ""
-										}
+					    										if ((pub_topic.length > 30)) {
+					    											pub_topic_error.textContent = "You can write upto 30 maximum characters."
+					    										}
+					    										else {
+					    											pub_topic_error.textContent = ""
+					    										}
 
-											if (!validateNumbers(port_number)) {
-												portNoError.textContent = "Enter port number upto 5 digits";
-												return;
-											}
+					    										if ((password.length > 30)) {
+					    											password_error.textContent = "You can write upto 30 maximum characters."
+					    										} else {
+					    											password_error.textContent = ""
+					    										}
+					    										if ((username.length > 30)) {
+					    											username_error.textContent = "You can write upto 30 maximum characters."
+					    										} else {
+					    											username_error.textContent = ""
+					    										}
 
-											if (!validateFiletype(type)) {
-												fileTypeError.textContent = "Please select type";
-												return;
-											}
-											
-											if (!validateStatus(enable)) {
-												statusError.textContent = "Please select status";
-												return;
-											}
+					    										if ((port_number.length > 5)) {
+					    											port_number_error.textContent = "You can write upto 5 maximum characters."
+					    										}
+					    										else {
+					    											port_number_error.textContent = ""
+					    										}
 
-											 var isDisabled = $("#file_name").prop("disabled");
-											 if (!isDisabled) {
-												 if (!validateCrtFile(file_name)) {
-														crtFileError.textContent = "Please select crt file";
-														return;
-													}
-											 }
-											
+					    										if ((broker_ip_address.length > 30)) {
+					    											broker_ip_error.textContent = "You can write upto 30 maximum characters."
+					    										} else {
+					    											broker_ip_error.textContent = ""
+					    										}
 
-											if (buttonText == 'Add') {
-												addMqtt();
-											} else {
-												editMqtt();
-											}
-										});
+					    											if (!validateNumbers(port_number)) {
+					    												portNoError.textContent = "Enter port number upto 5 digits";
+					    												return;
+					    											}
 
-						$('#clearBtn').click(function() {
-							$('#broker_ip_address').val('');
-							$('#port_number').val('');
-							$('#username').val('');
-							$('#password').val('');
-							$('#pub_topic').val('');
-							$('#sub_topic').val('');
-							$('#prefix').val('');
-							$("#prefix").prop("disabled", false);
-							$('#file_type').val('Select type');
-							$('#file_name').val('Select crt file');
-							$('#enable').val('Select status');
-							$('#registerBtn').val('Add');
-						});
+					    											if (!validateFiletype(type)) {
+					    												fileTypeError.textContent = "Please select type";
+					    												return;
+					    											}
+					    											
+					    											if (!validateStatus(enable)) {
+					    												statusError.textContent = "Please select status";
+					    												return;
+					    											}
+
+					    											 var isDisabled = $("#file_name").prop("disabled");
+					    											 if (!isDisabled) {
+					    												 if (!validateCrtFile(file_name)) {
+					    														crtFileError.textContent = "Please select crt file";
+					    														return;
+					    													}
+					    											 }
+					    											
+
+					    											if (buttonText == 'Add') {
+					    												addMqtt();
+					    											} else {
+					    												editMqtt();
+					    											}
+					    										});
+
+					    						$('#clearBtn').click(function() {
+					    							$('#broker_ip_address').val('');
+					    							$('#port_number').val('');
+					    							$('#username').val('');
+					    							$('#password').val('');
+					    							$('#pub_topic').val('');
+					    							$('#sub_topic').val('');
+					    							$('#prefix').val('');
+					    							$("#prefix").prop("disabled", false);
+					    							$('#file_type').val('Select type');
+					    							$('#file_name').val('Select crt file');
+					    							$('#enable').val('Select status');
+					    							$('#registerBtn').val('Add');
+					    						});
+					    						
+					    }
 
 					});
 </script>
@@ -1131,13 +1147,6 @@ margin-top: 70px;
 					<td></td>
 					<td></td>
 					</tr>
-					
-					<!-- <tr>
-					<td>Publishing format</td>
-					<td><input type="text" id="publishing_format" name="publishing_format" maxlength="31" placeholder="Publishing format" required /></td>
-					<td></td>
-					<td></td>
-					</tr> -->
 								
 					</table>
 					
@@ -1150,7 +1159,7 @@ margin-top: 70px;
 				
 			<div class="upload-crt-container">
     <div>
-        <h3>UPLOAD CRT FILE</h3>
+        <h3 style="margin-top: 5px;">UPLOAD CRT FILE</h3>
         <form action="CRTFileUploadServlet" method="post" enctype="multipart/form-data" id="crtUploadForm">
             <input type="file" name="file" id="crtFileInput">
             <input type="submit" value="Upload" id="crt_file_upload">
@@ -1158,7 +1167,7 @@ margin-top: 70px;
     </div>
 
     <div class="delete-crt-container">
-        <h3>DELETE CRT FILE</h3>
+        <h3 style="margin-top: 5px;">DELETE CRT FILE</h3>
         <div>
             <select class="textBox" id="file_name_delete" name="file_name_delete" style="height: 33px; width: 200px; margin-top: 10px;"></select>
             <input style="height: 26px; margin-left: 5px;" type="button" value="Delete CRT file" id="delete_crt_file" />

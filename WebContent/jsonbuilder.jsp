@@ -496,8 +496,7 @@ var tokenValue;
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		 json_string_text = $('#json_string_validate').val();
 
-		$
-				.ajax({
+		$.ajax({
 					url : 'jsonBuilderServlet',
 					type : 'POST',
 					data : {
@@ -567,10 +566,7 @@ var tokenValue;
 		 
 		  if(res_val == true &&  res_dup == false && res_emp == false){
 			  json_string_text = json_string; // Assign the value here
-			  
-			 // $('#json_string_validate').val(json_string_text);
-			  
-			// Format and display the JSON in the json_validate element
+			 
 	            try {
 	                const formattedJson = JSON.stringify(JSON.parse(json_string), null, 2);
 	                $('#json_string_validate').val(formattedJson);
@@ -579,7 +575,6 @@ var tokenValue;
 	                $("#popupMessage").text("JSON parsing error: " + error);
 	                $("#customPopup").show();
 	            }
-			  
 			  
 		  }else{
 			
@@ -750,16 +745,6 @@ var tokenValue;
 			    	
 			    	roleValue = '<%=roleValue%>';
 			    	
-			    	<%// Access the session variable
-			    	HttpSession token = request.getSession();
-			    	String tokenValue = (String) session.getAttribute("token");%>
-
-			    	tokenValue = '<%=tokenValue%>';
-
-						// Load user list
-						loadBrokerIPList();
-						loadJsonBuilderList();
-
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 							$("#actions").hide();
@@ -767,103 +752,120 @@ var tokenValue;
 							$('#clearBtn').prop('disabled', true);
 							$('#validateBtn').prop('disabled', true);
 							
-
 							changeButtonColor(true);
 						}
+						
+						if (roleValue === "null") {
+					        var modal = document.getElementById('custom-modal-session-timeout');
+					        modal.style.display = 'block';
 
-						$('#validateBtn').click(function() {
-							validateJSON();
+					        // Handle the confirm button click
+					        var confirmButton = document.getElementById('confirm-button-session-timeout');
+					        confirmButton.onclick = function() {
+					            // Close the modal
+					            modal.style.display = 'none';
+					            window.location.href = 'login.jsp';
+					        };
+					    } else{
+					    	<%// Access the session variable
+					    	HttpSession token = request.getSession();
+					    	String tokenValue = (String) session.getAttribute("token");%>
 
-						});
+					    	tokenValue = '<%=tokenValue%>';
 
-						//console.log(is_json({name: 'Robert'}));
-						// Handle form submission
-						$('#jsonBuilderForm')
-								.submit(
-										function(event) {
-											event.preventDefault();
-											var buttonText = $('#registerBtn').val();
+								// Load user list
+								loadBrokerIPList();
+								loadJsonBuilderList();
+								
+								$('#validateBtn').click(function() {
+									validateJSON();
 
-											var publishingStatus = $('#publishing_status').find(":selected").val();
-											var storeAndForward = $('#storeAndForward').find(":selected").val();
-											var json_interval = $('#json_interval').find(":selected").val();
-											var broker_type = $('#broker_type').find(":selected").val();
-											var broker_name = $('#broker_name').find(":selected").val();
-											var json_string_name = $("#json_string_name").val();
-											var publish_topic = $("#publish_topic").val();
+								});
 
-											if (!validatePublishingStatus(publishingStatus)) {
-												publishingStatusError.textContent = "Please select publishing status";
-												return;
-											}
+								//console.log(is_json({name: 'Robert'}));
+								// Handle form submission
+								$('#jsonBuilderForm').submit(function(event) {
+													event.preventDefault();
+													var buttonText = $('#registerBtn').val();
 
-											if (!validateSoreAndForward(storeAndForward)) {
-												storeAndForwardError.textContent = "Please select store and forward";
-												return;
-											}
+													var publishingStatus = $('#publishing_status').find(":selected").val();
+													var storeAndForward = $('#storeAndForward').find(":selected").val();
+													var json_interval = $('#json_interval').find(":selected").val();
+													var broker_type = $('#broker_type').find(":selected").val();
+													var broker_name = $('#broker_name').find(":selected").val();
+													var json_string_name = $("#json_string_name").val();
+													var publish_topic = $("#publish_topic").val();
 
-											if (!validateJSONInterval(json_interval)) {
-												jsonIntervalError.textContent = "Please select interval";
-												return;
-											}
+													if (!validatePublishingStatus(publishingStatus)) {
+														publishingStatusError.textContent = "Please select publishing status";
+														return;
+													}
 
-											if (!validateBrokerType(broker_type)) {
-												brokerTypeError.textContent = "Please select broker type";
-												return;
-											}
+													if (!validateSoreAndForward(storeAndForward)) {
+														storeAndForwardError.textContent = "Please select store and forward";
+														return;
+													}
 
-											if (!validateBrokerIPAddress(broker_name)) {
-												brokerIPAddressError.textContent = "Please select broker ip address ";
-												return;
-											}
+													if (!validateJSONInterval(json_interval)) {
+														jsonIntervalError.textContent = "Please select interval";
+														return;
+													}
 
-											if (publish_topic.length > 30) {
-												publish_topic_error.textContent = "You can write upto 30 maximum characters.";
-											} else {
-												publish_topic_error.textContent = "";
-											}
+													if (!validateBrokerType(broker_type)) {
+														brokerTypeError.textContent = "Please select broker type";
+														return;
+													}
 
-											if (json_string_name.length > 30) {
-												json_string_name_error.textContent = "You can write upto 30 maximum characters.";
-											} else {
-												json_string_name_error.textContent = "";
-											}
+													if (!validateBrokerIPAddress(broker_name)) {
+														brokerIPAddressError.textContent = "Please select broker ip address ";
+														return;
+													}
 
-										
-											if (json_string_text) {
-												if (buttonText == 'Add') {
-													addJsonBuilder();
-												} else {
-													editJsonBuilder();
-												}
-											} else {
-											
-												// Display the custom popup message
-								     			$("#popupMessage").text('First validate json!');
-								      			$("#customPopup").show();
-								      			
-								      			$("#closePopup").click(function () {
-								      			    $("#customPopup").hide();
-								      			  });
+													if (publish_topic.length > 30) {
+														publish_topic_error.textContent = "You can write upto 30 maximum characters.";
+													} else {
+														publish_topic_error.textContent = "";
+													}
 
-											}
+													if (json_string_name.length > 30) {
+														json_string_name_error.textContent = "You can write upto 30 maximum characters.";
+													} else {
+														json_string_name_error.textContent = "";
+													}
 
-										});
+													if (json_string_text) {
+														if (buttonText == 'Add') {
+															addJsonBuilder();
+														} else {
+															editJsonBuilder();
+														}
+													} else {
+													
+										     			$("#popupMessage").text('First validate json!');
+										      			$("#customPopup").show();
+										      			
+										      			$("#closePopup").click(function () {
+										      			    $("#customPopup").hide();
+										      			  });
+													}
 
-						$('#clearBtn').click(function() {
-											$('#json_string_name').val('');
-											$("#json_string_name").prop("disabled", false);
-											$('#json_interval').val('Select interval');
-											$('#broker_type').val('Select broker type');
-											$('#broker_name').val('Select broker IP address');
-											$('#publish_topic').val('');
-											$('#publishing_status').val('Enable');
-											$('#storeAndForward').val('Select store and forward');
-											$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
-											$('#json_string_validate').val('');
-											$('#registerBtn').val('Add');
-										});
+												});
 
+								$('#clearBtn').click(function() {
+													$('#json_string_name').val('');
+													$("#json_string_name").prop("disabled", false);
+													$('#json_interval').val('Select interval');
+													$('#broker_type').val('Select broker type');
+													$('#broker_name').val('Select broker IP address');
+													$('#publish_topic').val('');
+													$('#publishing_status').val('Enable');
+													$('#storeAndForward').val('Select store and forward');
+													$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
+													$('#json_string_validate').val('');
+													$('#registerBtn').val('Add');
+												});
+																
+					    }		
 					});
 </script>
 </head>

@@ -68,6 +68,7 @@ margin-top: 68px;
 	var itemsPerPage = 100; // Items per page
 	var total_pages = 0;
 	var tokenValue;
+	var roleValue;
 
 	function getStoreForwardData() {
 		$.ajax({
@@ -182,6 +183,24 @@ margin-top: 68px;
 	$(document).ready(function() {
 		
 		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+
+	roleValue = '<%=roleValue%>';
+	
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
+
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    } else{
+    	<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
 
@@ -209,6 +228,8 @@ margin-top: 68px;
 			}
 		});
 
+    }
+		
 	});
 </script>
 </head>

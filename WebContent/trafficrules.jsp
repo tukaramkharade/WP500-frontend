@@ -286,9 +286,14 @@ h3{
 margin-top: 68px;
 }
 
-.container {
+   .container {
+    margin-left: 20px;
+    width: 97%;
     border-collapse: collapse;
-  
+    background-color: #f2f2f2;
+     border-radius: 5px;
+    
+ 
   }
 
 table{
@@ -312,7 +317,7 @@ margin-top: 1px;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
-            margin-left: -5px;
+            margin-left: 10px;
         }
         
         .tab-button.active {
@@ -1173,21 +1178,7 @@ var globalData = [];
 		String roleValue = (String) session.getAttribute("role");%>
 		    	
 		    	roleValue = '<%=roleValue%>';
-		    	
-		    	<%// Access the session variable
-		    	HttpSession token = request.getSession();
-		    	String tokenValue = (String) session.getAttribute("token");%>
-
-		    	tokenValue = '<%=tokenValue%>';
-		    	
-		    	
-		    	getBasicConfiguration();
-		    	
-		// Load traffic rules list
-		loadTrafficRulesList();
-		
-		
-		
+		   
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 			 $("#actions").hide();
@@ -1201,161 +1192,187 @@ var globalData = [];
 			changeButtonColor(true);
 		}
 		
-		getGeneralSettings();
+		if (roleValue === "null") {
+	        var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
 
-		 $("#type").change(function(event) {
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function() {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
+	        };
+	    } else{
+	    	<%// Access the session variable
+	    	HttpSession token = request.getSession();
+	    	String tokenValue = (String) session.getAttribute("token");%>
 
-			if ($(this).val() == 'ip' || $(this).val() == 'IP') {
-				 
-				$("#macAddress").prop("disabled", true);
-				$("#macAddress").val('');
-				
-				var isDisabled = $('#ip_addr').prop('disabled');
-				 
-				 if(isDisabled){
-					 $("#ip_addr").prop("disabled", false);
-				 }
-				
-			} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
-				$("#ip_addr").prop("disabled", true);
-				$("#ip_addr").val('');
-				
-				var isDisabled = $('#macAddress').prop('disabled');
-				 
-				 if(isDisabled){
-					 $("#macAddress").prop("disabled", false);
-				 }
-			}
-		}); 
+	    	tokenValue = '<%=tokenValue%>';
+	    	
+	    	
+	    	getBasicConfiguration();
+	    	
+	// Load traffic rules list
+	loadTrafficRulesList();
+	
+	getGeneralSettings();
 
-		$('#applyBtnRules').click(function() {
-			applyTrafficRules();
+	 $("#type").change(function(event) {
 
-		});
-
-		$('#applyBtnGenSettings').click(function() {
-			applyGeneralSettings();
-
-		});
-
-		$("#delBtnGenSettings").click(function() {
-			deleteGeneralSettings();
-		});
-		
-		
-		
-		$("#applyBtnBasicConf").click(function() {
-			 var newData = []; // Create an array to store the current data
-
-			    // Iterate through the table rows to collect data for each row
-			    $("#basic-config-table tbody tr").each(function() {
-			        var id = $(this).find("td:eq(0)").text(); // Get the ID
-			        var action = $(this).find("td:eq(6) select").val(); // Get the action from the select element
-
-			        newData.push({ id: id, action: action }); // Add the data to the newData array
-			    });
-
-			 // Now, you can merge the current data with the existing globalData
-			    if (!globalData) {
-			        globalData = [];
-			    }
-			    globalData = globalData.concat(newData);
-		    
-		    sendAccumulatedData();
-		});
-		
-
-		$('#generalSettingsForm').submit(function(event) {
-			event.preventDefault();
-			var buttonText = $('#registerBtnGenSettings').val();
-
-			if (buttonText == 'Add') {
-				addGeneralSettings();
-			} else {
-				editGeneralSettings();
-			}
-		});
-
-		// Handle form submission
-		$("#trafficRulesForm").submit(function(event) {
-			event.preventDefault();
-			var buttonText = $("#registerBtn").val();
+		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
+			 
+			$("#macAddress").prop("disabled", true);
+			$("#macAddress").val('');
 			
-			var name = $('#name').val();
-			var macAddress = $('#macAddress').val();
-			var ip_addr = $('#ip_addr').val();
-			var portNumber = $('#portNumber').val();
+			var isDisabled = $('#ip_addr').prop('disabled');
+			 
+			 if(isDisabled){
+				 $("#ip_addr").prop("disabled", false);
+			 }
 			
-			if((name.length > 30)){
-
-				nameError.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }
-
-            else{
-
-            	nameError.textContent =""
-
-            }  
+		} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
+			$("#ip_addr").prop("disabled", true);
+			$("#ip_addr").val('');
 			
-			if((macAddress.length > 30)){
+			var isDisabled = $('#macAddress').prop('disabled');
+			 
+			 if(isDisabled){
+				 $("#macAddress").prop("disabled", false);
+			 }
+		}
+	}); 
 
-				macAddrError.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }
+	$('#applyBtnRules').click(function() {
+		applyTrafficRules();
 
-            else{
+	});
 
-            	macAddrError.textContent =""
+	$('#applyBtnGenSettings').click(function() {
+		applyGeneralSettings();
 
-            }  
-            
-            if((ip_addr.length > 30)){
+	});
 
-            	sourceIpError.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }
+	$("#delBtnGenSettings").click(function() {
+		deleteGeneralSettings();
+	});
+	
+	
+	
+	$("#applyBtnBasicConf").click(function() {
+		 var newData = []; // Create an array to store the current data
 
-            else{
+		    // Iterate through the table rows to collect data for each row
+		    $("#basic-config-table tbody tr").each(function() {
+		        var id = $(this).find("td:eq(0)").text(); // Get the ID
+		        var action = $(this).find("td:eq(6) select").val(); // Get the action from the select element
 
-            	sourceIpError.textContent =""
+		        newData.push({ id: id, action: action }); // Add the data to the newData array
+		    });
 
-            }  
-            
-           if((portNumber.length > 30)){
+		 // Now, you can merge the current data with the existing globalData
+		    if (!globalData) {
+		        globalData = [];
+		    }
+		    globalData = globalData.concat(newData);
+	    
+	    sendAccumulatedData();
+	});
+	
 
-        	   destPortError.textContent = "You can write upto 30 maximum characters."
-                	return;
-            }
+	$('#generalSettingsForm').submit(function(event) {
+		event.preventDefault();
+		var buttonText = $('#registerBtnGenSettings').val();
 
-            else{
+		if (buttonText == 'Add') {
+			addGeneralSettings();
+		} else {
+			editGeneralSettings();
+		}
+	});
 
-            	destPortError.textContent =""
+	// Handle form submission
+	$("#trafficRulesForm").submit(function(event) {
+		event.preventDefault();
+		var buttonText = $("#registerBtn").val();
+		
+		var name = $('#name').val();
+		var macAddress = $('#macAddress').val();
+		var ip_addr = $('#ip_addr').val();
+		var portNumber = $('#portNumber').val();
+		
+		if((name.length > 30)){
 
-            }  
-            
-            
-			if (buttonText == "Add") {
-				addTrafficRules();
-			} else {
-				editTrafficRules();
-			}
-		});
+			nameError.textContent = "You can write upto 30 maximum characters."
+           	return;
+       }
 
-		$('#clearBtn').click(function() {
-			$('#name').val('');
-			$('#iface').val('eth0');
-			$('#portNumber').val('');
-			$('#macAddress').val('');
-			$('#protocol').val('TCP');
-			$('#ip_addr').val('');
-			$('#type').val('Select type');
-			$('#action').val('ACCEPT');
-			 $('#registerBtn').val('Add');
-			$('#ip_addr').prop('disabled', false);
-			$('#macAddress').prop('disabled', false);
+       else{
 
-		});
+       	nameError.textContent =""
+
+       }  
+		
+		if((macAddress.length > 30)){
+
+			macAddrError.textContent = "You can write upto 30 maximum characters."
+           	return;
+       }
+
+       else{
+
+       	macAddrError.textContent =""
+
+       }  
+       
+       if((ip_addr.length > 30)){
+
+       	sourceIpError.textContent = "You can write upto 30 maximum characters."
+           	return;
+       }
+
+       else{
+
+       	sourceIpError.textContent =""
+
+       }  
+       
+      if((portNumber.length > 30)){
+
+   	   destPortError.textContent = "You can write upto 30 maximum characters."
+           	return;
+       }
+
+       else{
+
+       	destPortError.textContent =""
+
+       }  
+       
+		if (buttonText == "Add") {
+			addTrafficRules();
+		} else {
+			editTrafficRules();
+		}
+	});
+
+	$('#clearBtn').click(function() {
+		$('#name').val('');
+		$('#iface').val('eth0');
+		$('#portNumber').val('');
+		$('#macAddress').val('');
+		$('#protocol').val('TCP');
+		$('#ip_addr').val('');
+		$('#type').val('Select type');
+		$('#action').val('ACCEPT');
+		 $('#registerBtn').val('Add');
+		$('#ip_addr').prop('disabled', false);
+		$('#macAddress').prop('disabled', false);
+
+	});
+	    }
+		
+		
 	});
 </script>
 
@@ -1440,17 +1457,17 @@ var globalData = [];
 			  
 		<h3>CONFIGURATION</h3>
 		<hr /> 
-		<div class="container">
+	
 		
 		<div class="tab-container">
-    <button class="tab-button active" onclick="openTab('basic-config', this)" style="margin-left: -15px;">Basic Configuration</button>
+    <button class="tab-button active" onclick="openTab('basic-config', this)" style="margin-left: 2px;">Basic Configuration</button>
     <button class="tab-button" onclick="openTab('user-config', this)">User Configuration</button>
 
-    <div id="basic-config" class="tab" style="display: block; margin-left: -19px;">
-        <div class="container">
+    <div id="basic-config" class="tab" style="display: block; margin-left: 3px;">
+        <div class="container" style="margin-left: 2px;">
         
        
-       <table id="basic-config-table" style="margin-left: -15px; width: 102.2%;">
+       <table id="basic-config-table" style="margin-left: 3px; width: 100%;">
          <colgroup>
     <col style="width: 5%;">
     <col style="width: 20%;">
@@ -1502,7 +1519,7 @@ var globalData = [];
     </div>
 
 
-    <div id="user-config" class="tab" style="margin-left: -15px;">
+    <div id="user-config" class="tab" style="margin-left: 5px;">
     <h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
     <hr/>
         <div class="form-container">
@@ -1624,7 +1641,7 @@ var globalData = [];
         
     </div>
 </div>
-		</div>
+		
 		
 		</section>
 	</div>

@@ -199,10 +199,7 @@ var json = {};
 						&& Array.isArray(data.broker_ip_result)) {
 
 					var selectElement = $("#broker_name");
-					// Clear any existing options
-				//	selectElement.empty();
-
-					// Loop through the data and add options to the select element
+					
 					data.broker_ip_result.forEach(function(filename) {
 						var option = $("<option>", {
 							value : filename,
@@ -406,45 +403,6 @@ var json = {};
 	       	}
 
 	    	
-	    	function validateBrokerIPAddress(broker_name) {
-	    		var brokerIPAddressError = document.getElementById("brokerIPAddressError");
-
-	    		if (broker_name == 'Select broker IP address'){
-	    			
-	    			brokerIPAddressError.textContent = "Please select broker ip address";
-	    			return false;
-	    		} else {
-	    			brokerIPAddressError.textContent = "";
-	    			return true;
-	    		}
-	    	}
-	    	
-	    	function validateInterval(interval) {
-	    		var intervalError = document.getElementById("intervalError");
-
-	    		if (interval == 'Select interval'){
-	    			
-	    			intervalError.textContent = "Please select interval";
-	    			return false;
-	    		} else {
-	    			intervalError.textContent = "";
-	    			return true;
-	    		}
-	    	}
-	    	
-	    	function validateBrokerType(broker_type) {
-	    		var brokerTypeError = document.getElementById("brokerTypeError");
-
-	    		if (broker_type == 'Select broker type'){
-	    			
-	    			brokerTypeError.textContent = "Please select broker type";
-	    			return false;
-	    		} else {
-	    			brokerTypeError.textContent = "";
-	    			return true;
-	    		}
-	    	}
-	    	
 	    	function changeButtonColor(isDisabled) {
 	            var $add_button = $('#addBtn');
 	            var $delete_button = $('#delBtn');
@@ -488,16 +446,7 @@ var json = {};
 	    	    	
 	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
 	    	    	
-	    	    	<%// Access the session variable
-	    	    	HttpSession token = request.getSession();
-	    	    	String tokenValue = (String) session.getAttribute("token");%>
-
-	    	    	tokenValue = '<%=tokenValue%>';
-	    	      
-	    		 
-	       	  // Load broker ip
-	      	   loadCommandSettings();
-	       	  
+	    	    	
 	      	 if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 	    		  
 	    		  $("#actions").hide(); 
@@ -508,116 +457,122 @@ var json = {};
 	    		 
 	    		  changeButtonColor(true);
 	    	  }
-	       	  
-	       	  loadBrokerIPList();
-	       	  loadTagList();
-	       	  
-	       	  
-	       	  $("#saveBtn").click(function () {
-	       	    var tagName = $("#tag_name").val();
-	       	    var value = $("#variable").val();
+	      	 
+	      	if (roleValue === "null") {
+		        var modal = document.getElementById('custom-modal-session-timeout');
+		        modal.style.display = 'block';
 
-	       	    // Check if tagName and value are not empty
-	       	    if (tagName.trim() !== "" && value.trim() !== "") {
-	       	      var newRow = $("<tr>")
-	       	        .append($("<td>").text(tagName))
-	       	        .append($("<td>").text(value))
-	       	        .append(
-	       	          $("<td>").html(
-	       	            `<input
-	       	                style="background-color :red"
-	       	                type="button"
-	       	                value="Delete"
-	       	                onclick="deleteRow(this)"
-	       	              />`
-	       	          )
-	       	        );
+		        // Handle the confirm button click
+		        var confirmButton = document.getElementById('confirm-button-session-timeout');
+		        confirmButton.onclick = function() {
+		            // Close the modal
+		            modal.style.display = 'none';
+		            window.location.href = 'login.jsp';
+		        };
+		    } else{
+		    	<%// Access the session variable
+    	    	HttpSession token = request.getSession();
+    	    	String tokenValue = (String) session.getAttribute("token");%>
 
-	       	      $("#table_data").append(newRow);
-	       	      $("#tag_name").val("");
-	       	      $("#variable").val("");
-	       	    }
-	       	    
-	       	     else  if (!validatefields(tagName)) {
-					tagnameError.textContent = "Please enter tag name.";
-					return;
-				}
-	    	    else if (!validateOption(value)) {
-					variableError.textContent = "Please select variable.";
-					return;
-				} 
-	       	    
-	       	  });
+    	    	tokenValue = '<%=tokenValue%>';
+    	
+      	   loadCommandSettings();
+      	   
+      	 loadBrokerIPList();
+      	  loadTagList();
+      	  
+      	  
+      	  $("#saveBtn").click(function () {
+      	    var tagName = $("#tag_name").val();
+      	    var value = $("#variable").val();
+
+      	    // Check if tagName and value are not empty
+      	    if (tagName.trim() !== "" && value.trim() !== "") {
+      	      var newRow = $("<tr>")
+      	        .append($("<td>").text(tagName))
+      	        .append($("<td>").text(value))
+      	        .append(
+      	          $("<td>").html(
+      	            `<input
+      	                style="background-color :red"
+      	                type="button"
+      	                value="Delete"
+      	                onclick="deleteRow(this)"
+      	              />`
+      	          )
+      	        );
+
+      	      $("#table_data").append(newRow);
+      	      $("#tag_name").val("");
+      	      $("#variable").val("");
+      	    }
+      	    
+      	     else  if (!validatefields(tagName)) {
+				tagnameError.textContent = "Please enter tag name.";
+				return;
+			}
+   	    else if (!validateOption(value)) {
+				variableError.textContent = "Please select variable.";
+				return;
+			} 
+      	    
+      	  });
+      	  
+      	     	  
+      	     	$('#commandConfigForm').submit(function(event) {
+      				event.preventDefault();
+      				var buttonText = $('#addBtn').val();
+      				
+      				var interval = $('#interval').find(":selected").val();
+      				var broker_type = $('#broker_type').find(":selected").val();
+      				var broker_name = $('#broker_name').find(":selected").val();
+      				var unit_id = $('#unit_id').val();
+      				var asset_id = $('#asset_id').val();
+      				var tag_name = $('#tag_name').val();
+      				
+      				
+      				if ((unit_id.length > 30)) {
+      					unitid_error.textContent = "You can write upto 30 maximum characters."
+      				}
+      				else {
+      					unitid_error.textContent = ""
+      				}
+
+      				if ((asset_id.length > 30)) {
+      					assetid_error.textContent = "You can write upto 30 maximum characters."
+      				} else {
+      					assetid_error.textContent = ""
+      				}
+
+      				if ((tag_name.length > 30)) {
+      					tagname_error.textContent = "You can write upto 30 maximum characters."
+      				}
+      				else {
+      					tagname_error.textContent = ""
+      				}
+      				
+      				if (buttonText == 'Add') {
+      					addCommandConfig();
+      				} else {
+      					editCommandConfig();
+      				}
+      			});
+      	  
+      	 $('#clearBtn').click(function(){
+   		  $('#unit_id').val('');
+ 			$('#asset_id').val('');
+ 			$('#broker_type').val('mqtt');
+ 			$('#broker_name').val('Select broker IP address');
+ 			$('#interval').val('5 sec');	  
+ 			$('#addBtn').val('Add'); 
+   	});
+      	 
+      	$("#delBtn").click(function () {
+      		deleteCommand();
+   	  });
+       	  
+		    }
 	       	  
-	       	     	  
-	       	     	$('#commandConfigForm').submit(function(event) {
-	       				event.preventDefault();
-	       				var buttonText = $('#addBtn').val();
-	       				
-	       				var interval = $('#interval').find(":selected").val();
-	       				var broker_type = $('#broker_type').find(":selected").val();
-	       				var broker_name = $('#broker_name').find(":selected").val();
-	       				var unit_id = $('#unit_id').val();
-	       				var asset_id = $('#asset_id').val();
-	       				var tag_name = $('#tag_name').val();
-	       				
-	       				
-	       				if ((unit_id.length > 30)) {
-	       					unitid_error.textContent = "You can write upto 30 maximum characters."
-	       				}
-	       				else {
-	       					unitid_error.textContent = ""
-	       				}
-
-	       				if ((asset_id.length > 30)) {
-	       					assetid_error.textContent = "You can write upto 30 maximum characters."
-	       				} else {
-	       					assetid_error.textContent = ""
-	       				}
-
-	       				if ((tag_name.length > 30)) {
-	       					tagname_error.textContent = "You can write upto 30 maximum characters."
-	       				}
-	       				else {
-	       					tagname_error.textContent = ""
-	       				}
-	       				
-	       				
-	       				if (!validateBrokerIPAddress(broker_name)) {
-	       					brokerIPAddressError.textContent = "Please select broker ip address ";
-	       					return;
-	       				}
-	       				
-	       			 if (!validateInterval(interval)) {
-	     				intervalError.textContent = "Please select interval";
-	     				return;
-	     			}
-	     			
-	     			if (!validateBrokerType(broker_type)) {
-	     				brokerTypeError.textContent = "Please select broker type";
-	     				return;
-	     			}
-	     			
-
-	       				if (buttonText == 'Add') {
-	       					addCommandConfig();
-	       				} else {
-	       					editCommandConfig();
-	       				}
-	       			});
-	       	  
-	       	 $('#clearBtn').click(function(){
-	    		  $('#unit_id').val('');
-	  			$('#asset_id').val('');
-	  			$('#broker_type').val('mqtt');
-	  			$('#broker_name').val('Select broker IP address');
-	  			$('#interval').val('5 sec');	  
-	  			$('#addBtn').val('Add'); 
-	    	});
-	       	 
-	       	$("#delBtn").click(function () {
-	       		deleteCommand();
-	    	  });
 	       	});
 	
 	    	function deleteRow(button) {
@@ -754,25 +709,25 @@ var json = {};
 		}
 </script>
 </head>
-<body>
 
+<body>
 	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-
 	<div class="content">
 		<section style="margin-left: 1em">
 		<h3>COMMAND CONFIG SETTINGS</h3>
-		<hr>
+		<hr />
+
 		<div class="form-container">
 			<form id="commandConfigForm">
 			
 			<input type="hidden" id="action" name="action" value="">
-				
- <table class="bordered-table" style="margin-top: -1px;">
+			
+			<table class="bordered-table" style="margin-top: -1px;">
 			
 			<tr>
 			<td>Unit ID</td>
@@ -787,7 +742,7 @@ var json = {};
 			<td>Broker type</td>
 			<td><select class="textBox" id="broker_type" name="broker_type" style="height: 33px">
 							<option value="Select broker type">Select broker type</option>
-							<option value="mqtt" selected="selected">mqtt</option>
+							<option value="mqtt">mqtt</option>
 							<option value="iothub">iothub</option>
 						</select> 
 						</td>
@@ -806,7 +761,7 @@ var json = {};
 			<td><select class="interval-select" id="interval" name="interval"
 							style="height: 33px">
 							<option value="Select interval">Select interval</option>
-							<option value="5 sec" selected="selected">5 sec</option>
+							<option value="5 sec">5 sec</option>
 							<option value="10 sec">10 sec</option>
 							<option value="15 sec">15 sec</option>
 							<option value="20 sec">20 sec</option>
@@ -840,7 +795,7 @@ var json = {};
 					
 			<table class="bordered-table">
 			
-			<tr>
+			 <tr>
 			<td>Tag name</td>
 			<td><input type="text" id="tag_name" name="tag_name" style="height: 10px" maxlength="31"/> 
 					<span id="tagnameError" style="color: red;"></span>
@@ -851,18 +806,16 @@ var json = {};
 						</select> <span id="variableError" style="color: red;"></span></td>
 						
 						<td><input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" /></td>
-			</tr>
+			</tr> 
 				
 				</table>
-		
- 
- 
+					
 			</form>
 		</div>
 		
 		<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
-				  <p>Are you sure you want to delete this command setting?</p>
+				  <p>Are you sure you want to delete this alarm setting?</p>
 				  <button id="confirm-button-delete">Yes</button>
 				  <button id="cancel-button-delete">No</button>
 				</div>
@@ -870,7 +823,7 @@ var json = {};
 			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to modify this command setting?</p>
+				  <p>Are you sure you want to modify this alarm setting?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
@@ -883,14 +836,14 @@ var json = {};
 				</div>
 			  </div>
 			  
-			   <div id="customPopup" class="popup">
+			  <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
 			  </div>
 			  
-			  <hr />
+		<hr />
 		</section>
-		
+
 		<section style="margin-left: 1em">
 		<div class="container">
 			<table id="table_data">
@@ -899,10 +852,14 @@ var json = {};
 					<th>Variable</th>
 					<th id="actions">Action</th>
 				</tr>
-			</table>
+			</table> 
+			
+	
 		</div>
+		
 		</section>
 	</div>
+
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>

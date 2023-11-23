@@ -507,14 +507,6 @@ $(document).ready(function() {
 
 	roleValue = '<%=roleValue%>';
 
-	<%// Access the session variable
-	HttpSession token = request.getSession();
-	String tokenValue = (String) session.getAttribute("token");%>
-
-	tokenValue = '<%=tokenValue%>';
-	
-	loadOPCUAClientList();
-	
 	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 		$("#actions").hide();
@@ -524,29 +516,49 @@ $(document).ready(function() {
 		changeButtonColor(true);
 	}
 	
-	$('#opcuaClientForm').submit(function(event) {
-		event.preventDefault();
-		var buttonText = $('#registerBtn').val();
-		
-		if (buttonText == 'Add') {
-			addOPCUA();
-		}else {
-			editOPCUA();		
-		}
-	});
-	
-	$('#clearBtn').click(function() {
-		$('#endURL').val('');
-		$('#username').val('');
-		$('#password').val('');
-		$('#security').val('');
-		$('#actionType').val('');
-		$('#prefix').val('');
-		$("#prefix").prop("disabled", false);
-		$('#registerBtn').val('Add');
-	});
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
 
-	
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    }else{
+    	<%// Access the session variable
+    	HttpSession token = request.getSession();
+    	String tokenValue = (String) session.getAttribute("token");%>
+
+    	tokenValue = '<%=tokenValue%>';
+    	
+    	loadOPCUAClientList();
+    	
+    	$('#opcuaClientForm').submit(function(event) {
+    		event.preventDefault();
+    		var buttonText = $('#registerBtn').val();
+    		
+    		if (buttonText == 'Add') {
+    			addOPCUA();
+    		}else {
+    			editOPCUA();		
+    		}
+    	});
+    	
+    	$('#clearBtn').click(function() {
+    		$('#endURL').val('');
+    		$('#username').val('');
+    		$('#password').val('');
+    		$('#security').val('');
+    		$('#actionType').val('');
+    		$('#prefix').val('');
+    		$("#prefix").prop("disabled", false);
+    		$('#registerBtn').val('Add');
+   	});
+    }
+
 });
 </script>
 

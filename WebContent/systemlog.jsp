@@ -334,24 +334,33 @@ var tokenValue;
 		String roleValue = (String) session.getAttribute("role");%>
 	
 	roleValue = '<%=roleValue%>';
+	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+
+		$('#loadLogSysFileButton').prop('disabled', true);
+		
+		changeButtonColor(true);
+	}
 	
-		<%// Access the session variable
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
+
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    }else{
+    	<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
 
 		tokenValue = '<%=tokenValue%>';
 		
-		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
-
-			
-			$('#loadLogSysFileButton').prop('disabled', true);
-			
-			
-			changeButtonColor(true);
-		}
 		
-		// Load log file list
-
+	
 		loadSystemLog();
 		getCurrentTimeInIndia();
 	
@@ -370,7 +379,8 @@ var tokenValue;
 			}
 		});
 		setInterval(getCurrentTimeInIndia, 60000);
-		
+    }
+	
 	});
 </script>
 

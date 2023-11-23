@@ -120,71 +120,71 @@ button {
 
 #imageContainer {
 	margin-top: 2%;
-	
 }
 
 .note {
-    color: red;
-    margin-top: 5%; 
-   
+	color: red;
+	margin-top: 5%;
 }
 
-.test-totp{
-margin-top: 15px;
+.test-totp {
+	margin-top: 15px;
 }
 
 #otp, #sendOTP {
-    display: none;
+	display: none;
 }
 
-#auth_app{
-height: 50px;
-width: 50px;
+#auth_app {
+	height: 50px;
+	width: 50px;
 }
 
 .modal-session-timeout {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
 }
 
 .modal-content-session-timeout {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+	background-color: #d5d3d3;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+	width: 300px;
+	transform: translate(0, -50%); /* Center vertically */
+	top: 50%; /* Center vertically */
+	left: 50%; /* Center horizontally */
+	transform: translate(-50%, -50%);
+	/* Center horizontally and vertically */
 }
 
 #confirm-button-session-timeout {
-  background-color: #4caf50;
-  color: white;
+	background-color: #4caf50;
+	color: white;
 }
 
-h3{
-margin-top: 68px;
+h3 {
+	margin-top: 68px;
 }
-
 </style>
 
 <script>
 	var isActive;
 	var qr_status;
 	var secretKey;
+	var roleValue;
+	var tokenValue;
 
 	function updateTOTP(element) {
 	    // Get references to necessary elements
@@ -282,6 +282,9 @@ margin-top: 68px;
 			type : "GET",
 			url : "TOTPServlet", // Replace with the actual URL to retrieve TOTP details
 			dataType : "json",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+			},
 			data: {
 	            action: 'getTOTPDetails'
 	        },
@@ -452,32 +455,56 @@ margin-top: 68px;
 	}
 
 	$(document).ready(function() {
-
-		$('.toggle-container').click(function() {
-			updateTOTP(this);
-		});
-
-		getTOTPDetails();
 		
+		<%// Access the session variable
+			HttpSession role = request.getSession();
+			String roleValue = (String) session.getAttribute("role");%>
+
+	roleValue = '<%=roleValue%>';
 	
-		$('#generateQR').click(function() {
-			generateQRCode();
-		});
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
 
-		getQRCode();
-		
-		$('#test-totp').click(function() {
-	        // Show the OTP textbox and Send OTP button
-	        $('#test-totp').css('display', 'none');
-	        $('#otp').css('display', 'inline');
-	        $('#sendOTP').css('display', 'inline');
-	    });
-		
-		$('#sendOTP').click(function() {
-			sendOTP();
-		});
-		
-	});
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    }else{
+    	<%// Access the session variable
+			HttpSession token = request.getSession();
+			String tokenValue = (String) session.getAttribute("token");%>
+
+	tokenValue = '<%=tokenValue%>
+	';
+
+							$('.toggle-container').click(function() {
+								updateTOTP(this);
+							});
+
+							getTOTPDetails();
+
+							$('#generateQR').click(function() {
+								generateQRCode();
+							});
+
+							getQRCode();
+
+							$('#test-totp').click(function() {
+								// Show the OTP textbox and Send OTP button
+								$('#test-totp').css('display', 'none');
+								$('#otp').css('display', 'inline');
+								$('#sendOTP').css('display', 'inline');
+							});
+
+							$('#sendOTP').click(function() {
+								sendOTP();
+							});
+						}
+					});
 </script>
 
 <body>
@@ -503,32 +530,56 @@ margin-top: 68px;
 				<div class="toggle-text">
 					<span id="disableText">Disable</span> <span id="enableText">Enable</span>
 				</div>
-				
+
 				<input type="hidden" id="action" name="action" value="">
-				
+
 				<div class="generateQRcode">
-					 <input type="button" id="generateQR" value="Generate QR code">
+					<input type="button" id="generateQR" value="Generate QR code">
 					<div id="imageContainer"></div>
 				</div>
-				
+
 				<div class="test-totp">
-					 <input type="button" id="test-totp" value="Test TOTP">
-					 <input type="password" id="otp" placeholder="Enter OTP" style="width: 15%;">
-    				<input type="button" id="sendOTP" value="Validate OTP" style="margin-left: 1%">
-    				<div id="message"></div>
-					
+					<input type="button" id="test-totp" value="Test TOTP"> <input
+						type="password" id="otp" placeholder="Enter OTP"
+						style="width: 15%;"> <input type="button" id="sendOTP"
+						value="Validate OTP" style="margin-left: 1%">
+					<div id="message"></div>
+
 				</div>
-				
+
 				<div class="note">
-				<p>Note: Please click on the 'Generate QR Code' button to generate your QR code when enabling 2-Factor authentication</p>
-					<p>Note: Please install <b>Authenticator App</b> <img id="auth_app" src="images/auth.png" alt="Authenticator App image"> on your mobile phone for scanning QR code and save this QR code for further use. 
+
+					<p>
+						Note: Please install <b>Authenticator App</b> <img id="auth_app"
+							src="images/auth.png" alt="Authenticator App image"> on
+						your mobile phone for scanning QR code and save this QR code for
+						further use.
 					</p>
-					
-					<p>Note: To ensure proper functionality of TOTP, <b>time</b> must be correctly synchronized with the device.  </p>
-					
-					
+
+					<p>
+						Note: To ensure proper functionality of TOTP, <b>time</b> must be
+						correctly synchronized with the device.
+					</p>
+
+					<p style="margin-top: 30px;">
+						<b>Steps to Follow to Enable Two-Factor Authentication:</b>
+					</p>
+					<p>Step 1: Enable the Two-Factor Authentication switch.</p>
+					<p>Step 2: After enabling, a QR code will appear on the screen.
+						Please scan that QR code using the Authenticator App.</p>
+					<p>Step 3: After scanning, test the Time-Based One-Time
+						Password (TOTP) by entering the OTP. Click on the "Test TOTP"
+						button.</p>
+					<p>Step 4: If the OTP is valid, log out from the application.</p>
+					<p>Step 5: Now, log in again, and you will be redirected to the
+						TOTP page. Enter the OTP again to validate.</p>
+					<p>Step 6: If the OTP is correct, you will be able to access
+						the application.</p>
+
+
+
 				</div>
-				
+
 			</div>
 
 			<div id="custom-modal-edit" class="modal-edit">
@@ -538,13 +589,13 @@ margin-top: 68px;
 					<button id="cancel-button-edit">No</button>
 				</div>
 			</div>
-			
+
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
-				  <button id="confirm-button-session-timeout">OK</button>
+					<p>Your session is timeout. Please login again</p>
+					<button id="confirm-button-session-timeout">OK</button>
 				</div>
-			  </div>
+			</div>
 
 		</section>
 	</div>
