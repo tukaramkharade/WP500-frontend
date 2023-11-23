@@ -639,14 +639,6 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
-<%// Access the session variable
-			HttpSession token = request.getSession();
-			String tokenValue = (String) session.getAttribute("token");%>
-
-tokenValue = '<%=tokenValue%>';
-
-						getSMTPSettings();
-
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 							$('#addBtn').prop('disabled', true);
@@ -655,137 +647,159 @@ tokenValue = '<%=tokenValue%>';
 
 							changeButtonColor(true);
 						}
+						
+						if (roleValue === "null") {
+					        var modal = document.getElementById('custom-modal-session-timeout');
+					        modal.style.display = 'block';
 
-						$("#smtp_type")
-								.change(
-										function(event) {
+					        // Handle the confirm button click
+					        var confirmButton = document.getElementById('confirm-button-session-timeout');
+					        confirmButton.onclick = function() {
+					            // Close the modal
+					            modal.style.display = 'none';
+					            window.location.href = 'login.jsp';
+					        };
+					    }else{
 
-											if ($(this).val() == 'ssl'
-													|| $(this).val() == 'SSL') {
+					    	<%// Access the session variable
+					    				HttpSession token = request.getSession();
+					    				String tokenValue = (String) session.getAttribute("token");%>
 
-												$("#tls_port").prop("disabled",
-														true);
+					    	tokenValue = '<%=tokenValue%>';
 
-												$("#tls_auth").prop("disabled",
-														true);
-												$("#tls_enable").prop(
-														"disabled", true);
+					    							getSMTPSettings();
+					    							$("#smtp_type")
+													.change(
+															function(event) {
 
-												$("#tls_port").val('');
-												$("#tls_auth").val('False');
-												$("#tls_enable").val('False');
+																if ($(this).val() == 'ssl'
+																		|| $(this).val() == 'SSL') {
+
+																	$("#tls_port").prop("disabled",
+																			true);
+
+																	$("#tls_auth").prop("disabled",
+																			true);
+																	$("#tls_enable").prop(
+																			"disabled", true);
+
+																	$("#tls_port").val('');
+																	$("#tls_auth").val('False');
+																	$("#tls_enable").val('False');
+																	$('#ssl_smtp_type').val('True');
+
+																	var isDisabled1 = $(
+																			'#ssl_socket_factory_port')
+																			.prop('disabled');
+
+																	if (isDisabled1) {
+																		$(
+																				"#ssl_socket_factory_port")
+																				.prop("disabled",
+																						false);
+																	}
+
+																	var isDisabled2 = $('#ssl_port')
+																			.prop('disabled');
+
+																	if (isDisabled2) {
+																		$("#ssl_port").prop(
+																				"disabled", false);
+																	}
+
+																	var isDisabled3 = $(
+																			'#ssl_smtp_type').prop(
+																			'disabled');
+
+																	if (isDisabled3) {
+																		$("#ssl_smtp_type").prop(
+																				"disabled", false);
+																	}
+
+																} else if ($(this).val() == 'tls'
+																		|| $(this).val() == 'TLS') {
+																	$("#ssl_socket_factory_port")
+																			.prop("disabled", true);
+																	$("#ssl_port").prop("disabled",
+																			true);
+																	$("#ssl_smtp_type").prop(
+																			"disabled", true);
+
+																	$("#ssl_socket_factory_port")
+																			.val('');
+																	$("#ssl_port").val('');
+																	$('#ssl_smtp_type')
+																			.val('False');
+																	$("#tls_auth").val('True');
+																	$("#tls_enable").val('True');
+
+																	var isDisabled1 = $('#tls_port')
+																			.prop('disabled');
+
+																	if (isDisabled1) {
+																		$("#tls_port").prop(
+																				"disabled", false);
+																	}
+
+																	var isDisabled2 = $('#tls_auth')
+																			.prop('disabled');
+
+																	if (isDisabled2) {
+																		$("#tls_auth").prop(
+																				"disabled", false);
+																	}
+
+																	var isDisabled3 = $(
+																			'#tls_enable').prop(
+																			'disabled');
+
+																	if (isDisabled3) {
+																		$("#tls_enable").prop(
+																				"disabled", false);
+																	}
+
+																}
+															});
+
+											$('#smtpForm').submit(function(event) {
+												event.preventDefault();
+												var buttonText = $('#addBtn').val();
+
+												if (buttonText == 'Add') {
+													addSMTPSettings();
+												} else {
+													editSMTPSettings();
+												}
+
+											});
+
+											$('#clearBtn').click(function() {
+												$('#from_email_id').val('');
+												$('#password').val('');
+												$('#host').val('');
+												$('#smtp_type').val('Select SMTP type');
+												$('#ssl_socket_factory_port').val('');
+												$('#ssl_port').val('');
 												$('#ssl_smtp_type').val('True');
+												$('#tls_port').val('');
+												$('#tls_auth').val('True');
+												$('#tls_enable').val('True');
+												$('#to_email_id').val('');
+												$('#email_cc').val('');
+												$('#email_bcc').val('');
+											});
 
-												var isDisabled1 = $(
-														'#ssl_socket_factory_port')
-														.prop('disabled');
-
-												if (isDisabled1) {
-													$(
-															"#ssl_socket_factory_port")
-															.prop("disabled",
-																	false);
-												}
-
-												var isDisabled2 = $('#ssl_port')
-														.prop('disabled');
-
-												if (isDisabled2) {
-													$("#ssl_port").prop(
-															"disabled", false);
-												}
-
-												var isDisabled3 = $(
-														'#ssl_smtp_type').prop(
-														'disabled');
-
-												if (isDisabled3) {
-													$("#ssl_smtp_type").prop(
-															"disabled", false);
-												}
-
-											} else if ($(this).val() == 'tls'
-													|| $(this).val() == 'TLS') {
-												$("#ssl_socket_factory_port")
-														.prop("disabled", true);
-												$("#ssl_port").prop("disabled",
-														true);
-												$("#ssl_smtp_type").prop(
-														"disabled", true);
-
-												$("#ssl_socket_factory_port")
-														.val('');
-												$("#ssl_port").val('');
-												$('#ssl_smtp_type')
-														.val('False');
-												$("#tls_auth").val('True');
-												$("#tls_enable").val('True');
-
-												var isDisabled1 = $('#tls_port')
-														.prop('disabled');
-
-												if (isDisabled1) {
-													$("#tls_port").prop(
-															"disabled", false);
-												}
-
-												var isDisabled2 = $('#tls_auth')
-														.prop('disabled');
-
-												if (isDisabled2) {
-													$("#tls_auth").prop(
-															"disabled", false);
-												}
-
-												var isDisabled3 = $(
-														'#tls_enable').prop(
-														'disabled');
-
-												if (isDisabled3) {
-													$("#tls_enable").prop(
-															"disabled", false);
-												}
-
-											}
-										});
-
-						$('#smtpForm').submit(function(event) {
-							event.preventDefault();
-							var buttonText = $('#addBtn').val();
-
-							if (buttonText == 'Add') {
-								addSMTPSettings();
-							} else {
-								editSMTPSettings();
-							}
-
-						});
-
-						$('#clearBtn').click(function() {
-							$('#from_email_id').val('');
-							$('#password').val('');
-							$('#host').val('');
-							$('#smtp_type').val('Select SMTP type');
-							$('#ssl_socket_factory_port').val('');
-							$('#ssl_port').val('');
-							$('#ssl_smtp_type').val('True');
-							$('#tls_port').val('');
-							$('#tls_auth').val('True');
-							$('#tls_enable').val('True');
-							$('#to_email_id').val('');
-							$('#email_cc').val('');
-							$('#email_bcc').val('');
-						});
-
-						$("#delBtn").click(function() {
-							deleteSMTPSettings();
-						});
-						$("#testEmailBtn").click(function() {
-							testEmail();
-						});
-						$("#closePopup").click(function() {
-							$("#customPopup").hide();
-						});
+											$("#delBtn").click(function() {
+												deleteSMTPSettings();
+											});
+											$("#testEmailBtn").click(function() {
+												testEmail();
+											});
+											$("#closePopup").click(function() {
+												$("#customPopup").hide();
+											});		
+					    							
+					    }
 
 					});
 </script>

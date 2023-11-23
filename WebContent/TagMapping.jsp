@@ -184,19 +184,10 @@ margin-top: 70px;
 </style>
 
 <script>
-	// Function to load user data and populate the user list table
-
 	var roleValue;	
 	var tokenValue;
-	//var nodeid;
-	
-	
 
 	function loadTagList() {
-		
-		
-	//	var pv_address = $('#pv_address').val(nodeid);
-	//	$("#pv_address").prop("disabled", true);
 		
 		$.ajax({
 					url : 'tagMapping',
@@ -227,9 +218,6 @@ margin-top: 70px;
 							        window.location.href = 'login.jsp';
 							  };
 						}
-
-						// Iterate through the user data and add rows to the table
-						
 						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
 							$.each(data,function(index, tag) {
@@ -286,9 +274,6 @@ margin-top: 70px;
 				});
 	}
 
-
-	
-
 	function setTagName(tagId) {
 
 		$('#tag_name').val(tagId);
@@ -300,9 +285,6 @@ margin-top: 70px;
 		$('#registerBtn').val('Update');
 	}
 
-	
-
-	 
 	function deleteTag(tag_name) {
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
@@ -488,8 +470,6 @@ margin-top: 70px;
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-        
-        
     }
 	
 	 
@@ -502,56 +482,62 @@ margin-top: 70px;
 			String roleValue = (String) session.getAttribute("role");%>
     	
     	roleValue = '<%=roleValue%>';
-
-						<%// Access the session variable
-	HttpSession token = request.getSession();
-	String tokenValue = (String) session.getAttribute("token");%>
-
-	tokenValue = '<%=tokenValue%>';
-	
-	
-	<%-- <%// Access the session variable
-	HttpSession node = request.getSession();
-	String nodeid = (String) session.getAttribute("nodeid");%>
-
-	nodeid = '<%=nodeid%>'; --%>
-	
-
-	loadTagList();
-						
-						
+    	
 						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
-							$('#crtFileInput').prop('disabled', true); 
+							
 							
 							changeButtonColor(true);
-						}										
-
-						// Handle form submission
-						$('#tagForm').submit(function(event) {
-											event.preventDefault();
-											var buttonText = $('#registerBtn').val();
-											
-											var tag_name = $('#tag_name').val();										
-										    var pv_address = $('#pv_address').val();							
-										    if (buttonText == 'Add') {
-												addTag();
-											} else {
-												editTag();
-											}									
-										});
+						}	
 						
+						if (roleValue === "null") {
+					        var modal = document.getElementById('custom-modal-session-timeout');
+					        modal.style.display = 'block';
 
-						$('#clearBtn').click(function() {
-							$('#tag_name').val('');
-							$('#pv_address').val('');
-							$('#registerBtn').val('Add');
-						});
-						$('#exportButton').on('click', function() {							
-						    fetchDataAndExportToExcel();
-						});
+					        // Handle the confirm button click
+					        var confirmButton = document.getElementById('confirm-button-session-timeout');
+					        confirmButton.onclick = function() {
+					            // Close the modal
+					            modal.style.display = 'none';
+					            window.location.href = 'login.jsp';
+					        };
+					    }else{
+					    	
+					    	<%// Access the session variable
+					    	HttpSession token = request.getSession();
+					    	String tokenValue = (String) session.getAttribute("token");%>
+
+					    	tokenValue = '<%=tokenValue%>';
+
+					    	loadTagList();
+					    	
+					    	// Handle form submission
+							$('#tagForm').submit(function(event) {
+												event.preventDefault();
+												var buttonText = $('#registerBtn').val();
+												
+												var tag_name = $('#tag_name').val();										
+											    var pv_address = $('#pv_address').val();							
+											    if (buttonText == 'Add') {
+													addTag();
+												} else {
+													editTag();
+												}									
+											});
+							
+
+							$('#clearBtn').click(function() {
+								$('#tag_name').val('');
+								$('#pv_address').val('');
+								$('#registerBtn').val('Add');
+							});
+							$('#exportButton').on('click', function() {							
+							    fetchDataAndExportToExcel();
+							});
+					    	
+					    }
 
 					});
 </script>

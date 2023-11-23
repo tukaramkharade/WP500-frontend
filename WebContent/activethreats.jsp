@@ -465,13 +465,7 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
-<%// Access the session variable
-HttpSession token = request.getSession();
-String tokenValue = (String) session.getAttribute("token");%>
 
-tokenValue = '<%=tokenValue%>';
-	
-	getActiveThreats();
 	
 	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 		$("#acknowledge").hide();
@@ -481,16 +475,38 @@ tokenValue = '<%=tokenValue%>';
 		changeButtonColor(true);
 	}
 	
-	getCurrentTimeInIndia();
-		$(document).on("click", "#loadThreats", function() {
-        checkDateField();
-    });
-	setInterval(getCurrentTimeInIndia, 60000);
-	
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
 
-	$("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    }else{
+    	<%// Access the session variable
+    	HttpSession token = request.getSession();
+    	String tokenValue = (String) session.getAttribute("token");%>
+
+    	tokenValue = '<%=tokenValue%>';
+    		
+    		getActiveThreats();
+    		
+    		getCurrentTimeInIndia();
+    		$(document).on("click", "#loadThreats", function() {
+            checkDateField();
+        });
+    	setInterval(getCurrentTimeInIndia, 60000);
+    	
+
+    	$("#closePopup").click(function () {
+    	    $("#customPopup").hide();
+    	  });
+    }
+	
 });
 
 </script>

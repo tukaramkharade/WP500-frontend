@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="nav-bar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         
@@ -96,9 +97,24 @@
 
         	    return result;
         	}
+         
+         function togglePassword() {
+        	    var passwordInput = $('#password');
+        	    var passwordToggle = $('#password-toggle');
+
+        	    if (passwordInput.attr('type') === 'password') {
+        	        passwordInput.attr('type', 'text');
+        	        passwordToggle.html('<i class="fa fa-eye-slash"></i>');
+        	    } else {
+        	        passwordInput.attr('type', 'password');
+        	        passwordToggle.html('<i class="fa fa-eye"></i>');
+        	    }
+        	}
+
+
      
         	
-        	function generateImageWithNumber() {
+         function generateImageWithNumber() {
         	    const randomNumber = generateRandomAlphanumeric();
 
         	    // Get the canvas element
@@ -116,7 +132,7 @@
         	    ctx.fillStyle = 'black'; // Text color
 
         	    // Center the text on the canvas
-        	    ctx.textAlign = 'center';
+        	    ctx.textAlign = 'left'; // Change from 'center' to 'left'
         	    ctx.textBaseline = 'middle';
 
         	    // Calculate the space between characters
@@ -125,10 +141,10 @@
         	    // Calculate the total width needed for the text
         	    const totalTextWidth = (24 + characterSpacing) * randomNumber.length - characterSpacing;
 
-        	    // Calculate the starting position for the text
-        	    const startX = (canvas.width - totalTextWidth) / 2;
-        	    
-        	 // Draw a horizontal line in the middle of the canvas
+        	    // Calculate the starting position for the text (shifted to the left)
+        	    const startX = 10; // You can adjust this value to control the left shift
+
+        	    // Draw a horizontal line in the middle of the canvas
         	    ctx.beginPath();
         	    ctx.moveTo(0, canvas.height / 2);
         	    ctx.lineTo(canvas.width, canvas.height / 2);
@@ -156,8 +172,6 @@
         	    // Store the generated random number in a data attribute
         	    img.setAttribute('data-random-number', randomNumber);
         	}
-
-
 
       
          function checkUserInput() {
@@ -187,60 +201,76 @@
         	$('#loginForm').submit(function(event) {
                 event.preventDefault(); // Prevent the default form submission               
                 checkUserInput();
+                
+            });
+        	
+        	$('#password-toggle').click(function () {
+                togglePassword();
             });
         });
     </script>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #2e3891d4;
-            margin: 0;
-        }
-        
-        .container {
-            width: 24em;
-            border-radius: 30px;
-            background-color: #ffffff8f;
-            padding-bottom: 30px;
-            text-align: center;
-        }
-        
-        .container img {
-            width: 78%;
-        }
-        
-        .container label {
-            display: block;
-            text-align: left;
-        }
-        
-        .container input[type="text"],
-        .container input[type="password"] {
-            width: 100%;
-            padding: 5px 0;
-            margin-bottom: 10px;
-        }
-        
-        .container input[type="submit"] {
-            padding: 5px 140px;
-            font-size: medium;
-        }
-        
-       #imageContainer img {
-          
-            width: 38%;
-        }
-        
-        input[type="text"],
-        input[type="password"],
-        input[type="submit"]{
+   
+   <style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #2e3891d4;
+        margin: 0;
+    }
+
+    .container {
+        width: 24em;
+        border-radius: 30px;
+        background-color: #ffffff8f;
+        padding-bottom: 30px;
+        text-align: center;
+        position: relative; /* Add this line */
+    }
+
+    .container img {
+        width: 78%;
+    }
+
+    .container label {
+        display: block;
+        text-align: left;
+    }
+
+    .container input[type="text"],
+    .container input[type="password"] {
+        width: calc(100% - 20px); /* Adjusted width to account for padding */
+        padding: 5px 0;
+        margin-bottom: 10px;
+    }
+
+    .container input[type="submit"] {
+        padding: 5px 140px;
+        font-size: medium;
+    }
+
+    #imageContainer img {
+        width: 38%;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="submit"] {
         margin-left: -5px;
-        }
-        
-    </style>
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 35px; /* Adjust the positioning as needed */
+        top: 53.5%; /* Adjusted top to center the eye symbol */
+        cursor: pointer;
+    }
+    
+    
+    
+</style>
+   
 </head>
 <body style="background-color: #2e3891d4;">
     <form action="WP500Login" method="post" class="container" id="loginForm">
@@ -253,7 +283,12 @@
         <input required type="text" id="username" name="username" style="padding-left: 5px;"><br>
         
         <label for="password" style="float: left;">Password</label>
-        <input required type="password" id="password" name="password" style="padding-left: 5px;"><br><br>
+        <div style="position: relative;">
+    <input required type="password" id="password" name="password" style="padding-left: 5px;">
+    <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
+</div>
+ 
+        <br><br>
      	<div id="imageContainer">
         <!-- The generated image will be displayed here -->
    		 </div>

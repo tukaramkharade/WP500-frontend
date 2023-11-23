@@ -141,7 +141,6 @@ margin-top: 68px;
 <script>
 
 var user;
-var formSubmitted = false; // Flag to track form submission
 
 function updateOldPassword() {
 	
@@ -177,14 +176,8 @@ function updateOldPassword() {
 						// Close the modal
 							modal.style.display = 'none';
 						
-							// Set the flag to true on successful form submission
-		                    formSubmitted = true;
-						
 						 window.location.href = 'login.jsp';
-						 
 						
-					
-					
 				},
 				error : function(xhr, status, error) {
 					console.log('Error updating user: ' + error);
@@ -200,23 +193,9 @@ function updateOldPassword() {
 		};
 	} else {
 		
-		//showCustomPopup('New password and confirm password do not match.');
-		
 		$("#popupMessage").text('New password and confirm password do not match.');
 			$("#customPopup").show();
 		
-	}
-}
-
-function validateOldPassword(oldPassword) {
-	var oldPasswordError = document.getElementById("oldPasswordError");
-	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-	if (oldPassword.length < 8 || !strongRegex.test(oldPassword)) {
-		oldPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-		return false;
-	} else {
-		oldPasswordError.textContent = "";
-		return true;
 	}
 }
 
@@ -280,12 +259,7 @@ $(document).ready(function () {
     		var new_password = $('#new_password').val();
     		var confirm_password = $('#confirm_password').val();
     		
-    		if (!validateOldPassword(old_password)) {
-    			oldPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-    			return;
-    		}	
-    		
-    		if (!validateNewPassword(new_password)) {
+    		 if (!validateNewPassword(new_password)) {
     			newPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
     			return;
     		}	
@@ -293,7 +267,7 @@ $(document).ready(function () {
     		if (!validateConfirmPassword(confirm_password)) {
     			confirmPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
     			return;
-    		}	
+    		}	 
     		
     		if((old_password.length > 30)){
                 field_Old_Pass_Error.textContent = "You can write upto 30 maximum characters."
@@ -321,15 +295,7 @@ $(document).ready(function () {
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
-	
-	 // Block manual redirection by checking the flag
-    $(window).on('beforeunload', function() {
-        if (!formSubmitted) {
-            return 'You have unsaved changes. Are you sure you want to leave?';
-        }
-    }); 
-
-});
+	});
 
 </script>
 

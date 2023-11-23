@@ -142,9 +142,6 @@
                 <a href="opcuaClient.jsp">OPCUA Client</a>
               </li>
               
-              <li class="nav-item">
-                <a href="certificate.jsp">Certificate</a>
-              </li>
               
               <li class="nav-item">
                 <a href="browsequickclient.jsp">Quick Client</a>
@@ -152,6 +149,14 @@
               
                <li class="nav-item">
                 <a href="TagMapping.jsp">Tag Mapping</a>
+              </li>
+              
+              <li class="nav-item">
+                <a href=""></a>
+              </li>
+              
+               <li class="nav-item">
+                <a href="certificate.jsp">Certificate</a>
               </li>
                 
               </ul>

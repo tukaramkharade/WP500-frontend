@@ -672,11 +672,9 @@ var tokenValue;
 	
 	function getCurrentTimeInIndia() {
 	    const date = new Date();
-	  //  console.log("Current Time:", date);
 	    var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes 
 	    var offset = ISTOffset * 60 * 1000;
-	    var ISTTime = new Date(date.getTime() + offset);
-	 //   console.log("IST Date:", ISTTime);
+	    var ISTTime = new Date(date.getTime() + offset); 
 
 	    // Format IST time as a string in "yyyy-MM-ddTHH:mm" format
 	    var formattedTime = ISTTime.toISOString().slice(0, 16);
@@ -684,8 +682,6 @@ var tokenValue;
 	    // Set the IST time as the value of the "datetime" input field
 	    document.getElementById('datetime').value = formattedTime;
 
-	    // Debugging: Log the calculated IST time to the console
-	  //  console.log('Calculated IST time:', formattedTime);
 	  }
 	
 	function handleStatus(status) {
@@ -708,8 +704,6 @@ var tokenValue;
 	   var $updatentpbutton = $('#updatentp'); 
 	    var $savebutton = $('#saveButton'); 
 	    
-	     
-	     
 	     if (isDisabled) {
 		        $updatentpbutton.css('background-color', 'gray'); // Change to your desired color
 		    } else {
@@ -730,14 +724,7 @@ var tokenValue;
 		    	
 		    	roleValue = '<%=roleValue%>';
 		    	
-		    	<%// Access the session variable
-		    	HttpSession token = request.getSession();
-		    	String tokenValue = (String) session.getAttribute("token");%>
-
-		    	tokenValue = '<%=tokenValue%>';
 		    	
-		loadNtpSettings();
-		getCurrentTimeInIndia();
 		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
 
 			$('#updatentp').prop('disabled', true);
@@ -747,37 +734,58 @@ var tokenValue;
 			
 		}
 		
-		getNtpDetails();
-		
+		if (roleValue === "null") {
+	        var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
+
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function() {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
+	        };
+	    } else{
+	    	<%// Access the session variable
+	    	HttpSession token = request.getSession();
+	    	String tokenValue = (String) session.getAttribute("token");%>
+
+	    	tokenValue = '<%=tokenValue%>';
+	    	
+	loadNtpSettings();
+	getCurrentTimeInIndia();
+	
+	getNtpDetails();
+	
+	toggleDateTimeInput();
+	$("#get_current_time").click(function() {
+		getCurrentTime();
+	});
+	//getntp();
+
+	$('#setDateTime').click(function() {
+		setManualTime();
 		toggleDateTimeInput();
-		$("#get_current_time").click(function() {
-			getCurrentTime();
-		});
-		//getntp();
+	});
 
-		$('#setDateTime').click(function() {
-			setManualTime();
-			toggleDateTimeInput();
-		});
+	// Handle form submission
+	$("#updateNtp").submit(function(event) {
+		event.preventDefault();
+		var buttonText = $("#updatentp").val();
 
-		// Handle form submission
-		$("#updateNtp").submit(function(event) {
-			event.preventDefault();
-			var buttonText = $("#updatentp").val();
-
-			if (buttonText == "Add") {
-				updatentp();
-			}
-		});
-		
-		$("#closePopup").click(function () {
-		    $("#customPopup").hide();
-		  });
-
+		if (buttonText == "Add") {
+			updatentp();
+		}
+	});
+	
+	$("#closePopup").click(function () {
+	    $("#customPopup").hide();
+	  });
+	    }
+	
 	});
 	setInterval(getCurrentTimeInIndia, 60000);
 
-	
 </script>
 
 

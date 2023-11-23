@@ -138,7 +138,7 @@ h3 {
 
 </style>
 <script>
-
+var roleValue;
 var tokenValue;
 
 	function loadStratonLiveDataList() {
@@ -391,19 +391,37 @@ var tokenValue;
 
 	$(document).ready(function() {
 		<%// Access the session variable
-			HttpSession token = request.getSession();
-			String tokenValue = (String) session.getAttribute("token");%>
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
 
-		tokenValue = '<%=tokenValue%>';
-						loadStratonLiveDataList();
-						loadStratonFiles();
-						fetchStatusData();
-						
-						$('#stratonUpdateButton').click(function(event) {
-				            event.preventDefault(); // Prevent the form from submitting
-				            validateAndUpload('fileInput', '.cod');
-				        });						
+	roleValue = '<%=roleValue%>';
+	
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
 
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    } else{
+    	<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+	tokenValue = '<%=tokenValue%>';
+					loadStratonLiveDataList();
+					loadStratonFiles();
+					fetchStatusData();
+					
+					$('#stratonUpdateButton').click(function(event) {
+			            event.preventDefault(); // Prevent the form from submitting
+			            validateAndUpload('fileInput', '.cod');
+			        });		
+    }
 });
 </script>
 </head>
