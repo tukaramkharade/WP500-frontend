@@ -177,6 +177,10 @@ button {
 h3 {
 	margin-top: 68px;
 }
+
+#totp_steps{
+margin-left: -39px;
+}
 </style>
 
 <script>
@@ -478,8 +482,7 @@ h3 {
 			HttpSession token = request.getSession();
 			String tokenValue = (String) session.getAttribute("token");%>
 
-	tokenValue = '<%=tokenValue%>
-	';
+	tokenValue = '<%=tokenValue%>';
 
 							$('.toggle-container').click(function() {
 								updateTOTP(this);
@@ -550,14 +553,14 @@ h3 {
 				<div class="note">
 
 					<p>
-						Note: Please install <b>Authenticator App</b> <img id="auth_app"
+						Please install <b>Authenticator App</b> <img id="auth_app"
 							src="images/auth.png" alt="Authenticator App image"> on
 						your mobile phone for scanning QR code and save this QR code for
 						further use.
 					</p>
 
 					<p>
-						Note: To ensure proper functionality of TOTP, <b>time</b> must be
+						To ensure proper functionality of TOTP, <b>time</b> must be
 						correctly synchronized with the device.
 					</p>
 
@@ -576,7 +579,8 @@ h3 {
 					<p>Step 6: If the OTP is correct, you will be able to access
 						the application.</p>
 
-
+				<img id="totp_steps"
+							src="images/totp.png" alt="TOTP steps">
 
 				</div>
 

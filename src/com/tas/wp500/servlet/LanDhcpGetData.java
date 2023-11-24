@@ -51,15 +51,15 @@ public class LanDhcpGetData extends HttpServlet {
 			String respStr = client.sendMessage(json.toString());
 
 			System.out.println("response : " + respStr);
-			String eth1_ipaddr = new JSONObject(respStr).getString("eth1_ipaddr");
-			String eth1_subnet = new JSONObject(respStr).getString("eth1_subnet");
+			String lan0_ipaddr = new JSONObject(respStr).getString("lan0_ipaddr");
+			String lan0_subnet = new JSONObject(respStr).getString("lan0_subnet");
 			
-			String eth1_ipaddr1 = eth1_ipaddr.toString();
-			String eth1_subnet1 = eth1_subnet.toString();
+			String lan0_ipaddr1 = lan0_ipaddr.toString();
+			String lan0_subnet1 = lan0_subnet.toString();
 			
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("eth1_ipaddr", eth1_ipaddr1);
-			jsonObject.put("eth1_subnet", eth1_subnet1);
+			jsonObject.put("eth1_ipaddr", lan0_ipaddr1);
+			jsonObject.put("eth1_subnet", lan0_subnet1);
 			
 			System.out.println(jsonObject);
 

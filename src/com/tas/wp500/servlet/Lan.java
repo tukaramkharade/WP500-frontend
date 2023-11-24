@@ -42,7 +42,7 @@ public class Lan extends HttpServlet {
 			JSONObject result = new JSONObject(respStr);
 		
 			
-			JSONObject lan0 = result.getJSONObject("eth1");
+			JSONObject lan0 = result.getJSONObject("lan0");
 			System.out.println("lan 0 :"+lan0.toString());
 			
 			JSONObject lan1 = result.getJSONObject("LAN1_setting");
@@ -52,19 +52,19 @@ public class Lan extends HttpServlet {
 			System.out.println("lan 2 :"+lan2.toString());
 			
 			
-			String eth1_ipaddr = lan0.getString("eth1_ipaddr");
-			System.out.println("eth1_ipaddr : "+eth1_ipaddr);
-			logger.info("eth1_ipaddr : "+eth1_ipaddr);
+			String lan0_ipaddr = lan0.getString("lan0_ipaddr");
+			System.out.println("eth1_ipaddr : "+lan0_ipaddr);
+			logger.info("eth1_ipaddr : "+lan0_ipaddr);
 			
-			String eth1_subnet = lan0.getString("eth1_subnet");
-			System.out.println("eth1_subnet : "+eth1_subnet);
-			logger.info("eth1_subnet : "+eth1_subnet);
+			String lan0_subnet = lan0.getString("lan0_subnet");
+			System.out.println("eth1_subnet : "+lan0_subnet);
+			logger.info("eth1_subnet : "+lan0_subnet);
 			
-			String eth1_dhcp = lan0.getString("eth1_dhcp");
-			System.out.println("eth1_dhcp : "+eth1_dhcp);
-			logger.info("eth1_dhcp : "+eth1_dhcp);
-			String eth1_gateway = lan0.getString("eth1_gateway");
-			String eth1_dns = lan0.getString("eth1_dns");
+			String lan0_dhcp = lan0.getString("lan0_dhcp");
+			System.out.println("eth1_dhcp : "+lan0_dhcp);
+			logger.info("eth1_dhcp : "+lan0_dhcp);
+			String lan0_gateway = lan0.getString("lan0_gateway");
+			String lan0_dns = lan0.getString("lan0_dns");
 			
 			String lan1_ipaddr = lan1.getString("lan1_ipaddr");
 			System.out.println("lan1_ipaddr : "+lan1_ipaddr);
@@ -97,11 +97,11 @@ public class Lan extends HttpServlet {
 			String lan2_dns = lan2.getString("lan2_dns");
 					
 			JSONObject jsonObject = new JSONObject();
-		    jsonObject.put("eth1_ipaddr", eth1_ipaddr);
-		    jsonObject.put("eth1_subnet", eth1_subnet);
-		    jsonObject.put("eth1_dhcp", eth1_dhcp);
-		    jsonObject.put("eth1_gateway", eth1_gateway);
-		    jsonObject.put("eth1_dns",eth1_dns );
+		    jsonObject.put("eth1_ipaddr", lan0_ipaddr);
+		    jsonObject.put("eth1_subnet", lan0_subnet);
+		    jsonObject.put("eth1_dhcp", lan0_dhcp);
+		    jsonObject.put("eth1_gateway", lan0_gateway);
+		    jsonObject.put("eth1_dns",lan0_dns );
 		    
 		    
 		    jsonObject.put("lan1_ipaddr", lan1_ipaddr); 
