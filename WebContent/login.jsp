@@ -262,8 +262,8 @@
 
     .password-toggle {
         position: absolute;
-        right: 35px; /* Adjust the positioning as needed */
-        top: 53.5%; /* Adjusted top to center the eye symbol */
+        right: 15px; /* Adjust the positioning as needed */
+        top: 54.2%; /* Adjusted top to center the eye symbol */
         cursor: pointer;
     }
     

@@ -9,6 +9,7 @@
 	rel="stylesheet" type="text/css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -137,6 +138,27 @@ h3{
 margin-top: 68px;
 }
 
+.old_password_toggle {
+        position: absolute;
+        right: 41.8vw; /* Adjust the positioning as needed */
+        top: 29.2%; /* Adjusted top to center the eye symbol */
+        cursor: pointer;
+    }
+    
+    .new_password_toggle {
+        position: absolute;
+        right: 41.8vw; /* Adjust the positioning as needed */
+        top: 36.7%; /* Adjusted top to center the eye symbol */
+        cursor: pointer;
+    }
+    
+    .confirm_password_toggle {
+        position: absolute;
+        right: 41.8vw; /* Adjust the positioning as needed */
+        top: 44%; /* Adjusted top to center the eye symbol */
+        cursor: pointer;
+    }
+
 </style>
 <script>
 
@@ -176,14 +198,24 @@ function updateOldPassword() {
 						// Close the modal
 							modal.style.display = 'none';
 						
-						 window.location.href = 'login.jsp';
+						if(data.status === "success"){
+							 window.location.href = 'login.jsp';
+						}else if(data.status === "fail"){
+							$("#popupMessage").text(data.message);
+			      			$("#customPopup").show();
+						}
+						
 						
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating user: ' + error);
+					console.log('Error updating password: ' + error);
 					modal.style.display = 'none';
 				}
 			});
+			
+			$("#closePopup").click(function () {
+			    $("#customPopup").hide();
+			  });
 		};
 
 		var cancelButton = document.getElementById('cancel-button-edit');
@@ -199,29 +231,69 @@ function updateOldPassword() {
 	}
 }
 
-function validateNewPassword(newPassword) {
-	var newPasswordError = document.getElementById("newPasswordError");
-	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-	if (newPassword.length < 8 || !strongRegex.test(newPassword)) {
-		newPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-		return false;
-	} else {
-		newPasswordError.textContent = "";
-		return true;
-	}
+function toggleOldPassword() {
+    var passwordInput = $('#old_password');
+    var passwordToggle = $('#old_password_toggle');
+
+    if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        passwordToggle.html('<i class="fa fa-eye-slash"></i>');
+    } else {
+        passwordInput.attr('type', 'password');
+        passwordToggle.html('<i class="fa fa-eye"></i>');
+    }
 }
 
-function validateConfirmPassword(confirmPassword) {
-	var confirmPasswordError = document.getElementById("confirmPasswordError");
-	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-	if (confirmPassword.length < 8 || !strongRegex.test(confirmPassword)) {
-		confirmPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-		return false;
-	} else {
-		confirmPasswordError.textContent = "";
-		return true;
-	}
+function toggleNewPassword() {
+    var passwordInput = $('#new_password');
+    var passwordToggle = $('#new_password_toggle');
+
+    if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        passwordToggle.html('<i class="fa fa-eye-slash"></i>');
+    } else {
+        passwordInput.attr('type', 'password');
+        passwordToggle.html('<i class="fa fa-eye"></i>');
+    }
 }
+
+function toggleConfirmPassword() {
+    var passwordInput = $('#confirm_password');
+    var passwordToggle = $('#confirm_password_toggle');
+
+    if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        passwordToggle.html('<i class="fa fa-eye-slash"></i>');
+    } else {
+        passwordInput.attr('type', 'password');
+        passwordToggle.html('<i class="fa fa-eye"></i>');
+    }
+}
+
+function getPasswordInfo(){
+	$.ajax({
+		 
+		 url : 'ChangePasswordServlet',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+				
+	            $("#characters_count").text("1. Minimum "+data.characters_count+" character count");
+	            $("#ascii_ch_count").text("2. Minumum "+data.ascii_ch_count+" alphabet count");
+	            $("#number_count").text("3. Minimum "+data.number_count+" number count");
+	            $("#mixed_ch_count").text("4. Minimum "+data.mixed_ch_count+" mixed character count");
+	            $("#special_ch_count").text("5. Minimum "+data.special_ch_count+" special character count");
+	            $("#allowed_special_ch").text("6. "+data.allowed_special_ch+" allowed special characters");
+	            
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
+			}
+		    
+	 });
+}
+
 
 $(document).ready(function () {
 	<%// Access the session variable
@@ -250,24 +322,10 @@ $(document).ready(function () {
         }
     });
 	
-	
+    getPasswordInfo();
  
     	$('#changePasswordForm').submit(function(event) {
     		event.preventDefault(); // Prevent the default form submission
-    		
-    		var old_password = $('#old_password').val();
-    		var new_password = $('#new_password').val();
-    		var confirm_password = $('#confirm_password').val();
-    		
-    		 if (!validateNewPassword(new_password)) {
-    			newPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-    			return;
-    		}	
-    		
-    		if (!validateConfirmPassword(confirm_password)) {
-    			confirmPasswordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-    			return;
-    		}	 
     		
     		if((old_password.length > 30)){
                 field_Old_Pass_Error.textContent = "You can write upto 30 maximum characters."
@@ -295,6 +353,18 @@ $(document).ready(function () {
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
+	
+	$('#old_password_toggle').click(function () {
+        toggleOldPassword();
+    });
+	
+	$('#new_password_toggle').click(function () {
+        toggleNewPassword();
+    });
+	
+	$('#confirm_password_toggle').click(function () {
+        toggleConfirmPassword();
+    });
 	});
 
 </script>
@@ -314,13 +384,14 @@ $(document).ready(function () {
 				<input required type="text" id="username" name="username" style="padding-left: 5px;"><br>
 
 				<label for="old_password" style="float: left;" id="old_password_label">Old password</label>
-				<input required type="password" id="old_password" name="old_password" style="padding-left: 5px;"> 
-				<p id="oldPasswordError" style="color: red;"></p>
+				<input required type="password" id="old_password" name="old_password" style="padding-left: 5px;">
+				<span class="old_password_toggle" id="old_password_toggle"><i class="fa fa-eye"></i></span> 
+				
 				<p id="field_Old_Pass_Error" style="color: red;"></p>
 				
 				<label for="new_password" style="float: left;">New password</label> 
 				<input required type="password" id="new_password" name="new_password" style="padding-left: 5px;">
-				<p id="newPasswordError" style="color: red;"></p>
+				 <span class="new_password_toggle" id="new_password_toggle"><i class="fa fa-eye"></i></span> 
 				<p id="field_New_Pass_Error" style="color: red;"></p> 
 				
 				<!-- Add a span to display the message -->
@@ -328,14 +399,23 @@ $(document).ready(function () {
 					
 				<label for="confirm_password" style="float: left;">Confirm password</label> 
 				<input required type="password" id="confirm_password" name="confirm_password" style="padding-left: 5px;"> 
-				<p id="confirmPasswordError" style="color: red;"></p>
+				 <span class="confirm_password_toggle" id="confirm_password_toggle"><i class="fa fa-eye"></i></span> 
 				<p id="field_Confirm_Pass_Error" style="color: red;"></p>
 					
 				<input type="submit" value="Submit" id="change_password">
 
 			</form>
 			
+			
 			</div>
+			
+			<span style="color: red;"><b>Password policies to be followed while entering new password</b></span><br>
+			<span id="characters_count"></span><br>
+			<span id="ascii_ch_count"></span><br>
+			<span id="number_count"></span><br>
+			<span id="mixed_ch_count"></span><br>
+			<span id="special_ch_count"></span><br>
+			<span id="allowed_special_ch"></span>
 			
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">

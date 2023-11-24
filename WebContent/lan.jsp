@@ -184,9 +184,7 @@ button {
 				toggle0InputFields();
 				toggle1InputFields();
 				toggle2InputFields();
-				//toggleDhcpSetting("0");
-				//toggleDhcpSetting("1");
-				//toggleDhcpSetting("2");
+				
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
@@ -267,6 +265,7 @@ button {
 				var lan1_subnet = $('#subnet_mask_lan1').val();
 				var lan1_gateway = $('#gateway_lan1').val();
 				var lan1_dns = $('#dns_ip_lan1').val();
+				 var toggle_enable_lan1 = $("#toggle_enable_lan1").prop("checked") ? "1" : "0";
 				
 				$.ajax({
 					
@@ -278,7 +277,8 @@ button {
 						lan1_dhcp1 : lan1_dhcp1,
 						lan1_type : lan1_type,
 						lan1_gateway : lan1_gateway,
-						lan1_dns : lan1_dns
+						lan1_dns : lan1_dns,
+						toggle_enable_lan1 : toggle_enable_lan1
 						
 					},
 					success : function(data) {					
@@ -506,6 +506,10 @@ button {
 			changeButtonColor(true);
 		}
 	
+	
+	
+	//var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
+	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
@@ -688,6 +692,16 @@ button {
 						<input id="dns_ip_lan1" class="config" type='text'
 							name="dns_ip_lan1" style="width: 30%;"></td>
 					</tr>
+					
+					<tr>
+						<td>Enable Port</td>
+
+						<td><label class="toggle"> <input id="toggle_enable_lan1" name="toggle_enable_lan1"
+								class="toggle-input" type="checkbox" > <span
+								class="toggle-label" data-off="OFF" data-on="ON"></span> <span
+								class="toggle-handle"></span>
+						</label></td>
+					</tr>
 
 
 				</table>
@@ -750,6 +764,16 @@ button {
 						<td>
 						<input id="dns_ip_lan2" class="config" type='text'
 							name="dns_ip_lan2" style="width: 30%;"></td>
+					</tr>
+					
+					<tr>
+						<td>Enable Port</td>
+
+						<td><label class="toggle"> <input id="toggle_enable_lan2" name="toggle_enable_lan2"
+								class="toggle-input" type="checkbox" > <span
+								class="toggle-label" data-off="OFF" data-on="ON"></span> <span
+								class="toggle-handle"></span>
+						</label></td>
 					</tr>
 
 

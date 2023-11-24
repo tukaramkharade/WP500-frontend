@@ -209,30 +209,20 @@ margin-top: 70px;
 
 .container {
     margin: 0 auto;
-    width: 80%;
+    max-width: 80%;
+     
+     
   }
 
  .bordered-table {
   border-collapse: collapse; /* Optional: To collapse table borders */
   margin: 0 auto; /* Center the table horizontally */
+  width: 100%; /* Full width for responsiveness */
 }
 
 .bordered-table td {
   border: 1px solid #ccc; /* Light gray border */
 }
-
-/* .delete_crt {
-            text-align: center;
-        }
-        
-        .delete_crt h3 {
-            text-align: left;
-        }
-
-        .delete_crt > div {
-            display: inline-block;
-            text-align: left;
-        } */
         
          .upload-crt-container {
         display: flex;
@@ -243,6 +233,16 @@ margin-top: 70px;
     .delete-crt-container {
         margin-right: 233px; /* Adjust margin as needed */
     }
+    
+     .password-toggle {
+    position: absolute;
+    right: 10vw; /* Adjusted right positioning */
+    top: 17.3%; /* Center the eye symbol vertically */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+
 </style>
 
 <script>
@@ -651,6 +651,20 @@ margin-top: 70px;
 	  };	
 	 
  }
+ 
+ function togglePassword() {
+	    var passwordInput = $('#password');
+	    var passwordToggle = $('#password-toggle');
+
+	    if (passwordInput.attr('type') === 'password') {
+	        passwordInput.attr('type', 'text');
+	        passwordToggle.html('<i class="fa fa-eye-slash"></i>'); // Change to eye-slash icon
+	    } else {
+	        passwordInput.attr('type', 'password');
+	        passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+	    }
+	}
+
  
 	// Function to handle form submission and add a new mqtt
 	function addMqtt() {
@@ -1066,6 +1080,10 @@ margin-top: 70px;
 					    							$('#registerBtn').val('Add');
 					    						});
 					    						
+					    						$('#password-toggle').click(function () {
+					    			                togglePassword();
+					    			            });
+					    						
 					    }
 
 					});
@@ -1106,6 +1124,7 @@ margin-top: 70px;
 							<p id="username_error" style="color: red;"></p></td>
 					<td>Password</td>
 					<td><input type="password" id="password" name="password" maxlength="31"/>
+					<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
 							<p id="password_error" style="color: red;"></p></td>
 					</tr>
 					<tr>

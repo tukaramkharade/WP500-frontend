@@ -267,13 +267,13 @@ margin-top: 18px;
     border-collapse: collapse;
     background-color: #f2f2f2;
      border-radius: 5px;
-  position: relative; /* Add this line */
+  
   }
   
   .password-toggle {
         position: absolute;
-    right: 100px; /* Adjust the positioning as needed */
-    top: 22%; /* Adjusted top to center the eye symbol vertically */
+    right: 27vw; /* Adjust the positioning as needed */
+    top: 23.2%; /* Adjusted top to center the eye symbol vertically */
     transform: translateY(-50%); /* Center the eye symbol vertically */
     cursor: pointer;
     }
@@ -499,12 +499,15 @@ function togglePassword() {
       			
 				loadUserList();
 
-				// Clear form fields
-				$('#username').val('');
-			    $('#password').val('');
-			    $('#first_name').val('');
-			    $('#last_name').val('');
-			    $('#role').val('Select role');
+				if(data.status === "success"){
+					// Clear form fields
+					$('#username').val('');
+				    $('#password').val('');
+				    $('#first_name').val('');
+				    $('#last_name').val('');
+				    $('#role').val('Select role');
+				}
+				
 
 			},
 			error : function(xhr, status, error) {
@@ -528,18 +531,6 @@ function togglePassword() {
 			return false;
 		} else {
 			roleError.textContent = "";
-			return true;
-		}
-	}
-	
-	function validatePassword(password) {
-		var passwordError = document.getElementById("passwordError");
-		const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-		if (password.length < 8 || !strongRegex.test(password)) {
-			passwordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-			return false;
-		} else {
-			passwordError.textContent = "";
 			return true;
 		}
 	}
@@ -1022,12 +1013,7 @@ function togglePassword() {
 		                field_User_Error.textContent =""
 		            }  
 
-		            if((password.length > 30)){
-		                field_Pass_Error.textContent = "You can write upto 30 maximum characters."
-		                	return;
-		            }else{
-		                field_Pass_Error.textContent =""
-		            }          
+		                   
 
 		            if( (firstname.length > 30)){
 		                field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
@@ -1044,13 +1030,6 @@ function togglePassword() {
 		            }
 					
 				 var isDisabled = $("#password").prop("disabled");
-				 
-				 if (!isDisabled) {
-					 if (!validatePassword(password)) {
-							passwordError.textContent = "The password must be at least 8 characters long and include special characters, at least 1 capital letter, and numbers.";
-							return;
-						}	
-				    }
 									
 					if (buttonText == 'Add') {
 						addUser();
@@ -1255,15 +1234,15 @@ function togglePassword() {
 				</tr>
 				
 				<tr>
-				<td>Minimum ASCII characters count</td>
+				<td>Minimum alphabet characters count</td>
 				<td><input type="text" id="min_asccii_char_count" name="min_asccii_char_count" style="height: 10px;"/></td>
-				<td>Number of ASCII characters a new password must at least contain.</td>
+				<td>Number of alphabet characters a new password must at least contain.</td>
 				</tr>
 				
 				<tr>
-				<td>Minimum mixed characters count</td>
+				<td>Minimum mixed characters count (uppercase/lowercase)</td>
 				<td><input type="text" id="min_mix_char_count" name="min_mix_char_count" style="height: 10px;"/></td>
-				<td>Number of mixed-case characters a new password must at least contain.</td>
+				<td>Number of mixed-case characters a new password must at least contain. (uppercase/lowercase)</td>
 				</tr>
 				
 				<tr>
