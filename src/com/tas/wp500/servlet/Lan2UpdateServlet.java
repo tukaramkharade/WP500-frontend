@@ -45,6 +45,7 @@ public class Lan2UpdateServlet extends HttpServlet {
 		String lan2_dhcp = request.getParameter("lan1_dhcp2");
 		String lan2_gateway = request.getParameter("lan2_gateway");
 		String lan2_dns = request.getParameter("lan2_dns");
+		String toggle_enable_lan2 = request.getParameter("toggle_enable_lan2");
 
 		try {
 
@@ -64,6 +65,8 @@ public class Lan2UpdateServlet extends HttpServlet {
 			json.put("lan2_subnet", lan2_subnet);
 			json.put("lan2_gateway", lan2_gateway);
 			json.put("lan2_dns", lan2_dns);
+			json.put("lan2_enable", toggle_enable_lan2);
+			
 			System.out.println("lan2-->"+json);
 			
 			String respStr = client.sendMessage(json.toString());

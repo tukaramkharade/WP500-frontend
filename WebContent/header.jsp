@@ -64,7 +64,7 @@ button {
 .badge {
 	position: absolute;
 	top: -7px; /* Adjust this value to position the badge as needed */
-	right: 2px; /* Adjust this value to position the badge as needed */
+	right: 10px; /* Adjust this value to position the badge as needed */
 	background-color: white;
 	color: white;
 	border-radius: 50%;
@@ -234,6 +234,33 @@ button {
   color: white;
 }
 
+ .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
+
 </style>
 <script>
 var roleValue1;
@@ -253,10 +280,13 @@ var roleValue1;
 					type : 'GET',
 					dataType : 'json',
 					success : function(data) {
-						//alert(data.status);
-
 						
 						modal.style.display = 'none';
+						
+						$("#popupMessage").text(data.status);
+		      			$("#customPopup").show();
+		      			
+		      			
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
@@ -264,6 +294,10 @@ var roleValue1;
 					}
 				});
 		  };
+		  
+		  $("#closePopup").click(function () {
+			    $("#customPopup").hide();
+			  });
 		  
 		  var cancelButton = document.getElementById('cancel-button-load-config');
 		  cancelButton.onclick = function () {
@@ -364,7 +398,7 @@ var roleValue1;
 	
 	roleValue1 = '<%=roleValue1%>';
 	
-	if (roleValue1 == 'VIEWER' || roleValue1 == 'Viewer') {
+	if (roleValue1 == 'OPERATOR' || roleValue1 == 'Operator') {
 
 		
 		$('#loadConfig').prop('disabled', true);
@@ -540,6 +574,11 @@ var roleValue1;
 				  <p>Your session is timeout. Please login again</p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
+			  </div>
+			  
+			  <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
 			  </div>
 	
 </header>

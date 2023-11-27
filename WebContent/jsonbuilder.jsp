@@ -300,7 +300,7 @@ var tokenValue;
 
 										jsonBuilderTable.append(row);
 								});
-						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							
 							$.each(data,function(index, jsonBuilder) {
 								
@@ -745,7 +745,7 @@ var tokenValue;
 			    	
 			    	roleValue = '<%=roleValue%>';
 			    	
-						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$("#actions").hide();
 							$('#registerBtn').prop('disabled', true);

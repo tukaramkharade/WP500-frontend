@@ -425,7 +425,7 @@ var globalData = [];
 
 											trafficRulesTable.append(row);
 										});
-						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							$.each(data,function(index, trafficrules) {
 								var row = $("<tr>");
 								row.append($("<td>").text(trafficrules.name + ""));
@@ -1179,7 +1179,7 @@ var globalData = [];
 		    	
 		    	roleValue = '<%=roleValue%>';
 		   
-		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 			 $("#actions").hide();
 			$('#registerBtn').prop('disabled', true);

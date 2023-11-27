@@ -334,7 +334,7 @@ var tokenValue;
 		String roleValue = (String) session.getAttribute("role");%>
 	
 	roleValue = '<%=roleValue%>';
-	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 		$('#loadLogSysFileButton').prop('disabled', true);
 		

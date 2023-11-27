@@ -363,7 +363,7 @@ var tokenValue;
 	
 		
 		
-		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 			
 			$('#loadThreats').prop('disabled', true);
 			

@@ -305,7 +305,7 @@ var json = {};
 														
 										
 									 }
-								  else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+								  else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 										
 										$.each($.parseJSON(result), function(k, v) {
 										
@@ -447,7 +447,7 @@ var json = {};
 	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
 	    	    	
 	    	    	
-	      	 if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+	      	 if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 	    		  
 	    		  $("#actions").hide(); 
 	    		  $('#addBtn').prop('disabled', true);

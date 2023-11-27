@@ -267,7 +267,7 @@ function loadOPCUAClientList(){
 									opcuaTable.append(row);
 				
 								});
-			}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				
 				// Iterate through the user data and add rows to the table
 				$.each(data,function(index, opcuaClient) {
@@ -507,7 +507,7 @@ $(document).ready(function() {
 
 	roleValue = '<%=roleValue%>';
 
-	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 		$("#actions").hide();
 		$('#registerBtn').prop('disabled', true);

@@ -304,7 +304,7 @@ var tokenValue;
 														
 										
 									 }
-								  else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+								  else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 										
 										$.each($.parseJSON(result), function(k, v) {
 										
@@ -432,32 +432,7 @@ var tokenValue;
          
 	}
 	
-	function addDynamicRow() {
-	    var tagName = $('#dynamic_tag_name').val();
-	    var variable = $('#variable').val();
-
-	    if (tagName.trim() !== "" && variable.trim() !== "Select variable") {
-	        var newRow = $("<tr>")
-	            .append($("<td>").text(tagName))
-	            .append($("<td>").text(variable))
-	            .append($("<td>").html('<input type="button" value="Delete" onclick="deleteDynamicRow(this)" />'));
-
-	        $("#dynamic_table").append(newRow);
-
-	        // Clear input fields after adding a row
-	        $('#dynamic_tag_name').val('');
-	        $('#variable').val('Select variable');
-	    } else {
-	        // Handle validation or show an error message
-	        alert("Please enter valid Tag Name and Variable");
-	    }
-	}
 	
-	function deleteDynamicRow(button) {
-	    var confirmation = confirm('Are you sure you want to delete this dynamic row?');
-	    if (confirmation) {
-	        $(button).closest("tr").remove();
-	    }
 	
       $(document).ready(function () {
     	  
@@ -471,7 +446,7 @@ var tokenValue;
     	
     	
     	  
-    	  if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+    	  if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
     		  
     		  $("#actions").hide(); 
     		  $('#addBtn').prop('disabled', true);

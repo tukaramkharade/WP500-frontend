@@ -15,34 +15,49 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-@WebServlet("/loadConfigurationServlet")
-public class LoadConfigurationServlet extends HttpServlet {
+@WebServlet("/updateSettings")
+public class UpdateSettings extends HttpServlet {
+	final static Logger logger = Logger.getLogger(UpdateSettings.class);
 	
-	final static Logger logger = Logger.getLogger(LoadConfigurationServlet.class);
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-
+		
 		if (check_username != null) {
+			
+			String toggle_enable_ftp = request.getParameter("toggle_enable_ftp");
+			String toggle_enable_ssh = request.getParameter("toggle_enable_ssh");
+			String toggle_enable_usbtty = request.getParameter("toggle_enable_usbtty");
+			String lan_type = request.getParameter("lan_type");
+			
 			try {
 
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
-				json.put("operation", "load_config");
+				json.put("operation", "update_lan_setting");
 				json.put("user", check_username);
+				
+				json.put("lan_type", lan_type);
+				json.put("enable_ftp", toggle_enable_ftp);
+				json.put("enable_ssh", toggle_enable_ssh);
+				json.put("enable_usbtty", toggle_enable_usbtty);
+				
 
+				System.out.println("lan1-->" + json);
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr));
+				System.out.println("response : " + respStr);
 
-				String status = new JSONObject(respStr).getString("Status");
+				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("status", status);
+				jsonObject.put("message", message);
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
@@ -53,12 +68,12 @@ public class LoadConfigurationServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in load configuration : "+e);
 			}
-		} else {
+
+			
+		}else{
 			try {
 				JSONObject userObj = new JSONObject();
 				userObj.put("msg", "Your session is timeout. Please login again");
@@ -79,8 +94,4 @@ public class LoadConfigurationServlet extends HttpServlet {
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-	}
 }

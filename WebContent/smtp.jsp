@@ -187,12 +187,33 @@ margin-top: -30px;
 
  }
  
+ .password-toggle {
+        position: absolute;
+    right: 38vw; /* Adjust the positioning as needed */
+    top: 21.8%; /* Adjusted top to center the eye symbol vertically */
+    transform: translateY(-50%); /* Center the eye symbol vertically */
+    cursor: pointer;
+    }
+ 
 
 </style>
 
 <script>
 var roleValue; 
 var tokenValue;
+
+function togglePassword() {
+    var passwordInput = $('#password');
+    var passwordToggle = $('#password-toggle');
+
+    if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        passwordToggle.html('<i class="fa fa-eye-slash"></i>'); // Change to eye-slash icon
+    } else {
+        passwordInput.attr('type', 'password');
+        passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+    }
+}
 
 function getSMTPSettings() {
 
@@ -639,7 +660,7 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
-						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$('#addBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
@@ -798,6 +819,10 @@ roleValue = '<%=roleValue%>';
 											$("#closePopup").click(function() {
 												$("#customPopup").hide();
 											});		
+											
+											 $('#password-toggle').click(function () {
+									                togglePassword();
+									            });
 					    							
 					    }
 
@@ -822,11 +847,7 @@ roleValue = '<%=roleValue%>';
 				<table>
 				
 				<tr>
-					<th  colspan="2">
-					
-        					Email Configuration
-    					
-  					</th>
+					<th  colspan="2">Email Configuration</th>
 				</tr>
 				
 				<tr>
@@ -839,6 +860,7 @@ roleValue = '<%=roleValue%>';
 				<tr>
 				<td>Password</td>
 				<td><input type="password" id="password" name="password" style="height: 10px; width: 20%;" required /></td>
+				<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
 				</tr>
 				
 				<tr>

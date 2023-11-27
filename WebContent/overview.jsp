@@ -179,11 +179,6 @@ var tokenValue;
 						</tr>
 
 						<tr>
-							<td>Customer order number</td>
-							<td>2404267</td>
-						</tr>
-
-						<tr>
 							<td>Serial no.</td>
 							<td id="tas-serial-no-td"></td>
 						</tr>

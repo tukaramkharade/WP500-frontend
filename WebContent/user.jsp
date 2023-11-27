@@ -411,7 +411,7 @@ function togglePassword() {
 												userTable.append(row);
 								}
 											});
-						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							
 							// Iterate through the user data and add rows to the table
 							$.each(data,function(index, user) {
@@ -955,7 +955,7 @@ function togglePassword() {
 	
 	roleValue = '<%=roleValue%>';
 	
-		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 			$("#actions").hide();
 			$('#registerBtn').prop('disabled', true);
@@ -1142,7 +1142,7 @@ function togglePassword() {
 						<select class="role" id="role" name="role" style="height: 33px; max-width: 200px;">
 								<option value="Select role">Select role</option>
 								<option value="ADMIN">ADMIN</option>
-								<option value="VIEWER">VIEWER</option>
+								<option value="OPERATOR">OPERATOR</option>
 						</select> <span style="color: red; font-size: 12px;" id="roleError"></span>
 						</td>
 						<td></td>

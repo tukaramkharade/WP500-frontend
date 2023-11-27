@@ -172,7 +172,7 @@ function getProcessData() {
             populateTable(data.white_list_process, "white_list_table");
             populateTable(data.black_list_process, "black_list_table");
             
-            if (roleValue === 'VIEWER' || roleValue === 'Viewer') {
+            if (roleValue === 'OPERATOR' || roleValue === 'Operator') {
                 $('#loadLogFileButton').prop('disabled', true);
                 changeButtonColor(true);
             }
@@ -240,7 +240,7 @@ function getProcessData() {
 	    	    	
 	    	    	roleValue = '<%=roleValue%>'; 
 	    	    	
-						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$('#loadLogFileButton').prop('disabled', true);
 

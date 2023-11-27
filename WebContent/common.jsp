@@ -158,6 +158,22 @@
                <li class="nav-item">
                 <a href="certificate.jsp">Certificate</a>
               </li>
+              
+              <li class="nav-item">
+                <a href=""></a>
+              </li>
+              
+               <li class="nav-item">
+                <a href="settings.jsp">Settings</a>
+              </li>
+              
+              <li class="nav-item">
+                <a href=""></a>
+              </li>
+              
+               <li class="nav-item">
+                <a href="syslogServer.jsp">Syslog Server</a>
+              </li>
                 
               </ul>
             </div>

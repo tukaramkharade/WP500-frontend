@@ -223,7 +223,7 @@ function getActiveThreats() {
 						activeThreatsTable.append(row);
 					
 				});
-			 }else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+			 }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				 $.each(data, function(index, activeThreats) {
 						
 						
@@ -467,7 +467,7 @@ roleValue = '<%=roleValue%>';
 
 
 	
-	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 		$("#acknowledge").hide();
 		
 		$('#loadThreats').prop('disabled', true);
