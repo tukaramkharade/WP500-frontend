@@ -172,15 +172,7 @@ button {
 				$("#toggle_lan0").prop("checked", data.eth1_dhcp === "1");
 	            $("#toggle_lan1").prop("checked", data.lan1_dhcp === "1");
 	            $("#toggle_lan2").prop("checked", data.lan2_dhcp === "1");
-				console.log('eth1_ipaddr:', data.eth1_ipaddr);
-				console.log('eth1_subnet:', data.eth1_subnet);
 				
-				console.log('lan1_ipaddr:', data.lan1_ipaddr);
-				console.log('lan1_subnet:', data.lan1_subnet);
-				console.log('lan1_dhcp-->:', lan1_dhcp);
-				console.log('lan2_ipaddr:', data.lan2_ipaddr);
-				console.log('lan2_subnet:', data.lan2_subnet);
-				console.log('lan2_dhcp-->:', lan2_dhcp);
 				toggle0InputFields();
 				toggle1InputFields();
 				toggle2InputFields();
@@ -206,7 +198,7 @@ button {
 			  
 			  var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
 				console.log('eth1_dhcp1:', eth1_dhcp1);
-				var lan_type = 'eth1';
+				var lan_type = 'lan0';
 				var eth1_ipaddr = $('#ip_addr_eth1').val();
 				var eth1_subnet = $('#subnet_mask_eth1').val();   
 				var eth1_gateway = $('#gateway_eth1').val();
@@ -322,6 +314,7 @@ button {
 				var lan2_subnet = $('#subnet_mask_lan2').val();
 				var lan2_gateway = $('#gateway_lan2').val();
 				var lan2_dns = $('#dns_ip_lan2').val();
+				 var toggle_enable_lan2 = $("#toggle_enable_lan2").prop("checked") ? "1" : "0";
 				
 				$.ajax({
 					
@@ -333,7 +326,8 @@ button {
 						lan1_dhcp2 : lan1_dhcp2,
 						lan2_type : lan2_type,
 						lan2_gateway : lan2_gateway,
-						lan2_dns : lan2_dns
+						lan2_dns : lan2_dns,
+						toggle_enable_lan2 : toggle_enable_lan2
 					},
 					success : function(data) {					
 						// Close the modal
@@ -493,7 +487,7 @@ button {
 	
 	roleValue = '<%=roleValue%>';
 		
-	if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 			
 			$('#eth1_button').prop('disabled', true);
 			$('#lan1_button').prop('disabled', true);
@@ -505,10 +499,6 @@ button {
 			
 			changeButtonColor(true);
 		}
-	
-	
-	
-	//var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');

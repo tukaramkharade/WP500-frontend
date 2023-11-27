@@ -255,7 +255,7 @@ margin-top: 70px;
 
 							});
 							
-						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							$.each(data,function(index, tag) {
 								var row = $('<tr>');
 								row.append($('<td>').text(tag.tag_name+ ""));

@@ -441,7 +441,7 @@ function updateProgress() {
      	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
      	
     
-     	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
      		
      		$('#file_upload').prop('disabled', true);
 			$('#firmware_update').prop('disabled', true);

@@ -725,7 +725,7 @@ var tokenValue;
 		    	roleValue = '<%=roleValue%>';
 		    	
 		    	
-		if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 			$('#updatentp').prop('disabled', true);
 			$('#saveButton').prop('disabled', true);

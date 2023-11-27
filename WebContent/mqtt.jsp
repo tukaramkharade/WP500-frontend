@@ -405,7 +405,7 @@ margin-top: 70px;
 
 							});
 							
-						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							$.each(data,function(index, mqtt) {
 								var row = $('<tr>');
 								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
@@ -916,7 +916,7 @@ margin-top: 70px;
 						
 						
 						
-						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);

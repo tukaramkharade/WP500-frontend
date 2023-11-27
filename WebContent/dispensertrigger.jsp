@@ -505,7 +505,7 @@ var tokenValue;
 							dispenserTriggerTable.append(row);
 
 						});
-					}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+					}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 						$.each(data,function(index, dispenserTrigger) {
 							var row = $('<tr>');
 							row.append($('<td>').text(dispenserTrigger.station_name));
@@ -980,7 +980,7 @@ var tokenValue;
 	
 		roleValue = '<%=roleValue%>';
 		
-						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 							$("#actions").hide(); 
 							
 							$('#registerBtn').prop('disabled', true);

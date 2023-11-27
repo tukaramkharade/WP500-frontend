@@ -181,7 +181,7 @@ var tokenValue;
     	roleValue = '<%= roleValue %>';
     	
     	
-    	if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
+    	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
   		  
   		$('#reboot').prop('disabled', true);
   		  
