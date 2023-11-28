@@ -801,7 +801,7 @@ margin-top: 70px;
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
         var $crt_file_upload_button = $('#crt_file_upload');
-        
+        var $crt_file_delete_button = $('#delete_crt_file');
         
          if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
@@ -819,6 +819,12 @@ margin-top: 70px;
             $crt_file_upload_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $crt_file_upload_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $crt_file_delete_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $crt_file_delete_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
     }
@@ -913,14 +919,12 @@ margin-top: 70px;
     	
     	roleValue = '<%=roleValue%>';
 
-						
-						
-						
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
 							$('#crtFileInput').prop('disabled', true); 
+							$('#delete_crt_file').prop('disabled', true);
 							
 							changeButtonColor(true);
 						}

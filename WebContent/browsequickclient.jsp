@@ -22,8 +22,6 @@ ul.tree li {
 	 cursor: pointer;
 }
 
-
-
 h3{
 margin-top: 10px;
 }
@@ -223,8 +221,6 @@ textarea {
   				<button id="closePopup">OK</button>
 			  </div>
 	
-		
-		
 	</section>
 	</div>
 
@@ -280,6 +276,16 @@ textarea {
             
         });
         
+        function changeButtonColor(isDisabled) {
+            var $add_tag_button = $('#addTag');       
+           
+             if (isDisabled) {
+                $add_tag_button.css('background-color', 'gray'); // Change to your desired color
+            } else {
+                $add_tag_button.css('background-color', '#2b3991'); // Reset to original color
+            }
+            
+        }
         
         function addTag() {		
     		
@@ -301,13 +307,7 @@ textarea {
          			$("#popupMessage").text(data.message);
           			$("#customPopup").show();
 
-          
-          			//loadTagList();
-
-    				// Clear form fields
-
     				$('#tag_name').val('');
-    				//$('#pv_address').val('');
     				
     			},
     			error : function(xhr, status, error) {
@@ -318,11 +318,8 @@ textarea {
     		    $("#customPopup").hide();
     		  });
 
-    		
     	}	
-
-        
-        
+ 
  function loadopcnodesList(nodeid,opcname,type,browsename) {
         	
     		$.ajax({
@@ -390,7 +387,6 @@ textarea {
 				                }
     						}
     						
-				    			
     					},
     					error : function(xhr, status, error) {
     						console.log('Error loading user data: ' + error);
@@ -455,6 +451,12 @@ textarea {
 			String roleValue = (String) session.getAttribute("role");%>
 
 		roleValue = '<%=roleValue%>';
+		
+		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
+
+			$('#addTag').prop('disabled', true);
+			changeButtonColor(true);
+		}
         	
         	if (roleValue === "null") {
     	        var modal = document.getElementById('custom-modal-session-timeout');

@@ -68,6 +68,54 @@
 </style>
 
 <script>
+
+var roleValue;	
+var tokenValue;
+
+function changeButtonColor(isDisabled) {
+    var $applyBtn = $('#applyBtn');       
+    
+    if (isDisabled) {
+        $applyBtn.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $applyBtn.css('background-color', '#2b3991'); // Reset to original color
+    }   
+}
+
+$(document).ready(function() {
+	<%// Access the session variable
+	HttpSession role = request.getSession();
+	String roleValue = (String) session.getAttribute("role");%>
+
+roleValue = '<%=roleValue%>';
+
+if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
+
+	$('#applyBtn').prop('disabled', true);
+	
+	changeButtonColor(true);
+}
+
+if (roleValue === "null") {
+    var modal = document.getElementById('custom-modal-session-timeout');
+    modal.style.display = 'block';
+
+    // Handle the confirm button click
+    var confirmButton = document.getElementById('confirm-button-session-timeout');
+    confirmButton.onclick = function() {
+        // Close the modal
+        modal.style.display = 'none';
+        window.location.href = 'login.jsp';
+    };
+}else{
+	<%// Access the session variable
+	HttpSession token = request.getSession();
+	String tokenValue = (String) session.getAttribute("token");%>
+
+tokenValue = '<%=tokenValue%>';
+
+}
+});
 	
 </script>
 <body>
@@ -81,7 +129,7 @@
 
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>SYSLOG SERVER DESTINATION</h3>
+			<h3>SYSLOG CONFIGURATION</h3>
 			<hr>
 
 			<div class="container">

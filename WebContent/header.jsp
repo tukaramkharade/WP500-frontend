@@ -64,7 +64,7 @@ button {
 .badge {
 	position: absolute;
 	top: -7px; /* Adjust this value to position the badge as needed */
-	right: 10px; /* Adjust this value to position the badge as needed */
+	right: 3px; /* Adjust this value to position the badge as needed */
 	background-color: white;
 	color: white;
 	border-radius: 50%;

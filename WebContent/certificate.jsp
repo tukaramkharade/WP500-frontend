@@ -242,7 +242,6 @@ function applyCertificate(){
 	  var confirmButton = document.getElementById('confirm-button-apply-certificate');
 	  confirmButton.onclick = function () {
 		  
-	  
 	$.ajax({
 		
 		type : "GET",
@@ -295,6 +294,23 @@ function applyCertificate(){
 	  });
 }
 
+function changeButtonColor(isDisabled) {
+    var $regenerateBtn = $('#regenerateBtn');       
+    var $apply_btn = $('#apply');
+   
+    if (isDisabled) {
+        $regenerateBtn.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $regenerateBtn.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    if (isDisabled) {
+        $apply_btn.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $apply_btn.css('background-color', '#2b3991'); // Reset to original color
+    }   
+}
+
 $(document).ready(function () {
 	
 	<%// Access the session variable
@@ -302,6 +318,14 @@ $(document).ready(function () {
 			String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
+
+	$('#regenerateBtn').prop('disabled', true);
+	$('#apply').prop('disabled', true);
+	
+	changeButtonColor(true);
+}
 
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');

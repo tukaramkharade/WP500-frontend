@@ -538,8 +538,9 @@ function togglePassword() {
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
-        
-        
+        var $reset_password_button = $('#resetPasswordPolicy');
+        var $apply_button = $('#applyPassword');
+           
          if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
         } else {
@@ -550,6 +551,18 @@ function togglePassword() {
             $clear_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $reset_password_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $reset_password_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $apply_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $apply_button.css('background-color', '#2b3991'); // Reset to original color
         } 
     }
 	
@@ -960,6 +973,8 @@ function togglePassword() {
 			$("#actions").hide();
 			$('#registerBtn').prop('disabled', true);
 			$('#clearBtn').prop('disabled', true);
+			$('#resetPasswordPolicy').prop('disabled', true);
+			$('#applyPassword').prop('disabled', true);		
 			
 			changeButtonColor(true);
 		}
@@ -1291,7 +1306,6 @@ function togglePassword() {
 					<input style="margin-left: 5px; height: 26px;" type="submit" value="Apply" id="applyPassword" />
 				</div>
 
-		
 		 </form>
 		 </div>
 		 
@@ -1303,10 +1317,8 @@ function togglePassword() {
 				</div>
 			  </div>
 			  
-		 
 		 </div>
 		</div>
-			 
 			 
 		</section>
 	</div> 
