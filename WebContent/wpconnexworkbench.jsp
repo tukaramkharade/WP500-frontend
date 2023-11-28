@@ -471,10 +471,6 @@ var tokenValue;
                 <input type="file" name="file" id="fileInput">
                 <input type="submit" value="Upload" id="stratonUpdateButton">
 
-                <!-- <input type="button" value="Straton update" id="firmware_update"> -->
-                <div id="custom-straton-modal-delete" class="modal-delete">
-				
-			  </div>
             </form>
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>

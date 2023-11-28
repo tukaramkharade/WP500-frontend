@@ -412,8 +412,7 @@ function updateProgress() {
     function changeButtonColor(isDisabled) {
         var $file_upload_button = $('#file_upload');       
         var $firmware_update_button = $('#firmware_update');
-      
-        
+        var $firmware_upload_button = $('#firmwareUpdateButton');
         
          if (isDisabled) {
             $file_upload_button.css('background-color', 'gray'); // Change to your desired color
@@ -427,10 +426,14 @@ function updateProgress() {
             $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-       
+        if (isDisabled) {
+            $firmware_upload_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $firmware_upload_button.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
     }
     
- 
     $(document).ready(function() {
     	 <%
      	// Access the session variable
@@ -440,14 +443,12 @@ function updateProgress() {
      	
      	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
      	
-    
      	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
      		
      		$('#file_upload').prop('disabled', true);
-			$('#firmware_update').prop('disabled', true);
-			$('#crt_file_upload').prop('disabled', true);		
+			$('#firmware_update').prop('disabled', true);	
 			$('#fileInput').prop('disabled', true); 
-			
+			$('#firmwareUpdateButton').prop('disabled', true); 
 			
 			changeButtonColor(true);
      	}

@@ -456,7 +456,7 @@ margin-top: 70px;
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
-                
+        var $exportButton = $('#exportButton');
         
          if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
@@ -470,10 +470,14 @@ margin-top: 70px;
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
+        if (isDisabled) {
+            $exportButton.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $exportButton.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
     }
 	
-	 
-
 	// Function to execute on page load
 	$(document).ready(function() {
 						
@@ -483,11 +487,11 @@ margin-top: 70px;
     	
     	roleValue = '<%=roleValue%>';
     	
-						if (roleValue == 'VIEWER' || roleValue == 'Viewer') {
+						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
-							
+							$('#exportButton').prop('disabled', true);
 							
 							changeButtonColor(true);
 						}	

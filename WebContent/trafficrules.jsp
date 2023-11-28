@@ -1008,6 +1008,8 @@ var globalData = [];
         var $add_button_gs = $('#registerBtnGenSettings');       
         var $delete_button_gs = $('#delBtnGenSettings');
         var $apply_button_gs = $('#applyBtnGenSettings');
+        var $apply_button_basic = $('#applyBtnBasicConf');
+        
         
         
          if (isDisabled) {
@@ -1046,7 +1048,12 @@ var globalData = [];
             $apply_button_gs.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-    }
+        if (isDisabled) {
+            $apply_button_basic.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $apply_button_basic.css('background-color', '#2b3991'); // Reset to original color
+        } 
+      }
 	
 	function handleStatus(status) {
 	    if (status === 'fail') {
@@ -1188,7 +1195,8 @@ var globalData = [];
 			$('#registerBtnGenSettings').prop('disabled', true);
 			$('#delBtnGenSettings').prop('disabled', true);
 			$('#applyBtnGenSettings').prop('disabled', true);
-
+			$('#applyBtnBasicConf').prop('disabled', true);
+			
 			changeButtonColor(true);
 		}
 		
@@ -1464,10 +1472,9 @@ var globalData = [];
     <button class="tab-button" onclick="openTab('user-config', this)">User Configuration</button>
 
     <div id="basic-config" class="tab" style="display: block; margin-left: 3px;">
-        <div class="container" style="margin-left: 2px;">
+        <div class="container" style="margin-left: -19px;">
         
-       
-       <table id="basic-config-table" style="margin-left: 3px; width: 100%;">
+       <table id="basic-config-table" style="width: 100%;">
          <colgroup>
     <col style="width: 5%;">
     <col style="width: 20%;">

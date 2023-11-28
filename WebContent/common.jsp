@@ -55,9 +55,7 @@
                 <li class="nav-item">
                   <a href="reboot.jsp">Reboot</a>
                 </li>
-               <!--  <li class="nav-item">
-                  <a href="#">Certificates</a>
-                </li> -->
+              
               </ul>
             </div>
 
@@ -81,6 +79,9 @@
                 <li class="nav-item">
                   <a href="ntp.jsp">NTP</a>
                 </li>
+                <li class="nav-item">
+                  <a href="wireguard.jsp">Wireguard</a>
+                </li>
               </ul>
             </div>
           </li>
@@ -94,7 +95,9 @@
             </a>
             <div class="dropdown-container">
               <ul>
-
+				<li class="nav-item" style="color: white; font-size: 16px;">
+                MQTT
+              </li>
                 <li class="nav-item">
                   <a href="mqtt.jsp">MQTT Server</a>
                 </li>
@@ -105,24 +108,6 @@
                 <li class="nav-item">
                 <a href="dispensertrigger.jsp">Dispenser Trigger</a>
               </li>
-
-                 <!-- <li class="nav-item">
-                  <a class="dropdown-subbtn">Straton
-                    <i class="fa fa-caret-down"></i>
-                    
-                  </a>
-                  <button class="dropdown-subbtn">Straton
-                    <i class="fa fa-caret-down"></i>
-                  </button>
-                  <div class="dropdown-subcontainer">
-                    <a onclick="openExtLink()">Straton Variable</a>
-                    <a href="stratonlivedata.jsp">Straton Live Data</a>
-                  </div>
-                </li> -->
-                
-                <li class="nav-item">
-                  <a href="wpconnexworkbench.jsp">WPConnex Work Bench</a>
-                </li>
                 
                 <li class="nav-item">
                   <a href="alarmconfig.jsp">Alarm Config</a>
@@ -134,8 +119,12 @@
                   <a href="storeforward.jsp">Store and Forward</a>
                 </li>
                 
-                <li class="nav-item">
-                <a href=""></a>
+                 <li class="nav-item">
+               
+              </li>
+              
+                <li class="nav-item" style="color: white; font-size: 16px;">
+                OPC
               </li>
                 
                 <li class="nav-item">
@@ -151,29 +140,41 @@
                 <a href="TagMapping.jsp">Tag Mapping</a>
               </li>
               
-              <li class="nav-item">
-                <a href=""></a>
-              </li>
-              
                <li class="nav-item">
                 <a href="certificate.jsp">Certificate</a>
               </li>
               
+               <li class="nav-item">
+               
+              </li>
+              
+              <li class="nav-item" style="color: white; font-size: 16px;">
+                Settings
+              </li>
+              
               <li class="nav-item">
-                <a href=""></a>
+                <a href="generalsettings.jsp">General Settings</a>
               </li>
               
                <li class="nav-item">
-                <a href="settings.jsp">Settings</a>
+                <a href="syslogServer.jsp">Syslog Configuration</a>
               </li>
               
               <li class="nav-item">
-                <a href=""></a>
+                <a href="bannertext.jsp">Banner Text</a>
               </li>
               
-               <li class="nav-item">
-                <a href="syslogServer.jsp">Syslog Server</a>
+              <li class="nav-item">
+               
               </li>
+              
+              <li class="nav-item" style="color: white; font-size: 16px;">
+                Workbench
+              </li>
+              
+              <li class="nav-item">
+                  <a href="wpconnexworkbench.jsp">Workbench</a>
+                </li>
                 
               </ul>
             </div>

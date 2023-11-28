@@ -118,6 +118,10 @@ button {
 </style>
 
 <script>
+
+var roleValue;	
+var tokenValue;
+
 	function updateSettings() {
 		// Display the custom modal dialog
 		var modal = document.getElementById('custom-modal-edit');
@@ -182,11 +186,55 @@ button {
 		};
 	}
 	
+	function changeButtonColor(isDisabled) {
+	    var $applyBtn = $('#applyBtn');       
+	    
+	    if (isDisabled) {
+	        $applyBtn.css('background-color', 'gray'); // Change to your desired color
+	    } else {
+	        $applyBtn.css('background-color', '#2b3991'); // Reset to original color
+	    }   
+	}
+	
 	$(document).ready(function() {
-		$('#applyBtn').click(function() {
-			updateSettings();
+		
+		<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
 
-		});
+roleValue = '<%=roleValue%>';
+
+if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
+
+	$('#applyBtn').prop('disabled', true);
+	
+	changeButtonColor(true);
+}
+
+if (roleValue === "null") {
+    var modal = document.getElementById('custom-modal-session-timeout');
+    modal.style.display = 'block';
+
+    // Handle the confirm button click
+    var confirmButton = document.getElementById('confirm-button-session-timeout');
+    confirmButton.onclick = function() {
+        // Close the modal
+        modal.style.display = 'none';
+        window.location.href = 'login.jsp';
+    };
+}else{
+	<%// Access the session variable
+	HttpSession token = request.getSession();
+	String tokenValue = (String) session.getAttribute("token");%>
+
+tokenValue = '<%=tokenValue%>';
+
+$('#applyBtn').click(function() {
+	updateSettings();
+
+});
+}
+		
 	});
 </script>
 <body>
@@ -199,9 +247,8 @@ button {
 
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3>SETTINGS</h3>
+			<h3>GENERAL SETTINGS</h3>
 			<hr>
-
 			<div class="container">
 
 				<form id="settingsForm">
@@ -214,6 +261,9 @@ button {
 									class="toggle-label" data-off="OFF" data-on="ON"></span> <span
 									class="toggle-handle"></span>
 							</label></td>
+							</tr>
+							
+							<tr>
 							<td>SSH</td>
 							<td><label class="toggle"> <input
 									id="toggle_enable_ssh" name="toggle_enable_ssh"
@@ -221,6 +271,10 @@ button {
 									class="toggle-label" data-off="OFF" data-on="ON"></span> <span
 									class="toggle-handle"></span>
 							</label></td>
+							
+							</tr>
+							
+							<tr>
 							<td>USBTTY</td>
 							<td><label class="toggle"> <input
 									id="toggle_enable_usbtty" name="toggle_enable_usbtty"
