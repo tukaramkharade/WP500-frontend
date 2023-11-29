@@ -120,32 +120,53 @@ function readBannerText(){
 	});
 }
 
-function updateBannerText(){
+function updateBannerText() {
 	
-	// Get the textarea value
-    var textareaValue = $('#bannerForm textarea').val();
+	 var modal = document.getElementById('custom-modal-edit');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit');
+	  confirmButton.onclick = function () {
+		  
+    // Get the textarea value
+    var textareaValue = $('#banner_text').val();
 
     // Split the textarea value into an array using the newline character ("\n")
-    var data = textareaValue.split('\n');
+    var lines = textareaValue.split('\n');
 
     // Display the array in the console (you can replace this with your update logic)
-    alert("Data Array: " + data.join(', '));
-    console.log(data);
-    
+    console.log("Lines Array:", lines);
+
+    // Convert the lines array to a JSON string
+    var linesJson = JSON.stringify(lines);
+
+    // Use $.ajax to send the data to the servlet
     $.ajax({
-             url: 'bannerTextServlet',
-             type : "POST",
-             contentType: 'application/json', // Specify the content type
-             data: JSON.stringify({ data: data }),
-             success: function(response) {
-                 alert("Update successful:", response);
-                 readBannerText();
-             },
-             error: function(error) {
-                 console.log("Error updating data:", error);
-             }
-         });
-    
+        url: "bannerTextServlet",
+        type: "POST",
+       
+        data: JSON.stringify({
+            lines: linesJson
+        }), // Send as a JSON object
+        success: function(response) {
+        	// Close the modal
+	        modal.style.display = 'none';
+        	
+            readBannerText();
+        },
+        error: function(error) {
+            console.log("Error updating data:", error);
+        }
+    });
+};
+
+var cancelButton = document.getElementById('cancel-button-edit');
+cancelButton.onclick = function () {
+  // Close the modal
+  modal.style.display = 'none';
+  location.reload();
+};	
 }
 
 $(document).ready(function() {
@@ -185,7 +206,7 @@ $(document).ready(function() {
 			
 			 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
-				  <p>Are you sure you want to modify this mqtt setting?</p>
+				  <p>Are you sure you want to modify this banner?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>

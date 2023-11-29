@@ -1,5 +1,6 @@
 package com.tas.wp500.servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -26,7 +27,7 @@ public class BannerTextServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		
-		if (check_username != null) {
+		
 			
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
@@ -60,26 +61,8 @@ public class BannerTextServlet extends HttpServlet {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		
+		
 	}
 
 	
@@ -93,20 +76,32 @@ public class BannerTextServlet extends HttpServlet {
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-			
 			try{
-				
-				String dataJson = request.getParameter("data");
-				
+			
+				BufferedReader reader = request.getReader();
+	            StringBuilder stringBuilder = new StringBuilder();
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                stringBuilder.append(line);
+	            }
+	            String linesJson = stringBuilder.toString();
 
-				JSONArray data = new JSONArray(dataJson);
-				
+	            // Extract the "lines" property from the JSON object
+	           JSONObject jsonObj = new JSONObject(linesJson);
+	         //   String linesJson = request.getParameter("lines");
+	            System.out.println("lines json: "+linesJson);
+	            
+	            JSONArray linesArray = new JSONArray(jsonObj.getString("lines"));
+	            
+	            System.out.println("lines array: " + linesArray);
+
 				
 				json.put("operation", "write_banner_file");
 				json.put("user", check_username);
-				json.put("data", data);
+				json.put("data", linesArray);
 				
 				String respStr = client.sendMessage(json.toString());
+				System.out.println(respStr);
 
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
