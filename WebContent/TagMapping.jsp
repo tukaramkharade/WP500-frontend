@@ -12,6 +12,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+
+
 <style>
 .modal-delete {
   display: none;
@@ -184,10 +188,20 @@ margin-top: 70px;
 </style>
 
 <script>
+	// Function to load user data and populate the user list table
+
 	var roleValue;	
 	var tokenValue;
+	var existingData = [];
+	//var nodeid;
+	
+	
 
 	function loadTagList() {
+		
+		
+	//	var pv_address = $('#pv_address').val(nodeid);
+	//	$("#pv_address").prop("disabled", true);
 		
 		$.ajax({
 					url : 'tagMapping',
@@ -218,6 +232,9 @@ margin-top: 70px;
 							        window.location.href = 'login.jsp';
 							  };
 						}
+
+						// Iterate through the user data and add rows to the table
+						
 						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
 							$.each(data,function(index, tag) {
@@ -255,7 +272,7 @@ margin-top: 70px;
 
 							});
 							
-						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
 							$.each(data,function(index, tag) {
 								var row = $('<tr>');
 								row.append($('<td>').text(tag.tag_name+ ""));
@@ -274,6 +291,9 @@ margin-top: 70px;
 				});
 	}
 
+
+	
+
 	function setTagName(tagId) {
 
 		$('#tag_name').val(tagId);
@@ -285,6 +305,9 @@ margin-top: 70px;
 		$('#registerBtn').val('Update');
 	}
 
+	
+
+	 
 	function deleteTag(tag_name) {
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
@@ -448,15 +471,12 @@ margin-top: 70px;
 		  });
 
 		$('#registerBtn').val('Add');
-	}	
-	
-		
-	//change color of disabled buttons
+	}
 	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
-        var $exportButton = $('#exportButton');
+                
         
          if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
@@ -469,14 +489,73 @@ margin-top: 70px;
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
-        
-        if (isDisabled) {
-            $exportButton.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $exportButton.css('background-color', '#2b3991'); // Reset to original color
-        }
-        
     }
+	function processExcel() {
+	    var fileInput = document.getElementById('fileInput');
+	    var file = fileInput.files[0];
+
+	    var reader = new FileReader();
+
+	    reader.onload = function(e) {
+	        var data = new Uint8Array(e.target.result);
+	        var workbook = XLSX.read(data, { type: 'array' });
+
+	        workbook.SheetNames.forEach(function(sheetName) {
+	            var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+	            var dataArray = excelData.map(function(row) {
+	                return {
+	                    tag_name: row['Tag Name'],
+	                    pv_address: row['PV Address']
+	                };
+	            });
+
+	            // Format dataArray according to your desired structure
+	            var formattedDataArray = dataArray.map(function(item) {
+	                return {
+	                    tag_name: item.tag_name,
+	                    pv_address: item.pv_address
+	                };
+	            });	            
+	            formattedDataArray.forEach(function(obj) {
+	                console.log("Tag Name: " + obj.tag_name + ", PV Address: " + obj.pv_address);
+	            });
+	            console.log("formattedDataArray"+formattedDataArray);
+	            addNewTag(formattedDataArray);
+	        });
+	    };
+
+	    if (file) {
+	        reader.readAsArrayBuffer(file);
+	    }
+	}
+
+	function addNewTag(dataArray) {
+	    $.ajax({
+	        url: 'tagMapping',
+	        type: 'POST',
+	        data: {
+	            bulk_data: JSON.stringify(dataArray), // Pass the array directly
+	            action: 'add_bulk'
+	        },
+	        traditional: true, // Use traditional serialization to handle arrays
+	        success: function(data) {
+	        	$("#popupMessage").text(data.message);
+      			$("#customPopup").show();
+      			loadTagList();      			
+	        },
+	        error: function(xhr, status, error) {
+	            console.log('Error adding tags: ' + error);
+	        }	        
+	    });
+
+	    $("#closePopup").click(function() {
+	        $("#customPopup").hide();
+	    });
+
+	    $('#registerBtn').val('Add');
+	}		 
+
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -544,6 +623,7 @@ margin-top: 70px;
 					    }
 
 					});
+
 </script>
 
 <body>
@@ -584,6 +664,10 @@ margin-top: 70px;
 						<input style="height: 26px;" type="button" value="Clear" id="clearBtn" /> 
 						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
 						<input style="margin-left: 5px; height: 26px;" type="submit" value="Export Data" id="exportButton" />
+					</div>
+					<div>
+					<input type="file" id="fileInput" accept=".xlsx, .xls" />
+					<input type="button" value="Process Excel" onclick="processExcel()">
 					</div>
 					
 				</form>

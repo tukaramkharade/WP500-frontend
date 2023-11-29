@@ -387,7 +387,29 @@ var tokenValue;
 		        }
 		    });
 		}
-	  
+	  function downloadStratonFile() {
+		    var selectedFileName = $("#fileName").val();
+
+		    if (selectedFileName !== "") {
+		        // Create a hidden anchor element to trigger the file download
+		        var downloadLink = document.createElement("a");
+		        downloadLink.href = "downloadSratonFile?userFileName=" + selectedFileName;
+		        downloadLink.style.display = "none";
+		        document.body.appendChild(downloadLink);
+		        
+		        downloadLink.click(); // Simulate a click on the anchor element to trigger the download
+
+		        document.body.removeChild(downloadLink); // Clean up the element after download
+		    } else {
+		        // Handle the case when no file name is entered
+		        $("#popupMessage").text("Please enter a file name first.");
+		        $("#customPopup").show();
+		    }
+
+		    $("#closePopup").click(function () {
+		        $("#customPopup").hide();
+		    });
+		}	  
 
 	$(document).ready(function() {
 		<%// Access the session variable
@@ -420,7 +442,11 @@ var tokenValue;
 					$('#stratonUpdateButton').click(function(event) {
 			            event.preventDefault(); // Prevent the form from submitting
 			            validateAndUpload('fileInput', '.cod');
-			        });		
+			        });	
+					$('#straton_download').click(function(event) {
+			               event.preventDefault(); // Prevent the form from submitting
+			               downloadStratonFile();
+			           });
     }
 });
 </script>
@@ -471,7 +497,16 @@ var tokenValue;
                 <input type="file" name="file" id="fileInput">
                 <input type="submit" value="Upload" id="stratonUpdateButton">
 
+                <!-- <input type="button" value="Straton update" id="firmware_update"> -->
+                <div id="custom-straton-modal-delete" class="modal-delete">
+				
+			  </div>
             </form>
+            <label for="fileUrl">Enter File Name</label>
+            <input type="text" id="fileName" name="fileName" required>
+           
+            <input type="button" value="Download Straton File" id="straton_download">
+            
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>

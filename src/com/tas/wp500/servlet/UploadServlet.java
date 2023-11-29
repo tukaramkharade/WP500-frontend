@@ -30,15 +30,59 @@ public class UploadServlet extends HttpServlet {
 			Part filePart = request.getPart("file");
 
 			//String uploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder3";
-			String uploadPath = "D:\\cod files";
+			String uploadPath = "";			
+			String fileName ="";
+			String filePath = "";
+			
+			String fileExtension = getFileExtension(filePart);
+			System.out.println("fileExtension-->"+fileExtension);
+			if (fileExtension != null && fileExtension.equalsIgnoreCase("swu")) {
+				String baseUploadPath = "/home/wp500/";
+//				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4";
+				String newFolderName = "firmware-file"; // Change this to the desired folder name
 
-			File uploadDir = new File(uploadPath);
-			if (!uploadDir.exists()) {
-				uploadDir.mkdirs();
+				
+				    // Create the path for the new folder
+				    String newFolderPath = baseUploadPath + File.separator + newFolderName;
+				    
+				    // Create the directory
+				    File newFolder = new File(newFolderPath);
+				    boolean folderCreated = newFolder.mkdirs();
+				     fileName = getFileName(filePart);
+		             filePath = newFolderPath + File.separator + fileName;
+			}else if (fileExtension != null && fileExtension.equalsIgnoreCase("cod")){
+//				/etc/wp500cfg
+				String  baseUploadPath = "/etc/wp500cfg/";
+				String originalFileName;
+//				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4";
+				String newFolderName = "t5cod"; 
+				String defaultFileName = "t5.cod"; 
+				    // Create the path for the new folder
+				    String newFolderPath = baseUploadPath + File.separator + newFolderName;				    
+				    // Create the directory
+				    File newFolder = new File(newFolderPath);
+				    boolean folderCreated = newFolder.mkdirs();
+				    originalFileName = getFileName(filePart);
+				     if (originalFileName != null && !originalFileName.isEmpty()) {
+				         fileName = defaultFileName; // Set the default file name
+				     } else {
+				         fileName = originalFileName; // Use the original file name
+				     }
+				    
+				     File existingFile = new File(newFolderPath + File.separator + defaultFileName);
+				     if (existingFile.exists() && existingFile.isFile()) {
+				         boolean deletionStatus = existingFile.delete();
+				         if (deletionStatus) {
+				             System.out.println("Existing file deleted successfully.");
+				             filePath = newFolderPath + File.separator + fileName;
+				         } else {
+				             System.out.println("Failed to delete the existing file.");
+				             // Handle the deletion failure scenario as needed
+				         }
+				     }else{
+				    	 filePath = newFolderPath + File.separator + fileName;
+				     }
 			}
-			String fileName = getFileName(filePart);
-			String filePath = uploadPath + File.separator + fileName;
-
 			HttpSession session = request.getSession();
 			long fileSize = filePart.getSize();
 			long uploadedBytes = 0;
@@ -107,6 +151,22 @@ public class UploadServlet extends HttpServlet {
 		}
 		return null;
 	}
+	private String getFileExtension(final Part part) {
+	    String contentDisposition = part.getHeader("content-disposition");
+	    if (contentDisposition != null) {
+	        for (String content : contentDisposition.split(";")) {
+	            if (content.trim().startsWith("filename")) {
+	                String fileName = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+	                int lastDotIndex = fileName.lastIndexOf('.');
+	                if (lastDotIndex > 0) {
+	                    return fileName.substring(lastDotIndex + 1);
+	                }
+	            }
+	        }
+	    }
+	    return ""; // Return empty string if no extension is found or not applicable
+	}
+
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
