@@ -84,6 +84,72 @@ public class BannerTextServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession(false);
+
+		String check_username = (String) session.getAttribute("username");
+		
+		if (check_username != null) {
+
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+			
+			try{
+				
+				String dataJson = request.getParameter("data");
+				
+
+				JSONArray data = new JSONArray(dataJson);
+				
+				
+				json.put("operation", "write_banner_file");
+				json.put("user", check_username);
+				json.put("data", data);
+				
+				String respStr = client.sendMessage(json.toString());
+
+				logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+				String message = new JSONObject(respStr).getString("msg");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
+
+				// Set the content type of the response to
+				// application/json
+				response.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+				
+			}catch(Exception e){
+				
+			}
+			
+		}else{
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				System.out.println(">>" + userObj);
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout: " + e);
+			}
+			
+		}
+		
 		
 	}
 
