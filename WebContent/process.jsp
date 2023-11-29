@@ -192,14 +192,37 @@ function getProcessData() {
         var tableBody = $("#" + tableId + "_body");
         tableBody.empty();
         var textColorClass = (tableId === "white_list_table") ? "green-text" : "red-text";
-		
+
         if (data && Array.isArray(data)) {
-            data.forEach(function(row) {
+            data.forEach(function (row) {
                 var tableRow = $("<tr>");
-                Object.values(row).forEach(function(cellValue) {
-                    var cell = $("<td>").text(cellValue).addClass(textColorClass);
+                Object.keys(row).forEach(function (key) {
+                    var cellValue = row[key];
+                    var cell;
+
+                    if (key === "COMMAND") {
+                        // Modify the appearance of COMMAND based on table type
+                        var modifiedCommand = cellValue;
+                        if (tableId === "white_list_table" || tableId === "black_list_table") {
+                        	 if (cellValue.length > 20 && cellValue.length <= 30) {
+                                 modifiedCommand = cellValue.substring(0, 20) + "..........";
+                             } else if (cellValue.length > 30) {
+                                 modifiedCommand = cellValue.substring(0, 30) + "..........";
+                             }
+                            modifiedCommand = modifiedCommand.replace(/^\[(.*?)\]$/, "$1");                          
+                            modifiedCommand = modifiedCommand.replace(/[{}]/g, ''); // Remove curly braces
+                            
+                        } else {
+                            modifiedCommand = "[" + cellValue + "]";
+                        }
+                        cell = $("<td>").text(modifiedCommand).addClass(textColorClass);
+                    }  
+                    else {
+                        cell = $("<td>").text(cellValue).addClass(textColorClass);
+                    }
+
                     tableRow.append(cell);
-                }); 
+                });
                 tableBody.append(tableRow);
             });
         }

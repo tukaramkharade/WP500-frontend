@@ -141,6 +141,34 @@ button {
     border-radius: 5px;
     transition: width 0.3s ease-in-out;
 }
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.forms-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.upload-form,
+.download-form {
+    width: 45%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.download-form {
+    background-color: #f9f9f9;
+}
+
+.progress-container {
+    width: 80%;
+}
 
 #progress-bar-container:hover #progress-bar {
     background-color: #45a049;
@@ -149,13 +177,14 @@ button {
 #progress-bar-container:hover {
     background-color: #e0e0e0;
 }
+.button-container {
+    margin-top: 10px; /* Adjust the margin-top value as needed */
+}
+
 
 </style>
 
 <script type="text/javascript">
-
-var roleValue;
-var tokenValue;
 
 function deleteFile(file){
 	
@@ -200,9 +229,6 @@ function loadFirmwareFiles() {
         url: "FirmwareListServlet",
         type: "GET",
         dataType: "json",
-        beforeSend: function(xhr) {
-	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-	    },
         success: function (data) {
             if (data.firmware_files_result && Array.isArray(data.firmware_files_result)) {
                 var table = $("#firmware_list_table tbody");
@@ -323,9 +349,62 @@ function updateProgress() {
         }
     });
 }
+function firmwareProgress() {
+	 console.log('updateProgress');
+   $.ajax({
+       url: 'firmwareFileDownloadURL', // Replace with your servlet URL
+       type: 'GET',
+       dataType: 'json',
+       success: function(data) {
+       	console.log('updateProgress'+data.progress);
+           var progress = data.progress;
+           
+           $('#progress-bar').css('width', progress + '%');
+           $('#progress-bar').text(progress + '%');
+           if (progress === 100) {
+               $('#progress-bar').css('width', '0%');
+               $('#progress-bar').text('');
+           }
+       },
+       error: function(xhr, status, error) {
+           console.error('Error fetching progress:', error);
+       }
+   });
+}
+function firmwareDownload() {
+	 var fileUrl = $('#fileUrl').val();
 
+     $.ajax({
+         url: 'firmwareFileDownloadURL',
+         type: 'POST',
+         data: { fileUrl: fileUrl },
+         success: function(data) {
+                    clearInterval(progressInterval); // Stop the progress interval
+                    if (data.status === 'success') {
+                        // File uploaded successfully logic
+                        $("#popupMessage").text('File uploaded successfully.');
+                        $("#customPopup").show();
+                        loadStratonFiles();  // Refresh the Straton file list
+                    } else {
+                        // Error uploading file logic
+                        $("#popupMessage").text('Error uploading file: ' + data.message);
+                        $("#customPopup").show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    clearInterval(progressInterval); // Stop the progress interval on error
+                    console.log('Error uploading file: ' + error);
+                }
+            });
 
-
+            // Start the progress interval only if a file is being uploaded
+            progressInterval = setInterval(firmwareProgress, 1000);
+            $("#closePopup").click(function () {
+                $("#customPopup").hide();
+                $('#progress-bar').css('width', '0%');
+                $('#progress-bar').text('');	
+            });
+        }   
 </script>
 <body>
 
@@ -342,18 +421,28 @@ function updateProgress() {
 			<hr>
 			
 			<div class="container">
-			
-			<form action="UploadServlet" method="post" enctype="multipart/form-data">
-        		<input type="file" name="file" id="fileInput">
-        		<input type="submit" value="Upload" id="firmwareUpdateButton">
-        		
-        		<input type="button" value="Firmware update" id="firmware_update">
-        		<h3>File Upload Progress</h3>
-   					 <div id="progress-bar-container">
-       					 <div id="progress-bar"></div>
-    				</div>
-    		</form>
-			</div>
+    <div class="forms-container">
+        <form action="UploadServlet" method="post" enctype="multipart/form-data" class="upload-form">
+            <input type="file" name="file" id="fileInput">
+            <input type="submit" value="Upload" id="firmwareUpdateButton">
+            <input type="button" value="Firmware update" id="firmware_update">
+        </form>
+        <form id="downloadForm" class="download-form">
+            <label for="fileUrl">Enter File URL:</label>
+            <input type="text" id="fileUrl" name="fileUrl" required>
+            <div class="button-container">
+            <input type="button" value="Download Firmware File" id="firmware_download">
+        </div>
+        </form>
+    </div>
+    <div class="progress-container">
+        <h3>File Upload Progress</h3>
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+</div>
+
 			
 			<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
@@ -412,7 +501,8 @@ function updateProgress() {
     function changeButtonColor(isDisabled) {
         var $file_upload_button = $('#file_upload');       
         var $firmware_update_button = $('#firmware_update');
-        var $firmware_upload_button = $('#firmwareUpdateButton');
+      
+        
         
          if (isDisabled) {
             $file_upload_button.css('background-color', 'gray'); // Change to your desired color
@@ -426,34 +516,32 @@ function updateProgress() {
             $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-        if (isDisabled) {
-            $firmware_upload_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $firmware_upload_button.css('background-color', '#2b3991'); // Reset to original color
-        } 
-        
+       
     }
     
+ 
     $(document).ready(function() {
-    	 <%
-     	// Access the session variable
-     	HttpSession role = request.getSession();
-     	String roleValue = (String) session.getAttribute("role");
-     	%>
-     	
-     	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
-     	
-     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-     		
-     		$('#file_upload').prop('disabled', true);
-			$('#firmware_update').prop('disabled', true);	
+   	 <%
+    	// Access the session variable
+    	HttpSession role = request.getSession();
+    	String roleValue = (String) session.getAttribute("role");
+    	%>
+    	
+    	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	
+   
+    	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+    		
+    		$('#file_upload').prop('disabled', true);
+			$('#firmware_update').prop('disabled', true);
+			$('#crt_file_upload').prop('disabled', true);		
 			$('#fileInput').prop('disabled', true); 
-			$('#firmwareUpdateButton').prop('disabled', true); 
+			
 			
 			changeButtonColor(true);
-     	}
-     	
-     	if (roleValue === "null") {
+    	}
+    	
+    	if (roleValue === "null") {
 	        var modal = document.getElementById('custom-modal-session-timeout');
 	        modal.style.display = 'block';
 
@@ -465,24 +553,28 @@ function updateProgress() {
 	            window.location.href = 'login.jsp';
 	        };
 	    }
-     	
-     	else{
-     		<%// Access the session variable
+    	
+    	else{
+    		<%// Access the session variable
 			HttpSession token = request.getSession();
 			String tokenValue = (String) session.getAttribute("token");%>
 
 			tokenValue = '<%=tokenValue%>';
-     		
-     		$('#firmwareUpdateButton').click(function(event) {
+    		
+    		$('#firmwareUpdateButton').click(function(event) {
+               event.preventDefault(); // Prevent the form from submitting
+               validateAndUpload('fileInput', '.swu');
+           });	
+    		$('#firmware_download').click(function(event) {
                 event.preventDefault(); // Prevent the form from submitting
-                validateAndUpload('fileInput', '.swu');
-            });	
-         	
-         	loadFirmwareFiles();
-     		
-     	}
-     	
-    });
+                firmwareDownload();
+            });
+        	
+        	loadFirmwareFiles();
+    		
+    	}
+    	
+   });
     </script>
 </body>
 </html>

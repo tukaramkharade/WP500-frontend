@@ -228,6 +228,45 @@ public class TagMappingServelt extends HttpServlet {
 					}
 
 					break;
+					
+				case "add_bulk":
+					try {
+				        String bulkData = request.getParameter("bulk_data");
+				        
+				        // Assuming the bulk_data received is a JSON string
+				        JSONArray jsonArray = new JSONArray(bulkData);
+				        
+				        TCPClient client = new TCPClient();
+				        JSONObject json = new JSONObject();
+
+				        json.put("operation", "insert_bulk_tag");
+				        json.put("user", check_username);
+				        json.put("bulk_data", jsonArray); // Put the JSON array directly
+				        System.out.println("Json"+json);
+				        // Other operations with pv_address and tag_name
+				        
+				        String respStr = client.sendMessage(json.toString());
+				        logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+				        String message = new JSONObject(respStr).getString("msg");
+				        JSONObject jsonObject = new JSONObject();
+				        jsonObject.put("message", message);
+
+				        // Set the content type of the response to application/json
+				        response.setContentType("application/json");
+
+				        // Get the response PrintWriter
+				        PrintWriter out = response.getWriter();
+
+				        // Write the JSON object to the response
+				        out.print(jsonObject.toString());
+				        out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in adding mqtt : " + e);
+					}
+					break;
 				}
 			}
 		} else {
