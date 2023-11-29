@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.tas.wp500.utils.SessionListener;
 import com.tas.wp500.utils.TCPClient;
 
 import io.jsonwebtoken.Jwts;
@@ -25,15 +26,22 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @WebServlet("/WP500Login")
 public class WP500Login extends HttpServlet {
     final static Logger logger = Logger.getLogger(WP500Login.class);
+    
+ // Session registry to keep track of active sessions
+    private static Map<String, HttpSession> sessionRegistry = new HashMap<>();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
         
-        session.setMaxInactiveInterval(3600);
-
+     // Check if the user is already logged in from another location
         String username = request.getParameter("username");
+        SessionListener.invalidateUserSessions(username);
+
+        session.setMaxInactiveInterval(3600);
+        
+      // String username = request.getParameter("username");
         String password = request.getParameter("password");
         
         JSONObject userObj = new JSONObject();

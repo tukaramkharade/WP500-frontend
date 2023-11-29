@@ -194,8 +194,27 @@
              }
          }
          
+         function readBannerText(){
+        		$.ajax({
+        			url : "bannerTextServlet",
+        			type : "GET",
+        			dataType : "json",
+        			success : function(data) {
+        				// Assuming data.banner_text_data is an array, join it to create a string
+        	            var textToShow = data.banner_text_data.join('\n');
+
+        	            // Set the text in the textarea
+        	            $('#banner_text').val(textToShow);
+        			},
+        			error : function(xhr, status, error) {
+        				console.log("Error showing banner text data : " + error);
+        			},
+        		});
+        	}
+         
 
         $(document).ready(function () {
+        	readBannerText();
         	generateImageWithNumber();
         	// Attach the checkLogin function to the form submission
         	$('#loginForm').submit(function(event) {
@@ -211,23 +230,33 @@
     </script>
    
    <style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: #2e3891d4;
-        margin: 0;
-    }
+   body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #2e3891d4;
+    margin: 0;
+    padding: 20px; /* Add padding to create space from all directions */
+}
 
-    .container {
-        width: 24em;
-        border-radius: 30px;
-        background-color: #ffffff8f;
-        padding-bottom: 30px;
-        text-align: center;
-        position: relative; /* Add this line */
-    }
+.container {
+    width: 24em;
+    border-radius: 30px;
+    background-color: #ffffff8f;
+    padding-bottom: 30px;
+    text-align: center;
+    position: relative;
+    margin-top: 2px; /* Set the top margin for alignment */
+     margin-right: 130px;
+}
+
+.banner_container {
+  
+    padding: 20px; /* Add padding to create space from all directions */
+    margin-top: 20px; /* Set the top margin for alignment */
+   
+}
 
     .container img {
         width: 78%;
@@ -300,5 +329,10 @@
         <div id="loginMessage" style="color: red;"></div>
         
     </form>
+    
+    <div class="banner_container">
+    <textarea id="banner_text" name="banner_text" rows="10"
+							cols="100" required style="margin-top: -30px; margin-left: -19px; height: 500px;  background-color: #ffffff8f;"></textarea>
+    </div>
 </body>
 </html>
