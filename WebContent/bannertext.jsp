@@ -19,6 +19,85 @@
 h3 {
 	margin-top: 70px;
 }
+
+.modal-edit {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-edit {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+
+/* Style for buttons */
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-button-edit {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-edit {
+  background-color: #f44336;
+  color: white;
+}
+
+.modal-session-timeout {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-session-timeout {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  }
+  
+  #confirm-button-session-timeout {
+  background-color: #4caf50;
+  color: white;
+}
 </style>
 
 <script type="text/javascript">
@@ -43,10 +122,38 @@ function readBannerText(){
 
 function updateBannerText(){
 	
+	// Get the textarea value
+    var textareaValue = $('#bannerForm textarea').val();
+
+    // Split the textarea value into an array using the newline character ("\n")
+    var data = textareaValue.split('\n');
+
+    // Display the array in the console (you can replace this with your update logic)
+    alert("Data Array: " + data.join(', '));
+    console.log(data);
+    
+    $.ajax({
+             url: 'bannerTextServlet',
+             type : "POST",
+             contentType: 'application/json', // Specify the content type
+             data: JSON.stringify({ data: data }),
+             success: function(response) {
+                 alert("Update successful:", response);
+                 readBannerText();
+             },
+             error: function(error) {
+                 console.log("Error updating data:", error);
+             }
+         });
+    
 }
 
 $(document).ready(function() {
 	readBannerText();
+	
+	$('#update').click(function () {
+		updateBannerText();
+    });
 });
 
 </script>
@@ -75,6 +182,21 @@ $(document).ready(function() {
 				</div>
 			</form>
 			</div>
+			
+			 <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to modify this mqtt setting?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				  <p>Your session is timeout. Please login again</p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
+			  </div>
 			</section>
 			</div>
 
