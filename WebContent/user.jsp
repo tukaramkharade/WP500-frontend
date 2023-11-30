@@ -330,7 +330,7 @@ function togglePassword() {
 
 	// Function to load user data and populate the user list table
 	function loadUserList() {
-		
+		alert(tokenValue);
 		$.ajax({
 					
 					url : 'userServlet',
@@ -996,8 +996,8 @@ function togglePassword() {
 			HttpSession token = request.getSession();
 			String tokenValue = (String) session.getAttribute("token");%>
 
-			tokenValue = '<%=tokenValue%>';
-				
+			<%-- tokenValue = '<%=tokenValue%>'; --%>
+			tokenValue = 'hbhhhjkkkkk';
 				// Load user list
 				loadUserList();
 				
