@@ -77,26 +77,7 @@
         	        }
         	    });
         	}
-         function generateRandomAlphanumeric() {
-        	 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        	    const numChars = characters.length;
-        	    let result = '';
-        	    const length = 6; // You can change this to generate strings of different lengths
-        	    const numNumbers = 2; // Change this to the number of numbers you want
-
-        	    for ( i = 0; i < length; i++) {
-        	        if (i == 2 || i == 4) {
-        	            // Ensure the first 'numNumbers' characters are numbers
-        	            result += '0123456789'.charAt(Math.floor(Math.random() * 10));
-        	        } else {
-        	            // For the remaining characters, choose from the full set of characters
-        	            const randomIndex = Math.floor(Math.random() * numChars);
-        	            result += characters.charAt(randomIndex);
-        	        }
-        	    }
-
-        	    return result;
-        	}
+        
          
          function togglePassword() {
         	    var passwordInput = $('#password');
@@ -112,88 +93,29 @@
         	}
 
 
-     
+         
         	
-         function generateImageWithNumber() {
-        	    const randomNumber = generateRandomAlphanumeric();
+         
+         function checkUserInput() {
+        	    // Get the user's input
+        	    const userInput = $('#userInputNumber').val();
 
-        	    // Get the canvas element
-        	    const canvas = document.createElement('canvas');
-        	    canvas.width = 220; // Adjust the canvas size as needed
-        	    canvas.height = 120;
+        	    // Get the stored random number from the image (access the text content)
+        	    const storedRandomNumber = $('#captchaLabel').text(); // Fix: .text() to get the text content
 
-        	    // Get the drawing context
-        	    const ctx = canvas.getContext('2d');
-
-        	    // Customize the appearance of the text
-        	    ctx.fillStyle = 'white'; // Text color
-        	    ctx.fillRect(0, 0, canvas.width, canvas.height); // Background color
-        	    ctx.font = '36px Arial'; // Font size and family
-        	    ctx.fillStyle = 'black'; // Text color
-
-        	    // Center the text on the canvas
-        	    ctx.textAlign = 'left'; // Change from 'center' to 'left'
-        	    ctx.textBaseline = 'middle';
-
-        	    // Calculate the space between characters
-        	    const characterSpacing = 10; // Adjust the space between characters as needed
-
-        	    // Calculate the total width needed for the text
-        	    const totalTextWidth = (24 + characterSpacing) * randomNumber.length - characterSpacing;
-
-        	    // Calculate the starting position for the text (shifted to the left)
-        	    const startX = 10; // You can adjust this value to control the left shift
-
-        	    // Draw a horizontal line in the middle of the canvas
-        	    ctx.beginPath();
-        	    ctx.moveTo(0, canvas.height / 2);
-        	    ctx.lineTo(canvas.width, canvas.height / 2);
-        	    ctx.stroke();
-
-        	    // Draw each character with space between them
-        	    for (var i = 0; i < randomNumber.length; i++) {
-        	        const character = randomNumber.charAt(i);
-        	        ctx.fillText(character, startX + i * (24 + characterSpacing), canvas.height / 2);
+        	    // Check if the user's input matches the stored random number
+        	    if (userInput === storedRandomNumber) {
+        	        // Call your checkLogin function or do whatever you want
+        	        $('#loginMessage').text('Captcha is correct. You may proceed.').css('color', 'green');
+        	        checkLogin();
+        	    } else {
+        	        $('#loginMessage').text('Captcha is incorrect. Please try again.').css('color', 'red');
+        	        $('#userInputNumber').val('');
+        	        // Generate a new random number/image
+        	        generateImageWithNumber();
         	    }
-
-        	    // Create an image element
-        	    const img = new Image();
-
-        	    // Set the source of the image to the canvas data URL
-        	    img.src = canvas.toDataURL('image/png');
-
-        	    // Clear the previous image (if any)
-        	    const imageContainer = document.getElementById('imageContainer');
-        	    imageContainer.innerHTML = '';
-
-        	    // Append the new image to the container
-        	    imageContainer.appendChild(img);
-
-        	    // Store the generated random number in a data attribute
-        	    img.setAttribute('data-random-number', randomNumber);
         	}
 
-      
-         function checkUserInput() {
-             // Get the user's input
-             const userInput = $('#userInputNumber').val();
-
-             // Get the stored random number from the image
-             const storedRandomNumber = $('#imageContainer img').attr('data-random-number');
-
-             // Check if the user's input matches the stored random number
-             if (userInput === storedRandomNumber) {
-                 // Call your checkLogin function or do whatever you want
-                 $('#loginMessage').text('Captcha is correct. You may proceed.').css('color', 'green');
-                 checkLogin();
-             } else {
-                 $('#loginMessage').text('Captcha is incorrect. Please try again.').css('color', 'red');
-                 $('#userInputNumber').val('');
-                 // Generate a new random number/image
-                 generateImageWithNumber();
-             }
-         }
-         
          function readBannerText(){
         		$.ajax({
         			url : "bannerTextServlet",
@@ -204,7 +126,7 @@
         	            var textToShow = data.banner_text_data.join('\n');
 
         	            // Set the text in the textarea
-        	            $('#banner_text').val(textToShow);
+        	            $('#banner_text').text(textToShow);
         			},
         			error : function(xhr, status, error) {
         				console.log("Error showing banner text data : " + error);
@@ -212,10 +134,31 @@
         		});
         	}
          
+         document.addEventListener('DOMContentLoaded', function () {
+             const captchaLabel = document.getElementById('captchaLabel');
+
+             // Generate random alphanumeric text for CAPTCHA
+             const captchaText = generateRandomAlphanumeric();
+            
+             // Set the generated text to the label
+             captchaLabel.textContent = captchaText;
+         });
+
+     	function generateRandomAlphanumeric() {
+     	    var length = 8; // Set default value if length is falsy
+     	    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+     	    let result = '';
+     	    for (var i = 0; i < length; i++) {
+     	        result += characters.charAt(Math.floor(Math.random() * characters.length));
+     	    }
+     	    return result;
+     	}
 
         $(document).ready(function () {
         	readBannerText();
-        	generateImageWithNumber();
+        	
+        	
+        	 
         	// Attach the checkLogin function to the form submission
         	$('#loginForm').submit(function(event) {
                 event.preventDefault(); // Prevent the default form submission               
@@ -230,36 +173,30 @@
     </script>
    
    <style>
-   body {
-    display: flex;
+  body {
+   display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: #2e3891d4;
     margin: 0;
-    padding: 20px; /* Add padding to create space from all directions */
 }
 
 .container {
-    width: 24em;
+    width: 25em;
     border-radius: 30px;
     background-color: #ffffff8f;
     padding-bottom: 30px;
-    text-align: center;
-    position: relative;
-    margin-top: 2px; /* Set the top margin for alignment */
-     margin-right: 130px;
+   text-align: center;
+   
+    
 }
 
-.banner_container {
-  
-    padding: 20px; /* Add padding to create space from all directions */
-    margin-top: 20px; /* Set the top margin for alignment */
-   
-}
+
 
     .container img {
         width: 78%;
+        margin-top: -36px;
     }
 
     .container label {
@@ -272,6 +209,7 @@
         width: calc(100% - 20px); /* Adjusted width to account for padding */
         padding: 5px 0;
         margin-bottom: 10px;
+        margin-top: -8px;
     }
 
     .container input[type="submit"] {
@@ -292,12 +230,20 @@
     .password-toggle {
         position: absolute;
         right: 15px; /* Adjust the positioning as needed */
-        top: 54.2%; /* Adjusted top to center the eye symbol */
+        top: 36%; /* Adjusted top to center the eye symbol */
         cursor: pointer;
     }
     
+    #captchaLabel {
+            font-size: 24px;
+            color: black;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
     
-    
+
 </style>
    
 </head>
@@ -307,32 +253,33 @@
             <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo">
         </div>
         
-        <p style="font-size: medium;"><b>WPConnex Web Configuration</b></p>
-        <label for="username" style="float: left;">Username</label>
+        <p style="font-size: medium; margin-top: -30px;"><b>WPConnex Web Configuration</b></p>
+        <label for="username" style="float: left; margin-top: -20px;">Username</label>
         <input required type="text" id="username" name="username" style="padding-left: 5px;"><br>
         
-        <label for="password" style="float: left;">Password</label>
+        <label for="password" style="float: left;  margin-top: -15px;">Password</label>
+       
+        
         <div style="position: relative;">
     <input required type="password" id="password" name="password" style="padding-left: 5px;">
+     <!-- <canvas id="myCanvas" width="200" height="50"></canvas> -->
     <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
 </div>
  
-        <br><br>
-     	<div id="imageContainer">
-        <!-- The generated image will be displayed here -->
-   		 </div>
-        <label for="captcha" style="float: left;">Captcha</label>
-        <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px;"><br>
+ <label id="captchaLabel"></label>
+        
+        <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px; margin-top: 10px;"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">
         
         <div id="loginMessage" style="color: red;"></div>
         
+        <div id="banner_text" style="font-size: 10.5px; margin-top: 20px;"></div>
     </form>
     
-    <div class="banner_container">
+   <!--  <div class="banner_container">
     <textarea id="banner_text" name="banner_text" rows="10"
-							cols="100" required style="margin-top: -30px; margin-left: -19px; height: 500px;  background-color: #ffffff8f;"></textarea>
-    </div>
+							cols="100" required style="margin-top: -30px; margin-left: -19px; height: 430px; width: 350px; border-radius: 30px; font-size: 10.5px; background-color: #ffffff8f;"></textarea>
+    </div> -->
 </body>
 </html>
