@@ -145,7 +145,6 @@ public class BannerTextServlet extends HttpServlet {
 			
 		}
 		
-		
 	}
 
 }

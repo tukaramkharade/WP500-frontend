@@ -32,12 +32,10 @@ public class ProcessGetData extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
-			
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		String processType = request.getParameter("process_type");
 		if (check_username != null) {	
 
@@ -47,6 +45,8 @@ public class ProcessGetData extends HttpServlet {
 			try {
 				json.put("operation", "get_process_list");
 				json.put("process_type", processType);
+				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 

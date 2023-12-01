@@ -28,6 +28,7 @@ public class UpdateSettings extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			
@@ -43,7 +44,7 @@ public class UpdateSettings extends HttpServlet {
 
 				json.put("operation", "update_lan_setting");
 				json.put("user", check_username);
-				
+				json.put("token", check_token);
 				json.put("lan_type", lan_type);
 				json.put("enable_ftp", toggle_enable_ftp);
 				json.put("enable_ssh", toggle_enable_ssh);

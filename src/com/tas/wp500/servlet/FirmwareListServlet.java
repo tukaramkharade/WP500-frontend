@@ -25,6 +25,7 @@ public class FirmwareListServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			
@@ -36,6 +37,7 @@ public class FirmwareListServlet extends HttpServlet {
 				json.put("operation", "file_manager");				
 				json.put("operation_type", "firmware_file_list");
 				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -91,6 +93,7 @@ public class FirmwareListServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			
@@ -105,7 +108,8 @@ public class FirmwareListServlet extends HttpServlet {
 				json.put("operation_type", "firmware_file_delete");
 				json.put("firmware_file_name", file);
 				json.put("user", check_username);
-			;
+				json.put("token", check_token);
+			
 
 				String respStr = client.sendMessage(json.toString());
 

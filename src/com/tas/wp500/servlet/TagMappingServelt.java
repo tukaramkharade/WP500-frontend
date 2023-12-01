@@ -28,6 +28,8 @@ public class TagMappingServelt extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -38,7 +40,8 @@ public class TagMappingServelt extends HttpServlet {
 
 				json.put("operation", "get_all_tags");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
@@ -101,6 +104,7 @@ public class TagMappingServelt extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String tag_name = null;
 		String pv_address = null;
@@ -127,7 +131,7 @@ public class TagMappingServelt extends HttpServlet {
 						json.put("user", check_username);
 						json.put("tag_name", tag_name);
 						json.put("pv_address", pv_address);
-						
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -165,6 +169,8 @@ public class TagMappingServelt extends HttpServlet {
 						json.put("operation", "update_tag");
 						json.put("tag_name", tag_name);
 						json.put("pv_address", pv_address);
+						json.put("token", check_token);
+						json.put("user", check_username);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -203,7 +209,8 @@ public class TagMappingServelt extends HttpServlet {
 						json.put("operation", "delete_tag");
 						json.put("user", check_username);
 						json.put("tag_name", tag_name);
-
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
@@ -241,6 +248,7 @@ public class TagMappingServelt extends HttpServlet {
 
 				        json.put("operation", "insert_bulk_tag");
 				        json.put("user", check_username);
+				        json.put("token", check_token);
 				        json.put("bulk_data", jsonArray); // Put the JSON array directly
 				        System.out.println("Json"+json);
 				        // Other operations with pv_address and tag_name

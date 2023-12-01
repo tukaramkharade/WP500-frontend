@@ -25,6 +25,7 @@ public class OverviewGetData extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -35,6 +36,7 @@ public class OverviewGetData extends HttpServlet {
 
 				json.put("operation", "get_overview_info");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 

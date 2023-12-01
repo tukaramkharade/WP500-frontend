@@ -30,6 +30,7 @@ public class BrowseQuickCLient extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			try {
@@ -39,6 +40,7 @@ public class BrowseQuickCLient extends HttpServlet {
 
 				json.put("operation", "get_opc_client_list");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -93,6 +95,7 @@ public class BrowseQuickCLient extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			try {
@@ -114,6 +117,7 @@ public class BrowseQuickCLient extends HttpServlet {
 					JSONObject json = new JSONObject();
 					json.put("operation", "get_opc_nodes");
 					json.put("user", check_username);
+					json.put("token", check_token);
 
 					JSONObject json_opc_node = new JSONObject();
 
@@ -150,6 +154,7 @@ public class BrowseQuickCLient extends HttpServlet {
 					JSONObject json = new JSONObject();
 					json.put("operation", "get_opc_nodes");
 					json.put("user", check_username);
+					json.put("token", check_token);
 
 					JSONObject json_opc_node = new JSONObject();
 
@@ -186,6 +191,7 @@ public class BrowseQuickCLient extends HttpServlet {
 					JSONObject json = new JSONObject();
 					json.put("operation", "get_opc_node_value");
 					json.put("user", check_username);
+					json.put("token", check_token);
 
 					JSONObject json_opc_node = new JSONObject();
 

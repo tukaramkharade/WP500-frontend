@@ -31,6 +31,7 @@ public class JSONBuilderBrokerIPListServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -42,6 +43,7 @@ public class JSONBuilderBrokerIPListServlet extends HttpServlet {
 				json.put("protocol_type", "json_builder");
 				json.put("operation_type", "get_broker_ip");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 

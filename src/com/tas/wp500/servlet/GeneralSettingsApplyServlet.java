@@ -29,6 +29,7 @@ public class GeneralSettingsApplyServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -47,6 +48,7 @@ public class GeneralSettingsApplyServlet extends HttpServlet {
 				json.put("forword", forward);
 				json.put("rule_drop", rule_drop);
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 

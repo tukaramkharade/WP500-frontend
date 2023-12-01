@@ -27,6 +27,8 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		if (check_username != null) {
 
 			TCPClient client = new TCPClient();
@@ -36,6 +38,7 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 
 				json.put("operation", "get_Tag_list");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 

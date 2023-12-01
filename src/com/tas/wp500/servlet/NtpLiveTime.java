@@ -32,6 +32,7 @@ public class NtpLiveTime extends HttpServlet {
 
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 
 		try {
 			TCPClient client = new TCPClient();
@@ -39,7 +40,8 @@ public class NtpLiveTime extends HttpServlet {
 
 			json.put("operation", "get_live_date_time");
 			json.put("user", check_username);
-
+			json.put("token", check_token);
+			
 			String respStr = client.sendMessage(json.toString());
 
 			String IST_Time = new JSONObject(respStr).getString("IST_Time");

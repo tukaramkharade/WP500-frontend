@@ -28,6 +28,7 @@ public class ChangePasswordServlet extends HttpServlet {
 		JSONObject jsonObject = new JSONObject();
 		
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			try{
@@ -35,6 +36,7 @@ public class ChangePasswordServlet extends HttpServlet {
 				json.put("operation", "password_policy");
 				json.put("operation_type", "get_password_info");
 				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
@@ -110,6 +112,7 @@ public class ChangePasswordServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			
@@ -123,6 +126,7 @@ public class ChangePasswordServlet extends HttpServlet {
 					
 					json.put("operation", "update_old_password");
 					json.put("user", check_username);
+					json.put("token", check_token);
 					json.put("username", username);
 					json.put("old_password", old_password);
 					json.put("new_password", new_password);

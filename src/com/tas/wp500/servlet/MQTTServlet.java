@@ -28,6 +28,7 @@ public class MQTTServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -40,7 +41,8 @@ public class MQTTServlet extends HttpServlet {
 				json.put("protocol_type", "mqtt");
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
@@ -119,6 +121,7 @@ public class MQTTServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String broker_ip_address = null;
 		String port_number = null;
@@ -170,7 +173,8 @@ public class MQTTServlet extends HttpServlet {
 						json.put("file_type", file_type);
 						json.put("enable", enable);
 						json.put("file_name", file_name);
-
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
@@ -226,7 +230,8 @@ public class MQTTServlet extends HttpServlet {
 						json.put("file_type", file_type);
 						json.put("file_name", file_name);
 						json.put("enable", enable);
-
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
@@ -266,7 +271,8 @@ public class MQTTServlet extends HttpServlet {
 						json.put("operation_type", "delete_query");
 						json.put("user", check_username);
 						json.put("prefix", prefix);
-
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
@@ -306,6 +312,7 @@ public class MQTTServlet extends HttpServlet {
 						json.put("operation_type", "crt_file_delete");
 						json.put("user", check_username);
 						json.put("crt_file_name", crt_file_name);
+						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString());
 

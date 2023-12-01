@@ -26,6 +26,7 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -38,7 +39,8 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 			json.put("protocol_type", "mqtt");
 			json.put("operation_type", "get_crt_files");
 			json.put("user", check_username);
-
+			json.put("token", check_token);
+			
 			String respStr = client.sendMessage(json.toString());
 
 			logger.info("res " + new JSONObject(respStr));
@@ -90,6 +92,7 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -102,6 +105,7 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 				json.put("operation", "get_mqtt_status");
 				json.put("user", check_username);
 				json.put("ip_address", broker_ip_address);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 

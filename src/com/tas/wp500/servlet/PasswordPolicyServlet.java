@@ -27,6 +27,8 @@ public class PasswordPolicyServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		JSONObject jsonObject = new JSONObject();
 
 		if (check_username != null) {
@@ -38,6 +40,7 @@ public class PasswordPolicyServlet extends HttpServlet {
 				json.put("operation", "password_policy");
 				json.put("operation_type", "get_password");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
@@ -118,6 +121,7 @@ public class PasswordPolicyServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String min_asccii_char_count = null;
 		String min_mix_char_count = null;
@@ -160,7 +164,8 @@ public class PasswordPolicyServlet extends HttpServlet {
 						json.put("operation", "password_policy");
 						json.put("operation_type", "update_password");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
+						
 						json.put("ascii_ch_count", min_asccii_char_count);
 						json.put("mixed_ch_count", min_mix_char_count);
 						json.put("number_count", min_num_count);

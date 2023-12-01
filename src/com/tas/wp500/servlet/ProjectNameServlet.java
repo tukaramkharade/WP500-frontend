@@ -26,6 +26,8 @@ public class ProjectNameServlet extends HttpServlet {
 		JSONObject jsonObject = new JSONObject();
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		if (check_username != null) {
 
 			try {
@@ -35,6 +37,7 @@ public class ProjectNameServlet extends HttpServlet {
 
 				json.put("operation", "get_straton_status");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);

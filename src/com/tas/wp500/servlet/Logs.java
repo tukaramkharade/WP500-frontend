@@ -26,6 +26,8 @@ public class Logs extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		if (check_username != null) {
 
 			TCPClient client = new TCPClient();
@@ -34,7 +36,7 @@ public class Logs extends HttpServlet {
 			try {
 				json.put("operation", "get_log_file_list");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
 				String respStr = client.sendMessage(json.toString());
 				logger.info("res " + new JSONObject(respStr));
 
@@ -82,6 +84,8 @@ public class Logs extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 
 		if (check_username != null) {
 
@@ -93,7 +97,7 @@ public class Logs extends HttpServlet {
 			try {
 				json.put("operation", "get_log_file_data");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
 				json.put("log_type", log_type);
 				json.put("file_name", fileName);
 

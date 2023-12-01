@@ -27,6 +27,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -37,6 +38,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 				json.put("protocol_type", "dispenser");
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -129,6 +131,8 @@ public class DispenserTriggerServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 
 		String broker_name = null;
 		String station_name = null;
@@ -177,6 +181,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("protocol_type", "dispenser");
 						json.put("operation_type", "add_query");
 						json.put("user", check_username);
+						json.put("token", check_token);
 						json.put("station_name", station_name);
 						json.put("serial_number", serial_number);
 						json.put("side", side);
@@ -243,7 +248,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("protocol_type", "dispenser");
 						json.put("operation_type", "update_query");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
 						json.put("station_name", station_name);
 						json.put("serial_number", serial_number);
 						json.put("side", side);
@@ -297,7 +302,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("protocol_type", "dispenser");
 						json.put("operation_type", "delete_query");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
 						json.put("serial_number", serial_number);
 						json.put("side", side);
 
@@ -349,41 +354,13 @@ public class DispenserTriggerServlet extends HttpServlet {
 		}
 	}
 
-	protected void doPut(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-		String check_username = (String) session.getAttribute("username");
-
-		if (check_username != null) {
-
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
-
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -399,7 +376,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 				json.put("protocol_type", "dispenser");
 				json.put("operation_type", "delete_query");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
 				json.put("serial_number", serial_number);
 				json.put("side", side);
 

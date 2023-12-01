@@ -30,6 +30,7 @@ public class TOTPOTPServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			try{
@@ -37,6 +38,7 @@ public class TOTPOTPServlet extends HttpServlet {
 				json.put("operation", "get_user_totp_key");
 				json.put("username", check_username);
 				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 

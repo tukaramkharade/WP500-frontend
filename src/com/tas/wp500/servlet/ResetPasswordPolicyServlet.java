@@ -25,6 +25,9 @@ public class ResetPasswordPolicyServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
+		
 		if (check_username != null) {			
 			try{
 				
@@ -34,6 +37,7 @@ public class ResetPasswordPolicyServlet extends HttpServlet {
 				json.put("operation", "password_policy");
 				json.put("operation_type", "reset_password");
 				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 

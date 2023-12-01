@@ -28,6 +28,7 @@ public class Lan1UpdateServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -46,6 +47,7 @@ public class Lan1UpdateServlet extends HttpServlet {
 
 				json.put("operation", "update_lan_setting");
 				json.put("user", check_username);
+				json.put("token", check_token);
 				json.put("lan_type", lan1_type);
 				json.put("lan1_dhcp", lan1_dhcp);
 				json.put("lan1_ipaddr", lan1_ipaddr);

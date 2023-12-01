@@ -31,6 +31,7 @@ import com.tas.wp500.utils.TCPClient;
 
 			if (session.getAttribute("username") != null) {
 				String check_username = (String) session.getAttribute("username");
+				String check_token = (String) session.getAttribute("token");
 		
 			try{
 				TCPClient client = new TCPClient();
@@ -38,6 +39,7 @@ import com.tas.wp500.utils.TCPClient;
 				
 				json.put("operation", "get_ethernet_details");
 				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 				
@@ -125,6 +127,7 @@ import com.tas.wp500.utils.TCPClient;
 			HttpSession session = request.getSession(false);
 			
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 			
 			if(check_username != null){
 			String ntpIntervalValue = null;
@@ -148,12 +151,13 @@ import com.tas.wp500.utils.TCPClient;
 	//{"operation":"update_lan_setting","lan_type":"eth1","eth1_dhcp":"0","eth1_ipaddr":"192.168.1.50","eth1_subnet":"255.255.255.0"}
 				json.put("operation", "update_lan_setting");
 				json.put("lan_type", "ntp");
-				//json.put("user", check_username);
+				json.put("user", check_username);
 				json.put("ntp_server1", ntp_server1);
 				json.put("ntp_server2", ntp_server2);
 				json.put("ntp_server3", ntp_server3);
 				json.put("ntp_interval", ntpIntervalValue);
-			
+				json.put("token", check_token);
+				
 				System.out.println("ntp-->"+json);
 				String respStr = client.sendMessage(json.toString());
 

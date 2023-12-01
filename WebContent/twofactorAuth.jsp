@@ -178,6 +178,28 @@ h3 {
 	margin-top: 68px;
 }
 
+.steps_container{
+display: flex;      
+            height: 19vh;
+}
+
+        
+
+.step {
+  flex: 0 0 0; /* Adjust the width as needed */
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+}
+
+.step img {
+  margin-bottom: 10px;
+  width: 100px; /* Set your preferred width */
+  height: 100px; /* Set your preferred height */
+}
+
+  
+        
 #totp_steps{
 margin-left: -39px;
 }
@@ -564,27 +586,54 @@ margin-left: -39px;
 						correctly synchronized with the device.
 					</p>
 
-					<p style="margin-top: 30px;">
-						<b>Steps to Follow to Enable Two-Factor Authentication:</b>
-					</p>
-					<p>Step 1: Enable the Two-Factor Authentication switch.</p>
-					<p>Step 2: After enabling, a QR code will appear on the screen.
-						Please scan that QR code using the Authenticator App.</p>
-					<p>Step 3: After scanning, test the Time-Based One-Time
-						Password (TOTP) by entering the OTP. Click on the "Test TOTP"
-						button.</p>
-					<p>Step 4: If the OTP is valid, log out from the application.</p>
-					<p>Step 5: Now, log in again, and you will be redirected to the
-						TOTP page. Enter the OTP again to validate.</p>
-					<p>Step 6: If the OTP is correct, you will be able to access
-						the application.</p>
-
-				<img id="totp_steps"
-							src="images/totp.png" alt="TOTP steps">
-
 				</div>
 
 			</div>
+			
+			
+			<div class="steps_container">
+			<!-- Step 1: Enable Two-Factor Authentication -->
+<div class="step">
+    <p>Step 1</p>
+    <img src="icons/toggle.png" alt="Switch Icon">
+    <p>Enable 2FA</p>
+</div>
+
+<!-- Step 2: Scan QR Code -->
+<div class="step">
+    <p>Step 2</p>
+    <img src="icons/scan_qr.jpg" alt="QR Code" width="150" height="150">
+    <p>Scan QR Code</p>
+</div>
+
+<!-- Step 3: Test TOTP -->
+<div class="step">
+    <p>Step 3</p>
+    <img src="icons/test_totp.jpg" alt="Test TOTP Icon">
+    <p>Test TOTP</p>
+</div>
+
+<!-- Step 4: Logout -->
+<div class="step">
+    <p>Step 4</p>
+    <img src="icons/logout.png" alt="Logout Icon">
+    <p>Logout</p>
+</div>
+
+<!-- Step 5: Log in Again -->
+<div class="step">
+    <p>Step 5</p>
+    <img src="icons/login.png" alt="Login Icon">
+    <p>Log in Again</p>
+</div>
+
+<!-- Step 6: Access Application -->
+<div class="step">
+    <p>Step 6</p>
+    <img src="icons/validatetotp.jpg" alt="Access Icon">
+    <p>Validate OTP</p>
+</div>
+</div>
 
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">

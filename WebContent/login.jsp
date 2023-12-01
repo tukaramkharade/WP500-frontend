@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="nav-bar.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -102,7 +102,7 @@
 
         	    // Get the stored random number from the image (access the text content)
         	    const storedRandomNumber = $('#captchaLabel').text(); // Fix: .text() to get the text content
-
+        	   
         	    // Check if the user's input matches the stored random number
         	    if (userInput === storedRandomNumber) {
         	        // Call your checkLogin function or do whatever you want
@@ -112,7 +112,7 @@
         	        $('#loginMessage').text('Captcha is incorrect. Please try again.').css('color', 'red');
         	        $('#userInputNumber').val('');
         	        // Generate a new random number/image
-        	        generateImageWithNumber();
+        	        
         	    }
         	}
 
@@ -133,32 +133,47 @@
         			},
         		});
         	}
-         
-         document.addEventListener('DOMContentLoaded', function () {
+        
+          document.addEventListener('DOMContentLoaded', function () {
              const captchaLabel = document.getElementById('captchaLabel');
+             const refreshCaptcha = document.getElementById('refreshCaptcha');
+
 
              // Generate random alphanumeric text for CAPTCHA
-             const captchaText = generateRandomAlphanumeric();
-            
+             function generateRandomAlphanumeric() {
+               var length = 6;
+               const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+               let result = '';
+               for (var i = 0; i < length; i++) {
+                 result += characters.charAt(Math.floor(Math.random() * characters.length));
+               }
+               return result;
+             }
+
              // Set the generated text to the label
-             captchaLabel.textContent = captchaText;
-         });
+              function setNewCaptcha() {
+               const captchaTextValue = generateRandomAlphanumeric();
+               captchaLabel.textContent = captchaTextValue;
+             }
 
-     	function generateRandomAlphanumeric() {
-     	    var length = 8; // Set default value if length is falsy
-     	    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-     	    let result = '';
-     	    for (var i = 0; i < length; i++) {
-     	        result += characters.charAt(Math.floor(Math.random() * characters.length));
-     	    }
-     	    return result;
-     	}
+             // Set initial captcha
+             setNewCaptcha();
 
+             // Attach the setNewCaptcha function to the refresh button click event
+             refreshCaptcha.addEventListener('click', function () {
+               setNewCaptcha();
+             }); 
+           });
+          
+          
+         
+         
+         
+         
         $(document).ready(function () {
         	readBannerText();
         	
         	
-        	 
         	// Attach the checkLogin function to the form submission
         	$('#loginForm').submit(function(event) {
                 event.preventDefault(); // Prevent the default form submission               
@@ -188,11 +203,7 @@
     background-color: #ffffff8f;
     padding-bottom: 30px;
    text-align: center;
-   
-    
 }
-
-
 
     .container img {
         width: 78%;
@@ -234,15 +245,29 @@
         cursor: pointer;
     }
     
-    #captchaLabel {
-            font-size: 24px;
-            color: black;
-            background-color: white;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+  #captchaLabel {
+    font-size: 20px;
+    color: black;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px; /* Adjusted width to accommodate the text content */
+    margin: 0 auto;
+    text-align: left;
+    position: relative; /* Add relative positioning to the label */
+    display: inline-block; /* Display as inline-block to allow adjacent elements */
+}
+
+#refreshCaptcha {
+    font-size: 14px; /* Adjusted font size for the button */
+    padding: 5px 10px; /* Adjusted padding for the button */
+    cursor: pointer;
+}
+  
+
     
+     
 
 </style>
    
@@ -259,15 +284,17 @@
         
         <label for="password" style="float: left;  margin-top: -15px;">Password</label>
        
-        
         <div style="position: relative;">
     <input required type="password" id="password" name="password" style="padding-left: 5px;">
-     <!-- <canvas id="myCanvas" width="200" height="50"></canvas> -->
+     
     <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
 </div>
  
- <label id="captchaLabel"></label>
-        
+  <label id="captchaLabel">
+    <span id="captchaText"></span>
+</label>
+<button id="refreshCaptcha"><i class="fas fa-sync-alt" style="font-size: 20px; color: #35449a;"></i></button>
+ 
         <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px; margin-top: 10px;"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">
@@ -277,9 +304,5 @@
         <div id="banner_text" style="font-size: 10.5px; margin-top: 20px;"></div>
     </form>
     
-   <!--  <div class="banner_container">
-    <textarea id="banner_text" name="banner_text" rows="10"
-							cols="100" required style="margin-top: -30px; margin-left: -19px; height: 430px; width: 350px; border-radius: 30px; font-size: 10.5px; background-color: #ffffff8f;"></textarea>
-    </div> -->
 </body>
 </html>

@@ -26,6 +26,7 @@ public class LoadConfigurationServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			try {
@@ -35,7 +36,8 @@ public class LoadConfigurationServlet extends HttpServlet {
 
 				json.put("operation", "load_config");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				logger.info("res " + new JSONObject(respStr));

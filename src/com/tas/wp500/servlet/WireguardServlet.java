@@ -27,6 +27,7 @@ public class WireguardServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -38,7 +39,8 @@ public class WireguardServlet extends HttpServlet {
 
 				json.put("operation", "read_wireguard_file");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				logger.info("res " + new JSONObject(respStr));
@@ -46,9 +48,11 @@ public class WireguardServlet extends HttpServlet {
 				JSONObject result = new JSONObject(respStr);
 
 				JSONArray wireguard_file_data = result.getJSONArray("data");
+				String status = result.getString("status");
 
 				
 				jsonObject.put("wireguard_file_data", wireguard_file_data);
+				jsonObject.put("status", status);
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
@@ -90,6 +94,7 @@ public class WireguardServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 
@@ -118,6 +123,7 @@ public class WireguardServlet extends HttpServlet {
 				json.put("operation", "write_wireguard_file");
 				json.put("user", check_username);
 				json.put("data", linesArray);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 				System.out.println(respStr);
@@ -125,11 +131,12 @@ public class WireguardServlet extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
+				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
+				
 
-				// Set the content type of the response to
-				// application/json
+				// Set the content type of the response to application/json
 				response.setContentType("application/json");
 
 				// Get the response PrintWriter

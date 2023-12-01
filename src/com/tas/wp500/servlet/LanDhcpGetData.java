@@ -30,6 +30,7 @@ public class LanDhcpGetData extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if(check_username != null){
 			
@@ -44,8 +45,9 @@ public class LanDhcpGetData extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "get_dhcp_setting");
-			
+			json.put("token", check_token);
 			json.put("eth_type", dhcp_type);
+			json.put("user", check_username);
 			
 			
 			String respStr = client.sendMessage(json.toString());
