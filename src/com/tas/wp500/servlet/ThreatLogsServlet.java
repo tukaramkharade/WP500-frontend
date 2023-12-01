@@ -28,6 +28,7 @@ public class ThreatLogsServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -38,7 +39,8 @@ public class ThreatLogsServlet extends HttpServlet {
 
 				json.put("operation", "get_threat_logs");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
@@ -162,6 +164,7 @@ public class ThreatLogsServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -193,7 +196,8 @@ public class ThreatLogsServlet extends HttpServlet {
 				json.put("start_time", formattedStartDate);
 				json.put("end_time", formattedEndDate);
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);

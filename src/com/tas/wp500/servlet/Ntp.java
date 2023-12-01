@@ -39,6 +39,7 @@ public class Ntp extends HttpServlet {
 			HttpSession session = request.getSession(true);
 	 
 				String check_username = (String) session.getAttribute("username");
+				String check_token = (String) session.getAttribute("token");
 
 				JSONObject jsonObject = new JSONObject();
 	 
@@ -51,7 +52,8 @@ public class Ntp extends HttpServlet {
 	 
 						json.put("operation", "get_ntp_details");
 						json.put("user", check_username);
-	 
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString()); 
 						String ntp_service = new JSONObject(respStr).getString("ntp_service");
 						String system_clock_synchronized = new JSONObject(respStr).getString("system_clock_synchronized");
@@ -114,6 +116,7 @@ public class Ntp extends HttpServlet {
 
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 
 		String ntp_client = request.getParameter("ntp_client");
 
@@ -125,7 +128,7 @@ public class Ntp extends HttpServlet {
 			json.put("operation", "update_ntp");
 			json.put("user", check_username);
 			json.put("ntp_client", ntp_client);
-
+			json.put("token", check_token);
 
 			String respStr = client.sendMessage(json.toString());
 

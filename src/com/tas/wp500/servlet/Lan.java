@@ -27,6 +27,7 @@ public class Lan extends HttpServlet {
 
 		if (session.getAttribute("username") != null) {
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 	
 		try{
 			TCPClient client = new TCPClient();
@@ -34,6 +35,7 @@ public class Lan extends HttpServlet {
 			
 			json.put("operation", "get_ethernet_details");
 			json.put("user", check_username);
+			json.put("token", check_token);
 			
 			String respStr = client.sendMessage(json.toString());
 			
@@ -162,6 +164,7 @@ public class Lan extends HttpServlet {
 
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 		
 		logger.info("In lan dhcp settings !");
 		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
@@ -174,7 +177,7 @@ public class Lan extends HttpServlet {
 			
 			json.put("operation", "get_dhcp_setting");
 			json.put("user", check_username);
-		
+			json.put("token", check_token);
 			json.put("eth_type", eth_type);
 			
 			String respStr = client.sendMessage(json.toString());

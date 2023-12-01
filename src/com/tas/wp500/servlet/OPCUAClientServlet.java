@@ -30,12 +30,14 @@ public class OPCUAClientServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 			
 			if (check_username != null) {
 				
 				json.put("operation", "get_opc_client_settings");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
 
@@ -110,6 +112,7 @@ public class OPCUAClientServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String endUrl = null;
 		String Username = null;
@@ -141,7 +144,7 @@ public class OPCUAClientServlet extends HttpServlet {
 
 						json.put("operation", "add_opc_client_settings");
 						json.put("user", check_username);
-						
+						json.put("token", check_token);
 						JSONObject json_data = new JSONObject();
 						
 						json_data.put("endUrl", endUrl);
@@ -196,6 +199,7 @@ public class OPCUAClientServlet extends HttpServlet {
 
 						json.put("operation", "update_opc_client_settings");
 						json.put("user", check_username);
+						json.put("token", check_token);
 						
 						JSONObject json_data = new JSONObject();
 						
@@ -246,6 +250,7 @@ public class OPCUAClientServlet extends HttpServlet {
 						json.put("operation", "delete_opc_client_settings");
 						json.put("user", check_username);
 						json.put("prefix", prefix);
+						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString());
 

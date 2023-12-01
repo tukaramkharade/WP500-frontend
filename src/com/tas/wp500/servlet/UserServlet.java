@@ -30,6 +30,7 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String first_name = null;
 		String last_name = null;
@@ -63,7 +64,8 @@ public class UserServlet extends HttpServlet {
 						json.put("first_name", first_name);
 						json.put("last_name", last_name);
 						json.put("role", role);
-
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr));
@@ -104,7 +106,7 @@ public class UserServlet extends HttpServlet {
 
 						json.put("operation", "update_user");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
 						json.put("username", username);
 						json.put("first_name", first_name);
 						json.put("last_name", last_name);
@@ -146,7 +148,7 @@ public class UserServlet extends HttpServlet {
 
 						json.put("operation", "delete_user");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
 						json.put("username", username);
 
 							String respStr = client.sendMessage(json.toString());
@@ -189,6 +191,7 @@ public class UserServlet extends HttpServlet {
 						json.put("user", check_username);
 						json.put("username", username);
 						json.put("password", password);
+						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -249,11 +252,12 @@ public class UserServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
-
+			String check_token = (String) session.getAttribute("token");
+			
 			if (check_username != null) {
 				json.put("operation", "get_all_user");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
 				String respStr = client.sendMessage(json.toString());
 				respJson = new JSONObject(respStr);
 

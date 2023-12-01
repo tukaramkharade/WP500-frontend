@@ -25,6 +25,7 @@ public class EventGetData extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 		
@@ -34,7 +35,7 @@ public class EventGetData extends HttpServlet {
 			try {
 				json.put("operation", "get_event_data");
 				 json.put("user", check_username);
-
+				 json.put("token", check_token);
 				json.put("page_no", "1");
 
 				String respStr = client.sendMessage(json.toString());
@@ -86,6 +87,7 @@ public class EventGetData extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			String currentPage = request.getParameter("currentPage");
@@ -96,7 +98,7 @@ public class EventGetData extends HttpServlet {
 			try {
 				json.put("operation", "get_event_data");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
 				json.put("page_no", currentPage);
 
 				String respStr = client.sendMessage(json.toString());

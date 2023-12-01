@@ -24,6 +24,7 @@ public class TrafficRulesApplyServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		if (check_username != null) {			
 			try{
 				
@@ -32,6 +33,8 @@ public class TrafficRulesApplyServlet extends HttpServlet {
 
 				json.put("operation", "ip_tables");
 				json.put("operation_type", "apply_command");
+				json.put("token", check_token);
+				json.put("user", check_username);
 				
 				String respStr = client.sendMessage(json.toString());
 

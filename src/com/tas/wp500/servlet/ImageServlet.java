@@ -26,6 +26,8 @@ public class ImageServlet extends HttpServlet {
 
         if (session != null && session.getAttribute("username") != null) {
             String check_username = (String) session.getAttribute("username");
+            String check_token = (String) session.getAttribute("token");
+            
             String action = request.getParameter("action");
             
             if (action != null) {
@@ -38,7 +40,7 @@ public class ImageServlet extends HttpServlet {
                         json.put("operation", "generate_qr_code");
                         json.put("user", check_username);
                         json.put("username", check_username);
-                        
+                        json.put("token", check_token);
 
                         String respStr = client.sendMessage(json.toString());
 
@@ -83,7 +85,7 @@ public class ImageServlet extends HttpServlet {
                         json.put("operation", "get_user_qr");
                         json.put("user", check_username);
                         json.put("username", check_username);
-                        
+                        json.put("token", check_token);
 
                         String respStr = client.sendMessage(json.toString());
 
@@ -161,6 +163,8 @@ public class ImageServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		String action = request.getParameter("action");
 		
 		if (check_username != null) {
@@ -180,7 +184,8 @@ public class ImageServlet extends HttpServlet {
 						json.put("operation", "totp_authenticator");
 						json.put("secret_key", secretKey);
 						json.put("otp", otp);
-
+						json.put("token", check_token);
+						json.put("user", check_username);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -218,6 +223,8 @@ public class ImageServlet extends HttpServlet {
 						json.put("operation", "test_totp_authenticator");
 						json.put("secret_key", secretKey);
 						json.put("otp", otp);
+						json.put("token", check_token);
+						json.put("user", check_username);
 
 
 						String respStr = client.sendMessage(json.toString());

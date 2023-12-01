@@ -20,20 +20,16 @@ public class Lan2UpdateServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-		
 		
 		HttpSession session = request.getSession(false);
 		
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if(check_username != null){
 			
@@ -66,6 +62,7 @@ public class Lan2UpdateServlet extends HttpServlet {
 			json.put("lan2_gateway", lan2_gateway);
 			json.put("lan2_dns", lan2_dns);
 			json.put("lan2_enable", toggle_enable_lan2);
+			json.put("token", check_token);
 			
 			System.out.println("lan2-->"+json);
 			

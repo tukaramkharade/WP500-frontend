@@ -26,6 +26,7 @@ public class TrafficRulesServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -35,7 +36,8 @@ public class TrafficRulesServlet extends HttpServlet {
 			try {
 				json.put("operation", "firewall_settings");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
@@ -115,6 +117,7 @@ public class TrafficRulesServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		String name = null;
 		String iface = null;
@@ -159,6 +162,7 @@ public class TrafficRulesServlet extends HttpServlet {
 						json.put("portNum", portNumber);
 						json.put("action", action);
 						json.put("type", type);
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -210,6 +214,7 @@ public class TrafficRulesServlet extends HttpServlet {
 						json.put("portNum", portNumber);
 						json.put("action", action);
 						json.put("type", type);
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -248,6 +253,8 @@ public class TrafficRulesServlet extends HttpServlet {
 						json.put("operation_type", "delete_ip");
 						json.put("user", check_username);
 						json.put("name", name);
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));

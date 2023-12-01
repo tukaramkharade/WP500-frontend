@@ -32,6 +32,7 @@ public class AlarmConfigServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		JSONObject disObj = new JSONObject();
 
@@ -46,6 +47,7 @@ public class AlarmConfigServlet extends HttpServlet {
 				json.put("protocol_type", "alarm");
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -118,6 +120,7 @@ public class AlarmConfigServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String unit_id = null;
 		String asset_id = null;
@@ -164,6 +167,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("operation_type", "add_query");
 						json.put("id", "1");
 						json.put("user", check_username);
+						json.put("token", check_token);
 						json.put("unit_id", unit_id);
 						json.put("asset_id", asset_id);
 						json.put("broker_type", broker_type);
@@ -222,6 +226,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("protocol_type", "alarm");
 						json.put("operation_type", "update_query");
 						json.put("user", check_username);
+						json.put("token", check_token);
 						json.put("id", "1");
 						json.put("username", "admin");
 						json.put("unit_id", unit_id);
@@ -288,6 +293,7 @@ public class AlarmConfigServlet extends HttpServlet {
 
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 
 			try {
 
@@ -299,6 +305,7 @@ public class AlarmConfigServlet extends HttpServlet {
 				json.put("operation_type", "delete_query");
 				json.put("id", "1");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 

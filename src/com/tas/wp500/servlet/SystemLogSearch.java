@@ -41,6 +41,8 @@ public class SystemLogSearch extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		if (check_username != null) {
 
 			String start_date_time = request.getParameter("startdatetime");
@@ -83,6 +85,8 @@ public class SystemLogSearch extends HttpServlet {
 				json.accumulate("search", search_query);
 
 				json.put("user", check_username);
+				json.put("token", check_token);
+				
 				System.out.println(json);
 				String respStr = client.sendMessage(json.toString());
 

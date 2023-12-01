@@ -29,6 +29,7 @@ public class JSONBuilderServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		if (check_username != null) {
 			
 			TCPClient client = new TCPClient();
@@ -39,7 +40,8 @@ public class JSONBuilderServlet extends HttpServlet {
 				json.put("protocol_type", "json_builder");
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
@@ -120,6 +122,7 @@ public class JSONBuilderServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		String json_string_name = null;
 		String jsonInterval = null;
@@ -172,7 +175,8 @@ public class JSONBuilderServlet extends HttpServlet {
 						json.put("protocol_type", "json_builder");
 						json.put("operation_type", "add_query");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
+						
 						JSONObject json_data = new JSONObject();
 						json_data.put("json_string_name", json_string_name);
 						json_data.put("json_interval", intervalValue);
@@ -239,7 +243,8 @@ public class JSONBuilderServlet extends HttpServlet {
 						json.put("protocol_type", "json_builder");
 						json.put("operation_type", "update_query");
 						json.put("user", check_username);
-
+						json.put("token", check_token);
+						
 						JSONObject json_data = new JSONObject();
 						json_data.put("json_string_name", json_string_name);							
 						json_data.put("json_interval", intervalValue);
@@ -290,6 +295,7 @@ public class JSONBuilderServlet extends HttpServlet {
 							json.put("operation_type", "delete_query");
 							json.put("user", check_username);
 							json.put("json_string_name", json_string_name);
+							json.put("token", check_token);
 							
 							String respStr = client.sendMessage(json.toString());
 

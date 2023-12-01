@@ -31,12 +31,14 @@ public class CertificateServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			
 			try{
 				json.put("operation", "apply_certificate");		
 				json.put("user", check_username);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -95,6 +97,7 @@ public class CertificateServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			try{
@@ -127,6 +130,7 @@ public class CertificateServlet extends HttpServlet {
 	            
 	            json.put("operation", "generate_certificate");
 	            json.put("user", check_username);
+	            json.put("token", check_token);
 	            json.put("commonName", commonName);
 	            json.put("organization", organization);
 	            json.put("organizationalUnit", organizationalUnit);

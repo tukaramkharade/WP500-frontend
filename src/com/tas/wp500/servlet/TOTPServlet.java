@@ -29,6 +29,8 @@ public class TOTPServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		String action = request.getParameter("action");
 		
 		if (check_username != null) {
@@ -41,6 +43,7 @@ public class TOTPServlet extends HttpServlet {
 						json.put("operation", "get_totp_details");
 						json.put("username", check_username);
 						json.put("user", check_username);
+						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -109,6 +112,7 @@ public class TOTPServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 			
@@ -123,6 +127,7 @@ public class TOTPServlet extends HttpServlet {
 				json.put("user", check_username);
 				json.put("username", check_username);
 				json.put("totp_authenticator", totp_authenticator);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 

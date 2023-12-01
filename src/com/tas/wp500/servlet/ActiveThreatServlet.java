@@ -28,6 +28,7 @@ public class ActiveThreatServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -37,6 +38,7 @@ public class ActiveThreatServlet extends HttpServlet {
 
 				json.put("operation", "get_active_threats");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -122,6 +124,8 @@ public class ActiveThreatServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		ArrayList<String> stringList = new ArrayList<>();
 		String threat_id = request.getParameter("threat_id");
 
@@ -150,6 +154,7 @@ public class ActiveThreatServlet extends HttpServlet {
 					json.put("ack_at", formattedDate);
 					json.put("ack_by", check_username);
 					json.put("user", check_username);
+					json.put("token", check_token);
 
 					String respStr = client.sendMessage(json.toString());
 
@@ -206,6 +211,7 @@ public class ActiveThreatServlet extends HttpServlet {
 					json.put("start_time", formattedStartDate);
 					json.put("end_time", formattedEndDate);
 					json.put("user", check_username);
+					json.put("token", check_token);
 
 					String respStr = client.sendMessage(json.toString());
 

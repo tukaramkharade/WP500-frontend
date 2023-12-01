@@ -25,6 +25,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -36,6 +37,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 			try {
 				json.put("operation", "firewall_settings");
 				json.put("user", check_username);
+				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -102,6 +104,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String input = null;
 		String output = null;
@@ -133,6 +136,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 						json.put("forword", forward);
 						json.put("rule_drop", rule_drop);
 						json.put("user", check_username);
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -178,6 +182,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 						json.put("forword", forward);
 						json.put("rule_drop", rule_drop);
 						json.put("user", check_username);
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -223,6 +228,7 @@ public class GeneralSettingsServlet extends HttpServlet {
 						json.put("forword", forward);
 						json.put("rule_drop", rule_drop);
 						json.put("user", check_username);
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 

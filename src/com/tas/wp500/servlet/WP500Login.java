@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.tas.wp500.utils.SessionListener;
 import com.tas.wp500.utils.TCPClient;
 
 import io.jsonwebtoken.Claims;
@@ -70,67 +69,29 @@ public class WP500Login extends HttpServlet {
             	
             } else if(status.equals("success") && first_login.equals("false") && totp_authenticator.equals("enable")) {
                 String role = jsonResponse.getString("role");
+                String token = jsonResponse.getString("token");
+                
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
                 session.setAttribute("totp_authenticator", totp_authenticator);
-                
-             // Generate a JWT token
-                String secretKey = "tasm2m_admin#Admin@123"; // Replace with a secure secret key
-                Map<String, Object> claims = new HashMap<>();
-                claims.put("username", username);
-                claims.put("role", role);
-
-                String token = Jwts.builder()
-                    .setClaims(claims)
-                    .setSubject(username)
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // Token expires in 1 hour
-                    .signWith(SignatureAlgorithm.HS256, secretKey)
-                    .compact();
-                
-                logger.info("Generated Token: " + token);
-                
-             // Validate the generated token
-                validateToken(token, secretKey);
-                
+                session.setAttribute("token", token);
+             
                 userObj.put("status", status);
                 userObj.put("first_login", first_login);
                 userObj.put("totp_authenticator", totp_authenticator);
-                userObj.put("token", token);
-                
-                session.setAttribute("token", token);
                 
           }  else if(status.equals("success") && first_login.equals("false") && totp_authenticator.equals("disable")){
         	  
         	  String role = jsonResponse.getString("role");
+        	  String token = jsonResponse.getString("token");
+        	  
               session.setAttribute("username", username);
               session.setAttribute("role", role);
-              
-           // Generate a JWT token
-              String secretKey = "tasm2m_admin#Admin@123"; // Replace with a secure secret key
-              Map<String, Object> claims = new HashMap<>();
-              claims.put("username", username);
-              claims.put("role", role);
-
-              String token = Jwts.builder()
-                  .setClaims(claims)
-                  .setSubject(username)
-                  .setIssuedAt(new Date())
-                  .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // Token expires in 1 hour
-                  .signWith(SignatureAlgorithm.HS256, secretKey)
-                  .compact();
-              
-              logger.info("Generated Token: " + token);
-              
-              // Validate the generated token
-              validateToken(token, secretKey);
-              
+              session.setAttribute("token", token);
+           
               userObj.put("status", status);
               userObj.put("first_login", first_login);
               userObj.put("totp_authenticator", totp_authenticator);
-              userObj.put("token", token);
-              
-              session.setAttribute("token", token);
               
           }
             
@@ -147,13 +108,7 @@ public class WP500Login extends HttpServlet {
         	    try {
         	        userObj.put("status", "error");
         	        userObj.put("msg", "Invalid user.");
-
-        	        // Additional code for JWT token validation error handling
-        	        if (e instanceof JwtException) {
-        	            JwtException jwtException = (JwtException) e;
-        	            logger.error("Error validating token: " + jwtException.getMessage());
-        	            userObj.put("msg", "Invalid user or token.");
-        	        }
+        	        
         	    } catch (JSONException e1) {
         	        e1.printStackTrace();
         	    }
@@ -171,20 +126,4 @@ public class WP500Login extends HttpServlet {
         
     }
     
-    private void validateToken(String token, String secretKey) throws JwtException {
-        try {
-            logger.info("Validating token: " + token);
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
-            // Token is valid, proceed with your logic
-            // Extract information from claims if needed
-        } catch (JwtException e) {
-            // Token is invalid or has expired
-            // Handle the error, e.g., log it or throw a custom exception
-            logger.error("Error validating token: " + e.getMessage());
-            throw new JwtException("Invalid token: " + e.getMessage());
-        }
-    }
-
-    
-}
+   }

@@ -25,6 +25,7 @@ public class SMTPServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		if (check_username != null) {
 
@@ -48,7 +49,8 @@ public class SMTPServlet extends HttpServlet {
 				json.put("protocol_type", "smtp");
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
@@ -140,6 +142,7 @@ public class SMTPServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
 		String ssl_socket_factory_port = null;
 		String tls_port = null;
@@ -202,6 +205,7 @@ public class SMTPServlet extends HttpServlet {
 						json.put("email_cc", email_cc);
 						json.put("email_bcc", email_bcc);
 						json.put("user", check_username);
+						json.put("token", check_token);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -270,7 +274,8 @@ public class SMTPServlet extends HttpServlet {
 						json.put("email_cc", email_cc);
 						json.put("email_bcc", email_bcc);
 						json.put("user", check_username);
-
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
@@ -328,6 +333,7 @@ public class SMTPServlet extends HttpServlet {
 
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 
 			try {
 
@@ -338,7 +344,8 @@ public class SMTPServlet extends HttpServlet {
 				json.put("protocol_type", "smtp");
 				json.put("operation_type", "delete_query");
 				json.put("user", check_username);
-
+				json.put("token", check_token);
+				
 				String respStr = client.sendMessage(json.toString());
 
 				logger.info("res " + new JSONObject(respStr).getString("msg"));

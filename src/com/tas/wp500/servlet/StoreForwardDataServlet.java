@@ -28,6 +28,7 @@ public class StoreForwardDataServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
 
 			if (check_username != null) {
 				TCPClient client = new TCPClient();
@@ -35,8 +36,8 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 				try {
 					json.put("operation", "get_store_forword_data");
-					// json.put("user", "admin");
-
+					json.put("user", check_username);
+					json.put("token", check_token);
 					json.put("page_no", "1");
 
 					String respStr = client.sendMessage(json.toString());
@@ -95,6 +96,8 @@ public class StoreForwardDataServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
+			
 			String currentPage = request.getParameter("currentPage");
 			if (check_username != null) {
 				TCPClient client = new TCPClient();
@@ -102,8 +105,8 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 				try {
 					json.put("operation", "get_store_forword_data");
-					// json.put("user", "admin");
-
+					 json.put("user", check_username);
+					 json.put("token", check_token);
 					json.put("page_no", currentPage);
 
 					String respStr = client.sendMessage(json.toString());
