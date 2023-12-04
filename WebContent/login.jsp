@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        
+    var correctCaptcha;
+    
          function checkLogin() {
         	    var username = $('#username').val();
         	    var password = $('#password').val();
@@ -99,12 +100,10 @@
          function checkUserInput() {
         	    // Get the user's input
         	    const userInput = $('#userInputNumber').val();
-
-        	    // Get the stored random number from the image (access the text content)
-        	    const storedRandomNumber = $('#captchaLabel').text(); // Fix: .text() to get the text content
-        	   
+        	  
+        	    console.log(userInput+" "+$('#captchaLabel').text());
         	    // Check if the user's input matches the stored random number
-        	    if (userInput === storedRandomNumber) {
+        	    if (userInput.trim() === $('#captchaLabel').text().trim()) {
         	        // Call your checkLogin function or do whatever you want
         	        $('#loginMessage').text('Captcha is correct. You may proceed.').css('color', 'green');
         	        checkLogin();
@@ -133,44 +132,38 @@
         			},
         		});
         	}
-        
-          document.addEventListener('DOMContentLoaded', function () {
-             const captchaLabel = document.getElementById('captchaLabel');
-             const refreshCaptcha = document.getElementById('refreshCaptcha');
-
-
-             // Generate random alphanumeric text for CAPTCHA
-             function generateRandomAlphanumeric() {
-               var length = 6;
-               const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-               let result = '';
-               for (var i = 0; i < length; i++) {
-                 result += characters.charAt(Math.floor(Math.random() * characters.length));
-               }
-               return result;
-             }
-
-             // Set the generated text to the label
-              function setNewCaptcha() {
-               const captchaTextValue = generateRandomAlphanumeric();
-               captchaLabel.textContent = captchaTextValue;
-             }
-
-             // Set initial captcha
-             setNewCaptcha();
-
-             // Attach the setNewCaptcha function to the refresh button click event
-             refreshCaptcha.addEventListener('click', function () {
-               setNewCaptcha();
-             }); 
-           });
-          
-          
-         
-         
-         
          
         $(document).ready(function () {
+        	
+        	const captchaLabel = $('#captchaLabel');
+          //  const refreshCaptcha = $('#refreshCaptcha');
+
+            // Function to generate random alphanumeric text for CAPTCHA
+            function generateRandomAlphanumeric() {
+                var length = 6;
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let result = '';
+                for (var i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return result;
+            }
+
+            // Function to update the captcha label and return the new captcha value
+            function updateCaptcha() {
+    const newCaptcha = generateRandomAlphanumeric();
+    $('#captchaLabel').text(newCaptcha);
+}
+
+            // Set initial captcha
+            updateCaptcha();
+
+             /* $('#refreshCaptcha').click(function () {
+            	 alert("*******")
+            	 event.preventDefault();
+            	    updateCaptcha(); // Update the captcha immediately
+            	}); */
+            
         	readBannerText();
         	
         	
@@ -246,28 +239,26 @@
     }
     
   #captchaLabel {
-    font-size: 20px;
+    font-size: 24px;
     color: black;
-    background-color: white;
+    border: none;
     padding: 10px;
-    border: 1px solid #ddd;
+   
     border-radius: 5px;
     width: 200px; /* Adjusted width to accommodate the text content */
     margin: 0 auto;
-    text-align: left;
+    text-align: center;
     position: relative; /* Add relative positioning to the label */
     display: inline-block; /* Display as inline-block to allow adjacent elements */
 }
 
 #refreshCaptcha {
-    font-size: 14px; /* Adjusted font size for the button */
+    font-size: 10px; /* Adjusted font size for the button */
     padding: 5px 10px; /* Adjusted padding for the button */
     cursor: pointer;
+    height: 30px;
 }
   
-
-    
-     
 
 </style>
    
@@ -293,8 +284,8 @@
   <label id="captchaLabel">
     <span id="captchaText"></span>
 </label>
-<button id="refreshCaptcha"><i class="fas fa-sync-alt" style="font-size: 20px; color: #35449a;"></i></button>
- 
+<!-- <button id="refreshCaptcha"><i class="fas fa-sync-alt" style="font-size: 15px; color: #35449a;"></i></button>
+ --> 
         <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px; margin-top: 10px;"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">

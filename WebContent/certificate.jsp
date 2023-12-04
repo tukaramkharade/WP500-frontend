@@ -67,35 +67,7 @@ button {
 	cursor: pointer;
 }
 
-.modal-session-timeout {
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
-	margin: 0;
-}
-
-.modal-content-session-timeout {
-	background-color: #d5d3d3;
-	padding: 20px;
-	border-radius: 5px;
-	text-align: center;
-	position: relative;
-	width: 300px;
-	transform: translate(0, -50%); /* Center vertically */
-	top: 50%; /* Center vertically */
-	left: 50%; /* Center horizontally */
-	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
-}
-
+.modal-session-timeout,
 .modal-apply-certificate {
 	display: none;
 	position: fixed;
@@ -111,7 +83,8 @@ button {
 	margin: 0;
 }
 
-.modal-content-apply-certificate {
+.modal-content-session-timeout,
+.modal-content-apply-certificate{
 	background-color: #d5d3d3;
 	padding: 20px;
 	border-radius: 5px;
@@ -125,14 +98,10 @@ button {
 	/* Center horizontally and vertically */
 }
 
-#confirm-button-session-timeout {
+#confirm-button-session-timeout,
+#confirm-button-apply-certificate {
 	background-color: #4caf50;
 	color: white;
-}
-
-#confirm-button-apply-certificate {
-  background-color: #4caf50;
-  color: white;
 }
 
 #cancel-button-apply-certificate {

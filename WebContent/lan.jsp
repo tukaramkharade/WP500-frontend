@@ -18,33 +18,7 @@ h3{
 margin-top: 75px;
 }
 
-.modal-session-timeout {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content-session-timeout {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
- }
+.modal-session-timeout,
 .modal-edit {
   display: none;
   position: fixed;
@@ -60,7 +34,8 @@ margin-top: 75px;
   margin: 0;
 }
 
-.modal-content-edit {
+.modal-content-session-timeout,
+.modal-content-edit  {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -71,8 +46,7 @@ margin-top: 75px;
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
-
+ }
 
 button {
   margin: 5px;
@@ -81,7 +55,8 @@ button {
   cursor: pointer;
 }
 
-#confirm-button-edit {
+#confirm-button-edit,
+#confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
 }
@@ -91,10 +66,6 @@ button {
   color: white;
 }
 
-#confirm-button-session-timeout {
-  background-color: #4caf50;
-  color: white;
-}
 </style>
 
 <script>

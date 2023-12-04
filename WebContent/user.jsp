@@ -343,12 +343,8 @@ function togglePassword() {
 						// Clear existing table rows
 						var userTable = $('#userListTable tbody');
 						userTable.empty();
-
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
+						
+						if (data.status == 'fail') {
 							
 							 var modal = document.getElementById('custom-modal-session-timeout');
 							  modal.style.display = 'block';
@@ -362,73 +358,76 @@ function togglePassword() {
 							        window.location.href = 'login.jsp';
 							  };
 								  
-						}
+						} 
 
 						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-							// Iterate through the user data and add rows to the table
-							$.each(data,function(index, user) {
+							data.result.forEach(function(user) {
 								if (user.username !== 'wp500') {
-											var row = $('<tr>').addClass('userTableRow');
-												
-												row.append($('<td>').text(user.username));
-												row.append($('<td>').text(user.first_name));
-												row.append($('<td>').text(user.last_name));
-												row.append($('<td>').text(user.role));									
-												
-												var actions = $('<td>');
-										
-														var editButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Edit" style="color: #35449a;">'
-							                            )
-							                            .html('<i class="fas fa-edit"></i>')
-							                            .click(function() {
-							                                settUser(user.username);
-							                                setFirstName(user.first_name);
-							                                setLastName(user.last_name);
-							                                setRole(user.role);
-							                            });
+								var username = user.username; // Accessing the date_time property
+								var first_name = user.first_name; // Accessing the event_name property
+								var last_name = user.last_name; // Accessing the event_type property
+								var role = user.role; // Accessing the msg property
 
-							                        var deleteButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Delete" style="color: red;">')
-							                            .html('<i class="fas fa-trash-alt"></i>')
-							                            .click(function() {
-							                                deleteUser(user.username);
-							                            });
+								var row = $("<tr>").append($("<td>").text(username),
+										$("<td>").text(first_name),
+										$("<td>").text(last_name),
+										$("<td>").text(role));
+								
+								var actions = $('<td>');
+								
+								var editButton = $(
+	                            '<button data-toggle="tooltip" data-placement="top" title="Edit" style="color: #35449a;">'
+	                            )
+	                            .html('<i class="fas fa-edit"></i>')
+	                            .click(function() {
+	                                settUser(user.username);
+	                                setFirstName(user.first_name);
+	                                setLastName(user.last_name);
+	                                setRole(user.role);
+	                            });
 
-							                        var changePasswordButton = $(
-							                            '<button data-toggle="tooltip" data-placement="top" title="Change password" style="color: #35449a;">')
-							                            .html('<i class="fas fa-key"></i>')
-							                            .click(function() {
-							                                setUserForChangingPassword(user.username);
-							                            });
+	                        var deleteButton = $(
+	                            '<button data-toggle="tooltip" data-placement="top" title="Delete" style="color: red;">')
+	                            .html('<i class="fas fa-trash-alt"></i>')
+	                            .click(function() {
+	                                deleteUser(user.username);
+	                            });
 
-												actions.append(editButton);
-												actions.append(deleteButton);
-												actions.append(changePasswordButton);
+	                        var changePasswordButton = $(
+	                            '<button data-toggle="tooltip" data-placement="top" title="Change password" style="color: #35449a;">')
+	                            .html('<i class="fas fa-key"></i>')
+	                            .click(function() {
+	                                setUserForChangingPassword(user.username);
+	                            });
 
-												row.append(actions);
+						actions.append(editButton);
+						actions.append(deleteButton);
+						actions.append(changePasswordButton);
 
-												userTable.append(row);
+						row.append(actions);
+								userTable.append(row);
 								}
-											});
+							});
+ 
+ 
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-							
-							// Iterate through the user data and add rows to the table
-							$.each(data,function(index, user) {
+							data.result.forEach(function(user) {
 								if (user.username !== 'wp500') {
-												var row = $('<tr>').addClass('userTableRow');
-												
-												row.append($('<td>').text(user.username));
-												row.append($('<td>').text(user.first_name));
-												row.append($('<td>').text(user.last_name));
-												row.append($('<td>').text(user.role));
+									var username = user.username; // Accessing the date_time property
+									var first_name = user.first_name; // Accessing the event_name property
+									var last_name = user.last_name; // Accessing the event_type property
+									var role = user.role; // Accessing the msg property
 
-												userTable.append(row);
+									var row = $("<tr>").append($("<td>").text(username),
+											$("<td>").text(first_name),
+											$("<td>").text(last_name),
+											$("<td>").text(role));
+									
+									userTable.append(row);
 								}
-											});
+							});
+							
 						}
-						
-					
 						
 					},
 					error : function(xhr, status, error) {
@@ -492,6 +491,22 @@ function togglePassword() {
 				action: 'add'
 			},
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				}
 				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -657,6 +672,21 @@ function togglePassword() {
 					},
 					success : function(data) {
 					
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
+							  modal.style.display = 'block';
+							  
+							  // Handle the confirm button click
+							  var confirmButton = document.getElementById('confirm-button-session-timeout');
+							  confirmButton.onclick = function () {
+								  
+								// Close the modal
+							        modal.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						}
 						// Close the modal
 				        modal.style.display = 'none';
 						
@@ -710,6 +740,22 @@ function togglePassword() {
 					},
 					success : function(data) {
 					
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
+							  modal.style.display = 'block';
+							  
+							  // Handle the confirm button click
+							  var confirmButton = document.getElementById('confirm-button-session-timeout');
+							  confirmButton.onclick = function () {
+								  
+								// Close the modal
+							        modal.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						}
+						
 						// Close the modal
 				        modal.style.display = 'none';
 						
