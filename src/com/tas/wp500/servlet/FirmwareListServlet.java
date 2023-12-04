@@ -88,54 +88,95 @@ public class FirmwareListServlet extends HttpServlet {
 	}
 
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
-
 		String check_username = (String) session.getAttribute("username");
-		String check_token = (String) session.getAttribute("token");
+		String check_token = (String) session.getAttribute("token");	
 		
+
 		if (check_username != null) {
-			
-			String file = request.getParameter("file");
-			
-			try {
 
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
+			String action = request.getParameter("action");
+			String file ="";
+			if (action != null) {
+				switch (action) {
 
-				json.put("operation", "file_manager");
-				json.put("operation_type", "firmware_file_delete");
-				json.put("firmware_file_name", file);
-				json.put("user", check_username);
-				json.put("token", check_token);
-			
+				case "delete":
 
-				String respStr = client.sendMessage(json.toString());
+					 file = request.getParameter("file");
+					
+					try {
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
 
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
+						json.put("operation", "file_manager");
+						json.put("operation_type", "firmware_file_delete");
+						json.put("firmware_file_name", file);
+						json.put("user", check_username);
+						json.put("token", check_token);
+					
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+						String respStr = client.sendMessage(json.toString());
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in deleting mqtt : " + e);
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in adding mqtt : " + e);
+					}
+					break;
+
+				case "update":
+					 file = request.getParameter("file");					
+					try {
+
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "update_firmware");
+						json.put("file_name", file);						
+						json.put("token", check_token);
+						json.put("user", check_username);
+						System.out.println("json"+json);
+//						String respStr = client.sendMessage(json.toString());
+//
+//						logger.info("res " + new JSONObject(respStr).getString("msg"));
+//
+//						String message = new JSONObject(respStr).getString("msg");
+//						JSONObject jsonObject = new JSONObject();
+//						jsonObject.put("message", message);
+//						
+//						response.setContentType("application/json");
+//						
+//						PrintWriter out = response.getWriter();						
+//						out.print(jsonObject.toString());
+//						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating mqtt : " + e);
+					}
+					break;
+				}
 			}
-
-			
-		}else{
+		} else {
 			try {
 				JSONObject userObj = new JSONObject();
 				userObj.put("msg", "Your session is timeout. Please login again");

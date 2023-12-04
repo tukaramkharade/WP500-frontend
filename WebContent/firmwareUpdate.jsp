@@ -19,8 +19,21 @@ h3{
 margin-top: 68px;
 }
 
-.modal-delete,
-.modal-session-timeout {
+.modal-delete {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+.modal-update {
   display: none;
   position: fixed;
   z-index: 1;
@@ -35,8 +48,19 @@ margin-top: 68px;
   margin: 0;
 }
 
-.modal-content-delete,
-.modal-content-session-timeout {
+.modal-content-delete {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+}
+.modal-content-update {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -57,12 +81,57 @@ button {
   cursor: pointer;
 }
 
-#confirm-button-delete,
-#confirm-button-session-timeout {
+#confirm-button-delete {
   background-color: #4caf50;
   color: white;
 }
+
+#cancel-button-delete {
+  background-color: #f44336;
+  color: white;
+}
+#confirm-button-update {
+  background-color: #4caf50;
+  color: white;
+}
+
+#cancel-button-update {
+  background-color: #f44336;
+  color: white;
+}
+
+.modal-session-timeout {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content-session-timeout {
+  background-color: #d5d3d3;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  transform: translate(0, -50%); /* Center vertically */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  }
   
+  #confirm-button-session-timeout {
+  background-color: #4caf50;
+  color: white;
+}
  .popup {
   display: none;
   position: fixed;
@@ -146,7 +215,7 @@ button {
 .button-container {
     margin-top: 10px; /* Adjust the margin-top value as needed */
 }
-
+ 
 
 </style>
 
@@ -166,7 +235,8 @@ function deleteFile(file){
 				url : 'FirmwareListServlet',
 				type : 'POST',
 				data : {
-					file : file
+					file : file,
+					action : 'delete' 
 				},
 				success : function(data) {
 					
@@ -188,6 +258,37 @@ function deleteFile(file){
 	  };
 	
 	
+}
+function updateFirmwareFile(file){	
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-update');
+	  modal.style.display = 'block';
+	  // Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-update');
+	  confirmButton.onclick = function () {		  
+		  $.ajax({
+				url : 'FirmwareListServlet',
+				type : 'POST',
+				data : {
+					file : file,
+					action : 'update' 
+				},
+				success : function(data) {
+					
+					modal.style.display = 'none';
+					loadFirmwareFiles();
+				},
+				error : function(xhr, status, error) {
+					// Handle the error response, if needed
+					console.log('Error updating firmware file: ' + error);
+				}
+			});		  
+	  };	  
+	  var cancelButton = document.getElementById('cancel-button-update');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	  };
 }
 
 function loadFirmwareFiles() {
@@ -223,12 +324,18 @@ function loadFirmwareFiles() {
                 data.firmware_files_result.forEach(function (file) {
                     var row = $("<tr>");
                     row.append($("<td>").text(file));
-                    var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
+                    var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red;">')
                         .html('<i class="fas fa-trash-alt"></i>')
                         .click(function() {
                             deleteFile(file);
                         });
+                    var updateButton = $('<button data-toggle="tooltip" class="updBtn" data-placement="top" title="Update-Firmware" style="color: red">')
+                    .html('<i class="fa fa-play"></i>')
+                    .click(function() {
+                    	updateFirmwareFile(file);
+                    });                   
                     row.append($("<td>").append(deleteButton));
+                    row.append($("<td>").append(updateButton));
                     table.append(row);
                 });
             }
@@ -415,6 +522,13 @@ function firmwareDownload() {
 				  <p>Are you sure you want to delete this firmware file?</p>
 				  <button id="confirm-button-delete">Yes</button>
 				  <button id="cancel-button-delete">No</button>
+				</div>
+			  </div>
+			  <div id="custom-modal-update" class="modal-update">
+				<div class="modal-content-update">
+				  <p>Are you sure you want to update this firmware file?</p>
+				  <button id="confirm-button-update">Yes</button>
+				  <button id="cancel-button-update">No</button>
 				</div>
 			  </div>
 			  

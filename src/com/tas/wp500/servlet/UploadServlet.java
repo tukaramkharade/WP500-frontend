@@ -82,6 +82,38 @@ public class UploadServlet extends HttpServlet {
 				     }else{
 				    	 filePath = newFolderPath + File.separator + fileName;
 				     }
+			}else if (fileExtension != null && fileExtension.equalsIgnoreCase("zip")){
+//				/etc/wp500cfg
+				String  baseUploadPath = "/data/";
+				String originalFileName;
+//				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4\\";
+				String newFolderName = "wp500_backups"; 
+				String defaultFileName = "restore.zip"; 
+				    // Create the path for the new folder
+				    String newFolderPath = baseUploadPath + File.separator + newFolderName;				    
+				    // Create the directory
+				    File newFolder = new File(newFolderPath);
+				    boolean folderCreated = newFolder.mkdirs();
+				    originalFileName = getFileName(filePart);
+				     if (originalFileName != null && !originalFileName.isEmpty()) {
+				         fileName = defaultFileName; // Set the default file name
+				     } else {
+				         fileName = originalFileName; // Use the original file name
+				     }
+				    
+				     File existingFile = new File(newFolderPath + File.separator + defaultFileName);
+				     if (existingFile.exists() && existingFile.isFile()) {
+				         boolean deletionStatus = existingFile.delete();
+				         if (deletionStatus) {
+				             System.out.println("Existing file deleted successfully.");
+				             filePath = newFolderPath + File.separator + fileName;
+				         } else {
+				             System.out.println("Failed to delete the existing file.");
+				             // Handle the deletion failure scenario as needed
+				         }
+				     }else{
+				    	 filePath = newFolderPath + File.separator + fileName;
+				     }
 			}
 			HttpSession session = request.getSession();
 			long fileSize = filePart.getSize();
