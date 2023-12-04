@@ -117,8 +117,11 @@ public class UserServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to
 						// application/json
@@ -156,8 +159,11 @@ public class UserServlet extends HttpServlet {
 							System.out.println("res " + new JSONObject(respStr).getString("msg"));
 
 							String message = new JSONObject(respStr).getString("msg");
+							String status = new JSONObject(respStr).getString("status");
+							
 							JSONObject jsonObject = new JSONObject();
 							jsonObject.put("message", message);
+							jsonObject.put("status", status);
 
 							// Set the content type of the response to application/json
 							resp.setContentType("application/json");
@@ -198,8 +204,11 @@ public class UserServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						resp.setContentType("application/json");
@@ -219,27 +228,8 @@ public class UserServlet extends HttpServlet {
 				}
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				resp.setContentType("application/json");
-
-				// Write the JSON data to the response
-				resp.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
 		}
-
-	}
+		}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -261,60 +251,20 @@ public class UserServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 				respJson = new JSONObject(respStr);
 
+				String status = respJson.getString("status");
+				
 				JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
-				logger.info(respJson.getJSONArray("result").toString());
+				
+				 JSONObject finalJsonObj = new JSONObject();
+				    finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", jsonArray);
 
-				JSONArray resJsonArray = new JSONArray();
+				    // Set the response content type to JSON
+				    response.setContentType("application/json");
 
-				// Convert each user to a JSONObject and add it to the JSONArray
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsObj = jsonArray.getJSONObject(i);
-
-					String first_name = jsObj.getString("first_name");					
-					String last_name = jsObj.getString("last_name");				
-					String username = jsObj.getString("username");
-					String role = jsObj.getString("role");
-
-					JSONObject userObj = new JSONObject();
-
-					try {
-						userObj.put("first_name", first_name);
-						userObj.put("last_name", last_name);
-						userObj.put("username", username);
-						userObj.put("role", role);
-
-						resJsonArray.put(userObj);
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in putting user data in json array : " + e);
-					}
-				}
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
-			} else {
-
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-
-					System.out.println(">>" + userObj);
-
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error("Error in session timeout : " + e);
-				}
+				    // Write the JSON data to the response
+				    response.getWriter().print(finalJsonObj.toString());
+				
 			}
 
 		} catch (Exception e) {

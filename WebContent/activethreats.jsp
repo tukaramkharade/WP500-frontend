@@ -16,7 +16,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style type="text/css">
-.modal-session-timeout {
+.modal-session-timeout,
+.modal-ack{
   display: none;
   position: fixed;
   z-index: 1;
@@ -31,7 +32,9 @@
   margin: 0;
 }
 
-.modal-content-session-timeout {
+.modal-content-session-timeout,
+.modal-content-ack
+ {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -76,35 +79,8 @@
    
 }
 
-.modal-ack {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content-ack {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
-
-#confirm-button-ack {
+#confirm-button-ack,
+#confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
   margin: 5px;
@@ -120,10 +96,6 @@
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-}
-#confirm-button-session-timeout {
-  background-color: #4caf50;
-  color: white;
 }
 
   .popup {
