@@ -46,74 +46,26 @@ public class MQTTServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				
 				logger.info("MQTT response : " + respJson.toString());
 				JSONArray resultArr = respJson.getJSONArray("result");
+				
+				JSONObject finalJsonObj = new JSONObject();
+			    finalJsonObj.put("status", status);
+			    finalJsonObj.put("result", resultArr);
 
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-					String broker_ip_address = jsObj.getString("broker_ip_address");
-					String port_number = jsObj.getString("port_number");
-					String username = jsObj.getString("username");
-					String password = jsObj.getString("password");
-					String publish_topic = jsObj.getString("publish_topic");
-					String subscribe_topic = jsObj.getString("subscribe_topic");
-					String prefix = jsObj.getString("prefix");
-					String file_type = jsObj.getString("file_type");
-					String file_name = jsObj.getString("file_name");
-					String enable = jsObj.getString("enable");
-
-					JSONObject mqttObj = new JSONObject();
-
-					try {
-						mqttObj.put("broker_ip_address", broker_ip_address);
-						mqttObj.put("port_number", port_number);
-						mqttObj.put("username", username);
-						mqttObj.put("password", password);
-						mqttObj.put("publish_topic", publish_topic);
-						mqttObj.put("subscribe_topic", subscribe_topic);
-						mqttObj.put("prefix", prefix);
-						mqttObj.put("file_type", file_type);
-						mqttObj.put("file_name", file_name);
-						mqttObj.put("enable", enable);
-
-						resJsonArray.put(mqttObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting mqtt data in json array : " + e);
-					}
-				}
-
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting mqtt data: " + e);
 			}
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -180,9 +132,12 @@ public class MQTTServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
+						
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
 
@@ -237,9 +192,12 @@ public class MQTTServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
+						
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
@@ -278,9 +236,12 @@ public class MQTTServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
+						
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
 
@@ -337,24 +298,6 @@ public class MQTTServlet extends HttpServlet {
 						logger.error("Error in deleting crt file : " + e);
 					}
 				}
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
 			}
 		}
 	}
