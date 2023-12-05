@@ -331,8 +331,9 @@ margin-top: 70px;
 
 						var json = JSON.parse(json1);
 
-						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
 							  modal.style.display = 'block';
 							  
 							  // Handle the confirm button click
@@ -343,13 +344,11 @@ margin-top: 70px;
 							        modal.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };
-						}
-
-						// Iterate through the user data and add rows to the table
-						
+								  
+						} 
 						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
-							$.each(data,function(index, mqtt) {
+/* 							$.each(data,function(index, mqtt) {
 								var row = $('<tr>');
 								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
 								row.append($('<td>').text(mqtt.port_number + ""));							
@@ -403,6 +402,73 @@ margin-top: 70px;
 									
 								mqttTable.append(row);
 
+							}); */
+							
+							data.result.forEach(function(mqtt) {
+								
+								var broker_ip_address = mqtt.broker_ip_address; 
+								var port_number = mqtt.port_number; 
+								var publish_topic = mqtt.publish_topic; 
+								var prefix = mqtt.prefix; 
+								var file_type = mqtt.file_type; 
+								var file_name = mqtt.file_name; 
+								var enable = mqtt.enable; 
+								
+								
+								var row = $("<tr>").append($("<td>").text(broker_ip_address),
+										$("<td>").text(port_number),
+										$("<td>").text(publish_topic),
+										$("<td>").text(prefix),
+								$("<td>").text(file_type),
+								$("<td>").text(file_name),
+								$("<td>").text(enable));
+								
+								var actions = $('<td>')
+								
+								var editButton = $(
+										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+										.html('<i class="fas fa-edit"></i>')
+										.click(
+												function() {
+													setMqtt(mqtt.prefix);
+													setBrokerIPAddress(mqtt.broker_ip_address);
+													setPortNumber(mqtt.port_number);
+													setUsername(mqtt.username);
+													setPassword(mqtt.password);
+													setPublishedTopic(mqtt.publish_topic);
+													setSubscribedTopic(mqtt.subscribe_topic);
+													setFileType(mqtt.file_type);
+													setFileName(mqtt.file_name);
+													setEnable(mqtt.enable);
+
+												});
+								var deleteButton = $(
+										'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
+										.html('<i class="fas fa-trash-alt"></i>')
+										.click(
+												function() {
+												
+												deleteMqtt(mqtt.prefix);
+													
+												});
+								var getStatusButton = $(
+										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
+										.html('<i class="fas fa-info-circle"></i>')
+										.click(
+												function() {
+													getMqttStatus(mqtt.broker_ip_address);
+												});
+
+								actions.append(editButton);
+								actions.append(deleteButton);
+								actions.append(getStatusButton);
+
+								row.append(actions);
+									
+								mqttTable.append(row);
+								
+								
+								
 							});
 							
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
