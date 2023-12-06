@@ -167,6 +167,28 @@ function readWireguardFile(){
 		type : "GET",
 		dataType : "json",
 		success : function(data) {
+			
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+			
 			// Assuming data.banner_text_data is an array, join it to create a string
             var textToShow = data.wireguard_file_data.join('\n');
             // Set the text in the textarea
@@ -189,6 +211,27 @@ function generateWireguardKeys(){
 	            action: "generate_keys"
 	        },
 		success : function(data) {
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+			
 			$('#private_key').val(data.private_key);
 			$('#public_key').val(data.public_key);
 
@@ -209,6 +252,26 @@ function activateWireguard() {
             action: "activate_wireguard"
         },
         success: function (data) {
+        	if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
             // Check if the result is an array
             if (Array.isArray(data.activate_wireguard_result)) {
                 // Join array elements with HTML line breaks
@@ -243,6 +306,26 @@ function deActivateWireguard(){
             action: "deactivate_wireguard"
         },
         success: function (data) {
+        	if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
             // Check if the result is an array
             if (Array.isArray(data.deactivate_wireguard_result)) {
                 // Join array elements with HTML line breaks
@@ -277,6 +360,26 @@ function wireguardStatus() {
             action: "wireguard_status"
         },
         success: function (data) {
+        	if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
             // Check if the result is an array and not empty
             if (Array.isArray(data.wireguard_status_result) && data.wireguard_status_result.length > 0) {
                 // Join array elements with HTML line breaks
@@ -336,6 +439,26 @@ function updateWireguardFile() {
            lines: linesJson
        }), // Send as a JSON object
        success: function(response) {
+    	   if (response.status == 'fail') {
+				
+				 var modal1 = document.getElementById('custom-modal-session-timeout');
+				  modal1.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = response.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+				  confirmButton1.onclick = function () {
+					  
+					// Close the modal
+				        modal1.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
        	// Close the modal
 	        modal.style.display = 'none';
        	
@@ -493,7 +616,7 @@ else{
 
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-					<p>Your session is timeout. Please login again</p>
+					 <p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>

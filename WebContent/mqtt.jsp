@@ -1240,8 +1240,8 @@ margin-top: 70px;
 					<td>Status</td>
 					<td><select class="textBox" id="enable" name="enable" style="height: 33px;">
 								<option value="Select status">Select status</option>
-								<option value="True">True</option>
-								<option value="False">False</option>
+								<option value="Enable">Enable</option>
+								<option value="Disable">Disable</option>
 							</select>
 							<span id="statusError" style="color: red;"></span></td>
 					
@@ -1301,7 +1301,6 @@ margin-top: 70px;
     		<div class="note">
 					<p>Note: Please upload CRT file first and you will find that file in crt file dropdown.</p>
 				</div>
-    		
     		
 			</div>
 			

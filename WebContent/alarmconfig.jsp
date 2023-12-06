@@ -190,23 +190,7 @@ var tokenValue;
 		    },
   			success : function(data) {
 				
-				var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
-							  
-							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
-								  
-								// Close the modal
-							        modal.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };
-						}	
+				
 									var unit_id = $('#unit_id').val(data.unit_id);
 									var asset = $('#asset_id').val(data.asset_id);
 									var broker_type = $('#broker_type').val(data.broker_type);

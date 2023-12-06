@@ -147,18 +147,36 @@ function getActiveThreats() {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
 		success : function(data) {
+			
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+			
 			var activeThreatsTable = $('#data-table tbody');
 			activeThreatsTable.empty();
 			
-			 var json1 = JSON.stringify(data);
-			 var json = JSON.parse(json1);
-			 handleStatus(json.status); 
-
+			 
 			 if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-				 $.each(data, function(index, activeThreats) {
-						
-						
-						var row = $('<tr>');
+				 
+				 data.result.forEach(function(activeThreats) {
+					 var row = $('<tr>');
 						row.append($('<td>').text(activeThreats.timestamp + ""));
 						
 						if(activeThreats.priority == '1'){							
@@ -191,8 +209,9 @@ function getActiveThreats() {
 						row.append(actions);
 											
 						activeThreatsTable.append(row);
-					
-				});
+				 });
+				 
+				
 			 }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				 $.each(data, function(index, activeThreats) {
 						
@@ -526,7 +545,7 @@ roleValue = '<%=roleValue%>';
 			
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				   <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>

@@ -45,56 +45,34 @@ public class TagMappingServelt extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
+				
 				logger.info("Tag Mapping response : " + respJson.toString());
-				JSONArray resultArr = respJson.getJSONArray("data");
-
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
-
-					String tag_name = jsObj.getString("tag_name");
-					String pv_address = jsObj.getString("pv_address");
-					
-					JSONObject tagObj = new JSONObject();
-
-					try {
-						tagObj.put("tag_name", tag_name);
-						tagObj.put("pv_address", pv_address);
-						
-						resJsonArray.put(tagObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting mqtt data in json array : " + e);
-					}
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("Success")){
+					JSONArray resultArr = respJson.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", resultArr);
+				    finalJsonObj.put("message", message);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				response.setContentType("application/json");
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
+				
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting mqtt data: " + e);
-			}
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
 			}
 		}
 	}
@@ -138,8 +116,11 @@ public class TagMappingServelt extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
@@ -177,9 +158,11 @@ public class TagMappingServelt extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
@@ -216,9 +199,11 @@ public class TagMappingServelt extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
 
@@ -257,9 +242,11 @@ public class TagMappingServelt extends HttpServlet {
 				        logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				        String message = new JSONObject(respStr).getString("msg");
+				        String status = new JSONObject(respStr).getString("status");
+				        
 				        JSONObject jsonObject = new JSONObject();
 				        jsonObject.put("message", message);
-
+				        jsonObject.put("status", status);
 				        // Set the content type of the response to application/json
 				        response.setContentType("application/json");
 
@@ -277,24 +264,6 @@ public class TagMappingServelt extends HttpServlet {
 					break;
 				}
 			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 }

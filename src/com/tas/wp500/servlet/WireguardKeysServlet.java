@@ -58,12 +58,14 @@ public class WireguardKeysServlet extends HttpServlet {
 							String message = respJson.getString("msg");
 							String public_key = respJson.getString("public_key");
 							String private_key = respJson.getString("private_key");
+							String status = respJson.getString("status");
 
 							try {
 
 								jsonObject.put("message", message);
 								jsonObject.put("public_key", public_key);
 								jsonObject.put("private_key", private_key);
+								jsonObject.put("status", status);
 
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -101,12 +103,13 @@ public class WireguardKeysServlet extends HttpServlet {
 							String message = respJson.getString("msg");
 							String public_key = respJson.getString("public_key");
 							String private_key = respJson.getString("private_key");
-
+							String status = respJson.getString("status");
 							try {
 
 								jsonObject.put("message", message);
 								jsonObject.put("public_key", public_key);
 								jsonObject.put("private_key", private_key);
+								jsonObject.put("status", status);
 
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -141,20 +144,25 @@ public class WireguardKeysServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr));
 
 						JSONObject respJson = new JSONObject(respStr);
-						JSONArray activate_wireguard_result = respJson.getJSONArray("result");
+						
+						String message = respJson.getString("msg");
+						String status = respJson.getString("status");
+						
+						JSONObject finalJsonObj = new JSONObject();
+						if(status.equals("success")){
+							JSONArray activate_wireguard_result = respJson.getJSONArray("result");
+							finalJsonObj.put("status", status);
+							finalJsonObj.put("activate_wireguard_result", activate_wireguard_result);
+						}else if(status.equals("fail")){
+							finalJsonObj.put("status", status);
+						    finalJsonObj.put("message", message);
+						}
 
-						jsonObject.put("activate_wireguard_result", activate_wireguard_result);
+					    // Set the response content type to JSON
+					    response.setContentType("application/json");
 
-						// Set the content type of the response to
-						// application/json
-						response.setContentType("application/json");
-
-						// Get the response PrintWriter
-						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
-						out.print(jsonObject.toString());
-						out.flush();
+					    // Write the JSON data to the response
+					    response.getWriter().print(finalJsonObj.toString());
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -176,20 +184,25 @@ public class WireguardKeysServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr));
 
 						JSONObject respJson = new JSONObject(respStr);
-						JSONArray deactivate_wireguard_result = respJson.getJSONArray("result");
+					
+						String message = respJson.getString("msg");
+						String status = respJson.getString("status");
+						
+						JSONObject finalJsonObj = new JSONObject();
+						if(status.equals("success")){
+							JSONArray deactivate_wireguard_result = respJson.getJSONArray("result");
+							finalJsonObj.put("status", status);
+							finalJsonObj.put("deactivate_wireguard_result", deactivate_wireguard_result);
+						}else if(status.equals("fail")){
+							finalJsonObj.put("status", status);
+						    finalJsonObj.put("message", message);
+						}
 
-						jsonObject.put("deactivate_wireguard_result", deactivate_wireguard_result);
+					    // Set the response content type to JSON
+					    response.setContentType("application/json");
 
-						// Set the content type of the response to
-						// application/json
-						response.setContentType("application/json");
-
-						// Get the response PrintWriter
-						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
-						out.print(jsonObject.toString());
-						out.flush();
+					    // Write the JSON data to the response
+					    response.getWriter().print(finalJsonObj.toString());
 
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -210,20 +223,26 @@ public class WireguardKeysServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr));
 
 						JSONObject respJson = new JSONObject(respStr);
-						JSONArray wireguard_status_result = respJson.getJSONArray("wireguard_info");
+						
 
-						jsonObject.put("wireguard_status_result", wireguard_status_result);
+						String message = respJson.getString("msg");
+						String status = respJson.getString("status");
+						
+						JSONObject finalJsonObj = new JSONObject();
+						if(status.equals("success")){
+							JSONArray wireguard_status_result = respJson.getJSONArray("wireguard_info");
+							finalJsonObj.put("status", status);
+							finalJsonObj.put("wireguard_status_result", wireguard_status_result);
+						}else if(status.equals("fail")){
+							finalJsonObj.put("status", status);
+						    finalJsonObj.put("message", message);
+						}
 
-						// Set the content type of the response to
-						// application/json
-						response.setContentType("application/json");
+					    // Set the response content type to JSON
+					    response.setContentType("application/json");
 
-						// Get the response PrintWriter
-						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
-						out.print(jsonObject.toString());
-						out.flush();
+					    // Write the JSON data to the response
+					    response.getWriter().print(finalJsonObj.toString());
 
 					} catch (Exception e) {
 						e.printStackTrace();

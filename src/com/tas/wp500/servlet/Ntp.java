@@ -55,11 +55,11 @@ public class Ntp extends HttpServlet {
 						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString()); 
+						
+						logger.info("res: "+ new JSONObject(respStr));
 						String ntp_service = new JSONObject(respStr).getString("ntp_service");
 						String system_clock_synchronized = new JSONObject(respStr).getString("system_clock_synchronized");
 
-						System.out.println("ntp_service : " + ntp_service);
-						System.out.println("system_clock_synchronized : " + system_clock_synchronized);
 
 						jsonObject.put("ntp_service", ntp_service);
 						jsonObject.put("system_clock_synchronized", system_clock_synchronized);
@@ -84,27 +84,7 @@ public class Ntp extends HttpServlet {
 
 					}
 
-				} else {
-
-					try {
-
-						JSONObject userObj = new JSONObject();
-						userObj.put("msg", "Your session is timeout. Please login again");
-						userObj.put("status", "fail");
-	 
-						System.out.println(">>" + userObj);
-	 
-						// Set the response content type to JSON
-						response.setContentType("application/json");
-	 
-						// Write the JSON data to the response
-						response.getWriter().print(userObj.toString());
-	 
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in session timeout : " + e);
-
-					}
+				
 				}	 
 			}
 	
@@ -113,13 +93,13 @@ public class Ntp extends HttpServlet {
 	
 		
 		HttpSession session = request.getSession(false);
+		
+		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 
-		if (session != null) {
-			String check_username = (String) session.getAttribute("username");
-			String check_token = (String) session.getAttribute("token");
-
+		if (check_username != null) {
+			
 		String ntp_client = request.getParameter("ntp_client");
-
 
 		try {
 			TCPClient client = new TCPClient();
@@ -135,9 +115,12 @@ public class Ntp extends HttpServlet {
 			System.out.println("res " + new JSONObject(respStr).toString());
 			logger.info("res " + new JSONObject(respStr).toString());
 
-			String message = "Successfully Updated Ntp Setting";// new JSONObject(respStr).toString();
+			String message = new JSONObject(respStr).getString("msg");
+			String status = new JSONObject(respStr).getString("status");
+			
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("message", message);
+			jsonObject.put("status", status);
 
 			// Set the content type of the response to application/json
 			response.setContentType("application/json");
@@ -153,9 +136,6 @@ public class Ntp extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
 		}
 	}
 

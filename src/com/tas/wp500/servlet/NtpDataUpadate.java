@@ -46,39 +46,30 @@ import com.tas.wp500.utils.TCPClient;
 				System.out.println("res " + new JSONObject(respStr));
 				logger.info("res " + new JSONObject(respStr));
 				JSONObject result = new JSONObject(respStr);
+				
+				String status = result.getString("status");
+				String message = result.getString("msg");
 			
-				
 				JSONObject ntp = result.getJSONObject("ntp_setting");
-				System.out.println("ntp :"+ntp.toString());
-				
-				
 				
 				String ntp_server1 = ntp.getString("ntp_server1");
-				System.out.println("ntp_server1 : "+ntp_server1);
-				logger.info("ntp_server1 : "+ntp_server1);
-				 
+				
 				String ntp_server2 = ntp.getString("ntp_server2");
-				System.out.println("ntp_server2 : "+ntp_server2);
-				logger.info("ntp_server2 : "+ntp_server2);
 				
 				String ntp_server3 = ntp.getString("ntp_server3");
-				System.out.println("ntp_server3 : "+ntp_server3);
-				logger.info("ntp_server3 : "+ntp_server3);
-				
 				
 				String ntp_interval = ntp.getString("ntp_interval");
 				int intervalValue = Integer.parseInt(ntp_interval);
 				String ntpIntervalString = IntervalMapper.getIntervalByValue(intervalValue);
-				System.out.println("ntp_interval : "+ntpIntervalString);
-				logger.info("ntp_interval : "+ntpIntervalString);
-				
 				
 				JSONObject jsonObject = new JSONObject();
 			    
 			    jsonObject.put("ntp_server1", ntp_server1);
 			    jsonObject.put("ntp_server2", ntp_server2);
 			    jsonObject.put("ntp_server3", ntp_server3);
-			    jsonObject.put("ntp_interval",ntp_interval);
+			    jsonObject.put("ntp_interval",ntpIntervalString);
+			    jsonObject.put("message", message);
+			    jsonObject.put("status",status);
 			    
 			    
 			    response.setContentType("application/json");
@@ -92,37 +83,12 @@ import com.tas.wp500.utils.TCPClient;
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			}else{
-//				System.out.println("Login first");
-//				response.sendRedirect("login.jsp");
-				
-				
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-					
-					
-					
-					System.out.println(">>" +userObj);
-					
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 			
 		}
 
 		
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			// TODO Auto-generated method stub
-		//	doGet(request, response);
 			
 			HttpSession session = request.getSession(false);
 			
@@ -132,7 +98,6 @@ import com.tas.wp500.utils.TCPClient;
 			if(check_username != null){
 			String ntpIntervalValue = null;
 			
-
 			String ntp_server1 = request.getParameter("ntp_server1");
 			String ntp_server2 = request.getParameter("ntp_server2");
 			String ntp_server3 = request.getParameter("ntp_server2");
@@ -141,14 +106,9 @@ import com.tas.wp500.utils.TCPClient;
 
 			try {
 
-				System.out.println("ntp_server1-->: "+ntp_server1);
-				System.out.println("ntp_server2-->: "+ntp_server2);
-				System.out.println("ntp_server3-->: "+ntp_server3);
-				System.out.println("ntp_interval-->:"+ntpIntervalValue);
-				
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
-	//{"operation":"update_lan_setting","lan_type":"eth1","eth1_dhcp":"0","eth1_ipaddr":"192.168.1.50","eth1_subnet":"255.255.255.0"}
+				
 				json.put("operation", "update_lan_setting");
 				json.put("lan_type", "ntp");
 				json.put("user", check_username);
@@ -158,14 +118,14 @@ import com.tas.wp500.utils.TCPClient;
 				json.put("ntp_interval", ntpIntervalValue);
 				json.put("token", check_token);
 				
-				System.out.println("ntp-->"+json);
 				String respStr = client.sendMessage(json.toString());
 
-				System.out.println("response : " + respStr);
-
 				String message = new JSONObject(respStr).getString("msg");
+				String status = new JSONObject(respStr).getString("status");
+				
 				JSONObject jsonObject = new JSONObject();
 			    jsonObject.put("message", message);
+			    jsonObject.put("status", status);
 			    
 			    // Set the content type of the response to application/json
 			    response.setContentType("application/json");
@@ -182,28 +142,7 @@ import com.tas.wp500.utils.TCPClient;
 				e.printStackTrace();
 			}
 			
-			}else{
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-					
-					
-					
-					System.out.println(">>" +userObj);
-					
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 		}
 
 	}
-
-

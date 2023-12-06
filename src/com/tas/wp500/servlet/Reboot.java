@@ -45,8 +45,11 @@ public class Reboot extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
+				String status = new JSONObject(respStr).getString("status");
+				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
+				jsonObject.put("status", status);
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
@@ -62,26 +65,7 @@ public class Reboot extends HttpServlet {
 				e.printStackTrace();
 				logger.error("Error in rebooting system :"+e);
 			}
-		} else {
-			
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-				
-				System.out.println(">>" +userObj);
-				
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : "+e);
-			}
-		}
+		} 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

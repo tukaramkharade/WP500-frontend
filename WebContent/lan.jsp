@@ -202,6 +202,27 @@ button {
 						eth1_dns : eth1_dns
 					},
 					success : function(data) {
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
+						
+						
 						// Close the modal
 				        modal.style.display = 'none';
 							
@@ -260,6 +281,27 @@ button {
 					},
 					success : function(data) {					
 							
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
+						
+						
 						// Close the modal
 				        modal.style.display = 'none';
 						
@@ -314,7 +356,29 @@ button {
 						lan2_dns : lan2_dns,
 						toggle_enable_lan2 : toggle_enable_lan2
 					},
-					success : function(data) {					
+					success : function(data) {
+						
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
+						
+						
 						// Close the modal
 				        modal.style.display = 'none';
 							
@@ -606,8 +670,7 @@ button {
 
 				</table>
 				<div style="margin-top: 1%;">
-					<input type="button" value="Discard"
-						style="background-color: #ef0803;" id="discard1"> 
+					
 						<input type="button"
 						value="Apply changes" id="eth1_button">
 				</div>
@@ -682,8 +745,7 @@ button {
 				</table>
 
 				<div style="margin-top: 1%;">
-					<input type="button" style="background-color: #ef0803;"
-						value="Discard" id="discard2"> <input type="button"
+					 <input type="button"
 						value="Apply changes" id="lan1_button">
 				</div>
 			</div>
@@ -756,8 +818,7 @@ button {
 
 
 				<div style="margin-top: 1%;">
-					<input type="button" style="background-color: #ef0803;"
-						value="Discard" id="discard3"> <input type="button"
+					 <input type="button"
 						value="Apply changes" id="lan2_button">
 				</div>
 

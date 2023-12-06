@@ -211,14 +211,52 @@ function latestActiveThreats(){
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
         success: function (data) {
+        	
+        	if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+        	
             // Iterate through the data and populate the list
             var dataList = $("#dataList");
             var prority = null;
             
-            var json1 = JSON.stringify(data);
-			 var json = JSON.parse(json1);
-			 handleStatus(json.status);
             
+            data.result.forEach(function(item) {
+				var listItem = $("<li></li>");
+                
+                if(item.priority == '1'){	
+                	 priority = 'high';
+                	listItem.html("<span class='time-high'>" +item.timeStamp + "</span>" + "<span class='alert-high'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='red-box'>" + priority + "</span>");
+				}else if(item.priority == '2'){
+					 priority = 'medium';
+                	listItem.html("<span class='time-medium'>" +item.timeStamp + "</span>" + "<span class='alert-medium'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='orange-box'>" + priority + "</span>");
+				}else if(item.priority == '3'){
+					 priority = 'low';
+                	listItem.html("<span class='time-low'>" +item.timeStamp + "</span>"  + "<span class='alert-low'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='yellow-box'>" + priority + "</span>");
+				} 
+            
+                dataList.append(listItem);
+                dataList.append("<hr>"); 
+            });
+           
+            /* 
             $.each(data, function (index, item) {
                  var listItem = $("<li></li>");
                 
@@ -234,8 +272,10 @@ function latestActiveThreats(){
 				} 
             
                 dataList.append(listItem);
-                dataList.append("<hr>");
-            });
+                dataList.append("<hr>"); 
+            });*/
+            
+            
         },
         error: function (error) {
             console.error("Error fetching data: " + error);
@@ -1152,7 +1192,7 @@ if (roleValue === "null") {
 				
 				<div id="custom-modal-session-timeout" class="modal-session-timeout">
 					<div class="modal-content-session-timeout">
-						<p>Your session is timeout. Please login again</p>
+						 <p id="session-msg"></p>
 						<button id="confirm-button-session-timeout">OK</button>
 					</div>
 				 </div>			
