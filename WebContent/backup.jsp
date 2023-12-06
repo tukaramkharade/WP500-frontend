@@ -177,6 +177,25 @@ function validateAndUpload(fileInputId, allowedExtension) {
                         $("#customPopup").show();
                         loadStratonFiles();  // Refresh the Straton file list
                     } else {
+                    	if (data.status == 'error') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
                         // Error uploading file logic
                         $("#popupMessage").text('Error uploading file: ' + data.message);
                         $("#customPopup").show();
@@ -257,7 +276,28 @@ function createBackupFile() {
 		data : {
 			action: 'createBackupFile'
 		},
-		success : function(data) {			
+		success : function(data) {
+			
+			if (data.status == 'fail') {
+				
+				 var modal1 = document.getElementById('custom-modal-session-timeout');
+				  modal1.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+				  confirmButton1.onclick = function () {
+					  
+					// Close the modal
+				        modal1.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };			  
+			} 
+			
 			// Display the custom popup message
  			$("#popupMessage").text(data.message);
   			$("#customPopup").show();			
@@ -278,7 +318,28 @@ function restoreBackupFile() {
 		data : {
 			action: 'restoreBackupFile'
 		},
-		success : function(data) {			
+		success : function(data) {	
+			
+			if (data.status == 'fail') {
+				
+				 var modal1 = document.getElementById('custom-modal-session-timeout');
+				  modal1.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+				  confirmButton1.onclick = function () {
+					  
+					// Close the modal
+				        modal1.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };			  
+			} 
+			
 			// Display the custom popup message
  			$("#popupMessage").text(data.message);
   			$("#customPopup").show();			
@@ -398,7 +459,16 @@ function restoreBackupFile() {
 					<div id="progress-bar"></div>
 				</div>
 			</div>
+			
+			
 		</section>
+		
+		<div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				  <p id="session-msg"></p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
+			  </div>
 	</div>
 
 	<div class="footer">

@@ -58,43 +58,56 @@ public class Dashboard extends HttpServlet {
 
 				JSONObject respJson = new JSONObject(respStr);
 
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 
 				logger.info("Active Threats response : " + respJson.toString());
 
-				JSONArray resultArr = respJson.getJSONArray("data");
-
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
-
-					String timeStamp = jsObj.getString("timeStamp");
-					String alertMessage = jsObj.getString("alertMessage");
-					String threat_id = jsObj.getString("threat_id");
-					String priority = jsObj.getString("priority");
-
-					JSONObject latestThreatsObj = new JSONObject();
-
-					try {
-
-						latestThreatsObj.put("timeStamp", timeStamp);
-						latestThreatsObj.put("alertMessage", alertMessage);
-						latestThreatsObj.put("threat_id", threat_id);
-						latestThreatsObj.put("priority", priority);
-
-						resJsonArray.put(latestThreatsObj);
-
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in putting latest active threats data in json array : " + e);
-					}
+				
+				
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray resultArr = respJson.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", resultArr);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				logger.info("JSON ARRAY :" + resJsonArray.toString());
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				response.setContentType("application/json");
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
+//				for (int i = 0; i < resultArr.length(); i++) {
+//					JSONObject jsObj = resultArr.getJSONObject(i);
+//
+//					String timeStamp = jsObj.getString("timeStamp");
+//					String alertMessage = jsObj.getString("alertMessage");
+//					String threat_id = jsObj.getString("threat_id");
+//					String priority = jsObj.getString("priority");
+//
+//					JSONObject latestThreatsObj = new JSONObject();
+//
+//					try {
+//
+//						latestThreatsObj.put("timeStamp", timeStamp);
+//						latestThreatsObj.put("alertMessage", alertMessage);
+//						latestThreatsObj.put("threat_id", threat_id);
+//						latestThreatsObj.put("priority", priority);
+//
+//						resJsonArray.put(latestThreatsObj);
+//
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//						logger.error("Error in putting latest active threats data in json array : " + e);
+//					}
+//				}
+
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -62,8 +62,11 @@ public class Lan1UpdateServlet extends HttpServlet {
 				System.out.println("response : " + respStr);
 
 				String message = new JSONObject(respStr).getString("msg");
+				String status = new JSONObject(respStr).getString("status");
+				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
+				jsonObject.put("status", status);
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");

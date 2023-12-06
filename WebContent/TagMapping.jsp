@@ -17,7 +17,9 @@
 
 
 <style>
-.modal-delete {
+.modal-delete,
+.modal-edit,
+.modal-session-timeout  {
   display: none;
   position: fixed;
   z-index: 1;
@@ -32,35 +34,9 @@
   margin: 0;
 }
 
-.modal-content-delete {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
-
-.modal-edit {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content-edit {
+.modal-content-delete,
+.modal-content-edit,
+.modal-content-session-timeout {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -81,56 +57,16 @@ button {
   cursor: pointer;
 }
 
-#confirm-button-delete {
+#confirm-button-delete,
+#confirm-button-edit,
+#confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
 }
 
-#cancel-button-delete {
-  background-color: #f44336;
-  color: white;
-}
-
-#confirm-button-edit {
-  background-color: #4caf50;
-  color: white;
-}
-
+#cancel-button-delete,
 #cancel-button-edit {
   background-color: #f44336;
-  color: white;
-}
-
-.modal-session-timeout {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content-session-timeout {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
-  }
-  
-  #confirm-button-session-timeout {
-  background-color: #4caf50;
   color: white;
 }
   
@@ -211,37 +147,42 @@ margin-top: 70px;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
+						
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
+						
+						
 						// Clear existing table rows
 						var tagTable = $('#tagListTable tbody');
 						tagTable.empty();
 						
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
-							  
-							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
-								  
-								// Close the modal
-							        modal.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };
-						}
-
-						// Iterate through the user data and add rows to the table
-						
 						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
-							$.each(data,function(index, tag) {
-								var row = $('<tr>');
-								row.append($('<td>').text(tag.tag_name+ ""));
-								row.append($('<td>').text(tag.pv_address + ""));							
-																
+														
+							data.result.forEach(function(tag) {
+								var tag_name = tag.tag_name; 
+								var pv_address = tag.pv_address; 
+								
+								var row = $("<tr>").append($("<td>").text(tag_name),									
+										$("<td>").text(pv_address));
+								
 								var actions = $('<td>')
 								
 								var editButton = $(
@@ -269,19 +210,19 @@ margin-top: 70px;
 								row.append(actions);
 									
 								tagTable.append(row);
-
+								
 							});
 							
-						}else if(roleValue == 'VIEWER' || roleValue == 'Viewer'){
-							$.each(data,function(index, tag) {
-								var row = $('<tr>');
-								row.append($('<td>').text(tag.tag_name+ ""));
-								row.append($('<td>').text(tag.pv_address + ""));							
-																
+						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+							data.result.forEach(function(tag) {
 								
-									
+								var tag_name = tag.tag_name; 
+								var pv_address = tag.pv_address; 
+								
+								var row = $("<tr>").append($("<td>").text(tag_name),									
+										$("<td>").text(pv_address));
+								
 								tagTable.append(row);
-
 							});
 						}
 										},
@@ -290,9 +231,6 @@ margin-top: 70px;
 					}
 				});
 	}
-
-
-	
 
 	function setTagName(tagId) {
 
@@ -306,8 +244,6 @@ margin-top: 70px;
 	}
 
 	
-
-	 
 	function deleteTag(tag_name) {
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
@@ -324,6 +260,26 @@ margin-top: 70px;
 						action: 'delete'
 					},
 					success : function(data) {
+						
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
 						
 						modal.style.display = 'none';
 						loadTagList();
@@ -353,6 +309,26 @@ margin-top: 70px;
 	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	        },
 	        success: function (data) {
+	        	
+	        	if (data.status == 'fail') {
+					
+					 var modal1 = document.getElementById('custom-modal-session-timeout');
+					  modal1.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+					  confirmButton1.onclick = function () {
+						  
+						// Close the modal
+					        modal1.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };			  
+				} 
 	        	
 	        	if (data && data.length > 0) {
 	                exportToExcel(data);
@@ -405,7 +381,25 @@ margin-top: 70px;
 
 				},
 				success : function(data) {
-					
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };			  
+					} 
 					// Close the modal
 				    modal.style.display = 'none';
 					
@@ -448,6 +442,26 @@ margin-top: 70px;
 				
 			},
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal1 = document.getElementById('custom-modal-session-timeout');
+					  modal1.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+					  confirmButton1.onclick = function () {
+						  
+						// Close the modal
+					        modal1.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };			  
+				} 
 				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -540,6 +554,26 @@ margin-top: 70px;
 	        },
 	        traditional: true, // Use traditional serialization to handle arrays
 	        success: function(data) {
+	        	if (data.status == 'fail') {
+					
+					 var modal1 = document.getElementById('custom-modal-session-timeout');
+					  modal1.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+					  confirmButton1.onclick = function () {
+						  
+						// Close the modal
+					        modal1.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };			  
+				} 
+	        	
 	        	$("#popupMessage").text(data.message);
       			$("#customPopup").show();
       			loadTagList();      			
@@ -693,7 +727,7 @@ margin-top: 70px;
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>

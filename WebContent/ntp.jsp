@@ -10,9 +10,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet"
-	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <style type="text/css">
 .popup {
@@ -382,7 +380,6 @@ margin-top: 68px;
   }
   
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 var roleValue;
 var tokenValue;
@@ -416,9 +413,7 @@ var tokenValue;
 					xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				},
 				success: function(data) {
-					console.log("ntp_service " + data.ntp_service);
-					console.log("system_clock_synchronized " + data.system_clock_synchronized);
-
+					
 					document.getElementById('ntp-service-cell').textContent = data.ntp_service;
 	                document.getElementById('system-clock-cell').textContent = data.system_clock_synchronized;
 
@@ -442,52 +437,7 @@ var tokenValue;
 		}
 
 
-	function getntp() {
-		$.ajax({
-			url : 'ntp',
-			type : 'GET',
-			dataType : 'json',
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-		    },
-			success : function(data) {
-
-				var json1 = JSON.stringify(data);
-
-				var json = JSON.parse(json1);
-				if (json.status == 'fail') {
-					 var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
-					        modal.style.display = 'none';
-					        window.location.href = 'login.jsp';
-					  };
-				}
-			
-				//$('#ntp_client').prop('checked', data.ntp_client);
-				$('#ntp_client').prop('checked', data.ntp_client === '1');
-
-				$('#ntp_interval').val(data.ntp_interval);
-				$('#ntp_server').val(data.ntp_server);
-				//toggleNtpClient();
-				toggleDateTimeInput();
-
-			},
-			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
-			}
-		});
-	}
-
-	// Function to load user data and populate the user list table
-
-	function updatentp() {
+		function updatentp() {
 		
 		var ntp_client = $("#ntp_client").prop("checked") ? "1" : "0";
 		
@@ -500,11 +450,31 @@ var tokenValue;
 			},
 			success : function(data) {
 				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
+				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
       			$("#customPopup").show();
       			
-				getntp();
+				
 			
 				// Clear form fields
 				$("#ntp_client").val("");
@@ -527,13 +497,27 @@ var tokenValue;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
+				alert(data.status);
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 				
-				var json1 = JSON.stringify(data);
-
-				var json = JSON.parse(json1);
-
-				handleStatus(json.status);
-
 				$('#ntp_server1').val(data.ntp_server1);
 				$('#ntp_server2').val(data.ntp_server2);
 				$('#ntp_server3').val(data.ntp_server3);
@@ -562,14 +546,7 @@ var tokenValue;
 			    var ntp_server3 = $('#ntp_server3').val();
 			    var ntp_interval = $('#ntp_interval_1').val();
 			    var isValid=true;
-			    /* if (ntp_server1 === '' || ntp_server2 === '' || ntp_server3 === '' || ntp_interval === '') {
-			       
-			    
-				// Display the custom popup message
-     			$("#popupMessage").text('Please fill in all fields before saving.');
-      			$("#customPopup").show();
-			        return; // Prevent the AJAX request
-			    } */
+			   
 			    
 			    $.ajax({
 			        url: 'ntpDataUpadate',
@@ -581,6 +558,27 @@ var tokenValue;
 			            ntp_interval: ntp_interval
 			        },
 			        success: function (data) {
+			        	
+			        	if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						} 
+			        	
 			        	modal.style.display = 'none';
 
 			            // Clear fields here if needed
@@ -683,21 +681,6 @@ var tokenValue;
 	    document.getElementById('datetime').value = formattedTime;
 
 	  }
-	
-	function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
 
 	function changeButtonColor(isDisabled) {
 	    
@@ -859,7 +842,27 @@ var tokenValue;
 					
 					
 				</form>
+				<div id="custom-modal-session-timeout" class="modal-session-timeout">
+		<div class="modal-content-session-timeout">
+				   <p id="session-msg"></p>
+				  <button id="confirm-button-session-timeout">OK</button>
+		</div>
+	</div>
+	
+	<div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
+	
+	 <div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to edit this NTP?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
 			</div>
+			
 			
 			
 			<h3></h3>
@@ -881,25 +884,7 @@ var tokenValue;
 		</section>
 	</div>
 	
-	<div id="custom-modal-session-timeout" class="modal-session-timeout">
-		<div class="modal-content-session-timeout">
-				  <p1>Your session is timeout. Please login again</p1>
-				  <button id="confirm-button-session-timeout">OK</button>
-		</div>
-	</div>
 	
-	<div id="customPopup" class="popup">
-  				<span class="popup-content" id="popupMessage"></span>
-  				<button id="closePopup">OK</button>
-			  </div>
-	
-	 <div id="custom-modal-edit" class="modal-edit">
-				<div class="modal-content-edit">
-				  <p>Are you sure you want to edit this NTP?</p>
-				  <button id="confirm-button-edit">Yes</button>
-				  <button id="cancel-button-edit">No</button>
-				</div>
-			  </div>
 	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>

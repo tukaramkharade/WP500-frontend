@@ -47,46 +47,30 @@ public class WireguardServlet extends HttpServlet {
 
 				JSONObject result = new JSONObject(respStr);
 
-				JSONArray wireguard_file_data = result.getJSONArray("data");
 				String status = result.getString("status");
+				String message = result.getString("msg");
 
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray wireguard_file_data = result.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("wireguard_file_data", wireguard_file_data);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
+
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
+
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 				
-				jsonObject.put("wireguard_file_data", wireguard_file_data);
-				jsonObject.put("status", status);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -131,9 +115,11 @@ public class WireguardServlet extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 				String message = new JSONObject(respStr).getString("msg");
+				String status = new JSONObject(respStr).getString("status");
 				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
+				jsonObject.put("status", status);
 				
 
 				// Set the content type of the response to application/json
@@ -150,29 +136,7 @@ public class WireguardServlet extends HttpServlet {
 				
 			}
 			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-			
 		}
-		
-		
-	}
-
+			}
 
 }

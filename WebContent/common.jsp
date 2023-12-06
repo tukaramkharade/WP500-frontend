@@ -53,7 +53,7 @@
                   <a href="backup.jsp">Backup and Restore</a>
                 </li> 
                 <li class="nav-item">
-                  <a href="reboot.jsp">Reboot</a>
+                  <a href="reboot.jsp">Reboot and Factory Reset</a>
                 </li>
               
               </ul>
@@ -95,8 +95,8 @@
             </a>
             <div class="dropdown-container">
               <ul>
-				<li class="nav-item" style="color: white; font-size: 16px;">
-                MQTT
+				<li class="nav-item" style="color: white; font-size: 16px;"><b>
+                MQTT</b>
               </li>
                 <li class="nav-item">
                   <a href="mqtt.jsp">MQTT Server</a>
@@ -123,12 +123,12 @@
                
               </li>
               
-                <li class="nav-item" style="color: white; font-size: 16px;">
-                OPC
+                <li class="nav-item" style="color: white; font-size: 16px;"><b>
+                OPC</b>
               </li>
                 
                 <li class="nav-item">
-                <a href="opcuaClient.jsp">OPCUA Client</a>
+                <a href="opcuaClient.jsp">OPCUA Clients</a>
               </li>
               
               
@@ -137,8 +137,17 @@
               </li>
               
                <li class="nav-item">
-                <a href="TagMapping.jsp">Tag Mapping</a>
+                <a href="TagMapping.jsp">Tags</a>
               </li>
+              
+              <li class="nav-item">
+               
+              </li>
+              
+              <li class="nav-item" style="color: white; font-size: 16px;"><b>
+                Certificate</b>
+              </li>
+              
               
                <li class="nav-item">
                 <a href="certificate.jsp">Certificate</a>
@@ -148,8 +157,8 @@
                
               </li>
               
-              <li class="nav-item" style="color: white; font-size: 16px;">
-                Settings
+              <li class="nav-item" style="color: white; font-size: 16px;"><b>
+                Settings</b>
               </li>
               
               <li class="nav-item">
@@ -168,8 +177,8 @@
                
               </li>
               
-              <li class="nav-item" style="color: white; font-size: 16px;">
-                Workbench
+              <li class="nav-item" style="color: white; font-size: 16px;"><b>
+                Workbench</b>
               </li>
               
               <li class="nav-item">
