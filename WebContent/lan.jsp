@@ -108,13 +108,25 @@ button {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				
-				var json1 = JSON.stringify(data);
-				var json = JSON.parse(json1);
-				handleStatus(json.status);
-				//$('#dhcp_dis_1').val(data.eth0_dhcp);
-				
-				
+				if(data.status == 'fail'){
+					var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+				}
+								
 				eth1_dhcp = data.eth1_dhcp;
 				console.log('eth1_dhcp-->:', eth1_dhcp);
 				if(eth1_dhcp == 0){
@@ -131,6 +143,7 @@ button {
 				$('#subnet_mask_dis_1').val(data.lan1_subnet);
 				$('#gateway_dis_1').val(data.lan1_gateway);
 				$('#dns_dis_1').val(data.lan1_dns);	
+				$('#toggle_enable_lan1').val(data.lan1_enable);
 				
 				lan1_dhcp = data.lan1_dhcp;
 				
@@ -138,6 +151,7 @@ button {
 				$('#subnet_mask_dis_2').val(data.lan2_subnet);
 				$('#gateway_dis_2').val(data.lan2_gateway);
 				$('#dns_dis_2').val(data.lan2_dns);
+				$('#toggle_enable_lan2').val(data.lan2_enable);
 				
 				lan2_dhcp = data.lan2_dhcp;
 				$("#toggle_lan0").prop("checked", data.eth1_dhcp === "1");
@@ -759,7 +773,7 @@ button {
 			
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				 <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
