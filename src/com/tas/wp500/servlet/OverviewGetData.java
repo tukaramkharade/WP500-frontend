@@ -39,14 +39,15 @@ public class OverviewGetData extends HttpServlet {
 				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
-
-				String HW_REV = new JSONObject(respStr).getString("HW_REV");
-				String TAS_SERIAL_NO = new JSONObject(respStr).getString("TAS_SERIAL_NO");
-				String FW_REV = new JSONObject(respStr).getString("FW_REV");
-
-				System.out.println("HW_REV : " + HW_REV);
-				System.out.println("TAS_SERIAL_NO : " + TAS_SERIAL_NO);
-				System.out.println("FW_REV : " + FW_REV);
+				JSONObject respJson = new JSONObject(respStr);
+				
+				logger.info("res: "+respJson.toString());
+				
+				
+				
+				String HW_REV = respJson.getString("HW_REV");
+				String TAS_SERIAL_NO = respJson.getString("TAS_SERIAL_NO");
+				String FW_REV = respJson.getString("FW_REV");
 
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("HW_REV", HW_REV);
@@ -67,26 +68,10 @@ public class OverviewGetData extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in getting opcua client list: " + e);
+				logger.error("Error in getting overview data: " + e);
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 	}
 
 }

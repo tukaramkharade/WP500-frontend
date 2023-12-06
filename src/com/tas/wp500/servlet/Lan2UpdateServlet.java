@@ -33,8 +33,6 @@ public class Lan2UpdateServlet extends HttpServlet {
 		
 		if(check_username != null){
 			
-		
-
 		String lan2_ipaddr = request.getParameter("lan2_ipaddr");
 		String lan2_subnet = request.getParameter("lan2_subnet");
 		String lan2_type = request.getParameter("lan2_type");
@@ -45,16 +43,11 @@ public class Lan2UpdateServlet extends HttpServlet {
 
 		try {
 
-			System.out.println("lan2_ipaddr-->: "+lan2_ipaddr);
-			System.out.println("lan2_subnet-->: "+lan2_subnet);
-			System.out.println("lan2_type-->: "+lan2_type);
-			System.out.println("lan2_dhcp-->: "+lan2_dhcp);
-			
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
 			json.put("operation", "update_lan_setting");
-			//json.put("user", check_username);
+			json.put("user", check_username);
 			json.put("lan_type", lan2_type);
 			json.put("lan2_dhcp", lan2_dhcp);
 			json.put("lan2_ipaddr", lan2_ipaddr);
@@ -63,8 +56,6 @@ public class Lan2UpdateServlet extends HttpServlet {
 			json.put("lan2_dns", lan2_dns);
 			json.put("lan2_enable", toggle_enable_lan2);
 			json.put("token", check_token);
-			
-			System.out.println("lan2-->"+json);
 			
 			String respStr = client.sendMessage(json.toString());
 

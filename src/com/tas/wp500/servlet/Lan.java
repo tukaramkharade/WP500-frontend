@@ -43,81 +43,75 @@ public class Lan extends HttpServlet {
 			logger.info("res " + new JSONObject(respStr));
 			JSONObject result = new JSONObject(respStr);
 		
-			
-			JSONObject lan0 = result.getJSONObject("lan0");
-			System.out.println("lan 0 :"+lan0.toString());
-			
-			JSONObject lan1 = result.getJSONObject("LAN1_setting");
-			System.out.println("lan 1 :"+lan1.toString());
-			
-			JSONObject lan2 = result.getJSONObject("LAN2_setting");
-			System.out.println("lan 2 :"+lan2.toString());
-			
-			
-			String lan0_ipaddr = lan0.getString("lan0_ipaddr");
-			System.out.println("eth1_ipaddr : "+lan0_ipaddr);
-			logger.info("eth1_ipaddr : "+lan0_ipaddr);
-			
-			String lan0_subnet = lan0.getString("lan0_subnet");
-			System.out.println("eth1_subnet : "+lan0_subnet);
-			logger.info("eth1_subnet : "+lan0_subnet);
-			
-			String lan0_dhcp = lan0.getString("lan0_dhcp");
-			System.out.println("eth1_dhcp : "+lan0_dhcp);
-			logger.info("eth1_dhcp : "+lan0_dhcp);
-			String lan0_gateway = lan0.getString("lan0_gateway");
-			String lan0_dns = lan0.getString("lan0_dns");
-			
-			String lan1_ipaddr = lan1.getString("lan1_ipaddr");
-			System.out.println("lan1_ipaddr : "+lan1_ipaddr);
-			logger.info("lan1_ipaddr : "+lan1_ipaddr);
-			
-			String lan1_subnet = lan1.getString("lan1_subnet");
-			System.out.println("lan1_subnet : "+lan1_subnet);
-			logger.info("lan1_subnet : "+lan1_subnet);
-			
-			String lan1_dhcp = lan1.getString("lan1_dhcp");
-			System.out.println("lan1_dhcp : "+lan1_dhcp);
-			logger.info("lan1_dhcp : "+lan1_dhcp);
-			
-			String lan1_gateway = lan1.getString("lan1_gateway");
-			String lan1_dns = lan1.getString("lan1_dns");
-			
-			String lan2_ipaddr = lan2.getString("lan2_ipaddr");
-			System.out.println("lan2_ipaddr : "+lan2_ipaddr);
-			logger.info("lan2_ipaddr : "+lan2_ipaddr);
-			
-			String lan2_subnet = lan2.getString("lan2_subnet");
-			System.out.println("lan2_subnet : "+lan2_subnet);
-			logger.info("lan2_subnet : "+lan2_subnet);
-			
-			String lan2_dhcp = lan2.getString("lan2_dhcp");
-			System.out.println("lan2_dhcp : "+lan2_dhcp);
-			logger.info("lan2_dhcp : "+lan2_dhcp);
-			
-			String lan2_gateway = lan2.getString("lan2_gateway");
-			String lan2_dns = lan2.getString("lan2_dns");
-					
+			String status = result.getString("status");
 			JSONObject jsonObject = new JSONObject();
-		    jsonObject.put("eth1_ipaddr", lan0_ipaddr);
-		    jsonObject.put("eth1_subnet", lan0_subnet);
-		    jsonObject.put("eth1_dhcp", lan0_dhcp);
-		    jsonObject.put("eth1_gateway", lan0_gateway);
-		    jsonObject.put("eth1_dns",lan0_dns );
-		    
-		    
-		    jsonObject.put("lan1_ipaddr", lan1_ipaddr); 
-		    jsonObject.put("lan1_subnet", lan1_subnet);
-		    jsonObject.put("lan1_dhcp", lan1_dhcp);
-		    jsonObject.put("lan1_gateway", lan1_gateway);
-		    jsonObject.put("lan1_dns", lan1_dns);
-		    
-		    jsonObject.put("lan2_ipaddr", lan2_ipaddr);
-		    jsonObject.put("lan2_subnet", lan2_subnet);
-		    jsonObject.put("lan2_dhcp", lan2_dhcp);
-		    jsonObject.put("lan2_gateway", lan2_gateway);
-		    jsonObject.put("lan2_dns", lan2_dns);
-		  // System.out.println(jsonObject);
+			
+			if(status.equals("success")){
+				JSONObject lan0 = result.getJSONObject("lan0");
+				System.out.println("lan 0 :"+lan0.toString());
+				
+				JSONObject lan1 = result.getJSONObject("LAN1_setting");
+				System.out.println("lan 1 :"+lan1.toString());
+				
+				JSONObject lan2 = result.getJSONObject("LAN2_setting");
+				System.out.println("lan 2 :"+lan2.toString());
+				
+				String lan0_ipaddr = lan0.getString("lan0_ipaddr");
+				
+				String lan0_subnet = lan0.getString("lan0_subnet");
+				
+				String lan0_dhcp = lan0.getString("lan0_dhcp");
+				
+				String lan0_gateway = lan0.getString("lan0_gateway");
+				String lan0_dns = lan0.getString("lan0_dns");
+				
+				String lan1_ipaddr = lan1.getString("lan1_ipaddr");
+				
+				String lan1_subnet = lan1.getString("lan1_subnet");
+				
+				String lan1_dhcp = lan1.getString("lan1_dhcp");
+				
+				String lan1_gateway = lan1.getString("lan1_gateway");
+				String lan1_dns = lan1.getString("lan1_dns");
+				String lan1_enable = lan1.getString("lan1_enable");
+				
+				String lan2_ipaddr = lan2.getString("lan2_ipaddr");
+				
+				String lan2_subnet = lan2.getString("lan2_subnet");
+				
+				String lan2_dhcp = lan2.getString("lan2_dhcp");
+				
+				String lan2_gateway = lan2.getString("lan2_gateway");
+				String lan2_dns = lan2.getString("lan2_dns");
+				String lan2_enable = lan2.getString("lan2_enable");
+				
+			    jsonObject.put("eth1_ipaddr", lan0_ipaddr);
+			    jsonObject.put("eth1_subnet", lan0_subnet);
+			    jsonObject.put("eth1_dhcp", lan0_dhcp);
+			    jsonObject.put("eth1_gateway", lan0_gateway);
+			    jsonObject.put("eth1_dns",lan0_dns );
+			    
+			    
+			    jsonObject.put("lan1_ipaddr", lan1_ipaddr); 
+			    jsonObject.put("lan1_subnet", lan1_subnet);
+			    jsonObject.put("lan1_dhcp", lan1_dhcp);
+			    jsonObject.put("lan1_gateway", lan1_gateway);
+			    jsonObject.put("lan1_dns", lan1_dns);
+			    jsonObject.put("lan1_enable", lan1_enable);
+			    
+			    jsonObject.put("lan2_ipaddr", lan2_ipaddr);
+			    jsonObject.put("lan2_subnet", lan2_subnet);
+			    jsonObject.put("lan2_dhcp", lan2_dhcp);
+			    jsonObject.put("lan2_gateway", lan2_gateway);
+			    jsonObject.put("lan2_dns", lan2_dns);
+			    jsonObject.put("lan2_enable", lan2_enable);
+			}else if(status.equals("fail")){
+				String message = result.getString("msg");
+				jsonObject.put("status", status);
+				jsonObject.put("message", message);
+			}
+			
+		  
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");
 		    
@@ -130,29 +124,6 @@ public class Lan extends HttpServlet {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		}else{
-//			System.out.println("Login first");
-//			response.sendRedirect("login.jsp");
-			
-			
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-				
-				
-				
-				System.out.println(">>" +userObj);
-				
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		
 	}
@@ -166,10 +137,8 @@ public class Lan extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 		
-		logger.info("In lan dhcp settings !");
-		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
 		
-		logger.info("Ethernet Type: "+eth_type);
+		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
 		
 		try {
 			TCPClient client = new TCPClient();
