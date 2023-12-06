@@ -46,73 +46,29 @@ public class JSONBuilderServlet extends HttpServlet {
 
 				JSONObject respJson = new JSONObject(respStr);
 
-				JSONArray resJsonArray = new JSONArray();
-
 				logger.info("JSON Builder response : " + respJson.toString());
-
-				JSONArray resultArr = respJson.getJSONArray("result");
-
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
-
-					String json_string_name = jsObj.getString("json_string_name");
-					String json_interval = jsObj.getString("json_interval");
-					String broker_type = jsObj.getString("broker_type");
-					String broker_ip_address = jsObj.getString("broker_ip_address");
-					String publish_topic_name = jsObj.getString("publish_topic_name");
-					String publishing_status = jsObj.getString("publishing_status");
-					String store_n_forward = jsObj.getString("store_n_forward");
-					String json_string = jsObj.getString("json_string");
-					
-					int intervalValue = Integer.parseInt(json_interval);
-					String intervalString = IntervalMapper.getIntervalByValue(intervalValue);
-					
-
-					JSONObject jsonBuilderObj = new JSONObject();
-
-					try {
-						jsonBuilderObj.put("json_string_name", json_string_name);				
-					    jsonBuilderObj.put("json_interval", intervalString);
-						jsonBuilderObj.put("broker_type", broker_type);
-						jsonBuilderObj.put("broker_ip_address", broker_ip_address);
-						jsonBuilderObj.put("publish_topic_name", publish_topic_name);
-						jsonBuilderObj.put("publishing_status", publishing_status);
-						jsonBuilderObj.put("store_n_forward", store_n_forward);
-						jsonBuilderObj.put("json_string", json_string);
-
-						resJsonArray.put(jsonBuilderObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting json builder data in json array : "+e);
-					}
+				
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray resultArr = respJson.getJSONArray("result");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", resultArr);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				response.setContentType("application/json");
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-		} else {		
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-				
-				System.out.println(">>" +userObj);
-				
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : "+e);
 			}
 		}
 	}
@@ -138,7 +94,6 @@ public class JSONBuilderServlet extends HttpServlet {
 		JSONParser parser = new JSONParser();
 		org.json.simple.JSONObject json_string_con = null;
 		
-
 		if (check_username != null) {
 			
 			String action = request.getParameter("action");
@@ -157,7 +112,6 @@ public class JSONBuilderServlet extends HttpServlet {
 					 json_string_text = request.getParameter("json_string_text");
 					
 					 intervalValue = IntervalMapper.getIntervalByString(jsonInterval);
-				
 					
 					try {
 						json_string_con = (org.json.simple.JSONObject) parser.parse(json_string_text);
@@ -194,8 +148,11 @@ public class JSONBuilderServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
@@ -263,9 +220,12 @@ public class JSONBuilderServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
+						
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
 
@@ -302,9 +262,12 @@ public class JSONBuilderServlet extends HttpServlet {
 							logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 							String message = new JSONObject(respStr).getString("msg");
+							String status = new JSONObject(respStr).getString("status");
+							
 							JSONObject jsonObject = new JSONObject();
 							jsonObject.put("message", message);
-
+							jsonObject.put("status", status);
+							
 							// Set the content type of the response to application/json
 							response.setContentType("application/json");
 
@@ -322,25 +285,6 @@ public class JSONBuilderServlet extends HttpServlet {
 					break;
 				}
 			}			 
-		} else {
-			
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 }

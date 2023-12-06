@@ -42,72 +42,28 @@ public class BasicConfigurationServlet extends HttpServlet {
 				
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 
-				JSONArray jsonArray = new JSONArray(respJson.getJSONArray("data").toString());
-				logger.info(respJson.getJSONArray("data").toString());
+				logger.info(respJson.toString());
 
-				JSONArray resJsonArray = new JSONArray();
-				
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsObj = jsonArray.getJSONObject(i);
-
-					String lan_type = jsObj.getString("lan_type");					
-					String protocol = jsObj.getString("protocol");				
-					String to_port = jsObj.getString("to_port");
-					String action = jsObj.getString("action");
-					String comment = jsObj.getString("comment");
-					String direction = jsObj.getString("direction");
-					int id = jsObj.getInt("id");
-
-					JSONObject basicConfigObj = new JSONObject();
-
-					try {
-						basicConfigObj.put("lan_type", lan_type);
-						basicConfigObj.put("protocol", protocol);
-						basicConfigObj.put("to_port", to_port);
-						basicConfigObj.put("action", action);
-						basicConfigObj.put("comment", comment);
-						basicConfigObj.put("direction", direction);
-						basicConfigObj.put("id", id);
-
-						resJsonArray.put(basicConfigObj);
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in putting basic configuration data in json array : " + e);
-					}
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray jsonArray = respJson.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result_basic", jsonArray);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				// Set the response content type to JSON
-				response.setContentType("application/json");
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
-
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 				
-				
-				
-			}else {
-
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-
-					System.out.println(">>" + userObj);
-
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error("Error in session timeout : " + e);
-				}
-			}
-			
+			}			
 		}catch(Exception e){
 			e.printStackTrace();
 			logger.error("Error in getting basic configuration list : " + e);
@@ -161,8 +117,11 @@ public class BasicConfigurationServlet extends HttpServlet {
 	            System.out.println("res " + new JSONObject(respStr));
 
 	            String message = new JSONObject(respStr).getString("msg");
+	            String status = new JSONObject(respStr).getString("status");
+	            
 	            JSONObject jsonObject1 = new JSONObject();
 	            jsonObject1.put("message", message);
+	            jsonObject1.put("status", status);
 
 	            // Set the content type of the response to application/json
 	            response.setContentType("application/json");
@@ -176,25 +135,6 @@ public class BasicConfigurationServlet extends HttpServlet {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	    } else {
-	        
-	    	try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-	    }
+	    } 
 	}
 }

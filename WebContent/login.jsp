@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    var correctCaptcha;
-    
+   
          function checkLogin() {
         	    var username = $('#username').val();
         	    var password = $('#password').val();
@@ -243,7 +242,7 @@
     color: black;
     border: none;
     padding: 10px;
-   
+   font-family: Sans-serif;
     border-radius: 5px;
     width: 200px; /* Adjusted width to accommodate the text content */
     margin: 0 auto;
@@ -286,13 +285,13 @@
 </label>
 <!-- <button id="refreshCaptcha"><i class="fas fa-sync-alt" style="font-size: 15px; color: #35449a;"></i></button>
  --> 
-        <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px; margin-top: 10px;"><br>
+        <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px; margin-top: 10px;  font-family: Sans-serif;"><br>
        
         <input font-size: medium" type="submit" value="Login" id="login">
         
         <div id="loginMessage" style="color: red;"></div>
         
-        <div id="banner_text" style="font-size: 10.5px; margin-top: 20px;"></div>
+        <div id="banner_text" style="font-size: 10.5px; margin-top: 20px; text-align: left;"></div>
     </form>
     
 </body>

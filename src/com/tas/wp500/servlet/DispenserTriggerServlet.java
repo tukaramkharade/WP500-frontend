@@ -43,87 +43,33 @@ public class DispenserTriggerServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
-
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 
 				logger.info("Dispenser response : " + respJson.toString());
-
-				JSONArray resultArr = respJson.getJSONArray("result");
-
-				for (int i = 0; i < resultArr.length(); i++) {
-					JSONObject jsObj = resultArr.getJSONObject(i);
-
-					String broker_ip_address = jsObj.getString("broker_ip_address");
-					String station_name = jsObj.getString("station_name");
-					String side = jsObj.getString("side");
-					String total = jsObj.getString("total");
-					String quantity = jsObj.getString("quantity");
-					String tempreture = jsObj.getString("tempreture");
-					String start_pressesure = jsObj.getString("start_pressesure");
-					String end_pressure = jsObj.getString("end_pressure");
-					String trigger_value = jsObj.getString("trigger_value");
-					String serial_number = jsObj.getString("serial_number");
-					String unit_price = jsObj.getString("unit_price");
-					String trigger_tag = jsObj.getString("trigger_tag");
-					String status = jsObj.getString("status");
-					String unit_id = jsObj.getString("unit_id");
-
-					JSONObject disObj = new JSONObject();
-
-					try {
-
-						disObj.put("broker_ip_address", broker_ip_address);
-						disObj.put("station_name", station_name);
-						disObj.put("side", side);
-						disObj.put("total", total);
-						disObj.put("quantity", quantity);
-						disObj.put("tempreture", tempreture);
-						disObj.put("start_pressesure", start_pressesure);
-						disObj.put("end_pressure", end_pressure);
-						disObj.put("trigger_value", trigger_value);
-						disObj.put("serial_number", serial_number);
-						disObj.put("unit_price", unit_price);
-						disObj.put("trigger_tag", trigger_tag);
-						disObj.put("status", status);
-						disObj.put("unit_id", unit_id);
-
-						resJsonArray.put(disObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error putting dispenser trigger in json array : " + e);
-					}
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray resultArr = respJson.getJSONArray("result");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", resultArr);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				response.setContentType("application/json");
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting dispenser trigger data :" + e);
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -146,7 +92,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 		String total = null;
 		String quantity = null;
 		String unit_price = null;
-		String status = null;
+		String status_req = null;
 		String unit_id = null;
 
 		if (check_username != null) {
@@ -169,7 +115,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 					total = request.getParameter("total");
 					quantity = request.getParameter("quantity");
 					unit_price = request.getParameter("unit_price");
-					status = request.getParameter("status");
+					status_req = request.getParameter("status");
 					unit_id = request.getParameter("unit_id");
 
 					try {
@@ -187,7 +133,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("side", side);
 						json.put("trigger_tag", trigger_tag);
 						json.put("trigger_value", trigger_value);
-						json.put("status", status);
+						json.put("status", status_req);
 						json.put("start_pressesure", start_pressure);
 						json.put("end_pressure", end_pressure);
 						json.put("tempreture", temperature);
@@ -202,8 +148,11 @@ public class DispenserTriggerServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to
 						// application/json
@@ -236,7 +185,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 					total = request.getParameter("total");
 					quantity = request.getParameter("quantity");
 					unit_price = request.getParameter("unit_price");
-					status = request.getParameter("status");
+					status_req = request.getParameter("status");
 					unit_id = request.getParameter("unit_id");
 
 					try {
@@ -254,7 +203,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("side", side);
 						json.put("trigger_tag", trigger_tag);
 						json.put("trigger_value", trigger_value);
-						json.put("status", status);
+						json.put("status", status_req);
 						json.put("start_pressesure", start_pressure);
 						json.put("end_pressure", end_pressure);
 						json.put("tempreture", temperature);
@@ -269,8 +218,11 @@ public class DispenserTriggerServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to
 						// application/json
@@ -311,8 +263,11 @@ public class DispenserTriggerServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to
 						// application/json
@@ -332,94 +287,8 @@ public class DispenserTriggerServlet extends HttpServlet {
 					break;
 				}
 			}
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
-
-		String check_username = (String) session.getAttribute("username");
-		String check_token = (String) session.getAttribute("token");
-
-		if (check_username != null) {
-
-			String serial_number = request.getParameter("serial_number");
-			String side = request.getParameter("side");
-
-			try {
-
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
-
-				json.put("operation", "protocol");
-				json.put("protocol_type", "dispenser");
-				json.put("operation_type", "delete_query");
-				json.put("user", check_username);
-				json.put("token", check_token);
-				json.put("serial_number", serial_number);
-				json.put("side", side);
-
-				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in deleting dispenser trigger : " + e);
-			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
-	}
+	
 }

@@ -45,12 +45,19 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 
 			logger.info("res " + new JSONObject(respStr));
 
-			JSONObject result = new JSONObject(respStr);
+			JSONObject respJson = new JSONObject(respStr);
+			String status = respJson.getString("status");
+			String message = respJson.getString("msg");
 
-			JSONArray crt_files_result = result.getJSONArray("result");
-
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("crt_files_result", crt_files_result);
+			JSONObject finalJsonObj = new JSONObject();
+			if(status.equals("success")){
+				JSONArray crt_files_result = respJson.getJSONArray("result");
+				finalJsonObj.put("status", status);
+			    finalJsonObj.put("crt_files_result", crt_files_result);
+			}else if(status.equals("fail")){
+				finalJsonObj.put("status", status);
+			    finalJsonObj.put("message", message);
+			}
 
 			// Set the content type of the response to application/json
 			response.setContentType("application/json");
@@ -59,31 +66,13 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 
 			// Write the JSON object to the response
-			out.print(jsonObject.toString());
+			out.print(finalJsonObj.toString());
 			out.flush();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in getting firmware files : "+e);
 		}
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
 		}
 }
 
@@ -130,24 +119,6 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 				logger.error("Error in getting mqtt status : " + e);
 
 			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 }

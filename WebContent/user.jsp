@@ -306,8 +306,6 @@ margin-top: 18px;
         margin-left: -18px;
         }
         
-        
-        
 </style>
 <script>
 
@@ -340,14 +338,15 @@ function togglePassword() {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						// Clear existing table rows
-						var userTable = $('#userListTable tbody');
-						userTable.empty();
 						
 						if (data.status == 'fail') {
 							
 							 var modal = document.getElementById('custom-modal-session-timeout');
 							  modal.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 							  
 							  // Handle the confirm button click
 							  var confirmButton = document.getElementById('confirm-button-session-timeout');
@@ -359,7 +358,11 @@ function togglePassword() {
 							  };
 								  
 						} 
-
+						
+						// Clear existing table rows
+						var userTable = $('#userListTable tbody');
+						userTable.empty();
+						
 						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 							data.result.forEach(function(user) {
 								if (user.username !== 'wp500') {
@@ -413,10 +416,10 @@ function togglePassword() {
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							data.result.forEach(function(user) {
 								if (user.username !== 'wp500') {
-									var username = user.username; // Accessing the date_time property
-									var first_name = user.first_name; // Accessing the event_name property
-									var last_name = user.last_name; // Accessing the event_type property
-									var role = user.role; // Accessing the msg property
+									var username = user.username; 
+									var first_name = user.first_name; 
+									var last_name = user.last_name; 
+									var role = user.role; 
 
 									var row = $("<tr>").append($("<td>").text(username),
 											$("<td>").text(first_name),
@@ -496,6 +499,11 @@ function togglePassword() {
 					
 					 var modal = document.getElementById('custom-modal-session-timeout');
 					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
 					  
 					  // Handle the confirm button click
 					  var confirmButton = document.getElementById('confirm-button-session-timeout');
@@ -620,6 +628,26 @@ function togglePassword() {
 		      },
 		      success: function (data) {
 		       
+		    	  if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					}
+		    	  
 		        // Close the modal
 		        modal.style.display = 'none';
 
@@ -674,21 +702,26 @@ function togglePassword() {
 					
 						if (data.status == 'fail') {
 							
-							 var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 							  
 							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
 								  
 								// Close the modal
-							        modal.style.display = 'none';
+							        modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };
 								  
 						}
-						// Close the modal
-				        modal.style.display = 'none';
+						
+						
+						modal.style.display = 'none';
 						
 						loadUserList();
 
@@ -742,18 +775,21 @@ function togglePassword() {
 					
 						if (data.status == 'fail') {
 							
-							 var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 							  
 							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
 								  
 								// Close the modal
-							        modal.style.display = 'none';
+							        modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
-							  };
-								  
+							  };	  
 						}
 						
 						// Close the modal
@@ -839,6 +875,25 @@ function togglePassword() {
 			    		
 			    		success : function(data) {
 			    			
+			    			if (data.status == 'fail') {
+								
+								 var modal1 = document.getElementById('custom-modal-session-timeout');
+								  modal1.style.display = 'block';
+								  
+								// Update the session-msg content with the message from the server
+								    var sessionMsg = document.getElementById('session-msg');
+								    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+								  
+								  // Handle the confirm button click
+								  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+								  confirmButton1.onclick = function () {
+									  
+									// Close the modal
+								        modal1.style.display = 'none';
+								        window.location.href = 'login.jsp';
+								  };	  
+							}
+			    			
 			    			// Close the modal
 					        modal.style.display = 'none';
 			    			
@@ -871,7 +926,30 @@ function togglePassword() {
 				dataType : 'json',
 				success : function(data) {
 					
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };	  
+					}
+					
 					getPasswordPolicy();
+					
+					// Display the custom popup message
+	     			$("#popupMessage").text(data.message);
+	      			$("#customPopup").show();
 					
 				},
 				error : function(xhr, status, error) {
@@ -879,22 +957,13 @@ function togglePassword() {
 					console.log("Error resetting password policy: " + error);
 				},
 		  });
+		 
+		 $("#closePopup").click(function () {
+			    $("#customPopup").hide();
+			  });
 	 }
 	 
-	  function handleStatus(status) {
-		    if (status === 'fail') {
-		        var modal = document.getElementById('custom-modal-session-timeout');
-		        modal.style.display = 'block';
-
-		        // Handle the confirm button click
-		        var confirmButton = document.getElementById('confirm-button-session-timeout');
-		        confirmButton.onclick = function () {
-		            // Close the modal
-		            modal.style.display = 'none';
-		            window.location.href = 'login.jsp';
-		        };
-		    }
-		} 
+	  
 	 
 	
 	  function addRow() {
@@ -1245,7 +1314,7 @@ function togglePassword() {
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>

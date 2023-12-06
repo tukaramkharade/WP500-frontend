@@ -48,10 +48,10 @@
                 
                 <!--<li class="nav-item">
                   <a href="#">License</a>
-                </li>
+                </li>-->
                 <li class="nav-item">
-                  <a href="#">Backup</a>
-                </li> -->
+                  <a href="backup.jsp">Backup and Restore</a>
+                </li> 
                 <li class="nav-item">
                   <a href="reboot.jsp">Reboot</a>
                 </li>

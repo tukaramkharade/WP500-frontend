@@ -23,7 +23,7 @@ import com.tas.wp500.utils.TCPClient;
 public class DownloadBackupFile extends HttpServlet {
 	final static Logger logger = Logger.getLogger(DownloadBackupFile.class);
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String zipFilePath = "/data/wp500/backup.zip"; // Path to the existing ZIP file
+        String zipFilePath = "/data/wp500_backups/backup.zip"; // Path to the existing ZIP file
 //        String zipFilePath ="C:\\Users\\sanke\\Desktop\\Firmware-File\\backup.zip";
         File zipFile = new File(zipFilePath);
 
@@ -53,6 +53,8 @@ public class DownloadBackupFile extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		
 		if (check_username != null) {
 
 			String action = request.getParameter("action");
@@ -68,11 +70,17 @@ public class DownloadBackupFile extends HttpServlet {
 
 						json.put("operation", "create_backup_file");
 						json.put("user", check_username);
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
+						
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
 						// Get the response PrintWriter
@@ -95,14 +103,19 @@ public class DownloadBackupFile extends HttpServlet {
 
 						json.put("operation", "restore_backup_file");
 						json.put("user", check_username);
+						json.put("token", check_token);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
+						
 						jsonObject.put("message", message);
-
+						jsonObject.put("status", status);
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
@@ -122,24 +135,6 @@ public class DownloadBackupFile extends HttpServlet {
 					break;						
 				}
 			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 }

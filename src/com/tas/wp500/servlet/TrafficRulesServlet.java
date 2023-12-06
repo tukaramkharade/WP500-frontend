@@ -41,74 +41,32 @@ public class TrafficRulesServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
-
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 
 				logger.info("Traffic Rules response : " + respJson.toString());
 
-				JSONArray ip_tables = respJson.getJSONArray("ip_tables");
-
-				for (int i = 0; i < ip_tables.length(); i++) {
-
-					JSONObject jsObj = ip_tables.getJSONObject(i);
-					String name = jsObj.getString("name");
-					String iface = jsObj.getString("iface");
-					String protocol = jsObj.getString("protocol");
-					String macAddress = jsObj.getString("macAddress");
-					String portNum = jsObj.getString("portNum");
-					String ipAddress = jsObj.getString("ipAddress");
-					String action = jsObj.getString("action");
-					String type = jsObj.getString("type");
-
-					JSONObject firewallObj = new JSONObject();
-					try {
-
-						firewallObj.put("name", name);
-						firewallObj.put("iface", iface);
-						firewallObj.put("protocol", protocol);
-						firewallObj.put("macAddress", macAddress);
-						firewallObj.put("portNum", portNum);
-						firewallObj.put("ipAddress", ipAddress);
-						firewallObj.put("action", action);
-						firewallObj.put("type", type);
-
-						resJsonArray.put(firewallObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting traffic rules data in json array : " + e);
-					}
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray ip_tables = respJson.getJSONArray("ip_tables");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", ip_tables);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
-				// Set the response content type to JSON
-				response.setContentType("application/json");
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
-			} catch (Exception e) {
+				} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting traffic rules data: " + e);
 			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -169,8 +127,11 @@ public class TrafficRulesServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
@@ -221,8 +182,11 @@ public class TrafficRulesServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
@@ -260,8 +224,11 @@ public class TrafficRulesServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
 
 						String message = new JSONObject(respStr).getString("msg");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
@@ -281,25 +248,7 @@ public class TrafficRulesServlet extends HttpServlet {
 					break;		
 				}
 				} 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 
 	
