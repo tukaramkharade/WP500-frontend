@@ -344,8 +344,6 @@ margin-top: 1px;
     border: 1px solid #ccc; /* Light gray border */
   }
   
-  
-  
 </style>
 <script>
 
@@ -365,78 +363,110 @@ var globalData = [];
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						// Clear existing table rows
+						alert(data.status);
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
+							  modal.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 
+							  
+							  // Handle the confirm button click
+							  var confirmButton = document.getElementById('confirm-button-session-timeout');
+							  confirmButton.onclick = function () {
+								  
+								// Close the modal
+							        modal.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						} 
+						
 						var trafficRulesTable = $("#trafficRulesListTable tbody");
 						trafficRulesTable.empty();
 
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						handleStatus(json.status);
-
-						// Iterate through the traffic rules data and add rows to the table
-						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
-							$.each(data,function(index, trafficrules) {
-											var row = $("<tr>");
-											row.append($("<td>").text(trafficrules.name + ""));
-											row.append($("<td>").text(trafficrules.protocol+ ""));
-											row.append($("<td>").text(trafficrules.iface + ""));
-											row.append($("<td>").text(trafficrules.ipAddress+ ""));
-											row.append($("<td>").text(trafficrules.macAddress+ ""));
-											row.append($("<td>").text(trafficrules.portNum + ""));
-											row.append($("<td>").text(trafficrules.action + ""));
-											row.append($("<td>").text(trafficrules.type + ""));
+							 
+ 						data.result.forEach(function(trafficrules) {
+ 							
+ 							var name = trafficrules.name; 
+							var protocol = trafficrules.protocol; 
+							var iface = trafficrules.iface; 
+							var ipAddress = trafficrules.ipAddress; 
+							var macAddress = trafficrules.macAddress; 
+							var portNum = trafficrules.portNum; 
+							var action = trafficrules.action; 
+							var type = trafficrules.type; 
+							
+							var row = $("<tr>").append($("<td>").text(name),
+									$("<td>").text(protocol),
+									$("<td>").text(iface),
+									$("<td>").text(ipAddress),
+									$("<td>").text(macAddress),
+									$("<td>").text(portNum),
+									$("<td>").text(action),
+									$("<td>").text(type));
+							
+							var actions = $("<td>");
 
-											var actions = $("<td>");
+							var editButton = $(
+									'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+									.html('<i class="fas fa-edit"></i>')
+									.click(
+											function() {
+												setName(trafficrules.name);
+												setInterface(trafficrules.iface);
+												setProtocol(trafficrules.protocol);
+												setPortNumber(trafficrules.portNum);
+												setMacAddress(trafficrules.macAddress);
+												setIPAddress(trafficrules.ipAddress);
+												setType(trafficrules.type);
+												setAction(trafficrules.action);
 
-											var editButton = $(
-													'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
-													.html('<i class="fas fa-edit"></i>')
-													.click(
-															function() {
-																setName(trafficrules.name);
-																setInterface(trafficrules.iface);
-																setProtocol(trafficrules.protocol);
-																setPortNumber(trafficrules.portNum);
-																setMacAddress(trafficrules.macAddress);
-																setIPAddress(trafficrules.ipAddress);
-																setType(trafficrules.type);
-																setAction(trafficrules.action);
+											});
 
-															});
+							var deleteButton = $(
+									'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
+									.html('<i class="fas fa-trash-alt"></i>')
+									.click(
+											function() {
+												
+												deleteTrafficRules(trafficrules.name);
+											});
 
-											var deleteButton = $(
-													'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
-													.html('<i class="fas fa-trash-alt"></i>')
-													.click(
-															function() {
-																
-																deleteTrafficRules(trafficrules.name);
-															});
+							
+							actions.append(editButton);
+							actions.append(deleteButton);
 
-											
-											actions.append(editButton);
-											actions.append(deleteButton);
+							row.append(actions);
 
-											row.append(actions);
+							trafficRulesTable.append(row);
 
-											trafficRulesTable.append(row);
-										});
+ 						});
+						
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-							$.each(data,function(index, trafficrules) {
-								var row = $("<tr>");
-								row.append($("<td>").text(trafficrules.name + ""));
-								row.append($("<td>").text(trafficrules.protocol+ ""));
-								row.append($("<td>").text(trafficrules.iface + ""));
-								row.append($("<td>").text(trafficrules.ipAddress+ ""));
-								row.append($("<td>").text(trafficrules.macAddress+ ""));
-								row.append($("<td>").text(trafficrules.portNum + ""));
-								row.append($("<td>").text(trafficrules.action + ""));
-								row.append($("<td>").text(trafficrules.type + ""));
-
+							data.result.forEach(function(trafficrules) {
+								var name = trafficrules.name; 
+								var protocol = trafficrules.protocol; 
+								var iface = trafficrules.iface; 
+								var ipAddress = trafficrules.ipAddress; 
+								var macAddress = trafficrules.macAddress; 
+								var portNum = trafficrules.portNum; 
+								var action = trafficrules.action; 
+								var type = trafficrules.type; 
+								
+								var row = $("<tr>").append($("<td>").text(name),
+										$("<td>").text(protocol),
+										$("<td>").text(iface),
+										$("<td>").text(ipAddress),
+										$("<td>").text(macAddress),
+										$("<td>").text(portNum),
+										$("<td>").text(action),
+										$("<td>").text(type));
+								
 								trafficRulesTable.append(row);
 							});
 						}
@@ -474,6 +504,27 @@ var globalData = [];
 				operation_action: 'add'
 			},
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 			
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -526,6 +577,27 @@ var globalData = [];
 		      },
 		      success: function (data) {
    		        
+		    	  if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					} 
+		    	  
 		    	  // Close the modal
 			        modal.style.display = 'none';
 
@@ -615,6 +687,27 @@ var globalData = [];
 						operation_action: 'update'
 					},
 					success : function(data) {
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						} 
+						
 						// Close the modal
 				        modal.style.display = 'none';
 						
@@ -712,6 +805,27 @@ var globalData = [];
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 
 				$('#input').val(data.input);
 				$('#output').val(data.output);
@@ -752,6 +866,27 @@ var globalData = [];
 
 			},
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -805,6 +940,26 @@ var globalData = [];
 
 					},
 					success : function(data) {
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						} 
 						// Close the modal
 				        modal.style.display = 'none';
 						getGeneralSettings()
@@ -858,6 +1013,26 @@ var globalData = [];
 
 				},
 				success : function(data) {
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					} 
 					modal.style.display = 'none';
 					getGeneralSettings()
 
@@ -937,66 +1112,76 @@ var globalData = [];
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 		    success : function(data) {
-				// Clear existing table rows
+		    	
+		    	if (data.status == "fail") {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 
-				var basicConfigTable = $("#basic-config-table tbody");
-				basicConfigTable.empty();
-
-				var json1 = JSON.stringify(data);
-
-				var json = JSON.parse(json1);
-
-				handleStatus(json.status);
-
-					$.each(data,function(index, basicConfig) {
-									var row = $("<tr>");
-									
-									// Add the data-basic-config-id attribute with the basicConfigId value
-								    row.attr("data-basic-config-id", basicConfig.basicConfigId);
-
-									
-									row.append($("<td>").text(basicConfig.id));
-									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.direction).prop("disabled", true)));
-									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.lan_type).prop("disabled", true)));
-									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.protocol).prop("disabled", true)));
-									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.to_port).prop("disabled", true)));
-									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.comment).prop("disabled", true)));
-									
-									// Assuming you have a table row (row) and a variable basicConfig with a property: action
-									var actionOptions = ["ACCEPT", "REJECT", "DROP", "CONTINUE"];
-									var select = $("<select>");
-
-									// Loop through the options and create <option> elements
-									for (var i = 0; i < actionOptions.length; i++) {
-									    var option = $("<option>").text(actionOptions[i]);
-									    select.append(option);
-									}
-
-									// Set the selected option based on the value of basicConfig.action
-									select.val(basicConfig.action);
-
-									// Create the <td> element and append the <select> element
-									var td = $("<td>").append(select);
-									
-									 select.on("change", function() {
-									    globalAction = $(this).val();
-									    globalId = basicConfig.id; // Get the associated id from basicConfig
-									  //  alert("Selected value: " + globalAction + " for id: " + globalId);
-									}); 
-									row.append(td);
-
-									basicConfigTable.append(row);
-									
-									
-								});
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 				
-			},
+				
+					var basicConfigTable = $("#basic-config-table tbody");
+					basicConfigTable.empty();
+				
+					
+	 								data.result_basic.forEach(function(basicConfig) {
+		 
+	 									 var row = $("<tr>");
+	 									row.attr("data-basic-config-id", basicConfig.basicConfigId);
+	 									row.append($("<td>").text(basicConfig.id));
+										row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.direction).prop("disabled", true)));
+										row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.lan_type).prop("disabled", true)));
+										row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.protocol).prop("disabled", true)));
+										row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.to_port).prop("disabled", true)));
+										row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.comment).prop("disabled", true)));
+										
+										// Assuming you have a table row (row) and a variable basicConfig with a property: action
+										var actionOptions = ["ACCEPT", "REJECT", "DROP", "CONTINUE"];
+										var select = $("<select>");
+
+										// Loop through the options and create <option> elements
+										for (var i = 0; i < actionOptions.length; i++) {
+										    var option = $("<option>").text(actionOptions[i]);
+										    select.append(option);
+										}
+
+										// Set the selected option based on the value of basicConfig.action
+										select.val(basicConfig.action);
+
+										// Create the <td> element and append the <select> element
+										var td = $("<td>").append(select);
+										
+										 select.on("change", function() {
+										    globalAction = $(this).val();
+										    globalId = basicConfig.id; // Get the associated id from basicConfig
+										  //  alert("Selected value: " + globalAction + " for id: " + globalId);
+										}); 
+										row.append(td);
+
+										basicConfigTable.append(row); 
+										
+	 								});
+			    
+						    },
 			error : function(xhr, status, error) {
 				console.log("Error loading basic configuration data: "+ error);
 			},
-		    
-		    
-		});
+		 		});
 		
 	}
 	
@@ -1055,21 +1240,6 @@ var globalData = [];
         } 
       }
 	
-	function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
-	
 	function openTab(tabId, button) {
         var tabs = document.getElementsByClassName("tab");
         for (var i = 0; i < tabs.length; i++) {
@@ -1126,6 +1296,28 @@ var globalData = [];
 	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	        },
 	        success: function(response) {
+	        	
+	        	if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
+	        	
 	        	// Close the modal
 			    modal.style.display = 'none';
 	           
@@ -1523,6 +1715,13 @@ var globalData = [];
 				  <button id="cancel-button-edit-basic-conf">No</button>
 				</div>
 			  </div>
+			  
+			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div class="modal-content-session-timeout">
+				   <p id="session-msg"></p>
+				  <button id="confirm-button-session-timeout">OK</button>
+				</div>
+		 </div>
     </div>
 
 
@@ -1612,7 +1811,7 @@ var globalData = [];
 		 
 		 <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				   <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 		 </div>

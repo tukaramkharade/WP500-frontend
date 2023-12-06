@@ -408,7 +408,7 @@ var roleValue1;
 	}
 	
 	
-	if (roleValue1 === "") {
+	/* if (roleValue1 === "") {
         // If the role is blank, show the session timeout modal
         var sessionTimeoutModal = document.getElementById('custom-modal-session-timeout');
         sessionTimeoutModal.style.display = 'block';
@@ -420,8 +420,8 @@ var roleValue1;
             window.location.href = 'login.jsp';
         };
     } 
+	 */
 	
-	else{
 				startCountdown();
 				getProcessData1();
 				getProjectName();
@@ -468,7 +468,7 @@ var roleValue1;
 								modal.style.display = 'none';
 							};
 						});
-	}
+	
 			});
 	
 	document.addEventListener("DOMContentLoaded", function() {
@@ -569,12 +569,12 @@ var roleValue1;
 				</div>
 	 </div>
 	 
-	 <div id="custom-modal-session-timeout" class="modal-session-timeout">
+	 <!-- <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
-			  </div>
+			  </div> -->
 			  
 			  <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>

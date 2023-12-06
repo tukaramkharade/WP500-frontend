@@ -41,12 +41,15 @@ public class ResetPasswordPolicyServlet extends HttpServlet {
 				
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr).getString("message"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("message");
+				String status = new JSONObject(respStr).getString("status");
+				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
-
+				jsonObject.put("status", status);
+				
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
 

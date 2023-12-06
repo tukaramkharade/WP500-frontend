@@ -47,13 +47,19 @@ public class MQTTServlet extends HttpServlet {
 
 				JSONObject respJson = new JSONObject(respStr);
 				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 				
 				logger.info("MQTT response : " + respJson.toString());
-				JSONArray resultArr = respJson.getJSONArray("result");
 				
 				JSONObject finalJsonObj = new JSONObject();
-			    finalJsonObj.put("status", status);
-			    finalJsonObj.put("result", resultArr);
+				if(status.equals("success")){
+					JSONArray resultArr = respJson.getJSONArray("result");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", resultArr);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");

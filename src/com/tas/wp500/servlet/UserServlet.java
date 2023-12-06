@@ -251,14 +251,24 @@ public class UserServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 				respJson = new JSONObject(respStr);
 
+				logger.info(respJson.toString());
 				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 				
-				JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
 				
-				 JSONObject finalJsonObj = new JSONObject();
-				    finalJsonObj.put("status", status);
+				JSONObject finalJsonObj = new JSONObject();
+				
+				if(status.equals("success")){
+					JSONArray jsonArray = new JSONArray(respJson.getJSONArray("result").toString());
+					
+					finalJsonObj.put("status", status);
 				    finalJsonObj.put("result", jsonArray);
-
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
+				
+				
 				    // Set the response content type to JSON
 				    response.setContentType("application/json");
 

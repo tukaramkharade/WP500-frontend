@@ -11,8 +11,8 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style type="text/css">
@@ -176,8 +176,6 @@ function getActiveThreats() {
 						row.append($('<td>').text(activeThreats.dest_ip + ""));
 						row.append($('<td>').text(activeThreats.dest_port + ""));
 						row.append($('<td>').text(activeThreats.protocol_type + ""));
-						row.append($('<td>').text(activeThreats.ack_at + ""));
-						row.append($('<td>').text(activeThreats.ack_by + ""));
 						
 						var actions = $('<td>')
 						var ackButton = $(
@@ -217,10 +215,6 @@ function getActiveThreats() {
 						row.append($('<td>').text(activeThreats.dest_ip + ""));
 						row.append($('<td>').text(activeThreats.dest_port + ""));
 						row.append($('<td>').text(activeThreats.protocol_type + ""));
-						row.append($('<td>').text(activeThreats.ack_at + ""));
-						row.append($('<td>').text(activeThreats.ack_by + ""));
-						
-						
 											
 						activeThreatsTable.append(row);
 			 });
@@ -556,8 +550,6 @@ roleValue = '<%=roleValue%>';
 							<th>Dest IP</th>
 							<th>Dest port</th>
 							<th>Protocol type</th>
-							<th>Ack at</th>
-							<th>Ack by</th>
 							<th id="acknowledge">Acknowledge</th>
 							
 						</tr>

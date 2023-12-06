@@ -162,17 +162,16 @@ var tokenValue;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						// Clear existing table rows
-						var jsonBuilderTable = $('#jsonBuilderListTable tbody');
-						jsonBuilderTable.empty();
-
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
+						
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
 							  modal.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
 							  
 							  // Handle the confirm button click
 							  var confirmButton = document.getElementById('confirm-button-session-timeout');
@@ -182,70 +181,89 @@ var tokenValue;
 							        modal.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };
-						}
+								  
+						} 
+						
+						// Clear existing table rows
+						var jsonBuilderTable = $('#jsonBuilderListTable tbody');
+						jsonBuilderTable.empty();
 
 						// Iterate through the user data and add rows to the table
 					
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
 							
-								$.each(data,function(index, jsonBuilder) {
-									
-										var row = $('<tr>');
-										row.append($('<td>').text(jsonBuilder.json_string_name));
-										row.append($('<td>').text(jsonBuilder.json_interval));
-										row.append($('<td>').text(jsonBuilder.broker_type));
-										row.append($('<td>').text(jsonBuilder.broker_ip_address));
-										row.append($('<td>').text(jsonBuilder.publish_topic_name));
-										row.append($('<td>').text(jsonBuilder.publishing_status));
-										row.append($('<td>').text(jsonBuilder.store_n_forward));
-										//row.append($('<td>').text(jsonBuilder.json_string));
+						data.result.forEach(function(jsonBuilder) {
+ 						var json_string_name = jsonBuilder.json_string_name; 
+						var json_interval = jsonBuilder.json_interval; 
+						var broker_type = jsonBuilder.broker_type; 
+						var broker_ip_address = jsonBuilder.broker_ip_address; 
+						var publish_topic_name = jsonBuilder.publish_topic_name; 
+						var publishing_status = jsonBuilder.publishing_status; 
+						var store_n_forward = jsonBuilder.store_n_forward; 
+						
+						var row = $("<tr>").append($("<td>").text(json_string_name),
+								$("<td>").text(json_interval),
+								$("<td>").text(broker_type),
+								$("<td>").text(broker_ip_address),
+								$("<td>").text(publish_topic_name),
+								$("<td>").text(publishing_status),
+								$("<td>").text(store_n_forward));
+						
+						var actions = $('<td>');
+						var editButton = $(
+								'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit"style="color: #35449a;">')
+								.html('<i class="fas fa-edit"></i>')
+								.click(
+										function() {
+											setJsonBuilder(jsonBuilder.json_string_name);
+											setJSONInterval(jsonBuilder.json_interval);
+											setBrokerType(jsonBuilder.broker_type);
+											setBrokerIPAddress(jsonBuilder.broker_ip_address);
+											setPublishTopic(jsonBuilder.publish_topic_name);
+											setPublishingStatus(jsonBuilder.publishing_status);
+											setStoreAndForward(jsonBuilder.store_n_forward);
+											setJSONString(jsonBuilder.json_string);
+										});
 
-										 var actions = $('<td>');
-										var editButton = $(
-												'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit"style="color: #35449a;">')
-												.html('<i class="fas fa-edit"></i>')
-												.click(
-														function() {
-															setJsonBuilder(jsonBuilder.json_string_name);
-															setJSONInterval(jsonBuilder.json_interval);
-															setBrokerType(jsonBuilder.broker_type);
-															setBrokerIPAddress(jsonBuilder.broker_ip_address);
-															setPublishTopic(jsonBuilder.publish_topic_name);
-															setPublishingStatus(jsonBuilder.publishing_status);
-															setStoreAndForward(jsonBuilder.store_n_forward);
-															setJSONString(jsonBuilder.json_string);
-														});
+						var deleteButton = $(
+								'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red;">')
+								.html('<i class="fas fa-trash-alt"></i>')
+								.click(
+										function() {
+											deleteJsonBuilder(jsonBuilder.json_string_name);
+										}); 
 
-										var deleteButton = $(
-												'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete"style="color: red;">')
-												.html('<i class="fas fa-trash-alt"></i>')
-												.click(
-														function() {
-															deleteJsonBuilder(jsonBuilder.json_string_name);
-														}); 
+						 actions.append(editButton);
+						actions.append(deleteButton);
 
-										 actions.append(editButton);
-										actions.append(deleteButton);
+						row.append(actions); 
 
-										row.append(actions); 
-
-										jsonBuilderTable.append(row);
-								});
+						jsonBuilderTable.append(row);
+ 						
+ 					});
+ 
+ 
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							
-							$.each(data,function(index, jsonBuilder) {
-								
-								var row = $('<tr>');
-								row.append($('<td>').text(jsonBuilder.json_string_name));
-								row.append($('<td>').text(jsonBuilder.json_interval));
-								row.append($('<td>').text(jsonBuilder.broker_type));
-								row.append($('<td>').text(jsonBuilder.broker_ip_address));
-								row.append($('<td>').text(jsonBuilder.publish_topic_name));
-								row.append($('<td>').text(jsonBuilder.publishing_status));
-								row.append($('<td>').text(jsonBuilder.store_n_forward));
-								//row.append($('<td>').text(jsonBuilder.json_string));
-
-								jsonBuilderTable.append(row);
+						data.result.forEach(function(jsonBuilder) {
+							var json_string_name = jsonBuilder.json_string_name; 
+							var json_interval = jsonBuilder.json_interval; 
+							var broker_type = jsonBuilder.broker_type; 
+							var broker_ip_address = jsonBuilder.broker_ip_address; 
+							var publish_topic_name = jsonBuilder.publish_topic_name; 
+							var publishing_status = jsonBuilder.publishing_status; 
+							var store_n_forward = jsonBuilder.store_n_forward; 
+							
+							var row = $("<tr>").append($("<td>").text(json_string_name),
+									$("<td>").text(json_interval),
+									$("<td>").text(broker_type),
+									$("<td>").text(broker_ip_address),
+									$("<td>").text(publish_topic_name),
+									$("<td>").text(publishing_status),
+									$("<td>").text(store_n_forward));
+							
+							jsonBuilderTable.append(row);
+							
 						});
 						}	
 						// Initialize tooltips using Bootstrap
@@ -319,6 +337,26 @@ var tokenValue;
 					action: 'delete'
 				},
 				success : function(data) {
+					
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };			  
+					} 
 					 // Close the modal
 			        modal.style.display = 'none';
 
@@ -376,6 +414,26 @@ var tokenValue;
 							action: 'update'
 						},
 						success : function(data) {
+							
+							if (data.status == 'fail') {
+								
+								 var modal1 = document.getElementById('custom-modal-session-timeout');
+								  modal1.style.display = 'block';
+								  
+								// Update the session-msg content with the message from the server
+								    var sessionMsg = document.getElementById('session-msg');
+								    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+								  
+								  // Handle the confirm button click
+								  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+								  confirmButton1.onclick = function () {
+									  
+									// Close the modal
+								        modal1.style.display = 'none';
+								        window.location.href = 'login.jsp';
+								  };			  
+							} 
 							// Close the modal
 					        modal.style.display = 'none';
 							
@@ -442,6 +500,26 @@ var tokenValue;
 						action: 'add'
 					},
 					success : function(data) {
+						
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
 						
 						
 						// Display the custom popup message
@@ -923,7 +1001,7 @@ var tokenValue;
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				   <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>

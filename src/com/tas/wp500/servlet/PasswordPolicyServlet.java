@@ -80,8 +80,6 @@ public class PasswordPolicyServlet extends HttpServlet {
 					// Get the response PrintWriter
 					PrintWriter out = response.getWriter();
 
-					System.out.println("json obj : "+jsonObject.toString());
-					// Write the JSON object to the response
 					// Trim the JSON data before sending
 					out.print(jsonObject.toString().trim());
 
@@ -93,25 +91,7 @@ public class PasswordPolicyServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 
 	}
 
@@ -179,8 +159,11 @@ public class PasswordPolicyServlet extends HttpServlet {
 						logger.info("res " + new JSONObject(respStr).getString("message"));
 
 						String message = new JSONObject(respStr).getString("message");
+						String status = new JSONObject(respStr).getString("status");
+						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to
 						// application/json
@@ -200,25 +183,7 @@ public class PasswordPolicyServlet extends HttpServlet {
 				}
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 
 }

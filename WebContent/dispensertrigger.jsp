@@ -365,18 +365,15 @@ var tokenValue;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						// Clear existing table rows
 						
-						var dispenserTriggerTable = $('#dispenserTriggerListTable tbody');
-						dispenserTriggerTable.empty();
-						
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
 							  modal.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 							  
 							  // Handle the confirm button click
 							  var confirmButton = document.getElementById('confirm-button-session-timeout');
@@ -386,21 +383,35 @@ var tokenValue;
 							        modal.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };
-						}
-
+								  
+						} 
+						// Clear existing table rows
+						
+						var dispenserTriggerTable = $('#dispenserTriggerListTable tbody');
+						dispenserTriggerTable.empty();
+						
 						// Iterate through the user data and add rows to the table
 					if(roleValue == 'Admin' || roleValue == 'ADMIN'){
-						$.each(data,function(index, dispenserTrigger) {
-							var row = $('<tr>');
-							row.append($('<td>').text(dispenserTrigger.station_name));
-							row.append($('<td>').text(dispenserTrigger.serial_number));
-							row.append($('<td>').text(dispenserTrigger.side));
-							row.append($('<td>').text(dispenserTrigger.trigger_tag));
-							row.append($('<td>').text(dispenserTrigger.trigger_value));
-							row.append($('<td>').text(dispenserTrigger.broker_ip_address));
-							row.append($('<td>').text(dispenserTrigger.status));
-							row.append($('<td>').text(dispenserTrigger.unit_id));
-
+ 							data.result.forEach(function(dispenserTrigger) {
+							
+							var station_name = dispenserTrigger.station_name; 
+							var serial_number = dispenserTrigger.serial_number; 
+							var side = dispenserTrigger.side; 
+							var trigger_tag = dispenserTrigger.trigger_tag; 
+							var trigger_value = dispenserTrigger.trigger_value; 
+							var broker_ip_address = dispenserTrigger.broker_ip_address; 
+							var status = dispenserTrigger.status; 
+							var unit_id = dispenserTrigger.unit_id;
+							
+							var row = $("<tr>").append($("<td>").text(station_name),
+									$("<td>").text(serial_number),
+									$("<td>").text(side),
+									$("<td>").text(trigger_tag),
+									$("<td>").text(trigger_value),
+									$("<td>").text(broker_ip_address),
+									$("<td>").text(status),
+									$("<td>").text(unit_id));
+							
 							var actions = $('<td>');
 							var editButton = $(
 									'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit"style="color: #35449a;">')
@@ -441,21 +452,28 @@ var tokenValue;
 							dispenserTriggerTable.append(row);
 
 						});
+						
 					}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-						$.each(data,function(index, dispenserTrigger) {
-							var row = $('<tr>');
-							row.append($('<td>').text(dispenserTrigger.station_name));
-							row.append($('<td>').text(dispenserTrigger.serial_number));
-							row.append($('<td>').text(dispenserTrigger.side));
-							row.append($('<td>').text(dispenserTrigger.trigger_tag));
-							row.append($('<td>').text(dispenserTrigger.trigger_value));
-							row.append($('<td>').text(dispenserTrigger.broker_ip_address));
-							row.append($('<td>').text(dispenserTrigger.status));
-							row.append($('<td>').text(dispenserTrigger.unit_id));
-
-							dispenserTriggerTable.append(row);
-
-						});
+						
+						var station_name = dispenserTrigger.station_name; 
+						var serial_number = dispenserTrigger.serial_number; 
+						var side = dispenserTrigger.side; 
+						var trigger_tag = dispenserTrigger.trigger_tag; 
+						var trigger_value = dispenserTrigger.trigger_value; 
+						var broker_ip_address = dispenserTrigger.broker_ip_address; 
+						var status = dispenserTrigger.status; 
+						var unit_id = dispenserTrigger.unit_id;
+						
+						var row = $("<tr>").append($("<td>").text(station_name),
+								$("<td>").text(serial_number),
+								$("<td>").text(side),
+								$("<td>").text(trigger_tag),
+								$("<td>").text(trigger_value),
+								$("<td>").text(broker_ip_address),
+								$("<td>").text(status),
+								$("<td>").text(unit_id));
+						
+						dispenserTriggerTable.append(row);
 					}
 					// Initialize tooltips using Bootstrap
 		            $('[data-toggle="tooltip"]').tooltip();
@@ -589,6 +607,28 @@ var tokenValue;
 					action: 'update'
 				},
 				success : function(data) {
+					
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					} 
+					
 					// Close the modal
 			        modal.style.display = 'none';
 					
@@ -668,6 +708,26 @@ var tokenValue;
 				action: 'add'
 			},
 			success : function(data) {
+				if (data.status == 'fail') {
+					
+					 var modal1 = document.getElementById('custom-modal-session-timeout');
+					  modal1.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+					  confirmButton1.onclick = function () {
+						  
+						// Close the modal
+					        modal1.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -723,6 +783,27 @@ var tokenValue;
 						action: 'delete'
 					},
 					success : function(data) {
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						} 
+						
 						 // Close the modal
 				        modal.style.display = 'none';
 
@@ -1207,7 +1288,7 @@ var tokenValue;
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>

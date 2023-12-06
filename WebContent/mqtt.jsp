@@ -257,6 +257,8 @@ margin-top: 70px;
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
+				
+				
 				if (data.crt_files_result
 						&& Array.isArray(data.crt_files_result)) {
 
@@ -288,6 +290,28 @@ margin-top: 70px;
 			type : "GET",
 			dataType : "json",
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
+				
 				if (data.crt_files_result
 						&& Array.isArray(data.crt_files_result)) {
 
@@ -323,18 +347,16 @@ margin-top: 70px;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						// Clear existing table rows
-						var mqttTable = $('#mqttListTable tbody');
-						mqttTable.empty();
 						
-						var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
 						if (data.status == 'fail') {
 							
 							 var modal = document.getElementById('custom-modal-session-timeout');
 							  modal.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
 							  
 							  // Handle the confirm button click
 							  var confirmButton = document.getElementById('confirm-button-session-timeout');
@@ -347,64 +369,12 @@ margin-top: 70px;
 								  
 						} 
 						
+						// Clear existing table rows
+						var mqttTable = $('#mqttListTable tbody');
+						mqttTable.empty();
+						
 						if(roleValue == 'Admin' || roleValue == 'ADMIN'){
-/* 							$.each(data,function(index, mqtt) {
-								var row = $('<tr>');
-								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
-								row.append($('<td>').text(mqtt.port_number + ""));							
-								row.append($('<td>').text(mqtt.publish_topic + ""));								
-								row.append($('<td>').text(mqtt.prefix + ""));
-								row.append($('<td>').text(mqtt.file_type + ""));
-								row.append($('<td>').text(mqtt.file_name + ""));
-								row.append($('<td>').text(mqtt.enable + ""));
-								
-								var actions = $('<td>')
-								
-								var editButton = $(
-										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
-										.html('<i class="fas fa-edit"></i>')
-										.click(
-												function() {
-													setMqtt(mqtt.prefix);
-													setBrokerIPAddress(mqtt.broker_ip_address);
-													setPortNumber(mqtt.port_number);
-													setUsername(mqtt.username);
-													setPassword(mqtt.password);
-													setPublishedTopic(mqtt.publish_topic);
-													setSubscribedTopic(mqtt.subscribe_topic);
-													setFileType(mqtt.file_type);
-													setFileName(mqtt.file_name);
-													setEnable(mqtt.enable);
-
-												});
-								var deleteButton = $(
-										'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
-										.html('<i class="fas fa-trash-alt"></i>')
-										.click(
-												function() {
-												
-												deleteMqtt(mqtt.prefix);
-													
-												});
-								var getStatusButton = $(
-										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
-										.html('<i class="fas fa-info-circle"></i>')
-										.click(
-												function() {
-													getMqttStatus(mqtt.broker_ip_address);
-												});
-
-								actions.append(editButton);
-								actions.append(deleteButton);
-								actions.append(getStatusButton);
-
-								row.append(actions);
-									
-								mqttTable.append(row);
-
-							}); */
-							
-							data.result.forEach(function(mqtt) {
+ 								data.result.forEach(function(mqtt) {
 								
 								var broker_ip_address = mqtt.broker_ip_address; 
 								var port_number = mqtt.port_number; 
@@ -419,11 +389,11 @@ margin-top: 70px;
 										$("<td>").text(port_number),
 										$("<td>").text(publish_topic),
 										$("<td>").text(prefix),
-								$("<td>").text(file_type),
-								$("<td>").text(file_name),
-								$("<td>").text(enable));
+										$("<td>").text(file_type),
+										$("<td>").text(file_name),
+										$("<td>").text(enable));
 								
-								var actions = $('<td>')
+								var actions = $('<td>');
 								
 								var editButton = $(
 										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
@@ -467,41 +437,44 @@ margin-top: 70px;
 									
 								mqttTable.append(row);
 								
-								
-								
 							});
 							
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-							$.each(data,function(index, mqtt) {
-								var row = $('<tr>');
-								row.append($('<td>').text(mqtt.broker_ip_address+ ""));
-								row.append($('<td>').text(mqtt.port_number + ""));							
-								row.append($('<td>').text(mqtt.publish_topic + ""));								
-								row.append($('<td>').text(mqtt.prefix + ""));
-								row.append($('<td>').text(mqtt.file_type + ""));
-								row.append($('<td>').text(mqtt.file_name + ""));
-								row.append($('<td>').text(mqtt.enable + ""));
+							data.result.forEach(function(mqtt) {
+								var broker_ip_address = mqtt.broker_ip_address; 
+								var port_number = mqtt.port_number; 
+								var publish_topic = mqtt.publish_topic; 
+								var prefix = mqtt.prefix; 
+								var file_type = mqtt.file_type; 
+								var file_name = mqtt.file_name; 
+								var enable = mqtt.enable; 
 								
-								var actions = $('<td>')
+								var row = $("<tr>").append($("<td>").text(broker_ip_address),
+										$("<td>").text(port_number),
+										$("<td>").text(publish_topic),
+										$("<td>").text(prefix),
+										$("<td>").text(file_type),
+										$("<td>").text(file_name),
+										$("<td>").text(enable));
 								
+								var actions = $('<td>');
 								
 								var getStatusButton = $(
-										'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
-										.html('<i class="fas fa-info-circle"></i>')
-										.click(
-												function() {
-													getMqttStatus(mqtt.broker_ip_address);
-												});
-
-															actions.append(getStatusButton);
+								'<button data-toggle="tooltip" class="statusBtn" data-placement="top" title="Get Status" style="color: #35449a;">')
+								.html('<i class="fas fa-info-circle"></i>')
+								.click(
+										function() {
+											getMqttStatus(mqtt.broker_ip_address);
+										});
+								
+								actions.append(getStatusButton);
 
 								row.append(actions);
 									
 								mqttTable.append(row);
-
 							});
 						}
-										},
+					},
 					error : function(xhr, status, error) {
 						console.log('Error loading mqtt data: ' + error);
 					}
@@ -623,6 +596,26 @@ margin-top: 70px;
 					},
 					success : function(data) {
 						
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
+						
 						modal.style.display = 'none';
 						loadMqttList();
 					},
@@ -680,6 +673,27 @@ margin-top: 70px;
 
 				},
 				success : function(data) {
+					
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					} 
 					
 					// Close the modal
 				    modal.style.display = 'none';
@@ -772,6 +786,26 @@ margin-top: 70px;
 				
 			},
 			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 				
 				// Display the custom popup message
      			$("#popupMessage").text(data.message);
@@ -1289,7 +1323,7 @@ margin-top: 70px;
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>
