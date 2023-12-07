@@ -57,26 +57,7 @@ public class Logs extends HttpServlet {
 				e.printStackTrace();
 				logger.error("Error in getting log file list : " + e);
 			}
-		} else {
-
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -107,8 +88,15 @@ public class Logs extends HttpServlet {
 
 				JSONObject result = new JSONObject(respStr);
 				JSONArray log_file_result = result.getJSONArray("result");
+				String status = result.getString("status");
+				String message = result.getString("msg");
+				
+				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("log_file_data", log_file_result);
+				jsonObject.put("status", status);
+				jsonObject.put("message", message);
+				
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
 
@@ -122,24 +110,6 @@ public class Logs extends HttpServlet {
 				e.printStackTrace();
 				logger.error("Error in getting log file data : " + e);
 			}
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
-		}
+		} 
 	}
 }
