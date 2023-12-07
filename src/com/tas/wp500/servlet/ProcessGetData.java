@@ -51,22 +51,32 @@ public class ProcessGetData extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				logger.info("res " + new JSONObject(respStr));				
+				String status = new JSONObject(respStr).getString("status");
+				System.out.println("status: "+status);
+				String message = new JSONObject(respStr).getString("msg");
 				
 				JSONObject jsonObject = new JSONObject();
-				
-				if ( processType.equals("process_list")) {
-					JSONObject white_list_process = new JSONObject(respStr);
-					JSONObject black_list_process = new JSONObject(respStr);					
-					
-					JSONArray white_list_process1 = white_list_process.getJSONArray("white_list_process");
-					JSONArray black_list_process1 = black_list_process.getJSONArray("black_list_process");					
-					jsonObject.put("white_list_process", white_list_process1);
-					jsonObject.put("black_list_process", black_list_process1);
-				}else if ( processType.equals("process_count")) {
-					JSONObject black_list_process = new JSONObject(respStr);
-					String black_list_process_count = black_list_process.getString("black_list_process");					
-					jsonObject.put("black_list_process_count", black_list_process_count);
+				if(status.equals("success")){
+					if ( processType.equals("process_list")) {
+						JSONObject white_list_process = new JSONObject(respStr);
+						JSONObject black_list_process = new JSONObject(respStr);					
+						
+						JSONArray white_list_process1 = white_list_process.getJSONArray("white_list_process");
+						JSONArray black_list_process1 = black_list_process.getJSONArray("black_list_process");					
+						jsonObject.put("white_list_process", white_list_process1);
+						jsonObject.put("black_list_process", black_list_process1);
+						jsonObject.put("status", status);
+					}else if ( processType.equals("process_count")) {
+						JSONObject black_list_process = new JSONObject(respStr);
+						String black_list_process_count = black_list_process.getString("black_list_process");					
+						jsonObject.put("black_list_process_count", black_list_process_count);
+						jsonObject.put("status", status);
+					}
+				}else if(status.equals("fail")){
+					jsonObject.put("status", status);
+					jsonObject.put("message", message);
 				}
+				
 				
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");

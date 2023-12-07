@@ -363,7 +363,7 @@ var globalData = [];
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						alert(data.status);
+						
 						if (data.status == 'fail') {
 							
 							 var modal = document.getElementById('custom-modal-session-timeout');
@@ -1297,22 +1297,22 @@ var globalData = [];
 	        },
 	        success: function(response) {
 	        	
-	        	if (data.status == 'fail') {
+	        	if (response.status == 'fail') {
 					
-					 var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
+					 var modal1 = document.getElementById('custom-modal-session-timeout');
+					  modal1.style.display = 'block';
 					  
 					// Update the session-msg content with the message from the server
 					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+					    sessionMsg.textContent = response.message; // Assuming data.message contains the server message
 
 					  
 					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
+					  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+					  confirmButton1.onclick = function () {
 						  
 						// Close the modal
-					        modal.style.display = 'none';
+					        modal1.style.display = 'none';
 					        window.location.href = 'login.jsp';
 					  };
 						  

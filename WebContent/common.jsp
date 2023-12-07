@@ -46,12 +46,10 @@
                   <a href="firmwareUpdate.jsp">Firmware Update</a>
                 </li>
                 
-                <!--<li class="nav-item">
-                  <a href="#">License</a>
-                </li>-->
                 <li class="nav-item">
                   <a href="backup.jsp">Backup and Restore</a>
                 </li> 
+                
                 <li class="nav-item">
                   <a href="reboot.jsp">Reboot and Factory Reset</a>
                 </li>

@@ -70,24 +70,6 @@ public class CertificateServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
 		}
 	}
 
@@ -148,8 +130,7 @@ public class CertificateServlet extends HttpServlet {
 
 	            String respStr = client.sendMessage(json.toString());
 
-	          //  System.out.println("res " + new JSONObject(respStr));
-				logger.info("res " + new JSONObject(respStr).getString("message"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("message");
 				System.out.println("message: "+message);

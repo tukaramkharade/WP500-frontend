@@ -164,12 +164,27 @@ var tokenValue;
 					type : "GET",
 					dataType : "json",
 					success : function(data) {
-						
-						var json1 = JSON.stringify(data);
+						alert(data.status);
+						if (data.status == 'fail') {
+							
+							 var modal = document.getElementById('custom-modal-session-timeout');
+							  modal.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 
-						var json = JSON.parse(json1);
-
-						handleStatus(json.status);
+							  
+							  // Handle the confirm button click
+							  var confirmButton = document.getElementById('confirm-button-session-timeout');
+							  confirmButton.onclick = function () {
+								  
+								// Close the modal
+							        modal.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };
+								  
+						} 
 							
 						if (data.log_file_result
 								&& Array.isArray(data.log_file_result)) {
@@ -210,22 +225,6 @@ var tokenValue;
             $export_button.css('background-color', '#2b3991'); // Reset to original color
         }
 	}
-	
-	function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
-	
 	
 	
 	//Function to execute on page load
@@ -300,12 +299,11 @@ var tokenValue;
 		// Get the selected log file value from the dropdown
 		var selectedLogFile = document.getElementById("log_file").value;
 		var tableBody = $("#log_table_body");
-		console.log("Clearing table body"); // Debug statement
+		
 		tableBody.empty();
 		if (selectedLogFile !== "") {
 			// Make an AJAX POST request to fetch the log data
-			$
-					.ajax({
+			$.ajax({
 						url : "logs", // Replace this with the appropriate server-side URL to handle the AJAX POST
 						type : "POST",
 						data : {
@@ -313,6 +311,28 @@ var tokenValue;
 						}, // Send the selected log file name as POST data
 						//dataType : "json",
 						success : function(data) {
+							
+							if (data.status == 'fail') {
+								
+								 var modal = document.getElementById('custom-modal-session-timeout');
+								  modal.style.display = 'block';
+								  
+								// Update the session-msg content with the message from the server
+								    var sessionMsg = document.getElementById('session-msg');
+								    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+								  
+								  // Handle the confirm button click
+								  var confirmButton = document.getElementById('confirm-button-session-timeout');
+								  confirmButton.onclick = function () {
+									  
+									// Close the modal
+								        modal.style.display = 'none';
+								        window.location.href = 'login.jsp';
+								  };
+									  
+							} 
+							
 							// Data is the JSON array returned from the server
 							if (data.log_file_data
 									&& Array.isArray(data.log_file_data)) {
@@ -409,7 +429,7 @@ var tokenValue;
 		
 		<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 		</div>

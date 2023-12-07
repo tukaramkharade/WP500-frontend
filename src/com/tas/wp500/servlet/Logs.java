@@ -41,18 +41,27 @@ public class Logs extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject result = new JSONObject(respStr);
-				JSONArray log_file_result = result.getJSONArray("result");
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("log_file_result", log_file_result);
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+				String status = result.getString("status");
+				String message = result.getString("msg");
+				
+				
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray log_file_result = result.getJSONArray("result");
+					finalJsonObj.put("status", status);
+					finalJsonObj.put("log_file_result", log_file_result);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
+			
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting log file list : " + e);

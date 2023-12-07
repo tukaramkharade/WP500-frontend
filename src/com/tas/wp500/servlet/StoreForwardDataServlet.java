@@ -47,43 +47,31 @@ public class StoreForwardDataServlet extends HttpServlet {
 
 					JSONObject result = new JSONObject(respStr);
 					String totalPage = result.getString("total_pages");
-					JSONArray event_log_result = result.getJSONArray("result");
+					String status = result.getString("status");
+					String message = result.getString("msg");
+					
+					JSONObject finalJsonObj = new JSONObject();
+					if(status.equals("success")){
+						JSONArray event_log_result = result.getJSONArray("result");
+						finalJsonObj.put("status", status);
+					    finalJsonObj.put("result", event_log_result);
+					    finalJsonObj.put("total_page", totalPage);
+					}else if(status.equals("fail")){
+						finalJsonObj.put("status", status);
+					    finalJsonObj.put("message", message);
+					}
 
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("event_log_result", event_log_result);
-					jsonObject.put("total_page", totalPage);
-					// Set the content type of the response to application/json
-					response.setContentType("application/json");
+				    // Set the response content type to JSON
+				    response.setContentType("application/json");
 
-					// Get the response PrintWriter
-					PrintWriter out = response.getWriter();
+				    // Write the JSON data to the response
+				    response.getWriter().print(finalJsonObj.toString());
 
-					// Write the JSON object to the response
-					out.print(jsonObject.toString());
-					out.flush();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} else {
-
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-
-					System.out.println(">>" + userObj); 
-
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error("Error in session timeout : " + e);
-				}
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in getting store forward data: " + e);

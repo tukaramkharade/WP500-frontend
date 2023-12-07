@@ -15,6 +15,18 @@
 
 
 <style>
+
+.toggle {
+  
+  display: block;
+  width: 49px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: small;
+}
+
 h3{
 margin-top: 75px;
 }
@@ -67,6 +79,46 @@ button {
   color: white;
 }
 
+ .validation-container {
+            position: relative;
+            width: 70%; /* Adjust the width as needed */
+        }
+
+        .validation-message {
+            color: red;
+            margin-top: 5px;
+            position: absolute;
+            bottom: 0;
+        }
+        
+        
+        .popup {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
+}
+   
 </style>
 
 <script>
@@ -265,6 +317,18 @@ button {
 	
 	
 	function editEth1() {
+		
+		var eth1_ipaddr = $('#ip_addr_eth1').val();
+		var eth1_subnet = $('#subnet_mask_eth1').val();   
+        
+	if (!eth1_ipaddr || !eth1_subnet) {
+        // Display the custom popup message
+        $("#popupMessage").text("Please provide both lan2_subnet and lan2_ipaddr.");
+        $("#customPopup").show();
+        return; // Don't proceed further if fields are blank
+        
+    }else{
+	
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
 		  modal.style.display = 'block';
@@ -276,8 +340,7 @@ button {
 			  var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
 				console.log('eth1_dhcp1:', eth1_dhcp1);
 				var lan_type = 'lan0';
-				var eth1_ipaddr = $('#ip_addr_eth1').val();
-				var eth1_subnet = $('#subnet_mask_eth1').val();   
+				
 				var eth1_gateway = $('#gateway_eth1').val();
 				var eth1_dns = $('#dns_ip_eth1').val();
 				
@@ -317,9 +380,22 @@ button {
 		    modal.style.display = 'none';
 		    
 		  };
+    }
 	}
 	
 	function editLan1() {
+		
+		var lan1_ipaddr = $('#ip_addr_lan1').val();
+		var lan1_subnet = $('#subnet_mask_lan1').val();
+        
+	if (!lan1_subnet || !lan1_ipaddr) {
+        // Display the custom popup message
+        $("#popupMessage").text("Please provide both lan2_subnet and lan2_ipaddr.");
+        $("#customPopup").show();
+        return; // Don't proceed further if fields are blank
+        
+    }else{
+	
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
 		  modal.style.display = 'block';
@@ -330,8 +406,7 @@ button {
 			  
 			  var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
 				var lan1_type = 'lan1';
-				var lan1_ipaddr = $('#ip_addr_lan1').val();
-				var lan1_subnet = $('#subnet_mask_lan1').val();
+				
 				var lan1_gateway = $('#gateway_lan1').val();
 				var lan1_dns = $('#dns_ip_lan1').val();
 				 var toggle_enable_lan1 = $("#toggle_enable_lan1").prop("checked") ? "1" : "0";
@@ -374,64 +449,75 @@ button {
 		    modal.style.display = 'none';
 		    
 		  };
+    }
 	}
+	
 	
 	function editLan2() {
-		// Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal-edit');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-edit');
-		  confirmButton.onclick = function () {
-			
-			  var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
-				var lan2_type = 'lan2';
-				var lan2_ipaddr = $('#ip_addr_lan2').val();
-				var lan2_subnet = $('#subnet_mask_lan2').val();
-				var lan2_gateway = $('#gateway_lan2').val();
-				var lan2_dns = $('#dns_ip_lan2').val();
-				 var toggle_enable_lan2 = $("#toggle_enable_lan2").prop("checked") ? "1" : "0";
-				
-				$.ajax({
-					
-					url : 'upadateLan2',  
-					type : 'POST',
-					data : {
-						lan2_ipaddr : lan2_ipaddr,
-						lan2_subnet : lan2_subnet,
-						lan1_dhcp2 : lan1_dhcp2,
-						lan2_type : lan2_type,
-						lan2_gateway : lan2_gateway,
-						lan2_dns : lan2_dns,
-						toggle_enable_lan2 : toggle_enable_lan2
-					},
-					success : function(data) {					
-						// Close the modal
-				        modal.style.display = 'none';
-							
-							//clear fields
-							$('#ip_addr_lan2').val('');
-							$('#subnet_mask_lan2').val('');
-							$('#gateway_lan2').val('');
-							$('#dns_ip_lan2').val('');			
-
-					},
-					error : function(xhr, status, error) {
-						console.log('Error updating lan : ' + error);
-					}
-				});
-				
-		  };
-		  
-		  var cancelButton = document.getElementById('cancel-button-edit');
-		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		    
-		  };
-	}
-	
+		 var lan2_ipaddr = $('#ip_addr_lan2').val();
+	        var lan2_subnet = $('#subnet_mask_lan2').val();
+	        
+		if (!lan2_subnet || !lan2_ipaddr) {
+            // Display the custom popup message
+            $("#popupMessage").text("Please provide both lan2_subnet and lan2_ipaddr.");
+            $("#customPopup").show();
+            return; // Don't proceed further if fields are blank
+            
+        }else{
+        	
+	    // Display the custom modal dialog
+	    var modal = document.getElementById('custom-modal-edit');
+	    modal.style.display = 'block';
+	 
+	    // Handle the confirm button click
+	    var confirmButton = document.getElementById('confirm-button-edit');
+	    confirmButton.onclick = function () {
+	 
+	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
+	        var lan2_type = 'lan2';
+	       
+	        var lan2_gateway = $('#gateway_lan2').val();
+	        var lan2_dns = $('#dns_ip_lan2').val();
+	        var toggle_enable_lan2 = $("#toggle_enable_lan2").prop("checked") ? "1" : "0";
+	 
+	        $.ajax({
+	            url: 'upadateLan2',
+	            type: 'POST',
+	            data: {
+	                lan2_ipaddr: lan2_ipaddr,
+	                lan2_subnet: lan2_subnet,
+	                lan1_dhcp2: lan1_dhcp2,
+	                lan2_type: lan2_type,
+	                lan2_gateway: lan2_gateway,
+	                lan2_dns: lan2_dns,
+	                toggle_enable_lan2: toggle_enable_lan2
+	            },
+	            success: function (data) {
+	                // Close the modal
+	                modal.style.display = 'none';
+	 
+	                // Clear fields
+	                $('#ip_addr_lan2').val('');
+	                $('#subnet_mask_lan2').val('');
+	                $('#gateway_lan2').val('');
+	                $('#dns_ip_lan2').val('');
+	            },
+	            error: function (xhr, status, error) {
+	                console.log('Error updating lan : ' + error);
+	            }
+	        });
+	 
+	    };
+	 
+	    var cancelButton = document.getElementById('cancel-button-edit');
+	    cancelButton.onclick = function () {
+	        // Close the modal
+	        modal.style.display = 'none';
+	    };
+	 
+	    
+        }
+	}	
 	
 	function toggle0InputFields() {
         const toggle0 = document.getElementById("toggle_lan0");
@@ -493,21 +579,6 @@ button {
             
         }
     }
-	
-	function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
 
 	function changeButtonColor(isDisabled) {
 	    var $eth1button = $('#eth1_button');  
@@ -555,8 +626,26 @@ button {
 			    }
 	}
 	
+	function validateIPAddress(inputId, spanId) {
+	    var ipAddress = document.getElementById(inputId).value;
+	    var ipRegex = /^(\d{1,3}\.){0,3}\d{1,3}$/; // Updated regex to disallow spaces
+	    var validationMessageSpan = document.getElementById(spanId);
+
+	    if (ipRegex.test(ipAddress)) {
+	        validationMessageSpan.innerHTML = "";
+	        // You can also perform additional actions here if the IP address is valid
+	    } else {
+	        validationMessageSpan.innerHTML = "Invalid IP Address. Please enter a valid IP address.";
+	        // You can prevent form submission or perform other actions for invalid input
+	    }
+	}
+
 	
 	$(document).ready(function() {
+		
+		$("#closePopup").click(function () {
+	        $("#customPopup").hide();
+	    });
 		
 		<%// Access the session variable
 		HttpSession role = request.getSession();
@@ -662,16 +751,25 @@ button {
 							type='text' name="ip_addr_dis_0" style="width: 30%;"></td>
 							
 						<td>
-						<input id="ip_addr_eth1" class="config" type='text'
-							name="ip_addr_eth1" style="width: 30%;"></td>
+						 <div class="validation-container">
+                    <input id="ip_addr_eth1" class="config" type='text' name="ip_addr_eth1" style="width: 42%;" oninput="validateIPAddress('ip_addr_eth1', 'validationMessage')" required>
+                    <span id="validationMessage" class="validation-message" style="margin-left: 10px;"></span>
+                </div>
+            
+					</td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_0" class="status" disabled
 							type='text' name="subnet_mask_dis_0" style="width: 30%;"></td>
 							
-						<td><input id="subnet_mask_eth1" class="config" type='text'
-							name="subnet_mask_eth1" style="width: 30%;"></td>
+						<td>
+							
+					<div class="validation-container">
+                    <input id="subnet_mask_eth1" class="config" type='text' name="subnet_mask_eth1" style="width: 42%;" oninput="validateIPAddress('subnet_mask_eth1', 'validationMessage1')" required>
+                    <span id="validationMessage1" class="validation-message" style="margin-left: 10px;"></span>
+                </div>		
+							</td>
 					</tr>
 					
 					<tr>
@@ -681,8 +779,13 @@ button {
 							type='text' name="gateway_dis_0" style="width: 30%;"></td>
 							
 						<td>
-						<input id="gateway_eth1" class="config" type='text'
-							name="gateway_eth1" style="width: 30%;"></td>
+						
+						<div class="validation-container">
+                    <input id="gateway_eth1" class="config" type='text' name="gateway_eth1" style="width: 42%;" oninput="validateIPAddress('gateway_eth1', 'validationMessage2')">
+                    <span id="validationMessage2" class="validation-message" style="margin-left: 10px;"></span>
+                </div>			
+							
+							</td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
@@ -691,15 +794,19 @@ button {
 							type='text' name="dns_dis_0" style="width: 30%;"></td>
 							
 						<td>
-						<input id="dns_ip_eth1" class="config" type='text'
-							name="dns_ip_eth1" style="width: 30%;"></td>
+						
+							<div class="validation-container">
+                    <input id="dns_ip_eth1" class="config" type='text' name="dns_ip_eth1" style="width: 42%;" oninput="validateIPAddress('dns_ip_eth1', 'validationMessage3')">
+                    <span id="validationMessage3" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+							
+							</td>
 					</tr>
 
 
 				</table>
 				<div style="margin-top: 1%;">
-					<input type="button" value="Discard"
-						style="background-color: #ef0803;" id="discard1"> 
+					
 						<input type="button"
 						value="Apply changes" id="eth1_button">
 				</div>
@@ -729,15 +836,31 @@ button {
 
 						<td><input id="ip_addr_dis_1" class="status" disabled
 							type='text' name="ip_addr_dis_1" style="width: 30%;"></td>
-						<td><input id="ip_addr_lan1" class="config" type='text'
-							name="ip_addr_lan1" style="width: 30%;"></td>
+						
+						
+						<td>
+					
+						<div class="validation-container">
+                    <input id="ip_addr_lan1" class="config" type='text' name="ip_addr_lan1" style="width: 42%;" oninput="validateIPAddress('ip_addr_lan1', 'validationMessage5')" required>
+                    <span id="validationMessage5" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+                	
+							</td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
-						<td><input id="subnet_mask_dis_1" class="status" disabled
+						<td>
+						<input id="subnet_mask_dis_1" class="status" disabled
 							type='text' name="subnet_mask_dis_1" style="width: 30%;"></td>
-						<td><input id="subnet_mask_lan1" class="config" type='text'
-							name="subnet_mask_lan1" style="width: 30%;"></td>
+							
+						<td>
+						
+							<div class="validation-container">
+                    <input id="subnet_mask_lan1" class="config" type='text' name="subnet_mask_lan1" style="width: 42%;" oninput="validateIPAddress('subnet_mask_lan1', 'validationMessage6')" required>
+                    <span id="validationMessage6" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+							
+							</td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
@@ -746,8 +869,13 @@ button {
 							type='text' name="gateway_dis_1" style="width: 30%;"></td>
 							
 						<td>
-						<input id="gateway_lan1" class="config" type='text'
-							name="gateway_lan1" style="width: 30%;"></td>
+						
+							<div class="validation-container">
+                    <input id="gateway_lan1" class="config" type='text' name="gateway_lan1" style="width: 42%;" oninput="validateIPAddress('gateway_lan1', 'validationMessage7')">
+                    <span id="validationMessage7" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+							
+							</td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
@@ -756,8 +884,14 @@ button {
 							type='text' name="dns_dis_1" style="width: 30%;"></td>
 							
 						<td>
-						<input id="dns_ip_lan1" class="config" type='text'
-							name="dns_ip_lan1" style="width: 30%;"></td>
+						
+							<div class="validation-container">
+                    <input id="dns_ip_lan1" class="config" type='text' name="dns_ip_lan1" style="width: 42%;" oninput="validateIPAddress('dns_ip_lan1', 'validationMessage8')">
+                    <span id="validationMessage8" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+							
+							
+							</td>
 					</tr>
 					
 					<tr>
@@ -774,8 +908,7 @@ button {
 				</table>
 
 				<div style="margin-top: 1%;">
-					<input type="button" style="background-color: #ef0803;"
-						value="Discard" id="discard2"> <input type="button"
+					<input type="button"
 						value="Apply changes" id="lan1_button">
 				</div>
 			</div>
@@ -802,15 +935,28 @@ button {
 
 						<td><input id="ip_addr_dis_2" class="status" disabled
 							type='text' name="ip_addr_dis_2" style="width: 30%;"></td>
-						<td><input id="ip_addr_lan2" class="config" type='text'
-							name="ip_addr_lan2" style="width: 30%;"></td>
+							
+						<td>
+						<div class="validation-container">
+                    <input id="ip_addr_lan2" class="config" type='text' name="ip_addr_lan2" style="width: 42%;" required oninput="validateIPAddress('ip_addr_lan2', 'validationMessage9')" >
+                    <span id="validationMessage9" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+							
+							</td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
 						<td><input id="subnet_mask_dis_2" class="status" disabled
 							type='text' name="subnet_mask_dis_2" style="width: 30%;"></td>
-						<td><input id="subnet_mask_lan2" class="config" type='text'
-							name="subnet_mask_lan2" style="width: 30%;"></td>
+							
+						<td>
+						
+							<div class="validation-container">
+                    <input id="subnet_mask_lan2" class="config" type='text' name="subnet_mask_lan2" style="width: 42%;" required oninput="validateIPAddress('subnet_mask_lan2', 'validationMessage10')" >
+                    <span id="validationMessage10" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+                
+							</td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
@@ -819,8 +965,13 @@ button {
 							type='text' name="gateway_dis_2" style="width: 30%;"></td>
 							
 						<td>
-						<input id="gateway_lan2" class="config" type='text'
-							name="gateway_lan2" style="width: 30%;"></td>
+						
+						<div class="validation-container">
+                    <input id="gateway_lan2" class="config" type='text' name="gateway_lan2" style="width: 42%;" oninput="validateIPAddress('gateway_lan2', 'validationMessage11')">
+                    <span id="validationMessage11" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+                	
+							</td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
@@ -829,8 +980,12 @@ button {
 							type='text' name="dns_dis_2" style="width: 30%;"></td>
 							
 						<td>
-						<input id="dns_ip_lan2" class="config" type='text'
-							name="dns_ip_lan2" style="width: 30%;"></td>
+						
+							<div class="validation-container">
+                    <input id="dns_ip_lan2" class="config" type='text' name="dns_ip_lan2" style="width: 42%;" oninput="validateIPAddress('dns_ip_lan2', 'validationMessage12')">
+                    <span id="validationMessage12" class="validation-message" style="margin-left: 10px;"></span>
+                </div>	
+							</td>
 					</tr>
 					
 					<tr>
@@ -847,9 +1002,8 @@ button {
 				</table>
 
 
-				<div style="margin-top: 1%;">
-					<input type="button" style="background-color: #ef0803;"
-						value="Discard" id="discard3"> <input type="button"
+				<div style="margin-top: 1%; margin-bottom: 5px;">
+					 <input type="button"
 						value="Apply changes" id="lan2_button">
 				</div>
 
@@ -870,6 +1024,11 @@ button {
 				</div>
 			</div>
 		
+		<div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
+			  </div>
+			  
 		</section>
 	</div>
 	<div class="footer">

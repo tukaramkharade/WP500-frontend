@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,25 +58,33 @@ public class Ntp extends HttpServlet {
 						String respStr = client.sendMessage(json.toString()); 
 						
 						logger.info("res: "+ new JSONObject(respStr));
-						String ntp_service = new JSONObject(respStr).getString("ntp_service");
-						String system_clock_synchronized = new JSONObject(respStr).getString("system_clock_synchronized");
+						
+						String status = new JSONObject(respStr).getString("status");
+						String message = new JSONObject(respStr).getString("msg");
 
+						
+						
+						JSONObject finalJsonObj = new JSONObject();
+						if(status.equals("success")){
+							String ntp_service = new JSONObject(respStr).getString("ntp_service");
+							String system_clock_synchronized = new JSONObject(respStr).getString("system_clock_synchronized");
+							
+							finalJsonObj.put("ntp_service", ntp_service);
+							finalJsonObj.put("system_clock_synchronized", system_clock_synchronized);
+							
+							finalJsonObj.put("status", status);
 
-						jsonObject.put("ntp_service", ntp_service);
-						jsonObject.put("system_clock_synchronized", system_clock_synchronized);
+						}else if(status.equals("fail")){
+							finalJsonObj.put("status", status);
+						    finalJsonObj.put("message", message);
+						}
 
-	 					System.out.println(jsonObject);
-	 
-						// Set the content type of the response to application/json
-	 					response.setContentType("application/json");
-	 
-						// Get the response PrintWriter
-						PrintWriter out = response.getWriter();
-	 
-						// Write the JSON object to the response
-						out.print(jsonObject.toString());
-						out.flush();					
+					    // Set the response content type to JSON
+					    response.setContentType("application/json");
 
+					    // Write the JSON data to the response
+					    response.getWriter().print(finalJsonObj.toString());
+	 				
 					} catch (JSONException e) {
 
 						// TODO Auto-generated catch block
@@ -84,7 +93,6 @@ public class Ntp extends HttpServlet {
 
 					}
 
-				
 				}	 
 			}
 	
