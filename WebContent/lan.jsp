@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="nav-bar.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
 <style>
 h3{
 margin-top: 75px;
@@ -77,9 +78,10 @@ button {
 	var dhcp_type;
 	var tokenValue;
 	var roleValue;
+	var dhcpType;
 	
-	function getDhcpSettings() {
-		var dhcp_type = 1;
+	function getDhcpSettings(dhcpType) {
+		var dhcp_type = dhcpType;
 		  $.ajax({
 		    url: 'lanDhcpGetData1', 
 		    type : 'POST', 
@@ -87,11 +89,23 @@ button {
 		    	dhcp_type: dhcp_type 
 		    	},
 		    success: function(data) {
-		      // Process the received JSON data
-		      $('#ip_addr_dis_0').val(data.eth1_ipaddr);
-				$('#subnet_mask_dis_0').val(data.eth1_subnet);
-		       // $("#ip_addr_dis_0").text("eth1 ipaddr: " + data.eth1_ipaddr);
-				//$("#subnet_mask_dis_0").text("eth1 subnet: " + data.eth1_subnet);
+		    	if (data.status === 'success') {
+	                if (data.eth0_dhcp === '0') {
+	                    $('#ip_addr_dis_0').val(data.eth1_ipaddr);
+	                    $('#subnet_mask_dis_0').val(data.eth1_subnet);
+	                } else if (data.eth0_dhcp === '1') {
+	                    $('#ip_addr_dis_1').val(data.eth1_ipaddr);
+	                    $('#subnet_mask_dis_1').val(data.eth1_subnet);
+	                } else if (data.eth0_dhcp === '2') {
+	                    $('#ip_addr_dis_2').val(data.eth1_ipaddr);
+	                    $('#subnet_mask_dis_2').val(data.eth1_subnet);
+	                }else{
+	                	loadLanSettingsIfDhcpNot();
+	                }
+	            } else {
+	            	loadLanSettingsIfDhcpNot();
+	                console.error('Error: Data status is not success');
+	            }
 		    },
 		    error: function(xhr, status, error) {
 		      console.error('Error:', error);
@@ -129,31 +143,45 @@ button {
 								
 				eth1_dhcp = data.eth1_dhcp;
 				console.log('eth1_dhcp-->:', eth1_dhcp);
-				if(eth1_dhcp == 0){
-					getDhcpSettings();
+				if(eth1_dhcp == 1){
+					dhcpType=0;
+					getDhcpSettings(dhcpType);
 				}else{
 				$('#ip_addr_dis_0').val(data.eth1_ipaddr);
 				$('#subnet_mask_dis_0').val(data.eth1_subnet);
 				}
+				
 				$('#gateway_dis_0').val(data.eth1_gateway);
 				$('#dns_dis_0').val(data.eth1_dns);	
 				
+				lan1_dhcp = data.lan1_dhcp;
+				if(lan1_dhcp == 1){
+					dhcpType=1;
+					getDhcpSettings(dhcpType);
+				}else{
+					$('#ip_addr_dis_1').val(data.lan1_ipaddr);
+					$('#subnet_mask_dis_1').val(data.lan1_subnet);
+				}	
 
-				$('#ip_addr_dis_1').val(data.lan1_ipaddr);
-				$('#subnet_mask_dis_1').val(data.lan1_subnet);
+				
 				$('#gateway_dis_1').val(data.lan1_gateway);
 				$('#dns_dis_1').val(data.lan1_dns);	
 				$('#toggle_enable_lan1').val(data.lan1_enable);
 				
-				lan1_dhcp = data.lan1_dhcp;
+				lan2_dhcp = data.lan2_dhcp;
+				if(lan2_dhcp == 1){
+					dhcpType=2;
+					getDhcpSettings(dhcpType);
+				}else{
+					$('#ip_addr_dis_2').val(data.lan2_ipaddr);
+					$('#subnet_mask_dis_2').val(data.lan2_subnet);
+				}			
 				
-				$('#ip_addr_dis_2').val(data.lan2_ipaddr);
-				$('#subnet_mask_dis_2').val(data.lan2_subnet);
 				$('#gateway_dis_2').val(data.lan2_gateway);
 				$('#dns_dis_2').val(data.lan2_dns);
 				$('#toggle_enable_lan2').val(data.lan2_enable);
 				
-				lan2_dhcp = data.lan2_dhcp;
+				
 				$("#toggle_lan0").prop("checked", data.eth1_dhcp === "1");
 	            $("#toggle_lan1").prop("checked", data.lan1_dhcp === "1");
 	            $("#toggle_lan2").prop("checked", data.lan2_dhcp === "1");
@@ -162,6 +190,70 @@ button {
 				toggle1InputFields();
 				toggle2InputFields();
 				
+			},
+			error : function(xhr, status, error) {
+				// Handle the error response, if needed
+				console.log('Error: ' + error);
+			}
+		});
+	}
+	function loadLanSettingsIfDhcpNot() {
+		$.ajax({
+			url : 'lan',
+			type : 'GET',
+			dataType : 'json',
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+		    },
+			success : function(data) {
+				if(data.status == 'fail'){
+					var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+				}
+								
+				eth1_dhcp = data.eth1_dhcp;
+				console.log('eth1_dhcp-->:', eth1_dhcp);
+				
+				$('#ip_addr_dis_0').val(data.eth1_ipaddr);
+				$('#subnet_mask_dis_0').val(data.eth1_subnet);
+				$('#gateway_dis_0').val(data.eth1_gateway);
+				$('#dns_dis_0').val(data.eth1_dns);	
+				
+				lan1_dhcp = data.lan1_dhcp;				
+				$('#ip_addr_dis_1').val(data.lan1_ipaddr);
+				$('#subnet_mask_dis_1').val(data.lan1_subnet);		
+				$('#gateway_dis_1').val(data.lan1_gateway);
+				$('#dns_dis_1').val(data.lan1_dns);	
+				$('#toggle_enable_lan1').val(data.lan1_enable);
+				
+				lan2_dhcp = data.lan2_dhcp;
+				
+				$('#ip_addr_dis_2').val(data.lan2_ipaddr);
+				$('#subnet_mask_dis_2').val(data.lan2_subnet);
+				$('#gateway_dis_2').val(data.lan2_gateway);
+				$('#dns_dis_2').val(data.lan2_dns);
+				$('#toggle_enable_lan2').val(data.lan2_enable);			
+				
+				$("#toggle_lan0").prop("checked", data.eth1_dhcp === "1");
+	            $("#toggle_lan1").prop("checked", data.lan1_dhcp === "1");
+	            $("#toggle_lan2").prop("checked", data.lan2_dhcp === "1");				
+				toggle0InputFields();
+				toggle1InputFields();
+				toggle2InputFields();				
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
@@ -202,27 +294,6 @@ button {
 						eth1_dns : eth1_dns
 					},
 					success : function(data) {
-						if (data.status == 'fail') {
-							
-							 var modal1 = document.getElementById('custom-modal-session-timeout');
-							  modal1.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-							  
-							  // Handle the confirm button click
-							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
-							        modal1.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };			  
-						} 
-						
-						
 						// Close the modal
 				        modal.style.display = 'none';
 							
@@ -281,27 +352,6 @@ button {
 					},
 					success : function(data) {					
 							
-						if (data.status == 'fail') {
-							
-							 var modal1 = document.getElementById('custom-modal-session-timeout');
-							  modal1.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-							  
-							  // Handle the confirm button click
-							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
-							        modal1.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };			  
-						} 
-						
-						
 						// Close the modal
 				        modal.style.display = 'none';
 						
@@ -356,29 +406,7 @@ button {
 						lan2_dns : lan2_dns,
 						toggle_enable_lan2 : toggle_enable_lan2
 					},
-					success : function(data) {
-						
-						if (data.status == 'fail') {
-							
-							 var modal1 = document.getElementById('custom-modal-session-timeout');
-							  modal1.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-							  
-							  // Handle the confirm button click
-							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
-							        modal1.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };			  
-						} 
-						
-						
+					success : function(data) {					
 						// Close the modal
 				        modal.style.display = 'none';
 							
@@ -670,7 +698,8 @@ button {
 
 				</table>
 				<div style="margin-top: 1%;">
-					
+					<input type="button" value="Discard"
+						style="background-color: #ef0803;" id="discard1"> 
 						<input type="button"
 						value="Apply changes" id="eth1_button">
 				</div>
@@ -745,7 +774,8 @@ button {
 				</table>
 
 				<div style="margin-top: 1%;">
-					 <input type="button"
+					<input type="button" style="background-color: #ef0803;"
+						value="Discard" id="discard2"> <input type="button"
 						value="Apply changes" id="lan1_button">
 				</div>
 			</div>
@@ -818,7 +848,8 @@ button {
 
 
 				<div style="margin-top: 1%;">
-					 <input type="button"
+					<input type="button" style="background-color: #ef0803;"
+						value="Discard" id="discard3"> <input type="button"
 						value="Apply changes" id="lan2_button">
 				</div>
 

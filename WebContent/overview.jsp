@@ -97,6 +97,8 @@ var tokenValue;
 	                document.getElementById('hw-rev-td').textContent = data.HW_REV;
 	                document.getElementById('tas-serial-no-td').textContent = data.TAS_SERIAL_NO;
 	                document.getElementById('fw-rev-td').textContent = data.FW_REV;
+	                document.getElementById('sp-rev-td').textContent = data.SEC_PATCH_LVL;
+	                
 	            }
 				
 			},
@@ -186,6 +188,10 @@ var tokenValue;
 						<tr>
 							<td>Firmware revision</td>
 							<td id="fw-rev-td"></td>
+						</tr>
+						<tr>
+							<td>Security patch level</td>
+							<td id="sp-rev-td"></td>
 						</tr>
 
 						<tr>

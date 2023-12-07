@@ -414,8 +414,7 @@ var tokenValue;
 				},
 				success: function(data) {
 					
-					document.getElementById('ntp-service-cell').textContent = data.ntp_service;
-	                document.getElementById('system-clock-cell').textContent = data.system_clock_synchronized;
+					document.getElementById('ntp-service-cell').textContent = data.ntp_service;	               
 
 					var json1 = JSON.stringify(data);	 
 					var json = JSON.parse(json1);
@@ -435,6 +434,45 @@ var tokenValue;
 			});
 
 		}
+	function getOverviewData() {
+
+		$.ajax({
+
+			url : 'overviewGetData',
+			type : 'GET',
+			dataType : 'json',
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+			},
+			success : function(data) {
+
+				if (data.status == 'fail') {
+					var modal = document
+							.getElementById('custom-modal-session-timeout');
+					modal.style.display = 'block';
+
+					// Handle the confirm button click
+					var confirmButton = document
+							.getElementById('confirm-button-session-timeout');
+					confirmButton.onclick = function() {
+
+						// Close the modal
+						modal.style.display = 'none';
+						window.location.href = 'login.jsp';
+					};
+				} else {	                
+	                document.getElementById('system-clock-cell').textContent = data.NTP_SYNC_STATUS;
+	            }
+				
+			},
+
+			error : function(xhr, status, error) {
+				console.log('Error loading opcua client data: ' + error);
+			}
+
+		});
+
+	}
 
 
 		function updatentp() {
