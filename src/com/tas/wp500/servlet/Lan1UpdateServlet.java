@@ -48,13 +48,40 @@ public class Lan1UpdateServlet extends HttpServlet {
 				json.put("operation", "update_lan_setting");
 				json.put("user", check_username);
 				json.put("token", check_token);
-				json.put("lan_type", lan1_type);
-				json.put("lan1_dhcp", lan1_dhcp);
-				json.put("lan1_ipaddr", lan1_ipaddr);
-				json.put("lan1_subnet", lan1_subnet);
-				json.put("lan1_gateway", lan1_gateway);
-				json.put("lan1_dns", lan1_dns);
-				json.put("lan1_enable", toggle_enable_lan1);
+//				json.put("lan_type", lan1_type);
+//				json.put("lan1_dhcp", lan1_dhcp);
+//				json.put("lan1_ipaddr", lan1_ipaddr);
+//				json.put("lan1_subnet", lan1_subnet);
+//				json.put("lan1_gateway", lan1_gateway);
+//				json.put("lan1_dns", lan1_dns);
+//				json.put("lan1_enable", toggle_enable_lan1);
+				if (!lan1_type.isEmpty()) {
+				    json.put("lan_type", lan1_type);
+				}
+
+				if (!lan1_dhcp.isEmpty()) {
+				    json.put("lan1_dhcp", lan1_dhcp);
+				}
+
+				if (!lan1_ipaddr.isEmpty()) {
+				    json.put("lan1_ipaddr", lan1_ipaddr);
+				}
+
+				if (!lan1_subnet.isEmpty()) {
+				    json.put("lan1_subnet", lan1_subnet);
+				}
+
+				if (!lan1_gateway.isEmpty()) {
+				    json.put("lan1_gateway", lan1_gateway);
+				}
+
+				if (!lan1_dns.isEmpty()) {
+				    json.put("lan1_dns", lan1_dns);
+				}
+
+				if (!toggle_enable_lan1.isEmpty()) {
+				    json.put("lan1_enable", toggle_enable_lan1);
+				}
 
 				System.out.println("lan1-->" + json);
 				String respStr = client.sendMessage(json.toString());
@@ -62,11 +89,8 @@ public class Lan1UpdateServlet extends HttpServlet {
 				System.out.println("response : " + respStr);
 
 				String message = new JSONObject(respStr).getString("msg");
-				String status = new JSONObject(respStr).getString("status");
-				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
-				jsonObject.put("status", status);
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");

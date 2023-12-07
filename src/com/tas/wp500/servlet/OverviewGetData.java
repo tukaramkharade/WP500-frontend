@@ -39,21 +39,22 @@ public class OverviewGetData extends HttpServlet {
 				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
-				JSONObject respJson = new JSONObject(respStr);
-				
-				logger.info("res: "+respJson.toString());
-				
-				
-				
-				String HW_REV = respJson.getString("HW_REV");
-				String TAS_SERIAL_NO = respJson.getString("TAS_SERIAL_NO");
-				String FW_REV = respJson.getString("FW_REV");
+				System.out.println("respStr"+respStr);
+				String HW_REV = new JSONObject(respStr).getString("HW_REV");
+				String TAS_SERIAL_NO = new JSONObject(respStr).getString("TAS_SERIAL_NO");
+				String FW_REV = new JSONObject(respStr).getString("FW_REV");
+				String SEC_PATCH_LVL = new JSONObject(respStr).getString("SEC_PATCH_LVL");
+				String NTP_SYNC_STATUS = new JSONObject(respStr).getString("NTP_SYNC_STATUS");
+				System.out.println("HW_REV : " + HW_REV);
+				System.out.println("TAS_SERIAL_NO : " + TAS_SERIAL_NO);
+				System.out.println("FW_REV : " + FW_REV);
 
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("HW_REV", HW_REV);
 				jsonObject.put("TAS_SERIAL_NO", TAS_SERIAL_NO);
 				jsonObject.put("FW_REV", FW_REV);
-
+				jsonObject.put("SEC_PATCH_LVL", SEC_PATCH_LVL);
+				jsonObject.put("NTP_SYNC_STATUS", NTP_SYNC_STATUS);
 				System.out.println(jsonObject);
 
 				// Set the content type of the response to application/json
@@ -68,10 +69,26 @@ public class OverviewGetData extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in getting overview data: " + e);
+				logger.error("Error in getting opcua client list: " + e);
 			}
 
-		} 
+		} else {
+			try {
+				JSONObject userObj = new JSONObject();
+				userObj.put("msg", "Your session is timeout. Please login again");
+				userObj.put("status", "fail");
+
+				// Set the response content type to JSON
+				response.setContentType("application/json");
+
+				// Write the JSON data to the response
+				response.getWriter().print(userObj.toString());
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in session timeout : " + e);
+			}
+		}
 	}
 
 }
