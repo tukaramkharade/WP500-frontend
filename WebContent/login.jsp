@@ -238,6 +238,7 @@
     }
     
   #captchaLabel {
+  user-select: none;
     font-size: 24px;
     color: black;
     border: none;

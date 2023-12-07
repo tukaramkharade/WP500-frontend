@@ -53,16 +53,17 @@ public class LanDhcpGetData extends HttpServlet {
 			String respStr = client.sendMessage(json.toString());
 
 			System.out.println("response : " + respStr);
-			String lan0_ipaddr = new JSONObject(respStr).getString("lan0_ipaddr");
-			String lan0_subnet = new JSONObject(respStr).getString("lan0_subnet");
-			
+			String lan0_ipaddr = new JSONObject(respStr).getString("eth0_ipaddr");
+			String lan0_subnet = new JSONObject(respStr).getString("eth0_subnet");			
+			String status = new JSONObject(respStr).getString("status");
+			String eth0_dhcp = new JSONObject(respStr).getString("eth0_dhcp");
 			String lan0_ipaddr1 = lan0_ipaddr.toString();
 			String lan0_subnet1 = lan0_subnet.toString();
-			
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("eth1_ipaddr", lan0_ipaddr1);
 			jsonObject.put("eth1_subnet", lan0_subnet1);
-			
+			jsonObject.put("status", status);
+			jsonObject.put("eth0_dhcp", eth0_dhcp);
 			System.out.println(jsonObject);
 
 			// Set the content type of the response to application/json

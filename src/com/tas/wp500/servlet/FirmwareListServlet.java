@@ -44,21 +44,27 @@ public class FirmwareListServlet extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject result = new JSONObject(respStr);
+				
+				String status = result.getString("status");
+				String message = result.getString("msg");
 
-				JSONArray firmware_files_result = result.getJSONArray("files");
+			
 
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("firmware_files_result", firmware_files_result);
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray firmware_files_result = result.getJSONArray("files");
+					finalJsonObj.put("status", status);
+					finalJsonObj.put("firmware_files_result", firmware_files_result);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 				
 				
 			}catch(Exception e){

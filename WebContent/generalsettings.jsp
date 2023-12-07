@@ -119,13 +119,15 @@ var tokenValue;
 				},
 				success : function(data) {
 					
-					var json1 = JSON.stringify(data);
-
-					var json = JSON.parse(json1);
-
-					if (json.status == 'fail') {
-						var modal1 = document.getElementById('custom-modal-session-timeout');
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
 						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
 						  
 						  // Handle the confirm button click
 						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
@@ -135,7 +137,8 @@ var tokenValue;
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
 						  };
-					}
+							  
+					} 
 					
 					// Close the modal
 					modal.style.display = 'none';
@@ -275,7 +278,7 @@ $('#applyBtn').click(function() {
 
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-					<p>Your session is timeout. Please login again</p>
+					 <p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
