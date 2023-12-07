@@ -211,7 +211,7 @@ textarea {
 	
 	<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>
@@ -405,6 +405,29 @@ textarea {
     					dataType : 'json',
     					
     					success : function(response) {
+    						
+    						alert("status: "+response.status);
+    						if (response.status == 'fail') {
+    							
+   							 var modal = document.getElementById('custom-modal-session-timeout');
+   							  modal.style.display = 'block';
+   							  
+   							// Update the session-msg content with the message from the server
+   							    var sessionMsg = document.getElementById('session-msg');
+   							    sessionMsg.textContent = response.message; // Assuming data.message contains the server message
+
+   							  
+   							  // Handle the confirm button click
+   							  var confirmButton = document.getElementById('confirm-button-session-timeout');
+   							  confirmButton.onclick = function () {
+   								  
+   								// Close the modal
+   							        modal.style.display = 'none';
+   							        window.location.href = 'login.jsp';
+   							  };
+   								  
+   						} 
+    						
     						const root = document.getElementById('root');
     		                if (root) {
     		                    let ul = root.querySelector('ul');

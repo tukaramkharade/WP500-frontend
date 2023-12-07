@@ -45,25 +45,30 @@ public class BrowseQuickCLient extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
+				
+				String status = respJson.getString("status");
+				System.out.println("status: "+status);
+				String message = respJson.getString("msg");
 
 				logger.info("OPCUA client list response : " + respJson.toString());
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray dataArr = respJson.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("data", dataArr);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
 
-				JSONArray dataArr = respJson.getJSONArray("data");
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				System.out.println("data array : " + dataArr);
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("data", dataArr);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting opcua client list: " + e);

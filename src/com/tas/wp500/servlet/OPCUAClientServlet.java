@@ -41,71 +41,35 @@ public class OPCUAClientServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
 
-				JSONArray jsonArray = new JSONArray(respJson.getJSONArray("data").toString());
-				logger.info(respJson.getJSONArray("data").toString());
-
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 				
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsObj = jsonArray.getJSONObject(i);
+				logger.info(respJson.toString());
 
-					String endUrl = jsObj.getString("endUrl");					
-					String ActionType = jsObj.getString("ActionType");				
-					String Username = jsObj.getString("Username");
-					String Password = jsObj.getString("Password");
-					String Security = jsObj.getString("Security");
-					String prefix = jsObj.getString("prefix");
-
-					JSONObject opcuaObj = new JSONObject();
-
-					try {
-						opcuaObj.put("endUrl", endUrl);
-						opcuaObj.put("Username", Username);
-						opcuaObj.put("Password", Password);
-						opcuaObj.put("Security", Security);
-						opcuaObj.put("ActionType", ActionType);
-						opcuaObj.put("prefix", prefix);
-
-						resJsonArray.put(opcuaObj);
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in putting opcua client data in json array : " + e);
-					}
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray jsonArray = respJson.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("result", jsonArray);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				// Set the response content type to JSON
-				response.setContentType("application/json");
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
-				
-			}else {
-
-				try {
-					JSONObject userObj = new JSONObject();
-					userObj.put("msg", "Your session is timeout. Please login again");
-					userObj.put("status", "fail");
-
-					System.out.println(">>" + userObj);
-
-					// Set the response content type to JSON
-					response.setContentType("application/json");
-
-					// Write the JSON data to the response
-					response.getWriter().print(userObj.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error("Error in session timeout : " + e);
-				}
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 			}
-		}catch(Exception e){
-			e.printStackTrace();
-			logger.error("Error in getting opcua list : " + e);
-		}
-		
+			
+	}catch (Exception e) {
+		e.printStackTrace();
+		logger.error("Error in getting mqtt data: " + e);
 	}
+} 
+
+			
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
