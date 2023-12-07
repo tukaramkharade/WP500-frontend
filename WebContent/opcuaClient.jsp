@@ -195,18 +195,15 @@ function loadOPCUAClientList(){
 	    },
 	    
 	    success : function(data) {
-			// Clear existing table rows
-			var opcuaTable = $('#opcuaListTable tbody');
-			opcuaTable.empty();
-
-			var json1 = JSON.stringify(data);
-
-			var json = JSON.parse(json1);
-
-			if (json.status == 'fail') {
+	    	if (data.status == 'fail') {
 				
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
 				  
 				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
@@ -217,73 +214,81 @@ function loadOPCUAClientList(){
 				        window.location.href = 'login.jsp';
 				  };
 					  
-			}
-			
-			
+			} 
+	    	
+			// Clear existing table rows
+			var opcuaTable = $('#opcuaListTable tbody');
+			opcuaTable.empty();
 
 			if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-				// Iterate through the user data and add rows to the table
-				$.each(data,function(index, opcuaClient) {
-					
-								var row = $('<tr>');
-									
-								
-									row.append($('<td>').text(opcuaClient.endUrl));
-									row.append($('<td>').text(opcuaClient.Username));
-									row.append($('<td>').text(opcuaClient.Password));
-									row.append($('<td>').text(opcuaClient.Security));	
-									row.append($('<td>').text(opcuaClient.ActionType));
-									row.append($('<td>').text(opcuaClient.prefix));
-									
-									 var actions = $('<td>');
-							
-											var editButton = $(
-				                            '<button data-toggle="tooltip" data-placement="top" title="Edit" style="color: #35449a;">'
-				                            )
-				                            .html('<i class="fas fa-edit"></i>')
-				                            .click(function() {
-				                                setEndUrl(opcuaClient.endUrl);
-				                                setUserName(opcuaClient.Username);
-				                                setPassword(opcuaClient.Password);
-				                                setActionType(opcuaClient.ActionType);
-				                                setSecurity(opcuaClient.Security);
-				                                setPrefix(opcuaClient.prefix);
-				                            });
-
-				                        var deleteButton = $(
-				                            '<button data-toggle="tooltip" data-placement="top" title="Delete" style="color: red;">')
-				                            .html('<i class="fas fa-trash-alt"></i>')
-				                            .click(function() {
-				                                deleteOpcuaClient(opcuaClient.prefix);
-				                            });
-
-				                       
-
-									actions.append(editButton);
-									actions.append(deleteButton);									
-
-									row.append(actions); 
-
-									opcuaTable.append(row);
 				
-								});
+				data.result.forEach(function(opcuaClient) {
+					
+					var endUrl = opcuaClient.endUrl; 
+					var Username = opcuaClient.Username; 
+					var Password = opcuaClient.Password; 
+					var Security = opcuaClient.Security; 
+					var ActionType = opcuaClient.ActionType; 
+					var prefix = opcuaClient.prefix; 
+					
+					var row = $("<tr>").append($("<td>").text(endUrl),
+							$("<td>").text(Username),
+							$("<td>").text(Password),
+							$("<td>").text(Security),
+							$("<td>").text(ActionType),
+							$("<td>").text(prefix));
+					
+					
+					var actions = $('<td>');
+					
+					var editButton = $(
+                    '<button data-toggle="tooltip" data-placement="top" title="Edit" style="color: #35449a;">'
+                    )
+                    .html('<i class="fas fa-edit"></i>')
+                    .click(function() {
+                        setEndUrl(opcuaClient.endUrl);
+                        setUserName(opcuaClient.Username);
+                        setPassword(opcuaClient.Password);
+                        setActionType(opcuaClient.ActionType);
+                        setSecurity(opcuaClient.Security);
+                        setPrefix(opcuaClient.prefix);
+                    });
+
+                var deleteButton = $(
+                    '<button data-toggle="tooltip" data-placement="top" title="Delete" style="color: red;">')
+                    .html('<i class="fas fa-trash-alt"></i>')
+                    .click(function() {
+                        deleteOpcuaClient(opcuaClient.prefix);
+                    });
+
+               
+
+			actions.append(editButton);
+			actions.append(deleteButton);									
+
+			row.append(actions); 
+
+			opcuaTable.append(row);
+				});
+				
 			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-				
-				// Iterate through the user data and add rows to the table
-				$.each(data,function(index, opcuaClient) {
+				data.result.forEach(function(opcuaClient) {
+					var endUrl = opcuaClient.endUrl; 
+					var Username = opcuaClient.Username; 
+					var Password = opcuaClient.Password; 
+					var Security = opcuaClient.Security; 
+					var ActionType = opcuaClient.ActionType; 
+					var prefix = opcuaClient.prefix; 
 					
-									var row = $('<tr>');
-									
-									row.append($('<td>').text(opcuaClient.endUrl));
-									row.append($('<td>').text(opcuaClient.Username));
-									row.append($('<td>').text(opcuaClient.Password));
-									row.append($('<td>').text(opcuaClient.Security));	
-									row.append($('<td>').text(opcuaClient.ActionType));
-									row.append($('<td>').text(opcuaClient.prefix));
-
-									opcuaTable.append(row);
+					var row = $("<tr>").append($("<td>").text(endUrl),
+							$("<td>").text(Username),
+							$("<td>").text(Password),
+							$("<td>").text(Security),
+							$("<td>").text(ActionType),
+							$("<td>").text(prefix));
 					
-								});
+					opcuaTable.append(row);
+				});
 			}
 			
 		
@@ -650,7 +655,7 @@ $(document).ready(function() {
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				 <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>

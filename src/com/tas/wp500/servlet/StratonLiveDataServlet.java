@@ -45,109 +45,69 @@ public class StratonLiveDataServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 
 				JSONObject respJson = new JSONObject(respStr);
-
-				JSONArray resJsonArray = new JSONArray();
+				String status = respJson.getString("status");
+				System.out.println("status: "+status);
+				
 
 				logger.info("Straton live value response : " + respJson.toString());
 
-				JSONArray resultArr = respJson.getJSONArray("result");
 				
-				String result_arr = resultArr.toString();
-								
-				 	JSONArray jsonArr = new JSONArray(result_arr);
-				    
-				    List<JSONObject> jsonValues = new ArrayList<JSONObject>();
-				    for (int i = 0; i < jsonArr.length(); i++) {
-				        jsonValues.add(jsonArr.getJSONObject(i));
-				    }
-				    Collections.sort( jsonValues, new Comparator<JSONObject>() {
-				        //You can change "Name" with "ID" if you want to sort by ID
-				        private static final String KEY_NAME = "tag_name";
+			        JSONObject finalJsonObj = new JSONObject();
+					if(status.equals("success")){
+						JSONArray resultArr = respJson.getJSONArray("result");
+						
+						String result_arr = resultArr.toString();
+										
+						 	JSONArray jsonArr = new JSONArray(result_arr);
+						    
+						    List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+						    for (int i = 0; i < jsonArr.length(); i++) {
+						        jsonValues.add(jsonArr.getJSONObject(i));
+						    }
+						    Collections.sort( jsonValues, new Comparator<JSONObject>() {
+						        //You can change "Name" with "ID" if you want to sort by ID
+						        private static final String KEY_NAME = "tag_name";
 
-				        @Override
-				        public int compare(JSONObject a, JSONObject b) {
-				            String valA = new String();
-				            String valB = new String();
+						        @Override
+						        public int compare(JSONObject a, JSONObject b) {
+						            String valA = new String();
+						            String valB = new String();
 
-				            try {
-				                valA = (String) a.get(KEY_NAME);
-				                valB = (String) b.get(KEY_NAME);
-				            } 
-				            catch (JSONException e) {
-				               e.printStackTrace();
-				               logger.error("Error in sorting tags :" +e);
-				            }
+						            try {
+						                valA = (String) a.get(KEY_NAME);
+						                valB = (String) b.get(KEY_NAME);
+						            } 
+						            catch (JSONException e) {
+						               e.printStackTrace();
+						               logger.error("Error in sorting tags :" +e);
+						            }
 
-				            return valA.compareTo(valB);
-				            //if you want to change the sort order, simply use the following:
-				            //return -valA.compareTo(valB);
-				        }
-				    });
-				    
-				 // Convert the sorted list back to JSONArray
-			        JSONArray sortedJsonArray = new JSONArray(jsonValues);
-
-			        // Print the sorted JSONArray
-			        System.out.println("sorted json array:" + sortedJsonArray);
-				    
-
-				for (int i = 0; i < sortedJsonArray.length(); i++) {
-					JSONObject jsObj = sortedJsonArray.getJSONObject(i);
-
-					String extError = jsObj.getString("extError");
-					String access = jsObj.getString("access");
-					String tag_name = jsObj.getString("tag_name");
-					String error = jsObj.getString("error");
-					String value = jsObj.getString("value");
-			
-					JSONObject stratonObj = new JSONObject();
-
-					try {
-
-						stratonObj.put("extError", extError);
-						stratonObj.put("access", access);
-						stratonObj.put("tag_name", tag_name);
-						stratonObj.put("error", error);
-						stratonObj.put("value", value);
-
-						resJsonArray.put(stratonObj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error in putting straton data in json array : "+e);
+						            return valA.compareTo(valB);
+						            //if you want to change the sort order, simply use the following:
+						            //return -valA.compareTo(valB);
+						        }
+						    });
+						
+						JSONArray sortedJsonArray = new JSONArray(jsonValues);
+						finalJsonObj.put("status", status);
+					    finalJsonObj.put("result", sortedJsonArray);
+					}else if(status.equals("fail")){
+						String message = respJson.getString("msg");
+						finalJsonObj.put("status", status);
+					    finalJsonObj.put("message", message);
 					}
-				}
 
-				logger.info("JSON ARRAY :" + resJsonArray.length() + " " + resJsonArray.toString());
+				    // Set the response content type to JSON
+				    response.setContentType("application/json");
 
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(resJsonArray.toString());
-
+				    // Write the JSON data to the response
+				    response.getWriter().print(finalJsonObj.toString());
+	      
+			    
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting straton data : "+e);
 			}
-		} else {
-			
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-				
-				System.out.println(">>" +userObj);
-				
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : "+e);
-			}
-
 		}
 	}
 

@@ -41,22 +41,27 @@ public class BannerTextServlet extends HttpServlet {
 
 				logger.info("res " + new JSONObject(respStr));
 
-				JSONObject result = new JSONObject(respStr);
-
-				JSONArray banner_text_data = result.getJSONArray("data");
+				JSONObject respJson = new JSONObject(respStr);
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
 				
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("banner_text_data", banner_text_data);
+				logger.info("Banner text response : " + respJson.toString());
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONArray banner_text_data = respJson.getJSONArray("data");
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("banner_text_data", banner_text_data);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
+				}
 
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 				
 			}catch(Exception e){
 				e.printStackTrace();

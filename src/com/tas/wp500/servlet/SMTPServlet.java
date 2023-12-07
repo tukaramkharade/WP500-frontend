@@ -56,52 +56,66 @@ public class SMTPServlet extends HttpServlet {
 				JSONObject respJson = new JSONObject(respStr);
 
 				logger.info("res " + respJson.toString());
+				String message = respJson.getString("msg");
+				String status = respJson.getString("status");
+				
+				if(status.equals("success")){
+					for (int i = 0; i < respJson.length(); i++) {
 
-				for (int i = 0; i < respJson.length(); i++) {
+						String from_email_id = respJson.getString("from_email_id");
+						String password = respJson.getString("password");
+						String smtp_type = respJson.getString("smtp_type");
+						String host = respJson.getString("host");
+						to_email_id = respJson.getString("to_email_id");
+						
+						
+						if (respJson.has("cc")) {
+							email_cc = respJson.getString("cc");
+						}
+						if (respJson.has("bcc")) {
+							email_bcc = respJson.getString("bcc");
+							// System.out.println("bcc value"+email_bcc);
+						}
+						if ("ssl".equalsIgnoreCase(smtp_type)) {
+							ssl_socket_factory_port = respJson.getString("ssl_socket_factory_port");
+							ssl_port = respJson.getString("ssl_port");
+							ssl_smtp_type = respJson.getString("ssl_smtp_type");
 
-					String from_email_id = respJson.getString("from_email_id");
-					String password = respJson.getString("password");
-					String smtp_type = respJson.getString("smtp_type");
-					String host = respJson.getString("host");
-					to_email_id = respJson.getString("to_email_id");
-					if (respJson.has("cc")) {
-						email_cc = respJson.getString("cc");
+						} else if ("tls".equalsIgnoreCase(smtp_type)) {
+							tls_port = respJson.getString("tls_port");
+							tls_auth = respJson.getString("tls_auth");
+							tls_enable = respJson.getString("tls_enable");
+
+						}
+
+						try {
+							jsonObject.put("ssl_socket_factory_port", ssl_socket_factory_port);
+							jsonObject.put("tls_port", tls_port);
+							jsonObject.put("from_email_id", from_email_id);
+							jsonObject.put("password", password);
+							jsonObject.put("smtp_type", smtp_type);
+							jsonObject.put("tls_auth", tls_auth);
+							jsonObject.put("tls_enable", tls_enable);
+							jsonObject.put("ssl_smtp_type", ssl_smtp_type);
+							jsonObject.put("host", host);
+							jsonObject.put("ssl_port", ssl_port);
+							jsonObject.put("to_email_id", to_email_id);
+							jsonObject.put("email_cc", email_cc);
+							jsonObject.put("email_bcc", email_bcc);
+							jsonObject.put("message", message);
+							jsonObject.put("status", status);
+						} catch (Exception e) {
+							e.printStackTrace();
+							logger.error("Error in putting SMTP settings in json object: " + e);
+						}
 					}
-					if (respJson.has("bcc")) {
-						email_bcc = respJson.getString("bcc");
-						// System.out.println("bcc value"+email_bcc);
+					}else if(status.equals("fail")){
+						jsonObject.put("message", message);
+						jsonObject.put("status", status);
 					}
-					if ("ssl".equalsIgnoreCase(smtp_type)) {
-						ssl_socket_factory_port = respJson.getString("ssl_socket_factory_port");
-						ssl_port = respJson.getString("ssl_port");
-						ssl_smtp_type = respJson.getString("ssl_smtp_type");
+				
 
-					} else if ("tls".equalsIgnoreCase(smtp_type)) {
-						tls_port = respJson.getString("tls_port");
-						tls_auth = respJson.getString("tls_auth");
-						tls_enable = respJson.getString("tls_enable");
-
-					}
-
-					try {
-						jsonObject.put("ssl_socket_factory_port", ssl_socket_factory_port);
-						jsonObject.put("tls_port", tls_port);
-						jsonObject.put("from_email_id", from_email_id);
-						jsonObject.put("password", password);
-						jsonObject.put("smtp_type", smtp_type);
-						jsonObject.put("tls_auth", tls_auth);
-						jsonObject.put("tls_enable", tls_enable);
-						jsonObject.put("ssl_smtp_type", ssl_smtp_type);
-						jsonObject.put("host", host);
-						jsonObject.put("ssl_port", ssl_port);
-						jsonObject.put("to_email_id", to_email_id);
-						jsonObject.put("email_cc", email_cc);
-						jsonObject.put("email_bcc", email_bcc);
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in putting SMTP settings in json object: " + e);
-					}
-				}
+				
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
