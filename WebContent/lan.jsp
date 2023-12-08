@@ -16,17 +16,6 @@
 
 <style>
 
-.toggle {
-  
-  display: block;
-  width: 49px;
-  height: 20px;
-  padding: 3px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: small;
-}
-
 h3{
 margin-top: 75px;
 }
@@ -119,6 +108,29 @@ button {
   margin-left: 40%;
 }
    
+   
+   .toggle {
+  position: relative;
+  display: block;
+  width: 49px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: small;
+  z-index: 1 !important; /* Lower z-index for the toggle switch */
+}
+
+.toggle-label,
+.toggle-handle {
+position: relative;
+  transition: All 0.3s ease;
+  -webkit-transition: All 0.3s ease;
+  -moz-transition: All 0.3s ease;
+  -o-transition: All 0.3s ease;
+   z-index: 1 !important;
+}
+
 </style>
 
 <script>
@@ -323,7 +335,7 @@ button {
         
 	if (!eth1_ipaddr || !eth1_subnet) {
         // Display the custom popup message
-        $("#popupMessage").text("Please provide both lan2_subnet and lan2_ipaddr.");
+        $("#popupMessage").text("Please provide both subnet and ipaddr.");
         $("#customPopup").show();
         return; // Don't proceed further if fields are blank
         
@@ -390,7 +402,7 @@ button {
         
 	if (!lan1_subnet || !lan1_ipaddr) {
         // Display the custom popup message
-        $("#popupMessage").text("Please provide both lan2_subnet and lan2_ipaddr.");
+        $("#popupMessage").text("Please provide both subnet and ipaddr.");
         $("#customPopup").show();
         return; // Don't proceed further if fields are blank
         
@@ -459,8 +471,12 @@ button {
 	        
 		if (!lan2_subnet || !lan2_ipaddr) {
             // Display the custom popup message
-            $("#popupMessage").text("Please provide both lan2_subnet and lan2_ipaddr.");
+            $("#popupMessage").text("Please provide both subnet and ipaddr.");
             $("#customPopup").show();
+            
+         // Hide the toggle switch
+            $("#toggle_enable_lan1").closest("td").hide();
+         
             return; // Don't proceed further if fields are blank
             
         }else{
@@ -473,6 +489,8 @@ button {
 	    var confirmButton = document.getElementById('confirm-button-edit');
 	    confirmButton.onclick = function () {
 	 
+	    	
+	    	
 	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
 	        var lan2_type = 'lan2';
 	       
@@ -645,6 +663,8 @@ button {
 		
 		$("#closePopup").click(function () {
 	        $("#customPopup").hide();
+	     // Show the toggle switch
+            $("#toggle_enable_lan1").closest("td").show();
 	    });
 		
 		<%// Access the session variable

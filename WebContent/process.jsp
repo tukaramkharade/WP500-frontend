@@ -149,7 +149,6 @@ function getProcessData() {
         },
         success: function(data) {
         	
-        	alert(data.status);
         	if (data.status == 'fail') {
 				
 				 var modal = document.getElementById('custom-modal-session-timeout');

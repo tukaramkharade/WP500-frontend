@@ -63,8 +63,25 @@ button {
 
 .badge {
 	position: absolute;
-	top: -7px; /* Adjust this value to position the badge as needed */
-	right: 3px; /* Adjust this value to position the badge as needed */
+	top: -8px; /* Adjust this value to position the badge as needed */
+	right: 8px; /* Adjust this value to position the badge as needed */
+	background-color: white;
+	color: white;
+	border-radius: 50%;
+	padding: 5px 3px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#cyberguard-bell-count {
+	color: red;
+}
+
+
+.cyberguard-badge {
+	position: absolute;
+	top: -8px; /* Adjust this value to position the badge as needed */
+	right: 15px; /* Adjust this value to position the badge as needed */
 	background-color: white;
 	color: white;
 	border-radius: 50%;
@@ -112,6 +129,12 @@ button {
 }
 
 .notification-container {
+    position: relative;
+    display: inline-block;
+     
+}
+
+.cyberguard-notification-container {
     position: relative;
     display: inline-block;
      
@@ -346,9 +369,31 @@ var roleValue1;
 		});
 	}
 	
+	
+	
+	function getActiveThreatsCount() {
+		$.ajax({
+			url : "countDetailsServlet",
+			type : "GET", // Change the request type to POST
+			dataType : "json",
+			
+			success : function(data) {
+				
+				var activeThreatsCount = data.active_threats_count;
+				$('#cyberguard-bell-count').text(activeThreatsCount); // Update the notification bell count inside the span
+				
+			},
+			error : function(xhr, status, error) {
+				console.error("Error occurred: " + error);
+				// Handle the error here (show error message to the user, etc.)
+			}
+		});
+	}
+	
+	
+	
 	function changeButtonColor1(isDisabled) {
         var $load_conifg_button = $('#loadConfig'); 
-       
         
          if (isDisabled) {
             $load_conifg_button.css('background-color', 'gray'); // Change to your desired color
@@ -407,24 +452,10 @@ var roleValue1;
 		changeButtonColor1(true);
 	}
 	
-	
-	/* if (roleValue1 === "") {
-        // If the role is blank, show the session timeout modal
-        var sessionTimeoutModal = document.getElementById('custom-modal-session-timeout');
-        sessionTimeoutModal.style.display = 'block';
-
-        // Handle the OK button click in the session timeout modal
-        var confirmSessionTimeoutButton = document.getElementById('confirm-button-session-timeout');
-        confirmSessionTimeoutButton.onclick = function() {
-            // Redirect the user to the login page or perform any other necessary action
-            window.location.href = 'login.jsp';
-        };
-    } 
-	 */
-	
-				startCountdown();
+			startCountdown();
 				getProcessData1();
 				getProjectName();
+				getActiveThreatsCount();
 
 				$('#loadConfig').click(function() {
 					loadConfig();
@@ -493,6 +524,8 @@ var roleValue1;
 		window.location.href = "dashboard.jsp";
 	});
 }); 
+ setInterval(getActiveThreatsCount, 300000);
+ 
 	
 </script>
 
@@ -522,6 +555,8 @@ var roleValue1;
         style="color: #35449a; height: 40px; padding: 0 10px;">
         <i class="material-icons" id="warning" style="font-size: 24px;">warning</i>
     </button>
+    <span id="cyberguard-bell-count" class="cyberguard-badge"
+        style="height: 15px;">0</span>
     
 </div>
 		
@@ -568,13 +603,6 @@ var roleValue1;
 				  <button id="cancel-button-load-config">No</button>
 				</div>
 	 </div>
-	 
-	 <!-- <div id="custom-modal-session-timeout" class="modal-session-timeout">
-				<div class="modal-content-session-timeout">
-				  <p id="session-msg"></p>
-				  <button id="confirm-button-session-timeout">OK</button>
-				</div>
-			  </div> -->
 			  
 			  <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>

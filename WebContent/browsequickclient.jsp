@@ -406,7 +406,6 @@ textarea {
     					
     					success : function(response) {
     						
-    						alert("status: "+response.status);
     						if (response.status == 'fail') {
     							
    							 var modal = document.getElementById('custom-modal-session-timeout');

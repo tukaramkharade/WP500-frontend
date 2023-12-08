@@ -71,16 +71,22 @@ p{
 margin-left: 2%;
 }
 
-.last_threats{
-width:45%;
-   
+.last_threats {
+    width: 100%; /* Use 100% for full width on all screens */
+    max-width: 800px; /* Set a maximum width for larger screens if needed */
+    margin: 0 auto; /* Center the container */
     color: black;
-    margin-left: 25px;
-     /* Border properties */
-    border: 2px solid #e74c3c; /* Border width, style, and color */
-    border-radius: 10px; /* Border radius for rounded corners */
-  
+    border: 2px solid #e74c3c;
+    border-radius: 10px;
 }
+
+#dataList li {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 2%; /* Adjust margin for spacing between items */
+}
+
+
 .last_threats h5{/* 
 padding-left:7px; */
 font-size: 13px;
@@ -93,11 +99,7 @@ list-style: none;
 font-size:14px;
 }
 
-#dataList li{
-display: flex;
-justify-content:space-between;
-margin-right:30px;
-}
+
 
 .red-box {
     display: inline-block;
@@ -144,7 +146,7 @@ margin-right:30px;
 
 .threats_count{
     width: 45%; 
-    height: 460px;
+    height: 375px;
     color: black;
     font-size: 12px;
    
@@ -255,27 +257,7 @@ function latestActiveThreats(){
                 dataList.append(listItem);
                 dataList.append("<hr>"); 
             });
-           
-            /* 
-            $.each(data, function (index, item) {
-                 var listItem = $("<li></li>");
-                
-                if(item.priority == '1'){	
-                	 priority = 'high';
-                	listItem.html("<span class='time-high'>" +item.timeStamp + "</span>" + "<span class='alert-high'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='red-box'>" + priority + "</span>");
-				}else if(item.priority == '2'){
-					 priority = 'medium';
-                	listItem.html("<span class='time-medium'>" +item.timeStamp + "</span>" + "<span class='alert-medium'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='orange-box'>" + priority + "</span>");
-				}else if(item.priority == '3'){
-					 priority = 'low';
-                	listItem.html("<span class='time-low'>" +item.timeStamp + "</span>"  + "<span class='alert-low'>" +item.alertMessage + "</span>" + item.threat_id + " <span class='yellow-box'>" + priority + "</span>");
-				} 
-            
-                dataList.append(listItem);
-                dataList.append("<hr>"); 
-            });*/
-            
-            
+          
         },
         error: function (error) {
             console.error("Error fetching data: " + error);
@@ -917,27 +899,37 @@ function updateBarChartMonth(){
 }
  
  function getCurrentTimeInIndia() {
+	    // Get the current date in local time
 	    const date = new Date();
-	    var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes
-	    var offset = ISTOffset * 60 * 1000;
-	    var ISTTime = new Date(date.getTime() + offset);
 
-	    // Subtract 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds) from ISTTime
-	    var ISTTime24HoursAgo = new Date(ISTTime.getTime() - (24 * 60 * 60 * 1000));
-	 
-	    // Format both current ISTTime and ISTTime24HoursAgo as strings in "yyyy-MM-ddTHH:mm" format
-	    var formattedCurrentTime = ISTTime.toISOString().slice(0, 16);
-	    var formattedTime24HoursAgo = ISTTime24HoursAgo.toISOString().slice(0, 16);
+	    // Set date to the beginning of today in local time
+	    date.setHours(0, 0, 0, 0);
 
-	    // Set the current IST time as the value of the "enddatetime" input field
-	    document.getElementById('end_time').value = formattedCurrentTime;
+	    // Get the offset in minutes for IST (Indian Standard Time)
+	    const ISTOffset = 330; // IST is UTC+5:30
 
-	    // Set the IST time 24 hours ago as the value of the "startdatetime" input field
-	    document.getElementById('start_time').value = formattedTime24HoursAgo;
+	    // Calculate the total offset in milliseconds
+	    const offset = ISTOffset * 60 * 1000;
+
+	    // Convert the local date to IST by adding the offset
+	    const ISTTime = new Date(date.getTime() + offset);
+
+	    // Subtract 24 hours from ISTTime to get the beginning of yesterday in IST
+	    const ISTTimeYesterday = new Date(ISTTime.getTime() - (24 * 60 * 60 * 1000));
+
+	    // Format both ISTTimeYesterday and current ISTTime as strings in "yyyy-MM-ddTHH:mm" format
+	    const formattedYesterday = ISTTimeYesterday.toISOString().slice(0, 16);
+	    const formattedToday = ISTTime.toISOString().slice(0, 16);
+
+	    // Set yesterday's IST time as the value of the "startdatetime" input field
+	    document.getElementById('start_time').value = formattedYesterday;
+
+	    // Set today's IST time as the value of the "enddatetime" input field
+	    document.getElementById('end_time').value = formattedToday;
 
 	    // Debugging: Log both calculated times to the console
-	    console.log('Current IST time:', formattedCurrentTime);
-	    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
+	    console.log('Yesterday\'s IST time:', formattedYesterday);
+	    console.log('Today\'s IST time:', formattedToday);
 	}
  
  
@@ -1020,23 +1012,7 @@ function updateBarChartMonth(){
 		  };
      }
  }
- 
- 
- 
- function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
 
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
  
 $(document).ready(function() {
 	<%// Access the session variable
@@ -1185,7 +1161,7 @@ if (roleValue === "null") {
 					</div>
 					
 					<div class="threats_priority">
-					<h5>Day wise threats priority</h5>
+					<h5 style="margin-left: 50px;">Day wise threats priority</h5>
 					  <canvas id="barChart"  ></canvas>
 					</div>
 				</div>	

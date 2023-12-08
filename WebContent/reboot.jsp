@@ -16,7 +16,8 @@
 
 <style>
 
-.modal-edit {
+.modal-edit,
+.modal-factoryreset {
   display: none;
   position: fixed;
   z-index: 1;
@@ -31,7 +32,8 @@
   margin: 0;
 }
 
-.modal-content-edit {
+.modal-content-edit,
+.modal-content-factoryreset {
   background-color: #d5d3d3;
   padding: 20px;
   border-radius: 5px;
@@ -79,12 +81,14 @@ button {
   cursor: pointer;
 }
 
-#confirm-button-edit {
+#confirm-button-edit,
+#confirm-button-factoryreset {
   background-color: #4caf50;
   color: white;
 }
 
-#cancel-button-edit {
+#cancel-button-edit,
+#cancel-button-factoryreset {
   background-color: #f44336;
   color: white;
 }
@@ -96,6 +100,33 @@ margin-top: 68px;
 #confirm-button-session-timeout {
   background-color: #4caf50;
   color: white;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5d3d3;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center; /* Center-align the content */
+  width: 20%;
+}
+
+/* Style for the close button */
+#closePopup {
+  display: block; /* Display as to center horizontally */
+  margin-top: 30px; /* Adjust the top margin as needed */
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 40%;
 }
 
 </style>
@@ -159,16 +190,90 @@ var tokenValue;
 		    modal.style.display = 'none';
 		   
 		  };	
-
 	}
+	
+	
+	function factoryReset() {
+
+		// Display the custom modal dialog
+		  var modal = document.getElementById('custom-modal-factoryreset');
+		  modal.style.display = 'block';
+		  
+		// Handle the confirm button click
+		  var confirmButton = document.getElementById('confirm-button-factoryreset');
+		  confirmButton.onclick = function () {
+			  
+			  $.ajax({
+					url : 'factoryResetServlet',
+					type : 'GET',
+					dataType : 'json',
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+				    },
+					success : function(data) {
+						
+						if (data.status == 'fail') {
+							
+							 var modal1 = document.getElementById('custom-modal-session-timeout');
+							  modal1.style.display = 'block';
+							  
+							// Update the session-msg content with the message from the server
+							    var sessionMsg = document.getElementById('session-msg');
+							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+							  
+							  // Handle the confirm button click
+							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							  confirmButton1.onclick = function () {
+								  
+								// Close the modal
+							        modal1.style.display = 'none';
+							        window.location.href = 'login.jsp';
+							  };			  
+						} 
+						
+						modal.style.display = 'none';
+						
+						$("#popupMessage").text(data.message);
+		      			$("#customPopup").show();
+		      			
+
+					},
+					error : function(xhr, status, error) {
+						// Handle the error response, if needed
+						console.log('Error: ' + error);
+					}
+				});
+			  
+		  };
+		  
+		  $("#closePopup").click(function () {
+			    $("#customPopup").hide();
+			  });
+		  
+		  var cancelButton = document.getElementById('cancel-button-factoryreset');
+		  cancelButton.onclick = function () {
+		    // Close the modal
+		    modal.style.display = 'none';
+		   
+		  };	
+	}
+
 	
 	function changeButtonColor(isDisabled) {
         var $reboot_button = $('#reboot');
+        var $factory_reset_button = $('#factory_reset');
         
         if (isDisabled) {
             $reboot_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $reboot_button.css('background-color', '#2b3991'); // Reset to original color
+        }
+        
+        if (isDisabled) {
+            $factory_reset_button.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $factory_reset_button.css('background-color', '#2b3991'); // Reset to original color
         }
 	}
 
@@ -186,6 +291,7 @@ var tokenValue;
     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
   		  
   		$('#reboot').prop('disabled', true);
+  		$('#factory_reset').prop('disabled', true);
   		  
   		  changeButtonColor(true);
   	  }
@@ -210,6 +316,11 @@ var tokenValue;
 	    	
 	    	$('#reboot').click(function() {
 				reboot();
+
+			});
+	    	
+	    	$('#factory_reset').click(function() {
+	    		factoryReset();
 
 			});
 	    }
@@ -237,6 +348,13 @@ var tokenValue;
 			<input type="button" id="reboot" value="Reboot" />
 		</div>
 		
+		
+		<h3>FACTORY RESET</h3>
+		<hr>
+		<div class="container">
+		<input type="button" id="factory_reset" value="Factory Reset" />
+		</div>
+		
 		 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to reboot?</p>
@@ -245,11 +363,24 @@ var tokenValue;
 				</div>
 			  </div>
 			  
+			   <div id="custom-modal-factoryreset" class="modal-factoryreset">
+				<div class="modal-content-factoryreset">
+				  <p>Are you sure you want to do factory reset?</p>
+				  <button id="confirm-button-factoryreset">Yes</button>
+				  <button id="cancel-button-factoryreset">No</button>
+				</div>
+			  </div>
+			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
+			  </div>
+			  
+			  <div id="customPopup" class="popup">
+  				<span class="popup-content" id="popupMessage"></span>
+  				<button id="closePopup">OK</button>
 			  </div>
 			  
 		</section>

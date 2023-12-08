@@ -158,7 +158,7 @@
             updateCaptcha();
 
              /* $('#refreshCaptcha').click(function () {
-            	 alert("*******")
+            	 
             	 event.preventDefault();
             	    updateCaptcha(); // Update the captcha immediately
             	}); */
