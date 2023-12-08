@@ -82,32 +82,6 @@ public class Dashboard extends HttpServlet {
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
 
-//				for (int i = 0; i < resultArr.length(); i++) {
-//					JSONObject jsObj = resultArr.getJSONObject(i);
-//
-//					String timeStamp = jsObj.getString("timeStamp");
-//					String alertMessage = jsObj.getString("alertMessage");
-//					String threat_id = jsObj.getString("threat_id");
-//					String priority = jsObj.getString("priority");
-//
-//					JSONObject latestThreatsObj = new JSONObject();
-//
-//					try {
-//
-//						latestThreatsObj.put("timeStamp", timeStamp);
-//						latestThreatsObj.put("alertMessage", alertMessage);
-//						latestThreatsObj.put("threat_id", threat_id);
-//						latestThreatsObj.put("priority", priority);
-//
-//						resJsonArray.put(latestThreatsObj);
-//
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//						logger.error("Error in putting latest active threats data in json array : " + e);
-//					}
-//				}
-
-				
 
 			} catch (Exception e) {
 				e.printStackTrace();

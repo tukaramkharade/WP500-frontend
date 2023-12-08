@@ -1151,7 +1151,7 @@ var globalData = [];
 										row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.comment).prop("disabled", true)));
 										
 										// Assuming you have a table row (row) and a variable basicConfig with a property: action
-										var actionOptions = ["ACCEPT", "REJECT", "DROP", "CONTINUE"];
+										var actionOptions = ["ACCEPT", "REJECT"];
 										var select = $("<select>");
 
 										// Loop through the options and create <option> elements

@@ -396,21 +396,22 @@ var tokenValue;
 							
 							var station_name = dispenserTrigger.station_name; 
 							var serial_number = dispenserTrigger.serial_number; 
+							var unit_id = dispenserTrigger.unit_id;
 							var side = dispenserTrigger.side; 
 							var trigger_tag = dispenserTrigger.trigger_tag; 
 							var trigger_value = dispenserTrigger.trigger_value; 
 							var broker_ip_address = dispenserTrigger.broker_ip_address; 
 							var status = dispenserTrigger.status; 
-							var unit_id = dispenserTrigger.unit_id;
+						
 							
 							var row = $("<tr>").append($("<td>").text(station_name),
 									$("<td>").text(serial_number),
+									$("<td>").text(unit_id),
 									$("<td>").text(side),
 									$("<td>").text(trigger_tag),
 									$("<td>").text(trigger_value),
 									$("<td>").text(broker_ip_address),
-									$("<td>").text(status),
-									$("<td>").text(unit_id));
+									$("<td>").text(status));
 							
 							var actions = $('<td>');
 							var editButton = $(
@@ -1307,12 +1308,12 @@ var tokenValue;
 					<tr>
 						<th>Station name</th>
 						<th>Serial number</th>
+						<th>Unit ID</th>
 						<th>Side</th>
 						<th>Trigger tag</th>
 						<th>Trigger value</th>
 						<th>Broker IP address</th>
 						<th>Status</th>
-						<th>Unit ID</th>
 						<th id="actions">Actions</th>
 					</tr>
 				</thead>
