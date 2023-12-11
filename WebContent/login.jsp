@@ -92,10 +92,6 @@
         	    }
         	}
 
-
-         
-        	
-         
          function checkUserInput() {
         	    // Get the user's input
         	    const userInput = $('#userInputNumber').val();

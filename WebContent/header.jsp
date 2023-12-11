@@ -10,7 +10,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
 
 <style>
-.modal-logout {
+.modal-logout,
+.modal-load-config,
+.modal-session-timeout {
 	display: none;
 	position: fixed;
 	z-index: 1;
@@ -25,7 +27,9 @@
 	margin: 0;
 }
 
-.modal-content-logout {
+.modal-content-logout,
+.modal-content-load-config,
+.modal-content-session-timeout {
 	background-color: #d5d3d3;
 	padding: 20px;
 	border-radius: 5px;
@@ -46,12 +50,15 @@ button {
 	cursor: pointer;
 }
 
-#confirm-button-logout {
+#confirm-button-logout,
+#confirm-button-load-config,
+#confirm-button-session-timeout {
 	background-color: #4caf50;
 	color: white;
 }
 
-#cancel-button-logout {
+#cancel-button-logout,
+#cancel-button-load-config  {
 	background-color: #f44336;
 	color: white;
 }
@@ -88,44 +95,6 @@ button {
 	padding: 5px 3px;
 	font-size: 12px;
 	font-weight: bold;
-}
-
-.modal-load-config {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content-load-config {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
-
-#confirm-button-load-config {
-  background-color: #4caf50;
-  color: white;
-}
-
-#cancel-button-load-config {
-  background-color: #f44336;
-  color: white;
 }
 
 .notification-container {
@@ -217,44 +186,11 @@ background-color: #f7f7f7;
             display: block;
         }
 
-.modal-session-timeout {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.modal-content-session-timeout {
-  background-color: #d5d3d3;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  transform: translate(0, -50%); /* Center vertically */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
-}
-
 button {
   margin: 5px;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-}
-
-#confirm-button-session-timeout {
-  background-color: #4caf50;
-  color: white;
 }
 
  .popup {

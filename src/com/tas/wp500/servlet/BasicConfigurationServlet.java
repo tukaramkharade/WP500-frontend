@@ -52,6 +52,7 @@ public class BasicConfigurationServlet extends HttpServlet {
 					JSONArray jsonArray = respJson.getJSONArray("data");
 					finalJsonObj.put("status", status);
 				    finalJsonObj.put("result_basic", jsonArray);
+				    finalJsonObj.put("message", message);
 				}else if(status.equals("fail")){
 					finalJsonObj.put("status", status);
 				    finalJsonObj.put("message", message);
