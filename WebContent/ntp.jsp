@@ -40,10 +40,10 @@
   margin-left: 40%;
 }
 
-
 #close-popup:hover {
   background-color: #1f2b6d;
 }
+
 .modal-session-timeout,
 .modal-edit {
   display: none;
@@ -73,6 +73,7 @@
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
+
 .btn_discard_0 {
 	padding: 5px 10px;
 	background-color: #ef0803;

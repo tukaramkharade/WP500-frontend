@@ -97,8 +97,18 @@ h3 {
 	margin-bottom: 10px; /* Add some spacing between heading and table */
 	font-size: 18px; /* Adjust font size as needed */
 	margin-left: 5px;
-	margin-top: 2px;
+	margin-top: -22px;
 }
+
+ button {
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+         
+            font-size: small;
+            margin-right: 10px;
+             padding: 10px 20px;
+        }
 .table-container {
   display: flex;
   flex-wrap: wrap;
@@ -133,6 +143,13 @@ h3 {
 .red-text {
 	color: red;
 }
+
+.button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px; /* Add margin as needed */
+        }
+        
 </style>
 <script>
 
@@ -291,7 +308,12 @@ function getProcessData() {
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-			<h3 style="margin-top: 68px;">Process</h3>
+		
+		<div class="button-container">
+        <button onClick="window.location.reload();" style="color:white; background-color: #2b3991">Reload</button>
+    </div>
+    
+			<h3 style="margin-top: -8px;">Process</h3>
 			<hr />
 
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
@@ -305,6 +327,8 @@ function getProcessData() {
 				<span class="popup-content" id="popupMessage"></span>
 				<button id="closePopup">OK</button>
 			</div>
+			
+			
 
 			<div class="table-container" style="display: flex;">
 				<!-- White List Table -->
