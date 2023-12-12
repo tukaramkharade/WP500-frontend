@@ -413,7 +413,7 @@ var tokenValue;
 		<section style="margin-left: 1em">
 		<h3>SYSTEM LOGS</h3>
 		<hr />
-		<div class="row"
+		<!-- <div class="row"
 			style="display: flex; flex-content: space-between; margin-top: 5px;">
 			<div style="width: 20%;">
 				<label for="log_file">Choose a date:</label>
@@ -441,7 +441,20 @@ var tokenValue;
 					id="loadLogSysFileButton" value="Load system log file">
 			</div>
 
-		</div>
+		</div> -->
+		
+		
+		<table class="bordered-table" style="margin-top: -1px;">
+		<tr>
+		<td style="width: 6%;">Choose a date</td>
+		<td style="width: 10%;"><input type="datetime-local" id="startdatetime" name="startdatetime"></td>
+		<td  style="width: 1%;">to</td>
+		<td  style="width: 10%;"><input type="datetime-local" id="enddatetime" name="enddatetime"></td>
+		<td><input type="text" id="search_query" placeholder=" Search"></td>
+		<td><input style="margin-left: 1%;" type="button"
+					id="loadLogSysFileButton" value="Load system log file"></td>
+		</tr>
+		</table>
 		
 		<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">

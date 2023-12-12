@@ -963,17 +963,22 @@ margin-top: 70px;
 					    				            crtFileUpload();
 					    				        });
 					    						
-					    						$("#file_type").change(function(event) {
-					    									
-					    									if ($(this).val() == 'SSL'
-					    											|| $(this).val() == 'ssl') {
-					    										$("#file_name").prop("disabled", false);
-					    									} else if ($(this).val() == 'TCP'
-					    											|| $(this).val() == 'tcp') {
-					    										$("#file_name").prop("disabled", true);
-					    										$('#file_name').val('');
-					    									}
-					    								});
+					    						if ($("#file_type").val().toLowerCase() === 'tcp') {
+					    					        $("#file_name").prop("disabled", true);
+					    					    } else {
+					    					        $("#file_name").prop("disabled", false);
+					    					    }
+
+					    					    // Event handler for file_type change
+					    					    $("#file_type").change(function(event) {
+					    					        // Check the selected value and enable/disable file_name accordingly
+					    					        if ($(this).val().toLowerCase() === 'tcp') {
+					    					            $("#file_name").prop("disabled", true);
+					    					            $('#file_name').val(''); // Clear the value when disabled, if needed
+					    					        } else {
+					    					            $("#file_name").prop("disabled", false);
+					    					        }
+					    					    });
 
 					    						// Handle form submission
 					    						$('#mqttForm').submit(function(event) {
@@ -1146,8 +1151,8 @@ margin-top: 70px;
 					<td>Type</td>
 					<td><select class="textBox" id="file_type" name="file_type" style="height: 33px;">
 								<option value="Select type">Select type</option>
-								<option>SSL</option>
-								<option>TCP</option>
+								<option value="SSL">SSL</option>
+								<option value="TCP" selected>TCP</option>
 							</select> <span id="fileTypeError" style="color: red;"></span></td>
 					<td>CRT file</td>
 					<td><select class="textBox" id="file_name" name="file_name" style="height: 33px;">

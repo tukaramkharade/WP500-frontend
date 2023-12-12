@@ -87,6 +87,74 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		HttpSession session = request.getSession(false);
+
+		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+
+		String input = null;
+		String output = null;
+		String forward = null;
+		String rule_drop = null;
+
+		if (check_username != null) {
+
+			String operation_action = request.getParameter("operation_action_lan0");
+
+			if (operation_action != null) {
+				switch (operation_action) {
+
+				case "update":
+
+					 input = request.getParameter("input");
+					 output = request.getParameter("output");
+					 forward = request.getParameter("forward");
+					 rule_drop = request.getParameter("rule_drop");
+
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "genral_settings");
+						json.put("operation_type", "update");
+						json.put("input", input);
+						json.put("output", output);
+						json.put("forword", forward);
+						json.put("rule_drop", rule_drop);
+						json.put("user", check_username);
+						json.put("token", check_token);
+						json.put("interface", "lan0");
+
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+
+						// Set the content type of the response to
+						// application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out = response.getWriter();
+
+						// Write the JSON object to the response
+						out.print(jsonObject.toString());
+						out.flush();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error("Error in updating general settings : " + e);
+					}
+
+					break;
+
+			}
+		} 
+	}
+
 	}
 
 }

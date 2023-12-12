@@ -462,22 +462,22 @@ var roleValue1;
 }); 
  setInterval(getActiveThreatsCount, 300000);
  
+ 
 	
 </script>
 
 
  <header>
+ 
 
 	<div class="row" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 0.5%">
 	
 	 <div id="helpDropdown">
-            <button title="Help" style="border: none;"><b>Help</b></button>
-            <div class="help-content">
-                <p><a href="#">Option A</a></p>
-                <p><a href="#">Option B</a></p>
-                <p><a href="#">Option C</a></p>
-            </div>
-        </div>
+    <a href="https://support.tasind.com/" target="_blank" title="Help" style="text-decoration: none; color: inherit;">
+        <button style="border: none;"><b>Help</b></button>
+    </a>
+</div>
+
         
 	<div class="center-container">
             <div class="project_name">

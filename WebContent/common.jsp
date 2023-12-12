@@ -72,7 +72,7 @@
                   <a href="lan.jsp">LAN</a>
                 </li>
                 <li class="nav-item">
-                  <a href="trafficrules.jsp">Traffic Rules</a>
+                  <a href="trafficrules_new.jsp">Traffic Rules</a>
                 </li>
                 <li class="nav-item">
                   <a href="ntp.jsp">NTP</a>

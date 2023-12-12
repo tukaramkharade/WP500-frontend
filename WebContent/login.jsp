@@ -128,9 +128,29 @@
         		});
         	}
          
+         document.addEventListener('DOMContentLoaded', function () {
+             const captchaLabel = document.getElementById('captchaLabel');
+
+             // Generate random alphanumeric text for CAPTCHA
+             const captchaText = generateRandomAlphanumeric();
+            
+             // Set the generated text to the label
+             captchaLabel.textContent = captchaText;
+         });
+
+         function generateRandomAlphanumeric() {
+        	 var length = 6;
+             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+             let result = '';
+             for (var i = 0; i < length; i++) {
+                 result += characters.charAt(Math.floor(Math.random() * characters.length));
+             }
+             return result;
+         }
+         
         $(document).ready(function () {
         	
-        	const captchaLabel = $('#captchaLabel');
+        	/* const captchaLabel = $('#captchaLabel');
           //  const refreshCaptcha = $('#refreshCaptcha');
 
             // Function to generate random alphanumeric text for CAPTCHA
@@ -151,7 +171,7 @@
 }
 
             // Set initial captcha
-            updateCaptcha();
+            updateCaptcha(); */
 
              /* $('#refreshCaptcha').click(function () {
             	 
@@ -278,7 +298,7 @@
 </div>
  
   <label id="captchaLabel">
-    <span id="captchaText"></span>
+    <!-- <span id="captchaText"></span> -->
 </label>
 <!-- <button id="refreshCaptcha"><i class="fas fa-sync-alt" style="font-size: 15px; color: #35449a;"></i></button>
  --> 
