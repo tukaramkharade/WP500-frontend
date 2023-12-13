@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
 <link rel="stylesheet" href="nav-bar.css" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+
+<script src="jquery-3.6.0.min.js"></script>
+
+<link href="css_files/material.css"
 	rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/bundled-uncompressed/html4+html5/jquery.history.js"></script>
+	
+<link rel="stylesheet" href="css_files/all.min.css">
+<link rel="stylesheet" href="css_files/fontawesome.min.css">
 
 <style>
 .modal-logout,

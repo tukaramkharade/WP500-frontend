@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link rel="stylesheet" href="css_files/ionicons.min.css">
+<link rel="stylesheet" href="css_files/normalize.min.css">
+<link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
+<link rel="stylesheet" href="css_files/font-awesome.min.css">
+
   <link rel="stylesheet" href="nav-bar.css" />
   <script src="jquery-3.6.0.min.js"></script>
   <meta charset="UTF-8" />
@@ -13,6 +14,21 @@
   <title>WPConnex Web Configuration</title>
   <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 </head>
+
+<style>
+
+.sidebar-nav>ul>li>a:after {
+	  content: ">";
+	  font-family: ionicons;
+	  font-size: 0.5em;
+	  width: 10px;
+	  color: #fff;
+	  position: absolute;
+	  right: 0.75em;
+	  top: 45%;
+	  display: none;
+	}
+</style>
 
 <body>
   

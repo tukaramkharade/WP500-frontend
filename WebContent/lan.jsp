@@ -4,15 +4,11 @@
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+<link rel="stylesheet" href="css_files/ionicons.min.css">
+<link rel="stylesheet" href="css_files/normalize.min.css">
+<link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
 <link rel="stylesheet" type="text/css" href="nav-bar.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="jquery-3.6.0.min.js"></script>
 
 <style>
 
@@ -646,18 +642,30 @@ position: relative;
 	
 	function validateIPAddress(inputId, spanId) {
 	    var ipAddress = document.getElementById(inputId).value;
-	    var ipRegex = /^(\d{1,3}\.){0,3}\d{1,3}$/; // Updated regex to disallow spaces
+	    var ipRegex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
 	    var validationMessageSpan = document.getElementById(spanId);
 
 	    if (ipRegex.test(ipAddress)) {
 	        validationMessageSpan.innerHTML = "";
-	        // You can also perform additional actions here if the IP address is valid
+	        return true; // IP address is valid
 	    } else {
 	        validationMessageSpan.innerHTML = "Invalid IP Address. Please enter a valid IP address.";
-	        // You can prevent form submission or perform other actions for invalid input
+	        return false; // IP address is invalid
 	    }
 	}
 
+	function validateIPAddressOrBlank(inputId, spanId) {
+	    var value = document.getElementById(inputId).value.trim();
+	    
+	    // Allow blank value or validate IP address
+	    if (value === "" || /^(\d{1,3}\.){0,3}\d{1,3}$/.test(value)) {
+	        document.getElementById(spanId).innerHTML = "";
+	        return true;
+	    } else {
+	        document.getElementById(spanId).innerHTML = "Invalid input. Please enter a valid IP address or leave it blank.";
+	        return false;
+	    }
+	}
 	
 	$(document).ready(function() {
 		
@@ -710,18 +718,32 @@ position: relative;
 			getDhcpSettings();
 	 });	
 	
-	$('#eth1_button').click(function(){	
-	    	editEth1();		  
-	});
-	
-	$('#lan1_button').click(function(){		
-		    	editLan1();		
-		
-	});
-	
-    $('#lan2_button').click(function(){
-	    	editLan2();	 
-	});
+		$('#eth1_button').click(function () {
+		    if (validateIPAddress('ip_addr_eth1', 'validationMessage') &&
+		        validateIPAddress('subnet_mask_eth1', 'validationMessage1') &&
+		        validateIPAddressOrBlank('gateway_eth1', 'validationMessage2') &&
+		        validateIPAddressOrBlank('dns_ip_eth1', 'validationMessage3')) {
+		        editEth1();
+		    }
+		});
+
+		$('#lan1_button').click(function () {
+		    if (validateIPAddress('ip_addr_lan1', 'validationMessage5') &&
+		        validateIPAddress('subnet_mask_lan1', 'validationMessage6') &&
+		        validateIPAddressOrBlank('gateway_lan1', 'validationMessage7') &&
+		        validateIPAddressOrBlank('dns_ip_lan1', 'validationMessage8')) {
+		        editLan1();
+		    }
+		});
+
+		$('#lan2_button').click(function () {
+		    if (validateIPAddress('ip_addr_lan2', 'validationMessage9') &&
+		        validateIPAddress('subnet_mask_lan2', 'validationMessage10') &&
+		        validateIPAddressOrBlank('gateway_lan2', 'validationMessage11') &&
+		        validateIPAddressOrBlank('dns_ip_lan2', 'validationMessage12')) {
+		        editLan2();
+		    }
+		});
     }
 		
 	});
@@ -772,7 +794,7 @@ position: relative;
 							
 						<td>
 						 <div class="validation-container">
-                    <input id="ip_addr_eth1" class="config" type='text' name="ip_addr_eth1" style="width: 42%;" oninput="validateIPAddress('ip_addr_eth1', 'validationMessage')" required>
+                    <input id="ip_addr_eth1" class="config" type='text' name="ip_addr_eth1" style="width: 42%;" required>
                     <span id="validationMessage" class="validation-message" style="margin-left: 10px;"></span>
                 </div>
             
@@ -786,7 +808,7 @@ position: relative;
 						<td>
 							
 					<div class="validation-container">
-                    <input id="subnet_mask_eth1" class="config" type='text' name="subnet_mask_eth1" style="width: 42%;" oninput="validateIPAddress('subnet_mask_eth1', 'validationMessage1')" required>
+                    <input id="subnet_mask_eth1" class="config" type='text' name="subnet_mask_eth1" style="width: 42%;" required>
                     <span id="validationMessage1" class="validation-message" style="margin-left: 10px;"></span>
                 </div>		
 							</td>
@@ -801,7 +823,7 @@ position: relative;
 						<td>
 						
 						<div class="validation-container">
-                    <input id="gateway_eth1" class="config" type='text' name="gateway_eth1" style="width: 42%;" oninput="validateIPAddress('gateway_eth1', 'validationMessage2')">
+                    <input id="gateway_eth1" class="config" type='text' name="gateway_eth1" style="width: 42%;">
                     <span id="validationMessage2" class="validation-message" style="margin-left: 10px;"></span>
                 </div>			
 							
@@ -816,7 +838,7 @@ position: relative;
 						<td>
 						
 							<div class="validation-container">
-                    <input id="dns_ip_eth1" class="config" type='text' name="dns_ip_eth1" style="width: 42%;" oninput="validateIPAddress('dns_ip_eth1', 'validationMessage3')">
+                    <input id="dns_ip_eth1" class="config" type='text' name="dns_ip_eth1" style="width: 42%;">
                     <span id="validationMessage3" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							
@@ -861,7 +883,7 @@ position: relative;
 						<td>
 					
 						<div class="validation-container">
-                    <input id="ip_addr_lan1" class="config" type='text' name="ip_addr_lan1" style="width: 42%;" oninput="validateIPAddress('ip_addr_lan1', 'validationMessage5')" required>
+                    <input id="ip_addr_lan1" class="config" type='text' name="ip_addr_lan1" style="width: 42%;" required>
                     <span id="validationMessage5" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
                 	
@@ -876,7 +898,7 @@ position: relative;
 						<td>
 						
 							<div class="validation-container">
-                    <input id="subnet_mask_lan1" class="config" type='text' name="subnet_mask_lan1" style="width: 42%;" oninput="validateIPAddress('subnet_mask_lan1', 'validationMessage6')" required>
+                    <input id="subnet_mask_lan1" class="config" type='text' name="subnet_mask_lan1" style="width: 42%;" required>
                     <span id="validationMessage6" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							
@@ -891,7 +913,7 @@ position: relative;
 						<td>
 						
 							<div class="validation-container">
-                    <input id="gateway_lan1" class="config" type='text' name="gateway_lan1" style="width: 42%;" oninput="validateIPAddress('gateway_lan1', 'validationMessage7')">
+                    <input id="gateway_lan1" class="config" type='text' name="gateway_lan1" style="width: 42%;">
                     <span id="validationMessage7" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							
@@ -906,7 +928,7 @@ position: relative;
 						<td>
 						
 							<div class="validation-container">
-                    <input id="dns_ip_lan1" class="config" type='text' name="dns_ip_lan1" style="width: 42%;" oninput="validateIPAddress('dns_ip_lan1', 'validationMessage8')">
+                    <input id="dns_ip_lan1" class="config" type='text' name="dns_ip_lan1" style="width: 42%;">
                     <span id="validationMessage8" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							
@@ -958,7 +980,7 @@ position: relative;
 							
 						<td>
 						<div class="validation-container">
-                    <input id="ip_addr_lan2" class="config" type='text' name="ip_addr_lan2" style="width: 42%;" required oninput="validateIPAddress('ip_addr_lan2', 'validationMessage9')" >
+                    <input id="ip_addr_lan2" class="config" type='text' name="ip_addr_lan2" style="width: 42%;" required>
                     <span id="validationMessage9" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							
@@ -972,7 +994,7 @@ position: relative;
 						<td>
 						
 							<div class="validation-container">
-                    <input id="subnet_mask_lan2" class="config" type='text' name="subnet_mask_lan2" style="width: 42%;" required oninput="validateIPAddress('subnet_mask_lan2', 'validationMessage10')" >
+                    <input id="subnet_mask_lan2" class="config" type='text' name="subnet_mask_lan2" style="width: 42%;" required>
                     <span id="validationMessage10" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
                 
@@ -987,7 +1009,7 @@ position: relative;
 						<td>
 						
 						<div class="validation-container">
-                    <input id="gateway_lan2" class="config" type='text' name="gateway_lan2" style="width: 42%;" oninput="validateIPAddress('gateway_lan2', 'validationMessage11')">
+                    <input id="gateway_lan2" class="config" type='text' name="gateway_lan2" style="width: 42%;">
                     <span id="validationMessage11" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
                 	
@@ -1002,7 +1024,7 @@ position: relative;
 						<td>
 						
 							<div class="validation-container">
-                    <input id="dns_ip_lan2" class="config" type='text' name="dns_ip_lan2" style="width: 42%;" oninput="validateIPAddress('dns_ip_lan2', 'validationMessage12')">
+                    <input id="dns_ip_lan2" class="config" type='text' name="dns_ip_lan2" style="width: 42%;">
                     <span id="validationMessage12" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							</td>

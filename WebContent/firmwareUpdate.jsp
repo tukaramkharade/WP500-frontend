@@ -2,16 +2,14 @@
 <html>
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-<link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="css_files/ionicons.min.css">
+<link rel="stylesheet" href="css_files/normalize.min.css">
+<link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
+<link rel="stylesheet" href="nav-bar.css" />
+<link rel="stylesheet" href="css_files/all.min.css">
+<link rel="stylesheet" href="css_files/fontawesome.min.css">
+<script src="jquery-3.6.0.min.js"></script>
 
 <style>
 
@@ -271,6 +269,8 @@ function loadFirmwareFiles() {
                 data.firmware_files_result.forEach(function (file) {
                     var row = $("<tr>");
                     row.append($("<td>").text(file));
+                    var actions = $('<td>');
+                    
                     var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red;">')
                         .html('<i class="fas fa-trash-alt"></i>')
                         .click(function() {
@@ -281,8 +281,15 @@ function loadFirmwareFiles() {
                     .click(function() {
                     	updateFirmwareFile(file);
                     });                   
-                    row.append($("<td>").append(deleteButton));
-                    row.append($("<td>").append(updateButton));
+                    /* row.append($("<td>").append(deleteButton));
+                    row.append($("<td>").append(updateButton)); */
+                    
+                    actions.append(deleteButton);
+					actions.append(updateButton);
+					
+
+					row.append(actions);
+					
                     table.append(row);
                 });
             }
@@ -493,7 +500,7 @@ function firmwareDownload() {
 			<table id="firmware_list_table" style="margin-left: -17px;">
 			<thead>
 			<tr>
-			<th>File</th>
+			<th style="width: 20%;">File</th>
 			<th>Action</th>
 			</tr>
 			</thead>

@@ -3,18 +3,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32"
-	href="images/WP_Connex_logo_favicon.png" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
+
+<link rel="stylesheet" href="css_files/ionicons.min.css">
+<link rel="stylesheet" href="css_files/normalize.min.css">
+<link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="css_files/all.min.css">
+<link rel="stylesheet" href="css_files/fontawesome.min.css">	
+<script src="jquery-3.6.0.min.js"></script>
 
 <style>
 .tab {
@@ -2394,7 +2391,7 @@ function applyTrafficRulesLan2() {
 					<hr>
 
 
-					<div class="form-container">
+					<div class="form-container" style="width: 40%;">
 						<form id="generalSettingsForm_lan0" style="width: 100%;">
 							<input type="hidden" id="operation_action_lan0"
 								name="operation_action_lan0" value="">
@@ -2655,7 +2652,7 @@ function applyTrafficRulesLan2() {
 					<h3>GENERAL SETTINGS</h3>
 					<hr>
 
-					<div class="form-container">
+					<div class="form-container" style="width: 40%;">
 						<form id="generalSettingsForm_lan1" style="width: 100%;">
 							<input type="hidden" id="operation_action_lan1"
 								name="operation_action_lan1" value="">
@@ -2716,18 +2713,7 @@ function applyTrafficRulesLan2() {
 			  </div>
 					</div>
 
-					<h3>CONFIGURATION</h3>
-					<hr />
-
-					<div class="tab-container">
-
-						<button class="tab-button active"
-							onclick="openTabBasic('user-config-lan1', this)">User
-							Configuration</button>
-
-
-						<div id="user-config-lan1" class="tab-basic"
-							style="margin-left: 5px;">
+						<div id="user-config-lan1" style="margin-left: 5px;">
 							<h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
 							<hr />
 							<div class="form-container">
@@ -2843,7 +2829,7 @@ function applyTrafficRulesLan2() {
 
 
 						</div>
-					</div>
+					
 
 				</div>
 
@@ -2852,7 +2838,7 @@ function applyTrafficRulesLan2() {
 					<h3>GENERAL SETTINGS</h3>
 					<hr>
 
-					<div class="form-container">
+					<div class="form-container" style="width: 40%;">
 						<form id="generalSettingsForm_lan2" style="width: 100%;">
 							<input type="hidden" id="operation_action_lan2"
 								name="operation_action_lan2" value="">
@@ -2912,18 +2898,7 @@ function applyTrafficRulesLan2() {
 			  </div>
 					</div>
 
-					<h3>CONFIGURATION</h3>
-					<hr />
-
-					<div class="tab-container">
-
-						<button class="tab-button active"
-							onclick="openTabBasic('user-config-lan2', this)">User
-							Configuration</button>
-
-
-						<div id="user-config-lan2" class="tab-basic"
-							style="margin-left: 5px;">
+						<div id="user-config-lan2" style="margin-left: 5px;">
 							<h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
 							<hr />
 							<div class="form-container">
@@ -3037,8 +3012,7 @@ function applyTrafficRulesLan2() {
 
 
 						</div>
-					</div>
-
+					
 				</div>
 
 			</div>

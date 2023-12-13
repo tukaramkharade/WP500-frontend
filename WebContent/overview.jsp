@@ -2,19 +2,15 @@
 <html>
 <head>
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32"
-	href="images/WP_Connex_logo_favicon.png" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-<link rel="stylesheet" href="nav-bar.css" />
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
+<link rel="stylesheet" href="css_files/ionicons.min.css">
+<link rel="stylesheet" href="css_files/normalize.min.css">
+<link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
+<link rel="stylesheet" type="text/css" href="nav-bar.css">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="jquery-3.6.0.min.js"></script>
 
 <style>
 h3 {
