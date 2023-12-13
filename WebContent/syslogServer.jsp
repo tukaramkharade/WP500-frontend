@@ -3,16 +3,14 @@
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32"
 	href="images/WP_Connex_logo_favicon.png" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+	
+<link rel="stylesheet" href="css_files/ionicons.min.css">
+<link rel="stylesheet" href="css_files/normalize.min.css">
+<link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
 <link rel="stylesheet" href="nav-bar.css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="css_files/all.min.css">
+<link rel="stylesheet" href="css_files/fontawesome.min.css">
+<script src="jquery-3.6.0.min.js"></script>
 
 <style>
 
@@ -28,10 +26,12 @@
 
 .container {
 	margin: 0 auto;
-	max-width: 50%;
+	max-width: 20%;
 }
 
-.modal-session-timeout {
+.modal-session-timeout,
+.modal-edit,
+.modal-edit-status{
 	display: none;
 	position: fixed;
 	z-index: 1;
@@ -46,7 +46,9 @@
 	margin: 0;
 }
 
-.modal-content-session-timeout {
+.modal-content-session-timeout,
+.modal-content-edit,
+.modal-content-edit-status{
 	background-color: #d5d3d3;
 	padding: 20px;
 	border-radius: 5px;
@@ -60,9 +62,19 @@
 	/* Center horizontally and vertically */
 }
 
-#confirm-button-session-timeout {
+#confirm-button-session-timeout,
+#confirm-button-edit,
+#confirm-button-edit-status {
 	background-color: #4caf50;
 	color: white;
+}
+
+
+#cancel-button-edit,
+#cancel-button-edit-status
+ {
+  background-color: #f44336;
+  color: white;
 }
 
 </style>
@@ -71,6 +83,242 @@
 
 var roleValue;	
 var tokenValue;
+
+function getSysLog(){
+	
+	$.ajax({
+		url : "syslogConf",
+		type : "GET",
+		dataType : "json",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
+		success : function(data) {
+			
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+
+			$('#hostname').val(data.rsyslog_ip);
+			$('#port_number').val(data.rsyslog_port);
+			
+		},
+		error : function(xhr, status, error) {
+			// Handle the error response, if needed
+			console.log("Error loading rsyslog configuration: " + error);
+		},
+	});
+
+}
+
+
+function updateSysLog(){
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-edit');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit');
+	  confirmButton.onclick = function () {
+		  
+		  var hostname = $('#hostname').val();
+			var port_number = $('#port_number').val();
+			
+			
+			$.ajax({
+				url : 'syslogConf',
+				type : 'POST',
+				data : {
+					hostname : hostname,
+					port_number : port_number
+					
+
+				},
+				success : function(data) {
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					} 
+					// Close the modal
+			        modal.style.display = 'none';
+			        getSysLog();
+
+					// Clear form fields
+
+					$('#hostname').val('');
+					$('#port_number').val('');
+					
+
+				},
+				error : function(xhr, status, error) {
+					console.log('Error editing syslog configuration setting: ' + error);
+				}
+			});
+				
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-edit');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	   
+	  };
+	
+}
+
+function getSysLogStatus(){
+	$.ajax({
+		url : "syslogStatus",
+		type : "GET",
+		dataType : "json",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
+		success : function(data) {
+			
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+
+			$('#status').val(data.rsyslog_status);
+			
+			
+		},
+		error : function(xhr, status, error) {
+			// Handle the error response, if needed
+			console.log("Error loading rsyslog configuration: " + error);
+		},
+	});
+
+	
+}
+
+function updateSysLogStatus(){
+	
+	 var status = $('#status').find(":selected").val();
+	  var errorSpan = $('#status-error-message'); // Assuming you have a <span> element for error messages
+	  
+	// Check if the selected status is "Select status"
+	    if (status === "Select status") {
+	        // Display an error message and prevent saving
+	        errorSpan.text("Please select a valid status.");
+	        return;
+	    }
+
+	    // Clear any previous error messages
+	    errorSpan.text("");
+	
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-edit-status');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit-status');
+	  confirmButton.onclick = function () {
+		  
+			$.ajax({
+				url : 'syslogStatus',
+				type : 'POST',
+				data : {
+					status : status
+					
+				},
+				success : function(data) {
+					if (data.status == 'fail') {
+						
+						 var modal1 = document.getElementById('custom-modal-session-timeout');
+						  modal1.style.display = 'block';
+						  
+						// Update the session-msg content with the message from the server
+						    var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+						  
+						  // Handle the confirm button click
+						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						  confirmButton1.onclick = function () {
+							  
+							// Close the modal
+						        modal1.style.display = 'none';
+						        window.location.href = 'login.jsp';
+						  };
+							  
+					} 
+					// Close the modal
+			        modal.style.display = 'none';
+			        getSysLogStatus();
+
+					// Clear form fields
+
+					$('#status').val('Select status');
+					
+				},
+				error : function(xhr, status, error) {
+					console.log('Error editing syslog configuration setting: ' + error);
+				}
+			});
+				
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-edit-status');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	   
+	  };
+	
+}
+
 
 function changeButtonColor(isDisabled) {
     var $applyBtn = $('#applyBtn');       
@@ -81,6 +329,8 @@ function changeButtonColor(isDisabled) {
         $applyBtn.css('background-color', '#2b3991'); // Reset to original color
     }   
 }
+
+
 
 $(document).ready(function() {
 	<%// Access the session variable
@@ -114,6 +364,19 @@ if (roleValue === "null") {
 
 tokenValue = '<%=tokenValue%>';
 
+getSysLog();
+
+$('#applyBtn').click(function() {
+	updateSysLog();
+});
+
+getSysLogStatus();
+
+$('#addButton').click(function() {
+	updateSysLogStatus();
+});
+
+
 }
 });
 	
@@ -137,33 +400,56 @@ tokenValue = '<%=tokenValue%>';
 					<table class="bordered-table" style="margin-top: -1px;">
 						<tr>
 							<td>Hostname</td>
-							<td><input type="text" id="hostname" maxlength="31" name="hostname" required /></td>
+							<td><input type="text" id="hostname" maxlength="31" name="hostname" required style="max-width: 200px;" /></td>
+							</tr>
 							
-							<td>Protocol</td>
-							<td><select class="textBox" id="protocol" name="protocol" style="height: 33px;">
-							<option value="Select protocol">Select protocol</option>
-							<option value="TCP" selected="selected">TCP</option>
-							<option value="UDP">UDP</option>
-						</select></td>
-						
+						<tr>
 							<td>Port</td>
-							<td><input type="text" id="port_number" name="port_number" maxlength="6" required /></td>
+							<td><input type="text" id="port_number" name="port_number" maxlength="6" required style="max-width: 200px;"/></td>
+						</tr>
+						
+						<tr>
+						<td colspan="2" style="text-align: center;"><input style="height: 26px;" type="button" value="Apply"
+							id="applyBtn" /></td>
+						</tr>
+						
+						<tr>
+							<td>Status</td>
+							<td><select class="textBox" id="status" name="status" style="height: 33px; max-width: 220px;">
+							<option value="Select status">Select status</option>
+							<option value="Enable">Enable</option>
+							<option value="Disable">Disable</option>
+						</select>
+						
+						<span style="color: red; font-size: 12px;" id="status-error-message"></span>
+						</td>
+						<td><input type="button" id="addButton" value="Add"/></td>
 						</tr>
 
 					</table>
 
-					<div class="row"
-						style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-						<input style="height: 26px;" type="button" value="Apply"
-							id="applyBtn" />
-
-					</div>
 				</form>
 			</div>
 			
+			<div id="custom-modal-edit" class="modal-edit">
+				<div class="modal-content-edit">
+				  <p>Are you sure you want to modify this rsyslog configuration?</p>
+				  <button id="confirm-button-edit">Yes</button>
+				  <button id="cancel-button-edit">No</button>
+				</div>
+			  </div>
+			  
+			  <div id="custom-modal-edit-status" class="modal-edit-status">
+				<div class="modal-content-edit-status">
+				  <p>Are you sure you want to modify this rsyslog status?</p>
+				  <button id="confirm-button-edit-status">Yes</button>
+				  <button id="cancel-button-edit-status">No</button>
+				</div>
+			  </div>
+			
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-					<p>Your session is timeout. Please login again</p>
+					<p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
