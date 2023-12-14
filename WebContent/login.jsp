@@ -214,7 +214,7 @@
 }
 
     .container img {
-        width: 78%;
+        width: 70%;
         margin-top: -36px;
     }
 

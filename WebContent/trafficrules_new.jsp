@@ -1541,6 +1541,8 @@ function deleteTrafficRulesLan0(trafficRulesId) {
 
 			        // Refresh the user list
 			        loadTrafficRulesListLan0();
+			        
+			        location.reload();
 			      },
 			      error: function (xhr, status, error) {
 			        // Handle the error response, if needed
@@ -1605,6 +1607,7 @@ function deleteTrafficRulesLan1(trafficRulesId) {
 
 			        // Refresh the user list
 			        loadTrafficRulesListLan1();
+			        location.reload();
 			      },
 			      error: function (xhr, status, error) {
 			        // Handle the error response, if needed
@@ -1669,6 +1672,7 @@ function deleteTrafficRulesLan2(trafficRulesId) {
 
 			        // Refresh the user list
 			        loadTrafficRulesListLan2();
+			        location.reload();
 			      },
 			      error: function (xhr, status, error) {
 			        // Handle the error response, if needed

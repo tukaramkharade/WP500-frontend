@@ -466,7 +466,7 @@ var tokenValue;
             <label for="fileUrl">Enter File Name</label>
             <input type="text" id="fileName" name="fileName" required>
            
-            <input type="button" value="Download Straton File" id="straton_download">
+            <input type="button" value="Download Straton File" id="straton_download" style="margin-top: 15px;">
             
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>

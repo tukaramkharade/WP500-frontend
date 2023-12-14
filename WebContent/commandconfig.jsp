@@ -189,30 +189,21 @@ var json = {};
 		    },
 			success : function(data) {
 				
-				var json1 = JSON.stringify(data);
-
-						var json = JSON.parse(json1);
-
-						if (json.status == 'fail') {
-							var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
-							  
-							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
-								  
-								// Close the modal
-							        modal.style.display = 'none';
-							        window.location.href = 'login.jsp';
-							  };
-						}
-						
-				
 									var unit_id = $('#unit_id').val(data.unit_id);
-									var asset_id = $('#asset_id').val(data.asset_id);
-									var broker_type = $('#broker_type').val(data.broker_type);
+									var asset_id = $('#asset_id').val(data.asset_id);							
 									var broker_ip = $('#broker_name').val(data.broker_ip);
-									var interval = $('#interval').val(data.interval);
+									
+									if(data.broker_type != null && data.interval != null){
+										var broker_type = $('#broker_type').val(data.broker_type);
+										var interval = $('#interval').val(data.interval);
+									}else{
+										var brokerTypeSelect = $('#broker_type');
+										var intervalSelect = $('#interval');
+
+										// Set default values for broker type and interval
+										brokerTypeSelect.text(data.broker_type);
+										intervalSelect.text(data.interval);
+									}
 									
 									var result = data.command_tag;
 								
@@ -291,6 +282,7 @@ var json = {};
 
 	   		        // Refresh the user list
 	   		       loadCommandSettings();
+	   		        location.reload();
 	   		      },
 	   		      error: function (xhr, status, error) {
 	   		        // Handle the error response, if needed
@@ -537,6 +529,19 @@ var json = {};
 				
 		
 		function editCommandConfig() {
+			 var broker_name = $('#broker_name').find(":selected").val();
+			 var errorSpanStatus = $('#brokerIPAddressError'); // Assuming you have a <span> element for error messages
+			  
+				// Check if the selected status is "Select status"
+				    if (broker_name === "Select broker IP address") {
+				        // Display an error message and prevent saving
+				        errorSpanStatus.text("Please select a valid IP address.");
+				        return;
+				    }
+
+				    // Clear any previous error messages
+				    errorSpanStatus.text("");
+			
 			// Display the custom modal dialog
 			  var modal = document.getElementById('custom-modal-edit');
 			  modal.style.display = 'block';
@@ -549,7 +554,7 @@ var json = {};
 					var unit_id = $('#unit_id').val();
 				    var asset_id = $('#asset_id').val();
 				    var broker_type = $('#broker_type').find(":selected").val();
-				    var broker_name = $('#broker_name').find(":selected").val();
+				   
 				    var interval = $('#interval').find(":selected").val();
 				   
 				    $.ajax({
@@ -603,6 +608,19 @@ var json = {};
 		    var broker_type = $('#broker_type').find(":selected").val();
 		    var broker_name = $('#broker_name').find(":selected").val();
 		    var interval = $('#interval').find(":selected").val();
+		    
+		    
+		    var errorSpanStatus = $('#brokerIPAddressError'); // Assuming you have a <span> element for error messages
+			  
+			// Check if the selected status is "Select status"
+			    if (broker_name === "Select broker IP address") {
+			        // Display an error message and prevent saving
+			        errorSpanStatus.text("Please select a valid IP address.");
+			        return;
+			    }
+
+			    // Clear any previous error messages
+			    errorSpanStatus.text("");
 		   
 			$.ajax({
 				url : 'commandConfigServlet',
@@ -677,8 +695,8 @@ var json = {};
 			<tr>
 			<td>Broker type</td>
 			<td><select class="textBox" id="broker_type" name="broker_type" style="height: 33px">
-							<option value="Select broker type">Select broker type</option>
-							<option value="mqtt">mqtt</option>
+							
+							<option value="mqtt" selected>mqtt</option>
 							<option value="iothub">iothub</option>
 						</select> 
 						</td>
@@ -689,15 +707,16 @@ var json = {};
 							<option value="Select broker IP address">Select broker
 								IP address</option>
 							
-						</select> <span id="brokerIPAddressError" style="color: red;"></span></td>
+						</select>
+						 <span id="brokerIPAddressError" style="color: red;"></span></td>
 			</tr>
 			
 			<tr>
 			<td>Interval</td>
 			<td><select class="interval-select" id="interval" name="interval"
 							style="height: 33px">
-							<option value="Select interval">Select interval</option>
-							<option value="5 sec">5 sec</option>
+							
+							<option value="5 sec" selected>5 sec</option>
 							<option value="10 sec">10 sec</option>
 							<option value="15 sec">15 sec</option>
 							<option value="20 sec">20 sec</option>

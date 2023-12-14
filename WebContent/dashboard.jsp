@@ -17,8 +17,7 @@
 
  <script src="chart.js"></script>
  
- <script src="chartjs-adapter-moment.min.js" 
- integrity="sha512-hVy4KxCKgnXi2ok7rlnlPma4JHXI1VPQeempoaclV1GwRHrDeaiuS1pI6DVldaj5oh6Opy2XJ2CTljQLPkaMrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="chartjs-adapter-moment.min.js"></script>
 
 <style type="text/css">
 .modal-session-timeout,
@@ -899,7 +898,7 @@ function updateBarChartMonth(){
      });	
 }
  
- function getCurrentTimeInIndia() {
+ /* function getCurrentTimeInIndia() {
 	    // Get the current date in local time
 	    const date = new Date();
 
@@ -932,7 +931,7 @@ function updateBarChartMonth(){
 	    console.log('Yesterday\'s IST time:', formattedYesterday);
 	    console.log('Today\'s IST time:', formattedToday);
 	}
- 
+ */ 
  
  function snortDetails() {
      var snort_type = $('#snort_type').val();
@@ -1015,6 +1014,8 @@ function updateBarChartMonth(){
  }
 
  
+ 
+ 
 $(document).ready(function() {
 	<%// Access the session variable
 	HttpSession role = request.getSession();
@@ -1043,8 +1044,31 @@ if (roleValue === "null") {
 	
 	latestActiveThreats();
 	countDetails();
-	getCurrentTimeInIndia();
-	setInterval(getCurrentTimeInIndia, 60000);
+	/* getCurrentTimeInIndia();
+	setInterval(getCurrentTimeInIndia, 60000); */
+	
+	var today = new Date();
+
+    // Set the "To" date picker value to today's date
+    document.getElementById('end_time').value = formatDate(today);
+
+    // Get yesterday's date
+    var yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    // Set the "From" date picker value to yesterday's date
+    document.getElementById('start_time').value = formatDate(yesterday);
+
+    // Function to format the date as YYYY-MM-DD
+    function formatDate(date) {
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+        var day = date.getDate().toString().padStart(2, '0');
+        return year + '-' + month + '-' + day;
+    }
+	
+	threatCountsLineChart();
+	updateBarChart();
 	
 	$('#apply').click(function() {
 		threatCountsLineChart();
@@ -1111,8 +1135,15 @@ if (roleValue === "null") {
 						<input style="margin-left: 5px" type="button" value="Yesterday" id="yesterday" /> 
 						<input style="margin-left: 5px" type="button" value="Week" id="week" />
 						<input style="margin-left: 5px" type="button" value="Month" id="month" />
-						<label style="margin-left: 5px;">From</label><input style="margin-left: 3px" type="datetime-local" id="start_time" name="start_time" />
-						<label style="margin-left: 5px;">To</label><input style="margin-left: 3px" type="datetime-local" id="end_time" name="end_time" />
+						<!-- <label style="margin-left: 5px;">From</label><input style="margin-left: 3px" type="datetime-local" id="start_time" name="start_time" />
+						<label style="margin-left: 5px;">To</label><input style="margin-left: 3px" type="datetime-local" id="end_time" name="end_time" /> -->
+						
+						<label for="datepicker" style="margin-left: 5px;">From</label>
+    						<input type="date" id="start_time" name="start_time">
+    						
+    						<label for="datepicker" style="margin-left: 5px;">To</label>
+    						<input type="date" id="end_time" name="end_time">
+    
 						<input style="margin-left: 15px" type="button" value="Apply" id="apply" />						
 						
 						 <div style="display: flex; justify-content: flex-end; width: 100%;">

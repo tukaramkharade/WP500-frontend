@@ -515,6 +515,7 @@ margin-top: 70px;
 						
 						modal.style.display = 'none';
 						loadMqttList();
+						location.reload();
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
@@ -533,6 +534,20 @@ margin-top: 70px;
 	}
  
  function editMqtt(){
+	 
+	 var enable = $('#enable').find(":selected").val();
+	 var errorSpanStatus = $('#status-error-message'); // Assuming you have a <span> element for error messages
+	  
+		// Check if the selected status is "Select status"
+		    if (enable === "Select status") {
+		        // Display an error message and prevent saving
+		        errorSpanStatus.text("Please select a valid status.");
+		        return;
+		    }
+
+		    // Clear any previous error messages
+		    errorSpanStatus.text("");
+		    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -550,7 +565,6 @@ margin-top: 70px;
 			var prefix = $('#prefix').val();
 			var file_type = $('#file_type').find(":selected").val();
 			var file_name = $('#file_name').find(":selected").val();
-			var enable = $('#enable').find(":selected").val();
 			
 			$.ajax({
 				url : 'mqttServlet',
@@ -664,7 +678,20 @@ margin-top: 70px;
 			file_name = $('#file_name').find(":selected").val();
 			
 		}
+		
+		  var errorSpanStatus = $('#status-error-message'); // Assuming you have a <span> element for error messages
+		  
+		// Check if the selected status is "Select status"
+		    if (enable === "Select status") {
+		        // Display an error message and prevent saving
+		        errorSpanStatus.text("Please select a valid status.");
+		        return;
+		    }
 
+		    // Clear any previous error messages
+		    errorSpanStatus.text("");
+		    
+		    
 		$.ajax({
 			url : 'mqttServlet',
 			type : 'POST',
@@ -736,20 +763,6 @@ margin-top: 70px;
 		  });
 
 		$('#registerBtn').val('Add');
-	}
-	
-	
-	function validateFiletype(type) {
-		var fileTypeError = document.getElementById("fileTypeError");
-
-		if (type == 'Select file type'){
-			
-			fileTypeError.textContent = "Please select type";
-			return false;
-		} else {
-			fileTypeError.textContent = "";
-			return true;
-		}
 	}
 	
 	function validateCrtFile(crtFile) {
@@ -1031,16 +1044,7 @@ margin-top: 70px;
 					    												return;
 					    											}
 
-					    											if (!validateFiletype(type)) {
-					    												fileTypeError.textContent = "Please select type";
-					    												return;
-					    											}
 					    											
-					    											if (!validateStatus(enable)) {
-					    												statusError.textContent = "Please select status";
-					    												return;
-					    											}
-
 					    											 var isDisabled = $("#file_name").prop("disabled");
 					    											 if (!isDisabled) {
 					    												 if (!validateCrtFile(file_name)) {
@@ -1131,14 +1135,15 @@ margin-top: 70px;
 								<option value="Enable">Enable</option>
 								<option value="Disable">Disable</option>
 							</select>
-							<span id="statusError" style="color: red;"></span></td>
+							<span style="color: red; font-size: 12px;" id="status-error-message"></span>
 					
 					<td>Type</td>
 					<td><select class="textBox" id="file_type" name="file_type" style="height: 33px;">
 								<option value="Select type">Select type</option>
 								<option value="SSL">SSL</option>
 								<option value="TCP" selected>TCP</option>
-							</select> <span id="fileTypeError" style="color: red;"></span></td>
+							</select>
+							 <span id="fileTypeError" style="color: red;"></span></td>
 					<td>CRT file</td>
 					<td><select class="textBox" id="file_name" name="file_name" style="height: 33px;">
 								<option value="Select crt file">Select crt file</option>

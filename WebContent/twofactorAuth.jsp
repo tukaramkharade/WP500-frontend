@@ -148,8 +148,6 @@ display: flex;
             height: 19vh;
 }
 
-        
-
 .step {
   flex: 0 0 0; /* Adjust the width as needed */
   text-align: center;
@@ -163,8 +161,6 @@ display: flex;
   height: 100px; /* Set your preferred height */
 }
 
-  
-        
 #totp_steps{
 margin-left: -39px;
 }
@@ -176,6 +172,68 @@ margin-left: -39px;
 	var secretKey;
 	var roleValue;
 	var tokenValue;
+	
+	function ntpSyncStatus(){
+		
+		$.ajax({
+
+			url : 'overviewGetData',
+			type : 'GET',
+			dataType : 'json',
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+			},
+			success : function(data) {
+				
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+			
+			else {
+				// Assuming data.NTP_SYNC_STATUS is a string with values 'yes' or 'no'
+				var ntpSyncStatus = data.NTP_SYNC_STATUS;
+
+				// Select the element with id "ntp_sync"
+				var ntpSyncElement = $("#ntp_sync");
+
+				// Set the text content
+				ntpSyncElement.text("NTP sync status : " + ntpSyncStatus);
+
+				// Update the color based on the value of data.NTP_SYNC_STATUS
+				if (ntpSyncStatus === 'yes') {
+				  // Wrap 'yes' in a span with green color
+				  ntpSyncElement.html("NTP sync status : <span style='color: green;'>yes</span>");
+				} else if (ntpSyncStatus === 'no') {
+				  // Wrap 'no' in a span with red color
+				  ntpSyncElement.html("NTP sync status : <span style='color: red;'>no</span>");
+				}
+
+	            }
+				
+			},
+
+			error : function(xhr, status, error) {
+				console.log('Error loading opcua client data: ' + error);
+			}
+
+		});
+	}
 
 	function updateTOTP(element) {
 	    // Get references to necessary elements
@@ -470,6 +528,8 @@ margin-left: -39px;
 			String tokenValue = (String) session.getAttribute("token");%>
 
 	tokenValue = '<%=tokenValue%>';
+	
+	ntpSyncStatus();
 
 							$('.toggle-container').click(function() {
 								updateTOTP(this);
@@ -513,6 +573,7 @@ margin-left: -39px;
 
 			<div class="container">
 
+	<p id="ntp_sync" style="font-weight: bold; font-size: 16px; margin-top: -15px;"></p>
 
 				<div class="toggle-container">
 					<div id="toggle-switch" class="toggle-switch"></div>

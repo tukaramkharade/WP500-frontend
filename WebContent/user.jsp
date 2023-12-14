@@ -521,6 +521,7 @@ function togglePassword() {
 
 		        // Refresh the user list
 		        loadUserList();
+		        location.reload();
 		      },
 		      error: function (xhr, status, error) {
 		        // Handle the error response, if needed
