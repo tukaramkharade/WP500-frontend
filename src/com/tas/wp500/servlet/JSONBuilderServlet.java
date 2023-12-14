@@ -55,6 +55,16 @@ public class JSONBuilderServlet extends HttpServlet {
 				if(status.equals("success")){
 					JSONArray resultArr = respJson.getJSONArray("result");
 					finalJsonObj.put("status", status);
+					
+					if (resultArr.length() > 0 && resultArr.getJSONObject(0).has("json_interval")) {
+			            String jsonInterval = resultArr.getJSONObject(0).getString("json_interval");
+			            int intervalValue = Integer.parseInt(jsonInterval);
+			            String intervalString = IntervalMapper.getIntervalByValue(intervalValue);
+			            
+			            // Add the intervalString to the finalJsonObj
+			            finalJsonObj.put("intervalString", intervalString);
+			        }
+					
 				    finalJsonObj.put("result", resultArr);
 				}else if(status.equals("fail")){
 					finalJsonObj.put("status", status);

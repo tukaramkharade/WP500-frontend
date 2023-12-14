@@ -19,7 +19,7 @@ margin-top: 70px;
 
 .container {
     margin: 0 auto;
-    width: 80%;
+    width: 60%;
   }
 
  .bordered-table {
@@ -307,7 +307,7 @@ function editOPCUA(){
 					$('#endURL').val('');
 					$('#username').val('');
 					$('#password').val('');
-					$('#security').val('');
+					$('#security').val('None,None');
 					$('#prefix').val('');
 					$('#actionType').val('Enable');
 					
@@ -368,7 +368,7 @@ function addOPCUA(){
 			$('#endURL').val('');
 			$('#username').val('');
 			$('#password').val('');
-			$('#security').val('');
+			$('#security').val('None,None');
 			$('#prefix').val('');
 			$('#actionType').val('Enable');
 			
@@ -405,6 +405,8 @@ function deleteOpcuaClient(prefix){
 					
 					modal.style.display = 'none';
 					loadOPCUAClientList();
+					
+					 location.reload();
 				},
 				error : function(xhr, status, error) {
 					// Handle the error response, if needed
@@ -491,8 +493,8 @@ $(document).ready(function() {
     		$('#endURL').val('');
     		$('#username').val('');
     		$('#password').val('');
-    		$('#security').val('');
-    		$('#actionType').val('');
+    		$('#security').val('None,None');
+    		$('#actionType').val('Enable');
     		$('#prefix').val('');
     		$("#prefix").prop("disabled", false);
     		$('#registerBtn').val('Add');
@@ -542,8 +544,8 @@ $(document).ready(function() {
 							<p id="security_error" style="color: red;"></p> -->
 							
 							<select class="textBox" id="security" name="security">
-								<option value="Select security">Select security</option>
-								<option value="None,None">None,None</option>
+								
+								<option value="None,None" selected>None,None</option>
 								<option value="Basic128rsa15,Sign and Encrypt">Basic128rsa15,Sign and Encrypt</option>
 								<option value="Basic256,Sign and Encrypt">Basic256,Sign and Encrypt</option>
 								<option value="Basic256sha256,Sign and Encrypt">Basic256sha256,Sign and Encrypt</option>
@@ -552,8 +554,8 @@ $(document).ready(function() {
 							</td>
 					<td>Action type</td>
 					<td><select class="textBox" id="actionType" name="actionType" style="height: 33px;">
-								<option value="Select action type">Select action type</option>
-								<option value="Enable">Enable</option>
+								
+								<option value="Enable" selected>Enable</option>
 								<option value="Disable">Disable</option>
 							</select>
 							<span id="actionTypeError" style="color: red;"></span></td>

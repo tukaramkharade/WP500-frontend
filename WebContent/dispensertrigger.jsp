@@ -807,6 +807,7 @@ var tokenValue;
 
 						// Refresh the user list
 						loadDispenserTriggerList();
+						location.reload();
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
@@ -1038,16 +1039,16 @@ var tokenValue;
 												event.preventDefault();
 												var buttonText = $('#registerBtn').val();
 												var side = $('#side').find(":selected").val();
-												var status = $('#status').find(":selected").val();
+												var trigger_tag = $('#trigger_tag').find(":selected").val();
 												var trigger_value = $('#trigger_value').find(":selected").val();
-												var broker_name = $('#broker_name').find(":selected").val();
 												var start_pressure = $('#start_pressure').find(":selected").val();
 												var end_pressure = $('#end_pressure').find(":selected").val();
 												var temperature = $('#temperature').find(":selected").val();
 												var total = $('#total').find(":selected").val();
 												var quantity = $('#quantity').find(":selected").val();
 												var unit_price = $('#unit_price').find(":selected").val();
-												var trigger_tag = $('#trigger_tag').find(":selected").val();
+												var status = $('#status').find(":selected").val();										
+												var broker_name = $('#broker_name').find(":selected").val();							
 												var station_name = $('#station_name').val();
 												var serial_number = $('#serial_number').val();
 												var unit_id = $('#unit_id').val();
@@ -1076,22 +1077,17 @@ var tokenValue;
 													sideError.textContent = "Please select side";
 													return;
 												}
-
-												if (!validateStatus(status)) {
-													statusError.textContent = "Please select status";
+												
+												if (!validateTriggerTag(trigger_tag)) {
+													triggerTagError.textContent = "Please select trigger tag ";
 													return;
 												}
-
+												
 												if (!validateTriggerValue(trigger_value)) {
 													triggerValueError.textContent = "Please select trigger value";
 													return;
 												}
-
-												if (!validateBrokerIPAddress(broker_name)) {
-													brokerIPAddressError.textContent = "Please select broker ip address ";
-													return;
-												}
-
+												
 												if (!validateStartPressure(start_pressure)) {
 													startPressureError.textContent = "Please select start pressure ";
 													return;
@@ -1111,19 +1107,27 @@ var tokenValue;
 													totalError.textContent = "Please select total ";
 													return;
 												}
+
 												if (!validateQuantity(quantity)) {
 													quantityError.textContent = "Please select quantity ";
 													return;
 												}
+												
 												if (!validateUnitPrice(unit_price)) {
 													unitPriceError.textContent = "Please select unit price ";
 													return;
 												}
 												
-												if (!validateTriggerTag(trigger_tag)) {
-													triggerTagError.textContent = "Please select trigger tag ";
+												if (!validateStatus(status)) {
+													statusError.textContent = "Please select status";
 													return;
 												}
+
+												if (!validateBrokerIPAddress(broker_name)) {
+													brokerIPAddressError.textContent = "Please select broker ip address ";
+													return;
+												}
+
 
 												if (buttonText == 'Add') {
 													addDispenserTrigger();

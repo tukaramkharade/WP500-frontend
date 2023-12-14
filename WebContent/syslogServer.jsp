@@ -245,19 +245,6 @@ function getSysLogStatus(){
 
 function updateSysLogStatus(){
 	
-	 var status = $('#status').find(":selected").val();
-	  var errorSpan = $('#status-error-message'); // Assuming you have a <span> element for error messages
-	  
-	// Check if the selected status is "Select status"
-	    if (status === "Select status") {
-	        // Display an error message and prevent saving
-	        errorSpan.text("Please select a valid status.");
-	        return;
-	    }
-
-	    // Clear any previous error messages
-	    errorSpan.text("");
-	
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-status');
 	  modal.style.display = 'block';
@@ -265,6 +252,8 @@ function updateSysLogStatus(){
 	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit-status');
 	  confirmButton.onclick = function () {
+		  
+		  var status = $('#status').find(":selected").val();
 		  
 			$.ajax({
 				url : 'syslogStatus',
@@ -416,12 +405,11 @@ $('#addButton').click(function() {
 						<tr>
 							<td>Status</td>
 							<td><select class="textBox" id="status" name="status" style="height: 33px; max-width: 220px;">
-							<option value="Select status">Select status</option>
-							<option value="Enable">Enable</option>
+							
+							<option value="Enable" selected>Enable</option>
 							<option value="Disable">Disable</option>
 						</select>
 						
-						<span style="color: red; font-size: 12px;" id="status-error-message"></span>
 						</td>
 						<td><input type="button" id="addButton" value="Add"/></td>
 						</tr>

@@ -160,6 +160,7 @@ var tokenValue;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
+						var json_interval1 = data.intervalString;
 						
 						if (data.status == 'fail') {
 							
@@ -192,7 +193,7 @@ var tokenValue;
 							
 						data.result.forEach(function(jsonBuilder) {
  						var json_string_name = jsonBuilder.json_string_name; 
-						var json_interval = jsonBuilder.json_interval; 
+						var json_interval = json_interval1; 
 						var broker_type = jsonBuilder.broker_type; 
 						var broker_ip_address = jsonBuilder.broker_ip_address; 
 						var publish_topic_name = jsonBuilder.publish_topic_name; 
@@ -213,14 +214,16 @@ var tokenValue;
 								.html('<i class="fas fa-edit"></i>')
 								.click(
 										function() {
+											
 											setJsonBuilder(jsonBuilder.json_string_name);
-											setJSONInterval(jsonBuilder.json_interval);
+											setJSONInterval(json_interval1);
 											setBrokerType(jsonBuilder.broker_type);
 											setBrokerIPAddress(jsonBuilder.broker_ip_address);
 											setPublishTopic(jsonBuilder.publish_topic_name);
 											setPublishingStatus(jsonBuilder.publishing_status);
 											setStoreAndForward(jsonBuilder.store_n_forward);
 											setJSONString(jsonBuilder.json_string);
+											validateUpdatedJsonString(jsonBuilder.json_string);
 										});
 
 						var deleteButton = $(
@@ -244,8 +247,10 @@ var tokenValue;
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							
 						data.result.forEach(function(jsonBuilder) {
+							
+							
 							var json_string_name = jsonBuilder.json_string_name; 
-							var json_interval = jsonBuilder.json_interval; 
+							var json_interval = json_interval1; 
 							var broker_type = jsonBuilder.broker_type; 
 							var broker_ip_address = jsonBuilder.broker_ip_address; 
 							var publish_topic_name = jsonBuilder.publish_topic_name; 
@@ -253,7 +258,7 @@ var tokenValue;
 							var store_n_forward = jsonBuilder.store_n_forward; 
 							
 							var row = $("<tr>").append($("<td>").text(json_string_name),
-									$("<td>").text(json_interval),
+									$("<td>").text(json_interval1),
 									$("<td>").text(broker_type),
 									$("<td>").text(broker_ip_address),
 									$("<td>").text(publish_topic_name),
@@ -264,8 +269,7 @@ var tokenValue;
 							
 						});
 						}	
-						// Initialize tooltips using Bootstrap
-			            $('[data-toggle="tooltip"]').tooltip();
+						
 					},
 					error : function(xhr, status, error) {
 						console.log('Error loading jsonBuilderTable data: '
@@ -315,9 +319,13 @@ var tokenValue;
 	}
 
 	function setJSONString(jsonBuilderId) {
-
-		$('#json_string_text').val(jsonBuilderId);
+		$('#json_string_text').val(jsonBuilderId);	
 	}
+	
+	 function validateUpdatedJsonString(jsonBuilderId){
+		$('#json_string_validate').val(jsonBuilderId);
+		
+	} 
  
  function deleteJsonBuilder(jsonBuilderId) {
 	 // Display the custom modal dialog
@@ -360,6 +368,7 @@ var tokenValue;
 
 					// Refresh the user list
 					loadJsonBuilderList();
+					location.reload();
 				},
 				error : function(xhr, status, error) {
 					// Handle the error response, if needed
@@ -931,7 +940,7 @@ var tokenValue;
 				
 					<tr>
 					<td>Publish topic</td>
-					<td><input type="text" id="publish_topic" name="publish_topic" style="height: 17px;" maxlength="31">
+					<td><input type="text" id="publish_topic" name="publish_topic" style="height: 17px;" maxlength="31" required>
 						<p id="publish_topic_error" style="color: red;"></p></td>
 					<td>Publishing status</td>
 					<td><select class="textBox" id="publishing_status"

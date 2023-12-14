@@ -88,26 +88,7 @@ public class Dashboard extends HttpServlet {
 				logger.error("Error getting latest active threats : " + e);
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
-	}
+		} 	}
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -119,7 +100,7 @@ public class Dashboard extends HttpServlet {
 		
 		String action = request.getParameter("action");
 		
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");		
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");		
 		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		JSONObject lineChartResponse = null;
@@ -127,7 +108,50 @@ public class Dashboard extends HttpServlet {
 		
 		
 		String start_time = request.getParameter("start_time");
+		 
 		String end_time = request.getParameter("end_time");
+		
+		if (start_time != null && !start_time.isEmpty()) {
+		    try {
+		        // Parse the date with both date and time components
+		        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        Date startDate = dateTimeFormat.parse(start_time);
+
+		        // Set the time to midnight (00:00:00)
+		        startDate.setHours(0);
+		        startDate.setMinutes(0);
+		        startDate.setSeconds(0);
+
+		        // Format the date back to string
+		        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		        start_time = dateFormat.format(startDate) + " 00:00:00";
+		    } catch (ParseException e) {
+		        e.printStackTrace();
+		        // Handle parsing errors
+		    }
+		}
+		
+		if (end_time != null && !end_time.isEmpty()) {
+		    try {
+		        // Parse the end time with both date and time components
+		        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        Date endDate = dateTimeFormat.parse(end_time);
+
+		        // Set the time to end of the day (23:59:59)
+		        endDate.setHours(23);
+		        endDate.setMinutes(59);
+		        endDate.setSeconds(59);
+
+		        // Format the end time back to string
+		        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		        end_time = dateFormat.format(endDate) + " 23:59:59";
+		    } catch (ParseException e) {
+		        e.printStackTrace();
+		        // Handle parsing errors for end_time
+		    }
+		}
+		
+		
 		Calendar calendar = null;
 		Date startDate = null, currentDate = null, endDate = null;
 		String startDateTime = null, endDateTime = null, formattedDate = null, formattedStartDay = null, formattedEndDay = null;

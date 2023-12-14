@@ -279,6 +279,8 @@ margin-top: 70px;
 						
 						modal.style.display = 'none';
 						loadTagList();
+						
+						 location.reload();
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
