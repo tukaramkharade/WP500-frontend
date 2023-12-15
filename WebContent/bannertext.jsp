@@ -159,6 +159,18 @@ cancelButton.onclick = function () {
 };	
 }
 
+
+function changeButtonColor(isDisabled) {
+    var $update_button = $('#update');       
+   
+    if (isDisabled) {
+        $update_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $update_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+}
+
 $(document).ready(function() {
 	
 	<%// Access the session variable
@@ -166,6 +178,13 @@ $(document).ready(function() {
 	String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+	
+	$('#update').prop('disabled', true);
+	
+	changeButtonColor(true);
+}
 
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');

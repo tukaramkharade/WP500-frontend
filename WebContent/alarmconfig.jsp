@@ -187,35 +187,56 @@ var tokenValue;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
   			success : function(data) {
+  				var interval = data.intervalString;
 				
-				
-									var unit_id = $('#unit_id').val(data.unit_id);
-									var asset = $('#asset_id').val(data.asset_id);
-								//	
-									var broker_ip = $('#broker_name').val(data.broker_ip);
-									
-									if(data.broker_type != null && data.interval != null){
-										var broker_type = $('#broker_type').val(data.broker_type);
-										var interval = $('#interval').val(data.interval);
-									}else{
-										var brokerTypeSelect = $('#broker_type');
-										var intervalSelect = $('#interval');
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 
-										// Set default values for broker type and interval
-										brokerTypeSelect.text(data.broker_type);
-										intervalSelect.text(data.interval);
-									}
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
+  				
+  				var result = data.result;
+  				
+  	            var alarmTag = JSON.parse(result.alarm_tag);
+  	            
+  	            
+  	        
+  	          $('#unit_id').val(result.unit_id);
+              $('#asset_id').val(result.asset_id);
+              $('#broker_name').val(result.broker_ip);
+
+              if (result.broker_type != null && result.intrval != null) {
+                  // If broker_type and intrval are present, set their values
+                  $('#broker_type').val(result.broker_type);
+                  $('#interval').val(interval);
+              } else {
+                  // If broker_type or intrval is null, set default values
+                  $('#broker_type').val('defaultBrokerType');
+                  $('#interval').val('defaultInterval');
+              }
+								
 									
-									
-								//	
-									//var alarm_tag = $('#alarm_tag').val(data.alarm_tag);
-									
-									var result = data.alarm_tag;
+								//	var result = data.alarm_tag; 
 
 									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 										
-										$.each($.parseJSON(result), function(k, v) {
-									
+										$.each(alarmTag, function(k, v) {
+										   
 														    
 														    var newRow = $("<tr>")
 						    	        					.append($("<td>").text(k))
@@ -235,13 +256,11 @@ var tokenValue;
 						    	        					$("#table_data").append(newRow);
 														});
 														
-										
 									 }
 								  else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 										
-										$.each($.parseJSON(result), function(k, v) {
+										$.each(alarmTag, function(k, v) {
 										
-														    
 														    var newRow = $("<tr>")
 						    	        					.append($("<td>").text(k))
 						    	        					.append($("<td>").text(v))
@@ -251,13 +270,11 @@ var tokenValue;
 														
 									} 
 									
-									
-									if(unit_id != null){
-										$('#addBtn').val('Update');
-									}
-									else{
-										$('#addBtn').val('Add');
-									}
+									if (result.unit_id != null) {
+						                $('#addBtn').val('Update');
+						            } else {
+						                $('#addBtn').val('Add');
+						            }
 									
 			},
   			error : function(xhr, status, error) {
@@ -591,6 +608,7 @@ function editAlarmConfig() {
 	  cancelButton.onclick = function () {
 	    // Close the modal
 	    modal.style.display = 'none';
+	    location.reload();
 	    $('#addBtn').val('Update');
 	  };
 }

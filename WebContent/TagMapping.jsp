@@ -488,7 +488,9 @@ margin-top: 70px;
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
         var $clear_button = $('#clearBtn');
-                
+        var $exportButton = $('#exportButton'); 
+        var $processExcel = $('#processExcel'); 
+        
         
          if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
@@ -501,6 +503,20 @@ margin-top: 70px;
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
         } 
+        
+        if (isDisabled) {
+            $exportButton.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $exportButton.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        
+        if (isDisabled) {
+            $processExcel.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $processExcel.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
     }
 	function processExcel() {
 	    var fileInput = document.getElementById('fileInput');
@@ -603,7 +619,8 @@ margin-top: 70px;
 							$('#registerBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
 							$('#exportButton').prop('disabled', true);
-							
+							$('#processExcel').prop('disabled', true);
+														
 							changeButtonColor(true);
 						}	
 						
@@ -699,7 +716,7 @@ margin-top: 70px;
 					</div>
 					<div>
 					<input type="file" id="fileInput" accept=".xlsx, .xls" />
-					<input type="button" value="Process Excel" onclick="processExcel()">
+					<input type="button" value="Process Excel" id="processExcel" onclick="processExcel()">
 					</div>
 					
 				</form>

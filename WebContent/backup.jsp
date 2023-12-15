@@ -321,6 +321,38 @@ function restoreBackupFile() {
 	
 }	
 
+
+function changeButtonColor(isDisabled) {
+    var $download_button = $('#downloadZipFile');       
+    var $restore_button = $('#restoreButton');
+    var $generate_button = $('#generateBackupFile');
+    var $restore_backup_button = $('#restoreBackupFile');
+    
+     if (isDisabled) {
+        $download_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $download_button.css('background-color', '#2b3991'); // Reset to original color
+    }
+    
+    if (isDisabled) {
+        $restore_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $restore_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    if (isDisabled) {
+        $generate_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $generate_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    if (isDisabled) {
+        $restore_backup_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $restore_backup_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+}
 	$(document).ready(function() {
 
 		<%
@@ -334,8 +366,11 @@ function restoreBackupFile() {
     	
     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
   		  
-  		$('#reboot').prop('disabled', true);
-  		  
+    		$('#downloadZipFile').prop('disabled', true);
+    		$('#restoreButton').prop('disabled', true);
+    		$('#generateBackupFile').prop('disabled', true);
+    		$('#restoreBackupFile').prop('disabled', true);
+  		
   		  changeButtonColor(true);
   	  }
     	

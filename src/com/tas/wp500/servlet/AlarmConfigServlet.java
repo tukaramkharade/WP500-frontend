@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -54,40 +55,35 @@ public class AlarmConfigServlet extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject respJson = new JSONObject(respStr);
-
-				JSONObject alarm_result = respJson.getJSONObject("result");
-
-				for (int i = 0; i < alarm_result.length(); i++) {
-
-					String alarm_tag = alarm_result.getString("alarm_tag");
-					int interval = alarm_result.getInt("intrval");
-					String broker_type = alarm_result.getString("broker_type");
-					String broker_ip = alarm_result.getString("broker_ip");
-					String asset_id = alarm_result.getString("asset_id");
-					String unit_id = alarm_result.getString("unit_id");
-
-					String intervalString = IntervalMapper.getIntervalByValue(interval);
-
-					try {
-						disObj.put("alarm_tag", alarm_tag);
-						disObj.put("interval", intervalString);
-						disObj.put("broker_type", broker_type);
-						disObj.put("broker_ip", broker_ip);
-						disObj.put("asset_id", asset_id);
-						disObj.put("unit_id", unit_id);
-
-					} catch (JSONException e) {
-						e.printStackTrace();
-						logger.error("Error putting alarm data in json object: " + e);
-					}
+				
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONObject alarm_result = respJson.getJSONObject("result");
+					finalJsonObj.put("status", status);
+					
+					if (alarm_result.length() > 0 && alarm_result.has("intrval")) {
+			            String interval = alarm_result.getString("intrval");
+			            int intervalValue = Integer.parseInt(interval);
+			            String intervalString = IntervalMapper.getIntervalByValue(intervalValue);
+			            
+			            // Add the intervalString to the finalJsonObj
+			            finalJsonObj.put("intervalString", intervalString);
+			        }
+					
+				    finalJsonObj.put("result", alarm_result);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Write the JSON object to the response
-				out.print(disObj.toString());
-				out.flush();
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -77,6 +77,10 @@
   color: white;
 }
 
+
+h3{
+margin-top: 68px;
+}
 </style>
 
 <script>
@@ -310,13 +314,20 @@ function updateSysLogStatus(){
 
 
 function changeButtonColor(isDisabled) {
-    var $applyBtn = $('#applyBtn');       
+    var $applyBtn = $('#applyBtn');   
+    var $addBtn = $('#addButton');   
     
     if (isDisabled) {
         $applyBtn.css('background-color', 'gray'); // Change to your desired color
     } else {
         $applyBtn.css('background-color', '#2b3991'); // Reset to original color
     }   
+    
+    if (isDisabled) {
+        $addBtn.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $addBtn.css('background-color', '#2b3991'); // Reset to original color
+    }  
 }
 
 
@@ -331,6 +342,7 @@ roleValue = '<%=roleValue%>';
 if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 	$('#applyBtn').prop('disabled', true);
+	$('#addBtn').prop('disabled', true);
 	
 	changeButtonColor(true);
 }

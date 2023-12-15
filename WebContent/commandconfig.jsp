@@ -189,27 +189,51 @@ var json = {};
 		    },
 			success : function(data) {
 				
-									var unit_id = $('#unit_id').val(data.unit_id);
-									var asset_id = $('#asset_id').val(data.asset_id);							
-									var broker_ip = $('#broker_name').val(data.broker_ip);
-									
-									if(data.broker_type != null && data.interval != null){
-										var broker_type = $('#broker_type').val(data.broker_type);
-										var interval = $('#interval').val(data.interval);
-									}else{
-										var brokerTypeSelect = $('#broker_type');
-										var intervalSelect = $('#interval');
+				
+				var interval = data.intervalString;
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 
-										// Set default values for broker type and interval
-										brokerTypeSelect.text(data.broker_type);
-										intervalSelect.text(data.interval);
-									}
-									
-									var result = data.command_tag;
-								
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
+  				
+  				var result = data.result;
+  				
+  	            var commandTag = JSON.parse(result.command_tag);
+  	            
+  	          $('#unit_id').val(result.unit_id);
+              $('#asset_id').val(result.asset_id);
+              $('#broker_name').val(result.broker_ip);
+
+              if (result.broker_type != null && result.intrval != null) {
+                  // If broker_type and intrval are present, set their values
+                  $('#broker_type').val(result.broker_type);
+                  $('#interval').val(interval);
+              } else {
+                  // If broker_type or intrval is null, set default values
+                  $('#broker_type').val('defaultBrokerType');
+                  $('#interval').val('defaultInterval');
+              }
+				
 									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 										
-										$.each($.parseJSON(result), function(k, v) {
+										$.each(commandTag, function(k, v) {
 									
 														    
 														    var newRow = $("<tr>")
@@ -234,7 +258,7 @@ var json = {};
 									 }
 								  else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 										
-										$.each($.parseJSON(result), function(k, v) {
+										$.each(commandTag, function(k, v) {
 										
 														    
 														    var newRow = $("<tr>")
@@ -246,13 +270,12 @@ var json = {};
 														
 									}   
 
-									if(unit_id != null){
-										$('#addBtn').val('Update');
-									}
-									else{
-										$('#addBtn').val('Add');
-									}
-								
+									if (result.unit_id != null) {
+						                $('#addBtn').val('Update');
+						            } else {
+						                $('#addBtn').val('Add');
+						            }
+									
 			},
 			error : function(xhr, status, error) {
 				// Handle the error response, if needed
@@ -572,6 +595,8 @@ var json = {};
 						},
 						success : function(data) {
 							modal.style.display = 'none';
+							
+							loadCommandSettings();
 
 							// Clear form fields
 							$('#unit_id').val('');
@@ -594,6 +619,7 @@ var json = {};
 			  cancelButton.onclick = function () {
 			    // Close the modal
 			    modal.style.display = 'none';
+			    location.reload();
 			    $('#addBtn').val('Update');
 			  };
 

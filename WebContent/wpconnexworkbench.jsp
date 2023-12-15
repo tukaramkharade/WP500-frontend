@@ -253,26 +253,35 @@ var tokenValue;
 		        type: "GET",
 		        dataType: "json",
 		        success: function (data) {
-		            if (data.firmware_files_result && Array.isArray(data.firmware_files_result)) {
+		            
 		                var table = $("#straton_list_table tbody");
 
 		                // Clear any existing rows in the table
 		                table.empty();
 		                
-		        
-		                // Loop through the data and add rows to the table
-		                data.firmware_files_result.forEach(function (file) {
-		                    var row = $("<tr>");
-		                    row.append($("<td>").text(file));
-		                    var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
-		                        .html('<i class="fas fa-trash-alt"></i>')
-		                        .click(function() {
-		                        	deleteStratonFile(file);
-		                        });
-		                    row.append($("<td>").append(deleteButton));
-		                    table.append(row);
+		                if(roleValue == 'ADMIN' || roleValue == 'Admin'){
+		                	 // Loop through the data and add rows to the table
+			                data.firmware_files_result.forEach(function (file) {
+			                    var row = $("<tr>");
+			                    row.append($("<td>").text(file));
+			                    var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
+			                        .html('<i class="fas fa-trash-alt"></i>')
+			                        .click(function() {
+			                        	deleteStratonFile(file);
+			                        });
+			                    row.append($("<td>").append(deleteButton));
+			                    table.append(row);
+			                });
+		                }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+		                	
+		                	data.firmware_files_result.forEach(function (file) {
+			                    var row = $("<tr>");
+			                    row.append($("<td>").text(file));
+			                    
+			                    table.append(row);
 		                });
-		            }
+		                }
+		                
 		        },
 		        error: function (xhr, status, error) {
 		            console.log("Error loading firmware files list: " + error);
@@ -365,6 +374,27 @@ var tokenValue;
 		        $("#customPopup").hide();
 		    });
 		}	  
+	  
+	  
+	  function changeButtonColor(isDisabled) {
+	        var $stratonUpdateButton = $('#stratonUpdateButton');       
+	        var $straton_download = $('#straton_download');
+	       
+	        
+	         if (isDisabled) {
+	            $stratonUpdateButton.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $stratonUpdateButton.css('background-color', '#2b3991'); // Reset to original color
+	        }
+	        
+	        if (isDisabled) {
+	            $straton_download.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $straton_download.css('background-color', '#2b3991'); // Reset to original color
+	        } 
+	        
+	        
+	    }
 
 	$(document).ready(function() {
 		<%// Access the session variable
@@ -372,6 +402,14 @@ var tokenValue;
 		String roleValue = (String) session.getAttribute("role");%>
 
 	roleValue = '<%=roleValue%>';
+	
+	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+		
+		$('#stratonUpdateButton').prop('disabled', true);
+		$('#straton_download').prop('disabled', true);
+		
+		changeButtonColor(true);
+	}
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
