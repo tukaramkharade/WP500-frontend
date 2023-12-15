@@ -211,10 +211,8 @@ function getActiveThreats() {
 				 
 				
 			 }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-				 $.each(data, function(index, activeThreats) {
-						
-						
-						var row = $('<tr>');
+				 data.result.forEach(function(activeThreats) {
+					 var row = $('<tr>');
 						row.append($('<td>').text(activeThreats.timestamp + ""));
 						
 						if(activeThreats.priority == '1'){							
@@ -234,10 +232,10 @@ function getActiveThreats() {
 						row.append($('<td>').text(activeThreats.protocol_type + ""));
 											
 						activeThreatsTable.append(row);
-			 });
+				 });
+				 
 			 }		
-				// Initialize tooltips using Bootstrap
-	            $('[data-toggle="tooltip"]').tooltip();
+				
 		},
 		error : function(xhr, status, error) {
 			console.log('Error loading active threats data: ' + error);

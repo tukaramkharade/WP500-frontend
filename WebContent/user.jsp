@@ -396,7 +396,7 @@ function togglePassword() {
 				    $('#password').val('');
 				    $('#first_name').val('');
 				    $('#last_name').val('');
-				    $('#role').val('Select role');
+				    $('#role').val('ADMIN');
 				}
 				
 
@@ -599,7 +599,7 @@ function togglePassword() {
 			    $('#password').val('');
 			    $('#first_name').val('');
 			    $('#last_name').val('');
-			    $('#role').val('Select role');
+			    $('#role').val('ADMIN');
 
 						$("#password").prop("disabled", false);
 
@@ -1048,7 +1048,7 @@ function togglePassword() {
 					$("#first_name").prop("disabled", false);
 				    $('#last_name').val('');
 				    $("#last_name").prop("disabled", false);
-				    $('#role').val('Select role');
+				    $('#role').val('ADMIN');
 				    $("#role").prop("disabled", false);
 				    $('#registerBtn').val('Add');
 				});
@@ -1139,8 +1139,8 @@ function togglePassword() {
 						<td>Role</td>
 						<td>
 						<select class="role" id="role" name="role" style="height: 33px; max-width: 200px;">
-								<option value="Select role">Select role</option>
-								<option value="ADMIN">ADMIN</option>
+								
+								<option value="ADMIN" selected>ADMIN</option>
 								<option value="OPERATOR">OPERATOR</option>
 						</select> <span style="color: red; font-size: 12px;" id="roleError"></span>
 						</td>

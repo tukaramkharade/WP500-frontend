@@ -130,8 +130,6 @@ button {
 	margin-left: 40%;
 }
 
-
-
 </style>
 
 <script>
@@ -483,6 +481,44 @@ cancelButton.onclick = function () {
 };	
 }
 
+function changeButtonColor(isDisabled) {
+    var $update_button = $('#update');       
+    var $generate_button = $('#generate_new_key');
+    var $activate_button = $('#activate');
+    var $deactivate_button = $('#deactivate');
+    var $status_button = $('#status');   
+    
+     if (isDisabled) {
+        $update_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $update_button.css('background-color', '#2b3991'); // Reset to original color
+    }
+    
+    if (isDisabled) {
+        $generate_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $generate_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    if (isDisabled) {
+        $activate_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $activate_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    if (isDisabled) {
+        $deactivate_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $deactivate_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    if (isDisabled) {
+        $status_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $status_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+}
+
 
 $(document).ready(function() {
 	
@@ -491,6 +527,17 @@ $(document).ready(function() {
 			String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+	  
+	$('#update').prop('disabled', true);
+	$('#generate_new_key').prop('disabled', true);
+	$('#activate').prop('disabled', true);
+	$('#deactivate').prop('disabled', true);
+	$('#status').prop('disabled', true);
+	
+	  changeButtonColor(true);
+}
 
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');

@@ -55,44 +55,37 @@ public class CommandConfigServlet extends HttpServlet {
 				logger.info("res " + new JSONObject(respStr));
 
 				JSONObject respJson = new JSONObject(respStr);
-
-				JSONObject command_result = respJson.getJSONObject("result");
-
-				for (int i = 0; i < command_result.length(); i++) {
-
-					String command_tag = command_result.getString("command_tag");
-					int interval = command_result.getInt("intrval");
-					String broker_type = command_result.getString("broker_type");
-					String broker_ip = command_result.getString("broker_ip");
-					String asset_id = command_result.getString("asset_id");
-					String unit_id = command_result.getString("unit_id");
-
-					String intervalString = IntervalMapper.getIntervalByValue(interval);
-
-					try {
-
-						disObj.put("command_tag", command_tag);
-						disObj.put("interval", intervalString);
-						disObj.put("broker_type", broker_type);
-						disObj.put("broker_ip", broker_ip);
-						disObj.put("asset_id", asset_id);
-						disObj.put("unit_id", unit_id);
-
-						resJsonArray.put(disObj);
-
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						logger.error("Error putting command data in json object : " + e);
-					}
+				
+				
+				String status = respJson.getString("status");
+				String message = respJson.getString("msg");
+				
+				JSONObject finalJsonObj = new JSONObject();
+				if(status.equals("success")){
+					JSONObject command_result = respJson.getJSONObject("result");
+					finalJsonObj.put("status", status);
+					
+					if (command_result.length() > 0 && command_result.has("intrval")) {
+			            String interval = command_result.getString("intrval");
+			            int intervalValue = Integer.parseInt(interval);
+			            String intervalString = IntervalMapper.getIntervalByValue(intervalValue);
+			            
+			            // Add the intervalString to the finalJsonObj
+			            finalJsonObj.put("intervalString", intervalString);
+			        }
+					
+				    finalJsonObj.put("result", command_result);
+				}else if(status.equals("fail")){
+					finalJsonObj.put("status", status);
+				    finalJsonObj.put("message", message);
 				}
 
-				PrintWriter out = response.getWriter();
+			    // Set the response content type to JSON
+			    response.setContentType("application/json");
 
-				// Write the JSON object to the response
-				out.print(disObj.toString());
-				out.flush();
-
+			    // Write the JSON data to the response
+			    response.getWriter().print(finalJsonObj.toString());
+			    
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting command data : " + e);

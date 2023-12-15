@@ -423,6 +423,8 @@ margin-top: 70px;
 		
 		if(mqttId == 'TCP'){
 			$("#file_name").prop("disabled", true);
+		}else if(mqttId == 'SSL'){
+			$("#file_name").prop("disabled", false);
 		}
 		
 	}
@@ -536,18 +538,46 @@ margin-top: 70px;
  function editMqtt(){
 	 
 	 var enable = $('#enable').find(":selected").val();
-	 var errorSpanStatus = $('#status-error-message'); // Assuming you have a <span> element for error messages
-	  
-		// Check if the selected status is "Select status"
-		    if (enable === "Select status") {
-		        // Display an error message and prevent saving
-		        errorSpanStatus.text("Please select a valid status.");
-		        return;
-		    }
+	 
+	/*  if (enable === 'Enable') {
+	        var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
+	        if (existingEnabledEntries.length > 0) {
+	            
+	            $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
+      			$("#customPopup").show();
+      			
+      			$('#registerBtn').val('Add');
+      			
+      			$('#broker_ip_address').val('');
+				$('#port_number').val('');
+				$('#username').val('');
+				$('#password').val('');
+				$('#pub_topic').val('');
+				$('#sub_topic').val('');
+				$('#prefix').val('');
+				$('#file_type').val('TCP');
+				$('#file_name').val('Select crt file');
+				$('#enable').val('Disable');
+				$('#file_name').prop('disabled', true);
+      			
+	            return; // Prevent form submission
+	        }
+	        
+	        
+	    } */
+	    
+	    
+	    if (enable === 'Enable') {
+	        // Check if there is already an enabled entry
+	        var existingEnabledEntry = $('#mqttListTable tbody').find('td:contains("Enable")');
 
-		    // Clear any previous error messages
-		    errorSpanStatus.text("");
-		    
+	        if (existingEnabledEntry.length > 0) {
+	            // Disable the existing enabled entry
+	            existingEnabledEntry.text('Disable');
+	        }
+	    }
+	 
+	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -564,7 +594,34 @@ margin-top: 70px;
 			var sub_topic = $('#sub_topic').val();
 			var prefix = $('#prefix').val();
 			var file_type = $('#file_type').find(":selected").val();
-			var file_name = $('#file_name').find(":selected").val();
+			
+			 var file_name;
+				
+				if(file_type == 'TCP'){
+					file_name = '';
+				
+				}else if(file_type == 'SSL'){
+					file_name = $('#file_name').find(":selected").val();
+					
+				}
+				
+				if ($('#file_type').val().toUpperCase() === 'TCP') {
+				    $("#file_name").prop("disabled", true);
+				} else {
+				    $("#file_name").prop("disabled", false);
+				}
+
+				 // Add change event listener
+				$("#file_type").change(function(event) {
+				    if ($(this).val().toUpperCase() === 'TCP') {
+				        $("#file_name").prop("disabled", true);
+				        $('#file_name').val(''); // Clear the value when disabled, if needed
+				    } else {
+				        $("#file_name").prop("disabled", false);
+				    }
+				}); 
+				
+				
 			
 			$.ajax({
 				url : 'mqttServlet',
@@ -619,12 +676,15 @@ margin-top: 70px;
 					$('#pub_topic').val('');
 					$('#sub_topic').val('');
 					$('#prefix').val('');
-					$('#file_type').val('Select type');
+					$('#file_type').val('TCP');
 					$('#file_name').val('Select crt file');
-					$('#enable').val('Select status');
+					$('#enable').val('Disable');
 
 					$("#prefix").prop("disabled", false);
-					$('#file_name').prop('disabled', false);
+					
+						$('#file_name').prop('disabled', true);
+					
+					
 				},
 				error : function(xhr, status, error) {
 					console.log('Error updating mqtt: ' + error);
@@ -632,7 +692,10 @@ margin-top: 70px;
 			});
 			$('#registerBtn').val('Add');
 			
+			
 	  };
+	  
+	  
 	  
 	  var cancelButton = document.getElementById('cancel-button-edit');
 	  cancelButton.onclick = function () {
@@ -640,6 +703,8 @@ margin-top: 70px;
 	    modal.style.display = 'none';
 	    $('#registerBtn').val('Update');
 	  };	
+	  
+	  
 	 
  }
  
@@ -679,19 +744,14 @@ margin-top: 70px;
 			
 		}
 		
-		  var errorSpanStatus = $('#status-error-message'); // Assuming you have a <span> element for error messages
-		  
-		// Check if the selected status is "Select status"
-		    if (enable === "Select status") {
-		        // Display an error message and prevent saving
-		        errorSpanStatus.text("Please select a valid status.");
-		        return;
-		    }
-
-		    // Clear any previous error messages
-		    errorSpanStatus.text("");
-		    
-		    
+		if (enable === 'Enable') {
+	        var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
+	        if (existingEnabledEntries.length > 0) {
+	            alert('Only one entry can be enabled at a time. Please disable the existing entry first.');
+	            return; // Prevent form submission
+	        }
+	    }
+		
 		$.ajax({
 			url : 'mqttServlet',
 			type : 'POST',
@@ -747,9 +807,9 @@ margin-top: 70px;
 				$('#pub_topic').val('');
 				$('#sub_topic').val('');
 				$('#prefix').val('');
-				$('#file_type').val('Select type');
+				$('#file_type').val('TCP');
 				$('#file_name').val('Select crt file');
-				$('#enable').val('Select status');
+				$('#enable').val('Disable');
 				
 				$('#file_name').prop('disabled', false);
 
@@ -949,6 +1009,12 @@ margin-top: 70px;
 					    						
 					    						loadCrtFilesListToDelete();
 					    						
+					    						
+					    						$("#closePopup").click(function () {
+					    						    $("#customPopup").hide();
+					    						  });
+					    						
+					    						
 					    						$('#delete_crt_file').on('click', function () {
 					    				            var selectedFile = $('#file_name_delete').val();
 					    				            deleteCrtFiles(selectedFile);
@@ -961,7 +1027,7 @@ margin-top: 70px;
 					    				            crtFileUpload();
 					    				        });
 					    						
-					    						if ($("#file_type").val().toLowerCase() === 'tcp') {
+					    						if ($("#file_type").val().toUpperCase() === 'TCP') {
 					    					        $("#file_name").prop("disabled", true);
 					    					    } else {
 					    					        $("#file_name").prop("disabled", false);
@@ -970,7 +1036,7 @@ margin-top: 70px;
 					    					    // Event handler for file_type change
 					    					    $("#file_type").change(function(event) {
 					    					        // Check the selected value and enable/disable file_name accordingly
-					    					        if ($(this).val().toLowerCase() === 'tcp') {
+					    					        if ($(this).val().toUpperCase() === 'TCP') {
 					    					            $("#file_name").prop("disabled", true);
 					    					            $('#file_name').val(''); // Clear the value when disabled, if needed
 					    					        } else {
@@ -1070,9 +1136,9 @@ margin-top: 70px;
 					    							$('#sub_topic').val('');
 					    							$('#prefix').val('');
 					    							$("#prefix").prop("disabled", false);
-					    							$('#file_type').val('Select type');
+					    							$('#file_type').val('TCP');
 					    							$('#file_name').val('Select crt file');
-					    							$('#enable').val('Select status');
+					    							$('#enable').val('Disable');
 					    							$('#registerBtn').val('Add');
 					    						});
 					    						
@@ -1131,15 +1197,15 @@ margin-top: 70px;
 							
 					<td>Status</td>
 					<td><select class="textBox" id="enable" name="enable" style="height: 33px;">
-								<option value="Select status">Select status</option>
+								
 								<option value="Enable">Enable</option>
-								<option value="Disable">Disable</option>
+								<option value="Disable" selected>Disable</option>
 							</select>
-							<span style="color: red; font-size: 12px;" id="status-error-message"></span>
+							
 					
 					<td>Type</td>
 					<td><select class="textBox" id="file_type" name="file_type" style="height: 33px;">
-								<option value="Select type">Select type</option>
+								
 								<option value="SSL">SSL</option>
 								<option value="TCP" selected>TCP</option>
 							</select>

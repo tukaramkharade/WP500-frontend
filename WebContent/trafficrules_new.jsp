@@ -1315,7 +1315,7 @@ function addTrafficRulesLan0() {
 			$('#macAddress_lan0').val('');
 			$('#protocol_lan0').val('TCP');
 			$('#ip_addr_lan0').val('');
-			$('#type_lan0').val('Select type');
+			$('#type_lan0').val('IP');
 			$('#action_lan0').val('ACCEPT');
 
 			$('#ip_addr_lan0').prop('disabled', false);
@@ -1397,7 +1397,7 @@ function addTrafficRulesLan1() {
 			$('#macAddress_lan1').val('');
 			$('#protocol_lan1').val('TCP');
 			$('#ip_addr_lan1').val('');
-			$('#type_lan1').val('Select type');
+			$('#type_lan1').val('IP');
 			$('#action_lan1').val('ACCEPT');
 
 			$('#ip_addr_lan1').prop('disabled', false);
@@ -1478,7 +1478,7 @@ function addTrafficRulesLan2() {
 			$('#macAddress_lan2').val('');
 			$('#protocol_lan2').val('TCP');
 			$('#ip_addr_lan2').val('');
-			$('#type_lan2').val('Select type');
+			$('#type_lan2').val('IP');
 			$('#action_lan2').val('ACCEPT');
 
 			$('#ip_addr_lan2').prop('disabled', false);
@@ -1767,7 +1767,7 @@ function editTrafficRulesLan0() {
 					$('#macAddress_lan0').val('');
 					$('#protocol_lan0').val('TCP');
 					$('#ip_addr_lan0').val('');
-					$('#type_lan0').val('Select type');
+					$('#type_lan0').val('IP');
 					$('#action_lan0').val('ACCEPT');
 
 					$("#name_lan0").prop("disabled", false);
@@ -1866,7 +1866,7 @@ function editTrafficRulesLan1() {
 					$('#macAddress_lan1').val('');
 					$('#protocol_lan1').val('TCP');
 					$('#ip_addr_lan1').val('');
-					$('#type_lan1').val('Select type');
+					$('#type_lan1').val('IP');
 					$('#action_lan1').val('ACCEPT');
 
 					$("#name_lan1").prop("disabled", false);
@@ -1964,7 +1964,7 @@ function editTrafficRulesLan2() {
 					$('#macAddress_lan2').val('');
 					$('#protocol_lan2').val('TCP');
 					$('#ip_addr_lan2').val('');
-					$('#type_lan2').val('Select type');
+					$('#type_lan2').val('IP');
 					$('#action_lan2').val('ACCEPT');
 
 					$("#name_lan2").prop("disabled", false);
@@ -2133,6 +2133,103 @@ function applyTrafficRulesLan2() {
 	// Call the initializePage function when the page loads
 	window.onload = initializePage;
 	
+	function changeButtonColor(isDisabled) {
+		 var $registerBtnGenSettings_lan0 = $('#registerBtnGenSettings_lan0'); 
+		 var $registerBtnGenSettings_lan1 = $('#registerBtnGenSettings_lan1'); 
+		 var $registerBtnGenSettings_lan2 = $('#registerBtnGenSettings_lan2'); 
+		 
+		 var $applyBtnBasicConf = $('#applyBtnBasicConf'); 
+		 
+		 var $applyBtnRules_lan0 = $('#applyBtnRules_lan0'); 
+		 var $applyBtnRules_lan1 = $('#applyBtnRules_lan1'); 
+		 var $applyBtnRules_lan2 = $('#applyBtnRules_lan2'); 
+		 
+		 var $clearBtn_lan0 = $('#clearBtn_lan0'); 
+		 var $clearBtn_lan1 = $('#clearBtn_lan1'); 
+		 var $clearBtn_lan2 = $('#clearBtn_lan2'); 
+		 
+		 var $registerBtn_lan0 = $('#registerBtn_lan0'); 
+		 var $registerBtn_lan1 = $('#registerBtn_lan1'); 
+		 var $registerBtn_lan2 = $('#registerBtn_lan2'); 
+		 
+		
+		 if (isDisabled) {
+	            $registerBtnGenSettings_lan0.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $registerBtnGenSettings_lan0.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 
+		 if (isDisabled) {
+	            $registerBtnGenSettings_lan1.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $registerBtnGenSettings_lan1.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $registerBtnGenSettings_lan2.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $registerBtnGenSettings_lan2.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 
+		 
+		 if (isDisabled) {
+	            $applyBtnBasicConf.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $applyBtnBasicConf.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 
+		 
+		 if (isDisabled) {
+	            $applyBtnRules_lan0.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $applyBtnRules_lan0.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $applyBtnRules_lan1.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $applyBtnRules_lan1.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $applyBtnRules_lan2.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $applyBtnRules_lan2.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 
+		 
+		 if (isDisabled) {
+	            $clearBtn_lan0.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $clearBtn_lan0.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $clearBtn_lan1.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $clearBtn_lan1.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $clearBtn_lan2.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $clearBtn_lan2.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 
+		 
+		 if (isDisabled) {
+	            $registerBtn_lan0.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $registerBtn_lan0.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $registerBtn_lan1.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $registerBtn_lan1.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		 if (isDisabled) {
+	            $registerBtn_lan2.css('background-color', 'gray'); // Change to your desired color
+	        } else {
+	            $registerBtn_lan2.css('background-color', '#2b3991'); // Reset to original color
+	        }
+		
+	}
+	
 	
 	$(document).ready(function() {
 		<%// Access the session variable
@@ -2140,6 +2237,43 @@ function applyTrafficRulesLan2() {
 		String roleValue = (String) session.getAttribute("role");%>
 		    	
 		    	roleValue = '<%=roleValue%>';
+		    	
+		    	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
+
+					$('#registerBtnGenSettings_lan0').prop('disabled', true);
+					$('#registerBtnGenSettings_lan1').prop('disabled', true);
+					$('#registerBtnGenSettings_lan2').prop('disabled', true);
+					
+					$('#applyBtnBasicConf').prop('disabled', true);
+					
+					$('#applyBtnRules_lan0').prop('disabled', true);
+					$('#applyBtnRules_lan1').prop('disabled', true);
+					$('#applyBtnRules_lan2').prop('disabled', true);
+					
+					$('#clearBtn_lan0').prop('disabled', true);
+					$('#clearBtn_lan1').prop('disabled', true);
+					$('#clearBtn_lan2').prop('disabled', true);
+					
+					$('#registerBtn_lan0').prop('disabled', true);
+					$('#registerBtn_lan1').prop('disabled', true);
+					$('#registerBtn_lan2').prop('disabled', true);
+					
+					changeButtonColor(true);
+				}
+				
+				if (roleValue === "null") {
+			        var modal = document.getElementById('custom-modal-session-timeout');
+			        modal.style.display = 'block';
+
+			        // Handle the confirm button click
+			        var confirmButton = document.getElementById('confirm-button-session-timeout');
+			        confirmButton.onclick = function() {
+			            // Close the modal
+			            modal.style.display = 'none';
+			            window.location.href = 'login.jsp';
+			        };
+			        
+				}else{   
 		    	
 		    	<%// Access the session variable
 		    	HttpSession token = request.getSession();
@@ -2329,7 +2463,7 @@ function applyTrafficRulesLan2() {
 		    		$('#macAddress_lan0').val('');
 		    		$('#protocol_lan0').val('TCP');
 		    		$('#ip_addr_lan0').val('');
-		    		$('#type_lan0').val('Select type');
+		    		$('#type_lan0').val('IP');
 		    		$('#action_lan0').val('ACCEPT');
 		    		 $('#registerBtn_lan0').val('Add');
 		    		$('#ip_addr_lan0').prop('disabled', false);
@@ -2344,7 +2478,7 @@ function applyTrafficRulesLan2() {
 		    		$('#macAddress_lan1').val('');
 		    		$('#protocol_lan1').val('TCP');
 		    		$('#ip_addr_lan1').val('');
-		    		$('#type_lan1').val('Select type');
+		    		$('#type_lan1').val('IP');
 		    		$('#action_lan1').val('ACCEPT');
 		    		 $('#registerBtn_lan1').val('Add');
 		    		$('#ip_addr_lan1').prop('disabled', false);
@@ -2359,14 +2493,14 @@ function applyTrafficRulesLan2() {
 		    		$('#macAddress_lan2').val('');
 		    		$('#protocol_lan2').val('TCP');
 		    		$('#ip_addr_lan2').val('');
-		    		$('#type_lan2').val('Select type');
+		    		$('#type_lan2').val('IP');
 		    		$('#action_lan2').val('ACCEPT');
 		    		 $('#registerBtn_lan2').val('Add');
 		    		$('#ip_addr_lan2').prop('disabled', false);
 		    		$('#macAddress_lan2').prop('disabled', false);
 
 		    	});
-
+				}
 	});
 </script>
 
@@ -2552,8 +2686,8 @@ function applyTrafficRulesLan2() {
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan0" name="type_lan0"
 												style="height: 33px;">
-													<option value="Select type">Select type</option>
-													<option value="IP">IP</option>
+													
+													<option value="IP" selected>IP</option>
 													<option value="MAC">MAC</option>
 											</select></td>
 											<td>Source MAC address</td>
@@ -2566,7 +2700,7 @@ function applyTrafficRulesLan2() {
 											<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan0"
 												name="protocol_lan0" style="height: 33px;">
-													<option value="Select protocol">Select protocol</option>
+													
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
@@ -2583,7 +2717,7 @@ function applyTrafficRulesLan2() {
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan0" name="action_lan0"
 												style="height: 33px;">
-													<option value="ACCEPT">ACCEPT</option>
+													<option value="ACCEPT" selected>ACCEPT</option>
 													<option value="REJECT">REJECT</option>
 											</select></td>
 										</tr>
@@ -2740,8 +2874,8 @@ function applyTrafficRulesLan2() {
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan1" name="type_lan1"
 												style="height: 33px;">
-													<option value="Select type">Select type</option>
-													<option value="IP">IP</option>
+													
+													<option value="IP" selected>IP</option>
 													<option value="MAC">MAC</option>
 											</select></td>
 											<td>Source MAC address</td>
@@ -2754,7 +2888,7 @@ function applyTrafficRulesLan2() {
 											<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan1"
 												name="protocol_lan1" style="height: 33px;">
-													<option value="Select protocol">Select protocol</option>
+													
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
@@ -2925,8 +3059,8 @@ function applyTrafficRulesLan2() {
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan2" name="type_lan2"
 												style="height: 33px;">
-													<option value="Select type">Select type</option>
-													<option value="IP">IP</option>
+													
+													<option value="IP" selected>IP</option>
 													<option value="MAC">MAC</option>
 											</select></td>
 											<td>Source MAC address</td>
@@ -2939,7 +3073,7 @@ function applyTrafficRulesLan2() {
 											<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan2"
 												name="protocol_lan2" style="height: 33px;">
-													<option value="Select protocol">Select protocol</option>
+												
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>

@@ -160,6 +160,8 @@ button {
 
 <script type="text/javascript">
 
+var roleValue;
+
 function deleteFile(file){
 	
 	// Display the custom modal dialog
@@ -216,6 +218,10 @@ function updateFirmwareFile(file){
 					
 					modal.style.display = 'none';
 					loadFirmwareFiles();
+					
+					$("#popupMessage").text(data.message);
+	      			$("#customPopup").show();
+	      			
 				},
 				error : function(xhr, status, error) {
 					// Handle the error response, if needed
@@ -228,6 +234,10 @@ function updateFirmwareFile(file){
 	    // Close the modal
 	    modal.style.display = 'none';
 	  };
+	  
+	  $("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 }
 
 function loadFirmwareFiles() {
@@ -257,42 +267,50 @@ function loadFirmwareFiles() {
 					  
 			} 
 			
-        	
-            if (data.firmware_files_result && Array.isArray(data.firmware_files_result)) {
                 var table = $("#firmware_list_table tbody");
 
                 // Clear any existing rows in the table
                 table.empty();
                 
-
-                // Loop through the data and add rows to the table
-                data.firmware_files_result.forEach(function (file) {
-                    var row = $("<tr>");
-                    row.append($("<td>").text(file));
-                    var actions = $('<td>');
-                    
-                    var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red;">')
-                        .html('<i class="fas fa-trash-alt"></i>')
+             
+                if(roleValue == 'ADMIN' || roleValue == 'Admin'){
+                	// Loop through the data and add rows to the table
+                    data.firmware_files_result.forEach(function (file) {
+                        var row = $("<tr>");
+                        row.append($("<td>").text(file));
+                        var actions = $('<td>');
+                        
+                        var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red;">')
+                            .html('<i class="fas fa-trash-alt"></i>')
+                            .click(function() {
+                                deleteFile(file);
+                            });
+                        var updateButton = $('<button data-toggle="tooltip" class="updBtn" data-placement="top" title="Update-Firmware" style="color: red">')
+                        .html('<i class="fa fa-play"></i>')
                         .click(function() {
-                            deleteFile(file);
-                        });
-                    var updateButton = $('<button data-toggle="tooltip" class="updBtn" data-placement="top" title="Update-Firmware" style="color: red">')
-                    .html('<i class="fa fa-play"></i>')
-                    .click(function() {
-                    	updateFirmwareFile(file);
-                    });                   
-                    /* row.append($("<td>").append(deleteButton));
-                    row.append($("<td>").append(updateButton)); */
-                    
-                    actions.append(deleteButton);
-					actions.append(updateButton);
-					
+                        	updateFirmwareFile(file);
+                        });                   
+                        
+                        actions.append(deleteButton);
+    					actions.append(updateButton);
+    					
 
-					row.append(actions);
-					
-                    table.append(row);
-                });
-            }
+    					row.append(actions);
+    					
+                        table.append(row);
+                    });
+
+                }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+                	
+                	data.firmware_files_result.forEach(function (file) {
+                        var row = $("<tr>");
+                        row.append($("<td>").text(file));
+                                  
+                        table.append(row);
+                    });
+                	
+                }
+                             
         },
         error: function (xhr, status, error) {
             console.log("Error loading firmware files list: " + error);
@@ -535,8 +553,8 @@ function firmwareDownload() {
     function changeButtonColor(isDisabled) {
         var $file_upload_button = $('#file_upload');       
         var $firmware_update_button = $('#firmware_update');
-      
-        
+        var $firmware_update_button1 = $('#firmwareUpdateButton');
+        var $firmware_download = $('#firmware_download');
         
          if (isDisabled) {
             $file_upload_button.css('background-color', 'gray'); // Change to your desired color
@@ -550,18 +568,27 @@ function firmwareDownload() {
             $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-       
+        if (isDisabled) {
+            $firmware_update_button1.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $firmware_update_button1.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
+        if (isDisabled) {
+            $firmware_download.css('background-color', 'gray'); // Change to your desired color
+        } else {
+            $firmware_download.css('background-color', '#2b3991'); // Reset to original color
+        } 
+        
     }
     
  
     $(document).ready(function() {
-   	 <%
-    	// Access the session variable
-    	HttpSession role = request.getSession();
-    	String roleValue = (String) session.getAttribute("role");
-    	%>
-    	
-    	var roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	<%// Access the session variable
+		HttpSession role = request.getSession();
+		String roleValue = (String) session.getAttribute("role");%>
+	
+	roleValue = '<%=roleValue%>';
     	
    
     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
@@ -570,6 +597,8 @@ function firmwareDownload() {
 			$('#firmware_update').prop('disabled', true);
 			$('#crt_file_upload').prop('disabled', true);		
 			$('#fileInput').prop('disabled', true); 
+			$('#firmwareUpdateButton').prop('disabled', true);
+			$('#firmware_download').prop('disabled', true);
 			
 			
 			changeButtonColor(true);

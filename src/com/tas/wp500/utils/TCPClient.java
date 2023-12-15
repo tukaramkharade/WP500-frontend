@@ -104,7 +104,7 @@ public class TCPClient {
             // Load the keystore
       String keystorePath = "/opt/apache-tomcat-8.5.5/conf/keystore.jks";
         	
-   //  	String keystorePath = "D:\\keystore.jks";
+    //	String keystorePath = "D:\\keystore.jks";
         	
             char[] keystorePassword = "Wp500@https2023".toCharArray();
             KeyStore keystore = KeyStore.getInstance("JKS");

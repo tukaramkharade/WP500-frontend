@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
 <link rel="stylesheet" href="nav-bar.css" />
-<script src="jquery-3.6.4.min.js"></script>
+<script src="jquery-3.6.0.min.js"></script>
 
 <style type="text/css">
 .popup {
@@ -401,7 +401,10 @@ var tokenValue;
 						        window.location.href = 'login.jsp';
 						  };
 							  
+						  
 					} 
+					
+					
 					document.getElementById('ntp-service-cell').textContent = data.ntp_service;	               
 
 					
@@ -602,7 +605,7 @@ var tokenValue;
 			            $('#ntp_server1').val('');
 			            $('#ntp_server2').val('');
 			            $('#ntp_server3').val('');
-			            $('#ntp_interval_1').val('');
+			            $('#ntp_interval_1').val('5 sec');
 			        },
 			        error: function (xhr, status, error) {
 			            console.log('Error updating lan: ' + error);
@@ -717,6 +720,8 @@ var tokenValue;
 		    }
 	}
 	
+	
+	
 	$(document).ready(function() {
 		<%// Access the session variable
 		HttpSession role = request.getSession();
@@ -829,8 +834,8 @@ var tokenValue;
 					<td>NTP Interval</td>
 					<td><select class="ntp-interval-select" id="ntp_interval_1"
 									name="ntp_interval_1" style="height: 35px;" required>
-										<option value="Select interval">Select interval</option>
-										<option value="5 sec">5 sec</option>
+										
+										<option value="5 sec" selected>5 sec</option>
 										<option value="10 sec">10 sec</option>
 										<option value="15 sec">15 sec</option>
 										<option value="25 sec">20 sec</option>
