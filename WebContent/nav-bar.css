@@ -412,7 +412,7 @@ form {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.toggle {
+ .toggle {
   position: relative;
   display: block;
   width: 49px;
@@ -503,7 +503,7 @@ form {
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Transition*/
+Transition
 .toggle-label,
 .toggle-handle {
   transition: All 0.3s ease;
@@ -511,7 +511,7 @@ form {
   -moz-transition: All 0.3s ease;
   -o-transition: All 0.3s ease;
 }
-
+ 
 textarea
 {
   border:1px solid #999999;

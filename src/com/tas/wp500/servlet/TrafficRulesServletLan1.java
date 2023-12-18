@@ -79,7 +79,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	String check_token = (String) session.getAttribute("token");
 	
 	String name = null;
-	String iface = null;
 	String portNumber = null;
 	String macAddress = null;
 	String protocol = null;
@@ -96,7 +95,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			
 			case "add":
 				name = request.getParameter("name");
-				 iface = request.getParameter("iface");
 				 portNumber = request.getParameter("portNumber");
 				 macAddress = request.getParameter("macAddress");
 				 protocol = request.getParameter("protocol");
@@ -112,7 +110,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 					json.put("operation_type", "add_ip");
 					json.put("user", check_username);
 					json.put("name", name);
-					json.put("interface", iface);
+					json.put("interface", "lan1");
 					json.put("protocol", protocol);
 					json.put("ipAddress", ip_addr);
 					json.put("macAddress", macAddress);
@@ -151,7 +149,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 				
 			case "update":
 				 name = request.getParameter("name");
-				 iface = request.getParameter("iface");
 				 portNumber = request.getParameter("portNumber");
 				 macAddress = request.getParameter("macAddress");
 				 protocol = request.getParameter("protocol");
@@ -167,7 +164,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 					json.put("operation_type", "update_ip");
 					json.put("user", check_username);
 					json.put("name", name);
-					json.put("interface", iface);
+					json.put("interface", "lan1");
 					json.put("protocol", protocol);
 					json.put("ipAddress", ip_addr);
 					json.put("macAddress", macAddress);

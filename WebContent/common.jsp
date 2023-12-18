@@ -188,6 +188,10 @@
               </li>
               
               <li class="nav-item">
+                <a href="redundancysetting.jsp">Redundancy Settings</a>
+              </li>
+              
+              <li class="nav-item">
                
               </li>
               

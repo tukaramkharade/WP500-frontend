@@ -102,9 +102,9 @@ public class TCPClient {
 
         try {
             // Load the keystore
-      String keystorePath = "/opt/apache-tomcat-8.5.5/conf/keystore.jks";
+   //   String keystorePath = "/opt/apache-tomcat-8.5.5/conf/keystore.jks";
         	
-    //	String keystorePath = "D:\\keystore.jks";
+    	String keystorePath = "D:\\keystore.jks";
         	
             char[] keystorePassword = "Wp500@https2023".toCharArray();
             KeyStore keystore = KeyStore.getInstance("JKS");
@@ -118,8 +118,8 @@ public class TCPClient {
 
             // Create SSL socket
             SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-      sslSocket = (SSLSocket) sslSocketFactory.createSocket("127.0.0.1", 6801);
-   // sslSocket = (SSLSocket) sslSocketFactory.createSocket("192.168.1.74", 6801);
+   //   sslSocket = (SSLSocket) sslSocketFactory.createSocket("127.0.0.1", 6801);
+    sslSocket = (SSLSocket) sslSocketFactory.createSocket("192.168.1.74", 6801);
            
             input = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
             output = new BufferedWriter(new OutputStreamWriter(sslSocket.getOutputStream()));

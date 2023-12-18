@@ -50,6 +50,7 @@ public class CountDetailsServlet extends HttpServlet {
 					int threats_log_count = respJson.getInt("threats_log_count");
 					int active_threats_count = respJson.getInt("active_threats_count");
 					String last_update = respJson.getString("last_update");
+					String status_service = respJson.getString("status_service");
 					String status = respJson.getString("status");
 					
 					try{
@@ -57,6 +58,7 @@ public class CountDetailsServlet extends HttpServlet {
 						jsonObject.put("threats_log_count", threats_log_count);
 						jsonObject.put("active_threats_count", active_threats_count);
 						jsonObject.put("last_update", last_update);
+						jsonObject.put("status_service", status_service);
 						jsonObject.put("status", status);
 											
 					}catch(Exception e){

@@ -120,12 +120,13 @@
 	/* Center horizontally and vertically */
 }
 
-button {
-	margin: 5px;
-	padding: 10px 20px;
-	border: none;
-	cursor: pointer;
-}
+ button {
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            font-size: small;
+             padding: 10px 20px;
+        }
 
 #confirm-button-edit-basic-conf,
 #confirm-button-session-timeout,
@@ -157,6 +158,13 @@ button {
 	background-color: #f44336;
 	color: white;
 }
+
+.button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px; /* Add margin as needed */
+        }
+        
 </style>
 
 <script>
@@ -758,7 +766,6 @@ function loadTrafficRulesListLan0() {
 					
 					var name = trafficrules.name; 
 				var protocol = trafficrules.protocol; 
-				var iface = trafficrules.iface; 
 				var ipAddress = trafficrules.ipAddress; 
 				var macAddress = trafficrules.macAddress; 
 				var portNum = trafficrules.portNum; 
@@ -767,7 +774,6 @@ function loadTrafficRulesListLan0() {
 				
 				var row = $("<tr>").append($("<td>").text(name),
 						$("<td>").text(protocol),
-						$("<td>").text(iface),
 						$("<td>").text(ipAddress),
 						$("<td>").text(macAddress),
 						$("<td>").text(portNum),
@@ -782,7 +788,7 @@ function loadTrafficRulesListLan0() {
 						.click(
 								function() {
 									setName_lan0(trafficrules.name);
-									setInterface_lan0(trafficrules.iface);
+									
 									setProtocol_lan0(trafficrules.protocol);
 									setPortNumber_lan0(trafficrules.portNum);
 									setMacAddress_lan0(trafficrules.macAddress);
@@ -815,7 +821,6 @@ function loadTrafficRulesListLan0() {
 				data.result.forEach(function(trafficrules) {
 					var name = trafficrules.name; 
 					var protocol = trafficrules.protocol; 
-					var iface = trafficrules.iface; 
 					var ipAddress = trafficrules.ipAddress; 
 					var macAddress = trafficrules.macAddress; 
 					var portNum = trafficrules.portNum; 
@@ -824,7 +829,6 @@ function loadTrafficRulesListLan0() {
 					
 					var row = $("<tr>").append($("<td>").text(name),
 							$("<td>").text(protocol),
-							$("<td>").text(iface),
 							$("<td>").text(ipAddress),
 							$("<td>").text(macAddress),
 							$("<td>").text(portNum),
@@ -884,7 +888,6 @@ function loadTrafficRulesListLan1() {
 					
 					var name = trafficrules.name; 
 				var protocol = trafficrules.protocol; 
-				var iface = trafficrules.iface; 
 				var ipAddress = trafficrules.ipAddress; 
 				var macAddress = trafficrules.macAddress; 
 				var portNum = trafficrules.portNum; 
@@ -893,7 +896,6 @@ function loadTrafficRulesListLan1() {
 				
 				var row = $("<tr>").append($("<td>").text(name),
 						$("<td>").text(protocol),
-						$("<td>").text(iface),
 						$("<td>").text(ipAddress),
 						$("<td>").text(macAddress),
 						$("<td>").text(portNum),
@@ -908,7 +910,7 @@ function loadTrafficRulesListLan1() {
 						.click(
 								function() {
 									setName_lan1(trafficrules.name);
-									setInterface_lan1(trafficrules.iface);
+									
 									setProtocol_lan1(trafficrules.protocol);
 									setPortNumber_lan1(trafficrules.portNum);
 									setMacAddress_lan1(trafficrules.macAddress);
@@ -940,8 +942,7 @@ function loadTrafficRulesListLan1() {
 			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				data.result.forEach(function(trafficrules) {
 					var name = trafficrules.name; 
-					var protocol = trafficrules.protocol; 
-					var iface = trafficrules.iface; 
+					var protocol = trafficrules.protocol;  
 					var ipAddress = trafficrules.ipAddress; 
 					var macAddress = trafficrules.macAddress; 
 					var portNum = trafficrules.portNum; 
@@ -950,7 +951,6 @@ function loadTrafficRulesListLan1() {
 					
 					var row = $("<tr>").append($("<td>").text(name),
 							$("<td>").text(protocol),
-							$("<td>").text(iface),
 							$("<td>").text(ipAddress),
 							$("<td>").text(macAddress),
 							$("<td>").text(portNum),
@@ -1008,8 +1008,7 @@ function loadTrafficRulesListLan2() {
 				data.result.forEach(function(trafficrules) {
 					
 					var name = trafficrules.name; 
-				var protocol = trafficrules.protocol; 
-				var iface = trafficrules.iface; 
+				var protocol = trafficrules.protocol;  
 				var ipAddress = trafficrules.ipAddress; 
 				var macAddress = trafficrules.macAddress; 
 				var portNum = trafficrules.portNum; 
@@ -1018,7 +1017,6 @@ function loadTrafficRulesListLan2() {
 				
 				var row = $("<tr>").append($("<td>").text(name),
 						$("<td>").text(protocol),
-						$("<td>").text(iface),
 						$("<td>").text(ipAddress),
 						$("<td>").text(macAddress),
 						$("<td>").text(portNum),
@@ -1032,8 +1030,7 @@ function loadTrafficRulesListLan2() {
 						.html('<i class="fas fa-edit"></i>')
 						.click(
 								function() {
-									setName_lan2(trafficrules.name);
-									setInterface_lan2(trafficrules.iface);
+									setName_lan2(trafficrules.name);							
 									setProtocol_lan2(trafficrules.protocol);
 									setPortNumber_lan2(trafficrules.portNum);
 									setMacAddress_lan2(trafficrules.macAddress);
@@ -1066,7 +1063,6 @@ function loadTrafficRulesListLan2() {
 				data.result.forEach(function(trafficrules) {
 					var name = trafficrules.name; 
 					var protocol = trafficrules.protocol; 
-					var iface = trafficrules.iface; 
 					var ipAddress = trafficrules.ipAddress; 
 					var macAddress = trafficrules.macAddress; 
 					var portNum = trafficrules.portNum; 
@@ -1075,7 +1071,6 @@ function loadTrafficRulesListLan2() {
 					
 					var row = $("<tr>").append($("<td>").text(name),
 							$("<td>").text(protocol),
-							$("<td>").text(iface),
 							$("<td>").text(ipAddress),
 							$("<td>").text(macAddress),
 							$("<td>").text(portNum),
@@ -1100,11 +1095,6 @@ function setName_lan0(trafficRulesId) {
 	$("#name_lan0").prop("disabled", true);
 	$('#registerBtn_lan0').val('Update');
 
-}
-
-function setInterface_lan0(trafficRulesId) {
-
-	$('#iface_lan0').val(trafficRulesId);
 }
 
 function setProtocol_lan0(trafficRulesId) {
@@ -1155,11 +1145,6 @@ function setName_lan1(trafficRulesId) {
 
 }
 
-function setInterface_lan1(trafficRulesId) {
-
-	$('#iface_lan1').val(trafficRulesId);
-}
-
 function setProtocol_lan1(trafficRulesId) {
 
 	$('#protocol_lan1').val(trafficRulesId);
@@ -1208,11 +1193,6 @@ function setName_lan2(trafficRulesId) {
 
 }
 
-function setInterface_lan2(trafficRulesId) {
-
-	$('#iface_lan2').val(trafficRulesId);
-}
-
 function setProtocol_lan2(trafficRulesId) {
 
 	$('#protocol_lan2').val(trafficRulesId);
@@ -1255,7 +1235,6 @@ function setAction_lan2(trafficRulesId) {
 
 function addTrafficRulesLan0() {
 	var name = $('#name_lan0').val();
-	var iface = $('#iface_lan0').val();
 	var portNumber = $('#portNumber_lan0').val();
 	var macAddress = $('#macAddress_lan0').val();
 	var protocol = $('#protocol_lan0').find(":selected").val();
@@ -1269,7 +1248,6 @@ function addTrafficRulesLan0() {
 		type : "POST",
 		data : {
 			name : name,
-			iface : iface,
 			portNumber : portNumber,
 			macAddress : macAddress,
 			protocol : protocol,
@@ -1310,7 +1288,7 @@ function addTrafficRulesLan0() {
 
 			// Clear form fields
 			$('#name_lan0').val('');
-			$('#iface_lan0').val('lan0');
+			
 			$('#portNumber_lan0').val('');
 			$('#macAddress_lan0').val('');
 			$('#protocol_lan0').val('TCP');
@@ -1337,7 +1315,6 @@ function addTrafficRulesLan0() {
 function addTrafficRulesLan1() {
 	
 	var name = $('#name_lan1').val();
-	var iface = $('#iface_lan1').val();
 	var portNumber = $('#portNumber_lan1').val();
 	var macAddress = $('#macAddress_lan1').val();
 	var protocol = $('#protocol_lan1').find(":selected").val();
@@ -1351,7 +1328,6 @@ function addTrafficRulesLan1() {
 		type : "POST",
 		data : {
 			name : name,
-			iface : iface,
 			portNumber : portNumber,
 			macAddress : macAddress,
 			protocol : protocol,
@@ -1392,7 +1368,6 @@ function addTrafficRulesLan1() {
 
 			// Clear form fields
 			$('#name_lan1').val('');
-			$('#iface_lan1').val('lan1');
 			$('#portNumber_lan1').val('');
 			$('#macAddress_lan1').val('');
 			$('#protocol_lan1').val('TCP');
@@ -1418,7 +1393,6 @@ function addTrafficRulesLan1() {
 function addTrafficRulesLan2() {
 	
 	var name = $('#name_lan2').val();
-	var iface = $('#iface_lan2').val();
 	var portNumber = $('#portNumber_lan2').val();
 	var macAddress = $('#macAddress_lan2').val();
 	var protocol = $('#protocol_lan2').find(":selected").val();
@@ -1432,7 +1406,6 @@ function addTrafficRulesLan2() {
 		type : "POST",
 		data : {
 			name : name,
-			iface : iface,
 			portNumber : portNumber,
 			macAddress : macAddress,
 			protocol : protocol,
@@ -1473,7 +1446,6 @@ function addTrafficRulesLan2() {
 
 			// Clear form fields
 			$('#name_lan2').val('');
-			$('#iface_lan2').val('lan2');
 			$('#portNumber_lan2').val('');
 			$('#macAddress_lan2').val('');
 			$('#protocol_lan2').val('TCP');
@@ -1703,7 +1675,6 @@ function editTrafficRulesLan0() {
 	  confirmButton.onclick = function () {
 		  
 		  var name = $('#name_lan0').val();
-		  var iface = $('#iface_lan0').val();
 			var portNumber = $('#portNumber_lan0').val();
 			var macAddress = $('#macAddress_lan0').val();
 			var protocol = $('#protocol_lan0').find(":selected").val();
@@ -1724,7 +1695,6 @@ function editTrafficRulesLan0() {
 				type : 'POST',
 				data : {
 					name : name,
-					iface : iface,
 					portNumber : portNumber,
 					macAddress : macAddress,
 					protocol : protocol,
@@ -1762,7 +1732,6 @@ function editTrafficRulesLan0() {
 
 					// Clear form fields
 					$('#name_lan0').val('');
-					$('#iface_lan0').val('lan0');
 					$('#portNumber_lan0').val('');
 					$('#macAddress_lan0').val('');
 					$('#protocol_lan0').val('TCP');
@@ -1802,7 +1771,6 @@ function editTrafficRulesLan1() {
 	  confirmButton.onclick = function () {
 		  
 		  var name = $('#name_lan1').val();
-		  var iface = $('#iface_lan1').val();
 			var portNumber = $('#portNumber_lan1').val();
 			var macAddress = $('#macAddress_lan1').val();
 			var protocol = $('#protocol_lan1').find(":selected").val();
@@ -1823,7 +1791,6 @@ function editTrafficRulesLan1() {
 				type : 'POST',
 				data : {
 					name : name,
-					iface : iface,
 					portNumber : portNumber,
 					macAddress : macAddress,
 					protocol : protocol,
@@ -1861,7 +1828,6 @@ function editTrafficRulesLan1() {
 
 					// Clear form fields
 					$('#name_lan1').val('');
-					$('#iface_lan1').val('lan1');
 					$('#portNumber_lan1').val('');
 					$('#macAddress_lan1').val('');
 					$('#protocol_lan1').val('TCP');
@@ -1900,7 +1866,6 @@ function editTrafficRulesLan2() {
 	  confirmButton.onclick = function () {
 		  
 		  var name = $('#name_lan2').val();
-		  var iface = $('#iface_lan2').val();
 			var portNumber = $('#portNumber_lan2').val();
 			var macAddress = $('#macAddress_lan2').val();
 			var protocol = $('#protocol_lan2').find(":selected").val();
@@ -1921,7 +1886,6 @@ function editTrafficRulesLan2() {
 				type : 'POST',
 				data : {
 					name : name,
-					iface : iface,
 					portNumber : portNumber,
 					macAddress : macAddress,
 					protocol : protocol,
@@ -1959,7 +1923,6 @@ function editTrafficRulesLan2() {
 
 					// Clear form fields
 					$('#name_lan2').val('');
-					$('#iface_lan2').val('lan2');
 					$('#portNumber_lan2').val('');
 					$('#macAddress_lan2').val('');
 					$('#protocol_lan2').val('TCP');
@@ -1987,7 +1950,7 @@ function editTrafficRulesLan2() {
 
 }
 
-function applyTrafficRulesLan0() {
+function applyTrafficRules() {
 
 	$.ajax({
 		url : "trafficRulesApplyServletLan0",
@@ -1998,7 +1961,7 @@ function applyTrafficRulesLan0() {
 		// Display the custom popup message
  			$("#popupMessage").text(data.message);
   			$("#customPopup").show();
-			loadTrafficRulesListLan0();
+	//		loadTrafficRulesListLan0();
 
 		},
 		error : function(xhr, status, error) {
@@ -2010,57 +1973,6 @@ function applyTrafficRulesLan0() {
 	    $("#customPopup").hide();
 	  });
 }
-
-
-function applyTrafficRulesLan1() {
-
-	$.ajax({
-		url : "trafficRulesApplyServletLan0",
-		type : "GET",
-		dataType : "json",
-		success : function(data) {
-
-		// Display the custom popup message
- 			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();
-			loadTrafficRulesListLan1();
-
-		},
-		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error applying traffic rules: " + error);
-		},
-	});
-	$("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
-}
-
-
-function applyTrafficRulesLan2() {
-
-	$.ajax({
-		url : "trafficRulesApplyServletLan0",
-		type : "GET",
-		dataType : "json",
-		success : function(data) {
-
-		// Display the custom popup message
- 			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();
-			loadTrafficRulesListLan2();
-
-		},
-		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error applying traffic rules: " + error);
-		},
-	});
-	$("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
-}
-
 
 	function openTab(tabId, button) {
 		var tabs = document.getElementsByClassName("tab");
@@ -2138,11 +2050,10 @@ function applyTrafficRulesLan2() {
 		 var $registerBtnGenSettings_lan1 = $('#registerBtnGenSettings_lan1'); 
 		 var $registerBtnGenSettings_lan2 = $('#registerBtnGenSettings_lan2'); 
 		 
-		 var $applyBtnBasicConf = $('#applyBtnBasicConf'); 
+		 var $updateBtnBasicConf = $('#updateBtnBasicConf'); 
 		 
-		 var $applyBtnRules_lan0 = $('#applyBtnRules_lan0'); 
-		 var $applyBtnRules_lan1 = $('#applyBtnRules_lan1'); 
-		 var $applyBtnRules_lan2 = $('#applyBtnRules_lan2'); 
+		 var $applyBtn = $('#applyBtn'); 
+		
 		 
 		 var $clearBtn_lan0 = $('#clearBtn_lan0'); 
 		 var $clearBtn_lan1 = $('#clearBtn_lan1'); 
@@ -2172,26 +2083,16 @@ function applyTrafficRulesLan2() {
 		 
 		 
 		 if (isDisabled) {
-	            $applyBtnBasicConf.css('background-color', 'gray'); // Change to your desired color
+	            $updateBtnBasicConf.css('background-color', 'gray'); // Change to your desired color
 	        } else {
-	            $applyBtnBasicConf.css('background-color', '#2b3991'); // Reset to original color
+	            $updateBtnBasicConf.css('background-color', '#2b3991'); // Reset to original color
 	        }
 		 
 		 
 		 if (isDisabled) {
-	            $applyBtnRules_lan0.css('background-color', 'gray'); // Change to your desired color
+	            $applyBtn.css('background-color', 'gray'); // Change to your desired color
 	        } else {
-	            $applyBtnRules_lan0.css('background-color', '#2b3991'); // Reset to original color
-	        }
-		 if (isDisabled) {
-	            $applyBtnRules_lan1.css('background-color', 'gray'); // Change to your desired color
-	        } else {
-	            $applyBtnRules_lan1.css('background-color', '#2b3991'); // Reset to original color
-	        }
-		 if (isDisabled) {
-	            $applyBtnRules_lan2.css('background-color', 'gray'); // Change to your desired color
-	        } else {
-	            $applyBtnRules_lan2.css('background-color', '#2b3991'); // Reset to original color
+	            $applyBtn.css('background-color', '#2b3991'); // Reset to original color
 	        }
 		 
 		 
@@ -2230,6 +2131,28 @@ function applyTrafficRulesLan2() {
 		
 	}
 	
+	function initializeFieldState(typeSelector, ipSelector, macSelector) {
+	    var isIP = $(typeSelector).val() === 'ip' || $(typeSelector).val() === 'IP';
+	    $(ipSelector).prop("disabled", !isIP);
+	    $(macSelector).prop("disabled", isIP);
+	    if (isIP) {
+	        $(macSelector).val('');
+	    } else {
+	        $(ipSelector).val('');
+	    }
+	}
+
+	// Function to handle type change
+	function handleTypeChange(typeSelector, ipSelector, macSelector) {
+	    var isIP = $(typeSelector).val() === 'ip' || $(typeSelector).val() === 'IP';
+	    $(ipSelector).prop("disabled", !isIP);
+	    $(macSelector).prop("disabled", isIP);
+	    if (isIP) {
+	        $(macSelector).val('');
+	    } else {
+	        $(ipSelector).val('');
+	    }
+	}
 	
 	$(document).ready(function() {
 		<%// Access the session variable
@@ -2244,11 +2167,10 @@ function applyTrafficRulesLan2() {
 					$('#registerBtnGenSettings_lan1').prop('disabled', true);
 					$('#registerBtnGenSettings_lan2').prop('disabled', true);
 					
-					$('#applyBtnBasicConf').prop('disabled', true);
+					$('#updateBtnBasicConf').prop('disabled', true);
 					
-					$('#applyBtnRules_lan0').prop('disabled', true);
-					$('#applyBtnRules_lan1').prop('disabled', true);
-					$('#applyBtnRules_lan2').prop('disabled', true);
+					$('#applyBtn').prop('disabled', true);
+					
 					
 					$('#clearBtn_lan0').prop('disabled', true);
 					$('#clearBtn_lan1').prop('disabled', true);
@@ -2291,32 +2213,51 @@ function applyTrafficRulesLan2() {
 		    	loadTrafficRulesListLan1();
 		    	loadTrafficRulesListLan2();
 		    	
-		    	$("#type_lan0").change(function(event) {
-
-		    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
-		    			 
-		    			$("#macAddress_lan0").prop("disabled", true);
-		    			$("#macAddress_lan0").val('');
-		    			
-		    			var isDisabled = $('#ip_addr_lan0').prop('disabled');
-		    			 
-		    			 if(isDisabled){
-		    				 $("#ip_addr_lan0").prop("disabled", false);
-		    			 }
-		    			
-		    		} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
-		    			$("#ip_addr_lan0").prop("disabled", true);
-		    			$("#ip_addr_lan0").val('');
-		    			
-		    			var isDisabled = $('#macAddress_lan0').prop('disabled');
-		    			 
-		    			 if(isDisabled){
-		    				 $("#macAddress_lan0").prop("disabled", false);
-		    			 }
-		    		}
-		    	}); 
 		    	
-		    	$("#type_lan1").change(function(event) {
+		    	
+		    	
+		    	/* $("#type_lan0").val('IP'); // Replace 'ip' with your default value
+		        $("#type_lan1").val('IP'); // Replace 'ip' with your default value
+		        $("#type_lan2").val('IP'); // Replace 'ip' with your default value
+
+		        // Trigger change event for lan0
+		        $("#type_lan0").trigger("change");
+
+		        // Trigger change event for lan1
+		        $("#type_lan1").trigger("change");
+
+		        // Trigger change event for lan2
+		        $("#type_lan2").trigger("change");
+
+		        // Existing change event handlers...
+
+		        // Move these change event handlers outside of the document ready block
+		       $("#type_lan0").change(function(event) {
+
+			    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
+			    			 
+			    			$("#macAddress_lan0").prop("disabled", true);
+			    			$("#macAddress_lan0").val('');
+			    			
+			    			var isDisabled = $('#ip_addr_lan0').prop('disabled');
+			    			 
+			    			 if(isDisabled){
+			    				 $("#ip_addr_lan0").prop("disabled", false);
+			    			 }
+			    			
+			    		} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
+			    			$("#ip_addr_lan0").prop("disabled", true);
+			    			$("#ip_addr_lan0").val('');
+			    			
+			    			var isDisabled = $('#macAddress_lan0').prop('disabled');
+			    			 
+			    			 if(isDisabled){
+			    				 $("#macAddress_lan0").prop("disabled", false);
+			    			 }
+			    		}
+			    	});
+
+		       $("#type_lan1").change(function(event) {
 
 		    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
 		    			 
@@ -2340,9 +2281,8 @@ function applyTrafficRulesLan2() {
 		    			 }
 		    		}
 		    	}); 
-		    	
-		    	
-		    	$("#type_lan2").change(function(event) {
+
+		       $("#type_lan2").change(function(event) {
 
 		    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
 		    			 
@@ -2366,8 +2306,35 @@ function applyTrafficRulesLan2() {
 		    			 }
 		    		}
 		    	}); 
+ */
+ 
+ 
+ 
+ $("#type_lan0").val('IP'); // Replace 'ip' with your default value
+ $("#type_lan1").val('IP'); // Replace 'ip' with your default value
+ $("#type_lan2").val('IP'); // Replace 'ip' with your default value
+
+ // Set initial disabled state based on default values
+ initializeFieldState("#type_lan0", "#ip_addr_lan0", "#macAddress_lan0");
+ initializeFieldState("#type_lan1", "#ip_addr_lan1", "#macAddress_lan1");
+ initializeFieldState("#type_lan2", "#ip_addr_lan2", "#macAddress_lan2");
+
+ // Existing change event handlers...
+ $("#type_lan0").change(function(event) {
+     handleTypeChange("#type_lan0", "#ip_addr_lan0", "#macAddress_lan0");
+ });
+
+ $("#type_lan1").change(function(event) {
+     handleTypeChange("#type_lan1", "#ip_addr_lan1", "#macAddress_lan1");
+ });
+
+ $("#type_lan2").change(function(event) {
+     handleTypeChange("#type_lan2", "#ip_addr_lan2", "#macAddress_lan2");
+ });
+
+
 		    	
-		    	$("#applyBtnBasicConf").click(function() {
+		    	$("#updateBtnBasicConf").click(function() {
 		   		 var newData = []; // Create an array to store the current data
 
 		   		    // Iterate through the table rows to collect data for each row
@@ -2441,24 +2408,15 @@ function applyTrafficRulesLan2() {
 				});
 				
 				
-				$('#applyBtnRules_lan0').click(function() {
-					applyTrafficRulesLan0();
+				$('#applyBtn').click(function() {
+					applyTrafficRules();
 
 				});
 				
-				$('#applyBtnRules_lan1').click(function() {
-					applyTrafficRulesLan1();
-
-				});
-				
-				$('#applyBtnRules_lan2').click(function() {
-					applyTrafficRulesLan2();
-
-				});
+			
 		    	
 		    	$('#clearBtn_lan0').click(function() {
 		    		$('#name_lan0').val('');
-		    		$('#iface_lan0').val('lan0');
 		    		$('#portNumber_lan0').val('');
 		    		$('#macAddress_lan0').val('');
 		    		$('#protocol_lan0').val('TCP');
@@ -2473,7 +2431,6 @@ function applyTrafficRulesLan2() {
 		    	
 		    	$('#clearBtn_lan1').click(function() {
 		    		$('#name_lan1').val('');
-		    		$('#iface_lan1').val('lan1');
 		    		$('#portNumber_lan1').val('');
 		    		$('#macAddress_lan1').val('');
 		    		$('#protocol_lan1').val('TCP');
@@ -2488,7 +2445,6 @@ function applyTrafficRulesLan2() {
 		    	
 		    	$('#clearBtn_lan2').click(function() {
 		    		$('#name_lan2').val('');
-		    		$('#iface_lan2').val('lan2');
 		    		$('#portNumber_lan2').val('');
 		    		$('#macAddress_lan2').val('');
 		    		$('#protocol_lan2').val('TCP');
@@ -2522,6 +2478,10 @@ function applyTrafficRulesLan2() {
 					onclick="openTab('lan0', this)" style="margin-left: 2px;">LAN0</button>
 				<button class="tab-button-lan" onclick="openTab('lan1', this)">LAN1</button>
 				<button class="tab-button-lan" onclick="openTab('lan2', this)">LAN2</button>
+				
+				<div class="button-container">
+        <button style="color:white; background-color: #2b3991; margin-top: -40px;" id="applyBtn">Apply</button>
+    </div>
 
 				<div id="lan0" class="tab" style="display: block; margin-left: 3px;">
 
@@ -2640,7 +2600,7 @@ function applyTrafficRulesLan2() {
 
 								<div class="row"
 									style="display: flex; justify-content: right; margin-top: 2%;">
-									<input type="button" value="Apply" id="applyBtnBasicConf" />
+									<input type="button" value="Update" id="updateBtnBasicConf" />
 
 								</div>
 
@@ -2679,10 +2639,7 @@ function applyTrafficRulesLan2() {
 											<td><input type="text" id="name_lan0" name="name_lan0"
 												maxlength="31" style="height: 10px;" />
 												<p id="nameError_lan0" style="color: red;"></p></td>
-											<td>Interface</td>
-											<td><input type="text" id="iface_lan0" name="iface_lan0" Value="lan0"
-												maxlength="31" style="height: 10px;" /></td>
-
+										
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan0" name="type_lan0"
 												style="height: 33px;">
@@ -2694,16 +2651,18 @@ function applyTrafficRulesLan2() {
 											<td><input type="text" id="macAddress_lan0" name="macAddress_lan0"
 												maxlength="31" style="height: 10px;" />
 												<p id="macAddrError_lan0" style="color: red;"></p></td>
-										</tr>
-
-										<tr>
-											<td>Protocol</td>
+												
+												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan0"
 												name="protocol_lan0" style="height: 33px;">
 													
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
+										</tr>
+
+										<tr>
+											
 											
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan0" name="ip_addr_lan0"
@@ -2726,7 +2685,7 @@ function applyTrafficRulesLan2() {
 
 									<div class="row"
 										style="display: flex; justify-content: center; margin-top: 1%;">
-										<input type="button" value="Apply" id="applyBtnRules_lan0" /> <input
+										 <input
 											style="margin-left: 5px;" type="button" value="Clear"
 											id="clearBtn_lan0" /> <input style="margin-left: 5px;"
 											type="submit" value="Add" id="registerBtn_lan0" />
@@ -2762,7 +2721,6 @@ function applyTrafficRulesLan2() {
 										<tr>
 											<th>Name</th>
 											<th>Protocol</th>
-											<th>Interface</th>
 											<th>Source IP address</th>
 											<th>MAC address</th>
 											<th>Destination port</th>
@@ -2866,11 +2824,7 @@ function applyTrafficRulesLan2() {
 											<td><input type="text" id="name_lan1" name="name_lan1"
 												maxlength="31" style="height: 10px;" />
 												<p id="nameError_lan1" style="color: red;"></p></td>
-											<td>Interface</td>
-											<td><input type="text" id="iface_lan1" name="iface_lan1" Value="lan1"
-												maxlength="31" style="height: 10px;" /></td>
-
-
+											
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan1" name="type_lan1"
 												style="height: 33px;">
@@ -2882,16 +2836,18 @@ function applyTrafficRulesLan2() {
 											<td><input type="text" id="macAddress_lan1" name="macAddress_lan1"
 												maxlength="31" style="height: 10px;" />
 												<p id="macAddrError_lan1" style="color: red;"></p></td>
-										</tr>
-
-										<tr>
-											<td>Protocol</td>
+												
+												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan1"
 												name="protocol_lan1" style="height: 33px;">
 													
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
+										</tr>
+
+										<tr>
+											
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan1" name="ip_addr_lan1"
 												maxlength="31" />
@@ -2913,7 +2869,7 @@ function applyTrafficRulesLan2() {
 
 									<div class="row"
 										style="display: flex; justify-content: center; margin-top: 1%;">
-										<input type="button" value="Apply" id="applyBtnRules_lan1" /> <input
+										 <input
 											style="margin-left: 5px;" type="button" value="Clear"
 											id="clearBtn_lan1" /> <input style="margin-left: 5px;"
 											type="submit" value="Add" id="registerBtn_lan1" />
@@ -2950,7 +2906,6 @@ function applyTrafficRulesLan2() {
 										<tr>
 											<th>Name</th>
 											<th>Protocol</th>
-											<th>Interface</th>
 											<th>Source IP address</th>
 											<th>MAC address</th>
 											<th>Destination port</th>
@@ -3051,11 +3006,7 @@ function applyTrafficRulesLan2() {
 											<td><input type="text" id="name_lan2" name="name_lan2"
 												maxlength="31" style="height: 10px;" />
 												<p id="nameError_lan2" style="color: red;"></p></td>
-											<td>Interface</td>
-											<td><input type="text" id="iface_lan2" name="iface_lan2" Value="lan2"
-												maxlength="31" style="height: 10px;" /></td>
 											
-
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan2" name="type_lan2"
 												style="height: 33px;">
@@ -3067,16 +3018,18 @@ function applyTrafficRulesLan2() {
 											<td><input type="text" id="macAddress_lan2" name="macAddress_lan2"
 												maxlength="31" style="height: 10px;" />
 												<p id="macAddrError_lan2" style="color: red;"></p></td>
-										</tr>
-
-										<tr>
-											<td>Protocol</td>
+												
+												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan2"
 												name="protocol_lan2" style="height: 33px;">
 												
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
+										</tr>
+
+										<tr>
+											
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan2" name="ip_addr_lan2"
 												maxlength="31" />
@@ -3098,7 +3051,7 @@ function applyTrafficRulesLan2() {
 
 									<div class="row"
 										style="display: flex; justify-content: center; margin-top: 1%;">
-										<input type="button" value="Apply" id="applyBtnRules_lan2" /> <input
+										<input
 											style="margin-left: 5px;" type="button" value="Clear"
 											id="clearBtn_lan2" /> <input style="margin-left: 5px;"
 											type="submit" value="Add" id="registerBtn_lan2" />
@@ -3133,7 +3086,6 @@ function applyTrafficRulesLan2() {
 										<tr>
 											<th>Name</th>
 											<th>Protocol</th>
-											<th>Interface</th>
 											<th>Source IP address</th>
 											<th>MAC address</th>
 											<th>Destination port</th>

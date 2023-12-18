@@ -275,12 +275,13 @@ function countDetails(){
 	    },
 		success : function(data) {
 			
-			if (data.status == 'success') {
-    			var status = 'Running';
-    			$("#status").html("System Status: <span class='green-text'>" + status + "</span>");
+			alert(data.status_service);
+			if (data.status_service == 'success') {
+    			var status_service = 'Running';
+    			$("#status").html("System Status: <span class='green-text'>" + status_service + "</span>");
 			} else {
     			var status = 'Stop';
-    			$("#status").html("System Status: <span class='red-text'>" + status + "</span>");
+    			$("#status").html("System Status: <span class='red-text'>" + status_service + "</span>");
 	}
 		
 			$("#last_update").html("Last Update: <span class='overviewText'>" + data.last_update + "</span>");

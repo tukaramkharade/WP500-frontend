@@ -339,26 +339,6 @@ margin-left: -39px;
 	        },
 			success : function(data) {
 				
-				var json1 = JSON.stringify(data);
-
-				var json = JSON.parse(json1);
-
-				if (json.status == 'fail') {
-					
-					 var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
-					        modal.style.display = 'none';
-					        window.location.href = 'login.jsp';
-					  };
-						  
-				}
-				
 				var enableText = document.getElementById("enableText");
 				var disableText = document.getElementById("disableText");
 
