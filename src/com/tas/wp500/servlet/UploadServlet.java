@@ -37,7 +37,7 @@ public class UploadServlet extends HttpServlet {
 			String fileExtension = getFileExtension(filePart);
 			System.out.println("fileExtension-->"+fileExtension);
 			if (fileExtension != null && fileExtension.equalsIgnoreCase("swu")) {
-				String baseUploadPath = "/data/";
+				String baseUploadPath = "/home/wp500/";
 //				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4";
 				String newFolderName = "firmware-file"; // Change this to the desired folder name
 

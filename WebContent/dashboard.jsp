@@ -274,8 +274,7 @@ function countDetails(){
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
 		success : function(data) {
-			
-			alert(data.status_service);
+		
 			if (data.status_service == 'success') {
     			var status_service = 'Running';
     			$("#status").html("System Status: <span class='green-text'>" + status_service + "</span>");

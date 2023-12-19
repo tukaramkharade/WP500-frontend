@@ -49,7 +49,6 @@ public class TOTPOTPServlet extends HttpServlet {
 				for (int i = 0; i < respJson.length(); i++) {
 					String totp_key = respJson.getString("totp_key");
 					
-					
 					try{
 						
 						jsonObject.put("totp_key", totp_key);
@@ -72,13 +71,44 @@ public class TOTPOTPServlet extends HttpServlet {
 			}
 		}
 		
-		
-		
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+		TCPClient client = new TCPClient();
+		JSONObject json = new JSONObject();
 		
+		JSONObject jsonObject = new JSONObject();
+		
+		HttpSession session = request.getSession(true);
+
+		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		String to_email_id = request.getParameter("to_email_id");
+		
+		if (check_username != null) {
+			try{
+				
+				json.put("operation", "send_otp_email");
+				json.put("username", check_username);
+				json.put("user", check_username);
+				json.put("token", check_token);
+				json.put("to_email_id", to_email_id);
+				
+				String respStr = client.sendMessage(json.toString());
+
+				JSONObject respJson = new JSONObject(respStr);
+
+				logger.info("res " + respJson.toString());
+				
+				
+				
+			}catch(Exception e){
+				
+				
+			}
+		}
 	}
 
 }

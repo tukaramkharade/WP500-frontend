@@ -199,7 +199,7 @@ textarea {
 	
 	<tr>
 	<td>Add tag name</td>
-	<td><input type="text" id="tag_name" name="tag_name" maxlength="31" style="width: 200px;"/></td>
+	<td><input type="text" id="tag_name" name="tag_name" maxlength="31" style="width: 200px;" required/></td>
 	<td><input style="height: 26px;" type="button" value="Add Tag" id="addTag"/></td>
 	</tr>
 	</table>
@@ -288,6 +288,14 @@ textarea {
     		
     		var tag_name = $('#tag_name').val();
     		var pv_address = $('#node').val();
+    		
+    		if (tag_name === '' || pv_address === '') {
+    	      
+    	       $("#popupMessage").text('Tag name and PV address are required!');
+          			$("#customPopup").show();
+          			
+    	        return;
+    	    }
     	
     		$.ajax({
     			url : 'tagMapping',
@@ -311,9 +319,7 @@ textarea {
     				console.log('Error adding tag: '+ error);
     			}
     		});
-    		$("#closePopup").click(function () {
-    		    $("#customPopup").hide();
-    		  });
+    		
 
     	}	
  
@@ -494,6 +500,11 @@ textarea {
     			String tokenValue = (String) session.getAttribute("token");%>
 
     		tokenValue = '<%=tokenValue%>';
+    		
+    		$("#closePopup").click(function () {
+    		    $("#customPopup").hide();
+    		  });
+    		
     		
     		loadopcList();
         	

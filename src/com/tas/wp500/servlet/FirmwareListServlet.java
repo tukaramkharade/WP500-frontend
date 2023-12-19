@@ -143,19 +143,19 @@ public class FirmwareListServlet extends HttpServlet {
 						json.put("token", check_token);
 						json.put("user", check_username);
 						System.out.println("json"+json);
-//						String respStr = client.sendMessage(json.toString());
-//
-//						logger.info("res " + new JSONObject(respStr).getString("msg"));
-//
-//						String message = new JSONObject(respStr).getString("msg");
-//						JSONObject jsonObject = new JSONObject();
-//						jsonObject.put("message", message);
-//						
-//						response.setContentType("application/json");
-//						
-//						PrintWriter out = response.getWriter();						
-//						out.print(jsonObject.toString());
-//						out.flush();
+						String respStr = client.sendMessage(json.toString());
+
+						logger.info("res " + new JSONObject(respStr).getString("msg"));
+
+						String message = new JSONObject(respStr).getString("msg");
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("message", message);
+						
+						response.setContentType("application/json");
+						
+						PrintWriter out = response.getWriter();						
+						out.print(jsonObject.toString());
+						out.flush();
 
 					} catch (Exception e) {
 						e.printStackTrace();
