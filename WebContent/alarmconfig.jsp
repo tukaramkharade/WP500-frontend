@@ -586,6 +586,8 @@ function editAlarmConfig() {
 				},
 				success : function(data) {
 					modal.style.display = 'none';
+					
+					loadAlarmSettings();
 
 					// Clear form fields
 					$('#unit_id').val('');

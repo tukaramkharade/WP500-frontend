@@ -101,8 +101,7 @@ public class SMTPServlet extends HttpServlet {
 							jsonObject.put("ssl_port", ssl_port);
 							jsonObject.put("to_email_id", to_email_id);
 							jsonObject.put("email_cc", email_cc);
-							jsonObject.put("email_bcc", email_bcc);
-							jsonObject.put("message", message);
+							jsonObject.put("email_bcc", email_bcc);	
 							jsonObject.put("status", status);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -128,24 +127,6 @@ public class SMTPServlet extends HttpServlet {
 				e.printStackTrace();
 				logger.error("Error while getting SMTP Settings : " + e);
 
-			}
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-				
-				System.out.println(">>" +userObj);
-				
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : "+e);
 			}
 		}
 	}

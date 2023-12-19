@@ -90,6 +90,49 @@ button {
 var roleValue;	
 var tokenValue;
 
+function getSettings(){
+	$.ajax({
+		url : 'updateSettings',
+		type : 'GET',
+		dataType : 'json',
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	    },
+	    
+	    success : function(data) {
+			if(data.status == 'fail'){
+				var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+			}
+			
+			
+			 $('#toggle_enable_ftp').prop('checked', data.enable_ftp == 1);
+             $('#toggle_enable_ssh').prop('checked', data.enable_ssh == 1);
+             $('#toggle_enable_usbtty').prop('checked', data.enable_usbtty == 1);
+         
+			
+	    },
+	    error : function(xhr, status, error) {
+			// Handle the error response, if needed
+			console.log('Error: ' + error);
+		}
+	});
+}
+
 	function updateSettings() {
 		// Display the custom modal dialog
 		var modal = document.getElementById('custom-modal-edit');
@@ -140,6 +183,8 @@ var tokenValue;
 					
 					// Close the modal
 					modal.style.display = 'none';
+					
+					getSettings();
 
 				},
 				error : function(xhr, status, error) {
@@ -199,6 +244,8 @@ if (roleValue === "null") {
 	String tokenValue = (String) session.getAttribute("token");%>
 
 tokenValue = '<%=tokenValue%>';
+
+getSettings();
 
 $('#applyBtn').click(function() {
 	updateSettings();

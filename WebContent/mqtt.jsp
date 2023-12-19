@@ -537,47 +537,6 @@ margin-top: 70px;
  
  function editMqtt(){
 	 
-	 var enable = $('#enable').find(":selected").val();
-	 
-	/*  if (enable === 'Enable') {
-	        var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
-	        if (existingEnabledEntries.length > 0) {
-	            
-	            $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
-      			$("#customPopup").show();
-      			
-      			$('#registerBtn').val('Add');
-      			
-      			$('#broker_ip_address').val('');
-				$('#port_number').val('');
-				$('#username').val('');
-				$('#password').val('');
-				$('#pub_topic').val('');
-				$('#sub_topic').val('');
-				$('#prefix').val('');
-				$('#file_type').val('TCP');
-				$('#file_name').val('Select crt file');
-				$('#enable').val('Disable');
-				$('#file_name').prop('disabled', true);
-      			
-	            return; // Prevent form submission
-	        }
-	        
-	        
-	    } */
-	    
-	    
-	    if (enable === 'Enable') {
-	        // Check if there is already an enabled entry
-	        var existingEnabledEntry = $('#mqttListTable tbody').find('td:contains("Enable")');
-
-	        if (existingEnabledEntry.length > 0) {
-	            // Disable the existing enabled entry
-	            existingEnabledEntry.text('Disable');
-	        }
-	    }
-	 
-	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -594,6 +553,7 @@ margin-top: 70px;
 			var sub_topic = $('#sub_topic').val();
 			var prefix = $('#prefix').val();
 			var file_type = $('#file_type').find(":selected").val();
+			var enable = $('#enable').find(":selected").val();
 			
 			 var file_name;
 				
@@ -620,8 +580,23 @@ margin-top: 70px;
 				        $("#file_name").prop("disabled", false);
 				    }
 				}); 
+				 
+				if (enable === 'Enable') {
+			        var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
+			        if (existingEnabledEntries.length > 0) {
+			            //alert();
+			            
+			            $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
+		      			$("#customPopup").show();
+
+		      			
+			            return; // Prevent form submission
+			        }
+			    }
 				
 				
+				
+				 
 			
 			$.ajax({
 				url : 'mqttServlet',
@@ -684,18 +659,21 @@ margin-top: 70px;
 					
 						$('#file_name').prop('disabled', true);
 					
+						
+					
+
 					
 				},
 				error : function(xhr, status, error) {
 					console.log('Error updating mqtt: ' + error);
 				}
 			});
+			
+				
 			$('#registerBtn').val('Add');
 			
 			
 	  };
-	  
-	  
 	  
 	  var cancelButton = document.getElementById('cancel-button-edit');
 	  cancelButton.onclick = function () {
@@ -703,7 +681,6 @@ margin-top: 70px;
 	    modal.style.display = 'none';
 	    $('#registerBtn').val('Update');
 	  };	
-	  
 	  
 	 
  }
@@ -747,7 +724,12 @@ margin-top: 70px;
 		if (enable === 'Enable') {
 	        var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
 	        if (existingEnabledEntries.length > 0) {
-	            alert('Only one entry can be enabled at a time. Please disable the existing entry first.');
+	            //alert();
+	            
+	            $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
+      			$("#customPopup").show();
+
+      			
 	            return; // Prevent form submission
 	        }
 	    }
@@ -818,9 +800,7 @@ margin-top: 70px;
 				console.log('Error adding mqtt settings: ' + error);
 			}
 		});
-		$("#closePopup").click(function () {
-		    $("#customPopup").hide();
-		  });
+		
 
 		$('#registerBtn').val('Add');
 	}

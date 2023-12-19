@@ -289,6 +289,7 @@ function loadFirmwareFiles() {
                         .html('<i class="fa fa-play"></i>')
                         .click(function() {
                         	updateFirmwareFile(file);
+                        	getFirmwareStatus();
                         });                   
                         
                         actions.append(deleteButton);
@@ -416,6 +417,9 @@ function firmwareProgress() {
        }
    });
 }
+
+
+
 function firmwareDownload() {
 	 var fileUrl = $('#fileUrl').val();
 
@@ -486,6 +490,13 @@ function firmwareDownload() {
             <div id="progress-bar"></div>
         </div>
     </div>
+    
+    <div class="firmware-status-container" style="width: 80%;">
+    <h3>Firmware Status</h3>
+    <textarea id="firmware_status" name="firmware_status" 
+							 style="margin-left: -19px; height: 500px; width: 1000px;"></textarea>
+							</div>
+							
 </div>
 
 			
@@ -582,6 +593,50 @@ function firmwareDownload() {
         
     }
     
+    
+    function getFirmwareStatus(){
+    	$.ajax({
+    		url : "firmwareStatusServlet",
+    		type : "GET",
+    		dataType : "json",
+    		success : function(data) {
+    			
+    			if (data.status == 'fail') {
+    				
+   				 var modal = document.getElementById('custom-modal-session-timeout');
+   				  modal.style.display = 'block';
+   				  
+   				// Update the session-msg content with the message from the server
+   				    var sessionMsg = document.getElementById('session-msg');
+   				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+   				  
+   				  // Handle the confirm button click
+   				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+   				  confirmButton.onclick = function () {
+   					  
+   					// Close the modal
+   				        modal.style.display = 'none';
+   				        window.location.href = 'login.jsp';
+   				  };
+   					  
+   			} 
+   			// Assuming data.banner_text_data is an array, join it to create a string
+               var textToShow = data.firmware_status_data.join('\n');
+   			
+            // Clear the existing content in the textarea
+               $('#firmware_status').val('');
+
+               // Set the text in the textarea
+               $('#firmware_status').val(textToShow);
+
+    		},
+    		error : function(xhr, status, error) {
+    			// Handle the error response, if needed
+    			console.log("Error getting firmware status: " + error);
+    		},
+    	});
+    }
  
     $(document).ready(function() {
     	<%// Access the session variable
@@ -634,6 +689,8 @@ function firmwareDownload() {
             });
         	
         	loadFirmwareFiles();
+        	
+        	
     		
     	}
     	

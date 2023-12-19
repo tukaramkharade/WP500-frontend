@@ -226,7 +226,8 @@ position: relative;
 				
 				$('#gateway_dis_1').val(data.lan1_gateway);
 				$('#dns_dis_1').val(data.lan1_dns);	
-				$('#toggle_enable_lan1').val(data.lan1_enable);
+				//$('#toggle_enable_lan1').val(data.lan1_enable);
+				$('#toggle_enable_lan1').prop('checked', data.lan1_enable == 1);
 				
 				lan2_dhcp = data.lan2_dhcp;
 				if(lan2_dhcp == 1){
@@ -239,7 +240,10 @@ position: relative;
 				
 				$('#gateway_dis_2').val(data.lan2_gateway);
 				$('#dns_dis_2').val(data.lan2_dns);
-				$('#toggle_enable_lan2').val(data.lan2_enable);
+				
+				 $('#toggle_enable_lan2').prop('checked', data.lan2_enable == 1);
+				 
+				//$('#toggle_enable_lan2').val(data.lan2_enable);
 				
 				
 				$("#toggle_lan0").prop("checked", data.eth1_dhcp === "1");
@@ -485,8 +489,6 @@ position: relative;
 	    var confirmButton = document.getElementById('confirm-button-edit');
 	    confirmButton.onclick = function () {
 	 
-	    	
-	    	
 	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
 	        var lan2_type = 'lan2';
 	       

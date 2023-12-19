@@ -20,6 +20,61 @@ public class UpdateSettings extends HttpServlet {
 	final static Logger logger = Logger.getLogger(UpdateSettings.class);
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+
+		if (session.getAttribute("username") != null) {
+			String check_username = (String) session.getAttribute("username");
+			String check_token = (String) session.getAttribute("token");
+	
+		try{
+			TCPClient client = new TCPClient();
+			JSONObject json = new JSONObject();
+			
+			json.put("operation", "get_ethernet_details");
+			json.put("user", check_username);
+			json.put("token", check_token);
+			
+			String respStr = client.sendMessage(json.toString());
+			
+			System.out.println("res " + new JSONObject(respStr));
+			logger.info("res " + new JSONObject(respStr));
+			JSONObject result = new JSONObject(respStr);
+		
+			String status = result.getString("status");
+			JSONObject jsonObject = new JSONObject();
+			
+			if(status.equals("success")){
+				JSONObject general_setting = result.getJSONObject("general_setting");				
+				
+				String enable_ftp = general_setting.getString("enable_ftp");				
+				String enable_ssh = general_setting.getString("enable_ssh");				
+				String enable_usbtty = general_setting.getString("enable_usbtty");				
+				
+			    jsonObject.put("enable_ftp", enable_ftp);
+			    jsonObject.put("enable_ssh", enable_ssh);
+			    jsonObject.put("enable_usbtty", enable_usbtty);
+			   
+			}else if(status.equals("fail")){
+				String message = result.getString("msg");
+				jsonObject.put("status", status);
+				jsonObject.put("message", message);
+			}
+			
+		  
+		    // Set the content type of the response to application/json
+		    response.setContentType("application/json");
+		    
+		    // Get the response PrintWriter
+		    PrintWriter out = response.getWriter();
+		    
+		    // Write the JSON object to the response
+		    out.print(jsonObject.toString());
+		    out.flush();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		}
+
 		
 	}
 
@@ -77,25 +132,6 @@ public class UpdateSettings extends HttpServlet {
 				e.printStackTrace();
 			}
 
-			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
 		}
 	}
 

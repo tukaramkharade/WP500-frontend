@@ -79,7 +79,8 @@
 .modal-edit_lan2,
 .modal-edit-gen-lan0,
 .modal-edit-gen-lan1,
-.modal-edit-gen-lan2
+.modal-edit-gen-lan2,
+.modal-apply
  {
 	display: none;
 	position: fixed;
@@ -105,7 +106,8 @@
 .modal-content-edit_lan2,
 .modal-content-edit-gen-lan0,
 .modal-content-edit-gen-lan1,
-.modal-content-edit-gen-lan2
+.modal-content-edit-gen-lan2,
+.modal-content-apply
   {
 	background-color: #d5d3d3;
 	padding: 20px;
@@ -138,7 +140,8 @@
 #confirm-button-edit_lan2,
 #confirm-button-edit-gen-lan0,
 #confirm-button-edit-gen-lan1,
-#confirm-button-edit-gen-lan2
+#confirm-button-edit-gen-lan2,
+#confirm-button-apply
  {
 	background-color: #4caf50;
 	color: white;
@@ -153,7 +156,8 @@
 #cancel-button-edit_lan2,
 #cancel-button-edit-gen-lan0,
 #cancel-button-edit-gen-lan1,
-#cancel-button-edit-gen-lan2
+#cancel-button-edit-gen-lan2,
+#cancel-button-apply
  {
 	background-color: #f44336;
 	color: white;
@@ -1951,6 +1955,14 @@ function editTrafficRulesLan2() {
 }
 
 function applyTrafficRules() {
+	
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-apply');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-apply');
+	  confirmButton.onclick = function () {
 
 	$.ajax({
 		url : "trafficRulesApplyServletLan0",
@@ -1958,10 +1970,12 @@ function applyTrafficRules() {
 		dataType : "json",
 		success : function(data) {
 
+			modal.style.display = 'none';
+			
 		// Display the custom popup message
  			$("#popupMessage").text(data.message);
   			$("#customPopup").show();
-	//		loadTrafficRulesListLan0();
+	
 
 		},
 		error : function(xhr, status, error) {
@@ -1969,6 +1983,16 @@ function applyTrafficRules() {
 			console.log("Error applying traffic rules: " + error);
 		},
 	});
+	
+	  };
+	  
+	  var cancelButton = document.getElementById('cancel-button-apply');
+	  cancelButton.onclick = function () {
+	    // Close the modal
+	    modal.style.display = 'none';
+	    
+	  };	
+	  
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
@@ -2213,103 +2237,7 @@ function applyTrafficRules() {
 		    	loadTrafficRulesListLan1();
 		    	loadTrafficRulesListLan2();
 		    	
-		    	
-		    	
-		    	
-		    	/* $("#type_lan0").val('IP'); // Replace 'ip' with your default value
-		        $("#type_lan1").val('IP'); // Replace 'ip' with your default value
-		        $("#type_lan2").val('IP'); // Replace 'ip' with your default value
 
-		        // Trigger change event for lan0
-		        $("#type_lan0").trigger("change");
-
-		        // Trigger change event for lan1
-		        $("#type_lan1").trigger("change");
-
-		        // Trigger change event for lan2
-		        $("#type_lan2").trigger("change");
-
-		        // Existing change event handlers...
-
-		        // Move these change event handlers outside of the document ready block
-		       $("#type_lan0").change(function(event) {
-
-			    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
-			    			 
-			    			$("#macAddress_lan0").prop("disabled", true);
-			    			$("#macAddress_lan0").val('');
-			    			
-			    			var isDisabled = $('#ip_addr_lan0').prop('disabled');
-			    			 
-			    			 if(isDisabled){
-			    				 $("#ip_addr_lan0").prop("disabled", false);
-			    			 }
-			    			
-			    		} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
-			    			$("#ip_addr_lan0").prop("disabled", true);
-			    			$("#ip_addr_lan0").val('');
-			    			
-			    			var isDisabled = $('#macAddress_lan0').prop('disabled');
-			    			 
-			    			 if(isDisabled){
-			    				 $("#macAddress_lan0").prop("disabled", false);
-			    			 }
-			    		}
-			    	});
-
-		       $("#type_lan1").change(function(event) {
-
-		    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
-		    			 
-		    			$("#macAddress_lan1").prop("disabled", true);
-		    			$("#macAddress_lan1").val('');
-		    			
-		    			var isDisabled = $('#ip_addr_lan1').prop('disabled');
-		    			 
-		    			 if(isDisabled){
-		    				 $("#ip_addr_lan1").prop("disabled", false);
-		    			 }
-		    			
-		    		} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
-		    			$("#ip_addr_lan1").prop("disabled", true);
-		    			$("#ip_addr_lan1").val('');
-		    			
-		    			var isDisabled = $('#macAddress_lan1').prop('disabled');
-		    			 
-		    			 if(isDisabled){
-		    				 $("#macAddress_lan1").prop("disabled", false);
-		    			 }
-		    		}
-		    	}); 
-
-		       $("#type_lan2").change(function(event) {
-
-		    		if ($(this).val() == 'ip' || $(this).val() == 'IP') {
-		    			 
-		    			$("#macAddress_lan2").prop("disabled", true);
-		    			$("#macAddress_lan2").val('');
-		    			
-		    			var isDisabled = $('#ip_addr_lan2').prop('disabled');
-		    			 
-		    			 if(isDisabled){
-		    				 $("#ip_addr_lan2").prop("disabled", false);
-		    			 }
-		    			
-		    		} else if ($(this).val() == 'mac' || $(this).val() == 'MAC') {
-		    			$("#ip_addr_lan2").prop("disabled", true);
-		    			$("#ip_addr_lan2").val('');
-		    			
-		    			var isDisabled = $('#macAddress_lan2').prop('disabled');
-		    			 
-		    			 if(isDisabled){
-		    				 $("#macAddress_lan2").prop("disabled", false);
-		    			 }
-		    		}
-		    	}); 
- */
- 
- 
- 
  $("#type_lan0").val('IP'); // Replace 'ip' with your default value
  $("#type_lan1").val('IP'); // Replace 'ip' with your default value
  $("#type_lan2").val('IP'); // Replace 'ip' with your default value
@@ -3119,6 +3047,14 @@ function applyTrafficRules() {
 								<span class="popup-content" id="popupMessage"></span>
 								<button id="closePopup">OK</button>
 							</div>
+							
+							<div id="custom-modal-apply" class="modal-apply">
+				<div class="modal-content-apply">
+				  <p>Are you sure you want to apply settings?</p>
+				  <button id="confirm-button-apply">Yes</button>
+				  <button id="cancel-button-apply">No</button>
+				</div>
+			  </div>
 							
 			
 
