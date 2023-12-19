@@ -580,23 +580,40 @@ margin-top: 70px;
 				        $("#file_name").prop("disabled", false);
 				    }
 				}); 
-				 
-				if (enable === 'Enable') {
-			        var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
-			        if (existingEnabledEntries.length > 0) {
-			            //alert();
-			            
-			            $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
-		      			$("#customPopup").show();
+				
+				
+				$('#enable').on('change', function () {
+			        var enableValue = $(this).val();
 
-		      			
-			            return; // Prevent form submission
+			        // Check if the enable field changed from Disable to Enable
+			        if (enableValue === 'Enable') {
+			            var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
+			            if (existingEnabledEntries.length > 0) {
+			                // Display a message or perform other actions
+			                $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
+			                $("#customPopup").show();
+			                
+			                $('#broker_ip_address').val('');
+							$('#port_number').val('');
+							$('#username').val('');
+							$('#password').val('');
+							$('#pub_topic').val('');
+							$('#sub_topic').val('');
+							$('#prefix').val('');
+							$('#file_type').val('TCP');
+							$('#file_name').val('Select crt file');
+							$('#enable').val('Disable');
+							$("#prefix").prop("disabled", false);					
+							$('#file_name').prop('disabled', true);
+								
+								$('#registerBtn').val('Add');
+								
+			                return; // Prevent form submission
+			            }
 			        }
-			    }
+			    });
 				
-				
-				
-				 
+			
 			
 			$.ajax({
 				url : 'mqttServlet',
