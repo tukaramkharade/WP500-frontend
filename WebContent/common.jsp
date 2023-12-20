@@ -67,7 +67,7 @@
                 </li> 
                 
                 <li class="nav-item">
-                  <a href="reboot.jsp">Reboot and Factory Reset</a>
+                  <a href="reboot.jsp">Reset</a>
                 </li>
               
               </ul>

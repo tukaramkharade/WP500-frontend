@@ -87,8 +87,8 @@ public class UploadServlet extends HttpServlet {
 				String  baseUploadPath = "/data/";
 				String originalFileName;
 //				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4\\";
-				String newFolderName = "wp500_backups"; 
-				String defaultFileName = "restore.zip"; 
+				String newFolderName = "wp500_backup"; 
+				String defaultFileName = "backup.zip"; 
 				    // Create the path for the new folder
 				    String newFolderPath = baseUploadPath + File.separator + newFolderName;				    
 				    // Create the directory

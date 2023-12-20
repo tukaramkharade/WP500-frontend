@@ -10,10 +10,6 @@
     
 <style>
 
-h3{
-margin-top: 68px;
-}
-
  .container.center {
             display: flex;
             justify-content: center;
@@ -54,6 +50,31 @@ margin-top: 68px;
   cursor: pointer;
   margin-left: 40%;
 }
+
+
+   .email-container {
+        
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Optional: Set a height to center vertically within the viewport */
+    }
+
+    #otp,
+    #email_otp {
+        width: 70%;
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+
+    #sendOTP,
+    #email_sendOTP {
+        width: 90px;
+        margin-top: -14px;
+    }
+
+    #error-message {
+        color: red;
+        margin-top: 10px; /* Adjust as needed */
+    }
 
     </style>
     
@@ -131,6 +152,9 @@ margin-top: 68px;
                          to_email_id: to_email_id
                      },
                      success: function (data) {
+                    	 
+                    	 $("#popupMessage").text(data.message);
+               			$("#customPopup").show();
                          
                      },
                      error: function (xhr, status, error) {
@@ -143,6 +167,44 @@ margin-top: 68px;
        			$("#customPopup").show();
        			
              }
+        }
+        
+        
+        function validateEmailOTP(){
+        	
+        	
+        	var emailOtpValue = document.getElementById("email_otp").value;
+            console.log("OTP -->"+emailOtpValue);
+          
+            $.ajax({
+    			url : "imageServlet",
+    			type : "POST",
+    			data : {
+    				otp: emailOtpValue,
+    				action: 'totp-authentication-email'
+    			},
+                success: function (response) {
+                    // Handle the response from the server, if needed
+                    console.log("OTP -->"+response.email_otp_result);
+                   
+                    if(response.email_otp_result === 'true'){
+                    	window.location.href = 'overview.jsp';
+                    }else{
+                    	
+                    	// Display an error message on the same page
+                        document.getElementById("error-message-email").innerHTML = "Incorrect OTP. Please try again.";
+                        $('#email_otp').val('');
+                    	
+                    }
+                    
+                },
+                error: function () {
+                    // Handle errors here
+                    console.error("totp authentication failed");
+                }
+            });
+        	
+        	
         }
         
         $(document).ready(function() {
@@ -167,12 +229,13 @@ margin-top: 68px;
 
 	<div class="content1">
 		<section style="margin-left: 1em">
-			<h3>TOTP AUTHENTICATION</h3>
+			<h3 style="margin-top: 68px;">TOTP AUTHENTICATION</h3>
 				<hr>
-			
-			<div class="container">
+			<div class="container-wrapper">
+			<div class="mobile-container">
+			<h3>Authenticator App OTP</h3>
 				
-				<div class="row" style="display: flex;   justify-content: center; align-items: center; margin-top: -20px;">
+				<div class="row" style="display: flex;   justify-content: center; align-items: center;">
 					
     				 <input type="hidden" id="action" name="action" value="">
     				
@@ -183,13 +246,14 @@ margin-top: 68px;
     			
 			</div>
 			
+			
+			
+			</div>
+			
 			<h3>EMAIL OTP</h3>
 			<hr>
 			
 			 <div class="container center">
-
-                <!-- <label for="username" style="float: left;">Username</label>
-                <input required type="text" id="username" name="username" style="padding-left: 5px; width: 15%;"><br> -->
 
                 <label for="to_email_id" style="float: left; margin-top: 10px;">To email id</label>
                 <input required type="text" id="to_email_id" name="to_email_id" style="padding-left: 5px; width: 15%; margin-top: 10px;"><br>
@@ -198,6 +262,19 @@ margin-top: 68px;
 
             </div>
             
+            <div class="email-container">
+				<h3>Email OTP</h3>
+				<div class="row" style="display: flex;   justify-content: center; align-items: center;">
+					
+    				 <input type="hidden" id="action" name="action" value="">
+    				
+    				<input type="password" id="email_otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
+    				<input type="button" id="email_sendOTP" value="Validate OTP" style="margin-left: 1%">
+					<div id="error-message-email" style="color: red; margin-left: 2%;"></div>
+				</div>
+    			
+			</div>
+			
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>

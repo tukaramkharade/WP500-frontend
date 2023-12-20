@@ -367,13 +367,13 @@ tokenValue = '<%=tokenValue%>';
 
 getSysLog();
 
-$('#applyBtn').click(function() {
+$('#saveBtn').click(function() {
 	updateSysLog();
 });
 
 getSysLogStatus();
 
-$('#addButton').click(function() {
+$('#applyButton').click(function() {
 	updateSysLogStatus();
 });
 
@@ -399,6 +399,20 @@ $('#addButton').click(function() {
 			<div class="container">
 				<form id="settingsForm">
 					<table class="bordered-table" style="margin-top: -1px;">
+					
+					<tr>
+							<td>Status</td>
+							<td><select class="textBox" id="status" name="status" style="height: 33px; max-width: 220px;">
+							
+							<option value="Enable" selected>Enable</option>
+							<option value="Disable">Disable</option>
+						</select>
+						
+						</td>
+						<td><input type="button" id="applyButton" value="Apply"/></td>
+						</tr>
+					
+					
 						<tr>
 							<td>Hostname</td>
 							<td><input type="text" id="hostname" maxlength="31" name="hostname" required style="max-width: 200px;" /></td>
@@ -410,22 +424,11 @@ $('#addButton').click(function() {
 						</tr>
 						
 						<tr>
-						<td colspan="2" style="text-align: center;"><input style="height: 26px;" type="button" value="Apply"
-							id="applyBtn" /></td>
+						<td colspan="2" style="text-align: center;"><input style="height: 26px;" type="button" value="Save"
+							id="saveBtn" /></td>
 						</tr>
 						
-						<tr>
-							<td>Status</td>
-							<td><select class="textBox" id="status" name="status" style="height: 33px; max-width: 220px;">
-							
-							<option value="Enable" selected>Enable</option>
-							<option value="Disable">Disable</option>
-						</select>
 						
-						</td>
-						<td><input type="button" id="addButton" value="Add"/></td>
-						</tr>
-
 					</table>
 
 				</form>
