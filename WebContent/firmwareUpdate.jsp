@@ -485,18 +485,13 @@ function firmwareDownload() {
         </form>
     </div>
     <div class="progress-container">
-        <h3>File Upload Progress</h3>
+        <h3 style="margin-top: -7px;">File Upload Progress</h3>
         <div id="progress-bar-container">
             <div id="progress-bar"></div>
         </div>
     </div>
     
-    <div class="firmware-status-container" style="width: 80%;">
-    <h3>Firmware Status</h3>
-    <textarea id="firmware_status" name="firmware_status" 
-							 style="margin-left: -19px; height: 500px; width: 1000px;"></textarea>
-							</div>
-							
+    		
 </div>
 
 			
@@ -522,7 +517,7 @@ function firmwareDownload() {
 				</div>
 			  </div>
 			
-			<h3>FIRMWARE FILE LIST</h3>
+			<h3 style="margin-top: -23px;">FIRMWARE FILE LIST</h3>
 			<hr />
 			
 			<div class="container">
@@ -539,6 +534,12 @@ function firmwareDownload() {
 			</table>
 			
 			</div>
+			
+			<div class="firmware-status-container" style="width: 80%; margin-bottom: 20px;">
+    <h3>Firmware Status</h3>
+    <textarea id="firmware_status" name="firmware_status" 
+							 style="margin-left: 19px; height: 200px; width: 1000px;"></textarea>
+							</div>
 			
 			</section>
 			</div>
@@ -689,7 +690,6 @@ function firmwareDownload() {
             });
         	
         	loadFirmwareFiles();
-        	
         	
     		
     	}

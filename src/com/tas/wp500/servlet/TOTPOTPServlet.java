@@ -102,6 +102,22 @@ public class TOTPOTPServlet extends HttpServlet {
 
 				logger.info("res " + respJson.toString());
 				
+				String message = new JSONObject(respStr).getString("msg");
+				String status = new JSONObject(respStr).getString("status");
+				
+				jsonObject.put("message", message);
+				jsonObject.put("status", status);
+
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+				
 				
 				
 			}catch(Exception e){

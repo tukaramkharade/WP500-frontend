@@ -23,7 +23,7 @@ import com.tas.wp500.utils.TCPClient;
 public class DownloadBackupFile extends HttpServlet {
 	final static Logger logger = Logger.getLogger(DownloadBackupFile.class);
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String zipFilePath = "/data/wp500_backups/backup.zip"; // Path to the existing ZIP file
+        String zipFilePath = "/data/wp500_backup/backup.zip"; // Path to the existing ZIP file
 //        String zipFilePath ="C:\\Users\\sanke\\Desktop\\Firmware-File\\backup.zip";
         File zipFile = new File(zipFilePath);
 

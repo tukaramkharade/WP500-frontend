@@ -107,7 +107,10 @@ margin-top: 70px;
 
 .container {
     margin: 0 auto;
-    max-width: 80%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+     border-radius: 5px;
      
      
   }
@@ -132,12 +135,14 @@ margin-top: 70px;
         margin-right: 233px; /* Adjust margin as needed */
     }
     
-     .password-toggle {
-    position: absolute;
-    right: 10vw; /* Adjusted right positioning */
-    top: 17.3%; /* Center the eye symbol vertically */
-    transform: translateY(-50%);
-    cursor: pointer;
+    .password-container {
+  display: flex; /* Use flexbox to align items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+.password-toggle {
+  cursor: pointer;
+  margin-left: 5px; /* Adjust the margin for spacing */
 }
 
 
@@ -1078,11 +1083,11 @@ margin-top: 70px;
 					    											pub_topic_error.textContent = ""
 					    										}
 
-					    										if ((password.length > 30)) {
+					    										/* if ((password.length > 30)) {
 					    											password_error.textContent = "You can write upto 30 maximum characters."
 					    										} else {
 					    											password_error.textContent = ""
-					    										}
+					    										} */
 					    										if ((username.length > 30)) {
 					    											username_error.textContent = "You can write upto 30 maximum characters."
 					    										} else {
@@ -1182,9 +1187,13 @@ margin-top: 70px;
 					<td><input type="text" id="username" name="username" maxlength="31"/>
 							<p id="username_error" style="color: red;"></p></td>
 					<td>Password</td>
-					<td><input type="password" id="password" name="password" maxlength="31"/>
-					<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
-							<p id="password_error" style="color: red;"></p></td>
+					
+					
+					<td><div class="password-container">
+    <input type="password" id="password" name="password" maxlength="31"/>
+    <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
+  </div>
+							</td>
 					</tr>
 					<tr>
 					<td>Published topic</td>

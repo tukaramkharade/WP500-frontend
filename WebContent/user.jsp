@@ -114,11 +114,12 @@ margin-top: 18px;
  .bordered-table {
   border-collapse: collapse; /* Optional: To collapse table borders */
   margin: 0 auto; /* Center the table horizontally */
+  width: 100%; /* Make the table take up 100% of the container's width */
 }
 
 .bordered-table td {
   border: 1px solid #ccc; /* Light gray border */
- 
+  
 }
 
 .block-list{
@@ -127,26 +128,30 @@ margin-top: 18px;
 
 .block-list td{
  border: 1px solid #ccc;
+ 
 }
 
    .container {
     margin: 0 auto;
-    width: 50%;
+   max-width: 750px;
     border-collapse: collapse;
     background-color: #f2f2f2;
      border-radius: 5px;
   
   }
   
+  
   .password-toggle {
-        position: absolute;
-    right: 27vw; /* Adjust the positioning as needed */
-    top: 23.2%; /* Adjusted top to center the eye symbol vertically */
-    transform: translateY(-50%); /* Center the eye symbol vertically */
+   margin-right: -5px;
+    margin-top: -10px;    
     cursor: pointer;
+    margin-left: 10px;
     }
     
-   
+    .error-message {
+            color: red;
+            display: none; /* Hide the error message by default */
+        }
   
 .tab {
         display: none;
@@ -413,18 +418,7 @@ function togglePassword() {
 		$('#registerBtn').val('Add');
 	}
 
-	function validateRole(role) {
-		var roleError = document.getElementById("roleError");
 
-		if (role == 'Select role') {
-
-			roleError.textContent = "Please select role";
-			return false;
-		} else {
-			roleError.textContent = "";
-			return true;
-		}
-	}
 
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
@@ -941,7 +935,7 @@ function togglePassword() {
 			  });
 			 }
 		  
-		  
+		 
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -998,23 +992,23 @@ function togglePassword() {
 
 					 var isDisabledRole = $("#role").prop("disabled");
 					 
-					 if (!isDisabledRole) {
+					/*  if (!isDisabledRole) {
 						 if (!validateRole(role)) {
 								roleError.textContent = "Please select role";
 								return;
 							}
-					    }
+					    } */
 					 
-					if((user_name.length > 30)){
+					/* if((user_name.length > 30)){
 		                field_User_Error.textContent = "You can write upto 30 maximum characters."
 		                	return;
 		            } else{
 		                field_User_Error.textContent =""
-		            }  
+		            }   */
 
 		                   
 
-		            if( (firstname.length > 30)){
+		            /* if( (firstname.length > 30)){
 		                field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
 		                	return;
 		            }else{
@@ -1026,7 +1020,7 @@ function togglePassword() {
 		                	return;
 		            }else{
 		                field_LastN_Error.textContent =""
-		            }
+		            } */
 					
 				 var isDisabled = $("#password").prop("disabled");
 									
@@ -1108,7 +1102,7 @@ function togglePassword() {
 						<td>Username</td>
 						<td>
 						<input type="text" id="username" name="username" required maxlength="31" style="height: 10px; max-width: 200px;"/>
-								<p id="field_User_Error" style="color: red;"></p>
+								<p id="field_User_Error" class="error-message"></p>
 						</td>
 					
 						<td>Password</td>
@@ -1116,7 +1110,7 @@ function togglePassword() {
 						<input type="password" id="password" name="password" required maxlength="31" style="height: 10px; max-width: 200px;">
 						 <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
 								<span id="passwordError" style="color: red;"></span>
-								<p id="field_Pass_Error" style="color: red;"></p>
+								
 						</td>
 					</tr>
 					
@@ -1124,14 +1118,14 @@ function togglePassword() {
 						<td>First name</td>
 						<td>
 						<input type="text" id="first_name" name="first_name" maxlength="31" style="height: 10px; max-width: 200px;"/>
-								<p id="field_FirstN_Error" style="color: red;"></p>
+								
 						</td>
 						
 						
 						<td>Last name</td>
 						<td>
 						<input type="text" id="last_name" name="last_name"  maxlength="31" style="height: 10px; max-width: 200px;"/>
-								<p id="field_LastN_Error" style="color: red;"></p>
+								
 						</td>
 					</tr>
 							

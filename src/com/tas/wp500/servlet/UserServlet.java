@@ -249,6 +249,7 @@ public class UserServlet extends HttpServlet {
 				json.put("user", check_username);
 				json.put("token", check_token);
 				String respStr = client.sendMessage(json.toString());
+				System.out.println("response string :"+respStr);
 				respJson = new JSONObject(respStr);
 
 				logger.info(respJson.toString());

@@ -119,7 +119,7 @@ public class TCPClient {
             // Create SSL socket
             SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
       sslSocket = (SSLSocket) sslSocketFactory.createSocket("127.0.0.1", 6801);
-   // sslSocket = (SSLSocket) sslSocketFactory.createSocket("192.168.1.74", 6801);
+  //  sslSocket = (SSLSocket) sslSocketFactory.createSocket("192.168.1.74", 6801);
            
             input = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
             output = new BufferedWriter(new OutputStreamWriter(sslSocket.getOutputStream()));
