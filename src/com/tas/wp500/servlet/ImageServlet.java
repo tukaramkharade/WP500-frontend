@@ -197,6 +197,51 @@ public class ImageServlet extends HttpServlet {
 					}
 					break;
 					
+					
+				case "totp-authentication-email":
+					String email_otp = request.getParameter("email_otp");
+					
+					try {
+						TCPClient client = new TCPClient();
+						JSONObject json = new JSONObject();
+
+						json.put("operation", "validate_otp_email");
+						json.put("username", check_username);
+						json.put("email_otp", email_otp);
+						json.put("token", check_token);
+						json.put("user", check_username);
+
+						String respStr = client.sendMessage(json.toString());
+
+			            System.out.println("res " + new JSONObject(respStr));
+
+			            JSONObject result = new JSONObject(respStr);
+
+			            String email_otp_result = result.getString("email_otp_result");
+						
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("email_otp_result", email_otp_result);
+
+						// Set the content type of the response to application/json
+						response.setContentType("application/json");
+
+						// Get the response PrintWriter
+						PrintWriter out1 = response.getWriter();
+
+						// Write the JSON object to the response
+						out1.print(jsonObject.toString());
+						out1.flush();
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.error("Error geting totp authentication : "+e);
+					}
+					break;
+
+					
+					
+					
 				case "test-totp":
 					try {
 						TCPClient client = new TCPClient();

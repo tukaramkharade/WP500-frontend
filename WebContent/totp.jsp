@@ -10,14 +10,6 @@
     
 <style>
 
- .container.center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-
 .container.center label {
            display: block;
    text-align: left;
@@ -51,18 +43,17 @@
   margin-left: 40%;
 }
 
+.note {
+    color: red;
+    text-align: center;
+    
+}
 
    .email-container {
         
         align-items: center;
         justify-content: center;
-        height: 100vh; /* Optional: Set a height to center vertically within the viewport */
-    }
-
-    #otp,
-    #email_otp {
-        width: 70%;
-        margin-bottom: 10px; /* Adjust as needed */
+        height: 10vh; /* Optional: Set a height to center vertically within the viewport */
     }
 
     #sendOTP,
@@ -180,7 +171,7 @@
     			url : "imageServlet",
     			type : "POST",
     			data : {
-    				otp: emailOtpValue,
+    				email_otp: emailOtpValue,
     				action: 'totp-authentication-email'
     			},
                 success: function (response) {
@@ -229,22 +220,20 @@
 
 	<div class="content1">
 		<section style="margin-left: 1em">
-			<h3 style="margin-top: 68px;">TOTP AUTHENTICATION</h3>
+			<h3 style="margin-top: 68px;">TWO FACTOR AUTHENTICATION</h3>
 				<hr>
 			<div class="container-wrapper">
-			<div class="mobile-container">
-			<h3>Authenticator App OTP</h3>
-				
-				<div class="row" style="display: flex;   justify-content: center; align-items: center;">
-					
-    				 <input type="hidden" id="action" name="action" value="">
-    				
-    				<input type="password" id="otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
-    				<input type="button" id="sendOTP" onclick="sendOTP();" value="Validate OTP" style="margin-left: 1%">
-					<div id="error-message" style="color: red; margin-left: 2%;"></div>
-				</div>
-    			
-			</div>
+			
+		<div class="mobile-container" style="display: flex; flex-direction: column; align-items: left;">
+    <h3>Authenticator App OTP</h3>
+    <div class="row" style="display: flex; justify-content: left; align-items: left;">
+        <input type="hidden" id="action" name="action" value="">
+        <input type="password" id="otp" placeholder="Enter OTP" style="margin-left: 208px; width: 129px; margin-top: -36px; height: 17px;">
+        <input type="button" id="sendOTP" onclick="sendOTP();" value="Validate OTP" style="margin-left: 15px; margin-top: -35px; height: 30px;">
+        <div id="error-message" style="color: red; margin-left: 2%;"></div>
+    </div>
+</div>
+			
 			
 			
 			
@@ -253,7 +242,7 @@
 			<h3>EMAIL OTP</h3>
 			<hr>
 			
-			 <div class="container center">
+			 <div class="container">
 
                 <label for="to_email_id" style="float: left; margin-top: 10px;">To email id</label>
                 <input required type="text" id="to_email_id" name="to_email_id" style="padding-left: 5px; width: 15%; margin-top: 10px;"><br>
@@ -268,12 +257,16 @@
 					
     				 <input type="hidden" id="action" name="action" value="">
     				
-    				<input type="password" id="email_otp" placeholder="Enter OTP" style="width: 15%; margin-left: 1%;">
-    				<input type="button" id="email_sendOTP" value="Validate OTP" style="margin-left: 1%">
+    				<input type="password" id="email_otp" placeholder="Enter OTP" style="width: 10%; margin-left: 1%;">
+    				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 1%">
 					<div id="error-message-email" style="color: red; margin-left: 2%;"></div>
 				</div>
     			
 			</div>
+			
+			<div class="note">
+					<p>Note: Email OTP is valid upto 5 minutes</p>
+				</div>
 			
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>

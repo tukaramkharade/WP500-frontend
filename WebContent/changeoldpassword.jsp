@@ -138,22 +138,22 @@ margin-top: 68px;
 }
 
 .old_password_toggle {
-        position: absolute;
-        right: 41.8vw; /* Adjust the positioning as needed */
+        
+       right: 37.8vw; /* Adjust the positioning as needed */
         top: 29.2%; /* Adjusted top to center the eye symbol */
         cursor: pointer;
     }
     
     .new_password_toggle {
-        position: absolute;
-        right: 41.8vw; /* Adjust the positioning as needed */
-        top: 36.7%; /* Adjusted top to center the eye symbol */
+        
+        right: 37.8vw; /* Adjust the positioning as needed */
+        top: 37%; /* Adjusted top to center the eye symbol */
         cursor: pointer;
     }
     
     .confirm_password_toggle {
-        position: absolute;
-        right: 41.8vw; /* Adjust the positioning as needed */
+       
+        right: 37.8vw; /* Adjust the positioning as needed */
         top: 44%; /* Adjusted top to center the eye symbol */
         cursor: pointer;
     }

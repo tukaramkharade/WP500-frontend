@@ -111,6 +111,7 @@ margin-top: 70px;
     border-collapse: collapse;
     background-color: #f2f2f2;
      border-radius: 5px;
+     overflow-x: auto; /* Enable horizontal scrolling */
      
      
   }
@@ -118,7 +119,8 @@ margin-top: 70px;
  .bordered-table {
   border-collapse: collapse; /* Optional: To collapse table borders */
   margin: 0 auto; /* Center the table horizontally */
-  width: 100%; /* Full width for responsiveness */
+ width: auto; /* Set width to auto for responsive behavior */
+  table-layout: auto; /* Set table layout to auto */
 }
 
 .bordered-table td {
@@ -129,6 +131,7 @@ margin-top: 70px;
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
+        overflow-x: auto; /* Enable horizontal scrolling */
     }
 
     .delete-crt-container {
