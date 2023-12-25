@@ -119,11 +119,11 @@ margin-top: -30px;
  }
  
  .password-toggle {
-        position: absolute;
-    right: 38vw; /* Adjust the positioning as needed */
-    top: 21.8%; /* Adjusted top to center the eye symbol vertically */
-    transform: translateY(-50%); /* Center the eye symbol vertically */
+        
+    margin-right: -5px;
+   
     cursor: pointer;
+    margin-left: 10px;
     }
  
 
@@ -518,6 +518,7 @@ function deleteSMTPSettings() {
 
 						// Refresh the user list
 						getSMTPSettings();
+						location.reload();
 					},
 					error : function(xhr, status, error) {
 						// Handle the error response, if needed
@@ -807,8 +808,8 @@ roleValue = '<%=roleValue%>';
 				
 				<tr>
 				<td>Password</td>
-				<td><input type="password" id="password" name="password" style="height: 10px; width: 20%;" required /></td>
-				<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
+				<td><input type="password" id="password" name="password" style="height: 10px; width: 20%;" required />
+				<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span></td>
 				</tr>
 				
 				<tr>
@@ -906,7 +907,7 @@ roleValue = '<%=roleValue%>';
 				<div class="row" style="display: flex; justify-content: right; margin-bottom: 2%;">
 					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Clear" id="clearBtn" /> 
 					<input style="margin-top: 10px; margin-left: 5px" type="submit" value="Add" id="addBtn" /> 
-					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Delete" id="delBtn" onClick="window.location.reload();" />
+					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Delete" id="delBtn" />
 					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Test Email" id="testEmailBtn" />
 				</div>
 				

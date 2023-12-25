@@ -44,7 +44,7 @@ public class ImageServlet extends HttpServlet {
 
                         String respStr = client.sendMessage(json.toString());
 
-                       // System.out.println("res " + new JSONObject(respStr));
+                        System.out.println("res " + new JSONObject(respStr));
 
                         JSONObject result = new JSONObject(respStr);
 

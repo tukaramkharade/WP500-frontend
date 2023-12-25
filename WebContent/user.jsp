@@ -140,6 +140,15 @@ margin-top: 18px;
   
   }
   
+  .policy-container{
+  margin: 0 auto;
+    width: 50%;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+     border-radius: 5px;
+  
+  }
+  
   
   .password-toggle {
    margin-right: -5px;
@@ -179,6 +188,26 @@ margin-top: 18px;
         margin-left: -18px;
         }
         
+        #loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
+
 </style>
 <script>
 
@@ -201,6 +230,8 @@ function togglePassword() {
 
 	// Function to load user data and populate the user list table
 	function loadUserList() {
+		// Display loader when the request is initiated
+	    showLoader();
 		
 		$.ajax({
 					
@@ -211,6 +242,8 @@ function togglePassword() {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
+						// Hide loader when the response has arrived
+			            hideLoader();
 						
 						if (data.status == 'fail') {
 							
@@ -307,6 +340,8 @@ function togglePassword() {
 						
 					},
 					error : function(xhr, status, error) {
+						// Hide loader when the response has arrived
+			            hideLoader();
 						console.log('Error loading user data: ' + error);
 					}
 				});
@@ -935,7 +970,17 @@ function togglePassword() {
 			  });
 			 }
 		  
-		 
+		// Function to show the loader
+			 function showLoader() {
+			     // Show the loader overlay
+			     $('#loader-overlay').show();
+			 }
+
+			 // Function to hide the loader
+			 function hideLoader() {
+			     // Hide the loader overlay
+			     $('#loader-overlay').hide();
+			 }
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -1097,6 +1142,14 @@ function togglePassword() {
 				
 				<input type="hidden" id="action" name="action" value="">
 				
+					<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
+		
+		
 				<table class="bordered-table" style="margin-top: -1px;">
 					<tr>
 						<td>Username</td>
@@ -1212,7 +1265,7 @@ function togglePassword() {
 		
 		 <div id="password-policy" class="tab">
 		 
-		 <div class="container" style="width: 97%;">
+		 <div class="policy-container" style="width: 97%;">
 		 <h3>Password Policy</h3>
 		 <hr>
 		 

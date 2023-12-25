@@ -206,7 +206,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("user", check_username);
 						json.put("token", check_token);
 						json.put("id", "1");
-						json.put("username", "admin");
+						json.put("username", check_username);
 						json.put("unit_id", unit_id);
 						json.put("asset_id", asset_id);
 						json.put("broker_type", broker_type);
@@ -268,7 +268,7 @@ public class AlarmConfigServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();

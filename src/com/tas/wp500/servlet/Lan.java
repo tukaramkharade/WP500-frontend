@@ -152,7 +152,7 @@ public class Lan extends HttpServlet {
 			String respStr = client.sendMessage(json.toString());
 			
 			System.out.println("res " + new JSONObject(respStr).getString("msg"));
-			logger.info("res " + new JSONObject(respStr).getString("msg"));
+			logger.info("res " + new JSONObject(respStr));
 			
 			String message_dhcp = new JSONObject(respStr).getString("msg");
 			
@@ -187,9 +187,6 @@ public class Lan extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
 		}
 	}
 

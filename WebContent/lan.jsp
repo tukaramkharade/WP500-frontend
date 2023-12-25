@@ -127,6 +127,27 @@ position: relative;
    z-index: 1 !important;
 }
 
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
+
+
 </style>
 
 <script>
@@ -174,6 +195,10 @@ position: relative;
 		}
 	
 	function loadLanSettings() {
+		
+		// Display loader when the request is initiated
+	    showLoader();
+		
 		$.ajax({
 			url : 'lan',
 			type : 'GET',
@@ -182,6 +207,9 @@ position: relative;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
+				// Hide loader when the response has arrived
+	            hideLoader();
+				
 				if(data.status == 'fail'){
 					var modal = document.getElementById('custom-modal-session-timeout');
 					  modal.style.display = 'block';
@@ -256,6 +284,9 @@ position: relative;
 				
 			},
 			error : function(xhr, status, error) {
+				// Hide loader when the response has arrived
+	            hideLoader();
+				
 				// Handle the error response, if needed
 				console.log('Error: ' + error);
 			}
@@ -669,6 +700,19 @@ position: relative;
 	    }
 	}
 	
+	// Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
+	 
+	
 	$(document).ready(function() {
 		
 		$("#closePopup").click(function () {
@@ -721,7 +765,11 @@ position: relative;
 	 });	
 	
 		$('#eth1_button').click(function () {
-		    if (validateIPAddress('ip_addr_eth1', 'validationMessage') &&
+		    if (!isFieldDisabled('ip_addr_eth1') &&
+		        !isFieldDisabled('subnet_mask_eth1') &&
+		        !isFieldDisabled('gateway_eth1') &&
+		        !isFieldDisabled('dns_ip_eth1') &&
+		        validateIPAddress('ip_addr_eth1', 'validationMessage') &&
 		        validateIPAddress('subnet_mask_eth1', 'validationMessage1') &&
 		        validateIPAddressOrBlank('gateway_eth1', 'validationMessage2') &&
 		        validateIPAddressOrBlank('dns_ip_eth1', 'validationMessage3')) {
@@ -730,7 +778,11 @@ position: relative;
 		});
 
 		$('#lan1_button').click(function () {
-		    if (validateIPAddress('ip_addr_lan1', 'validationMessage5') &&
+		    if (!isFieldDisabled('ip_addr_lan1') &&
+		        !isFieldDisabled('subnet_mask_lan1') &&
+		        !isFieldDisabled('gateway_lan1') &&
+		        !isFieldDisabled('dns_ip_lan1') &&
+		        validateIPAddress('ip_addr_lan1', 'validationMessage5') &&
 		        validateIPAddress('subnet_mask_lan1', 'validationMessage6') &&
 		        validateIPAddressOrBlank('gateway_lan1', 'validationMessage7') &&
 		        validateIPAddressOrBlank('dns_ip_lan1', 'validationMessage8')) {
@@ -739,13 +791,24 @@ position: relative;
 		});
 
 		$('#lan2_button').click(function () {
-		    if (validateIPAddress('ip_addr_lan2', 'validationMessage9') &&
+		    if (!isFieldDisabled('ip_addr_lan2') &&
+		        !isFieldDisabled('subnet_mask_lan2') &&
+		        !isFieldDisabled('gateway_lan2') &&
+		        !isFieldDisabled('dns_ip_lan2') &&
+		        validateIPAddress('ip_addr_lan2', 'validationMessage9') &&
 		        validateIPAddress('subnet_mask_lan2', 'validationMessage10') &&
 		        validateIPAddressOrBlank('gateway_lan2', 'validationMessage11') &&
 		        validateIPAddressOrBlank('dns_ip_lan2', 'validationMessage12')) {
 		        editLan2();
 		    }
 		});
+
+		function isFieldDisabled(fieldId) {
+		    return $('#' + fieldId).prop('disabled');
+		}
+
+		
+		
     }
 		
 	});
@@ -764,6 +827,12 @@ position: relative;
 			<h3>LAN SETTINGS</h3>
 			<hr>
 			<div class="container">
+			<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
 				<table>
 					<tr>
 						<th>TCP/IP(LAN 0)- Switched mode</th>

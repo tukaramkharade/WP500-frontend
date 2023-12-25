@@ -98,7 +98,7 @@ public class MQTTCrtFileListServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr).getString("connection_status"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String connection_status = new JSONObject(respStr).getString("connection_status");
 				JSONObject jsonObject = new JSONObject();

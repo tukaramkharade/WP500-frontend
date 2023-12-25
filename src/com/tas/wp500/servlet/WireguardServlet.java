@@ -112,7 +112,7 @@ public class WireguardServlet extends HttpServlet {
 				String respStr = client.sendMessage(json.toString());
 				System.out.println(respStr);
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				String status = new JSONObject(respStr).getString("status");

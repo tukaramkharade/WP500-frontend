@@ -119,6 +119,8 @@ import com.tas.wp500.utils.TCPClient;
 				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
+				
+				System.out.println("update resp: "+new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				String status = new JSONObject(respStr).getString("status");

@@ -74,9 +74,6 @@ public class NtpLiveTime extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		}else{
-			System.out.println("Login first");
-			response.sendRedirect("login.jsp");
 		}
 
 	}

@@ -155,7 +155,7 @@ public class JSONBuilderServlet extends HttpServlet {
 
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						String status = new JSONObject(respStr).getString("status");
@@ -227,7 +227,7 @@ public class JSONBuilderServlet extends HttpServlet {
 
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						String status = new JSONObject(respStr).getString("status");
@@ -269,7 +269,7 @@ public class JSONBuilderServlet extends HttpServlet {
 							
 							String respStr = client.sendMessage(json.toString());
 
-							logger.info("res " + new JSONObject(respStr).getString("msg"));
+							logger.info("res " + new JSONObject(respStr));
 
 							String message = new JSONObject(respStr).getString("msg");
 							String status = new JSONObject(respStr).getString("status");

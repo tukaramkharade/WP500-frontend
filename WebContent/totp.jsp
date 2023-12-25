@@ -45,7 +45,7 @@
 
 .note {
     color: red;
-    text-align: center;
+    text-align: left;
     
 }
 
@@ -242,23 +242,23 @@
 			<h3>EMAIL OTP</h3>
 			<hr>
 			
-			 <div class="container">
+			 <div class="container1">
 
-                <label for="to_email_id" style="float: left; margin-top: 10px;">To email id</label>
-                <input required type="text" id="to_email_id" name="to_email_id" style="padding-left: 5px; width: 15%; margin-top: 10px;"><br>
-
-                <input type="button" value="Get OTP" id="get_otp" style="margin-top: 10px;">
+                <label for="to_email_id" style="display: inline-block; margin-top: 10px;">To email id</label>
+<input required type="text" id="to_email_id" name="to_email_id" style="display: inline-block; padding-left: 5px; width: 15%; margin-top: 10px;">
+<input type="button" value="Get OTP" id="get_otp" style="display: inline-block; margin-left: 10px;">
+                
 
             </div>
             
             <div class="email-container">
-				<h3>Email OTP</h3>
-				<div class="row" style="display: flex;   justify-content: center; align-items: center;">
+				
+				<div class="row" style="display: flex;   justify-content: left; align-items: left;">
 					
     				 <input type="hidden" id="action" name="action" value="">
     				
-    				<input type="password" id="email_otp" placeholder="Enter OTP" style="width: 10%; margin-left: 1%;">
-    				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 1%">
+    				<input type="password" id="email_otp" placeholder="Enter OTP" style="width: 10%; margin-top: 20px;">
+    				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 1%; height: 30px; margin-top: 20px;">
 					<div id="error-message-email" style="color: red; margin-left: 2%;"></div>
 				</div>
     			

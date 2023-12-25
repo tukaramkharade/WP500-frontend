@@ -269,7 +269,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
