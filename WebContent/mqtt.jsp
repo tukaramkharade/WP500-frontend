@@ -148,6 +148,25 @@ margin-top: 70px;
   margin-left: 5px; /* Adjust the margin for spacing */
 }
 
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
 
 </style>
 
@@ -244,6 +263,9 @@ margin-top: 70px;
 
 	function loadMqttList() {
 		
+		// Display loader when the request is initiated
+	    showLoader();
+		
 		$.ajax({
 					url : 'mqttServlet',
 					type : 'GET',
@@ -252,6 +274,9 @@ margin-top: 70px;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
+						
+						// Hide loader when the response has arrived
+			            hideLoader();
 						
 						if (data.status == 'fail') {
 							
@@ -288,7 +313,7 @@ margin-top: 70px;
 								var file_type = mqtt.file_type; 
 								var file_name = mqtt.file_name; 
 								var enable = mqtt.enable; 
-								
+								var publishing_format = mqtt.publishing_format;
 								
 								var row = $("<tr>").append($("<td>").text(broker_ip_address),
 										$("<td>").text(port_number),
@@ -296,7 +321,9 @@ margin-top: 70px;
 										$("<td>").text(prefix),
 										$("<td>").text(file_type),
 										$("<td>").text(file_name),
-										$("<td>").text(enable));
+										$("<td>").text(enable),
+										$("<td>").text(publishing_format)
+										);
 								
 								var actions = $('<td>');
 								
@@ -315,6 +342,7 @@ margin-top: 70px;
 													setFileType(mqtt.file_type);
 													setFileName(mqtt.file_name);
 													setEnable(mqtt.enable);
+													setPublishingFormat(mqtt.publishing_format);
 
 												});
 								var deleteButton = $(
@@ -353,6 +381,7 @@ margin-top: 70px;
 								var file_type = mqtt.file_type; 
 								var file_name = mqtt.file_name; 
 								var enable = mqtt.enable; 
+								var publishing_format = mqtt.publishing_format;
 								
 								var row = $("<tr>").append($("<td>").text(broker_ip_address),
 										$("<td>").text(port_number),
@@ -360,7 +389,8 @@ margin-top: 70px;
 										$("<td>").text(prefix),
 										$("<td>").text(file_type),
 										$("<td>").text(file_name),
-										$("<td>").text(enable));
+										$("<td>").text(enable),
+										$("<td>").text(publishing_format));
 								
 								var actions = $('<td>');
 								
@@ -381,6 +411,8 @@ margin-top: 70px;
 						}
 					},
 					error : function(xhr, status, error) {
+						// Hide loader when the response has arrived
+			            hideLoader();
 						console.log('Error loading mqtt data: ' + error);
 					}
 				});
@@ -441,6 +473,13 @@ margin-top: 70px;
 
 		$('#file_name').val(mqttId);
 	}
+	
+	
+	function setPublishingFormat(mqttId) {
+
+		$('#publishing_format').val(mqttId);
+	}
+	
 
 	function setEnable(mqttId) {
 
@@ -562,6 +601,8 @@ margin-top: 70px;
 			var prefix = $('#prefix').val();
 			var file_type = $('#file_type').find(":selected").val();
 			var enable = $('#enable').find(":selected").val();
+			var publishing_format = $('#publishing_format').find(":selected").val();
+			
 			
 			 var file_name;
 				
@@ -610,6 +651,8 @@ margin-top: 70px;
 							$('#prefix').val('');
 							$('#file_type').val('TCP');
 							$('#file_name').val('Select crt file');
+							$('#publishing_format').val('Single');
+							
 							$('#enable').val('Disable');
 							$("#prefix").prop("disabled", false);					
 							$('#file_name').prop('disabled', true);
@@ -637,6 +680,7 @@ margin-top: 70px;
 					file_type : file_type,
 					enable : enable,
 					file_name : file_name,
+					publishing_format : publishing_format,
 					action: 'update'
 
 				},
@@ -676,6 +720,7 @@ margin-top: 70px;
 					$('#pub_topic').val('');
 					$('#sub_topic').val('');
 					$('#prefix').val('');
+					$('#publishing_format').val('Single');
 					$('#file_type').val('TCP');
 					$('#file_name').val('Select crt file');
 					$('#enable').val('Disable');
@@ -683,10 +728,6 @@ margin-top: 70px;
 					$("#prefix").prop("disabled", false);
 					
 						$('#file_name').prop('disabled', true);
-					
-						
-					
-
 					
 				},
 				error : function(xhr, status, error) {
@@ -735,6 +776,7 @@ margin-top: 70px;
 		var sub_topic = $('#sub_topic').val();
 		var prefix = $('#prefix').val();
 		var enable = $('#enable').find(":selected").val();
+		var publishing_format = $('#publishing_format').find(":selected").val();
 		var file_type = $('#file_type').find(":selected").val();
 		var file_name;
 		
@@ -773,6 +815,7 @@ margin-top: 70px;
 				file_type : file_type,
 				enable : enable,
 				file_name : file_name,
+				publishing_format : publishing_format,
 				action: 'add'
 				
 			},
@@ -814,11 +857,29 @@ margin-top: 70px;
 				$('#pub_topic').val('');
 				$('#sub_topic').val('');
 				$('#prefix').val('');
+				$('#publishing_format').val('Single');				
 				$('#file_type').val('TCP');
 				$('#file_name').val('Select crt file');
 				$('#enable').val('Disable');
 				
-				$('#file_name').prop('disabled', false);
+				
+				if ($("#file_type").val().toUpperCase() === 'TCP') {
+			        $("#file_name").prop("disabled", true);
+			    } else {
+			        $("#file_name").prop("disabled", false);
+			    }
+
+			    // Event handler for file_type change
+			    $("#file_type").change(function(event) {
+			        // Check the selected value and enable/disable file_name accordingly
+			        if ($(this).val().toUpperCase() === 'TCP') {
+			            $("#file_name").prop("disabled", true);
+			            $('#file_name').val(''); // Clear the value when disabled, if needed
+			        } else {
+			            $("#file_name").prop("disabled", false);
+			        }
+			    });
+				//$('#file_name').prop('disabled', false);
 
 			},
 			error : function(xhr, status, error) {
@@ -971,6 +1032,18 @@ margin-top: 70px;
 		 
 	 }
 
+	// Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
+	 
 	// Function to execute on page load
 	$(document).ready(function() {
 						
@@ -1066,50 +1139,6 @@ margin-top: 70px;
 					    										var sub_topic = $('#sub_topic').val();
 					    										var prefix = $('#prefix').val();
 
-					    										if ((prefix.length > 30)) {
-					    											prefix_error.textContent = "You can write upto 30 maximum characters."
-					    										}
-					    										else {
-					    											prefix_error.textContent = ""
-					    										}
-
-					    										if ((sub_topic.length > 30)) {
-					    											sub_topic_error.textContent = "You can write upto 30 maximum characters."
-					    										} else {
-					    											sub_topic_error.textContent = ""
-					    										}
-
-					    										if ((pub_topic.length > 30)) {
-					    											pub_topic_error.textContent = "You can write upto 30 maximum characters."
-					    										}
-					    										else {
-					    											pub_topic_error.textContent = ""
-					    										}
-
-					    										/* if ((password.length > 30)) {
-					    											password_error.textContent = "You can write upto 30 maximum characters."
-					    										} else {
-					    											password_error.textContent = ""
-					    										} */
-					    										if ((username.length > 30)) {
-					    											username_error.textContent = "You can write upto 30 maximum characters."
-					    										} else {
-					    											username_error.textContent = ""
-					    										}
-
-					    										if ((port_number.length > 5)) {
-					    											port_number_error.textContent = "You can write upto 5 maximum characters."
-					    										}
-					    										else {
-					    											port_number_error.textContent = ""
-					    										}
-
-					    										if ((broker_ip_address.length > 30)) {
-					    											broker_ip_error.textContent = "You can write upto 30 maximum characters."
-					    										} else {
-					    											broker_ip_error.textContent = ""
-					    										}
-
 					    											if (!validateNumbers(port_number)) {
 					    												portNoError.textContent = "Enter port number upto 5 digits";
 					    												return;
@@ -1140,6 +1169,7 @@ margin-top: 70px;
 					    							$('#pub_topic').val('');
 					    							$('#sub_topic').val('');
 					    							$('#prefix').val('');
+					    							$('#publishing_format').val('Single');
 					    							$("#prefix").prop("disabled", false);
 					    							$('#file_type').val('TCP');
 					    							$('#file_name').val('Select crt file');
@@ -1173,22 +1203,31 @@ margin-top: 70px;
 				<form id="mqttForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					
+	<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
+					
+					
 					<table class="bordered-table" style="margin-top: -1px;">
 
 					<tr>
 					<td>Broker IP address</td>
 					<td><input type="text" id="broker_ip_address" maxlength="31" name="broker_ip_address" required />
-							<p id="broker_ip_error" style="color: red;"></p>
+							
 					</td>
 					
 					<td>Port</td>
 					<td><input type="text" id="port_number" name="port_number" maxlength="6" required /> <span style="color: red; font-size: 12px;"
 								id="portNoError"></span>
-							<p id="port_number_error" style="color: red;"></p></td>
+							</td>
 					
 					<td>Username</td>
 					<td><input type="text" id="username" name="username" maxlength="31"/>
-							<p id="username_error" style="color: red;"></p></td>
+							</td>
 					<td>Password</td>
 					
 					
@@ -1201,8 +1240,6 @@ margin-top: 70px;
 					<tr>
 					<td>Published topic</td>
 					<td><input type="text" id="pub_topic" name="pub_topic" maxlength="30" required />
-							<p id="pub_topic_error" style="color: red;"></p></td>
-							
 							
 					<td>Status</td>
 					<td><select class="textBox" id="enable" name="enable" style="height: 33px;">
@@ -1218,7 +1255,7 @@ margin-top: 70px;
 								<option value="SSL">SSL</option>
 								<option value="TCP" selected>TCP</option>
 							</select>
-							 <span id="fileTypeError" style="color: red;"></span></td>
+							</td>
 					<td>CRT file</td>
 					<td><select class="textBox" id="file_name" name="file_name" style="height: 33px;">
 								<option value="Select crt file">Select crt file</option>
@@ -1228,13 +1265,19 @@ margin-top: 70px;
 					<tr>
 					<td>Subscribed topic</td>
 					<td><input type="text" id="sub_topic" name="sub_topic" maxlength="31" required />
-							<p id="sub_topic_error" style="color: red;"></p></td>
+							</td>
 					<td>Prefix</td>
 					<td><input type="text" id="prefix" name="prefix" maxlength="31" required />
-							<p id="prefix_error" style="color: red;"></p>
+							
 					</td>
-					<td></td>
-					<td></td>
+					<td>Publishing format</td>
+					<td>
+					<select class="textBox" id="publishing_format" name="publishing_format" style="height: 33px;">
+								
+								<option value="Single" selected>Single</option>
+								<option value="Array">Array</option>
+							</select>
+					</td>
 					<td></td>
 					<td></td>
 					</tr>
@@ -1321,6 +1364,7 @@ margin-top: 70px;
 							<th>Type</th>
 							<th>File name</th>
 							<th>Enable</th>
+							<th>Publishing format</th>
 							<th>Actions</th>
 
 						</tr>

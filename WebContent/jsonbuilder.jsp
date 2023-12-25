@@ -112,6 +112,25 @@ margin-top: 68px;
   border: 1px solid #ccc; /* Light gray border */
 }
 
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
 
 </style>
 <script>
@@ -151,8 +170,10 @@ var tokenValue;
 
 	// Function to load user data and populate the user list table
 	function loadJsonBuilderList() {
-		$
-				.ajax({
+		// Display loader when the request is initiated
+	    showLoader();
+		
+		$.ajax({
 					url : 'jsonBuilderServlet',
 					type : 'GET',
 					dataType : 'json',
@@ -160,6 +181,10 @@ var tokenValue;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
+						
+						// Hide loader when the response has arrived
+			            hideLoader();
+						
 						var json_interval1 = data.intervalString;
 						
 						if (data.status == 'fail') {
@@ -272,6 +297,9 @@ var tokenValue;
 						
 					},
 					error : function(xhr, status, error) {
+						// Hide loader when the response has arrived
+			            hideLoader();
+						
 						console.log('Error loading jsonBuilderTable data: '
 								+ error);
 					}
@@ -449,12 +477,12 @@ var tokenValue;
 							// Clear form fields
 
 							$('#json_string_name').val('');
-							$('#json_interval').val('Select interval');
-							$('#broker_type').val('Select broker type');
+							$('#json_interval').val('30 sec');
+							$('#broker_type').val('mqtt');
 							$('#broker_name').val('Select broker IP address');
 							$('#publish_topic').val('');
 							$('#publishing_status').val('Enable');
-							$('#storeAndForward').val('Enter store and forward');
+							$('#storeAndForward').val('Enable');
 							$('#json_string_text')
 									.val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 							$('#json_string_validate').val('');
@@ -539,12 +567,12 @@ var tokenValue;
 						// Clear form fields
 
 						$('#json_string_name').val('');
-						$('#json_interval').val('Select interval');
-						$('#broker_type').val('Select broker type');
+						$('#json_interval').val('30 sec');
+						$('#broker_type').val('mqtt');
 						$('#broker_name').val('Select broker IP address');
 						$('#publish_topic').val('');
 						$('#publishing_status').val('Enable');
-						$('#storeAndForward').val('Select store and forward');
+						$('#storeAndForward').val('Enable');
 						$('#json_string_text')
 								.val(
 										'{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
@@ -658,58 +686,6 @@ var tokenValue;
 		    return false; // No duplicate keys found
 		}
 
-	function validateSoreAndForward(storeAndForward) {
-		var storeAndForwardError = document
-				.getElementById("storeAndForwardError");
-
-		if (storeAndForward == 'Select store and forward') {
-
-			storeAndForwardError.textContent = "Please select store and forward";
-			return false;
-		} else {
-			storeAndForwardError.textContent = "";
-			return true;
-		}
-	}
-	
-	function validatePublishingStatus(publishingStatus) {
-		var publishingStatusError = document.getElementById("publishingStatusError");
-
-		if (publishingStatus == 'Select publishing status') {
-
-			publishingStatusError.textContent = "Please select publishing status";
-			return false;
-		} else {
-			publishingStatusError.textContent = "";
-			return true;
-		}
-	}
-
-	function validateJSONInterval(jsonInterval) {
-		var jsonIntervalError = document.getElementById("jsonIntervalError");
-
-		if (jsonInterval == 'Select interval') {
-
-			jsonIntervalError.textContent = "Please select interval";
-			return false;
-		} else {
-			jsonIntervalError.textContent = "";
-			return true;
-		}
-	}
-
-	function validateBrokerType(broker_type) {
-		var brokerTypeError = document.getElementById("brokerTypeError");
-
-		if (broker_type == 'Select broker type') {
-
-			brokerTypeError.textContent = "Please select broker type";
-			return false;
-		} else {
-			brokerTypeError.textContent = "";
-			return true;
-		}
-	}
 
 	function validateBrokerIPAddress(broker_name) {
 		var brokerIPAddressError = document
@@ -752,6 +728,18 @@ var tokenValue;
         
     }
 	
+	// Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
+	 
 	// Function to execute on page load
 	$(document).ready(function() {
 			
@@ -812,42 +800,12 @@ var tokenValue;
 													var json_string_name = $("#json_string_name").val();
 													var publish_topic = $("#publish_topic").val();
 
-													if (!validatePublishingStatus(publishingStatus)) {
-														publishingStatusError.textContent = "Please select publishing status";
-														return;
-													}
-
-													if (!validateSoreAndForward(storeAndForward)) {
-														storeAndForwardError.textContent = "Please select store and forward";
-														return;
-													}
-
-													if (!validateJSONInterval(json_interval)) {
-														jsonIntervalError.textContent = "Please select interval";
-														return;
-													}
-
-													if (!validateBrokerType(broker_type)) {
-														brokerTypeError.textContent = "Please select broker type";
-														return;
-													}
-
+													
 													if (!validateBrokerIPAddress(broker_name)) {
 														brokerIPAddressError.textContent = "Please select broker ip address ";
 														return;
 													}
 
-													if (publish_topic.length > 30) {
-														publish_topic_error.textContent = "You can write upto 30 maximum characters.";
-													} else {
-														publish_topic_error.textContent = "";
-													}
-
-													if (json_string_name.length > 30) {
-														json_string_name_error.textContent = "You can write upto 30 maximum characters.";
-													} else {
-														json_string_name_error.textContent = "";
-													}
 
 													if (json_string_text) {
 														if (buttonText == 'Add') {
@@ -870,12 +828,12 @@ var tokenValue;
 								$('#clearBtn').click(function() {
 													$('#json_string_name').val('');
 													$("#json_string_name").prop("disabled", false);
-													$('#json_interval').val('Select interval');
-													$('#broker_type').val('Select broker type');
+													$('#json_interval').val('30 sec');
+													$('#broker_type').val('mqtt');
 													$('#broker_name').val('Select broker IP address');
 													$('#publish_topic').val('');
 													$('#publishing_status').val('Enable');
-													$('#storeAndForward').val('Select store and forward');
+													$('#storeAndForward').val('Enable');
 													$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 													$('#json_string_validate').val('');
 													$('#registerBtn').val('Add');
@@ -901,17 +859,26 @@ var tokenValue;
 			<form id="jsonBuilderForm">
 				<input type="hidden" id="action" name="action" value="">
 				
+				<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
+		
+		
 				<table class="bordered-table" style="margin-top: -1px;">
 				
 				<tr>
 				<td>JSON string name</td>
 				<td><input type="text" id="json_string_name" name="json_string_name" required style="height: 17px;" maxlength="31" />
-						<p id="json_string_name_error" style="color: red;"></p></td>
+						
+						</td>
 				<td>Interval</td>
 				<td><select class="json-interval-select" id="json_interval"
 							name="json_interval" style="height: 35px;" required>
-							<option value="Select interval">Select interval</option>
-							<option value="30 sec">30 sec</option>
+							
+							<option value="30 sec" selected>30 sec</option>
 							<option value="1 min">1 min</option>
 							<option value="5 min">5 min</option>
 							<option value="10 min">10 min</option>
@@ -921,15 +888,16 @@ var tokenValue;
 							<option value="30 min">30 min</option>
 							<option value="1 hour">1 hour</option>
 
-						</select> <span id="jsonIntervalError" style="color: red;"></span></td>
+						</select> </td>
 				
 				<td>Broker type</td>
 				<td><select class="textBox" id="broker_type" name="broker_type"
 							style="height: 35px;" required>
-							<option value="Select broker type">Select broker type</option>
-							<option value="mqtt">mqtt</option>
+							
+							<option value="mqtt" selected>mqtt</option>
 							<option value="iothub">iothub</option>
-						</select> <span id="brokerTypeError" style="color: red;"></span></td>
+						</select> </td>
+						
 				<td>Broker IP address</td>
 				<td><select class="textBox" id="broker_name" name="broker_name"
 							style="height: 35px;" required>
@@ -941,22 +909,22 @@ var tokenValue;
 					<tr>
 					<td>Publish topic</td>
 					<td><input type="text" id="publish_topic" name="publish_topic" style="height: 17px;" maxlength="31" required>
-						<p id="publish_topic_error" style="color: red;"></p></td>
+						</td>
+						
 					<td>Publishing status</td>
 					<td><select class="textBox" id="publishing_status"
 							name="publishing_status" style="height: 35px;" required>
-							<option value="Select publishing status">Select publishing status</option>
 							<option value="Enable" selected>Enable</option>
 							<option value="Disable">Disable</option>
-						</select> <span id="publishingStatusError" style="color: red;"></span></td>
+						</select> </td>
 					
 				<td>Store and forward</td>
 				<td><select class="textBox" id="storeAndForward"
 							name="storeAndForward" style="height: 35px;" required>
-							<option value="Select store and forward">Select store and forward</option>
-							<option value="Enable">Enable</option>
+							
+							<option value="Enable" selected>Enable</option>
 							<option value="Disable">Disable</option>
-						</select> <span id="storeAndForwardError" style="color: red;"></span></td>
+						</select> </td>
 						<td></td>
 						<td></td>
 				</tr>

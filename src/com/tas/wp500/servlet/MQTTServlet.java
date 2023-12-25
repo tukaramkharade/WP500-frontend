@@ -90,6 +90,7 @@ public class MQTTServlet extends HttpServlet {
 		String prefix = null;
 		String file_type = null;
 		String enable = null;
+		String publishing_format = null;
 		String file_name = null;
 
 		if (check_username != null) {
@@ -111,6 +112,7 @@ public class MQTTServlet extends HttpServlet {
 					file_type = request.getParameter("file_type");
 					enable = request.getParameter("enable");
 					file_name = request.getParameter("file_name");
+					publishing_format = request.getParameter("publishing_format");
 
 					try {
 
@@ -130,12 +132,13 @@ public class MQTTServlet extends HttpServlet {
 						json.put("prefix", prefix);
 						json.put("file_type", file_type);
 						json.put("enable", enable);
+						json.put("publishing_format", publishing_format);					
 						json.put("file_name", file_name);
 						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						String status = new JSONObject(respStr).getString("status");
@@ -171,7 +174,8 @@ public class MQTTServlet extends HttpServlet {
 					file_type = request.getParameter("file_type");
 					enable = request.getParameter("enable");
 					file_name = request.getParameter("file_name");
-
+					publishing_format = request.getParameter("publishing_format");
+					
 					try {
 
 						TCPClient client = new TCPClient();
@@ -191,11 +195,12 @@ public class MQTTServlet extends HttpServlet {
 						json.put("file_type", file_type);
 						json.put("file_name", file_name);
 						json.put("enable", enable);
+						json.put("publishing_format", publishing_format);
 						json.put("token", check_token);
 						
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						String status = new JSONObject(respStr).getString("status");
@@ -239,7 +244,7 @@ public class MQTTServlet extends HttpServlet {
 						
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						String status = new JSONObject(respStr).getString("status");
@@ -283,7 +288,7 @@ public class MQTTServlet extends HttpServlet {
 						
 						String respStr = client.sendMessage(json.toString());
 
-						//logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 					//	String message = new JSONObject(respStr).getString("msg");
 						JSONObject jsonObject = new JSONObject();

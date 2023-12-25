@@ -218,7 +218,7 @@ public class OPCUAClientServlet extends HttpServlet {
 						
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr).getString("msg"));
+						logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						JSONObject jsonObject = new JSONObject();
@@ -243,28 +243,7 @@ public class OPCUAClientServlet extends HttpServlet {
 				}
 			}
 			
-			
-			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
-			}
 		}
-		
 		
 	}
 

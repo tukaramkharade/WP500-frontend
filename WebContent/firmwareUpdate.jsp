@@ -154,6 +154,26 @@ button {
 .button-container {
     margin-top: 10px; /* Adjust the margin-top value as needed */
 }
+
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
  
 
 </style>
@@ -241,11 +261,18 @@ function updateFirmwareFile(file){
 }
 
 function loadFirmwareFiles() {
+	
+	// Display loader when the request is initiated
+    showLoader();
+	
     $.ajax({
         url: "FirmwareListServlet",
         type: "GET",
         dataType: "json",
         success: function (data) {
+        	
+        	// Hide loader when the response has arrived
+            hideLoader();
         	
         	if (data.status == 'fail') {
 				
@@ -314,6 +341,9 @@ function loadFirmwareFiles() {
                              
         },
         error: function (xhr, status, error) {
+        	// Hide loader when the response has arrived
+            hideLoader();
+        	
             console.log("Error loading firmware files list: " + error);
         },
     });
@@ -470,6 +500,12 @@ function firmwareDownload() {
 			<hr>
 			
 			<div class="container">
+			<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
     <div class="forms-container">
         <form action="UploadServlet" method="post" enctype="multipart/form-data" class="upload-form">
             <input type="file" name="file" id="fileInput">
@@ -638,6 +674,19 @@ function firmwareDownload() {
     		},
     	});
     }
+    
+ // Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
+	 
  
     $(document).ready(function() {
     	<%// Access the session variable

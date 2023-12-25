@@ -42,6 +42,8 @@ public class StratonStatusData extends HttpServlet {
 				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
+				
+				logger.info("status : " + new JSONObject(respStr));
 
 				String sys_cyclecount = new JSONObject(respStr).getString("sys.cyclecount");
 				String sys_flags = new JSONObject(respStr).getString("sys.flags");
@@ -96,22 +98,6 @@ public class StratonStatusData extends HttpServlet {
 				logger.error("Error in getting opcua client list: " + e);
 			}
 
-		} else {
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout : " + e);
-			}
-		}
+		} 
 	}
 }

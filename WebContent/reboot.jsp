@@ -140,7 +140,8 @@ var tokenValue;
 							  };			  
 						} 
 						
-						modal.style.display = 'none';
+						// Close the modal
+					    modal.style.display = 'none';
 
 					},
 					error : function(xhr, status, error) {

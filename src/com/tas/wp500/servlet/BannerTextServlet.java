@@ -76,6 +76,7 @@ public class BannerTextServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
 		
 		if (check_username != null) {
 
@@ -104,11 +105,12 @@ public class BannerTextServlet extends HttpServlet {
 				json.put("operation", "write_banner_file");
 				json.put("user", check_username);
 				json.put("data", linesArray);
+				json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 				System.out.println(respStr);
 
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
+				logger.info("res " + new JSONObject(respStr));
 
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
@@ -127,25 +129,6 @@ public class BannerTextServlet extends HttpServlet {
 				
 			}catch(Exception e){
 				
-			}
-			
-		}else{
-			try {
-				JSONObject userObj = new JSONObject();
-				userObj.put("msg", "Your session is timeout. Please login again");
-				userObj.put("status", "fail");
-
-				System.out.println(">>" + userObj);
-
-				// Set the response content type to JSON
-				response.setContentType("application/json");
-
-				// Write the JSON data to the response
-				response.getWriter().print(userObj.toString());
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error("Error in session timeout: " + e);
 			}
 			
 		}

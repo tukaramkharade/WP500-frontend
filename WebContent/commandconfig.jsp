@@ -117,6 +117,26 @@ margin-top: 68px;
      border-radius: 5px;
   padding: 20px;
   }
+  
+  #loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
 
 </style>
 <script>
@@ -180,6 +200,10 @@ var json = {};
  	  } 
  
  function loadCommandSettings() {
+	 
+	// Display loader when the request is initiated
+	    showLoader();
+	 
 		$.ajax({
 			url : 'commandConfigServlet',
 			type : 'GET',
@@ -188,7 +212,8 @@ var json = {};
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				
+				// Hide loader when the response has arrived
+	            hideLoader();
 				
 				var interval = data.intervalString;
 				
@@ -278,6 +303,9 @@ var json = {};
 									
 			},
 			error : function(xhr, status, error) {
+				// Hide loader when the response has arrived
+	            hideLoader();
+				
 				// Handle the error response, if needed
 				console.log('Error: ' + error);
 			}
@@ -386,6 +414,18 @@ var json = {};
 	            }
 	             
 	    	}
+	    	
+	    	// Function to show the loader
+	   	 function showLoader() {
+	   	     // Show the loader overlay
+	   	     $('#loader-overlay').show();
+	   	 }
+
+	   	 // Function to hide the loader
+	   	 function hideLoader() {
+	   	     // Hide the loader overlay
+	   	     $('#loader-overlay').hide();
+	   	 }
 	    	
 	    	 $(document).ready(function () {
 	    		 
@@ -706,6 +746,13 @@ var json = {};
 			<form id="commandConfigForm">
 			
 			<input type="hidden" id="action" name="action" value="">
+			
+			<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
 			
 			<table class="bordered-table" style="margin-top: -1px;">
 			

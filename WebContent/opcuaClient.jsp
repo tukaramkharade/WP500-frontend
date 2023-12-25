@@ -19,12 +19,13 @@ margin-top: 70px;
 
 .container {
     margin: 0 auto;
-    width: 60%;
+    max-width: 800px;
   }
 
  .bordered-table {
   border-collapse: collapse; /* Optional: To collapse table borders */
   margin: 0 auto; /* Center the table horizontally */
+  width: 100%;
 }
 
 .bordered-table td {
@@ -111,12 +112,37 @@ button {
   color: white;
 }
 
+.password-container {
+  display: flex; /* Use flexbox to align items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+.password-toggle {
+  cursor: pointer;
+  margin-left: 5px; /* Adjust the margin for spacing */
+}
+ 
+ 
 </style>
 
 <script>
 
 var roleValue;
 var tokenValue;
+
+function togglePassword() {
+    var passwordInput = $('#password');
+    var passwordToggle = $('#password-toggle');
+
+    if (passwordInput.attr('type') === 'password') {
+        passwordInput.attr('type', 'text');
+        passwordToggle.html('<i class="fa fa-eye-slash"></i>'); // Change to eye-slash icon
+    } else {
+        passwordInput.attr('type', 'password');
+        passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+    }
+}
+
 
 function loadOPCUAClientList(){
 	
@@ -499,6 +525,10 @@ $(document).ready(function() {
     		$("#prefix").prop("disabled", false);
     		$('#registerBtn').val('Add');
    	});
+    	
+    	$('#password-toggle').click(function () {
+            togglePassword();
+        });
     }
 
 });
@@ -527,14 +557,22 @@ $(document).ready(function() {
 					
 					<tr>
 					<td>End URL</td>
-					<td><input type="text" id="endURL" name="endURL" maxlength="31"/>
-							<p id="endURL_error" style="color: red;"></p></td>
+					<td><input type="text" id="endURL" name="endURL" maxlength="31" style="height: 10px; max-width: 200px;"/>
+							</td>
 					<td>Username</td>
-					<td><input type="text" id="username" name="username" maxlength="31"/>
-							<p id="username_error" style="color: red;"></p></td>
+					<td><input type="text" id="username" name="username" maxlength="31" style="height: 10px; max-width: 200px;"/>
+							</td>
 					<td>Password</td>
-					<td><input type="password" id="password" name="password" maxlength="31"/>
-							<p id="password_error" style="color: red;"></p></td>
+					
+					<!-- <td style="width: 200px;"><input type="password" id="password" name="password" maxlength="31" style="height: 10px; max-width: 200px;" />
+					<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
+							</td> -->
+							
+							
+							<td><div class="password-container">
+    <input type="password" id="password" name="password" maxlength="31"/>
+    <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
+  </div>
 					</tr>
 					
 					<tr>
@@ -558,10 +596,10 @@ $(document).ready(function() {
 								<option value="Enable" selected>Enable</option>
 								<option value="Disable">Disable</option>
 							</select>
-							<span id="actionTypeError" style="color: red;"></span></td>
+							</td>
 					<td>Prefix</td>
 					<td><input type="text" id="prefix" name="prefix" maxlength="31"/>
-							<p id="prefix_error" style="color: red;"></p></td>
+							</td>
 					</tr>
 					</table>
 					

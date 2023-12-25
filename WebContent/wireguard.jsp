@@ -130,6 +130,26 @@ button {
 	margin-left: 40%;
 }
 
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
+
 </style>
 
 <script>
@@ -137,6 +157,9 @@ var roleValue;
 var tokenValue;
 
 function getKeys(){
+	// Display loader when the request is initiated
+    showLoader();
+	
 	$.ajax({
 		url : "wireguardKeysServlet",
 		type : "GET",
@@ -145,12 +168,18 @@ function getKeys(){
 	            action: "get"
 	        },
 		success : function(data) {
+			
+			// Hide loader when the response has arrived
+            hideLoader();
+			
 			$('#private_key').val(data.private_key);
 			$('#public_key').val(data.public_key);
 
             
 		},
 		error : function(xhr, status, error) {
+			// Hide loader when the response has arrived
+            hideLoader();
 			console.log("Error showing wireguard keys data : " + error);
 		},
 	});
@@ -519,6 +548,17 @@ function changeButtonColor(isDisabled) {
     } 
 }
 
+//Function to show the loader
+function showLoader() {
+    // Show the loader overlay
+    $('#loader-overlay').show();
+}
+
+// Function to hide the loader
+function hideLoader() {
+    // Hide the loader overlay
+    $('#loader-overlay').hide();
+}
 
 $(document).ready(function() {
 	
@@ -603,6 +643,12 @@ else{
 				<form id="wireguardForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
 
 					<table class="bordered-table">
 						<tr>
