@@ -11,6 +11,7 @@
 
 <script src="jquery-3.6.0.min.js"></script>
 
+
 <style>
 .modal-delete,
 .modal-edit,
@@ -432,6 +433,14 @@ function togglePassword() {
 
 				if(data.status === "success"){
 					// Clear form fields
+					
+					 var passwordInput = $('#password');
+				    var passwordToggle = $('#password-toggle');
+
+				    // Reset password input first
+				    passwordInput.attr('type', 'password');
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+				    
 					$('#username').val('');
 				    $('#password').val('');
 				    $('#first_name').val('');
@@ -624,6 +633,14 @@ function togglePassword() {
 						loadUserList();
 
 						// Clear form fields
+						
+						 var passwordInput = $('#password');
+				    var passwordToggle = $('#password-toggle');
+
+				    // Reset password input first
+				    passwordInput.attr('type', 'password');
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+				    
 					$('#username').val('');
 			    $('#password').val('');
 			    $('#first_name').val('');
@@ -1037,35 +1054,7 @@ function togglePassword() {
 
 					 var isDisabledRole = $("#role").prop("disabled");
 					 
-					/*  if (!isDisabledRole) {
-						 if (!validateRole(role)) {
-								roleError.textContent = "Please select role";
-								return;
-							}
-					    } */
-					 
-					/* if((user_name.length > 30)){
-		                field_User_Error.textContent = "You can write upto 30 maximum characters."
-		                	return;
-		            } else{
-		                field_User_Error.textContent =""
-		            }   */
-
-		                   
-
-		            /* if( (firstname.length > 30)){
-		                field_FirstN_Error.textContent = "You can write upto 30 maximum characters."
-		                	return;
-		            }else{
-		                field_FirstN_Error.textContent=""
-		            }
-
-		            if( (lastname.length > 30)){
-		                field_LastN_Error.textContent = "You can write upto 30 maximum characters."
-		                	return;
-		            }else{
-		                field_LastN_Error.textContent =""
-		            } */
+					
 					
 				 var isDisabled = $("#password").prop("disabled");
 									
@@ -1079,18 +1068,26 @@ function togglePassword() {
 				});
 
 				$('#clearBtn').click(function() {
-					$('#username').val('');
-					$("#username").prop("disabled", false);
-					$('#password').val('');
-					$("#password").prop("disabled", false);
-					$('#first_name').val('');
-					$("#first_name").prop("disabled", false);
+				    var passwordInput = $('#password');
+				    var passwordToggle = $('#password-toggle');
+
+				    // Reset password input first
+				    passwordInput.attr('type', 'password');
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+
+				    $('#username').val('');
+				    $("#username").prop("disabled", false);
+				    $('#password').val('');
+				    $("#password").prop("disabled", false);
+				    $('#first_name').val('');
+				    $("#first_name").prop("disabled", false);
 				    $('#last_name').val('');
 				    $("#last_name").prop("disabled", false);
 				    $('#role').val('ADMIN');
 				    $("#role").prop("disabled", false);
 				    $('#registerBtn').val('Add');
 				});
+
 				
 				  
 				  $('#applyPassword').click(function() {

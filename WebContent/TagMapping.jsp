@@ -117,6 +117,26 @@ margin-top: 70px;
 }
 
 
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
+
 </style>
 
 <script>
@@ -134,6 +154,9 @@ margin-top: 70px;
 		
 	//	var pv_address = $('#pv_address').val(nodeid);
 	//	$("#pv_address").prop("disabled", true);
+	
+	// Display loader when the request is initiated
+	    showLoader();
 		
 		$.ajax({
 					url : 'tagMapping',
@@ -143,6 +166,8 @@ margin-top: 70px;
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
+						// Hide loader when the response has arrived
+			            hideLoader();
 						
 						if (data.status == 'fail') {
 							
@@ -223,6 +248,9 @@ margin-top: 70px;
 						}
 										},
 					error : function(xhr, status, error) {
+						// Hide loader when the response has arrived
+			            hideLoader();
+						
 						console.log('Error loading tag data: ' + error);
 					}
 				});
@@ -604,6 +632,17 @@ margin-top: 70px;
 	    $('#registerBtn').val('Add');
 	}		 
 
+	// Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
 	
 	// Function to execute on page load
 	$(document).ready(function() {
@@ -692,18 +731,26 @@ margin-top: 70px;
 				<form id="tagForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					
+					<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
+
 					<table class="bordered-table" style="margin-top: -1px;">
 
 					<tr>
 					<td>Tag Name</td>
 					<td><input type="text" id="tag_name" maxlength="31" name="tag_name" required style="width: 200px;"/>
-							<p id="broker_ip_error" style="color: red;"></p>
+							
 					</td>	
 					
 					<td>PV address</td>
 					<td><input type="text" id="pv_address" name="pv_address" maxlength="31" required style="width: 200px;"/> <span style="color: red; font-size: 12px;"
 								id="portNoError"></span>
-							<p id="pv_address_error" style="color: red;"></p></td>
+							</td>
 					
 					</tr>
 					

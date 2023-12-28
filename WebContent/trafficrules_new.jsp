@@ -2615,7 +2615,7 @@ function applyTrafficRules() {
 											<td>Name</td>
 											<td><input type="text" id="name_lan0" name="name_lan0"
 												maxlength="31" style="height: 10px;" />
-												<p id="nameError_lan0" style="color: red;"></p></td>
+												</td>
 										
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan0" name="type_lan0"
@@ -2627,7 +2627,7 @@ function applyTrafficRules() {
 											<td>Source MAC address</td>
 											<td><input type="text" id="macAddress_lan0" name="macAddress_lan0"
 												maxlength="31" style="height: 10px;" />
-												<p id="macAddrError_lan0" style="color: red;"></p></td>
+												</td>
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan0"
@@ -2644,12 +2644,12 @@ function applyTrafficRules() {
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan0" name="ip_addr_lan0"
 												maxlength="31" />
-												<p id="sourceIpError_lan0" style="color: red;"></p></td>
+												</td>
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
 												maxlength="6" />
-												<p id="destPortError_lan0" style="color: red;"></p></td>
+												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan0" name="action_lan0"
 												style="height: 33px;">
@@ -2800,7 +2800,7 @@ function applyTrafficRules() {
 											<td>Name</td>
 											<td><input type="text" id="name_lan1" name="name_lan1"
 												maxlength="31" style="height: 10px;" />
-												<p id="nameError_lan1" style="color: red;"></p></td>
+												</td>
 											
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan1" name="type_lan1"
@@ -2812,7 +2812,7 @@ function applyTrafficRules() {
 											<td>Source MAC address</td>
 											<td><input type="text" id="macAddress_lan1" name="macAddress_lan1"
 												maxlength="31" style="height: 10px;" />
-												<p id="macAddrError_lan1" style="color: red;"></p></td>
+												</td>
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan1"
@@ -2828,12 +2828,12 @@ function applyTrafficRules() {
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan1" name="ip_addr_lan1"
 												maxlength="31" />
-												<p id="sourceIpError_lan1" style="color: red;"></p></td>
+												</td>
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan1" name="portNumber_lan1"
 												maxlength="6" />
-												<p id="destPortError_lan1" style="color: red;"></p></td>
+												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan1" name="action_lan1"
 												style="height: 33px;">
@@ -2982,7 +2982,7 @@ function applyTrafficRules() {
 											<td>Name</td>
 											<td><input type="text" id="name_lan2" name="name_lan2"
 												maxlength="31" style="height: 10px;" />
-												<p id="nameError_lan2" style="color: red;"></p></td>
+												</td>
 											
 											<td>Type</td>
 											<td><select class="textBox" id="type_lan2" name="type_lan2"
@@ -2994,7 +2994,7 @@ function applyTrafficRules() {
 											<td>Source MAC address</td>
 											<td><input type="text" id="macAddress_lan2" name="macAddress_lan2"
 												maxlength="31" style="height: 10px;" />
-												<p id="macAddrError_lan2" style="color: red;"></p></td>
+												</td>
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan2"
@@ -3010,12 +3010,12 @@ function applyTrafficRules() {
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan2" name="ip_addr_lan2"
 												maxlength="31" />
-												<p id="sourceIpError_lan2" style="color: red;"></p></td>
+												</td>
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
 												maxlength="6" />
-												<p id="destPortError_lan2" style="color: red;"></p></td>
+												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan2" name="action_lan2"
 												style="height: 33px;">

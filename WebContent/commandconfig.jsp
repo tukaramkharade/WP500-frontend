@@ -520,27 +520,7 @@ var json = {};
       				var unit_id = $('#unit_id').val();
       				var asset_id = $('#asset_id').val();
       				var tag_name = $('#tag_name').val();
-      				
-      				
-      				if ((unit_id.length > 30)) {
-      					unitid_error.textContent = "You can write upto 30 maximum characters."
-      				}
-      				else {
-      					unitid_error.textContent = ""
-      				}
-
-      				if ((asset_id.length > 30)) {
-      					assetid_error.textContent = "You can write upto 30 maximum characters."
-      				} else {
-      					assetid_error.textContent = ""
-      				}
-
-      				if ((tag_name.length > 30)) {
-      					tagname_error.textContent = "You can write upto 30 maximum characters."
-      				}
-      				else {
-      					tagname_error.textContent = ""
-      				}
+      			
       				
       				if (buttonText == 'Add') {
       					addCommandConfig();
@@ -759,10 +739,10 @@ var json = {};
 			<tr>
 			<td>Unit ID</td>
 			<td style="padding: 5px;"><input type="text" id="unit_id" name="unit_id" required style="height: 10px; " maxlength="31"/>
-							<p id="unitid_error" style="color: red;"></p></td>
+							</td>
 			<td>Asset ID</td>
 			<td><input type="text" id="asset_id" name="asset_id" required style="height: 10px" maxlength="31"/>
-							<p id="assetid_error" style="color: red;"></p></td>
+							</td>
 			</tr>
 			
 			<tr>
@@ -827,7 +807,7 @@ var json = {};
 			<td>Tag name</td>
 			<td><input type="text" id="tag_name" name="tag_name" style="height: 10px" maxlength="31"/> 
 					<span id="tagnameError" style="color: red;"></span>
-					<p id="tagname_error" style="color: red;"></p></td>
+					</td>
 			<td>Variable</td>
 			<td><select class="textBox" id="variable" name="variable" style="height: 33px">
 							<option value="Select variable">Select variable</option>

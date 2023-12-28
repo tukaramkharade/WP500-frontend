@@ -59,6 +59,26 @@
 h3{
 margin-top: 68px;
 }
+
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
 </style>
 <script>
 	var currentPage = 1; // Initial page
@@ -68,6 +88,9 @@ margin-top: 68px;
 	var roleValue;
 
 	function getStoreForwardData() {
+		// Display loader when the request is initiated
+	    showLoader();
+		
 		$.ajax({
 			url : 'storeForwardDataServlet',
 			type : 'GET',
@@ -76,6 +99,9 @@ margin-top: 68px;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
+				// Hide loader when the response has arrived
+	            hideLoader();
+				
 				if (data.status == 'fail') {
 					
 					 var modal = document.getElementById('custom-modal-session-timeout');
@@ -124,6 +150,9 @@ margin-top: 68px;
 				}
 			},
 			error : function(xhr, status, error) {
+				// Hide loader when the response has arrived
+	            hideLoader();
+				
 				console.log('Error loading store forward data: ' + error);
 			}
 		});
@@ -194,6 +223,19 @@ margin-top: 68px;
 	function updatePageInfo() {
 		$('#pageInfo').text('Page ' + currentPage);
 	}
+	
+	// Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
+	 
 	$(document).ready(function() {
 		
 		<%// Access the session variable
@@ -254,6 +296,14 @@ margin-top: 68px;
 	<div class="header"><%@ include file="header.jsp"%></div>
 	<div class="content">
 		<section style="margin-left: 1em">
+		
+		<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
+
 			<h3>STORE AND FORWARD</h3>
 			<button onClick="window.location.reload();"
 				style="cursor: pointer; background-color: #35449a; border-radius: 5px; border: none; color: white; font-size: small">Refresh

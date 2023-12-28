@@ -164,6 +164,27 @@ display: flex;
 #totp_steps{
 margin-left: -39px;
 }
+
+#loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
+    z-index: 1000; /* Ensure the loader is on top of other elements */
+    justify-content: center;
+    align-items: center;
+}
+
+#loader {
+    text-align: center;
+    padding: 20px;
+    background: #fff; /* Loader background color */
+    border-radius: 5px;
+}
+
 </style>
 
 <script>
@@ -326,6 +347,8 @@ margin-left: -39px;
 
 
 	function getTOTPDetails() {
+		// Display loader when the request is initiated
+	    showLoader();
 
 		$.ajax({
 			type : "GET",
@@ -338,6 +361,8 @@ margin-left: -39px;
 	            action: 'getTOTPDetails'
 	        },
 			success : function(data) {
+				// Hide loader when the response has arrived
+	            hideLoader();
 				
 				var enableText = document.getElementById("enableText");
 				var disableText = document.getElementById("disableText");
@@ -357,6 +382,9 @@ margin-left: -39px;
 				}
 			},
 			error : function(xhr, textStatus, errorThrown) {
+				// Hide loader when the response has arrived
+	            hideLoader();
+				
 				console.error("Error fetching TOTP details: " + errorThrown);
 			}
 		});
@@ -482,6 +510,18 @@ margin-left: -39px;
 		var container = document.getElementById("imageContainer"); // Replace "imageContainer" with the ID of your container element
 		container.appendChild(imgElement);
 	}
+	
+	// Function to show the loader
+	 function showLoader() {
+	     // Show the loader overlay
+	     $('#loader-overlay').show();
+	 }
+
+	 // Function to hide the loader
+	 function hideLoader() {
+	     // Hide the loader overlay
+	     $('#loader-overlay').hide();
+	 }
 
 	$(document).ready(function() {
 		
@@ -552,6 +592,13 @@ margin-left: -39px;
 			<hr>
 
 			<div class="container">
+			
+				<div id="loader-overlay">
+    <div id="loader">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading...</p>
+    </div>
+</div>
 
 	<p id="ntp_sync" style="font-weight: bold; font-size: 16px; margin-top: -15px;"></p>
 

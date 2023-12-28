@@ -1092,25 +1092,11 @@ var tokenValue;
 												var serial_number = $('#serial_number').val();
 												var unit_id = $('#unit_id').val();
 												
-												if ((station_name.length > 30)) {
-													station_name_error.textContent = "You can write upto 30 maximum characters."
-												}
-												else {
-													station_name_error.textContent = ""
-												}
+											
 
-												if ((serial_number.length > 30)) {
-													serial_number_error.textContent = "You can write upto 30 maximum characters."
-												} else {
-													serial_number_error.textContent = ""
-												}
+												
 
-												if ((unit_id.length > 30)) {
-													unitid_error.textContent = "You can write upto 30 maximum characters."
-												}
-												else {
-													unitid_error.textContent = ""
-												}
+												
 
 												if (!validateSide(side)) {
 													sideError.textContent = "Please select side";
@@ -1226,16 +1212,16 @@ var tokenValue;
 			<tr>
 			<td>Station name</td>
 			<td><input type="text" id="station_name" name="station_name" required style="height: 10px;" maxlength="31"/>
-							<p id="station_name_error" style="color: red;"></p>
+							
 			</td>
 			<td>Serial number</td>
 			<td><input type="text" id="serial_number" name="serial_number" required style="height: 10px" maxlength="31"/> 
-							<p id="serial_number_error" style="color: red;"></p>
+							
 			</td>
 			
 			<td>Unit ID</td>
 			<td><input type="text" id="unit_id" name="unit_id" required maxlength="31" style="height: 10px;"/>
-							<p id="unitid_error" style="color: red;"></p>
+							
 			</td>
 			<td>Side</td>
 			<td><select class="textBox" id="side" name="side" style="height: 33px"

@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.tas.wp500.utils.PasswordHasher;
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/userServlet")
@@ -52,6 +53,11 @@ public class UserServlet extends HttpServlet {
 					username = request.getParameter("username");
 					password = request.getParameter("password");
 					role = request.getParameter("role");
+					
+				
+                    // Hash the password
+                   // String hashedPassword = PasswordHasher.hashPassword(password);
+
 
 					try {
 						TCPClient client = new TCPClient();
@@ -76,7 +82,8 @@ public class UserServlet extends HttpServlet {
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 						jsonObject.put("status", status);
-
+						
+						
 						// Set the content type of the response to application/json
 						resp.setContentType("application/json");
 
