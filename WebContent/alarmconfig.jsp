@@ -99,12 +99,12 @@ h3{
 margin-top: 68px;
 }
 
-.bordered-table {
+.bordered-table, .bordered-table1 {
   border-collapse: collapse; /* Optional: To collapse table borders */
   margin: 0 auto; /* Center the table horizontally */
 }
 
-.bordered-table td {
+.bordered-table td, .bordered-table1 td{
   border: 1px solid #ccc; /* Light gray border */
  
 }
@@ -144,6 +144,8 @@ margin-top: 68px;
 var roleValue;
 var tokenValue;
 
+var tagVariableValues = {};
+
 	var json = {};
 
       function loadBrokerIPList() {
@@ -178,7 +180,7 @@ var tokenValue;
     	      dataType: "json",
     	      success: function (data) {
     	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
-    	          var datalist = $("#variable");
+    	          var datalist = $(".variable");
     	          // Clear any existing options
     	         // datalist.empty();
 
@@ -239,7 +241,7 @@ var tokenValue;
   				var result = data.result;
   				
   	            var alarmTag = JSON.parse(result.alarm_tag);
-  	            
+  	          initializeTable(alarmTag);
   	            
   	        
   	          $('#unit_id').val(result.unit_id);
@@ -259,42 +261,8 @@ var tokenValue;
 									
 								//	var result = data.alarm_tag; 
 
-									if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-										
-										$.each(alarmTag, function(k, v) {
-										   
-														    
-														    var newRow = $("<tr>")
-						    	        					.append($("<td>").text(k))
-						    	        					.append($("<td>").text(v))
-						    	        					.append(
-					 	          $("<td>").html(
-					 	            `<input
-					 	                style="background-color :red"
-					 	                type="button"
-					 	                value="Delete"
-					 	                onclick="deleteRow(this)"
-					 	                addClass="tagDelBtn"
-					 	              />`
-					 	          )
-					 	        );
-															
-						    	        					$("#table_data").append(newRow);
-														});
-														
-									 }
-								  else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-										
-										$.each(alarmTag, function(k, v) {
-										
-														    var newRow = $("<tr>")
-						    	        					.append($("<td>").text(k))
-						    	        					.append($("<td>").text(v))
-						    	        					
-						    	        					$("#table_data").append(newRow);
-														});
-														
-									} 
+					
+								
 									
 									if (result.unit_id != null) {
 						                $('#addBtn').val('Update');
@@ -314,6 +282,90 @@ var tokenValue;
   		});
   	
   	} 
+       
+       
+       function initializeTable(commandTag) {
+   	    var table = $('.bordered-table1');
+
+   	    // Empty the existing table content
+   	    table.empty();
+
+   	    // Create the initial row with input fields
+   	    var initialRow = $('<tr>');
+   	    var cell1 = $('<td>').append($('<input>', {
+   	        type: 'text',
+   	        class: 'tag_name',
+   	        style: 'height: 10px; width: 200px;',
+   	        value: Object.keys(commandTag)[0]
+   	    }));
+   	    var cell2 = $('<td>').append($('<select>', {
+   	        class: 'variable',
+   	        style: 'height: 32px;',
+   	        required: true
+   	    }).append($('<option>', {
+   	        value: Object.values(commandTag)[0],
+   	        text: Object.values(commandTag)[0]
+   	    })));
+   	    var deleteCell = $('<td>').append($('<input>', {
+   	        type: 'button',
+   	        value: 'X',
+   	        class: 'deleteBtn',
+   	        style: 'height: 22px;',
+   	        title: 'Remove subject alternative name'
+   	    }));
+   	    initialRow.append(cell1, cell2, deleteCell);
+   	    table.append(initialRow);
+
+   	    // Iterate over the rest of the keys and values of the commandTag
+   	    $.each(Object.entries(commandTag).slice(1), function (_, [key, value]) {
+   	        // Create a table row for each key-value pair
+   	        var newRow = $('<tr>');
+   	        var cell1 = $('<td style="width: 100px;">').append($('<input>', {
+   	            type: 'text',
+   	            class: 'tag_name',
+   	            style: 'height: 10px; width: 200px;',
+   	            value: key
+   	        }));
+   	        var cell2 = $('<td>').append($('<select>', {
+   	            class: 'variable',
+   	            style: 'height: 32px;',
+   	            required: true
+   	        }).append($('<option>', {
+   	            value: value,
+   	            text: value
+   	        })));
+   	        var deleteCell = $('<td>').append($('<input>', {
+   	            type: 'button',
+   	            value: 'X',
+   	            class: 'deleteBtn',
+   	            style: 'height: 22px;',
+   	            title: 'Remove subject alternative name'
+   	        }));
+   	        newRow.append(cell1, cell2, deleteCell);
+
+   	        // Append the new row after the existing rows
+   	        table.append(newRow);
+   	    });
+
+   	    // Create the row with the "+" button
+   	    var addButtonRow = $('<tr>');
+   	    var addButtonCell = $('<td>').append($('<input>', {
+   	        type: 'button',
+   	        value: '+',
+   	        class: 'saveBtn', // Add a class for easy selection
+   	        style: 'height: 22px;',
+   	        title: 'Add tags'
+   	    }));
+   	    addButtonRow.append(addButtonCell);
+   	    table.append(addButtonRow);
+   	    
+   	 // Attach a click event handler to the dynamically added "+" button
+   	    table.on('click', '.saveBtn', function () {
+   	        addRow();
+   	    });
+   	}
+
+       
        
        function deleteAlarm() {
  		  // Display the custom modal dialog
@@ -356,7 +408,7 @@ var tokenValue;
  		  };
  		}
        
-       function validatefields(tag_name) {
+       /* function validatefields(tag_name) {
    		var tagnameError = document.getElementById("tagnameError");
 
    		if (tag_name === "") {
@@ -378,7 +430,7 @@ var tokenValue;
    			variableError.textContent = "";
    			return true;
    		}
-   	}
+   	} */
    	
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#addBtn');
@@ -424,6 +476,86 @@ var tokenValue;
 	     // Hide the loader overlay
 	     $('#loader-overlay').hide();
 	 }
+	 
+		function updateTagVariableValues() {
+	   	    // Assuming input and select are global variables or are accessible in the same scope
+	   	    var tagValues = {};
+
+	   	    // Iterate over each row
+	   	    $('.bordered-table1 tr').each(function () {
+	   	        var tagName = $(this).find('.tag_name').val();
+	   	        var variable = $(this).find('.variable').val();
+
+	   	        // Add the new key-value pair to the local tagValues object
+	   	        tagValues[tagName] = variable;
+	   	    });
+
+	   	    // Update the global tagVariableValues with the collected key-value pairs
+	   	    tagVariableValues = tagValues;
+
+	   	    // Return the updated object if needed (optional)
+	   	    return tagVariableValues;
+	   	}
+		
+		  // Function to dynamically add a new row
+	   	function addRow() {
+	   	    var newRow = $('<tr>');
+
+	   	    var cell1 = $('<td style="width: 100px;">');
+	   	    var input = $('<input>', {
+	   	        type: 'text',
+	   	        class: 'tag_name',
+	   	        name: 'tag_name',
+	   	        style: 'height: 10px; width: 200px;'
+	   	    });
+	   	    cell1.append(input);
+
+	   	    var cell2 = $('<td>');
+	   	    var select = $('<select>', {
+	   	        class: 'variable',
+	   	        name: 'variable',
+	   	        style: 'height: 32px;',
+	   	        required: true
+	   	    });
+	   	    var option = $('<option>', {
+	   	        value: 'Select variable',
+	   	        text: 'Select variable'
+	   	    });
+	   	    select.append(option);
+	   	    cell2.append(select);
+
+	   	    var cell3 = $('<td>');
+	   	    var deleteBtn = $('<input>', {
+	   	        type: 'button',
+	   	        value: 'X',
+	   	        class: 'deleteBtn',
+	   	        style: 'height: 22px;',
+	   	        title: 'Remove tag'
+	   	    });
+	   	    deleteBtn.on('click', function () {
+	   	        newRow.remove();
+	   	    });
+	   	    cell3.append(deleteBtn);
+
+	   	    newRow.append(cell1, cell2, cell3);
+
+	   	    // Insert the new row before the last row (Add button row)
+	   	    var table = $('.bordered-table1');
+	   	    var lastRow = table.find('tr').last();
+	   	    newRow.insertBefore(lastRow);
+
+	   	// Load tag list for the new dropdown
+	   	    loadTagList();
+
+	   	 input.on('blur', function () {
+	         // Call updateTagVariableValues to ensure tagVariableValues is up-to-date
+	         updateTagVariableValues();
+
+	         // Log or use the updated tagVariableValues as needed
+	         var jsonString = JSON.stringify(tagVariableValues);
+	         console.log(jsonString);
+	     });
+	   	}
 	
       $(document).ready(function () {
     	  
@@ -472,39 +604,10 @@ var tokenValue;
   	    	loadBrokerIPList();
       	  loadTagList(); 	  
       	  
-      	   $("#saveBtn").click(function () {
-      	    var tagName = $("#tag_name").val();
-      	    var value = $("#variable").val();
-      	    
-      	    // Check if tagName and value are not empty
-      	    if (tagName.trim() !== "" && value.trim() !== "") {
-      	      var newRow = $("<tr>")
-      	        .append($("<td>").text(tagName))
-      	        .append($("<td>").text(value))
-      	        .append(
-      	          $("<td>").html(
-      	            `<input
-      	                style="background-color :red"
-      	                type="button"
-      	                value="Delete"
-      	                onclick="deleteRow(this)"
-      	              />`
-      	          )
-      	        );
-
-      	      $("#table_data").append(newRow);
-      	      $("#tag_name").val("");
-      	      $("#variable").val("");
-      	    } else  if (!validatefields(tagName)) {
-  				tagnameError.textContent = "Please enter tag name.";
-  				return;
-  			}
-      	    else if (!validateOption(value)) {
-  				variableError.textContent = "Please select variable.";
-  				return;
-  			}
-      	     
-      	  });
+      	$('#saveBtn').on('click', function () {
+     		 addRow();
+     	   
+     	});
        	  
         	$('#alarmConfigForm').submit(function(event) {
   			event.preventDefault();
@@ -546,20 +649,6 @@ function deleteRow(button) {
   $(button).closest("tr").remove();
 	}
 }
-
-function tableToJson() {
-		 const table = document.getElementById("table_data");
-
-	  for (var i = 1; i < table.rows.length; i++) {
-	    const row = table.rows[i];
-	    const tag = row.cells[0].textContent;
-	    const variable = row.cells[1].textContent;
-	    json[tag] = variable;
-	    console.log(json);
-	  }
-
-	  return json;
-	}
 	
 function editAlarmConfig() {
 	
@@ -584,7 +673,7 @@ function editAlarmConfig() {
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 
-			var tagData = tableToJson();
+		  var tagData = updateTagVariableValues();
 			var unit_id = $('#unit_id').val();
 		    var asset_id = $('#asset_id').val();
 		    var broker_type = $('#broker_type').find(":selected").val();
@@ -599,7 +688,7 @@ function editAlarmConfig() {
 					broker_type : broker_type,
 					broker_name : broker_name,
 					interval : interval,
-					tagData: JSON.stringify(tagData),
+					tagData: JSON.stringify(tagVariableValues),
 					action: 'update'
 					
 				},
@@ -636,7 +725,7 @@ function editAlarmConfig() {
 
 function addAlarmConfig() {
 
-	var tagData = tableToJson();
+	 var tagData = updateTagVariableValues();
 
     var unit_id = $('#unit_id').val();
     var asset_id = $('#asset_id').val();
@@ -665,7 +754,7 @@ function addAlarmConfig() {
 			broker_type : broker_type,
 			broker_name : broker_name,
 			interval : interval,
-			tagData: JSON.stringify(tagData),
+			tagData: JSON.stringify(tagVariableValues),
 			action: 'add'
 			
 		},
@@ -791,20 +880,26 @@ function addAlarmConfig() {
 						
 					</div>
 					
-			<table class="bordered-table">
+			<table class="bordered-table1">
 			
 			 <tr>
-			<td>Tag name</td>
-			<td><input type="text" id="tag_name" name="tag_name" style="height: 10px" maxlength="31"/> 
-					<span id="tagnameError" style="color: red;"></span>
-					</td>
-			<td>Variable</td>
-			<td><select class="textBox" id="variable" name="variable" style="height: 33px">
-							<option value="Select variable">Select variable</option>
-						</select> <span id="variableError" style="color: red;"></span></td>
+			
+						<td><input type="text" id="tag_name" name="tag_name" class="tag_name"
+											style="height: 10px; width: 200px;" /></td>
+											
+										<td><select class="variable" id="variable"
+											name="variable" style="height: 32px;" required>
+												<option value="Select variable">Select variable</option>
+										</select></td>
+										<td><input type="button" value="X" id="deleteBtn"
+											style="height: 22px;" title="Remove subject alternative name" /></td>
 						
-						<td><input type="button" value="+" id="saveBtn" style="height: 26px; margin-left: 5%;" /></td>
+						
 			</tr> 
+			<tr>
+										<td><input type="button" value="+" id="saveBtn" class="saveBtn"
+											style="height: 22px;" title="Add tags" /></td>
+									</tr>
 				
 				</table>
 					
@@ -829,7 +924,7 @@ function addAlarmConfig() {
 			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-				  <p>Your session is timeout. Please login again</p>
+				 <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>
@@ -842,20 +937,7 @@ function addAlarmConfig() {
 		<hr />
 		</section>
 
-		<section style="margin-left: 1em">
-		<div class="container">
-			<table id="table_data">
-				<tr>
-					<th>Tag Name</th>
-					<th>Variable</th>
-					<th id="actions">Action</th>
-				</tr>
-			</table> 
-			
-	
-		</div>
 		
-		</section>
 	</div>
 
 	<div class="footer">
