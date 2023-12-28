@@ -338,18 +338,12 @@ if (roleValue === "null") {
 							var dnsNames = [];
 
 							var addBtn = document.getElementById('addBtn');
-							addBtn
-									.addEventListener(
-											'click',
-											function() {
-												var newRow = document
-														.createElement('tr');
+							addBtn.addEventListener('click',function() {
+												var newRow = document.createElement('tr');
 
 												// Create the first cell with an input element
-												var cell1 = document
-														.createElement('td');
-												var input = document
-														.createElement('input');
+												var cell1 = document.createElement('td');
+												var input = document.createElement('input');
 												input.type = 'text';
 												input.id = 'alt-name';
 												input.name = 'alt-name';
@@ -582,7 +576,7 @@ if (roleValue === "null") {
 
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-					<p>Your session is timeout. Please login again</p>
+					<p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>

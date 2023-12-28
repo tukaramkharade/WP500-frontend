@@ -357,6 +357,13 @@ function editOPCUA(){
 
 					// Clear form fields
 
+					var passwordInput = $('#password');
+				    var passwordToggle = $('#password-toggle');
+
+				    // Reset password input first
+				    passwordInput.attr('type', 'password');
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+				    
 					$('#endURL').val('');
 					$('#username').val('');
 					$('#password').val('');
@@ -418,6 +425,13 @@ function addOPCUA(){
 
 			// Clear form fields
 
+			var passwordInput = $('#password');
+				    var passwordToggle = $('#password-toggle');
+
+				    // Reset password input first
+				    passwordInput.attr('type', 'password');
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+				    
 			$('#endURL').val('');
 			$('#username').val('');
 			$('#password').val('');
@@ -555,6 +569,13 @@ $(document).ready(function() {
     	});
     	
     	$('#clearBtn').click(function() {
+    		var passwordInput = $('#password');
+		    var passwordToggle = $('#password-toggle');
+
+		    // Reset password input first
+		    passwordInput.attr('type', 'password');
+		    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
+		    
     		$('#endURL').val('');
     		$('#username').val('');
     		$('#password').val('');
