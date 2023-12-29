@@ -312,7 +312,7 @@ function loadFirmwareFiles() {
                             .click(function() {
                                 deleteFile(file);
                             });
-                        var updateButton = $('<button data-toggle="tooltip" class="updBtn" data-placement="top" title="Update-Firmware" style="color: red">')
+                        var updateButton = $('<button data-toggle="tooltip" class="updBtn" data-placement="top" title="Update Firmware" style="color: red">')
                         .html('<i class="fa fa-play"></i>')
                         .click(function() {
                         	updateFirmwareFile(file);
@@ -510,7 +510,7 @@ function firmwareDownload() {
         <form action="UploadServlet" method="post" enctype="multipart/form-data" class="upload-form">
             <input type="file" name="file" id="fileInput">
             <input type="submit" value="Upload" id="firmwareUpdateButton">
-            <input type="button" value="Firmware update" id="firmware_update">
+            
         </form>
         <form id="downloadForm" class="download-form">
             <label for="fileUrl">Enter File URL:</label>
@@ -600,7 +600,6 @@ function firmwareDownload() {
  
     function changeButtonColor(isDisabled) {
         var $file_upload_button = $('#file_upload');       
-        var $firmware_update_button = $('#firmware_update');
         var $firmware_update_button1 = $('#firmwareUpdateButton');
         var $firmware_download = $('#firmware_download');
         
@@ -699,7 +698,6 @@ function firmwareDownload() {
     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
     		
     		$('#file_upload').prop('disabled', true);
-			$('#firmware_update').prop('disabled', true);
 			$('#crt_file_upload').prop('disabled', true);		
 			$('#fileInput').prop('disabled', true); 
 			$('#firmwareUpdateButton').prop('disabled', true);

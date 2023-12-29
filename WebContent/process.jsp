@@ -90,12 +90,13 @@
 }
 
 h3 {
-	color: #2b3991; /* Set your desired color */
-	margin-bottom: 10px; /* Add some spacing between heading and table */
-	font-size: 18px; /* Adjust font size as needed */
-	margin-left: 5px;
-	margin-top: -22px;
+    color: #2b3991;
+    margin-bottom: 10px;
+    font-size: 18px;
+    margin-left: 5px;
+    /* margin-top: -22px; */
 }
+
 
  button {
             cursor: pointer;

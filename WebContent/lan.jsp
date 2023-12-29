@@ -363,8 +363,9 @@ position: relative;
 		
 		var eth1_ipaddr = $('#ip_addr_eth1').val();
 		var eth1_subnet = $('#subnet_mask_eth1').val();   
+		 var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
         
-	if (!eth1_ipaddr || !eth1_subnet) {
+	if (!eth1_ipaddr && !eth1_subnet && eth1_dhcp1 == 0) {
         // Display the custom popup message
         $("#popupMessage").text("Please provide both subnet and ipaddr.");
         $("#customPopup").show();
@@ -380,7 +381,7 @@ position: relative;
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
 			  
-			  var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
+			 
 				console.log('eth1_dhcp1:', eth1_dhcp1);
 				var lan_type = 'lan0';
 				
@@ -430,8 +431,9 @@ position: relative;
 		
 		var lan1_ipaddr = $('#ip_addr_lan1').val();
 		var lan1_subnet = $('#subnet_mask_lan1').val();
+		var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
         
-	if (!lan1_subnet || !lan1_ipaddr) {
+	if (!lan1_subnet && !lan1_ipaddr && lan1_dhcp1 == 0) {
         // Display the custom popup message
         $("#popupMessage").text("Please provide both subnet and ipaddr.");
         $("#customPopup").show();
@@ -447,7 +449,7 @@ position: relative;
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
 			  
-			  var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
+			  
 				var lan1_type = 'lan1';
 				
 				var lan1_gateway = $('#gateway_lan1').val();
@@ -499,19 +501,25 @@ position: relative;
 	function editLan2() {
 		 var lan2_ipaddr = $('#ip_addr_lan2').val();
 	        var lan2_subnet = $('#subnet_mask_lan2').val();
+	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
 	        
-		if (!lan2_subnet || !lan2_ipaddr) {
-            // Display the custom popup message
-            $("#popupMessage").text("Please provide both subnet and ipaddr.");
-            $("#customPopup").show();
+	       
+			if (!lan2_subnet && !lan2_ipaddr && lan1_dhcp2 == 0) {
+				// Display the custom popup message
+	            $("#popupMessage").text("Please provide both subnet and ipaddr.");
+	            $("#customPopup").show();
+	            
+	         // Hide the toggle switch
+	            $("#toggle_enable_lan1").closest("td").hide();
+	            
+			
+			
+			return;
+             // Don't proceed further if fields are blank
             
-         // Hide the toggle switch
-            $("#toggle_enable_lan1").closest("td").hide();
-         
-            return; // Don't proceed further if fields are blank
-            
-        }else{
-        	
+			}
+			else {
+				
 	    // Display the custom modal dialog
 	    var modal = document.getElementById('custom-modal-edit');
 	    modal.style.display = 'block';
@@ -521,6 +529,8 @@ position: relative;
 	    confirmButton.onclick = function () {
 	 
 	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
+	       
+	        
 	        var lan2_type = 'lan2';
 	       
 	        var lan2_gateway = $('#gateway_lan2').val();
@@ -561,9 +571,9 @@ position: relative;
 	        // Close the modal
 	        modal.style.display = 'none';
 	    };
-	 
-	    
         }
+	    
+      
 	}	
 	
 	function toggle0InputFields() {
@@ -791,16 +801,21 @@ position: relative;
 		});
 
 		$('#lan2_button').click(function () {
-		    if (!isFieldDisabled('ip_addr_lan2') &&
+		     if (!isFieldDisabled('ip_addr_lan2') &&
 		        !isFieldDisabled('subnet_mask_lan2') &&
 		        !isFieldDisabled('gateway_lan2') &&
 		        !isFieldDisabled('dns_ip_lan2') &&
-		        validateIPAddress('ip_addr_lan2', 'validationMessage9') &&
+		         validateIPAddress('ip_addr_lan2', 'validationMessage9') &&
 		        validateIPAddress('subnet_mask_lan2', 'validationMessage10') &&
 		        validateIPAddressOrBlank('gateway_lan2', 'validationMessage11') &&
-		        validateIPAddressOrBlank('dns_ip_lan2', 'validationMessage12')) {
+		        validateIPAddressOrBlank('dns_ip_lan2', 'validationMessage12') 
+		        ) { 
 		        editLan2();
+		    }else{
+		    	editLan2();
 		    }
+		    
+		     
 		});
 
 		function isFieldDisabled(fieldId) {

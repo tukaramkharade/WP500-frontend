@@ -63,6 +63,8 @@ public class Lan2UpdateServlet extends HttpServlet {
 			if (!lan2_dhcp.isEmpty()) {
 			    json.put("lan2_dhcp", lan2_dhcp);
 			}
+			
+			System.out.println("lan dhcp: "+lan2_dhcp);
 
 			if (!lan2_ipaddr.isEmpty()) {
 			    json.put("lan2_ipaddr", lan2_ipaddr);
