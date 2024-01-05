@@ -170,8 +170,8 @@ button {
 
 #loader {
     text-align: center;
-    padding: 20px;
-    background: #fff; /* Loader background color */
+   margin-left: 120px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
  
@@ -600,7 +600,7 @@ function firmwareDownload() {
  
     function changeButtonColor(isDisabled) {
         var $file_upload_button = $('#file_upload');       
-        var $firmware_update_button1 = $('#firmwareUpdateButton');
+        var $firmware_update_button = $('#firmwareUpdateButton');
         var $firmware_download = $('#firmware_download');
         
          if (isDisabled) {
@@ -615,11 +615,6 @@ function firmwareDownload() {
             $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
         } 
         
-        if (isDisabled) {
-            $firmware_update_button1.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $firmware_update_button1.css('background-color', '#2b3991'); // Reset to original color
-        } 
         
         if (isDisabled) {
             $firmware_download.css('background-color', 'gray'); // Change to your desired color

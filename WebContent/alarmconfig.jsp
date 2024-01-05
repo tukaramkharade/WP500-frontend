@@ -133,8 +133,8 @@ margin-top: 68px;
 
 #loader {
     text-align: center;
-    padding: 20px;
-    background: #fff; /* Loader background color */
+   margin-left: 120px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
 
@@ -285,84 +285,123 @@ var tagVariableValues = {};
        
        
        function initializeTable(commandTag) {
-   	    var table = $('.bordered-table1');
+    	    var table = $('.bordered-table1');
 
-   	    // Empty the existing table content
-   	    table.empty();
+    	    // Empty the existing table content
+    	    table.empty();
 
-   	    // Create the initial row with input fields
-   	    var initialRow = $('<tr>');
-   	    var cell1 = $('<td>').append($('<input>', {
-   	        type: 'text',
-   	        class: 'tag_name',
-   	        style: 'height: 10px; width: 200px;',
-   	        value: Object.keys(commandTag)[0]
-   	    }));
-   	    var cell2 = $('<td>').append($('<select>', {
-   	        class: 'variable',
-   	        style: 'height: 32px;',
-   	        required: true
-   	    }).append($('<option>', {
-   	        value: Object.values(commandTag)[0],
-   	        text: Object.values(commandTag)[0]
-   	    })));
-   	    var deleteCell = $('<td>').append($('<input>', {
-   	        type: 'button',
-   	        value: 'X',
-   	        class: 'deleteBtn',
-   	        style: 'height: 22px;',
-   	        title: 'Remove subject alternative name'
-   	    }));
-   	    initialRow.append(cell1, cell2, deleteCell);
-   	    table.append(initialRow);
+    	    // Create the initial row with input fields
+    	    var initialRow = $('<tr>');
+    	  
+    	    var cell1 = $('<th>').text('Tag List').css('width', '20%');
+    	    var cell2 = $('<th>').text('Variable').css('width', '20%');
+    	    var cell3 = $('<th>').text('Action').css('width', '10%');
 
-   	    // Iterate over the rest of the keys and values of the commandTag
-   	    $.each(Object.entries(commandTag).slice(1), function (_, [key, value]) {
-   	        // Create a table row for each key-value pair
-   	        var newRow = $('<tr>');
-   	        var cell1 = $('<td style="width: 100px;">').append($('<input>', {
-   	            type: 'text',
-   	            class: 'tag_name',
-   	            style: 'height: 10px; width: 200px;',
-   	            value: key
-   	        }));
-   	        var cell2 = $('<td>').append($('<select>', {
-   	            class: 'variable',
-   	            style: 'height: 32px;',
-   	            required: true
-   	        }).append($('<option>', {
-   	            value: value,
-   	            text: value
-   	        })));
-   	        var deleteCell = $('<td>').append($('<input>', {
-   	            type: 'button',
-   	            value: 'X',
-   	            class: 'deleteBtn',
-   	            style: 'height: 22px;',
-   	            title: 'Remove subject alternative name'
-   	        }));
-   	        newRow.append(cell1, cell2, deleteCell);
+    	    initialRow.append(cell1, cell2, cell3);
+    	    table.append(initialRow);
 
-   	        // Append the new row after the existing rows
-   	        table.append(newRow);
-   	    });
+    	    // Create the initial data row with input fields
+    	    var dataRow = $('<tr>');
 
-   	    // Create the row with the "+" button
-   	    var addButtonRow = $('<tr>');
-   	    var addButtonCell = $('<td>').append($('<input>', {
-   	        type: 'button',
-   	        value: '+',
-   	        class: 'saveBtn', // Add a class for easy selection
-   	        style: 'height: 22px;',
-   	        title: 'Add tags'
-   	    }));
-   	    addButtonRow.append(addButtonCell);
-   	    table.append(addButtonRow);
-   	    
-   	 // Attach a click event handler to the dynamically added "+" button
-   	    table.on('click', '.saveBtn', function () {
-   	        addRow();
-   	    });
+    	    var dataCell1 = $('<td>').append($('<input>', {
+    	        type: 'text',
+    	        class: 'tag_name',
+    	        style: 'height: 10px; width: 200px;',
+    	        value: Object.keys(commandTag)[0]
+    	    }));
+    	    var dataCell2 = $('<td>').append($('<select>', {
+    	        class: 'variable',
+    	        style: 'height: 32px;',
+    	        required: true
+    	    }).append($('<option>', {
+    	        value: Object.values(commandTag)[0],
+    	        text: Object.values(commandTag)[0]
+    	    })));
+    	    
+    	    var cell3 = $('<td>');
+	   	    var deleteBtn = $('<input>', {
+	   	        type: 'button',
+	   	        value: 'X',
+	   	        class: 'deleteBtn',
+	   	        style: 'height: 22px;',
+	   	        title: 'Remove tag'
+	   	    });
+	   	    deleteBtn.on('click', function () {
+	   	    	dataRow.remove();
+	   	    });
+	   	    cell3.append(deleteBtn);
+	   	    
+	   	    
+    	    
+    	   /*  var deleteDataCell = $('<td>').append($('<input>', {
+    	        type: 'button',
+    	        value: 'X',
+    	        class: 'deleteBtn',
+    	        style: 'height: 22px;',
+    	        title: 'Remove subject alternative name'
+    	    })); */
+
+    	    dataRow.append(dataCell1, dataCell2, cell3);
+    	    table.append(dataRow);
+
+    	    // Iterate over the rest of the keys and values of the commandTag
+    	    $.each(Object.entries(commandTag).slice(1), function (_, [key, value]) {
+    	        var newRow = $('<tr>');
+    	        var cell1 = $('<td style="width: 100px;">').append($('<input>', {
+    	            type: 'text',
+    	            class: 'tag_name',
+    	            style: 'height: 10px; width: 200px;',
+    	            value: key
+    	        }));
+    	        var cell2 = $('<td>').append($('<select>', {
+    	            class: 'variable',
+    	            style: 'height: 32px;',
+    	            required: true
+    	        }).append($('<option>', {
+    	            value: value,
+    	            text: value
+    	        })));
+    	        
+    	        var cell3 = $('<td>');
+    	   	    var deleteBtn = $('<input>', {
+    	   	        type: 'button',
+    	   	        value: 'X',
+    	   	        class: 'deleteBtn',
+    	   	        style: 'height: 22px;',
+    	   	        title: 'Remove tag'
+    	   	    });
+    	   	    deleteBtn.on('click', function () {
+    	   	        newRow.remove();
+    	   	    });
+    	   	    cell3.append(deleteBtn);
+    	        
+    	     /*    var deleteCell = $('<td>').append($('<input>', {
+    	            type: 'button',
+    	            value: 'X',
+    	            class: 'deleteBtn',
+    	            style: 'height: 22px;',
+    	            title: 'Remove subject alternative name'
+    	        })); */
+    	        newRow.append(cell1, cell2, cell3);
+    	        table.append(newRow);
+    	    });
+
+    	    // Create the row with the "+" button
+    	    var addButtonRow = $('<tr>');
+    	    var addButtonCell = $('<td>').append($('<input>', {
+    	        type: 'button',
+    	        value: '+',
+    	        class: 'saveBtn', // Add a class for easy selection
+    	        style: 'height: 22px;',
+    	        title: 'Add tags'
+    	    }));
+    	    addButtonRow.append(addButtonCell);
+    	    table.append(addButtonRow);
+
+    	    // Attach a click event handler to the dynamically added "+" button
+    	    table.on('click', '.saveBtn', function () {
+    	        addRow();
+    	    });
    	}
 
        
@@ -641,14 +680,21 @@ var tagVariableValues = {};
       	  });
   	    }
        	  
+    	  $('.deleteBtn').on('click', function () {
+    		    // Find the parent row and remove it
+    		    $(this).closest('tr').remove();
+    		});
+    	  
       });
 
-function deleteRow(button) {
+/* function deleteRow(button) {
 	var confirmation = confirm('Are you sure you want to delete this tag?');
 	if (confirmation) {
   $(button).closest("tr").remove();
 	}
-}
+} */
+
+
 	
 function editAlarmConfig() {
 	
@@ -872,18 +918,16 @@ function addAlarmConfig() {
 			
 			</table>
 			
-			<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-					
-					<input style="height: 26px;" type="button" value="Clear" id="clearBtn"/> 
-						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
-						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" />
-						
-					</div>
+			<br>
 					
 			<table class="bordered-table1">
 			
 			 <tr>
-			
+			<th style="width: 20%">Tag List</th>
+			<th style="width: 20%">Variable</th>
+			<th style="width: 10%">Action</th>
+			</tr>
+			<tr>
 						<td><input type="text" id="tag_name" name="tag_name" class="tag_name"
 											style="height: 10px; width: 200px;" /></td>
 											
@@ -891,7 +935,7 @@ function addAlarmConfig() {
 											name="variable" style="height: 32px;" required>
 												<option value="Select variable">Select variable</option>
 										</select></td>
-										<td><input type="button" value="X" id="deleteBtn"
+										<td><input type="button" value="X" id="deleteBtn" class="deleteBtn"
 											style="height: 22px;" title="Remove subject alternative name" /></td>
 						
 						
@@ -902,6 +946,14 @@ function addAlarmConfig() {
 									</tr>
 				
 				</table>
+				
+				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
+					
+					<input style="height: 26px;" type="button" value="Clear" id="clearBtn"/> 
+						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="addBtn" /> 
+						<input style="margin-left: 5px; height: 26px;" type="button" value="Delete" id="delBtn" />
+						
+					</div>
 					
 			</form>
 		</div>
@@ -934,7 +986,7 @@ function addAlarmConfig() {
   				<button id="closePopup">OK</button>
 			  </div>
 			  
-		<hr />
+		
 		</section>
 
 		

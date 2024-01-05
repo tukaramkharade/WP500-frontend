@@ -132,8 +132,8 @@ margin-top: 70px;
 
 #loader {
     text-align: center;
-    padding: 20px;
-    background: #fff; /* Loader background color */
+   margin-left: 120px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
 
@@ -707,6 +707,10 @@ margin-top: 70px;
 							$('#exportButton').on('click', function() {							
 							    fetchDataAndExportToExcel();
 							});
+							
+							$('#processExcel').click(function() {
+								processExcel();
+							});
 					    	
 					    }
 
@@ -763,7 +767,7 @@ margin-top: 70px;
 					</div>
 					<div>
 					<input type="file" id="fileInput" accept=".xlsx, .xls" />
-					<input type="button" value="Process Excel" id="processExcel" onclick="processExcel()">
+					<input type="button" value="Process Excel" id="processExcel">
 					</div>
 					
 				</form>
