@@ -94,7 +94,7 @@ public class JSONBuilderServlet extends HttpServlet {
 		String jsonInterval = null;
 		String broker_type = null;
 		String broker_name = null;
-		String publishTopic = null;
+	//	String publishTopic = null;
 		String publishStatus = null;
 		String storeAndForward = null;
 		String json_string_text = null;
@@ -116,7 +116,7 @@ public class JSONBuilderServlet extends HttpServlet {
 					 jsonInterval = request.getParameter("json_interval");
 					 broker_type = request.getParameter("broker_type");
 					 broker_name = request.getParameter("broker_name");
-					 publishTopic = request.getParameter("publish_topic");
+					// publishTopic = request.getParameter("publish_topic");
 					 publishStatus = request.getParameter("publishing_status");
 					 storeAndForward = request.getParameter("storeAndForward");
 					 json_string_text = request.getParameter("json_string_text");
@@ -146,7 +146,7 @@ public class JSONBuilderServlet extends HttpServlet {
 						json_data.put("json_interval", intervalValue);
 						json_data.put("broker_type", broker_type);
 						json_data.put("broker_ip_address", broker_name);
-						json_data.put("publish_topic_name", publishTopic);
+						json_data.put("publish_topic_name", "");
 						json_data.put("publishing_status", publishStatus);
 						json_data.put("store_n_forward", storeAndForward);
 						json_data.put("json_string", json_string_con);
@@ -186,7 +186,7 @@ public class JSONBuilderServlet extends HttpServlet {
 					 jsonInterval = request.getParameter("json_interval");
 					 broker_type = request.getParameter("broker_type");
 					 broker_name = request.getParameter("broker_name");
-					 publishTopic = request.getParameter("publish_topic");
+				//	 publishTopic = request.getParameter("publish_topic");
 					 publishStatus = request.getParameter("publishing_status");
 					 storeAndForward = request.getParameter("storeAndForward");
 					 json_string_text = request.getParameter("json_string_text");
@@ -217,7 +217,7 @@ public class JSONBuilderServlet extends HttpServlet {
 						json_data.put("json_interval", intervalValue);
 						json_data.put("broker_type", broker_type);
 						json_data.put("broker_ip_address", broker_name);
-						json_data.put("publish_topic_name", publishTopic);
+						json_data.put("publish_topic_name", "");
 						json_data.put("publishing_status", publishStatus);
 						json_data.put("store_n_forward", storeAndForward);
 

@@ -209,8 +209,8 @@ button {
 
 #loader {
     text-align: center;
-    padding: 20px;
-    background: #fff; /* Loader background color */
+   margin-left: 120px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
 </style>
@@ -374,10 +374,33 @@ function hideLoader() {
     $('#loader-overlay').hide();
 }
 
+function changeButtonColor(isDisabled) {
+    var $applyBtn = $('#applyBtn');   
+    
+    if (isDisabled) {
+        $applyBtn.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $applyBtn.css('background-color', '#2b3991'); // Reset to original color
+    }   
+    
+    
+}
+
+
 $(document).ready(function() {
 	
+	<%// Access the session variable
+	HttpSession role = request.getSession();
+	String roleValue = (String) session.getAttribute("role");%>
+
+roleValue = '<%=roleValue%>';
+
+	
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
+		$('#applyBtn').prop('disabled', true);
 		
+		
+		changeButtonColor(true);
 	}
 	
 	if (roleValue === "null") {

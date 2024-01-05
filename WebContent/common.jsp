@@ -67,6 +67,10 @@
                 </li> 
                 
                 <li class="nav-item">
+                  <a href="cpumetrics.jsp">CPU Metrics</a>
+                </li>
+                
+                <li class="nav-item">
                   <a href="reboot.jsp">Reset</a>
                 </li>
               

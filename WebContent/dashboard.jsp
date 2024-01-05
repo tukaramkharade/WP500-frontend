@@ -212,8 +212,8 @@ margin-top: 68px;
 
 #loader {
     text-align: center;
-    padding: 20px;
-    background: #fff; /* Loader background color */
+   margin-left: 120px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
 
@@ -308,7 +308,7 @@ function countDetails(){
     			var status_service = 'Running';
     			$("#status").html("System Status: <span class='green-text'>" + status_service + "</span>");
 			} else {
-    			var status = 'Stop';
+    			var status_service = 'Stop';
     			$("#status").html("System Status: <span class='red-text'>" + status_service + "</span>");
 	}
 		

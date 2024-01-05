@@ -127,8 +127,8 @@ margin-top: 68px;
 
 #loader {
     text-align: center;
-    padding: 20px;
-    background: #fff; /* Loader background color */
+   margin-left: 120px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
 
@@ -221,7 +221,6 @@ var tokenValue;
 						var json_interval = json_interval1; 
 						var broker_type = jsonBuilder.broker_type; 
 						var broker_ip_address = jsonBuilder.broker_ip_address; 
-						var publish_topic_name = jsonBuilder.publish_topic_name; 
 						var publishing_status = jsonBuilder.publishing_status; 
 						var store_n_forward = jsonBuilder.store_n_forward; 
 						
@@ -229,7 +228,6 @@ var tokenValue;
 								$("<td>").text(json_interval),
 								$("<td>").text(broker_type),
 								$("<td>").text(broker_ip_address),
-								$("<td>").text(publish_topic_name),
 								$("<td>").text(publishing_status),
 								$("<td>").text(store_n_forward));
 						
@@ -244,7 +242,7 @@ var tokenValue;
 											setJSONInterval(json_interval1);
 											setBrokerType(jsonBuilder.broker_type);
 											setBrokerIPAddress(jsonBuilder.broker_ip_address);
-											setPublishTopic(jsonBuilder.publish_topic_name);
+											//setPublishTopic(jsonBuilder.publish_topic_name);
 											setPublishingStatus(jsonBuilder.publishing_status);
 											setStoreAndForward(jsonBuilder.store_n_forward);
 											setJSONString(jsonBuilder.json_string);
@@ -278,7 +276,7 @@ var tokenValue;
 							var json_interval = json_interval1; 
 							var broker_type = jsonBuilder.broker_type; 
 							var broker_ip_address = jsonBuilder.broker_ip_address; 
-							var publish_topic_name = jsonBuilder.publish_topic_name; 
+							 
 							var publishing_status = jsonBuilder.publishing_status; 
 							var store_n_forward = jsonBuilder.store_n_forward; 
 							
@@ -286,7 +284,6 @@ var tokenValue;
 									$("<td>").text(json_interval1),
 									$("<td>").text(broker_type),
 									$("<td>").text(broker_ip_address),
-									$("<td>").text(publish_topic_name),
 									$("<td>").text(publishing_status),
 									$("<td>").text(store_n_forward));
 							
@@ -331,10 +328,10 @@ var tokenValue;
 		$('#broker_name').val(jsonBuilderId);
 	}
 
-	function setPublishTopic(jsonBuilderId) {
+	/* function setPublishTopic(jsonBuilderId) {
 
 		$('#publish_topic').val(jsonBuilderId);
-	}
+	} */
 
 	function setPublishingStatus(jsonBuilderId) {
 
@@ -428,7 +425,7 @@ var tokenValue;
 				var json_interval = $('#json_interval').find(":selected").val();
 				var broker_type = $('#broker_type').find(":selected").val();
 				var broker_name = $('#broker_name').find(":selected").val();
-				var publish_topic = $('#publish_topic').val();
+			//	var publish_topic = $('#publish_topic').val();
 				var publishing_status = $('#publishing_status').find(":selected").val();
 				var storeAndForward = $('#storeAndForward').find(":selected").val();
 				 json_string_text = $('#json_string_validate').val();
@@ -442,7 +439,6 @@ var tokenValue;
 							json_interval : json_interval,
 							broker_type : broker_type,
 							broker_name : broker_name,
-							publish_topic : publish_topic,
 							publishing_status : publishing_status,
 							storeAndForward : storeAndForward,
 							json_string_text : json_string_text,
@@ -480,7 +476,6 @@ var tokenValue;
 							$('#json_interval').val('30 sec');
 							$('#broker_type').val('mqtt');
 							$('#broker_name').val('Select broker IP address');
-							$('#publish_topic').val('');
 							$('#publishing_status').val('Enable');
 							$('#storeAndForward').val('Enable');
 							$('#json_string_text')
@@ -515,7 +510,6 @@ var tokenValue;
 		var json_interval = $('#json_interval').find(":selected").val();
 		var broker_type = $('#broker_type').find(":selected").val();
 		var broker_name = $('#broker_name').find(":selected").val();
-		var publish_topic = $('#publish_topic').val();
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		 json_string_text = $('#json_string_validate').val();
@@ -528,7 +522,6 @@ var tokenValue;
 						json_interval : json_interval,
 						broker_type : broker_type,
 						broker_name : broker_name,
-						publish_topic : publish_topic,
 						publishing_status : publishing_status,
 						storeAndForward : storeAndForward,
 						json_string_text : json_string_text,
@@ -570,7 +563,6 @@ var tokenValue;
 						$('#json_interval').val('30 sec');
 						$('#broker_type').val('mqtt');
 						$('#broker_name').val('Select broker IP address');
-						$('#publish_topic').val('');
 						$('#publishing_status').val('Enable');
 						$('#storeAndForward').val('Enable');
 						$('#json_string_text')
@@ -798,9 +790,7 @@ var tokenValue;
 													var broker_type = $('#broker_type').find(":selected").val();
 													var broker_name = $('#broker_name').find(":selected").val();
 													var json_string_name = $("#json_string_name").val();
-													var publish_topic = $("#publish_topic").val();
-
-													
+																										
 													if (!validateBrokerIPAddress(broker_name)) {
 														brokerIPAddressError.textContent = "Please select broker ip address ";
 														return;
@@ -831,7 +821,6 @@ var tokenValue;
 													$('#json_interval').val('30 sec');
 													$('#broker_type').val('mqtt');
 													$('#broker_name').val('Select broker IP address');
-													$('#publish_topic').val('');
 													$('#publishing_status').val('Enable');
 													$('#storeAndForward').val('Enable');
 													$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
@@ -907,10 +896,7 @@ var tokenValue;
 				</tr>
 				
 					<tr>
-					<td>Publish topic</td>
-					<td><input type="text" id="publish_topic" name="publish_topic" style="height: 17px;" maxlength="31" required>
-						</td>
-						
+											
 					<td>Publishing status</td>
 					<td><select class="textBox" id="publishing_status"
 							name="publishing_status" style="height: 35px;" required>
@@ -996,7 +982,6 @@ var tokenValue;
 						<th>JSON interval</th>
 						<th>Broker type</th>
 						<th>Broker IP address</th>
-						<th>Publish topic name</th>
 						<th>Publishing status</th>
 						<th>Store and forward</th>
 						
