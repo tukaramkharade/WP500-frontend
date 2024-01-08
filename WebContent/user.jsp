@@ -205,7 +205,7 @@ margin-top: 18px;
 #loader {
     text-align: center;
    margin-left: 120px;
-    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
+   background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
 
