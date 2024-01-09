@@ -253,6 +253,7 @@ var tagVariableValues = {};
   	          $('#unit_id').val(result.unit_id);
               $('#asset_id').val(result.asset_id);
               $('#broker_name').val(result.broker_ip);
+              $('#status').val(result.alarm_status);
 
               if (result.broker_type != null && result.intrval != null) {
                   // If broker_type and intrval are present, set their values
@@ -843,9 +844,9 @@ var tagVariableValues = {};
 				  var tagData = updateTagVariableValues();
 					var unit_id = $('#unit_id').val();
 				    var asset_id = $('#asset_id').val();
-				    var broker_type = $('#broker_type').find(":selected").val();
-				   
+				    var broker_type = $('#broker_type').find(":selected").val();		   
 				    var interval = $('#interval').find(":selected").val();
+				    var status = $('#status').find(":selected").val();
 				   
 				    $.ajax({
 						url : 'commandConfigServlet',
@@ -856,6 +857,7 @@ var tagVariableValues = {};
 							broker_type : broker_type,
 							broker_name : broker_name,
 							interval : interval,
+							status : status,
 							tagData: JSON.stringify(tagVariableValues),
 							action: 'update'
 							
@@ -871,6 +873,7 @@ var tagVariableValues = {};
 							$('#broker_type').val('mqtt');
 							$('#broker_name').val('Select broker IP address');
 							$('#interval').val('1 min');
+							$('#status').val('Enable');
 							
 							location.reload();
 						},
@@ -902,7 +905,7 @@ var tagVariableValues = {};
 		    var broker_type = $('#broker_type').find(":selected").val();
 		    var broker_name = $('#broker_name').find(":selected").val();
 		    var interval = $('#interval').find(":selected").val();
-		    
+		    var status = $('#status').find(":selected").val();  
 		    
 		    var errorSpanStatus = $('#brokerIPAddressError'); // Assuming you have a <span> element for error messages
 			  
@@ -927,6 +930,7 @@ var tagVariableValues = {};
 					broker_type : broker_type,
 					broker_name : broker_name,
 					interval : interval,
+					status : status,
 					tagData: JSON.stringify(tagVariableValues),
 					action: 'add'
 					
@@ -943,6 +947,7 @@ var tagVariableValues = {};
 					$('#broker_type').val('mqtt');
 					$('#broker_name').val('Select broker IP address');
 					$('#interval').val('1 min');
+					$('#status').val('Enable');
 					
 					location.reload();
 					
@@ -1032,8 +1037,11 @@ var tagVariableValues = {};
 							</select>
 							</td>
 						
-			<td></td>
-			<td></td>
+			<td>Status</td>
+			<td><select class="textBox" id="status" name="status" style="height: 33px" required>
+							<option value="Enable" selected>Enable</option>
+							<option value="Disable">Disable</option>
+						</select> </td>
 			
 			</tr>
 			

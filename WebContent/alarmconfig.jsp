@@ -260,10 +260,6 @@ var tagVariableValues = {};
                   $('#interval').val('defaultInterval');
               }
 								
-									
-								//	var result = data.alarm_tag; 
-
-					
 									if (result.unit_id != null) {
 						                $('#addBtn').val('Update');
 						            } else {
@@ -604,7 +600,7 @@ var tagVariableValues = {};
     	String roleValue = (String) session.getAttribute("role");
     	%>
     	
-    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
+    	roleValue = '<%= roleValue %>'; 
     	
     	
     	  
@@ -753,7 +749,6 @@ function editAlarmConfig() {
 					$('#interval').val('5 sec');
 					$('#status').val('Enable');
 					
-					
 					location.reload();
 				},
 				error : function(xhr, status, error) {
@@ -824,8 +819,6 @@ function addAlarmConfig() {
 			$('#interval').val('5 sec');
 			$('#status').val('Enable');
 			
-			
-
 			location.reload();
 		},
 		error : function(xhr, status, error) {
