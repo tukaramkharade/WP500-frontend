@@ -158,7 +158,6 @@ function getActiveThreats() {
 	// Display loader when the request is initiated
     showLoader();
 	
-	
 	$.ajax({
 		url : 'activeThreatServlet',
 		type : 'GET',

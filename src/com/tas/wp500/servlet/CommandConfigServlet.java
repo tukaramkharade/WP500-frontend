@@ -107,6 +107,7 @@ public class CommandConfigServlet extends HttpServlet {
 		String broker_type = null;
 		String broker_name = null;
 		String interval = null;
+		String command_status = null;
 		String tagData = null;
 		String intervalValue = null;
 		
@@ -127,6 +128,7 @@ public class CommandConfigServlet extends HttpServlet {
 					 broker_type = request.getParameter("broker_type");
 					 broker_name = request.getParameter("broker_name");
 					 interval = request.getParameter("interval");
+					 command_status = request.getParameter("status");		
 					 tagData = request.getParameter("tagData");
 
 					 intervalValue = IntervalMapper.getIntervalByString(interval);
@@ -154,6 +156,7 @@ public class CommandConfigServlet extends HttpServlet {
 						json.put("asset_id", asset_id);
 						json.put("broker_type", broker_type);
 						json.put("broker_ip", broker_name);
+						json.put("command_status", command_status);
 						json.put("intrval", intervalValue);
 						json.put("command_tag", json_string_con);
 
@@ -188,6 +191,7 @@ public class CommandConfigServlet extends HttpServlet {
 					 broker_type = request.getParameter("broker_type");
 					 broker_name = request.getParameter("broker_name");
 					 interval = request.getParameter("interval");
+					 command_status = request.getParameter("status");	
 					 tagData = request.getParameter("tagData");
 					
 					 intervalValue = IntervalMapper.getIntervalByString(interval);
@@ -216,6 +220,7 @@ public class CommandConfigServlet extends HttpServlet {
 						json.put("broker_type", broker_type);
 						json.put("broker_ip", broker_name);
 						json.put("intrval", intervalValue);
+						json.put("command_status", command_status);
 						json.put("command_tag", json_string_con);
 
 						String respStr = client.sendMessage(json.toString());

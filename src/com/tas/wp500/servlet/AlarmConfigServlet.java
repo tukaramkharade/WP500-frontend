@@ -105,6 +105,7 @@ public class AlarmConfigServlet extends HttpServlet {
 		String broker_type = null;
 		String broker_name = null;
 		String interval = null;
+		String alarm_status = null;
 		String tagData = null;
 		String intervalValue = null;
 
@@ -123,6 +124,7 @@ public class AlarmConfigServlet extends HttpServlet {
 					broker_type = request.getParameter("broker_type");
 					broker_name = request.getParameter("broker_name");
 					interval = request.getParameter("interval");
+					alarm_status = request.getParameter("status");					
 					tagData = request.getParameter("tagData");
 
 					intervalValue = IntervalMapper.getIntervalByString(interval);
@@ -151,6 +153,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("broker_type", broker_type);
 						json.put("broker_ip", broker_name);
 						json.put("intrval", intervalValue);
+						json.put("alarm_status", alarm_status);
 						json.put("alarm_tag", json_string_con);
 
 						String respStr = client.sendMessage(json.toString());
@@ -186,6 +189,7 @@ public class AlarmConfigServlet extends HttpServlet {
 					broker_name = request.getParameter("broker_name");
 					interval = request.getParameter("interval");
 					tagData = request.getParameter("tagData");
+					alarm_status = request.getParameter("status");	
 
 					intervalValue = IntervalMapper.getIntervalByString(interval);
 
@@ -212,6 +216,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("broker_type", broker_type);
 						json.put("broker_ip", broker_name);
 						json.put("intrval", intervalValue);
+						json.put("alarm_status", alarm_status);
 						json.put("alarm_tag", json_string_con);
 
 						String respStr = client.sendMessage(json.toString());

@@ -50,7 +50,6 @@ public class ActiveThreatServlet extends HttpServlet {
 				logger.info("Active Threats response : " + respJson.toString());
 
 				
-				
 				JSONObject finalJsonObj = new JSONObject();
 				if(status.equals("success")){
 					JSONArray resultArr = respJson.getJSONArray("data");
