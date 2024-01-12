@@ -39,8 +39,6 @@ public class AlarmConfigServlet extends HttpServlet {
 
 		if (check_username != null) {
 			try {
-				// JSONArray resJsonArray = new JSONArray();
-
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -51,9 +49,6 @@ public class AlarmConfigServlet extends HttpServlet {
 				json.put("token", check_token);
 
 				String respStr = client.sendMessage(json.toString());
-
-				logger.info("res " + new JSONObject(respStr));
-
 				JSONObject respJson = new JSONObject(respStr);
 				
 				String status = respJson.getString("status");
@@ -67,9 +62,7 @@ public class AlarmConfigServlet extends HttpServlet {
 					if (alarm_result.length() > 0 && alarm_result.has("intrval")) {
 			            String interval = alarm_result.getString("intrval");
 			            int intervalValue = Integer.parseInt(interval);
-			            String intervalString = IntervalMapper.getIntervalByValue(intervalValue);
-			            
-			            // Add the intervalString to the finalJsonObj
+			            String intervalString = IntervalMapper.getIntervalByValue(intervalValue);			            
 			            finalJsonObj.put("intervalString", intervalString);
 			        }
 					
@@ -78,16 +71,11 @@ public class AlarmConfigServlet extends HttpServlet {
 					finalJsonObj.put("status", status);
 				    finalJsonObj.put("message", message);
 				}
-
-			    // Set the response content type to JSON
 			    response.setContentType("application/json");
-
-			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error getting alarm data : " + e);
 			}
 		}
 	}
@@ -134,7 +122,6 @@ public class AlarmConfigServlet extends HttpServlet {
 					} catch (ParseException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						logger.error("Error converting into json object: " + e1);
 					}
 
 					try {
@@ -157,27 +144,18 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("alarm_tag", json_string_con);
 
 						String respStr = client.sendMessage(json.toString());
-
-						logger.info("res " + new JSONObject(respStr));
-
 						String message = new JSONObject(respStr).getString("msg");
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 
-						// Set the content type of the response to
-						// application/json
 						response.setContentType("application/json");
 
-						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
 
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error adding alarm data : " + e);
 					}
 
 					break;
@@ -221,26 +199,18 @@ public class AlarmConfigServlet extends HttpServlet {
 
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr));
-
 						String message = new JSONObject(respStr).getString("msg");
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 
-						// Set the content type of the response to
-						// application/json
 						response.setContentType("application/json");
 
-						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
 
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error updating alarm data : " + e);
 					}
 
 					break;
@@ -273,25 +243,18 @@ public class AlarmConfigServlet extends HttpServlet {
 
 				String respStr = client.sendMessage(json.toString());
 
-				logger.info("res " + new JSONObject(respStr));
-
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
 
-				// Set the content type of the response to application/json
 				response.setContentType("application/json");
 
-				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error deleting alarm : " + e);
 			}
 		} 
 	}

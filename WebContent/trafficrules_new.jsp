@@ -2614,7 +2614,7 @@ function applyTrafficRules() {
 										<tr>
 											<td>Name</td>
 											<td><input type="text" id="name_lan0" name="name_lan0"
-												maxlength="31" style="height: 10px;" />
+												maxlength="31" style="height: 10px;" required/>
 												</td>
 										
 											<td>Type</td>
@@ -2648,7 +2648,7 @@ function applyTrafficRules() {
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
-												maxlength="6" />
+												maxlength="6" required/>
 												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan0" name="action_lan0"
@@ -2799,7 +2799,7 @@ function applyTrafficRules() {
 										<tr>
 											<td>Name</td>
 											<td><input type="text" id="name_lan1" name="name_lan1"
-												maxlength="31" style="height: 10px;" />
+												maxlength="31" style="height: 10px;" required/>
 												</td>
 											
 											<td>Type</td>
@@ -2832,7 +2832,7 @@ function applyTrafficRules() {
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan1" name="portNumber_lan1"
-												maxlength="6" />
+												maxlength="6" required/>
 												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan1" name="action_lan1"
@@ -2981,7 +2981,7 @@ function applyTrafficRules() {
 										<tr>
 											<td>Name</td>
 											<td><input type="text" id="name_lan2" name="name_lan2"
-												maxlength="31" style="height: 10px;" />
+												maxlength="31" style="height: 10px;" required/>
 												</td>
 											
 											<td>Type</td>
@@ -3014,7 +3014,7 @@ function applyTrafficRules() {
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
-												maxlength="6" />
+												maxlength="6" required/>
 												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan2" name="action_lan2"

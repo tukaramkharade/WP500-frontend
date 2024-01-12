@@ -484,7 +484,7 @@ roleValue = '<%=roleValue%>';
 							<td>Partner IP</td>
 							<td>
 							 <div class="validation-container">
-							<input id="partner_ip" class="config" type='text' name="partner_ip" style="width: 42%;" required>
+							<input id="partner_ip" type='text' name="partner_ip" style="width: 42%;" required>
 							 <span id="validationMessage1" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
@@ -494,7 +494,7 @@ roleValue = '<%=roleValue%>';
 							<td>Common IP 0</td>
 							<td>
 							 <div class="validation-container">
-							<input id="common_ip_0" class="config" type='text' name="common_ip_0" style="width: 42%;" required>
+							<input id="common_ip_0" type='text' name="common_ip_0" style="width: 42%;" required>
 							 <span id="validationMessage2" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
@@ -504,7 +504,7 @@ roleValue = '<%=roleValue%>';
 							<td>Common Subnet 0</td>
 							<td>
 							 <div class="validation-container">
-							<input id="common_subnet_0" class="config" type='text' name="common_subnet_0" style="width: 42%;" required>
+							<input id="common_subnet_0" type='text' name="common_subnet_0" style="width: 42%;" required>
 							 <span id="validationMessage3" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
@@ -514,7 +514,7 @@ roleValue = '<%=roleValue%>';
 							<td>Common IP 1</td>
 							<td>
 							 <div class="validation-container">
-							<input id="common_ip_1" class="config" type='text' name="common_ip_1" style="width: 42%;" required>
+							<input id="common_ip_1" type='text' name="common_ip_1" style="width: 42%;" required>
 							 <span id="validationMessage4" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
@@ -524,7 +524,7 @@ roleValue = '<%=roleValue%>';
 							<td>Common Subnet 1</td>
 							<td>
 							 <div class="validation-container">
-							<input id="common_subnet_1" class="config" type='text' name="common_subnet_1" style="width: 42%;" required>
+							<input id="common_subnet_1" type='text' name="common_subnet_1" style="width: 42%;" required>
 							 <span id="validationMessage5" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
@@ -534,7 +534,7 @@ roleValue = '<%=roleValue%>';
 							<td>Common IP 2</td>
 							<td>
 							 <div class="validation-container">
-							<input id="common_ip_2" class="config" type='text' name="common_ip_2" style="width: 42%;" required>
+							<input id="common_ip_2" type='text' name="common_ip_2" style="width: 42%;" required>
 							 <span id="validationMessage6" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
@@ -544,7 +544,7 @@ roleValue = '<%=roleValue%>';
 							<td>Common Subnet 2</td>
 							<td>
 							 <div class="validation-container">
-							<input id="common_subnet_2" class="config" type='text' name="common_subnet_2" style="width: 42%;" required>
+							<input id="common_subnet_2" type='text' name="common_subnet_2" style="width: 42%;" required>
 							 <span id="validationMessage7" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>

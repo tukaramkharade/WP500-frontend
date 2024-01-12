@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,113 +20,145 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
 @WebServlet("/WP500Login")
 public class WP500Login extends HttpServlet {
-    final static Logger logger = Logger.getLogger(WP500Login.class);
-    
- // Session registry to keep track of active sessions
-    private static Map<String, HttpSession> sessionRegistry = new HashMap<>();
+	final static Logger logger = Logger.getLogger(WP500Login.class);
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        
-        session.setMaxInactiveInterval(3600);
-        
-       String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        JSONObject userObj = new JSONObject();
+		HttpSession session = request.getSession();
 
-        try {
-            TCPClient client = new TCPClient();
-            JSONObject json = new JSONObject();
+		session.setMaxInactiveInterval(3600);
 
-            json.put("operation", "login");
-            json.put("username", username);
-            json.put("password", password);
-            
-            String respStr = client.sendMessage(json.toString());
+		// Retrieve CSRF token from the request
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
 
-            logger.info("Response: " + respStr);
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
-            JSONObject jsonResponse = new JSONObject(respStr);
-            String status = jsonResponse.getString("status");
-            String first_login = jsonResponse.getString("first_login");
-            String totp_authenticator = jsonResponse.getString("totp_authenticator");
-            
-            if(status.equals("success") && first_login.equals("true") && totp_authenticator.equals("disable")){
-            	String token = jsonResponse.getString("token");
-            	
-            	session.setAttribute("username", username);
-            	 session.setAttribute("token", token);
-            	userObj.put("status", status);
-            	userObj.put("first_login", first_login);
-            	
-            } else if(status.equals("success") && first_login.equals("false") && totp_authenticator.equals("enable")) {
-                String role = jsonResponse.getString("role");
-                String token = jsonResponse.getString("token");
-                
-                session.setAttribute("username", username);
-                session.setAttribute("role", role);
-                session.setAttribute("totp_authenticator", totp_authenticator);
-                session.setAttribute("token", token);
-             
-                userObj.put("status", status);
-                userObj.put("first_login", first_login);
-                userObj.put("totp_authenticator", totp_authenticator);
-                
-          }  else if(status.equals("success") && first_login.equals("false") && totp_authenticator.equals("disable")){
-        	  
-        	  String role = jsonResponse.getString("role");
-        	  String token = jsonResponse.getString("token");
-        	  
-              session.setAttribute("username", username);
-              session.setAttribute("role", role);
-              session.setAttribute("token", token);
-           
-              userObj.put("status", status);
-              userObj.put("first_login", first_login);
-              userObj.put("totp_authenticator", totp_authenticator);
-              
-          }
-            
-            else if (status.equals("fail")) {
-               userObj.put("msg", "Invalid user. Please login again");
-               userObj.put("status", status);
-           }
-            
-        } catch (Exception e) {
-        	
-        	    e.printStackTrace();
-        	    logger.error("Error in login : " + e);
+		System.out.println("csrf req: " + csrfTokenFromRequest);
+		System.out.println("csrf session : " + csrfTokenFromSession);
 
-        	    try {
-        	        userObj.put("status", "error");
-        	        userObj.put("msg", "Invalid user.");
-        	        
-        	    } catch (JSONException e1) {
-        	        e1.printStackTrace();
-        	    }
-        }
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
 
-        // Set the content type of the response to application/json
-        response.setContentType("application/json");
+		JSONObject userObj = new JSONObject();
 
-        // Get the response PrintWriter
-        PrintWriter out = response.getWriter();
+		try {
 
-        // Write the JSON object to the response
-        out.print(userObj.toString());
-        out.flush();
-        
-    }
-    
-   }
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+
+				TCPClient client = new TCPClient();
+				JSONObject json = new JSONObject();
+
+				json.put("operation", "login");
+				json.put("username", username);
+				json.put("password", password);
+
+				String respStr = client.sendMessage(json.toString());
+
+				logger.info("Response: " + respStr);
+
+				JSONObject jsonResponse = new JSONObject(respStr);
+				String status = jsonResponse.getString("status");
+				String first_login = jsonResponse.getString("first_login");
+				String totp_authenticator = jsonResponse.getString("totp_authenticator");
+
+				if (status.equals("success") && first_login.equals("true") && totp_authenticator.equals("disable")) {
+					String token = jsonResponse.getString("token");
+
+					session.setAttribute("username", username);
+					session.setAttribute("token", token);
+					userObj.put("status", status);
+					userObj.put("first_login", first_login);
+					
+			//		setCookie(response, "token", token, "Strict");
+					// Set the CSRF token in the response header
+			//		response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfTokenFromSession + "; HttpOnly; Secure; SameSite=Strict");
+
+				} else if (status.equals("success") && first_login.equals("false")
+						&& totp_authenticator.equals("enable")) {
+					String role = jsonResponse.getString("role");
+					String token = jsonResponse.getString("token");
+
+					session.setAttribute("username", username);
+					session.setAttribute("role", role);
+					session.setAttribute("totp_authenticator", totp_authenticator);
+					session.setAttribute("token", token);
+
+					userObj.put("status", status);
+					userObj.put("first_login", first_login);
+					userObj.put("totp_authenticator", totp_authenticator);
+					
+			//		setCookie(response, "token", token, "Strict");
+			//		response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfTokenFromSession + "; HttpOnly; Secure; SameSite=Strict");
+
+				} else if (status.equals("success") && first_login.equals("false")
+						&& totp_authenticator.equals("disable")) {
+
+					String role = jsonResponse.getString("role");
+					String token = jsonResponse.getString("token");
+
+					session.setAttribute("username", username);
+					session.setAttribute("role", role);
+					session.setAttribute("token", token);
+
+					userObj.put("status", status);
+					userObj.put("first_login", first_login);
+					userObj.put("totp_authenticator", totp_authenticator);
+					
+				//	setCookie(response, "token", token, "Strict");
+				//	response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfTokenFromSession + "; HttpOnly; Secure; SameSite=Strict");
+
+				}
+
+				else if (status.equals("fail")) {
+					userObj.put("msg", "Invalid user. Please login again");
+					userObj.put("status", status);
+				}
+
+			} else {
+				// CSRF token is invalid, reject the request
+				userObj.put("status", "fail");
+				userObj.put("msg", "CSRF token validation failed");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			logger.error("Error in login : " + e);
+
+			try {
+				userObj.put("status", "error");
+				userObj.put("msg", "Invalid user.");
+
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		
+
+		// Set the content type of the response to application/json
+		response.setContentType("application/json");
+		
+		response.setHeader("X-Content-Type-Options", "nosniff");
+
+
+		// Get the response PrintWriter
+		PrintWriter out = response.getWriter();
+
+		// Write the JSON object to the response
+		out.print(userObj.toString());
+		out.flush();
+
+	}
+	
+//	private void setCookie(HttpServletResponse response, String name, String value, String sameSite) {
+//	    String cookieValue = name + "=" + value + "; HttpOnly; Secure; SameSite=" + sameSite;
+//	    response.addHeader("Set-Cookie", cookieValue);
+//	}
+
+
+}
