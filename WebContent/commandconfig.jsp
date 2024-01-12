@@ -253,7 +253,7 @@ var tagVariableValues = {};
   	          $('#unit_id').val(result.unit_id);
               $('#asset_id').val(result.asset_id);
               $('#broker_name').val(result.broker_ip);
-              $('#status').val(result.alarm_status);
+              $('#status').val(result.command_status);
 
               if (result.broker_type != null && result.intrval != null) {
                   // If broker_type and intrval are present, set their values

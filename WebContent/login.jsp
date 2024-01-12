@@ -1,8 +1,21 @@
+<%@ page import="java.util.UUID" %>
+<%@ page import="java.security.MessageDigest" %>
+
+<%
+   
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+
+
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
     <title>WPConnex Web Configuration</title>
     <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png">
         <link rel="stylesheet" href="css_files/ionicons.min.css">
@@ -17,13 +30,17 @@
          function checkLogin() {
         	    var username = $('#username').val();
         	    var password = $('#password').val();
+        	    var csrfToken = document.getElementById('csrfToken').value;
 
+			
+        	    
         	    $.ajax({
         	        url: 'WP500Login',
         	        type: 'POST',
         	        data: {
         	            username: username,
-        	            password: password
+        	            password: password,
+        	            csrfToken: csrfToken
         	        },
         	        success: function(data) {
         	            var json1 = JSON.stringify(data);
@@ -150,34 +167,7 @@
          
         $(document).ready(function () {
         	
-        	/* const captchaLabel = $('#captchaLabel');
-          //  const refreshCaptcha = $('#refreshCaptcha');
-
-            // Function to generate random alphanumeric text for CAPTCHA
-            function generateRandomAlphanumeric() {
-                var length = 6;
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                let result = '';
-                for (var i = 0; i < length; i++) {
-                    result += characters.charAt(Math.floor(Math.random() * characters.length));
-                }
-                return result;
-            }
-
-            // Function to update the captcha label and return the new captcha value
-            function updateCaptcha() {
-    const newCaptcha = generateRandomAlphanumeric();
-    $('#captchaLabel').text(newCaptcha);
-}
-
-            // Set initial captcha
-            updateCaptcha(); */
-
-             /* $('#refreshCaptcha').click(function () {
-            	 
-            	 event.preventDefault();
-            	    updateCaptcha(); // Update the captcha immediately
-            	}); */
+        	
             
         	readBannerText();
         	
@@ -280,7 +270,30 @@
    
 </head>
 <body style="background-color: #2e3891d4;">
+
+<%!
+        // Function to generate CSRF token
+        private String generateCSRFToken() {
+            String token = UUID.randomUUID().toString();
+            // You can apply additional hashing or encoding if needed
+            return token;
+        }
+    %>
+    
     <form action="WP500Login" method="post" class="container" id="loginForm">
+    
+    <% 
+            // Generate CSRF token and store it in the session
+            String csrfToken = generateCSRFToken();
+            session.setAttribute("csrfToken", csrfToken);
+            
+            
+      //      response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfToken + "; HttpOnly; Secure; SameSite=Strict");
+
+        %>
+
+        <input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfToken %>" />
+        
         <div>
             <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo">
         </div>

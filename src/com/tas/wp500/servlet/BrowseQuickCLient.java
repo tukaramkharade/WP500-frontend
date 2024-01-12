@@ -16,7 +16,6 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-import jdk.management.resource.internal.inst.SocketOutputStreamRMHooks;
 
 @WebServlet("/BrowseQuickCLient")
 public class BrowseQuickCLient extends HttpServlet {

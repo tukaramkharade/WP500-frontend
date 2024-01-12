@@ -44,11 +44,7 @@ public class ActiveThreatServlet extends HttpServlet {
 
 				JSONObject respJson = new JSONObject(respStr);
 				String status = respJson.getString("status");
-				String message = respJson.getString("msg");
-
-				
-				logger.info("Active Threats response : " + respJson.toString());
-
+				String message = respJson.getString("msg");		
 				
 				JSONObject finalJsonObj = new JSONObject();
 				if(status.equals("success")){
@@ -60,16 +56,10 @@ public class ActiveThreatServlet extends HttpServlet {
 				    finalJsonObj.put("message", message);
 				}
 
-			    // Set the response content type to JSON
 			    response.setContentType("application/json");
-
-			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
-				
-
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error getting active threats :" + e);
 			}
 		} 
 	}
@@ -93,11 +83,7 @@ public class ActiveThreatServlet extends HttpServlet {
 			case "get_ack_threats":
 
 				Date currentDate = new Date();
-
-				// Create a date format to format the date as a string
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-				// Format the current date and time as a string
 				String formattedDate = dateFormat.format(currentDate);
 
 				try {
@@ -119,17 +105,10 @@ public class ActiveThreatServlet extends HttpServlet {
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("message", message);
 
-					// Set the content type of the response to
-					// application/json
 					response.setContentType("application/json");
-
-					// Get the response PrintWriter
 					PrintWriter out = response.getWriter();
-
-					// Write the JSON object to the response
 					out.print(jsonObject.toString());
 					out.flush();
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -141,19 +120,15 @@ public class ActiveThreatServlet extends HttpServlet {
 				String end_date_time = request.getParameter("enddatetime");
 				SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 				SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				// System.out.println("start_date_time: " + start_date_time + "
-				// end_date_time: " + end_date_time);
+				
 				String formattedStartDate = "";
 				String formattedEndDate = "";
 				try {
 					Date startDate = inputFormat.parse(start_date_time);
 					Date endDate = inputFormat.parse(end_date_time);
-					// Format the dates to the desired format
 					formattedStartDate = outputFormat.format(startDate);
 					formattedEndDate = outputFormat.format(endDate);
 
-					System.out
-							.println("start_date_time: " + formattedStartDate + " end_date_time: " + formattedEndDate);
 				} catch (Exception e) {
 
 				}
@@ -171,11 +146,7 @@ public class ActiveThreatServlet extends HttpServlet {
 					String respStr = client.sendMessage(json.toString());
 
 					JSONObject respJson = new JSONObject(respStr);
-
 					JSONArray resJsonArray = new JSONArray();
-
-					logger.info("Active Threats response : " + respJson.toString());
-
 					JSONArray resultArr = respJson.getJSONArray("data");
 
 					for (int i = 0; i < resultArr.length(); i++) {
@@ -210,20 +181,14 @@ public class ActiveThreatServlet extends HttpServlet {
 							resJsonArray.put(activeThreatsObj);
 						} catch (Exception e) {
 							e.printStackTrace();
-							logger.error("Error in putting active threats data in json array : " + e);
 						}
 					}
 
-					logger.info("JSON ARRAY :" + resJsonArray.toString());
-
 					response.setContentType("application/json");
-
-					// Write the JSON data to the response
 					response.getWriter().print(resJsonArray.toString());
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					logger.error("Error getting active threats :" + e);
 				}
 
 				break;
