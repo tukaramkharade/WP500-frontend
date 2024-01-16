@@ -27,6 +27,7 @@ public class ImageServlet extends HttpServlet {
         if (session != null && session.getAttribute("username") != null) {
             String check_username = (String) session.getAttribute("username");
             String check_token = (String) session.getAttribute("token");
+            String check_role = (String) session.getAttribute("role");
             
             String action = request.getParameter("action");
             
@@ -41,6 +42,7 @@ public class ImageServlet extends HttpServlet {
                         json.put("user", check_username);
                         json.put("username", check_username);
                         json.put("token", check_token);
+                        json.put("role", check_role);
 
                         String respStr = client.sendMessage(json.toString());
 
@@ -62,6 +64,7 @@ public class ImageServlet extends HttpServlet {
 
                             // Set the response content type to JSON
                             response.setContentType("application/json");
+                            response.setHeader("X-Content-Type-Options", "nosniff");
 
                             // Write the JSON data to the response
                             PrintWriter out = response.getWriter();
@@ -86,6 +89,7 @@ public class ImageServlet extends HttpServlet {
                         json.put("user", check_username);
                         json.put("username", check_username);
                         json.put("token", check_token);
+                        json.put("role", check_role);
 
                         String respStr = client.sendMessage(json.toString());
 
@@ -114,7 +118,8 @@ public class ImageServlet extends HttpServlet {
 
                             // Set the response content type to JSON
                             response.setContentType("application/json");
-
+                            response.setHeader("X-Content-Type-Options", "nosniff");
+                            
                             // Write the JSON data to the response
                             PrintWriter out = response.getWriter();
                             out.print(responseJson.toString());
@@ -146,14 +151,14 @@ public class ImageServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		String action = request.getParameter("action");
 		
 		if (check_username != null) {
 			
 			String otp = request.getParameter("otp");
-			String secretKey = request.getParameter("secretKey");
-			System.out.println("otp-->"+otp+"secretKey-->"+secretKey);
+			
 			
 			if (action != null) {
 				switch (action) {
@@ -164,10 +169,12 @@ public class ImageServlet extends HttpServlet {
 						JSONObject json = new JSONObject();
 
 						json.put("operation", "totp_authenticator");
-						json.put("secret_key", secretKey);
+						
 						json.put("otp", otp);
-						json.put("token", check_token);
+					//	json.put("token", check_token);
 						json.put("user", check_username);
+						json.put("username", check_username);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -175,13 +182,21 @@ public class ImageServlet extends HttpServlet {
 
 			            JSONObject result = new JSONObject(respStr);
 
-			            String otp_result = result.getString("otp_result");
+			           // String otp_result = result.getString("otp_result");
+			            String token = result.getString("token");
+			            String status = result.getString("status");
+			            
 						
+			            session.setAttribute("token", token);
+			            
 						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("otp_result", otp_result);
+						jsonObject.put("status", status);
+						
+					//	jsonObject.put("otp_result", otp_result);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out1 = response.getWriter();
@@ -208,8 +223,9 @@ public class ImageServlet extends HttpServlet {
 						json.put("operation", "validate_otp_email");
 						json.put("username", check_username);
 						json.put("email_otp", email_otp);
-						json.put("token", check_token);
+			//			json.put("token", check_token);
 						json.put("user", check_username);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -217,13 +233,19 @@ public class ImageServlet extends HttpServlet {
 
 			            JSONObject result = new JSONObject(respStr);
 
-			            String email_otp_result = result.getString("email_otp_result");
+			            String status = result.getString("status");
+			            
+			            String token = result.getString("token");
+			            
+						
+			            session.setAttribute("token", token);
 						
 						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("email_otp_result", email_otp_result);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out1 = response.getWriter();
@@ -239,19 +261,17 @@ public class ImageServlet extends HttpServlet {
 					}
 					break;
 
-					
-					
-					
 				case "test-totp":
 					try {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
 						json.put("operation", "test_totp_authenticator");
-						json.put("secret_key", secretKey);
+						
 						json.put("otp", otp);
 						json.put("token", check_token);
 						json.put("user", check_username);
+						json.put("role", check_role);
 
 
 						String respStr = client.sendMessage(json.toString());
@@ -267,6 +287,7 @@ public class ImageServlet extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out1 = response.getWriter();

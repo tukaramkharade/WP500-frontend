@@ -48,12 +48,14 @@ public class DownloadBackupFile extends HttpServlet {
             os.flush();
         }
     }
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 
@@ -71,6 +73,7 @@ public class DownloadBackupFile extends HttpServlet {
 						json.put("operation", "create_backup_file");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 						logger.info("res " + new JSONObject(respStr));
@@ -83,6 +86,8 @@ public class DownloadBackupFile extends HttpServlet {
 						
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
+						
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
 						// Write the JSON object to the response
@@ -104,6 +109,7 @@ public class DownloadBackupFile extends HttpServlet {
 						json.put("operation", "restore_backup_file");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -119,6 +125,7 @@ public class DownloadBackupFile extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();

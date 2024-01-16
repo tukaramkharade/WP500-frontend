@@ -1,4 +1,5 @@
-<%@ page import="java.util.UUID" %>
+
+ <%@ page import="java.util.UUID" %>
 <%@ page import="java.security.MessageDigest" %>
 
 <%
@@ -53,15 +54,7 @@
         	            }else if (json.status === 'success' && json.first_login === 'false' && json.totp_authenticator === 'enable') {
         	                // Login successful
         	                $('#loginMessage').text('Login Successful').css('color', 'green');
-        	                var token = data.token;
-
-                            // Set the token in the header for future AJAX requests
-                            $.ajaxSetup({
-                                beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                                }
-                            });
-                            
+        	                
         	                window.location.href = 'totp.jsp';
         	                
         	            } 
@@ -280,7 +273,7 @@
         }
     %>
     
-    <form action="WP500Login" method="post" class="container" id="loginForm">
+    <form action="WP500Login" method="post" class="container" id="loginForm" autocomplete="off">
     
     <% 
             // Generate CSRF token and store it in the session
@@ -326,3 +319,4 @@
     
 </body>
 </html>
+ 

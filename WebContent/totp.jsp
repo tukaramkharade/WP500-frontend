@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -104,10 +109,9 @@
     				action: 'totp-authentication'
     			},
                 success: function (response) {
-                    // Handle the response from the server, if needed
-                    console.log("OTP -->"+response.otp_result);
                    
-                    if(response.otp_result === 'true'){
+                   
+                    if(response.status === 'success'){
                     	window.location.href = 'overview.jsp';
                     }else{
                     	
@@ -176,9 +180,9 @@
     			},
                 success: function (response) {
                     // Handle the response from the server, if needed
-                    console.log("OTP -->"+response.email_otp_result);
+                    console.log("OTP -->"+response.status);
                    
-                    if(response.email_otp_result === 'true'){
+                    if(response.status === 'success'){
                     	window.location.href = 'overview.jsp';
                     }else{
                     	
@@ -257,8 +261,9 @@
 					
     				 <input type="hidden" id="action" name="action" value="">
     				
-    				<input type="password" id="email_otp" placeholder="Enter OTP" style="width: 10%; margin-top: 20px;">
-    				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 1%; height: 30px; margin-top: 20px;">
+    				<label for="enter_otp" style="display: inline-block; margin-top: 20px;">Enter OTP</label>
+    				<input type="password" id="email_otp" style="width: 10%; margin-top: 20px; margin-left: 10px;">
+    				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 5.5%; height: 30px; margin-top: 20px;">
 					<div id="error-message-email" style="color: red; margin-left: 2%;"></div>
 				</div>
     			

@@ -31,6 +31,7 @@ public class TOTPOTPServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 			try{
@@ -38,7 +39,8 @@ public class TOTPOTPServlet extends HttpServlet {
 				json.put("operation", "get_user_totp_key");
 				json.put("username", check_username);
 				json.put("user", check_username);
-				json.put("token", check_token);
+				json.put("role", check_role);
+			//	json.put("token", check_token);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -59,6 +61,7 @@ public class TOTPOTPServlet extends HttpServlet {
 					}
 				}
 				
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
@@ -85,6 +88,8 @@ public class TOTPOTPServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
+		
 		String to_email_id = request.getParameter("to_email_id");
 		
 		if (check_username != null) {
@@ -93,8 +98,9 @@ public class TOTPOTPServlet extends HttpServlet {
 				json.put("operation", "send_otp_email");
 				json.put("username", check_username);
 				json.put("user", check_username);
-				json.put("token", check_token);
+		//		json.put("token", check_token);
 				json.put("to_email_id", to_email_id);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -110,15 +116,14 @@ public class TOTPOTPServlet extends HttpServlet {
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
-				out.flush();
-				
-				
+				out.flush();			
 				
 			}catch(Exception e){
 				

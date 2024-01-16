@@ -29,6 +29,7 @@ public class ActiveThreatServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -39,6 +40,7 @@ public class ActiveThreatServlet extends HttpServlet {
 				json.put("operation", "get_active_threats");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -57,6 +59,7 @@ public class ActiveThreatServlet extends HttpServlet {
 				}
 
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 			    response.getWriter().print(finalJsonObj.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -185,6 +188,7 @@ public class ActiveThreatServlet extends HttpServlet {
 					}
 
 					response.setContentType("application/json");
+					response.setHeader("X-Content-Type-Options", "nosniff");
 					response.getWriter().print(resJsonArray.toString());
 
 				} catch (Exception e) {

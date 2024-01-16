@@ -27,6 +27,8 @@ public class FirmwareStatusServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
+		
 		if (check_username != null) {			
 			try{
 				
@@ -36,6 +38,7 @@ public class FirmwareStatusServlet extends HttpServlet {
 				json.put("operation", "get_firmware_status");
 				json.put("token", check_token);
 				json.put("user", check_username);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -57,6 +60,7 @@ public class FirmwareStatusServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());

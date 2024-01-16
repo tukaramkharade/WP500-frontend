@@ -25,6 +25,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 
@@ -35,6 +36,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 				json.put("operation", "firewall_settings");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -56,6 +58,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -76,6 +79,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		String name = null;
 		String portNumber = null;
@@ -117,6 +121,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 						json.put("action", action);
 						json.put("type", type);
 						json.put("token", check_token);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -131,6 +136,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -171,7 +177,8 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 						json.put("action", action);
 						json.put("type", type);
 						json.put("token", check_token);
-
+						json.put("role", check_role);
+						
 						String respStr = client.sendMessage(json.toString());
 
 						logger.info("res " + new JSONObject(respStr));
@@ -185,6 +192,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -213,6 +221,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 						json.put("user", check_username);
 						json.put("name", name);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -227,6 +236,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();

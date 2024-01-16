@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>

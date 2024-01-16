@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -326,9 +331,9 @@ margin-top: 70px;
 		  
 	}
 	
-	function fetchDataAndExportToExcel() {
+/* 	function fetchDataAndExportToExcel() {
 	    $.ajax({
-	        url: 'tagMapping',
+	        url: 'ExportExcelServlet',
 	        type: 'GET',
 	        dataType: 'json',
 	        beforeSend: function (xhr) {
@@ -356,18 +361,42 @@ margin-top: 70px;
 					  };			  
 				} 
 	        	
-	        	if (data && data.length > 0) {
+	        	alert(JSON.stringify(data));
+	        	
+	        	 var excelData = [];
+	        	data.result.forEach(function(tag) {
+	        		
+	        	        // Iterate through the data and push to excelData array
+	        	      
+	        	            var rowData = [tag.tag_name, tag.pv_address];
+	        	        alert(tag.tag_name);
+	        	            excelData.push(rowData);
+	        	});  
+
+	        	        // Create a new workbook and add a worksheet
+	        	        var ws = XLSX.utils.aoa_to_sheet([['Tag Name', 'PV Address']].concat(excelData));
+	        	        var wb = XLSX.utils.book_new();
+	        	        XLSX.utils.book_append_sheet(wb, ws, 'TAG Mapping List');
+
+	        	        // Save the workbook to an Excel file
+	        	        XLSX.writeFile(wb, 'tag_mapping_list.xlsx');
+	        	    
+
+	        	
+	        	
+	        	 if (data && data.length > 0) {
 	                exportToExcel(data);
 	            } else {
 	                console.error('No data to export.');
-	            }
+	            } 
 	        },
 	        error: function (xhr, status, error) {
 	            console.log('Error loading tag data: ' + error);
 	        }
 	    });
-	}
-	function exportToExcel(data) {
+	} */
+	
+	/* function exportToExcel(data) {
         var excelData = [];
         // Iterate through the data and push to excelData array
         data.forEach(function (tag) {
@@ -383,6 +412,46 @@ margin-top: 70px;
         // Save the workbook to an Excel file
         XLSX.writeFile(wb, 'tag_mapping_list.xlsx');
     }
+ */
+ 
+ 
+ function fetchDataAndExportToExcel() {
+	    $.ajax({
+	        url: 'ExportExcelServlet',
+	        type: 'GET',
+	        dataType: 'json',
+	        beforeSend: function (xhr) {
+	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
+	        },
+	        success: function (data) {
+	        	
+	        	if (data && data.length > 0) {
+	                exportToExcel(data);
+	            } else {
+	                console.error('No data to export.');
+	            }
+	        },
+	        error: function (xhr, status, error) {
+	            console.log('Error loading tag data: ' + error);
+	        }
+	    });
+	}
+	function exportToExcel(data) {
+     var excelData = [];
+     // Iterate through the data and push to excelData array
+     data.forEach(function (tag) {
+         var rowData = [tag.tag_name, tag.pv_address];
+         excelData.push(rowData);
+     });
+
+     // Create a new workbook and add a worksheet
+     var ws = XLSX.utils.aoa_to_sheet([['Tag Name', 'PV Address']].concat(excelData));
+     var wb = XLSX.utils.book_new();
+     XLSX.utils.book_append_sheet(wb, ws, 'TAG Mapping List');
+
+     // Save the workbook to an Excel file
+     XLSX.writeFile(wb, 'tag_mapping_list.xlsx');
+ }
 
  
  function editTag(){
@@ -666,7 +735,10 @@ margin-top: 70px;
 						if (roleValue === "null") {
 					        var modal = document.getElementById('custom-modal-session-timeout');
 					        modal.style.display = 'block';
-
+					        
+					        var sessionMsg = document.getElementById('session-msg');
+						    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
+						    
 					        // Handle the confirm button click
 					        var confirmButton = document.getElementById('confirm-button-session-timeout');
 					        confirmButton.onclick = function() {
@@ -763,7 +835,7 @@ margin-top: 70px;
 					<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">			
 						<input style="height: 26px;" type="button" value="Clear" id="clearBtn" /> 
 						<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
-						<input style="margin-left: 5px; height: 26px;" type="submit" value="Export Data" id="exportButton" />
+						<input style="margin-left: 5px; height: 26px;" type="button" value="Export Data" id="exportButton" />
 					</div>
 					<div>
 					<input type="file" id="fileInput" accept=".xlsx, .xls" />

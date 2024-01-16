@@ -42,6 +42,7 @@ public class SystemLogSearch extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 
@@ -79,7 +80,7 @@ public class SystemLogSearch extends HttpServlet {
 				json.put("log_type", "system");
 				json.put("start_month", startDate1);
 				json.put("start_time", startTime1);
-
+				json.put("role", check_role);
 				json.put("end_month", endDate1);
 				json.put("end_time", endTime1);
 				json.accumulate("search", search_query);
@@ -101,6 +102,7 @@ public class SystemLogSearch extends HttpServlet {
 				jsonObject.put("system_log_result", system_log_result);
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();

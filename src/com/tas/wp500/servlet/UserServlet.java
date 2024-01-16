@@ -32,6 +32,7 @@ public class UserServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		String first_name = null;
 		String last_name = null;
@@ -47,18 +48,16 @@ public class UserServlet extends HttpServlet {
 				switch (action) {
 
 				case "add":
+					
+					
+					System.out.println("role: "+check_role);
 
 					first_name = request.getParameter("first_name");
 					last_name = request.getParameter("last_name");
 					username = request.getParameter("username");
 					password = request.getParameter("password");
-					role = request.getParameter("role");
+					role = request.getParameter("user_role");
 					
-				
-                    // Hash the password
-                   // String hashedPassword = PasswordHasher.hashPassword(password);
-
-
 					try {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
@@ -69,8 +68,9 @@ public class UserServlet extends HttpServlet {
 						json.put("password", password);
 						json.put("first_name", first_name);
 						json.put("last_name", last_name);
-						json.put("role", role);
+						json.put("user_role", role);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -86,6 +86,7 @@ public class UserServlet extends HttpServlet {
 						
 						// Set the content type of the response to application/json
 						resp.setContentType("application/json");
+						 resp.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = resp.getWriter();
@@ -105,7 +106,7 @@ public class UserServlet extends HttpServlet {
 					first_name = request.getParameter("first_name");
 					last_name = request.getParameter("last_name");
 					username = request.getParameter("username");
-					role = request.getParameter("role");
+					role = request.getParameter("user_role");
 
 					try {
 						TCPClient client = new TCPClient();
@@ -117,7 +118,8 @@ public class UserServlet extends HttpServlet {
 						json.put("username", username);
 						json.put("first_name", first_name);
 						json.put("last_name", last_name);
-						json.put("role", role);
+						json.put("user_role", role);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -133,6 +135,7 @@ public class UserServlet extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						resp.setContentType("application/json");
+						 resp.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = resp.getWriter();
@@ -160,6 +163,7 @@ public class UserServlet extends HttpServlet {
 						json.put("user", check_username);
 						json.put("token", check_token);
 						json.put("username", username);
+						json.put("role", check_role);
 
 							String respStr = client.sendMessage(json.toString());
 
@@ -174,6 +178,7 @@ public class UserServlet extends HttpServlet {
 
 							// Set the content type of the response to application/json
 							resp.setContentType("application/json");
+							 resp.setHeader("X-Content-Type-Options", "nosniff");
 
 							// Get the response PrintWriter
 							PrintWriter out = resp.getWriter();
@@ -205,6 +210,7 @@ public class UserServlet extends HttpServlet {
 						json.put("username", username);
 						json.put("password", password);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -219,6 +225,7 @@ public class UserServlet extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						resp.setContentType("application/json");
+						 resp.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = resp.getWriter();
@@ -250,11 +257,14 @@ public class UserServlet extends HttpServlet {
 
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 			
 			if (check_username != null) {
 				json.put("operation", "get_all_user");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
+				
 				String respStr = client.sendMessage(json.toString());
 				System.out.println("response string :"+respStr);
 				respJson = new JSONObject(respStr);
@@ -279,6 +289,7 @@ public class UserServlet extends HttpServlet {
 				
 				    // Set the response content type to JSON
 				    response.setContentType("application/json");
+				    response.setHeader("X-Content-Type-Options", "nosniff");
 
 				    // Write the JSON data to the response
 				    response.getWriter().print(finalJsonObj.toString());

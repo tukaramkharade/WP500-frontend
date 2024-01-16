@@ -28,7 +28,8 @@ public class Lan extends HttpServlet {
 		if (session.getAttribute("username") != null) {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
-	
+			String check_role = (String) session.getAttribute("role");
+			
 		try{
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
@@ -36,6 +37,7 @@ public class Lan extends HttpServlet {
 			json.put("operation", "get_ethernet_details");
 			json.put("user", check_username);
 			json.put("token", check_token);
+			json.put("role", check_role);
 			
 			String respStr = client.sendMessage(json.toString());
 			
@@ -114,6 +116,7 @@ public class Lan extends HttpServlet {
 		  
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");
+		    response.setHeader("X-Content-Type-Options", "nosniff");
 		    
 		    // Get the response PrintWriter
 		    PrintWriter out = response.getWriter();
@@ -136,6 +139,7 @@ public class Lan extends HttpServlet {
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 		
 		
 		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
@@ -148,6 +152,7 @@ public class Lan extends HttpServlet {
 			json.put("user", check_username);
 			json.put("token", check_token);
 			json.put("eth_type", eth_type);
+			json.put("role", check_role);
 			
 			String respStr = client.sendMessage(json.toString());
 			
@@ -174,6 +179,7 @@ public class Lan extends HttpServlet {
 		   
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");
+		    response.setHeader("X-Content-Type-Options", "nosniff");
 		    
 		    // Get the response PrintWriter
 		    PrintWriter out = response.getWriter();

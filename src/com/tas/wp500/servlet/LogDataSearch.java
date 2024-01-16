@@ -71,6 +71,7 @@ public class LogDataSearch extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 
@@ -89,6 +90,7 @@ public class LogDataSearch extends HttpServlet {
 				json.put("log_type", log_type);
 				json.put("file_name", fileName);
 				json.put("search", search_query);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -102,6 +104,7 @@ public class LogDataSearch extends HttpServlet {
 				jsonObject.put("log_search_result", log_search_result);
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
@@ -113,8 +116,6 @@ public class LogDataSearch extends HttpServlet {
 				e.printStackTrace();
 				logger.error("Error in getting log search result : "+e);
 			}
-		} else {
-			
-		}
+		} 
 	}
 }

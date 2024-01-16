@@ -28,7 +28,8 @@ public class GeneralSettingsServletLan1 extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
-
+		String check_role = (String) session.getAttribute("role");
+		
 		if (check_username != null) {
 
 			TCPClient client = new TCPClient();
@@ -42,6 +43,7 @@ public class GeneralSettingsServletLan1 extends HttpServlet {
 				json.put("user", check_username);
 				json.put("token", check_token);
 				json.put("interface", "lan1");
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -68,6 +70,7 @@ public class GeneralSettingsServletLan1 extends HttpServlet {
 					}
 					
 				}
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
@@ -89,6 +92,7 @@ public class GeneralSettingsServletLan1 extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		String input = null;
 		String output = null;
@@ -122,6 +126,7 @@ public class GeneralSettingsServletLan1 extends HttpServlet {
 						json.put("user", check_username);
 						json.put("token", check_token);
 						json.put("interface", "lan1");
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -134,6 +139,7 @@ public class GeneralSettingsServletLan1 extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();

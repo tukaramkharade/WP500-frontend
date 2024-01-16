@@ -30,6 +30,8 @@ public class JSONBuilderServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
+		
 		if (check_username != null) {
 			
 			TCPClient client = new TCPClient();
@@ -41,6 +43,7 @@ public class JSONBuilderServlet extends HttpServlet {
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -73,6 +76,7 @@ public class JSONBuilderServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -89,6 +93,7 @@ public class JSONBuilderServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		String json_string_name = null;
 		String jsonInterval = null;
@@ -140,6 +145,7 @@ public class JSONBuilderServlet extends HttpServlet {
 						json.put("operation_type", "add_query");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						JSONObject json_data = new JSONObject();
 						json_data.put("json_string_name", json_string_name);
@@ -166,7 +172,9 @@ public class JSONBuilderServlet extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
-
+						 response.setHeader("X-Content-Type-Options", "nosniff");
+						 
+						 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
 
@@ -211,6 +219,7 @@ public class JSONBuilderServlet extends HttpServlet {
 						json.put("operation_type", "update_query");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						JSONObject json_data = new JSONObject();
 						json_data.put("json_string_name", json_string_name);							
@@ -238,6 +247,7 @@ public class JSONBuilderServlet extends HttpServlet {
 						jsonObject.put("status", status);
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -266,6 +276,7 @@ public class JSONBuilderServlet extends HttpServlet {
 							json.put("user", check_username);
 							json.put("json_string_name", json_string_name);
 							json.put("token", check_token);
+							json.put("role", check_role);
 							
 							String respStr = client.sendMessage(json.toString());
 
@@ -280,6 +291,7 @@ public class JSONBuilderServlet extends HttpServlet {
 							
 							// Set the content type of the response to application/json
 							response.setContentType("application/json");
+							 response.setHeader("X-Content-Type-Options", "nosniff");
 
 							// Get the response PrintWriter
 							PrintWriter out = response.getWriter();

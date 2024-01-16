@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -348,28 +353,28 @@ margin-left: -39px;
 
 	function getTOTPDetails() {
 		// Display loader when the request is initiated
-	    showLoader();
+	//    showLoader();
 
 		$.ajax({
 			type : "GET",
 			url : "TOTPServlet", // Replace with the actual URL to retrieve TOTP details
 			dataType : "json",
-			beforeSend : function(xhr) {
-				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-			},
+			
 			data: {
 	            action: 'getTOTPDetails'
 	        },
 			success : function(data) {
 				// Hide loader when the response has arrived
-	            hideLoader();
+	         //   hideLoader();
 				
 				var enableText = document.getElementById("enableText");
 				var disableText = document.getElementById("disableText");
 
+			
 				if (data.totp_authenticator === "enable") {
 					// If TOTP authenticator is enabled, show "Enable" and hide "Disable"
 					$('.toggle-container').addClass('active');
+					
 					enableText.style.display = "inline";
 					disableText.style.display = "none";
 					
@@ -377,13 +382,14 @@ margin-left: -39px;
 				} else {
 					// If TOTP authenticator is disabled, show "Disable" and hide "Enable"
 					$('.toggle-container').removeClass('active');
+					
 					enableText.style.display = "none";
 					disableText.style.display = "inline";
 				}
 			},
 			error : function(xhr, textStatus, errorThrown) {
 				// Hide loader when the response has arrived
-	            hideLoader();
+	          //  hideLoader();
 				
 				console.error("Error fetching TOTP details: " + errorThrown);
 			}
@@ -511,17 +517,8 @@ margin-left: -39px;
 		container.appendChild(imgElement);
 	}
 	
-	// Function to show the loader
-	 function showLoader() {
-	     // Show the loader overlay
-	     $('#loader-overlay').show();
-	 }
-
-	 // Function to hide the loader
-	 function hideLoader() {
-	     // Hide the loader overlay
-	     $('#loader-overlay').hide();
-	 }
+	
+	
 
 	$(document).ready(function() {
 		
@@ -534,7 +531,10 @@ margin-left: -39px;
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
-
+        
+        var sessionMsg = document.getElementById('session-msg');
+	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
+	    
         // Handle the confirm button click
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function() {
@@ -698,7 +698,7 @@ margin-left: -39px;
 
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
-					<p>Your session is timeout. Please login again</p>
+					<p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>

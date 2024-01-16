@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
@@ -30,6 +31,7 @@ public class TOTPServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		String action = request.getParameter("action");
 		
@@ -44,31 +46,46 @@ public class TOTPServlet extends HttpServlet {
 						json.put("username", check_username);
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
 						JSONObject respJson = new JSONObject(respStr);
 
+						String status = respJson.getString("status");
+						
 						logger.info("res " + respJson.toString());
 						
-						for (int i = 0; i < respJson.length(); i++) {
-							String totp_authenticator = respJson.getString("totp_authenticator");
+						JSONObject finalJsonObj = new JSONObject();
+						if(status.equals("success")){
+							//for (int i = 0; i < respJson.length(); i++) {
+								String totp_authenticator = respJson.getString("totp_authenticator");
+								
+								
+								try{
+									finalJsonObj.put("status", status);
+									finalJsonObj.put("totp_authenticator", totp_authenticator);
+									
+								}catch(Exception e){
+									e.printStackTrace();
+									logger.error("Error in putting totp details in json object :"+e);
+								}
+							//}
+						}else if(status.equals("fail")){
+							String message = respJson.getString("msg");
 							
-							try{
-								
-								jsonObject.put("totp_authenticator", totp_authenticator);
-								
-							}catch(Exception e){
-								e.printStackTrace();
-								logger.error("Error in putting totp details in json object :"+e);
-							}
+							finalJsonObj.put("status", status);
+						    finalJsonObj.put("message", message);
 						}
 						
+						
+						 response.setHeader("X-Content-Type-Options", "nosniff");
+						 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
 
 						// Write the JSON object to the response
-						out.print(jsonObject.toString());
+						out.print(finalJsonObj.toString());
 						out.flush();
 						
 						
@@ -93,6 +110,7 @@ public class TOTPServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 			
@@ -108,6 +126,7 @@ public class TOTPServlet extends HttpServlet {
 				json.put("username", check_username);
 				json.put("totp_authenticator", totp_authenticator);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -120,6 +139,7 @@ public class TOTPServlet extends HttpServlet {
 				// Set the content type of the response to
 				// application/json
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
@@ -127,8 +147,6 @@ public class TOTPServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-				
-				
 				
 			}catch(Exception e){
 				e.printStackTrace();

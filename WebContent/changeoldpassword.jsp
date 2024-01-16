@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 
@@ -200,8 +205,8 @@ function updateOldPassword() {
 						if(data.status === "success"){
 							 window.location.href = 'login.jsp';
 						}else if(data.status === "fail"){
-							$("#popupMessage").text(data.message);
-			      			$("#customPopup").show();
+							 $("#popupMessage").text(data.message);
+			      			$("#customPopup").show(); 
 						}
 						
 						

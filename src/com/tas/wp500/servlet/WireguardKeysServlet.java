@@ -28,6 +28,7 @@ public class WireguardKeysServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 
 		if (check_username != null) {
@@ -47,6 +48,7 @@ public class WireguardKeysServlet extends HttpServlet {
 						json.put("operation", "get_wireguard_keys");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -73,6 +75,7 @@ public class WireguardKeysServlet extends HttpServlet {
 							}
 						}
 
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
 
@@ -92,6 +95,7 @@ public class WireguardKeysServlet extends HttpServlet {
 						json.put("operation", "genrate_wireguard_keys");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -116,6 +120,7 @@ public class WireguardKeysServlet extends HttpServlet {
 								logger.error("Error in wireguard keys in json object :" + e);
 							}
 						}
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -138,6 +143,7 @@ public class WireguardKeysServlet extends HttpServlet {
 						json.put("operation", "activate_wireguard");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -160,6 +166,7 @@ public class WireguardKeysServlet extends HttpServlet {
 
 					    // Set the response content type to JSON
 					    response.setContentType("application/json");
+					    response.setHeader("X-Content-Type-Options", "nosniff");
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
@@ -178,6 +185,7 @@ public class WireguardKeysServlet extends HttpServlet {
 						json.put("operation", "deactivate_wireguard");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -200,6 +208,7 @@ public class WireguardKeysServlet extends HttpServlet {
 
 					    // Set the response content type to JSON
 					    response.setContentType("application/json");
+					    response.setHeader("X-Content-Type-Options", "nosniff");
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
@@ -217,6 +226,7 @@ public class WireguardKeysServlet extends HttpServlet {
 						json.put("operation", "get_wireguard_info");
 						json.put("user", check_username);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -240,6 +250,7 @@ public class WireguardKeysServlet extends HttpServlet {
 
 					    // Set the response content type to JSON
 					    response.setContentType("application/json");
+					    response.setHeader("X-Content-Type-Options", "nosniff");
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
