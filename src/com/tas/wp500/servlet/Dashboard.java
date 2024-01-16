@@ -44,6 +44,7 @@ public class Dashboard extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -53,6 +54,7 @@ public class Dashboard extends HttpServlet {
 				json.put("operation", "get_latest_five_active_threats");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -76,6 +78,7 @@ public class Dashboard extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -95,6 +98,7 @@ public class Dashboard extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		String action = request.getParameter("action");
 		
@@ -174,7 +178,7 @@ public class Dashboard extends HttpServlet {
 						e1.printStackTrace();
 					}
 				
-					lineChartResponse = fetchThreatCountForLineChart(startDateTime, endDateTime, check_username, check_token);
+					lineChartResponse = fetchThreatCountForLineChart(startDateTime, endDateTime, check_username, check_token, check_role);
 					try {
 						if (lineChartResponse.getBoolean("success")) {
 						    JSONObject chartData = lineChartResponse.getJSONObject("chartData");
@@ -203,7 +207,7 @@ public class Dashboard extends HttpServlet {
 					e1.printStackTrace();
 				}
 				
-				 barChartResponse = fetchThreatPriorityCountForBarChart(startDateTime,endDateTime, check_username, check_token);
+				 barChartResponse = fetchThreatPriorityCountForBarChart(startDateTime,endDateTime, check_username, check_token, check_role);
 					try {
 						if (barChartResponse.getBoolean("success")) {
 						    JSONObject dataObject = barChartResponse.getJSONObject("dataObject");
@@ -240,7 +244,7 @@ public class Dashboard extends HttpServlet {
 				 formattedStartDay = outputFormat.format(startDate);
 				 formattedDate = outputFormat.format(currentDate);
 				 
-				 lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedDate, check_username, check_token);
+				 lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedDate, check_username, check_token, check_role);
 					try {
 						if (lineChartResponse.getBoolean("success")) {
 						    JSONObject chartData = lineChartResponse.getJSONObject("chartData");
@@ -275,7 +279,7 @@ public class Dashboard extends HttpServlet {
 				 formattedStartDay = outputFormat.format(startDate);
 				 formattedDate = outputFormat.format(currentDate);
 				 
-				 barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedDate, check_username, check_token);
+				 barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedDate, check_username, check_token, check_role);
 					try {
 						if (barChartResponse.getBoolean("success")) {
 						    JSONObject dataObject = barChartResponse.getJSONObject("dataObject");
@@ -334,7 +338,7 @@ public class Dashboard extends HttpServlet {
 					// Format and print the result
 					 formattedEndDay = outputFormat.format(endDate);
 					 
-					 lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedEndDay, check_username, check_token);
+					 lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedEndDay, check_username, check_token, check_role);
 						try {
 							if (lineChartResponse.getBoolean("success")) {
 							    JSONObject chartData = lineChartResponse.getJSONObject("chartData");
@@ -390,7 +394,7 @@ public class Dashboard extends HttpServlet {
 					// Format and print the result
 					 formattedEndDay = outputFormat.format(endDate);
 					 
-					 barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedEndDay, check_username, check_token);
+					 barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedEndDay, check_username, check_token, check_role);
 						try {
 							if (barChartResponse.getBoolean("success")) {
 							    JSONObject dataObject = barChartResponse.getJSONObject("dataObject");
@@ -423,7 +427,7 @@ public class Dashboard extends HttpServlet {
 				// Format the current date and time as a string
 				formattedStartDay = outputFormat.format(calendar.getTime());
 				
-				lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedDate, check_username, check_token);
+				lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedDate, check_username, check_token, check_role);
 				try {
 					if (lineChartResponse.getBoolean("success")) {
 					    JSONObject chartData = lineChartResponse.getJSONObject("chartData");
@@ -455,7 +459,7 @@ public class Dashboard extends HttpServlet {
 				// Format the current date and time as a string
 				formattedStartDay = outputFormat.format(calendar.getTime());
 				
-				barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedDate, check_username, check_token);
+				barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedDate, check_username, check_token, check_role);
 				try {
 					if (barChartResponse.getBoolean("success")) {
 					    JSONObject dataObject = barChartResponse.getJSONObject("dataObject");
@@ -489,7 +493,7 @@ public class Dashboard extends HttpServlet {
 				// Format the date and print it
 				 formattedStartDay = outputFormat.format(startDate);
 				 
-				 lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedDate, check_username, check_token);
+				 lineChartResponse = fetchThreatCountForLineChart(formattedStartDay, formattedDate, check_username, check_token, check_role);
 					try {
 						if (lineChartResponse.getBoolean("success")) {
 						    JSONObject chartData = lineChartResponse.getJSONObject("chartData");
@@ -523,7 +527,7 @@ public class Dashboard extends HttpServlet {
 				// Format the date and print it
 				 formattedStartDay = outputFormat.format(startDate);
 				 
-				 barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedDate, check_username, check_token);
+				 barChartResponse = fetchThreatPriorityCountForBarChart(formattedStartDay, formattedDate, check_username, check_token, check_role);
 					try {
 						if (barChartResponse.getBoolean("success")) {
 						    JSONObject dataObject = barChartResponse.getJSONObject("dataObject");
@@ -553,6 +557,7 @@ public class Dashboard extends HttpServlet {
 					json.put("user", check_username);
 					json.put("token", check_token);
 					json.put("snort_type", snort_type);
+					json.put("role", check_role);
 					
 					String respStr = client.sendMessage(json.toString());
 
@@ -564,6 +569,7 @@ public class Dashboard extends HttpServlet {
 
 					// Set the content type of the response to application/json
 					response.setContentType("application/json");
+					response.setHeader("X-Content-Type-Options", "nosniff");
 
 					// Get the response PrintWriter
 					PrintWriter out = response.getWriter();
@@ -582,7 +588,7 @@ public class Dashboard extends HttpServlet {
 		
 	}
 	
-	private JSONObject fetchThreatCountForLineChart(String startTime, String endTime, String check_username, String check_token) {
+	private JSONObject fetchThreatCountForLineChart(String startTime, String endTime, String check_username, String check_token, String check_role) {
 	    JSONObject result = new JSONObject();
 	    JSONObject json = new JSONObject();
 	    TCPClient client = new TCPClient();
@@ -594,6 +600,7 @@ public class Dashboard extends HttpServlet {
 	        json.put("end_time", endTime);
 	        json.put("user", check_username);
 	        json.put("token", check_token);
+	        json.put("role", check_role);
 
 	        String respStr = client.sendMessage(json.toString());
 
@@ -660,7 +667,7 @@ public class Dashboard extends HttpServlet {
 	}
 	
 	
-	private JSONObject fetchThreatPriorityCountForBarChart(String startTime, String endTime, String check_username, String check_token) {
+	private JSONObject fetchThreatPriorityCountForBarChart(String startTime, String endTime, String check_username, String check_token, String check_role) {
 		
 		JSONObject result = new JSONObject();
 		 JSONObject json = new JSONObject();
@@ -673,6 +680,7 @@ public class Dashboard extends HttpServlet {
 	        json.put("end_time", endTime);
 	        json.put("user", check_username);
 	        json.put("token", check_token);
+	        json.put("role", check_role);
 
 	        String respStr = client.sendMessage(json.toString());
 

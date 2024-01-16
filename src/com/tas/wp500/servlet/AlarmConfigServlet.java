@@ -34,6 +34,7 @@ public class AlarmConfigServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		JSONObject disObj = new JSONObject();
 
@@ -47,6 +48,7 @@ public class AlarmConfigServlet extends HttpServlet {
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
@@ -72,6 +74,7 @@ public class AlarmConfigServlet extends HttpServlet {
 				    finalJsonObj.put("message", message);
 				}
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 			    response.getWriter().print(finalJsonObj.toString());
 
 			} catch (Exception e) {
@@ -87,6 +90,7 @@ public class AlarmConfigServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		String unit_id = null;
 		String asset_id = null;
@@ -142,6 +146,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("intrval", intervalValue);
 						json.put("alarm_status", alarm_status);
 						json.put("alarm_tag", json_string_con);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 						String message = new JSONObject(respStr).getString("msg");
@@ -196,6 +201,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						json.put("intrval", intervalValue);
 						json.put("alarm_status", alarm_status);
 						json.put("alarm_tag", json_string_con);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -204,6 +210,7 @@ public class AlarmConfigServlet extends HttpServlet {
 						jsonObject.put("message", message);
 
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
 
 						PrintWriter out = response.getWriter();
 						out.print(jsonObject.toString());
@@ -228,6 +235,7 @@ public class AlarmConfigServlet extends HttpServlet {
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 
 			try {
 
@@ -240,6 +248,7 @@ public class AlarmConfigServlet extends HttpServlet {
 				json.put("id", "1");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -248,6 +257,7 @@ public class AlarmConfigServlet extends HttpServlet {
 				jsonObject.put("message", message);
 
 				response.setContentType("application/json");
+				response.setHeader("X-Content-Type-Options", "nosniff");
 
 				PrintWriter out = response.getWriter();
 				out.print(jsonObject.toString());

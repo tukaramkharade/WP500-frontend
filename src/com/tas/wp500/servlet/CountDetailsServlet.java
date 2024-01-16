@@ -26,6 +26,7 @@ public class CountDetailsServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 			
@@ -37,6 +38,7 @@ public class CountDetailsServlet extends HttpServlet {
 				json.put("operation", "get_count_details");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -67,6 +69,8 @@ public class CountDetailsServlet extends HttpServlet {
 					}
 									
 				}
+				
+				response.setHeader("X-Content-Type-Options", "nosniff");
 				
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();

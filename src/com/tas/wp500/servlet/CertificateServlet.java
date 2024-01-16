@@ -32,6 +32,7 @@ public class CertificateServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 			
@@ -39,6 +40,7 @@ public class CertificateServlet extends HttpServlet {
 				json.put("operation", "apply_certificate");		
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -58,6 +60,8 @@ public class CertificateServlet extends HttpServlet {
 						logger.error("Error in putting totp details in json object :"+e);
 					}
 				}
+				
+				response.setHeader("X-Content-Type-Options", "nosniff");
 				
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
@@ -80,6 +84,7 @@ public class CertificateServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 			try{
@@ -120,6 +125,7 @@ public class CertificateServlet extends HttpServlet {
 	            json.put("state", state);
 	            json.put("country", country);
 	            json.put("validity", validity);
+	            json.put("role", check_role);
 	            
 	            
 	            if (dnsNames.length() > 0) {
@@ -139,7 +145,7 @@ public class CertificateServlet extends HttpServlet {
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
-
+				response.setHeader("X-Content-Type-Options", "nosniff");
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 

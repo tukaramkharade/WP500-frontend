@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -404,7 +409,19 @@ roleValue = '<%=roleValue%>';
 	}
 	
 	if (roleValue === "null") {
-		
+		 var modal = document.getElementById('custom-modal-session-timeout');
+	        modal.style.display = 'block';
+
+	     // Update the session-msg content with the message from the server
+		    var sessionMsg = document.getElementById('session-msg');
+		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
+		    
+	        // Handle the confirm button click
+	        var confirmButton = document.getElementById('confirm-button-session-timeout');
+	        confirmButton.onclick = function() {
+	            // Close the modal
+	            modal.style.display = 'none';
+	            window.location.href = 'login.jsp';
 		
 	}else{
 		<%// Access the session variable

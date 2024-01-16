@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -228,6 +233,7 @@ if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');
     modal.style.display = 'block';
 
+  
     // Handle the confirm button click
     var confirmButton = document.getElementById('confirm-button-session-timeout');
     confirmButton.onclick = function() {

@@ -33,6 +33,7 @@ public class NtpLiveTime extends HttpServlet {
 		if (session != null) {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 
 		try {
 			TCPClient client = new TCPClient();
@@ -41,6 +42,7 @@ public class NtpLiveTime extends HttpServlet {
 			json.put("operation", "get_live_date_time");
 			json.put("user", check_username);
 			json.put("token", check_token);
+			json.put("role", check_role);
 			
 			String respStr = client.sendMessage(json.toString());
 
@@ -64,6 +66,7 @@ public class NtpLiveTime extends HttpServlet {
 
 			// Set the content type of the response to application/json
 			response.setContentType("application/json");
+			 response.setHeader("X-Content-Type-Options", "nosniff");
 
 			// Get the response PrintWriter
 			PrintWriter out = response.getWriter();

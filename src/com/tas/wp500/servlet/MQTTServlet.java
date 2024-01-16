@@ -29,6 +29,7 @@ public class MQTTServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -42,6 +43,7 @@ public class MQTTServlet extends HttpServlet {
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -63,6 +65,7 @@ public class MQTTServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -80,6 +83,7 @@ public class MQTTServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		String broker_ip_address = null;
 		String port_number = null;
@@ -135,6 +139,7 @@ public class MQTTServlet extends HttpServlet {
 						json.put("publishing_format", publishing_format);					
 						json.put("file_name", file_name);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -149,6 +154,7 @@ public class MQTTServlet extends HttpServlet {
 						
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -197,6 +203,7 @@ public class MQTTServlet extends HttpServlet {
 						json.put("enable", enable);
 						json.put("publishing_format", publishing_format);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -212,6 +219,7 @@ public class MQTTServlet extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -241,6 +249,7 @@ public class MQTTServlet extends HttpServlet {
 						json.put("user", check_username);
 						json.put("prefix", prefix);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -255,6 +264,7 @@ public class MQTTServlet extends HttpServlet {
 						
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -285,6 +295,7 @@ public class MQTTServlet extends HttpServlet {
 						json.put("user", check_username);
 						json.put("crt_file_name", crt_file_name);
 						json.put("token", check_token);
+						json.put("role", check_role);
 						
 						String respStr = client.sendMessage(json.toString());
 
@@ -296,6 +307,7 @@ public class MQTTServlet extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();

@@ -30,6 +30,7 @@ public class BrowseQuickCLient extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 			try {
@@ -40,6 +41,7 @@ public class BrowseQuickCLient extends HttpServlet {
 				json.put("operation", "get_opc_client_list");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -63,6 +65,7 @@ public class BrowseQuickCLient extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -82,7 +85,8 @@ public class BrowseQuickCLient extends HttpServlet {
 		HttpSession session = request.getSession();
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
-
+		String check_role = (String) session.getAttribute("role");
+		
 		if (check_username != null) {
 			try {
 				JSONObject jsonObject = new JSONObject();
@@ -104,6 +108,7 @@ public class BrowseQuickCLient extends HttpServlet {
 					json.put("operation", "get_opc_nodes");
 					json.put("user", check_username);
 					json.put("token", check_token);
+					json.put("role", check_role);
 
 					JSONObject json_opc_node = new JSONObject();
 
@@ -128,6 +133,7 @@ public class BrowseQuickCLient extends HttpServlet {
 
 					// Set the response content type to JSON
 					response.setContentType("application/json");
+					response.setHeader("X-Content-Type-Options", "nosniff");
 
 					System.out.println("--" + dataArr.toString());
 
@@ -141,6 +147,7 @@ public class BrowseQuickCLient extends HttpServlet {
 					json.put("operation", "get_opc_nodes");
 					json.put("user", check_username);
 					json.put("token", check_token);
+					json.put("role", check_role);
 
 					JSONObject json_opc_node = new JSONObject();
 
@@ -165,7 +172,8 @@ public class BrowseQuickCLient extends HttpServlet {
 
 					// Set the response content type to JSON
 					response.setContentType("application/json");
-
+					response.setHeader("X-Content-Type-Options", "nosniff");
+					
 					System.out.println("--" + dataArr.toString());
 
 					// Write the JSON data to the response
@@ -178,6 +186,7 @@ public class BrowseQuickCLient extends HttpServlet {
 					json.put("operation", "get_opc_node_value");
 					json.put("user", check_username);
 					json.put("token", check_token);
+					json.put("role", check_role);
 
 					JSONObject json_opc_node = new JSONObject();
 
@@ -221,6 +230,7 @@ public class BrowseQuickCLient extends HttpServlet {
 
 					response.setContentType("application/json");
 
+					response.setHeader("X-Content-Type-Options", "nosniff");
 					// Get the response PrintWriter
 					PrintWriter out = response.getWriter();
 

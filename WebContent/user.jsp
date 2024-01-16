@@ -1,3 +1,8 @@
+<%  
+    // Add X-Frame-Options header to prevent clickjacking
+    response.setHeader("X-Frame-Options", "DENY");
+%>
+
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
@@ -160,7 +165,7 @@ margin-top: 18px;
     
     .error-message {
             color: red;
-            display: none; /* Hide the error message by default */
+            display: block; /* Hide the error message by default */
         }
   
 .tab {
@@ -307,6 +312,14 @@ function togglePassword() {
 	                            '<button data-toggle="tooltip" data-placement="top" title="Change password" style="color: #35449a;">')
 	                            .html('<i class="fas fa-key"></i>')
 	                            .click(function() {
+	                            	// Check if the password field is disabled
+	                    		    var isPasswordDisabled = $("#password").is(":disabled");
+
+	                    		    // If it is disabled, enable it before proceeding
+	                    		    if (isPasswordDisabled) {
+	                    		        $("#password").prop("disabled", false);
+	                    		    }
+	                    		    
 	                                setUserForChangingPassword(user.username);
 	                            });
 
@@ -382,6 +395,40 @@ function togglePassword() {
 		$('#role').val(userId);
 	}
 
+	
+	// Validation for username
+	function validateUsername(username) {
+	    var regex = /^[a-zA-Z][a-zA-Z0-9.@_-]*$/;
+
+	    if (!regex.test(username)) {
+	        return 'Username should start with a letter, contain only letters, numbers, and the following special symbols: . @ _ -';
+	    }
+
+	    return null; // Validation passed
+	}
+
+	// Validation for first name
+	function validateFirstName(firstName) {
+	    var regex = /^[a-zA-Z]+$/;
+
+	    if (!regex.test(firstName)) {
+	        return 'First name should contain only letters and should not start with numbers or symbols.';
+	    }
+
+	    return null; // Validation passed
+	}
+
+	// Validation for last name
+	function validateLastName(lastName) {
+	    var regex = /^[a-zA-Z]+$/;
+
+	    if (!regex.test(lastName)) {
+	        return 'Last name should contain only letters and should not start with numbers or symbols.';
+	    }
+
+	    return null; // Validation passed
+	}
+	
 	// Function to handle form submission and add a new user
 	function addUser() {
 
@@ -389,8 +436,35 @@ function togglePassword() {
 		var password = $('#password').val();
 		var first_name = $('#first_name').val();
 		var last_name = $('#last_name').val();
-		var role = $('#role').find(":selected").val();
+		var user_role = $('#role').find(":selected").val();
+		
+		 // Clear previous error messages
+	    $('#field_User_Error').text('');
+	    $('#field_FirstName_Error').text('');
+	    $('#field_LastName_Error').text('');
 
+
+		 // Validate username
+	    var usernameError = validateUsername(username);
+	    if (usernameError) {
+	        $('#field_User_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var firstNameError = validateFirstName(first_name);
+	    if (firstNameError) {
+	        $('#field_FirstName_Error').text(firstNameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate last name
+	    var lastNameError = validateLastName(last_name);
+	    if (lastNameError) {
+	        $('#field_LastName_Error').text(lastNameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
 		$.ajax({
 			url : 'userServlet',
 			type : 'POST',
@@ -399,7 +473,7 @@ function togglePassword() {
 				password : password,
 				first_name : first_name,
 				last_name : last_name,
-				role : role,
+				user_role : user_role,
 				action: 'add'
 			},
 			success : function(data) {
@@ -592,7 +666,7 @@ function togglePassword() {
 			  var username = $('#username').val();
 				var first_name = $('#first_name').val();
 				var last_name = $('#last_name').val();
-				var role = $('#role').find(":selected").val();
+				var user_role = $('#role').find(":selected").val();
 				
 			  
 			  $.ajax({
@@ -602,7 +676,7 @@ function togglePassword() {
 						username : username,
 						first_name : first_name,
 						last_name : last_name,
-						role : role,
+						user_role : user_role,
 						action: 'update'
 					},
 					success : function(data) {
@@ -671,6 +745,8 @@ function togglePassword() {
 		 var modal = document.getElementById('custom-modal-edit-password');
 		  modal.style.display = 'block';
 		  
+		  
+		    
 		// Handle the confirm button click
 		  var confirmButton = document.getElementById('confirm-button-edit-password');
 		  confirmButton.onclick = function () {
@@ -1023,7 +1099,10 @@ function togglePassword() {
 	        var modal = document.getElementById('custom-modal-session-timeout');
 	        modal.style.display = 'block';
 
-	        // Handle the confirm button click
+	        var sessionMsg = document.getElementById('session-msg');
+		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
+		    
+		    // Handle the confirm button click
 	        var confirmButton = document.getElementById('confirm-button-session-timeout');
 	        confirmButton.onclick = function() {
 	            // Close the modal
@@ -1137,6 +1216,7 @@ function togglePassword() {
 			<div class="container">
 				<form id="userForm">
 				
+   
 				<input type="hidden" id="action" name="action" value="">
 				
 					<div id="loader-overlay">
@@ -1150,9 +1230,10 @@ function togglePassword() {
 				<table class="bordered-table" style="margin-top: -1px;">
 					<tr>
 						<td>Username</td>
-						<td>
+						<td style="height: 100px; width: 250px;">
 						<input type="text" id="username" name="username" required maxlength="31" style="height: 10px; max-width: 200px;"/>
-								<p id="field_User_Error" class="error-message"></p>
+								<span id="field_User_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+        
 						</td>
 					
 						<td>Password</td>
@@ -1166,16 +1247,16 @@ function togglePassword() {
 					
 					<tr>			
 						<td>First name</td>
-						<td>
+						<td style="height: 100px; width: 250px;">
 						<input type="text" id="first_name" name="first_name" maxlength="31" style="height: 10px; max-width: 200px;"/>
-								
+								<span id="field_FirstName_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 						</td>
 						
 						
 						<td>Last name</td>
 						<td>
 						<input type="text" id="last_name" name="last_name"  maxlength="31" style="height: 10px; max-width: 200px;"/>
-								
+								<span id="field_LastName_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 						</td>
 					</tr>
 							

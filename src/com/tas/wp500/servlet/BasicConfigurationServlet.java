@@ -33,12 +33,14 @@ public class BasicConfigurationServlet extends HttpServlet {
 
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 			
 			if (check_username != null) {
 				
 				json.put("operation", "get_iptable_basic_settings");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
@@ -60,7 +62,7 @@ public class BasicConfigurationServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
-
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
 				
@@ -76,6 +78,7 @@ public class BasicConfigurationServlet extends HttpServlet {
 	    HttpSession session = request.getSession(false);
 	    String check_username = (String) session.getAttribute("username");
 	    String check_token = (String) session.getAttribute("token");
+	    String check_role = (String) session.getAttribute("role");
 
 	    if (check_username != null) {
 	        try {
@@ -87,6 +90,7 @@ public class BasicConfigurationServlet extends HttpServlet {
 	            json.put("operation", "update_iptable_basic_settings");
 	            json.put("user", check_username);
 	            json.put("token", check_token);
+	            json.put("role", check_role);
 
 	            // Read the JSON data from the request
 	            StringBuilder jsonPayload = new StringBuilder();
@@ -126,7 +130,7 @@ public class BasicConfigurationServlet extends HttpServlet {
 
 	            // Set the content type of the response to application/json
 	            response.setContentType("application/json");
-
+	            response.setHeader("X-Content-Type-Options", "nosniff");
 	            // Get the response PrintWriter
 	            PrintWriter out = response.getWriter();
 

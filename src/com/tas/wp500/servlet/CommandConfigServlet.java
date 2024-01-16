@@ -34,6 +34,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		JSONObject disObj = new JSONObject();
 
@@ -49,6 +50,7 @@ public class CommandConfigServlet extends HttpServlet {
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -82,6 +84,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -101,6 +104,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		String unit_id = null;
 		String asset_id = null;
@@ -159,6 +163,7 @@ public class CommandConfigServlet extends HttpServlet {
 						json.put("command_status", command_status);
 						json.put("intrval", intervalValue);
 						json.put("command_tag", json_string_con);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -170,6 +175,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -222,6 +228,7 @@ public class CommandConfigServlet extends HttpServlet {
 						json.put("intrval", intervalValue);
 						json.put("command_status", command_status);
 						json.put("command_tag", json_string_con);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -233,7 +240,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");
-
+						response.setHeader("X-Content-Type-Options", "nosniff");
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
 
@@ -258,6 +265,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 			try {
@@ -271,6 +279,7 @@ public class CommandConfigServlet extends HttpServlet {
 				json.put("id", "1");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -282,6 +291,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
+				response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();

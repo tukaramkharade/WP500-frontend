@@ -28,6 +28,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -39,6 +40,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 				json.put("operation_type", "get_query");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -60,6 +62,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -78,7 +81,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
-		
+		String check_role = (String) session.getAttribute("role");		
 
 		String broker_name = null;
 		String station_name = null;
@@ -142,6 +145,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("unit_price", unit_price);
 						json.put("broker_ip_address", broker_name);
 						json.put("unit_id", unit_id);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -157,6 +161,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -212,6 +217,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("unit_price", unit_price);
 						json.put("broker_ip_address", broker_name);
 						json.put("unit_id", unit_id);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -227,6 +233,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -257,6 +264,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						json.put("token", check_token);
 						json.put("serial_number", serial_number);
 						json.put("side", side);
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -272,6 +280,7 @@ public class DispenserTriggerServlet extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();

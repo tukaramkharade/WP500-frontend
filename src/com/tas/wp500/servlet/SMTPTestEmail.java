@@ -27,6 +27,7 @@ import com.tas.wp500.utils.TCPClient;
 
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 
 			if (check_username != null) {
 
@@ -37,6 +38,7 @@ import com.tas.wp500.utils.TCPClient;
 				json.put("operation", "test_email");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				System.out.println("test_email-->"+json);
 				String respStr = client.sendMessage(json.toString());

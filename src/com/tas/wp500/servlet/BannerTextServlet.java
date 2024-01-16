@@ -26,7 +26,7 @@ public class BannerTextServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-		
+		String check_role = (String) session.getAttribute("role");
 		
 			
 			TCPClient client = new TCPClient();
@@ -36,6 +36,7 @@ public class BannerTextServlet extends HttpServlet {
 				
 				json.put("operation", "read_banner_file");
 				json.put("user", check_username);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -59,7 +60,7 @@ public class BannerTextServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
-
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
 				
@@ -77,6 +78,7 @@ public class BannerTextServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 
@@ -106,6 +108,7 @@ public class BannerTextServlet extends HttpServlet {
 				json.put("user", check_username);
 				json.put("data", linesArray);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 				System.out.println(respStr);
@@ -119,6 +122,7 @@ public class BannerTextServlet extends HttpServlet {
 				// Set the content type of the response to
 				// application/json
 				response.setContentType("application/json");
+				response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();

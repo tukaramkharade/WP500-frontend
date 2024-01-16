@@ -66,34 +66,28 @@ public class WP500Login extends HttpServlet {
 				String totp_authenticator = jsonResponse.getString("totp_authenticator");
 
 				if (status.equals("success") && first_login.equals("true") && totp_authenticator.equals("disable")) {
-					String token = jsonResponse.getString("token");
-
+					
 					session.setAttribute("username", username);
-					session.setAttribute("token", token);
+					
 					userObj.put("status", status);
 					userObj.put("first_login", first_login);
 					
-			//		setCookie(response, "token", token, "Strict");
-					// Set the CSRF token in the response header
-			//		response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfTokenFromSession + "; HttpOnly; Secure; SameSite=Strict");
-
+			
 				} else if (status.equals("success") && first_login.equals("false")
 						&& totp_authenticator.equals("enable")) {
 					String role = jsonResponse.getString("role");
-					String token = jsonResponse.getString("token");
+				
 
 					session.setAttribute("username", username);
 					session.setAttribute("role", role);
 					session.setAttribute("totp_authenticator", totp_authenticator);
-					session.setAttribute("token", token);
+					
 
 					userObj.put("status", status);
 					userObj.put("first_login", first_login);
 					userObj.put("totp_authenticator", totp_authenticator);
 					
-			//		setCookie(response, "token", token, "Strict");
-			//		response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfTokenFromSession + "; HttpOnly; Secure; SameSite=Strict");
-
+			
 				} else if (status.equals("success") && first_login.equals("false")
 						&& totp_authenticator.equals("disable")) {
 
@@ -108,9 +102,7 @@ public class WP500Login extends HttpServlet {
 					userObj.put("first_login", first_login);
 					userObj.put("totp_authenticator", totp_authenticator);
 					
-				//	setCookie(response, "token", token, "Strict");
-				//	response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfTokenFromSession + "; HttpOnly; Secure; SameSite=Strict");
-
+				
 				}
 
 				else if (status.equals("fail")) {
@@ -139,7 +131,6 @@ public class WP500Login extends HttpServlet {
 		}
 
 		
-
 		// Set the content type of the response to application/json
 		response.setContentType("application/json");
 		
@@ -155,10 +146,7 @@ public class WP500Login extends HttpServlet {
 
 	}
 	
-//	private void setCookie(HttpServletResponse response, String name, String value, String sameSite) {
-//	    String cookieValue = name + "=" + value + "; HttpOnly; Secure; SameSite=" + sameSite;
-//	    response.addHeader("Set-Cookie", cookieValue);
-//	}
 
 
 }
+

@@ -167,6 +167,7 @@ public class UploadServlet extends HttpServlet {
 			}
 
 			response.setContentType("application/json");
+			 response.setHeader("X-Content-Type-Options", "nosniff");
 
 			PrintWriter out = response.getWriter();
 
@@ -216,6 +217,7 @@ public class UploadServlet extends HttpServlet {
 
 		// Set the content type of the response to application/json
 		response.setContentType("application/json");
+		 response.setHeader("X-Content-Type-Options", "nosniff");
 
 		// Get the response PrintWriter
 		PrintWriter out = response.getWriter();

@@ -26,6 +26,7 @@ public class SyslogConf extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 
@@ -39,6 +40,7 @@ public class SyslogConf extends HttpServlet {
 				json.put("operation_type", "get_rsyslog");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -63,6 +65,9 @@ public class SyslogConf extends HttpServlet {
 					}
 					
 				}
+				
+				 response.setHeader("X-Content-Type-Options", "nosniff");
+				 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
 
@@ -85,6 +90,7 @@ public class SyslogConf extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		String hostname = null;
 		String port_number = null;
@@ -105,7 +111,7 @@ public class SyslogConf extends HttpServlet {
 						json.put("rsyslog_port", port_number);
 						json.put("user", check_username);
 						json.put("token", check_token);
-						
+						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -118,6 +124,7 @@ public class SyslogConf extends HttpServlet {
 						// Set the content type of the response to
 						// application/json
 						response.setContentType("application/json");
+						 response.setHeader("X-Content-Type-Options", "nosniff");
 
 						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
@@ -137,5 +144,3 @@ public class SyslogConf extends HttpServlet {
 
 
 	}
-
-

@@ -29,6 +29,7 @@ public class ThreatLogsServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 
@@ -40,6 +41,7 @@ public class ThreatLogsServlet extends HttpServlet {
 				json.put("operation", "get_threat_logs");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -65,6 +67,7 @@ public class ThreatLogsServlet extends HttpServlet {
 
 			    // Set the response content type to JSON
 			    response.setContentType("application/json");
+			    response.setHeader("X-Content-Type-Options", "nosniff");
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
@@ -82,6 +85,7 @@ public class ThreatLogsServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 
@@ -114,6 +118,7 @@ public class ThreatLogsServlet extends HttpServlet {
 				json.put("end_time", formattedEndDate);
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -164,6 +169,7 @@ public class ThreatLogsServlet extends HttpServlet {
 				logger.info("JSON ARRAY :" + resJsonArray.toString());
 
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Write the JSON data to the response
 				response.getWriter().print(resJsonArray.toString());

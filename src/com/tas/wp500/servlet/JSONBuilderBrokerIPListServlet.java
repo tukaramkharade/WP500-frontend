@@ -32,6 +32,7 @@ public class JSONBuilderBrokerIPListServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 
 		if (check_username != null) {
 
@@ -44,6 +45,7 @@ public class JSONBuilderBrokerIPListServlet extends HttpServlet {
 				json.put("operation_type", "get_broker_ip");
 				json.put("user", check_username);
 				json.put("token", check_token);
+				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
 
@@ -58,6 +60,7 @@ public class JSONBuilderBrokerIPListServlet extends HttpServlet {
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();

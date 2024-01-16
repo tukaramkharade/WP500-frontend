@@ -87,6 +87,7 @@ public class FirmwareFileDownloadURL extends HttpServlet {
 	            jsonObject.put("message", "File downloaded successfully from URL.");
 
 	            response.setContentType("application/json");
+	            response.setHeader("X-Content-Type-Options", "nosniff");
 
 	            PrintWriter out = response.getWriter();
 	            out.print(jsonObject.toString());
@@ -115,6 +116,7 @@ public class FirmwareFileDownloadURL extends HttpServlet {
 			}	        
 
 	        response.setContentType("application/json");
+	        response.setHeader("X-Content-Type-Options", "nosniff");
 
 	        PrintWriter out = response.getWriter();
 	        out.print(jsonObject.toString());
@@ -138,6 +140,7 @@ public class FirmwareFileDownloadURL extends HttpServlet {
 
 		// Set the content type of the response to application/json
 		response.setContentType("application/json");
+		response.setHeader("X-Content-Type-Options", "nosniff");
 
 		// Get the response PrintWriter
 		PrintWriter out = response.getWriter();

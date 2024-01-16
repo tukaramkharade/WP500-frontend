@@ -26,6 +26,7 @@ public class RedundancyServlet extends HttpServlet {
 		if (session.getAttribute("username") != null) {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
+			String check_role = (String) session.getAttribute("role");
 	
 		try{
 			TCPClient client = new TCPClient();
@@ -34,6 +35,7 @@ public class RedundancyServlet extends HttpServlet {
 			json.put("operation", "get_ethernet_details");
 			json.put("user", check_username);
 			json.put("token", check_token);
+			json.put("role", check_role);
 			
 			String respStr = client.sendMessage(json.toString());
 			
@@ -78,6 +80,7 @@ public class RedundancyServlet extends HttpServlet {
 		  
 		    // Set the content type of the response to application/json
 		    response.setContentType("application/json");
+		    response.setHeader("X-Content-Type-Options", "nosniff");
 		    
 		    // Get the response PrintWriter
 		    PrintWriter out = response.getWriter();
@@ -99,6 +102,7 @@ public class RedundancyServlet extends HttpServlet {
 
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
 		
 		if (check_username != null) {
 			
@@ -121,7 +125,7 @@ public class RedundancyServlet extends HttpServlet {
 				json.put("user", check_username);
 				json.put("token", check_token);
 				json.put("lan_type", "redundancy_setting");
-				
+				json.put("role", check_role);
 				
 				json.put("Redundancy_enable", toggle_redundancy_enable);			
 				json.put("Redundancy_Role", toggle_redundancy_role);				
@@ -149,6 +153,7 @@ public class RedundancyServlet extends HttpServlet {
 
 				// Set the content type of the response to application/json
 				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
 
 				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
