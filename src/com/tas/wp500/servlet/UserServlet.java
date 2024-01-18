@@ -33,6 +33,11 @@ public class UserServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		String first_name = null;
 		String last_name = null;
@@ -49,9 +54,6 @@ public class UserServlet extends HttpServlet {
 
 				case "add":
 					
-					
-					System.out.println("role: "+check_role);
-
 					first_name = request.getParameter("first_name");
 					last_name = request.getParameter("last_name");
 					username = request.getParameter("username");
@@ -59,6 +61,8 @@ public class UserServlet extends HttpServlet {
 					role = request.getParameter("user_role");
 					
 					try {
+						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -94,7 +98,9 @@ public class UserServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding user: " + e);
@@ -109,6 +115,8 @@ public class UserServlet extends HttpServlet {
 					role = request.getParameter("user_role");
 
 					try {
+						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -143,7 +151,9 @@ public class UserServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating user: " + e);
@@ -156,6 +166,8 @@ public class UserServlet extends HttpServlet {
 					username = request.getParameter("username");
 
 					try {
+						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -187,7 +199,9 @@ public class UserServlet extends HttpServlet {
 							out.print(jsonObject.toString());
 							out.flush();
 						 
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in deleting user: " + e);
@@ -201,7 +215,7 @@ public class UserServlet extends HttpServlet {
 					password = request.getParameter("password");
 					
 					try{
-						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -233,7 +247,9 @@ public class UserServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-						
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error in changing password: " + e);
@@ -259,7 +275,15 @@ public class UserServlet extends HttpServlet {
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
 			
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+			
 			if (check_username != null) {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
+				
 				json.put("operation", "get_all_user");
 				json.put("user", check_username);
 				json.put("token", check_token);
@@ -296,6 +320,9 @@ public class UserServlet extends HttpServlet {
 				
 			}
 
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in getting user list : " + e);

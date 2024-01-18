@@ -180,6 +180,7 @@ margin-top: 70px;
 
 	var roleValue;	
 	var tokenValue;
+	var csrfTokenValue;
 	
 	function loadCrtFilesList() {
 		$.ajax({
@@ -270,11 +271,14 @@ margin-top: 70px;
 		
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
 					url : 'mqttServlet',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -531,6 +535,8 @@ margin-top: 70px;
 
 	 
 	function deleteMqtt(prefix) {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -543,6 +549,7 @@ margin-top: 70px;
 					type : 'POST',
 					data : {
 						prefix : prefix,
+						csrfToken: csrfToken,
 						action: 'delete'
 					},
 					success : function(data) {
@@ -650,7 +657,7 @@ margin-top: 70px;
 		var file_type = $('#file_type').find(":selected").val();
 		var enable = $('#enable').find(":selected").val();
 		var publishing_format = $('#publishing_format').find(":selected").val();
-		
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 		 var file_name;
 			
@@ -779,6 +786,7 @@ margin-top: 70px;
 					enable : enable,
 					file_name : file_name,
 					publishing_format : publishing_format,
+					csrfToken: csrfToken,
 					action: 'update'
 
 				},
@@ -883,6 +891,7 @@ margin-top: 70px;
 		var enable = $('#enable').find(":selected").val();
 		var publishing_format = $('#publishing_format').find(":selected").val();
 		var file_type = $('#file_type').find(":selected").val();
+		 var csrfToken = document.getElementById('csrfToken').value;
 		var file_name;
 		
 		if(file_type == 'TCP'){
@@ -921,6 +930,7 @@ margin-top: 70px;
 				enable : enable,
 				file_name : file_name,
 				publishing_format : publishing_format,
+				csrfToken: csrfToken,
 				action: 'add'
 				
 			},
@@ -1164,6 +1174,12 @@ margin-top: 70px;
 			String roleValue = (String) session.getAttribute("role");%>
     	
     	roleValue = '<%=roleValue%>';
+    	
+    	<%// Access the session variable
+		HttpSession csrfToken = request.getSession();
+		String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+		csrfTokenValue = '<%=csrfTokenValue%>';
 
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -1326,6 +1342,7 @@ margin-top: 70px;
 				<form id="mqttForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 					
 	<div id="loader-overlay">
     <div id="loader">
