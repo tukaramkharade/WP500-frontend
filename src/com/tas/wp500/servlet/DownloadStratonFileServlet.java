@@ -21,14 +21,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/downloadSratonFile")
 public class DownloadStratonFileServlet extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    String userProvidedFileName = request.getParameter("userFileName");
 	    System.out.println("userProvidedFileName: " + userProvidedFileName);
 	    if (userProvidedFileName == null || userProvidedFileName.equals("")) {
 	        throw new ServletException("File Name can't be null or empty");
 	    }
 
-	    String logDirectoryPath =  "/etc/wp500cfg/t5cod";//"C:\\Users\\sanke\\Desktop\\DbFile\\New folder4\\t5cod"; // Directory path
+	    String logDirectoryPath =  "/etc/wp500cfg/t5cod";//"/etc/wp500cfg/t5cod";//"C:\\Users\\sanke\\Desktop\\DbFile\\New folder4\\t5cod"; // Directory path
 	    File logDirectory = new File(logDirectoryPath);
 	    File[] files = logDirectory.listFiles();
 	    boolean fileFound = false;
@@ -48,7 +48,7 @@ public class DownloadStratonFileServlet extends HttpServlet {
 	        response.setContentType("application/octet-stream");
 	        response.setContentLength((int) logFile.length());
 	        response.setHeader("Content-Disposition", "attachment; filename=\"" + userProvidedFileName + fileExtension + "\"");
-
+	        response.setHeader("X-Status", "success");
 	        try (InputStream fis = new FileInputStream(logFile);
 	             ServletOutputStream os = response.getOutputStream()) {
 

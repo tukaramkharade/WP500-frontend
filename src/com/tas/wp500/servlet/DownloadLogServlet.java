@@ -1,67 +1,96 @@
 package com.tas.wp500.servlet;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/DownloadLogServlet")
 public class DownloadLogServlet extends HttpServlet {
-	 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 String requestedFileName = request.getParameter("log_file");
-    	//String requestedFileName = "WP500_2020-09-20_10-17-09.log";
-        if (requestedFileName == null || requestedFileName.equals("")) {
-            throw new ServletException("File Name can't be null or empty");
-        }
 
-        String logDirectoryPath = "/var/log";
-        File logDirectory = new File(logDirectoryPath);
-        File[] files = logDirectory.listFiles();
-        boolean fileFound = false;
-        File logFile = null;
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		String clientToken = request.getParameter("token");
+		String serverToken = (String) session.getAttribute("token");
 
-        for (File file : files) {
-            if (file.isFile() && file.getName().equals(requestedFileName)) {
-                fileFound = true;
-                logFile = file;
-                break;
-            }
-        }
+		if (clientToken != null && clientToken.equals(serverToken)) {
+			if (session != null && session.getAttribute("role") != null) {
+				String userRole = (String) session.getAttribute("role");
 
-        if (fileFound) {
-            System.out.println("File Found: " + logFile.getAbsolutePath());
+				if (userRole.equalsIgnoreCase("admin")) {
+					String requestedFileName = request.getParameter("log_file");
+					if (requestedFileName == null || requestedFileName.equals("")) {
+						response.setHeader("X-Message", "File Name can't be null or empty");
+						response.setHeader("X-Status", "error");
+						return;
+					}
+					String logDirectoryPath = "/data/log";
+					File logDirectory = new File(logDirectoryPath);
+					File logFile = new File(logDirectory, requestedFileName);
 
-            ServletContext ctx = getServletContext();
-            InputStream fis = new FileInputStream(logFile);
-            String mimeType = ctx.getMimeType(logFile.getAbsolutePath());
-            response.setContentType(mimeType != null ? mimeType : "application/octet-stream");
-            response.setContentLength((int) logFile.length());
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + logFile.getName() + "\"");
+					if (!logFile.exists() || !logFile.isFile()) {
+						response.setHeader("X-Message", "File not found");
+						response.setHeader("X-Status", "error");
+						return;
+					}
+					if (!logFile.getCanonicalPath().startsWith(logDirectory.getCanonicalPath())) {
+						response.setHeader("X-Message", "Invalid file path");
+						response.setHeader("X-Status", "error");
+						return;
+					}
 
-            ServletOutputStream os = response.getOutputStream();
-            byte[] bufferData = new byte[1024];
-            int read;
-            while ((read = fis.read(bufferData)) != -1) {
-                os.write(bufferData, 0, read);
-            }
-            os.flush();
-            os.close();
-            fis.close();
-            System.out.println("File downloaded at client successfully");
-        } 
-    }
+					// Set response headers for success
+					response.setHeader("X-Status", "success");
+					response.setHeader("X-Message", "File download initiated");
+
+					// Set response headers
+					response.setContentType("application/octet-stream");
+					response.setContentLength((int) logFile.length());
+					String encodedFileName = URLEncoder.encode(logFile.getName(), "UTF-8");
+					String headerKey = "Content-Disposition";
+					String headerValue = String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s",
+							logFile.getName(), encodedFileName);
+					response.setHeader(headerKey, headerValue);
+
+					// Copy file content to response body
+					try (OutputStream outStream = response.getOutputStream();
+							FileInputStream inStream = new FileInputStream(logFile)) {
+						byte[] buffer = new byte[4096];
+						int bytesRead;
+						while ((bytesRead = inStream.read(buffer)) != -1) {
+							outStream.write(buffer, 0, bytesRead);
+						}
+					}
+				} else {
+					// Set response headers for unauthorized access
+					response.setHeader("X-Status", "error");
+					response.setHeader("X-Message", "Unauthorized access");
+				}
+			} else {
+				// Set response headers for session invalid or not logged in
+				response.setHeader("X-Status", "error");
+				response.setHeader("X-Message", "Session invalid or not logged in");
+				response.sendRedirect("login.jsp");
+			}
+		} else {
+			// Set response headers for invalid token
+			response.setHeader("X-Status", "error");
+			response.setHeader("X-Message", "Invalid token");
+
+		}
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+	}
+
 }
