@@ -430,7 +430,17 @@ var tokenValue;
 					} 
 					
 					
-					document.getElementById('ntp-service-cell').textContent = data.ntp_service;	               
+					//document.getElementById('ntp-service-cell').textContent = data.ntp_service;	          
+					
+					var ntpServiceCell = document.getElementById('ntp-service-cell');
+            ntpServiceCell.textContent = data.ntp_service;
+
+            // Set color based on the value of data.ntp_service
+            if (data.ntp_service === 'active') {
+                ntpServiceCell.style.color = 'green';
+            } else {
+                ntpServiceCell.style.color = 'red';
+            }
 					
 					
 				},
@@ -469,7 +479,18 @@ var tokenValue;
 					};
 				} 
 			
-				document.getElementById('system-clock-cell').textContent = data.NTP_SYNC_STATUS;
+			//	document.getElementById('system-clock-cell').textContent = data.NTP_SYNC_STATUS;
+			
+			
+			var systemClockeCell = document.getElementById('system-clock-cell');
+			systemClockeCell.textContent = data.NTP_SYNC_STATUS;
+
+            // Set color based on the value of data.ntp_service
+            if (data.NTP_SYNC_STATUS === 'yes') {
+            	systemClockeCell.style.color = 'green';
+            } else {
+            	systemClockeCell.style.color = 'red';
+            }
 				
 			},
 
@@ -572,7 +593,17 @@ var tokenValue;
 				$('#ntp_server1').val(data.ntp_server1);
 				$('#ntp_server2').val(data.ntp_server2);
 				$('#ntp_server3').val(data.ntp_server3);
-				$('#ntp_interval_1').val(data.ntp_interval);
+				
+				
+				if (data.ntp_interval != null ) {
+	                  
+					$('#ntp_interval_1').val(data.ntp_interval);
+	                 
+	              } else {
+	                  
+	                  $('#ntp_interval_1').val('5 sec');
+	                 
+	              }
 
 			
 			},
@@ -585,23 +616,92 @@ var tokenValue;
 		});
 	}
 
+	function validateNTPServer1(firstName) {
+	    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
+
+	    if (!regex.test(firstName)) {
+	        return 'Invalid IP Address. Please enter a valid IP address.';
+	    }
+
+	    return null; // Validation passed
+	}
+	
+	function validateNTPServer2(firstName) {
+	    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
+
+	    if (!regex.test(firstName)) {
+	        return 'Invalid IP Address. Please enter a valid IP address.';
+	    }
+
+	    return null; // Validation passed
+	}
+
+	
+	function validateNTPServer3(firstName) {
+	    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
+
+	    if (!regex.test(firstName)) {
+	        return 'Invalid IP Address. Please enter a valid IP address.';
+	    }
+
+	    return null; // Validation passed
+	}
+
+
+	
 	function editNtpData() {
 		
+		var ntp_server1 = $('#ntp_server1').val();
+	    var ntp_server2 = $('#ntp_server2').val();
+	    var ntp_server3 = $('#ntp_server3').val();
+	    var ntp_interval = $('#ntp_interval_1').val();
+	    var isValid=true;
+	   
+	    // Clear previous error messages
+	    $('#field_ntp1_Error').text('');
+	    $('#field_ntp2_Error').text('');
+	    $('#field_ntp3_Error').text('');
+
+
+	    var ntp1Error = validateNTPServer1(ntp_server1);
+	    if (ntp1Error) {
+	        $('#field_ntp1_Error').text(ntp1Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	       
+	        return;
+	    }
+
+	    
+	    var ntp2Error = validateNTPServer2(ntp_server2);
+	    if (ntp2Error) {
+	        $('#field_ntp2_Error').text(ntp2Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	    
+	        return;
+	    }
+
+	    
+	    var ntp3Error = validateNTPServer3(ntp_server3);
+	    if (ntp3Error) {
+	        $('#field_ntp3_Error').text(ntp3Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	      
+	        return;
+	    }
+	    
+	 // Validate ntp_interval
+	    if (ntp_interval.trim() === '') {
+	        $('#field_ntp_interval_Error').text('NTP Interval cannot be empty').css({'color': 'red', 'max-width': '200px'});
+	        return;
+	    }
+	    
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
 		  modal.style.display = 'block';
 		  
+		 
+		  
 		// Handle the confirm button click
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
-			  var ntp_server1 = $('#ntp_server1').val();
-			    var ntp_server2 = $('#ntp_server2').val();
-			    var ntp_server3 = $('#ntp_server3').val();
-			    var ntp_interval = $('#ntp_interval_1').val();
-			    var isValid=true;
-			   
-			    
-			    $.ajax({
+			 			    $.ajax({
 			        url: 'ntpDataUpadate',
 			        type: 'POST',
 			        data: {
@@ -636,11 +736,6 @@ var tokenValue;
 			        	
 			        	loadNtpSettings();
 
-			            // Clear fields here if needed
-			            $('#ntp_server1').val('');
-			            $('#ntp_server2').val('');
-			            $('#ntp_server3').val('');
-			            $('#ntp_interval_1').val('5 sec');
 			        },
 			        error: function (xhr, status, error) {
 			            console.log('Error updating lan: ' + error);
@@ -877,14 +972,23 @@ var tokenValue;
 					</tr>
 					<tr>
 					<td>NTP Server 1</td>
-					<td><input type="text" id="ntp_server1" name="ntp_server1" maxlength="31"/></td>
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="ntp_server1" name="ntp_server1" maxlength="31" required/>
+					<span id="field_ntp1_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+					</td>
+					
 					<td>NTP Server 2</td>
-					<td><input type="text" id="ntp_server2" name="ntp_server2" maxlength="31"/></td>
+					<td><input type="text" id="ntp_server2" name="ntp_server2" maxlength="31" required/>
+					<span id="field_ntp2_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+					</td>
 					</tr>
 					
 					<tr>
 					<td>NTP Server 3</td>
-					<td><input type="text" id="ntp_server3" name="ntp_server3" maxlength="31"/></td>
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="ntp_server3" name="ntp_server3" maxlength="31" required/>
+					<span id="field_ntp3_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+					</td>
 					<td>NTP Interval</td>
 					<td><select class="ntp-interval-select" id="ntp_interval_1"
 									name="ntp_interval_1" style="height: 35px;" required>
@@ -899,7 +1003,10 @@ var tokenValue;
 										<option value="5 min">5 min</option>
 										<option value="10 min">10 min</option>							
 
-						</select> <span id="jsonIntervalError" style="color: red;"></span></td>
+						</select> 
+						<span id="field_ntp_interval_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+						
+						</td>
 					</tr>
 					
 					<tr>

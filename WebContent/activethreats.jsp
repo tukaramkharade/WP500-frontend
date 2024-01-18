@@ -158,15 +158,20 @@ margin-top: 68px;
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function getActiveThreats() {
 	// Display loader when the request is initiated
     showLoader();
-	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 		url : 'activeThreatServlet',
 		type : 'GET',
 		dataType : 'json',
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -278,6 +283,7 @@ function getSearchThreats() {
     // Get the values of startdatetime and enddatetime elements
     var startdatetime = $('#startdatetime').val();
     var enddatetime = $('#enddatetime').val();
+    var csrfToken = document.getElementById('csrfToken').value;
     
     $.ajax({
         url: 'activeThreatServlet',
@@ -285,6 +291,7 @@ function getSearchThreats() {
         data: {
             startdatetime: startdatetime,
             enddatetime: enddatetime,
+            csrfToken: csrfToken,
             action : 'get_threats'
         },
         beforeSend: function(xhr) {
@@ -356,6 +363,8 @@ function getSearchThreats() {
 
 
 function ackThreats(threat_id){
+	 var csrfToken = document.getElementById('csrfToken').value;
+	
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-ack');
 	  modal.style.display = 'block';
@@ -368,6 +377,7 @@ function ackThreats(threat_id){
 				type : 'POST',
 				data : {
 					threat_id : threat_id,
+					csrfToken: csrfToken,
 					 action : 'get_ack_threats'
 					
 				},
@@ -444,21 +454,6 @@ function getCurrentTimeInIndia() {
     console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
 }
 
-function handleStatus(status) {
-    if (status === 'fail') {
-        var modal = document.getElementById('custom-modal-session-timeout');
-        modal.style.display = 'block';
-
-        // Handle the confirm button click
-        var confirmButton = document.getElementById('confirm-button-session-timeout');
-        confirmButton.onclick = function () {
-            // Close the modal
-            modal.style.display = 'none';
-            window.location.href = 'login.jsp';
-        };
-    }
-}
-
 function changeButtonColor(isDisabled) {
     var $loadThreatsbutton = $('#loadThreats');      
     
@@ -488,6 +483,12 @@ $(document).ready(function() {
 	String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
 
 
 	
@@ -550,6 +551,8 @@ roleValue = '<%=roleValue%>';
 		<section style="margin-left: 1em">
 		<h3>ACTIVE THREATS</h3>
 		<hr />
+		
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 		
 			<div id="loader-overlay">
     <div id="loader">

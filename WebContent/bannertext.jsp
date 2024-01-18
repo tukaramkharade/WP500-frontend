@@ -95,6 +95,7 @@ button {
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function readBannerText(){
 	// Display loader when the request is initiated
@@ -142,7 +143,9 @@ function readBannerText(){
 }
 
 function updateBannerText() {
-	
+	var csrfToken = document.getElementById('csrfToken').value;
+//	alert(csrfToken);
+	 
 	 var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
 	  
@@ -167,9 +170,17 @@ function updateBannerText() {
         url: "bannerTextServlet",
         type: "POST",
        
-        data: JSON.stringify({
-            lines: linesJson
-        }), // Send as a JSON object
+         /* data: JSON.stringify({
+            lines: linesJson,
+            csrfToken: csrfToken
+        }),   */
+        
+        data: {
+        	lines: linesJson,
+			csrfToken: csrfToken
+        },
+      
+        
         success: function(response) {
         	// Close the modal
 	        modal.style.display = 'none';
@@ -222,6 +233,12 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
+
 if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 	
 	$('#update').prop('disabled', true);
@@ -273,6 +290,8 @@ else{
 		<section style="margin-left: 1em">
 			<h3>BANNER TEXT</h3>
 			<hr>
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
+			
 			<div class="container">
 			
 			<div id="loader-overlay">

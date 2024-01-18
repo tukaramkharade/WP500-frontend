@@ -587,7 +587,173 @@ margin-top: 70px;
 		  
 	}
  
+	
+	function validateIPaddr(ipaddr) {
+	    var regex = /^([a-zA-Z0-9@_.-]{1,100}\.){0,3}[a-zA-Z0-9@_.-]{1,100}$/;
+
+	    if (!regex.test(ipaddr)) {
+	        return 'Invalid IP Address. Please enter a valid IP address.';
+	    }
+
+	    return null; // Validation passed
+	}
+
+	
+	function validateUserName(username) {
+		var regex = /^[a-zA-Z][a-zA-Z0-9.@_-]*$/;
+
+	    if (!regex.test(username)) {
+	        return 'Invalid username; the allowed symbols are @_-';
+	    }
+
+	    return null; // Validation passed
+	}
+	
+	function validatePubTopic(pubTopic) {
+	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+	    if (!regex.test(pubTopic)) {
+	        return 'Invalid published topic; symbols not allowed';
+	    }
+
+	    return null; // Validation passed
+	}
+	
+	function validateSubTopic(subTopic) {
+	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+	    if (!regex.test(subTopic)) {
+	        return 'Invalid subscribed topic; symbols not allowed';
+	    }
+
+	    return null; // Validation passed
+	}
+	
+	function validatePrefix(prefix) {
+	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+	    if (!regex.test(prefix)) {
+	        return 'Invalid prefix; symbols not allowed';
+	    }
+
+	    return null; // Validation passed
+	}
+	
  function editMqtt(){
+	 var broker_ip_address = $('#broker_ip_address').val();
+		var port_number = $('#port_number').val();
+		var username = $('#username').val();
+		var password = $('#password').val();
+		var pub_topic = $('#pub_topic').val();
+		var sub_topic = $('#sub_topic').val();
+		var prefix = $('#prefix').val();
+		var file_type = $('#file_type').find(":selected").val();
+		var enable = $('#enable').find(":selected").val();
+		var publishing_format = $('#publishing_format').find(":selected").val();
+		
+		
+		 var file_name;
+			
+			if(file_type == 'TCP'){
+				file_name = '';
+			
+			}else if(file_type == 'SSL'){
+				file_name = $('#file_name').find(":selected").val();
+				
+			}
+			
+			if ($('#file_type').val().toUpperCase() === 'TCP') {
+			    $("#file_name").prop("disabled", true);
+			} else {
+			    $("#file_name").prop("disabled", false);
+			}
+
+			 // Add change event listener
+			$("#file_type").change(function(event) {
+			    if ($(this).val().toUpperCase() === 'TCP') {
+			        $("#file_name").prop("disabled", true);
+			        $('#file_name').val(''); // Clear the value when disabled, if needed
+			    } else {
+			        $("#file_name").prop("disabled", false);
+			    }
+			}); 
+			
+			
+			$('#enable').on('change', function () {
+		        var enableValue = $(this).val();
+
+		        // Check if the enable field changed from Disable to Enable
+		        if (enableValue === 'Enable') {
+		            var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
+		            if (existingEnabledEntries.length > 0) {
+		                // Display a message or perform other actions
+		                $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
+		                $("#customPopup").show();
+		                
+		                $('#broker_ip_address').val('');
+						$('#port_number').val('');
+						$('#username').val('');
+						$('#password').val('');
+						$('#pub_topic').val('');
+						$('#sub_topic').val('');
+						$('#prefix').val('');
+						$('#file_type').val('TCP');
+						$('#file_name').val('Select crt file');
+						$('#publishing_format').val('Single');
+						
+						$('#enable').val('Disable');
+						$("#prefix").prop("disabled", false);					
+						$('#file_name').prop('disabled', true);
+							
+							$('#registerBtn').val('Add');
+							
+		                return; // Prevent form submission
+		            }
+		        }
+		    });
+			
+			
+			
+			$('#field_ipaddr_Error').text('');
+		    $('#field_user_Error').text('');
+		    $('#field_pub_Error').text('');
+		    $('#field_sub_Error').text('');
+		    $('#field_prefix_Error').text('');
+		    
+		    var usernameError = validateUserName(username);
+		    if (usernameError) {
+		        $('#field_user_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		    
+		    var ipAddrError = validateIPaddr(broker_ip_address);
+		    if (ipAddrError) {
+		        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		   
+		    var pubTopicError = validatePubTopic(pub_topic);
+		    if (pubTopicError) {
+		        $('#field_pub_Error').text(pubTopicError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		    
+		    var subTopicError = validateSubTopic(sub_topic);
+		    if (subTopicError) {
+		        $('#field_sub_Error').text(subTopicError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		  
+		    var prefixError = validatePrefix(prefix);
+		    if (prefixError) {
+		        $('#field_prefix_Error').text(prefixError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		
+
 	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
@@ -597,80 +763,7 @@ margin-top: 70px;
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 		  
-		  var broker_ip_address = $('#broker_ip_address').val();
-			var port_number = $('#port_number').val();
-			var username = $('#username').val();
-			var password = $('#password').val();
-			var pub_topic = $('#pub_topic').val();
-			var sub_topic = $('#sub_topic').val();
-			var prefix = $('#prefix').val();
-			var file_type = $('#file_type').find(":selected").val();
-			var enable = $('#enable').find(":selected").val();
-			var publishing_format = $('#publishing_format').find(":selected").val();
-			
-			
-			 var file_name;
-				
-				if(file_type == 'TCP'){
-					file_name = '';
-				
-				}else if(file_type == 'SSL'){
-					file_name = $('#file_name').find(":selected").val();
-					
-				}
-				
-				if ($('#file_type').val().toUpperCase() === 'TCP') {
-				    $("#file_name").prop("disabled", true);
-				} else {
-				    $("#file_name").prop("disabled", false);
-				}
-
-				 // Add change event listener
-				$("#file_type").change(function(event) {
-				    if ($(this).val().toUpperCase() === 'TCP') {
-				        $("#file_name").prop("disabled", true);
-				        $('#file_name').val(''); // Clear the value when disabled, if needed
-				    } else {
-				        $("#file_name").prop("disabled", false);
-				    }
-				}); 
-				
-				
-				$('#enable').on('change', function () {
-			        var enableValue = $(this).val();
-
-			        // Check if the enable field changed from Disable to Enable
-			        if (enableValue === 'Enable') {
-			            var existingEnabledEntries = $('#mqttListTable tbody').find('td:contains("Enable")');
-			            if (existingEnabledEntries.length > 0) {
-			                // Display a message or perform other actions
-			                $("#popupMessage").text('Only one entry can be enabled at a time. Please disable the existing entry first.');
-			                $("#customPopup").show();
-			                
-			                $('#broker_ip_address').val('');
-							$('#port_number').val('');
-							$('#username').val('');
-							$('#password').val('');
-							$('#pub_topic').val('');
-							$('#sub_topic').val('');
-							$('#prefix').val('');
-							$('#file_type').val('TCP');
-							$('#file_name').val('Select crt file');
-							$('#publishing_format').val('Single');
-							
-							$('#enable').val('Disable');
-							$("#prefix").prop("disabled", false);					
-							$('#file_name').prop('disabled', true);
-								
-								$('#registerBtn').val('Add');
-								
-			                return; // Prevent form submission
-			            }
-			        }
-			    });
-				
-			
-			
+		  			
 			$.ajax({
 				url : 'mqttServlet',
 				type : 'POST',
@@ -1246,17 +1339,20 @@ margin-top: 70px;
 
 					<tr>
 					<td>Broker IP address</td>
-					<td><input type="text" id="broker_ip_address" maxlength="31" name="broker_ip_address" required />
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="broker_ip_address" maxlength="31" name="broker_ip_address" required />
+					<span id="field_ipaddr_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							
 					</td>
 					
 					<td>Port</td>
-					<td><input type="text" id="port_number" name="port_number" maxlength="6" required /> <span style="color: red; font-size: 12px;"
-								id="portNoError"></span>
+					<td><input type="text" id="port_number" name="port_number" maxlength="6" required /> 
+					<span style="color: red; font-size: 12px;" id="portNoError"></span>
 							</td>
 					
 					<td>Username</td>
 					<td><input type="text" id="username" name="username" maxlength="31"/>
+					<span id="field_user_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					<td>Password</td>
 					
@@ -1269,7 +1365,10 @@ margin-top: 70px;
 					</tr>
 					<tr>
 					<td>Published topic</td>
-					<td><input type="text" id="pub_topic" name="pub_topic" maxlength="30" required />
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="pub_topic" name="pub_topic" maxlength="30" required />
+					<span id="field_pub_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+					</td>
 							
 					<td>Status</td>
 					<td><select class="textBox" id="enable" name="enable" style="height: 33px;">
@@ -1294,11 +1393,13 @@ margin-top: 70px;
 					</tr>
 					<tr>
 					<td>Subscribed topic</td>
-					<td><input type="text" id="sub_topic" name="sub_topic" maxlength="31" required />
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="sub_topic" name="sub_topic" maxlength="31" required />
+					<span id="field_sub_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					<td>Prefix</td>
 					<td><input type="text" id="prefix" name="prefix" maxlength="31" required />
-							
+							<span id="field_prefix_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 					</td>
 					<td>Publishing format</td>
 					<td>

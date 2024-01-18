@@ -161,7 +161,7 @@ public class JSONBuilderServlet extends HttpServlet {
 
 						String respStr = client.sendMessage(json.toString());
 
-						logger.info("res " + new JSONObject(respStr));
+						//logger.info("res " + new JSONObject(respStr));
 
 						String message = new JSONObject(respStr).getString("msg");
 						String status = new JSONObject(respStr).getString("status");

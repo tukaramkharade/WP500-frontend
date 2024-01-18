@@ -104,7 +104,7 @@ margin-top: 68px;
 
 .container {
     margin: 0 auto;
-    width: 80%;
+   max-width: 750px;
   }
 
  .bordered-table {
@@ -593,15 +593,7 @@ var tokenValue;
  
  	function editDispenserTrigger() {
 	 
-	// Display the custom modal dialog
-	  var modal = document.getElementById('custom-modal-edit');
-	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
-	  var confirmButton = document.getElementById('confirm-button-edit');
-	  confirmButton.onclick = function () {
-		  
-		  var station_name = $('#station_name').val();
+ 		 var station_name = $('#station_name').val();
 			var serial_number = $('#serial_number').val();
 			var side = $('#side').find(":selected").val();
 			var broker_name = $('#broker_name').find(":selected").val();
@@ -615,6 +607,43 @@ var tokenValue;
 			var unit_price = $('#unit_price').find(":selected").val();
 			var status = $('#status').find(":selected").val();
 			var unit_id = $('#unit_id').val();
+			
+			 // Clear previous error messages
+		    $('#field_name_Error').text('');
+		    $('#field_serial_num_Error').text('');
+		    $('#field_unitid_Error').text('');
+
+
+			 // Validate username
+		    var stationnameError = validateStationName(station_name);
+		    if (stationnameError) {
+		        $('#field_name_Error').text(stationnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		    // Validate first name
+		    var serialNumError = validateSerialNumber(serial_number);
+		    if (serialNumError) {
+		        $('#field_serial_num_Error').text(serialNumError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		    // Validate last name
+		    var unitidError = validateUnitId(unit_id);
+		    if (unitidError) {
+		        $('#field_unitid_Error').text(unitidError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		    
+	// Display the custom modal dialog
+	  var modal = document.getElementById('custom-modal-edit');
+	  modal.style.display = 'block';
+	  
+	// Handle the confirm button click
+	  var confirmButton = document.getElementById('confirm-button-edit');
+	  confirmButton.onclick = function () {
+		  
+		 
 			
 			$.ajax({
 				url : 'dispenserTriggerServlet',
@@ -666,20 +695,21 @@ var tokenValue;
 
 					// Clear form fields
 
-					$('#station_name').val('');
-					$('#serial_number').val('');
-					$('#side').val('Select side');
-					$('#broker_name').val('Select broker IP address');
-					$('#trigger_tag').val('Select trigger tag');
-					$('#trigger_value').val('Select trigger value');
-					$('#start_pressure').val('Select start pressure');
-					$('#end_pressure').val('Select end pressure');
-					$('#temperature').val('Select temperature');
-					$('#total').val('Select total');
-					$('#quantity').val('Select quantity');
-					$('#unit_price').val('Select unit price');
-					$('#status').val('Select status');
-					$('#unit_id').val('');
+					
+				$('#station_name').val('');
+				$('#serial_number').val('');
+				$('#side').val('A');
+				$('#broker_name').val('Select broker IP address');
+				$('#trigger_tag').val('Select trigger tag');
+				$('#trigger_value').val('0');
+				$('#start_pressure').val('Select start pressure');
+				$('#end_pressure').val('Select end pressure');
+				$('#temperature').val('Select temperature');
+				$('#total').val('Select total');
+				$('#quantity').val('Select quantity');
+				$('#unit_price').val('Select unit price');
+				$('#status').val('Enable');
+				$('#unit_id').val('');
 					$("#serial_number").prop("disabled", false);
 					$("#side").prop("disabled", false);
 				},
@@ -698,6 +728,40 @@ var tokenValue;
 	    $('#registerBtn').val('Update');
 	  };	
  	}
+ 	
+ 	
+ 	function validateStationName(stationName) {
+ 	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+ 	    if (!regex.test(stationName)) {
+ 	        return 'Invalid station name; symbols not allowed';
+ 	    }
+
+ 	    return null; // Validation passed
+ 	}
+
+ 	
+ 	function validateSerialNumber(serialNum) {
+ 	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+ 	    if (!regex.test(serialNum)) {
+ 	        return 'Invalid serial number; symbols not allowed';
+ 	    }
+
+ 	    return null; // Validation passed
+ 	}
+
+ 	
+ 	function validateUnitId(unitId) {
+ 	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+ 	    if (!regex.test(unitId)) {
+ 	        return 'Invalid unit id; symbols not allowed';
+ 	    }
+
+ 	    return null; // Validation passed
+ 	}
+
  
  
 	function addDispenserTrigger() {
@@ -716,6 +780,34 @@ var tokenValue;
 		var unit_price = $('#unit_price').find(":selected").val();
 		var status = $('#status').find(":selected").val();
 		var unit_id = $('#unit_id').val();
+		
+		 // Clear previous error messages
+	    $('#field_name_Error').text('');
+	    $('#field_serial_num_Error').text('');
+	    $('#field_unitid_Error').text('');
+
+
+		 // Validate username
+	    var stationnameError = validateStationName(station_name);
+	    if (stationnameError) {
+	        $('#field_name_Error').text(stationnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var serialNumError = validateSerialNumber(serial_number);
+	    if (serialNumError) {
+	        $('#field_serial_num_Error').text(serialNumError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate last name
+	    var unitidError = validateUnitId(unit_id);
+	    if (unitidError) {
+	        $('#field_unitid_Error').text(unitidError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
 
 		$.ajax({
 			url : 'dispenserTriggerServlet',
@@ -769,17 +861,17 @@ var tokenValue;
 
 				$('#station_name').val('');
 				$('#serial_number').val('');
-				$('#side').val('Select side');
+				$('#side').val('A');
 				$('#broker_name').val('Select broker IP address');
 				$('#trigger_tag').val('Select trigger tag');
-				$('#trigger_value').val('Select trigger value');
+				$('#trigger_value').val('0');
 				$('#start_pressure').val('Select start pressure');
 				$('#end_pressure').val('Select end pressure');
 				$('#temperature').val('Select temperature');
 				$('#total').val('Select total');
 				$('#quantity').val('Select quantity');
 				$('#unit_price').val('Select unit price');
-				$('#status').val('Select status');
+				$('#status').val('Enable');
 				$('#unit_id').val('');
 
 			},
@@ -857,44 +949,6 @@ var tokenValue;
 		  };		  
 	}
 	
-	function validateSide(side) {
-		var sideError = document.getElementById("sideError");
-
-		if (side == 'Select side') {
-
-			sideError.textContent = "Please select side";
-			return false;
-		} else {
-			sideError.textContent = "";
-			return true;
-		}
-	}
-
-	function validateStatus(status) {
-		var statusError = document.getElementById("statusError");
-
-		if (status == 'Select status') {
-
-			statusError.textContent = "Please select status";
-			return false;
-		} else {
-			statusError.textContent = "";
-			return true;
-		}
-	}
-
-	function validateTriggerValue(triggerValue) {
-		var triggerValueError = document.getElementById("triggerValueError");
-
-		if (triggerValue == 'Select trigger value') {
-
-			triggerValueError.textContent = "Please select trigger value";
-			return false;
-		} else {
-			triggerValueError.textContent = "";
-			return true;
-		}
-	}
 
 	function validateBrokerIPAddress(broker_name) {
 		var brokerIPAddressError = document
@@ -1101,21 +1155,14 @@ var tokenValue;
 												var serial_number = $('#serial_number').val();
 												var unit_id = $('#unit_id').val();
 												
-												if (!validateSide(side)) {
-													sideError.textContent = "Please select side";
-													return;
-												}
+												
 												
 												if (!validateTriggerTag(trigger_tag)) {
 													triggerTagError.textContent = "Please select trigger tag ";
 													return;
 												}
 												
-												if (!validateTriggerValue(trigger_value)) {
-													triggerValueError.textContent = "Please select trigger value";
-													return;
-												}
-												
+																								
 												if (!validateStartPressure(start_pressure)) {
 													startPressureError.textContent = "Please select start pressure ";
 													return;
@@ -1146,11 +1193,7 @@ var tokenValue;
 													return;
 												}
 												
-												if (!validateStatus(status)) {
-													statusError.textContent = "Please select status";
-													return;
-												}
-
+												
 												if (!validateBrokerIPAddress(broker_name)) {
 													brokerIPAddressError.textContent = "Please select broker ip address ";
 													return;
@@ -1165,20 +1208,22 @@ var tokenValue;
 											});
 
 							$('#clearBtn').click(function() {
+
 								$('#station_name').val('');
 								$('#serial_number').val('');
-								$('#side').val('Select side');
+								$('#side').val('A');
 								$('#broker_name').val('Select broker IP address');
 								$('#trigger_tag').val('Select trigger tag');
-								$('#trigger_value').val('Select trigger value');
+								$('#trigger_value').val('0');
 								$('#start_pressure').val('Select start pressure');
 								$('#end_pressure').val('Select end pressure');
 								$('#temperature').val('Select temperature');
 								$('#total').val('Select total');
 								$('#quantity').val('Select quantity');
 								$('#unit_price').val('Select unit price');
-								$('#status').val('Select status');
+								$('#status').val('Enable');
 								$('#unit_id').val('');
+								
 								$('#registerBtn').val('Add');
 
 							});
@@ -1214,29 +1259,32 @@ var tokenValue;
 			
 			<tr>
 			<td>Station name</td>
-			<td><input type="text" id="station_name" name="station_name" required style="height: 10px;" maxlength="31"/>
-							
+			<td style="height: 50px; width: 230px;">
+			<input type="text" id="station_name" name="station_name" required style="height: 10px;" maxlength="31"/>
+							<span id="field_name_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 			</td>
 			<td>Serial number</td>
 			<td><input type="text" id="serial_number" name="serial_number" required style="height: 10px" maxlength="31"/> 
-							
+							<span id="field_serial_num_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 			</td>
 			
 			<td>Unit ID</td>
 			<td><input type="text" id="unit_id" name="unit_id" required maxlength="31" style="height: 10px;"/>
-							
+							<span id="field_unitid_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 			</td>
+			</tr>
+			<tr>
+			
 			<td>Side</td>
 			<td><select class="textBox" id="side" name="side" style="height: 33px"
 							required>
-							<option value="Select side">Select side</option>
-							<option value="a">A</option>
-							<option value="b">B</option>
-							<option value="c">C</option>
-							<option value="d">D</option>
+							<option value="A" selected>A</option>
+							<option value="B">B</option>
+							<option value="C">C</option>
+							<option value="D">D</option>
 						</select> <span id="sideError" style="color: red"></span></td>
-			</tr>
-			<tr>
+		
+		
 			<td>Trigger tag</td>
 			<td><select class="textBox" id=trigger_tag name="trigger_tag" style="height: 33px;">
 							<option value="Select trigger tag">Select trigger tag</option>
@@ -1245,10 +1293,13 @@ var tokenValue;
 						
 			<td>Trigger value</td>
 			<td><select class="textBox" id="trigger_value" name="trigger_value" style="height: 33px" required>
-							<option value="Select trigger value">Select trigger value</option>
-							<option value="0">0</option>
+							
+							<option value="0" selected>0</option>
 							<option value="1">1</option>
 						</select> <span id="triggerValueError" style="color: red"></span></td>
+						
+						</tr>
+						<tr>
 			
 			<td>Start pressure</td>
 			<td><select class="textBox" id="start_pressure" name="start_pressure" style="height: 33px;">
@@ -1259,12 +1310,16 @@ var tokenValue;
 							<option value="Select end pressure">Select end pressure</option>
 						</select> <span id="endPressureError" style="color: red"></span></td>
 			
-			</tr>
-			<tr>
+			
+			
 			<td>temperature</td>
 			<td><select class="textBox" id="temperature" name="temperature" style="height: 33px;">
 							<option value="Select temperature">Select temperature</option>
 						</select> <span id="temperatureError" style="color: red"></span></td>
+						
+						</tr>
+						
+						<tr>
 			<td>total</td>
 			<td><select class="textBox" id="total" name="total" style="height: 33px;">
 							<option value="Select total">Select total</option>
@@ -1284,8 +1339,7 @@ var tokenValue;
 			<tr>
 			<td>Status</td>
 			<td><select class="textBox" id="status" name="status" style="height: 33px" required>
-							<option value="Select status">Select status</option>
-							<option value="Enable">Enable</option>
+							<option value="Enable" selected>Enable</option>
 							<option value="Disable">Disable</option>
 						</select> <span id="statusError" style="color: red"></span></td>
 			<td>Broker IP address</td>
@@ -1295,8 +1349,7 @@ var tokenValue;
 						
 						<td></td>
 						<td></td>
-						<td></td>
-						<td></td>
+						
 			</tr>
 			
 			</table>

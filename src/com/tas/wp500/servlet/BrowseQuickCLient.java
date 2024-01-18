@@ -87,8 +87,19 @@ public class BrowseQuickCLient extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
+		
 		if (check_username != null) {
 			try {
+				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
+				
 				JSONObject jsonObject = new JSONObject();
 
 				String node = request.getParameter("node");
@@ -243,6 +254,9 @@ public class BrowseQuickCLient extends HttpServlet {
 
 				}
 
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting opcua client list: " + e);

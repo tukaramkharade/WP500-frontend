@@ -114,6 +114,81 @@ button {
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
+
+function validateName(name) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(name)) {
+        return 'Invalid common name; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validateOrg(org) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(org)) {
+        return 'Invalid organization name; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validateOrgUnit(orgUnit) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(orgUnit)) {
+        return 'Invalid organizational unit; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validateLocation(location) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(location)) {
+        return 'Invalid location; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validateState(state) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(state)) {
+        return 'Invalid state; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validateCountry(country) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(country)) {
+        return 'Invalid country; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validateNumbers(number) {
+	const
+	numberPattern = /\b\d{1,10}\b/g;
+	if (!numberPattern.test(number)) {
+		return "Enter validity";
+
+		
+	} 
+		return null;
+	
+}
+
+
 
 function generateCertificate(){
 	
@@ -124,6 +199,7 @@ function generateCertificate(){
 	var state = $('#state').val();
 	var country = $('#country').val();
 	var validity = $('#validity').val();
+	 var csrfToken = document.getElementById('csrfToken').value;
 	
 	// Collect IP addresses and DNS names into arrays
     var ipAddresses = [];
@@ -140,6 +216,58 @@ function generateCertificate(){
         }
     });
     
+    // Clear previous error messages
+    $('#field_name_Error').text('');
+    $('#field_org_Error').text('');
+    $('#field_orgunit_Error').text('');
+    $('#field_loc_Error').text('');
+    $('#field_state_Error').text('');
+    $('#field_country_Error').text('');
+    $('#field_validity_Error').text('');
+
+    var nameError = validateName(common_name);
+    if (nameError) {
+        $('#field_name_Error').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    var orgError = validateOrg(organization);
+    if (orgError) {
+        $('#field_org_Error').text(orgError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    var orgUnitError = validateOrgUnit(organizational_unit);
+    if (orgUnitError) {
+        $('#field_orgunit_Error').text(orgUnitError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
+    var locError = validateLocation(location);
+    if (locError) {
+        $('#field_loc_Error').text(locError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    var stateError = validateState(state);
+    if (stateError) {
+        $('#field_state_Error').text(stateError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    var countryError = validateCountry(country);
+    if (countryError) {
+        $('#field_country_Error').text(countryError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
+    var validityError = validateNumbers(validity);
+    if (validityError) {
+        $('#field_validity_Error').text(validityError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
+    
  // Convert IP addresses and DNS names arrays to JSON strings
     var ipAddressesJson = JSON.stringify(ipAddresses);
     var dnsNamesJson = JSON.stringify(dnsNames);
@@ -155,6 +283,7 @@ function generateCertificate(){
 			location : location,
 			country : country,
 			validity : validity,
+			csrfToken: csrfToken,
 			ipAddresses: ipAddressesJson,
             dnsNames: dnsNamesJson
 			
@@ -287,6 +416,13 @@ $(document).ready(function () {
 			String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
+	
 
 if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -440,7 +576,8 @@ if (roleValue === "null") {
 
 			<h3>GENERATE CERTIFICATE</h3>
 			<hr />
-
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
+		
 			<div class="container">
 				<form id="certificateForm" style="margin-top: 0">
 
@@ -471,39 +608,55 @@ if (roleValue === "null") {
 
 									<tr>
 										<td>Common name</td>
-										<td><input type="text" id="common_name"
-											name="common_name" style="height: 10px;" /></td>
+										<td style="height: 50px;">
+										<input type="text" id="common_name"
+											name="common_name" style="height: 10px;" />
+											<span id="field_name_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
 									</tr>
 
 									<tr>
 										<td>Organization</td>
-										<td><input type="text" id="organization"
-											name="organization" style="height: 10px;" /></td>
+										<td style="height: 50px;">
+										<input type="text" id="organization"
+											name="organization" style="height: 10px;" />
+											<span id="field_org_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
 									</tr>
 
 									<tr>
 
 										<td>Organizationl unit</td>
-										<td><input type="text" id="organizational_unit"
-											name="organizational_unit" style="height: 10px;" /></td>
+										<td style="height: 50px;">
+										<input type="text" id="organizational_unit"
+											name="organizational_unit" style="height: 10px;" />
+											<span id="field_orgunit_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
+											
 									</tr>
 
 									<tr>
 										<td>Location</td>
-										<td><input type="text" id="location" name="location"
-											style="height: 10px;" /></td>
+										<td style="height: 50px;">
+										<input type="text" id="location" name="location" style="height: 10px;" />
+										<span id="field_loc_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
 									</tr>
 
 									<tr>
 										<td>State</td>
-										<td><input type="text" id="state" name="state"
-											style="height: 10px;" /></td>
+										<td style="height: 50px;">
+										<input type="text" id="state" name="state" style="height: 10px;" />
+										<span id="field_state_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
 									</tr>
 
 									<tr>
 										<td>Country</td>
-										<td><input type="text" id="country" name="country"
-											style="height: 10px;" /></td>
+										<td style="height: 50px;">
+										<input type="text" id="country" name="country" style="height: 10px;" />
+										<span id="field_country_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
 									</tr>
 
 									<tr>
@@ -512,8 +665,12 @@ if (roleValue === "null") {
 
 									<tr>
 										<td>Validity not after</td>
-										<td><input type="text" id="validity" name="validity"
-											style="height: 10px; width: 20%;" /> (in days)</td>
+										<td style="height: 50px;">
+										<input type="text" id="validity" name="validity"
+											style="height: 10px; width: 20%;" /> (in days)
+											
+											<span id="field_validity_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+											</td>
 									</tr>
 
 									<tr>

@@ -203,6 +203,7 @@ var tokenValue;
 var globalId;
 var globalAction;
 var globalData = [];
+var csrfTokenValue;
 
 function getBasicConfiguration(){
 	
@@ -540,6 +541,9 @@ function getGeneralSettingsLan2(){
 }
 
 function updateGeneralSettingsLan0(){
+	
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-gen-lan0');
 	  modal.style.display = 'block';
@@ -561,6 +565,7 @@ function updateGeneralSettingsLan0(){
 					output : output,
 					forward : forward,
 					rule_drop : rule_drop,
+					csrfToken: csrfToken,
 					operation_action_lan0: 'update'
 
 				},
@@ -614,7 +619,8 @@ function updateGeneralSettingsLan0(){
 }
 
 function updateGeneralSettingsLan1(){
-	
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-gen-lan1');
 	  modal.style.display = 'block';
@@ -636,6 +642,7 @@ function updateGeneralSettingsLan1(){
 					output : output,
 					forward : forward,
 					rule_drop : rule_drop,
+					csrfToken: csrfToken,
 					operation_action_lan1: 'update'
 
 				},
@@ -689,7 +696,8 @@ function updateGeneralSettingsLan1(){
 }
 
 function updateGeneralSettingsLan2(){
-	
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-gen-lan2');
 	  modal.style.display = 'block';
@@ -711,6 +719,7 @@ function updateGeneralSettingsLan2(){
 					output : output,
 					forward : forward,
 					rule_drop : rule_drop,
+					csrfToken: csrfToken,
 					operation_action_lan2: 'update'
 
 				},
@@ -1270,6 +1279,41 @@ function setAction_lan2(trafficRulesId) {
 	$('#action_lan2').val(trafficRulesId);
 }
 
+function validateIPAddr(ipAddr) {
+    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
+
+    if (!regex.test(ipAddr)) {
+        return 'Invalid IP Address. Please enter a valid IP address.';
+    }
+
+    return null; // Validation passed
+}
+
+function validateName(name) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+    if (!regex.test(name)) {
+        return 'Invalid name; symbols not allowed';
+    }
+
+    return null; // Validation passed
+}
+
+function validatePortNumber(portNumber) {
+    // Check if it contains only numbers
+    if (!/^\d+$/.test(portNumber)) {
+        return 'Port number should contain only numbers.';
+    }
+
+    // Check if it has a maximum length of 5 digits
+    if (portNumber.length > 5) {
+        return 'Port number should have a maximum of 5 digits.';
+    }
+
+    // Validation passed
+    return null;
+}
+
 
 function addTrafficRulesLan0() {
 	var name = $('#name_lan0').val();
@@ -1279,8 +1323,34 @@ function addTrafficRulesLan0() {
 	var ip_addr = $('#ip_addr_lan0').val();
 	var type = $('#type_lan0').find(":selected").val();
 	var action = $('#action_lan0').find(":selected").val();
-	
+	  var csrfToken = document.getElementById('csrfToken').value;
 
+	$('#field_name_Error_lan0').text('');
+    $('#field_ipaddr_Error_lan0').text('');
+    $('#field_port_Error_lan0').text('');
+
+
+	 // Validate username
+    var nameError = validateName(name);
+    if (nameError) {
+        $('#field_name_Error_lan0').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    // Validate first name
+    var ipAddrError = validateIPAddr(ip_addr);
+    if (ipAddrError) {
+        $('#field_ipaddr_Error_lan0').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    // Validate last name
+    var portError = validatePortNumber(portNumber);
+    if (portError) {
+        $('#field_port_Error_lan0').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
 	$.ajax({
 		url : "trafficRulesServletLan0",
 		type : "POST",
@@ -1292,6 +1362,7 @@ function addTrafficRulesLan0() {
 			ip_addr : ip_addr,
 			type : type,
 			action : action,
+			csrfToken: csrfToken,
 			operation_action_lan0: 'add'
 		},
 		success : function(data) {
@@ -1359,8 +1430,34 @@ function addTrafficRulesLan1() {
 	var ip_addr = $('#ip_addr_lan1').val();
 	var type = $('#type_lan1').find(":selected").val();
 	var action = $('#action_lan1').find(":selected").val();
+	var csrfToken = document.getElementById('csrfToken').value;
 	
+	$('#field_name_Error_lan1').text('');
+    $('#field_ipaddr_Error_lan1').text('');
+    $('#field_port_Error_lan1').text('');
 
+
+	 // Validate username
+    var nameError = validateName(name);
+    if (nameError) {
+        $('#field_name_Error_lan1').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    // Validate first name
+    var ipAddrError = validateIPAddr(ip_addr);
+    if (ipAddrError) {
+        $('#field_ipaddr_Error_lan1').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    // Validate last name
+    var portError = validatePortNumber(portNumber);
+    if (portError) {
+        $('#field_port_Error_lan1').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
 	$.ajax({
 		url : "trafficRulesServletLan1",
 		type : "POST",
@@ -1372,6 +1469,7 @@ function addTrafficRulesLan1() {
 			ip_addr : ip_addr,
 			type : type,
 			action : action,
+			csrfToken: csrfToken,
 			operation_action_lan1: 'add'
 		},
 		success : function(data) {
@@ -1437,7 +1535,33 @@ function addTrafficRulesLan2() {
 	var ip_addr = $('#ip_addr_lan2').val();
 	var type = $('#type_lan2').find(":selected").val();
 	var action = $('#action_lan2').find(":selected").val();
+	var csrfToken = document.getElementById('csrfToken').value;
 	
+	$('#field_name_Error_lan2').text('');
+    $('#field_ipaddr_Error_lan2').text('');
+    $('#field_port_Error_lan2').text('');
+
+
+	 // Validate username
+    var nameError = validateName(name);
+    if (nameError) {
+        $('#field_name_Error_lan2').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    // Validate first name
+    var ipAddrError = validateIPAddr(ip_addr);
+    if (ipAddrError) {
+        $('#field_ipaddr_Error_lan2').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    // Validate last name
+    var portError = validatePortNumber(portNumber);
+    if (portError) {
+        $('#field_port_Error_lan2').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
 
 	$.ajax({
 		url : "trafficRulesServletLan2",
@@ -1450,6 +1574,7 @@ function addTrafficRulesLan2() {
 			ip_addr : ip_addr,
 			type : type,
 			action : action,
+			csrfToken: csrfToken,
 			operation_action_lan2: 'add'
 		},
 		success : function(data) {
@@ -1507,6 +1632,7 @@ function addTrafficRulesLan2() {
 }
 
 function deleteTrafficRulesLan0(trafficRulesId) {
+	var csrfToken = document.getElementById('csrfToken').value;
 	
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-delete_lan0');
@@ -1521,6 +1647,7 @@ function deleteTrafficRulesLan0(trafficRulesId) {
 		      type: 'POST',
 		      data: {
 		    	  name : trafficRulesId,
+		    	  csrfToken: csrfToken,
 					operation_action_lan0: 'delete'
 		      },
 		      success: function (data) {
@@ -1573,6 +1700,7 @@ function deleteTrafficRulesLan0(trafficRulesId) {
 }
 
 function deleteTrafficRulesLan1(trafficRulesId) {
+	var csrfToken = document.getElementById('csrfToken').value;
 	
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-delete_lan1');
@@ -1587,6 +1715,7 @@ function deleteTrafficRulesLan1(trafficRulesId) {
 		      type: 'POST',
 		      data: {
 		    	  name : trafficRulesId,
+		    	  csrfToken: csrfToken,
 					operation_action_lan1: 'delete'
 		      },
 		      success: function (data) {
@@ -1638,6 +1767,7 @@ function deleteTrafficRulesLan1(trafficRulesId) {
 }
 
 function deleteTrafficRulesLan2(trafficRulesId) {
+	var csrfToken = document.getElementById('csrfToken').value;
 	
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-delete_lan2');
@@ -1652,6 +1782,7 @@ function deleteTrafficRulesLan2(trafficRulesId) {
 		      type: 'POST',
 		      data: {
 		    	  name : trafficRulesId,
+		    	  csrfToken: csrfToken,
 					operation_action_lan2: 'delete'
 		      },
 		      success: function (data) {
@@ -1704,6 +1835,50 @@ function deleteTrafficRulesLan2(trafficRulesId) {
 
 function editTrafficRulesLan0() {
 	
+	 var name = $('#name_lan0').val();
+		var portNumber = $('#portNumber_lan0').val();
+		var macAddress = $('#macAddress_lan0').val();
+		var protocol = $('#protocol_lan0').find(":selected").val();
+		var ip_addr = $('#ip_addr_lan0').val();
+		var type = $('#type_lan0').find(":selected").val();
+		var action = $('#action_lan0').find(":selected").val();
+		var csrfToken = document.getElementById('csrfToken').value;
+		
+		if(type == 'IP'){
+			
+			$("#macAddress_lan0").prop("disabled", true);
+		}else if(type == 'MAC'){
+			
+			$("#ip_addr_lan0").prop("disabled", true);
+		}
+		
+		$('#field_name_Error_lan0').text('');
+	    $('#field_ipaddr_Error_lan0').text('');
+	    $('#field_port_Error_lan0').text('');
+
+
+		 // Validate username
+	    var nameError = validateName(name);
+	    if (nameError) {
+	        $('#field_name_Error_lan0').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var ipAddrError = validateIPAddr(ip_addr);
+	    if (ipAddrError) {
+	        $('#field_ipaddr_Error_lan0').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate last name
+	    var portError = validatePortNumber(portNumber);
+	    if (portError) {
+	        $('#field_port_Error_lan0').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit_lan0');
 	  modal.style.display = 'block';
@@ -1712,22 +1887,8 @@ function editTrafficRulesLan0() {
 	  var confirmButton = document.getElementById('confirm-button-edit_lan0');
 	  confirmButton.onclick = function () {
 		  
-		  var name = $('#name_lan0').val();
-			var portNumber = $('#portNumber_lan0').val();
-			var macAddress = $('#macAddress_lan0').val();
-			var protocol = $('#protocol_lan0').find(":selected").val();
-			var ip_addr = $('#ip_addr_lan0').val();
-			var type = $('#type_lan0').find(":selected").val();
-			var action = $('#action_lan0').find(":selected").val();
-			
-			if(type == 'IP'){
-				
-				$("#macAddress_lan0").prop("disabled", true);
-			}else if(type == 'MAC'){
-				
-				$("#ip_addr_lan0").prop("disabled", true);
-			}
-			
+		 
+		    
 			$.ajax({
 				url : 'trafficRulesServletLan0',
 				type : 'POST',
@@ -1739,6 +1900,7 @@ function editTrafficRulesLan0() {
 					ip_addr : ip_addr,
 					type : type,
 					action : action,
+					csrfToken: csrfToken,
 					operation_action_lan0: 'update'
 				},
 				success : function(data) {
@@ -1800,6 +1962,50 @@ function editTrafficRulesLan0() {
 
 function editTrafficRulesLan1() {
 	
+	 var name = $('#name_lan1').val();
+		var portNumber = $('#portNumber_lan1').val();
+		var macAddress = $('#macAddress_lan1').val();
+		var protocol = $('#protocol_lan1').find(":selected").val();
+		var ip_addr = $('#ip_addr_lan1').val();
+		var type = $('#type_lan1').find(":selected").val();
+		var action = $('#action_lan1').find(":selected").val();
+		var csrfToken = document.getElementById('csrfToken').value;
+		
+		if(type == 'IP'){
+			
+			$("#macAddress_lan1").prop("disabled", true);
+		}else if(type == 'MAC'){
+			
+			$("#ip_addr_lan1").prop("disabled", true);
+		}
+		
+		$('#field_name_Error_lan1').text('');
+	    $('#field_ipaddr_Error_lan1').text('');
+	    $('#field_port_Error_lan1').text('');
+
+
+		 // Validate username
+	    var nameError = validateName(name);
+	    if (nameError) {
+	        $('#field_name_Error_lan1').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var ipAddrError = validateIPAddr(ip_addr);
+	    if (ipAddrError) {
+	        $('#field_ipaddr_Error_lan1').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate last name
+	    var portError = validatePortNumber(portNumber);
+	    if (portError) {
+	        $('#field_port_Error_lan1').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit_lan1');
 	  modal.style.display = 'block';
@@ -1808,22 +2014,7 @@ function editTrafficRulesLan1() {
 	  var confirmButton = document.getElementById('confirm-button-edit_lan1');
 	  confirmButton.onclick = function () {
 		  
-		  var name = $('#name_lan1').val();
-			var portNumber = $('#portNumber_lan1').val();
-			var macAddress = $('#macAddress_lan1').val();
-			var protocol = $('#protocol_lan1').find(":selected").val();
-			var ip_addr = $('#ip_addr_lan1').val();
-			var type = $('#type_lan1').find(":selected").val();
-			var action = $('#action_lan1').find(":selected").val();
-			
-			if(type == 'IP'){
-				
-				$("#macAddress_lan1").prop("disabled", true);
-			}else if(type == 'MAC'){
-				
-				$("#ip_addr_lan1").prop("disabled", true);
-			}
-			
+		 
 			$.ajax({
 				url : 'trafficRulesServletLan1',
 				type : 'POST',
@@ -1835,6 +2026,7 @@ function editTrafficRulesLan1() {
 					ip_addr : ip_addr,
 					type : type,
 					action : action,
+					csrfToken: csrfToken,
 					operation_action_lan1: 'update'
 				},
 				success : function(data) {
@@ -1895,6 +2087,50 @@ function editTrafficRulesLan1() {
 
 function editTrafficRulesLan2() {
 	
+	 var name = $('#name_lan2').val();
+		var portNumber = $('#portNumber_lan2').val();
+		var macAddress = $('#macAddress_lan2').val();
+		var protocol = $('#protocol_lan2').find(":selected").val();
+		var ip_addr = $('#ip_addr_lan2').val();
+		var type = $('#type_lan2').find(":selected").val();
+		var action = $('#action_lan2').find(":selected").val();
+		var csrfToken = document.getElementById('csrfToken').value;
+		
+		if(type == 'IP'){
+			
+			$("#macAddress_lan2").prop("disabled", true);
+		}else if(type == 'MAC'){
+			
+			$("#ip_addr_lan2").prop("disabled", true);
+		}
+		
+		$('#field_name_Error_lan2').text('');
+	    $('#field_ipaddr_Error_lan2').text('');
+	    $('#field_port_Error_lan2').text('');
+
+
+		 // Validate username
+	    var nameError = validateName(name);
+	    if (nameError) {
+	        $('#field_name_Error_lan2').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var ipAddrError = validateIPAddr(ip_addr);
+	    if (ipAddrError) {
+	        $('#field_ipaddr_Error_lan2').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate last name
+	    var portError = validatePortNumber(portNumber);
+	    if (portError) {
+	        $('#field_port_Error_lan2').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit_lan2');
 	  modal.style.display = 'block';
@@ -1903,22 +2139,7 @@ function editTrafficRulesLan2() {
 	  var confirmButton = document.getElementById('confirm-button-edit_lan2');
 	  confirmButton.onclick = function () {
 		  
-		  var name = $('#name_lan2').val();
-			var portNumber = $('#portNumber_lan2').val();
-			var macAddress = $('#macAddress_lan2').val();
-			var protocol = $('#protocol_lan2').find(":selected").val();
-			var ip_addr = $('#ip_addr_lan2').val();
-			var type = $('#type_lan2').find(":selected").val();
-			var action = $('#action_lan2').find(":selected").val();
-			
-			if(type == 'IP'){
-				
-				$("#macAddress_lan2").prop("disabled", true);
-			}else if(type == 'MAC'){
-				
-				$("#ip_addr_lan2").prop("disabled", true);
-			}
-			
+		
 			$.ajax({
 				url : 'trafficRulesServletLan2',
 				type : 'POST',
@@ -1930,6 +2151,7 @@ function editTrafficRulesLan2() {
 					ip_addr : ip_addr,
 					type : type,
 					action : action,
+					csrfToken: csrfToken,
 					operation_action_lan2: 'update'
 				},
 				success : function(data) {
@@ -2231,6 +2453,12 @@ function applyTrafficRules() {
 		    	
 		    	roleValue = '<%=roleValue%>';
 		    	
+		    	<%// Access the session variable
+				HttpSession csrfToken = request.getSession();
+				String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+				csrfTokenValue = '<%=csrfTokenValue%>';
+		    	
 		    	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 					$('#registerBtnGenSettings_lan0').prop('disabled', true);
@@ -2459,6 +2687,7 @@ function applyTrafficRules() {
     </div>
 </div>
 
+<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 				<button class="tab-button-lan active"
 					onclick="openTab('lan0', this)" style="margin-left: 2px;">LAN0</button>
 				<button class="tab-button-lan" onclick="openTab('lan1', this)">LAN1</button>
@@ -2476,8 +2705,8 @@ function applyTrafficRules() {
 
 					<div class="form-container" style="width: 40%;">
 						<form id="generalSettingsForm_lan0" style="width: 100%;">
-							<input type="hidden" id="operation_action_lan0"
-								name="operation_action_lan0" value="">
+							<input type="hidden" id="operation_action_lan0" name="operation_action_lan0" value="">
+							
 
 							<table>
 								<tr>
@@ -2621,8 +2850,11 @@ function applyTrafficRules() {
 
 										<tr>
 											<td>Name</td>
-											<td><input type="text" id="name_lan0" name="name_lan0"
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="name_lan0" name="name_lan0"
 												maxlength="31" style="height: 10px;" required/>
+												<span id="field_name_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
 												</td>
 										
 											<td>Type</td>
@@ -2650,13 +2882,16 @@ function applyTrafficRules() {
 											
 											
 											<td>Source IP address</td>
-											<td><input type="text" id="ip_addr_lan0" name="ip_addr_lan0"
-												maxlength="31" />
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="ip_addr_lan0" name="ip_addr_lan0"
+												maxlength="31" style="height: 10px;"/>
+												<span id="field_ipaddr_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
 												maxlength="6" required/>
+												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan0" name="action_lan0"
@@ -2806,8 +3041,10 @@ function applyTrafficRules() {
 
 										<tr>
 											<td>Name</td>
-											<td><input type="text" id="name_lan1" name="name_lan1"
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="name_lan1" name="name_lan1"
 												maxlength="31" style="height: 10px;" required/>
+													<span id="field_name_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											
 											<td>Type</td>
@@ -2836,11 +3073,13 @@ function applyTrafficRules() {
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan1" name="ip_addr_lan1"
 												maxlength="31" />
+													<span id="field_ipaddr_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan1" name="portNumber_lan1"
 												maxlength="6" required/>
+													<span id="field_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan1" name="action_lan1"
@@ -2988,8 +3227,10 @@ function applyTrafficRules() {
 
 										<tr>
 											<td>Name</td>
-											<td><input type="text" id="name_lan2" name="name_lan2"
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="name_lan2" name="name_lan2"
 												maxlength="31" style="height: 10px;" required/>
+													<span id="field_name_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											
 											<td>Type</td>
@@ -3018,11 +3259,13 @@ function applyTrafficRules() {
 											<td>Source IP address</td>
 											<td><input type="text" id="ip_addr_lan2" name="ip_addr_lan2"
 												maxlength="31" />
+													<span id="field_ipaddr_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 
 											<td>Port</td>
 											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
 												maxlength="6" required/>
+													<span id="field_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan2" name="action_lan2"

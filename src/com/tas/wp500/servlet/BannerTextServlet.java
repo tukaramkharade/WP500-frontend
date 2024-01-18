@@ -26,7 +26,7 @@ public class BannerTextServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 
 		String check_username = (String) session.getAttribute("username");
-		String check_role = (String) session.getAttribute("role");
+		
 		
 			
 			TCPClient client = new TCPClient();
@@ -36,7 +36,6 @@ public class BannerTextServlet extends HttpServlet {
 				
 				json.put("operation", "read_banner_file");
 				json.put("user", check_username);
-				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -80,30 +79,48 @@ public class BannerTextServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
+		System.out.println("csrf session: "+csrfTokenFromSession);
+		System.out.println("csrf req: "+csrfTokenFromRequest);
+		
 		if (check_username != null) {
 
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-			try{
 			
-				BufferedReader reader = request.getReader();
-	            StringBuilder stringBuilder = new StringBuilder();
-	            String line;
-	            while ((line = reader.readLine()) != null) {
-	                stringBuilder.append(line);
-	            }
-	            String linesJson = stringBuilder.toString();
+		
+			try{
+				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
+					String linesJson = request.getParameter("lines");
+	                System.out.println("lines json: " + linesJson);
 
-	            // Extract the "lines" property from the JSON object
-	           JSONObject jsonObj = new JSONObject(linesJson);
-	         //   String linesJson = request.getParameter("lines");
-	            System.out.println("lines json: "+linesJson);
-	            
-	            JSONArray linesArray = new JSONArray(jsonObj.getString("lines"));
+	                JSONArray linesArray = new JSONArray(linesJson);
+	                System.out.println("lines array: " + linesArray);
+			
+//				BufferedReader reader = request.getReader();
+//	            StringBuilder stringBuilder = new StringBuilder();
+//	            String line;
+//	            while ((line = reader.readLine()) != null) {
+//	                stringBuilder.append(line);
+//	            }
+//	            String linesJson = stringBuilder.toString();
+//	            
+//	           
+//	            // Extract the "lines" property from the JSON object
+//	           JSONObject jsonObj = new JSONObject(linesJson);
+//	         //   String linesJson = request.getParameter("lines");
+//	            System.out.println("lines json: "+linesJson);
+//	            
+//	            JSONArray linesArray = new JSONArray(jsonObj.getString("lines"));
 	            
 	            System.out.println("lines array: " + linesArray);
-
-				
+	          
 				json.put("operation", "write_banner_file");
 				json.put("user", check_username);
 				json.put("data", linesArray);
@@ -130,7 +147,9 @@ public class BannerTextServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			}catch(Exception e){
 				
 			}

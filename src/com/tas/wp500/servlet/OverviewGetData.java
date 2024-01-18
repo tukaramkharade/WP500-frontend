@@ -27,6 +27,11 @@ public class OverviewGetData extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
@@ -35,6 +40,8 @@ public class OverviewGetData extends HttpServlet {
 
 			try {
 
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
 				json.put("operation", "get_overview_info");
 				json.put("user", check_username);
 				json.put("token", check_token);
@@ -76,6 +83,9 @@ public class OverviewGetData extends HttpServlet {
 				out.print(jsonObject.toString());
 				out.flush();
 
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting opcua client list: " + e);

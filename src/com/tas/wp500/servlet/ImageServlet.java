@@ -280,10 +280,11 @@ public class ImageServlet extends HttpServlet {
 
 			            JSONObject result = new JSONObject(respStr);
 
-			            String otp_result = result.getString("otp_result");
+			     //       String otp_result = result.getString("otp_result");
+			            String status = result.getString("status");
 						
 						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("otp_result", otp_result);
+						jsonObject.put("status", status);
 
 						// Set the content type of the response to application/json
 						response.setContentType("application/json");

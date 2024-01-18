@@ -72,7 +72,10 @@
                                 }
                             });
                             
-        	                window.location.href = 'overview.jsp';
+        	                 window.location.href = 'overview.jsp'; 
+                           /*  window.location.replace('overview.jsp'); */
+        	            	   
+        	                
         	            	
         	            }
         	            

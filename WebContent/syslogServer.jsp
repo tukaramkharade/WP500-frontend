@@ -166,8 +166,53 @@ function getSysLog(){
 
 }
 
+function validateHost(ipaddr) {
+    var regex = /^([a-zA-Z0-9@_.-]{1,100}\.){0,3}[a-zA-Z0-9@_.-]{1,100}$/;
+
+    if (!regex.test(ipaddr)) {
+        return 'Invalid host name. Please enter a valid IP address.';
+    }
+
+    return null; // Validation passed
+}
+
+function validatePortNumber(portNumber) {
+    // Check if it contains only numbers
+    if (!/^\d+$/.test(portNumber)) {
+        return 'Port number should contain only numbers.';
+    }
+
+    // Check if it has a maximum length of 5 digits
+    if (portNumber.length > 5) {
+        return 'Port number should have a maximum of 5 digits.';
+    }
+
+    // Validation passed
+    return null;
+}
 
 function updateSysLog(){
+	
+	 var hostname = $('#hostname').val();
+		var port_number = $('#port_number').val();
+		
+		 $('#field_host_Error').text('');
+		    $('#field_port_Error').text('');
+		   
+			 // Validate username
+		    var hostnameError = validateHost(hostname);
+		    if (hostnameError) {
+		        $('#field_host_Error').text(hostnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		    // Validate first name
+		    var portError = validatePortNumber(port_number);
+		    if (portError) {
+		        $('#field_port_Error').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -176,10 +221,6 @@ function updateSysLog(){
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 		  
-		  var hostname = $('#hostname').val();
-			var port_number = $('#port_number').val();
-			
-			
 			$.ajax({
 				url : 'syslogConf',
 				type : 'POST',
@@ -470,12 +511,18 @@ $('#applyButton').click(function() {
 					
 						<tr>
 							<td>Hostname</td>
-							<td><input type="text" id="hostname" maxlength="31" name="hostname" required style="max-width: 200px;" /></td>
+							<td style="height: 50px; width: 230px;">
+							<input type="text" id="hostname" maxlength="31" name="hostname" required style="max-width: 200px;" />
+							<span id="field_host_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+							</td>
 							</tr>
 							
 						<tr>
 							<td>Port</td>
-							<td><input type="text" id="port_number" name="port_number" maxlength="6" required style="max-width: 200px;"/></td>
+							<td style="height: 50px; width: 230px;">
+							<input type="text" id="port_number" name="port_number" maxlength="6" required style="max-width: 200px;"/>
+							<span id="field_port_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+							</td>
 						</tr>
 						
 						<tr>
