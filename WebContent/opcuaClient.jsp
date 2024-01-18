@@ -753,7 +753,7 @@ $(document).ready(function() {
 							</select>
 							</td>
 					<td>Prefix</td>
-					<td><input type="text" id="prefix" name="prefix" maxlength="31"/>
+					<td><input type="text" id="prefix" name="prefix" maxlength="31" required/>
 					<span id="field_prefix_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					</tr>

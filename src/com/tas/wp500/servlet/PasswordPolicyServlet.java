@@ -29,12 +29,18 @@ public class PasswordPolicyServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		JSONObject jsonObject = new JSONObject();
 
 		if (check_username != null) {
 
 			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -87,7 +93,9 @@ public class PasswordPolicyServlet extends HttpServlet {
 
 					out.flush();
 
-				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -105,6 +113,11 @@ public class PasswordPolicyServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		String min_asccii_char_count = null;
 		String min_mix_char_count = null;
@@ -140,7 +153,7 @@ public class PasswordPolicyServlet extends HttpServlet {
 					}
 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -179,7 +192,9 @@ public class PasswordPolicyServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

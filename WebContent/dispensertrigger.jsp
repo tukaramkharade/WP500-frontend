@@ -143,6 +143,7 @@ margin-top: 68px;
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 	function loadBrokerIPList() {
 		$.ajax({
@@ -380,11 +381,15 @@ var tokenValue;
 	function loadDispenserTriggerList() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 					url : 'dispenserTriggerServlet',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -607,7 +612,7 @@ var tokenValue;
 			var unit_price = $('#unit_price').find(":selected").val();
 			var status = $('#status').find(":selected").val();
 			var unit_id = $('#unit_id').val();
-			
+			var csrfToken = document.getElementById('csrfToken').value;
 			 // Clear previous error messages
 		    $('#field_name_Error').text('');
 		    $('#field_serial_num_Error').text('');
@@ -663,6 +668,7 @@ var tokenValue;
 					unit_price : unit_price,
 					status : status,
 					unit_id : unit_id,
+					csrfToken: csrfToken,
 					action: 'update'
 				},
 				success : function(data) {
@@ -780,6 +786,7 @@ var tokenValue;
 		var unit_price = $('#unit_price').find(":selected").val();
 		var status = $('#status').find(":selected").val();
 		var unit_id = $('#unit_id').val();
+		var csrfToken = document.getElementById('csrfToken').value;
 		
 		 // Clear previous error messages
 	    $('#field_name_Error').text('');
@@ -827,6 +834,7 @@ var tokenValue;
 				unit_price : unit_price,
 				status : status,
 				unit_id : unit_id,
+				csrfToken: csrfToken,
 				action: 'add'
 			},
 			success : function(data) {
@@ -889,6 +897,8 @@ var tokenValue;
 
 	
 	function deleteDispenserTrigger(dispenserTriggerId1, dispenserTriggerId2) {
+		var csrfToken = document.getElementById('csrfToken').value;
+		
 		 // Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -902,6 +912,7 @@ var tokenValue;
 					data : {
 						serial_number : dispenserTriggerId1,
 						side : dispenserTriggerId2,
+						csrfToken: csrfToken,
 						action: 'delete'
 					},
 					success : function(data) {
@@ -1094,6 +1105,12 @@ var tokenValue;
 	
 		roleValue = '<%=roleValue%>';
 		
+		<%// Access the session variable
+		HttpSession csrfToken = request.getSession();
+		String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+		csrfTokenValue = '<%=csrfTokenValue%>';
+		
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 							$("#actions").hide(); 
 							
@@ -1246,6 +1263,7 @@ var tokenValue;
 		<div class="container">
 			<form id="dispensortriggerform">
 			<input type="hidden" id="action" name="action" value="">
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			
 			<div id="loader-overlay">
     <div id="loader">

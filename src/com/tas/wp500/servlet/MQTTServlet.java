@@ -30,7 +30,11 @@ public class MQTTServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
 
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 
@@ -38,6 +42,7 @@ public class MQTTServlet extends HttpServlet {
 
 			try {
 
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "protocol");
 				json.put("protocol_type", "mqtt");
 				json.put("operation_type", "get_query");
@@ -69,7 +74,9 @@ public class MQTTServlet extends HttpServlet {
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
-
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting mqtt data: " + e);
@@ -84,6 +91,11 @@ public class MQTTServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		String broker_ip_address = null;
 		String port_number = null;
@@ -119,7 +131,9 @@ public class MQTTServlet extends HttpServlet {
 					publishing_format = request.getParameter("publishing_format");
 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+							
+						
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -162,7 +176,9 @@ public class MQTTServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding mqtt : " + e);
@@ -183,6 +199,8 @@ public class MQTTServlet extends HttpServlet {
 					publishing_format = request.getParameter("publishing_format");
 					
 					try {
+						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
@@ -228,6 +246,9 @@ public class MQTTServlet extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating mqtt : " + e);
@@ -239,7 +260,7 @@ public class MQTTServlet extends HttpServlet {
 					prefix = request.getParameter("prefix");
 					
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -272,7 +293,9 @@ public class MQTTServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in deleting mqtt : " + e);

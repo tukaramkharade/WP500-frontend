@@ -143,6 +143,7 @@ margin-top: 68px;
 var roleValue;	
 var json_string_text;
 var tokenValue;
+var csrfTokenValue;
 
 	function loadBrokerIPList() {
 		$.ajax({
@@ -177,11 +178,15 @@ var tokenValue;
 	function loadJsonBuilderList() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 					url : 'jsonBuilderServlet',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -333,11 +338,6 @@ var tokenValue;
 		$('#broker_name').val(jsonBuilderId);
 	}
 
-	/* function setPublishTopic(jsonBuilderId) {
-
-		$('#publish_topic').val(jsonBuilderId);
-	} */
-
 	function setPublishingStatus(jsonBuilderId) {
 
 		$('#publishing_status').val(jsonBuilderId);
@@ -358,6 +358,8 @@ var tokenValue;
 	} 
  
  function deleteJsonBuilder(jsonBuilderId) {
+	  var csrfToken = document.getElementById('csrfToken').value;
+	  
 	 // Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-delete');
 	  modal.style.display = 'block';
@@ -370,6 +372,7 @@ var tokenValue;
 				type : 'POST',
 				data : {
 					json_string_name : jsonBuilderId,
+					csrfToken: csrfToken,
 					action: 'delete'
 				},
 				success : function(data) {
@@ -426,6 +429,7 @@ var tokenValue;
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		 json_string_text = $('#json_string_validate').val();
+		  var csrfToken = document.getElementById('csrfToken').value;
 
 		 $('#field_string_Error').text('');
 		   
@@ -444,8 +448,7 @@ var tokenValue;
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
 			  			 
-				 $
-					.ajax({
+				 $.ajax({
 						url : 'jsonBuilderServlet',
 						type : 'POST',
 						data : {
@@ -456,6 +459,7 @@ var tokenValue;
 							publishing_status : publishing_status,
 							storeAndForward : storeAndForward,
 							json_string_text : json_string_text,
+							csrfToken: csrfToken,
 							action: 'update'
 						},
 						success : function(data) {
@@ -537,6 +541,7 @@ var tokenValue;
 		var publishing_status = $('#publishing_status').find(":selected").val();
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		 json_string_text = $('#json_string_validate').val();
+		  var csrfToken = document.getElementById('csrfToken').value;
 
 		 $('#field_string_Error').text('');
 		   
@@ -559,6 +564,7 @@ var tokenValue;
 						publishing_status : publishing_status,
 						storeAndForward : storeAndForward,
 						json_string_text : json_string_text,
+						csrfToken: csrfToken,
 						action: 'add'
 					},
 					success : function(data) {
@@ -775,6 +781,13 @@ var tokenValue;
 			    	
 			    	roleValue = '<%=roleValue%>';
 			    	
+			    	<%// Access the session variable
+					HttpSession csrfToken = request.getSession();
+					String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+					csrfTokenValue = '<%=csrfTokenValue%>';
+						
+			    	
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$("#actions").hide();
@@ -885,6 +898,7 @@ var tokenValue;
 		<div class="container">
 			<form id="jsonBuilderForm">
 				<input type="hidden" id="action" name="action" value="">
+				<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 				
 				<div id="loader-overlay">
     <div id="loader">

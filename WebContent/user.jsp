@@ -219,6 +219,7 @@ margin-top: 18px;
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function togglePassword() {
     var passwordInput = $('#password');
@@ -238,12 +239,16 @@ function togglePassword() {
 	function loadUserList() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 					
 					url : 'userServlet',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -437,6 +442,7 @@ function togglePassword() {
 		var first_name = $('#first_name').val();
 		var last_name = $('#last_name').val();
 		var user_role = $('#role').find(":selected").val();
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 		 // Clear previous error messages
 	    $('#field_User_Error').text('');
@@ -474,6 +480,7 @@ function togglePassword() {
 				first_name : first_name,
 				last_name : last_name,
 				user_role : user_role,
+				csrfToken: csrfToken,
 				action: 'add'
 			},
 			success : function(data) {
@@ -591,6 +598,8 @@ function togglePassword() {
     }
 	
 	function deleteUser(userId) {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		  // Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -604,6 +613,7 @@ function togglePassword() {
 		      type: 'POST',
 		      data: {
 		        username: userId,
+		        csrfToken: csrfToken,
 		        action: 'delete'
 		      },
 		      success: function (data) {
@@ -654,6 +664,8 @@ function togglePassword() {
 	
 	
 	 function editUser() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		 var username = $('#username').val();
 			var first_name = $('#first_name').val();
 			var last_name = $('#last_name').val();
@@ -694,8 +706,6 @@ function togglePassword() {
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
 			  
-			  
-			  
 			  $.ajax({
 					url : 'userServlet',
 					type : 'POST',
@@ -704,6 +714,7 @@ function togglePassword() {
 						first_name : first_name,
 						last_name : last_name,
 						user_role : user_role,
+						csrfToken: csrfToken,
 						action: 'update'
 					},
 					success : function(data) {
@@ -769,11 +780,11 @@ function togglePassword() {
 	} 
 	 
 	 function editPassword() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		 var modal = document.getElementById('custom-modal-edit-password');
 		  modal.style.display = 'block';
 		  
-		  
-		    
 		// Handle the confirm button click
 		  var confirmButton = document.getElementById('confirm-button-edit-password');
 		  confirmButton.onclick = function () {
@@ -787,6 +798,7 @@ function togglePassword() {
 					data : {
 						username : username,
 						password : password,
+						csrfToken: csrfToken,
 						action: 'update_user_password'
 					},
 					success : function(data) {
@@ -843,6 +855,7 @@ function togglePassword() {
 	 }
 	 
 	 function updatePasswordPolicy(){
+		 var csrfToken = document.getElementById('csrfToken').value;
 		 
 		 var modal = document.getElementById('custom-modal-updatePasswordPolicy');
 		  modal.style.display = 'block';
@@ -886,6 +899,7 @@ function togglePassword() {
 			    			allowed_spl_char: allowed_spl_char,
 			    			min_char_count : min_char_count,
 			    			password_blocked_list : blockedPasswordJson,
+			    			csrfToken: csrfToken,
 			    			password_policy_action : 'updatePassword'
 			    						
 			    		},
@@ -938,10 +952,15 @@ function togglePassword() {
 	 }
 	 
 	 function resetPasswordPolicy(){
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		 $.ajax({
 			  url : 'ResetPasswordPolicyServlet',
 				type : 'GET',
 				dataType : 'json',
+				data: {
+					csrfToken: csrfToken
+		        },
 				success : function(data) {
 					
 					if (data.status == 'fail') {
@@ -1067,10 +1086,15 @@ function togglePassword() {
 
 		  
 		  function getPasswordPolicy() {
+			  var csrfToken = document.getElementById('csrfToken').value;
+			  
 			  $.ajax({
 				  url : 'PasswordPolicyServlet',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					success : function(data) {
 						
 						$('#min_char_count').val(data.characters_count);
@@ -1110,6 +1134,12 @@ function togglePassword() {
 		String roleValue = (String) session.getAttribute("role");%>
 	
 	roleValue = '<%=roleValue%>';
+	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
 	
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -1231,6 +1261,7 @@ function togglePassword() {
 		<section style="margin-left: 1em">
 				
 		<div class="tab-container">
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 		
 		 <button class="tab-button active" onclick="openTab('add-user', this)" style="margin-left: 16px; margin-top: 10px;">Add User</button>
     <button class="tab-button" onclick="openTab('password-policy', this)">Password Policy</button>
