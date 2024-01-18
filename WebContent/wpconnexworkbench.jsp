@@ -129,6 +129,19 @@ h3 {
     background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
+.form-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .form-container label {
+        margin-right: 10px;
+    }
+
+    .form-container input {
+        margin-right: 10px;
+    }
 
 </style>
 <script>
@@ -387,15 +400,58 @@ var tokenValue;
 		    var selectedFileName = $("#fileName").val();
 
 		    if (selectedFileName !== "") {
-		        // Create a hidden anchor element to trigger the file download
-		        var downloadLink = document.createElement("a");
-		        downloadLink.href = "downloadSratonFile?userFileName=" + selectedFileName;
-		        downloadLink.style.display = "none";
-		        document.body.appendChild(downloadLink);
-		        
-		        downloadLink.click(); // Simulate a click on the anchor element to trigger the download
+		        $.ajax({
+		            type: "POST", // Use POST method to send data
+		            url: "downloadSratonFile",
+		            data: { userFileName: selectedFileName },
+		            success: function (data, textStatus, xhr) {
+		            	 var filename = "";
+		                 var disposition = xhr.getResponseHeader('Content-Disposition');
 
-		        document.body.removeChild(downloadLink); // Clean up the element after download
+		                 // Access custom headers
+		                 var customStatus = xhr.getResponseHeader('X-Status');
+		                 var customMessage = xhr.getResponseHeader('X-Message');
+
+		                 // Handle custom headers
+		                 if (customStatus === 'success') {
+		                     // File download was successful
+		                     if (disposition && disposition.indexOf('attachment') !== -1) {
+		                         var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+		                         var matches = filenameRegex.exec(disposition);
+		                         if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+		                     }
+
+		                     var blob = new Blob([data], { type: 'application/octet-stream' });
+
+		                     if (typeof window.navigator.msSaveBlob !== 'undefined') {
+		                         window.navigator.msSaveBlob(blob, filename);
+		                     } else {
+		                         var URL = window.URL || window.webkitURL;
+		                         var downloadUrl = URL.createObjectURL(blob);
+
+		                         if (filename) {
+		                             var a = document.createElement("a");
+		                             a.href = downloadUrl;
+		                             a.download = filename;
+		                             document.body.appendChild(a);
+		                             a.click();
+		                             document.body.removeChild(a);
+		                         } else {
+		                             window.location.href = downloadUrl;
+		                         }
+
+		                         setTimeout(function () {
+		                             URL.revokeObjectURL(downloadUrl);
+		                         }, 100);
+		                     }
+		                     }
+		            },
+		            error: function (xhr, textStatus, errorThrown) {
+		                // Handle AJAX error
+		                $("#popupMessage").text("Error: " + errorThrown);
+		                $("#customPopup").show();
+		            }
+		        });
 		    } else {
 		        // Handle the case when no file name is entered
 		        $("#popupMessage").text("Please enter a file name first.");
@@ -405,7 +461,8 @@ var tokenValue;
 		    $("#closePopup").click(function () {
 		        $("#customPopup").hide();
 		    });
-		}	  
+		}
+	  
 	  
 	  
 	  function changeButtonColor(isDisabled) {
@@ -555,11 +612,15 @@ var tokenValue;
 				
 			  </div>
             </form>
-            <label for="fileUrl">Enter File Name</label>
-            <input type="text" id="fileName" name="fileName" required>
-           
-            <input type="button" value="Download Straton File" id="straton_download" style="margin-top: 15px;">
+            <div class="form-container">
             
+            <label for="fileUrl">Enter File Name</label>
+            <input type="text" id="fileName" name="fileName" required style="width: 200px;">
+           <div>
+              <input type="button" value="Download Straton File" id="straton_download" >
+           </div>
+            
+            </div>
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>

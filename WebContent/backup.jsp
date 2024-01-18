@@ -218,29 +218,82 @@ function updateProgress() {
     });
 }
 
-function downloadZipFile() {
-    var selectedFileName = $("#fileName").val();
+function downloadZipFile() {   
+    $.ajax({
+        type: "POST",
+        url: "downloadBackupFile",
+        data: {
+            action: 'downloadBackupFile',
+            roleValue: roleValue,
+            tokenValue: tokenValue
+        },
+        success: function (data, status, xhr) {
+            // Handle success
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
 
-    if (selectedFileName !== "") {
-        // Create a hidden anchor element to trigger the file download
-        var downloadLink = document.createElement("a");
-        downloadLink.href = "downloadBackupFile"; // Replace with the appropriate endpoint for downloading the ZIP file
-        downloadLink.style.display = "none";
-        document.body.appendChild(downloadLink);
+            // Access custom headers
+            var customStatus = xhr.getResponseHeader('X-Status');
+            var customMessage = xhr.getResponseHeader('X-Message');
 
-        downloadLink.click(); // Simulate a click on the anchor element to trigger the download
+            // Handle custom headers
+            if (customStatus === 'success') {
+                // File download was successful
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                }
 
-        document.body.removeChild(downloadLink); // Clean up the element after download
-    } else {
-        // Handle the case when no file name is entered
-        $("#popupMessage").text("Please enter a file name first.");
-        $("#customPopup").show();
-    }
+                var blob = new Blob([data], { type: 'application/octet-stream' });
+
+                if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                    window.navigator.msSaveBlob(blob, filename);
+                } else {
+                    var URL = window.URL || window.webkitURL;
+                    var downloadUrl = URL.createObjectURL(blob);
+
+                    if (filename) {
+                        var a = document.createElement("a");
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    } else {
+                        window.location.href = downloadUrl;
+                    }
+
+                    setTimeout(function () {
+                        URL.revokeObjectURL(downloadUrl);
+                    }, 100);
+                }
+            } else {
+                // Display the custom popup message for error
+                $("#popupMessage").text(customMessage || "Error initiating file download");
+                $("#customPopup").show();
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle errors
+            console.error("Error initiating file download: " + error);
+
+            // Display the custom popup message for errors
+            var customStatus = xhr.getResponseHeader('X-Status');
+            var customMessage = xhr.getResponseHeader('X-Message');
+
+            // Display the custom popup message for error
+            $("#popupMessage").text(customMessage || "Error initiating file download");
+            $("#customPopup").show();
+        }
+    });
 
     $("#closePopup").click(function () {
         $("#customPopup").hide();
     });
 }
+
+
 function createBackupFile() {
 	$.ajax({
 		url : 'downloadBackupFile',
@@ -310,19 +363,12 @@ function restoreBackupFile() {
 				        modal1.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };			  
-			} 
-			
-			// Display the custom popup message
- 			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();			
+			}		
 		},
 		error : function(xhr, status, error) {
 			console.log('Error adding tag: '+ error);
 		}
-	});
-	$("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
+	});	
 	
 }	
 

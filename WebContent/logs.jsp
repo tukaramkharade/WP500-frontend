@@ -238,6 +238,89 @@ var tokenValue;
 					},
 				});
 	}
+	function downloadLogFile() {
+	    var selectedLogFile = $("#log_file").val();
+	    var token = '<%= session.getAttribute("token") %>';
+
+	    if (selectedLogFile !== "") {
+	        // Encode the log file name and token
+	        var sanitizedLogFile = encodeURIComponent(selectedLogFile);
+	        var sanitizedToken = encodeURIComponent(token);
+
+	        // Make an AJAX POST request
+	        $.ajax({
+	            type: "POST",
+	            url: "DownloadLogServlet",
+	            data: {
+	                log_file: sanitizedLogFile,
+	                token: sanitizedToken
+	            },
+	            success: function (data, status, xhr) {
+	                var downloadStatus = xhr.getResponseHeader('X-Status');
+	                var customMessage = xhr.getResponseHeader('X-Message');
+	                var filename = "";
+	                var disposition = xhr.getResponseHeader('Content-Disposition');
+	                // Display the custom popup message based on the status
+	                if (downloadStatus === 'success') {
+	                	if (disposition && disposition.indexOf('attachment') !== -1) {
+	                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+	                        var matches = filenameRegex.exec(disposition);
+	                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+	                    }
+
+	                    var blob = new Blob([data], { type: 'application/octet-stream' });
+
+	                    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+	                        window.navigator.msSaveBlob(blob, filename);
+	                    } else {
+	                        var URL = window.URL || window.webkitURL;
+	                        var downloadUrl = URL.createObjectURL(blob);
+
+	                        if (filename) {
+	                            var a = document.createElement("a");
+	                            a.href = downloadUrl;
+	                            a.download = filename;
+	                            document.body.appendChild(a);
+	                            a.click();
+	                            document.body.removeChild(a);
+	                        } else {
+	                            window.location.href = downloadUrl;
+	                        }
+
+	                        setTimeout(function () {
+	                            URL.revokeObjectURL(downloadUrl);
+	                        }, 100);
+	                        xhr.getResponseHeader = function () {
+	                            return null;
+	                        };
+	                    }
+	                    $("#popupMessage").text("File download initiated.");
+	                } else {
+	                    // Error case
+	                    $("#popupMessage").text(customMessage || "Error initiating file download");
+	                }
+
+	                $("#customPopup").show();
+	            },
+	            error: function (xhr, status, error) {
+	                // Handle errors
+	                console.error("Error initiating file download: " + error);
+
+	                // Display the custom popup message for errors
+	                $("#popupMessage").text("Error initiating file download. Please try again.");
+	                $("#customPopup").show();
+	            }
+	        });
+	    } else {
+	        // Handle the case when no log file is selected
+	        $("#popupMessage").text("Please select a log file first.");
+	        $("#customPopup").show();
+	    }
+
+	    $("#closePopup").click(function () {
+	        $("#customPopup").hide();
+	    });
+	}	
 
 	function changeButtonColor(isDisabled) {
         var $load_button = $('#loadLogFileButton');
@@ -317,16 +400,7 @@ var tokenValue;
 			loadLogFileList();
 			
 			$("#exportButton").click(function() {
-		        var selectedLogFile = $("#log_file").val();
-
-		        if (selectedLogFile !== "") {
-		            // Redirect to the servlet URL to trigger the download
-		            window.location.href = "DownloadLogServlet?log_file=" + selectedLogFile;
-		        } else {
-		            // Handle the case when no log file is selected
-		            $("#popupMessage").text("Please select a log file first.");
-		            $("#customPopup").show();
-		        }
+		       downloadLogFile();
 		    });		
 			
 			$(document).on("click", "#loadLogFileButton", function() {
