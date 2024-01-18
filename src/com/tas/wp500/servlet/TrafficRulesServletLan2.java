@@ -81,6 +81,10 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		String name = null;
 		String portNumber = null;
@@ -107,6 +111,9 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 					 action = request.getParameter("action");
 
 					try {
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+							
+						
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -145,7 +152,9 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding traffic rules : " + e);
@@ -163,6 +172,9 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 					 action = request.getParameter("action");
 
 					try {
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+							
+						
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -201,7 +213,9 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating traffic rules : " + e);
@@ -214,6 +228,10 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 					 name = request.getParameter("name");
 
 					try {
+						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+							
+						
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -245,7 +263,9 @@ public class TrafficRulesServletLan2 extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in deleting traffic rules : " + e);

@@ -151,7 +151,22 @@ textarea {
         
 </style>
 </head>
+
+	
 <body>
+
+<script>
+var csrfTokenValue;
+
+$(document).ready(function() {
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
+});
+
+</script>
 
 <div class="sidebar">
 		<%@ include file="common.jsp"%>
@@ -160,7 +175,7 @@ textarea {
 		<%@ include file="header.jsp"%>
 	</div>
 	
-	
+	<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 	
 	<div class="content">
 		<section style="margin-left: 1em">
@@ -181,6 +196,7 @@ textarea {
 		
 		<h3>QUICK CLIENT</h3>
 		<hr/>
+		
 		
 	<ul id="tree" class="tree">
 		<li class="expandable" id="root">OPC Servers</li>
@@ -230,7 +246,9 @@ textarea {
 	
 	<tr>
 	<td>Add tag name</td>
-	<td><input type="text" id="tag_name" name="tag_name" maxlength="31" style="width: 200px;" required/></td>
+	<td><input type="text" id="tag_name" name="tag_name" maxlength="31" style="width: 200px; margin-bottom: 10px;" required/>
+	<span id="field_tag_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+	</td>
 	<td><input style="height: 26px;" type="button" value="Add Tag" id="addTag"/></td>
 	</tr>
 	</table>
@@ -315,6 +333,17 @@ textarea {
             
         }
         
+     // Validation for first name
+    	function validateTag(tag) {
+        var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+        if (!regex.test(tag)) {
+            return 'Invalid Tag name; symbols not allowed';
+        }
+
+        return null; // Validation passed
+    }
+        
         function addTag() {		
     		
     		var tag_name = $('#tag_name').val();
@@ -328,6 +357,21 @@ textarea {
     	        return;
     	    }
     	
+    		// Clear previous error messages
+    	  
+    	    $('#field_tag_Error').text('');
+    	   
+    		
+
+    	    // Validate first name
+    	    var tagError = validateTag(tag_name);
+    	    if (tagError) {
+    	        $('#field_tag_Error').text(tagError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+    	        return;
+    	    }
+
+    	    
+    	    
     		$.ajax({
     			url : 'tagMapping',
     			type : 'POST',
@@ -356,6 +400,8 @@ textarea {
  
  function loadopcnodesList(nodeid,opcname,type,browsename) {
         	
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
     		$.ajax({
     					url : 'BrowseQuickCLient',
     					type : 'POST',
@@ -364,7 +410,8 @@ textarea {
     						node : nodeid,
     						type : type,
     						opcname : opcname,
-    						browsename : browsename
+    						browsename : browsename,
+    						csrfToken: csrfToken
     					},
     					success : function(response) {
     						
@@ -526,6 +573,8 @@ textarea {
 			String roleValue = (String) session.getAttribute("role");%>
 
 		roleValue = '<%=roleValue%>';
+		
+		
 		
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 

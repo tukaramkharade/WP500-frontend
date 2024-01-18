@@ -486,7 +486,7 @@ margin-left: -39px;
               
                 var message = document.getElementById("message");
                
-                if(response.otp_result === 'true'){
+                if(response.status === 'success'){
                 	message.style.color = "green";
                     message.innerHTML = "Your OTP is correct; you can now log in with TOTP.";
                 }else{

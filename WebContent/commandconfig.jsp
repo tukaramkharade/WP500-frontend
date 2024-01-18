@@ -147,6 +147,7 @@ margin-top: 68px;
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 var json = {};
 //Global variable to store tag name and variable values
@@ -212,11 +213,16 @@ var tagVariableValues = {};
 	 
 	// Display loader when the request is initiated
 	    showLoader();
+	
+	    var csrfToken = document.getElementById('csrfToken').value;
 	 
 		$.ajax({
 			url : 'commandConfigServlet',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+  				csrfToken: csrfToken
+  	         },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -270,15 +276,6 @@ var tagVariableValues = {};
                   $('#interval').val('defaultInterval');
               }
 				
-									/* if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-										
-										
-									 }
-								  else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-										
-										
-									}  */  
-
 									if (result.unit_id != null) {
 						                $('#addBtn').val('Update');
 						            } else {
@@ -297,115 +294,8 @@ var tagVariableValues = {};
 	
 	} 
  
- 
- 
- /* function initializeTable(commandTag) {
-	 var table = $('.bordered-table1');
-
-	    // Empty the existing table content
-	    table.empty();
-
-	    // Create the initial row with input fields
-	    var initialRow = $('<tr>');
-	  
-	    var cell1 = $('<th>').text('Tag List').css('width', '20%');
-	    var cell2 = $('<th>').text('Variable').css('width', '20%');
-	    var cell3 = $('<th>').text('Action').css('width', '10%');
-
-	    initialRow.append(cell1, cell2, cell3);
-	    table.append(initialRow);
-
-	    // Create the initial data row with input fields
-	    var dataRow = $('<tr>');
-
-	    var dataCell1 = $('<td>').append($('<input>', {
-	        type: 'text',
-	        class: 'tag_name',
-	        style: 'height: 10px; width: 200px;',
-	        value: Object.keys(commandTag)[0]
-	    }));
-	    var dataCell2 = $('<td>').append($('<select>', {
-	        class: 'variable',
-	        style: 'height: 32px;',
-	        required: true
-	    }).append($('<option>', {
-	        value: Object.values(commandTag)[0],
-	        text: Object.values(commandTag)[0]
-	    })));
-	 
-	    var cell3 = $('<td>');
-   	    var deleteBtn = $('<input>', {
-   	        type: 'button',
-   	        value: 'X',
-   	        class: 'deleteBtn',
-   	        style: 'height: 22px;',
-   	        title: 'Remove tag'
-   	    });
-   	    deleteBtn.on('click', function () {
-   	    	dataRow.remove();
-   	    });
-   	    cell3.append(deleteBtn);
-   	    
-	    dataRow.append(dataCell1, dataCell2, cell3);
-	    table.append(dataRow);
-
-	    // Iterate over the rest of the keys and values of the commandTag
-	    $.each(Object.entries(commandTag).slice(1), function (_, [key, value]) {
-	        var newRow = $('<tr>');
-	        var cell1 = $('<td style="width: 100px;">').append($('<input>', {
-	            type: 'text',
-	            class: 'tag_name',
-	            style: 'height: 10px; width: 200px;',
-	            value: key
-	        }));
-	        var cell2 = $('<td>').append($('<select>', {
-	            class: 'variable',
-	            style: 'height: 32px;',
-	            required: true
-	        }).append($('<option>', {
-	            value: value,
-	            text: value
-	        })));
-	        
-	        var cell3 = $('<td>');
-	   	    var deleteBtn = $('<input>', {
-	   	        type: 'button',
-	   	        value: 'X',
-	   	        class: 'deleteBtn',
-	   	        style: 'height: 22px;',
-	   	        title: 'Remove tag'
-	   	    });
-	   	    deleteBtn.on('click', function () {
-	   	    	dataRow.remove();
-	   	    });
-	   	    cell3.append(deleteBtn);
-	        
-	        newRow.append(cell1, cell2, cell3);
-	        table.append(newRow);
-	    });
-
-	    // Create the row with the "+" button
-	    var addButtonRow = $('<tr>');
-	    var addButtonCell = $('<td>').append($('<input>', {
-	        type: 'button',
-	        value: '+',
-	        class: 'saveBtn', // Add a class for easy selection
-	        style: 'height: 22px;',
-	        title: 'Add tags'
-	    }));
-	    addButtonRow.append(addButtonCell);
-	    table.append(addButtonRow);
-
-	    // Attach a click event handler to the dynamically added "+" button
-	    table.on('click', '.saveBtn', function () {
-	        addRow();
-	    });
-	    
- }
- */
- 
- 
- function initializeTable(commandTag) {
+  
+  function initializeTable(commandTag) {
 	    var table = $('.bordered-table1');
 
 	    // Empty the existing table content
@@ -452,16 +342,7 @@ var tagVariableValues = {};
 	    });
 	    cell3.append(deleteBtn);
 	    
-	    
-	    
-	   /*  var deleteDataCell = $('<td>').append($('<input>', {
-	        type: 'button',
-	        value: 'X',
-	        class: 'deleteBtn',
-	        style: 'height: 22px;',
-	        title: 'Remove subject alternative name'
-	    })); */
-
+	   
 	    dataRow.append(dataCell1, dataCell2, cell3);
 	    table.append(dataRow);
 
@@ -495,14 +376,7 @@ var tagVariableValues = {};
 	   	        newRow.remove();
 	   	    });
 	   	    cell3.append(deleteBtn);
-	        
-	     /*    var deleteCell = $('<td>').append($('<input>', {
-	            type: 'button',
-	            value: 'X',
-	            class: 'deleteBtn',
-	            style: 'height: 22px;',
-	            title: 'Remove subject alternative name'
-	        })); */
+	     
 	        newRow.append(cell1, cell2, cell3);
 	        table.append(newRow);
 	    });
@@ -527,6 +401,8 @@ var tagVariableValues = {};
 
  
  	       	function deleteCommand(){
+ 	       	 var csrfToken = document.getElementById('csrfToken').value;
+ 	       	 
 	       	// Display the custom modal dialog
 	   		  var modal = document.getElementById('custom-modal-delete');
 	   		  modal.style.display = 'block';
@@ -539,6 +415,9 @@ var tagVariableValues = {};
 	   		      url: 'commandConfigServlet',
 	   		      type: 'DELETE',
 	   		     dataType : 'json',
+	   		  data: {
+					csrfToken: csrfToken
+		        },
 	   		      success: function (data) {
 	   		    	  
 	   		        // Close the modal
@@ -735,6 +614,13 @@ var tagVariableValues = {};
 	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
 	    	    	
 	    	    	
+
+	    	    	<%// Access the session variable
+	    			HttpSession csrfToken = request.getSession();
+	    			String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	    			csrfTokenValue = '<%=csrfTokenValue%>';
+	    	    	
 	      	 if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 	    		  
 	    		  $("#actions").hide(); 
@@ -842,6 +728,32 @@ var tagVariableValues = {};
 
 				    // Clear any previous error messages
 				    errorSpanStatus.text("");
+				    
+				    var tagData = updateTagVariableValues();
+					var unit_id = $('#unit_id').val();
+				    var asset_id = $('#asset_id').val();
+				    var broker_type = $('#broker_type').find(":selected").val();		   
+				    var interval = $('#interval').find(":selected").val();
+				    var status = $('#status').find(":selected").val();
+				    var csrfToken = document.getElementById('csrfToken').value;
+				   
+				    // Clear previous error messages
+				    $('#field_unitid_Error').text('');
+				    $('#field_assetid_Error').text('');
+				 
+					 // Validate username
+				    var unitIdError = validateUnitId(unit_id);
+				    if (unitIdError) {
+				        $('#field_unitid_Error').text(unitIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+				        return;
+				    }
+
+				    // Validate first name
+				    var assetIdError = validateAssetId(asset_id);
+				    if (assetIdError) {
+				        $('#field_assetid_Error').text(assetIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+				        return;
+				    }
 			
 			// Display the custom modal dialog
 			  var modal = document.getElementById('custom-modal-edit');
@@ -851,13 +763,8 @@ var tagVariableValues = {};
 			  var confirmButton = document.getElementById('confirm-button-edit');
 			  confirmButton.onclick = function () {
 
-				  var tagData = updateTagVariableValues();
-					var unit_id = $('#unit_id').val();
-				    var asset_id = $('#asset_id').val();
-				    var broker_type = $('#broker_type').find(":selected").val();		   
-				    var interval = $('#interval').find(":selected").val();
-				    var status = $('#status').find(":selected").val();
-				   
+				 
+				    
 				    $.ajax({
 						url : 'commandConfigServlet',
 						type : 'POST',
@@ -869,6 +776,7 @@ var tagVariableValues = {};
 							interval : interval,
 							status : status,
 							tagData: JSON.stringify(tagVariableValues),
+							csrfToken: csrfToken,
 							action: 'update'
 							
 						},
@@ -905,6 +813,28 @@ var tagVariableValues = {};
 
 		}
 		
+		//Validation for first name
+		function validateUnitId(unitid) {
+		var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+		if (!regex.test(unitid)) {
+		    return 'Invalid unit id; symbols not allowed';
+		}
+
+		return null; // Validation passed
+		}
+
+		//Validation for first name
+		function validateAssetId(assetId) {
+		var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+		if (!regex.test(assetId)) {
+		    return 'Invalid Asset id; symbols not allowed';
+		}
+
+		return null; // Validation passed
+		}
+		
 		function addCommandConfig() {
 
 		 var tagData = updateTagVariableValues();
@@ -916,6 +846,7 @@ var tagVariableValues = {};
 		    var broker_name = $('#broker_name').find(":selected").val();
 		    var interval = $('#interval').find(":selected").val();
 		    var status = $('#status').find(":selected").val();  
+		    var csrfToken = document.getElementById('csrfToken').value;
 		    
 		    var errorSpanStatus = $('#brokerIPAddressError'); // Assuming you have a <span> element for error messages
 			  
@@ -929,6 +860,25 @@ var tagVariableValues = {};
 			    // Clear any previous error messages
 			    errorSpanStatus.text("");
 			    
+			    // Clear previous error messages
+			    $('#field_unitid_Error').text('');
+			    $('#field_assetid_Error').text('');
+			 
+				 // Validate username
+			    var unitIdError = validateUnitId(unit_id);
+			    if (unitIdError) {
+			        $('#field_unitid_Error').text(unitIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+			        return;
+			    }
+
+			    // Validate first name
+			    var assetIdError = validateAssetId(asset_id);
+			    if (assetIdError) {
+			        $('#field_assetid_Error').text(assetIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+			        return;
+			    }
+
+			   
 			
 		   
 			$.ajax({
@@ -942,6 +892,7 @@ var tagVariableValues = {};
 					interval : interval,
 					status : status,
 					tagData: JSON.stringify(tagVariableValues),
+					csrfToken: csrfToken,
 					action: 'add'
 					
 				},
@@ -993,6 +944,7 @@ var tagVariableValues = {};
 			<form id="commandConfigForm">
 			
 			<input type="hidden" id="action" name="action" value="">
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			
 			<div id="loader-overlay">
     <div id="loader">
@@ -1005,10 +957,13 @@ var tagVariableValues = {};
 			
 			<tr>
 			<td>Unit ID</td>
-			<td style="padding: 5px;"><input type="text" id="unit_id" name="unit_id" required style="height: 10px; " maxlength="31"/>
+			<td style="padding: 5px; height: 50px; width: 230px;">
+			<input type="text" id="unit_id" name="unit_id" required style="height: 10px; " maxlength="31"/>
+			<span id="field_unitid_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 			<td>Asset ID</td>
 			<td><input type="text" id="asset_id" name="asset_id" required style="height: 10px" maxlength="31"/>
+			<span id="field_assetid_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 			</tr>
 			

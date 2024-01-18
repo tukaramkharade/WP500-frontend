@@ -323,6 +323,37 @@ function setPrefix(opcuaClientId){
 }
 
 function editOPCUA(){
+	 var endURL = $('#endURL').val();
+		var username = $('#username').val();
+		var password = $('#password').val();
+		var security = $('#security').find(":selected").val();
+		var actionType = $('#actionType').find(":selected").val();
+		var prefix = $('#prefix').val();
+		
+		$('#field_user_Error').text('');
+	    $('#field_url_Error').text('');
+	    $('#field_prefix_Error').text('');
+
+	
+	    var urlError = validateIPaddr(endURL);
+	    if (urlError) {
+	        $('#field_url_Error').text(urlError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
+	    // Validate username
+	    var usernameError = validateUsername(username);
+	    if (usernameError) {
+	        $('#field_user_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    var prefixError = validatePrefix(prefix);
+	    if (prefixError) {
+	        $('#field_prefix_Error').text(prefixError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -331,13 +362,7 @@ function editOPCUA(){
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 		  
-		  var endURL = $('#endURL').val();
-			var username = $('#username').val();
-			var password = $('#password').val();
-			var security = $('#security').find(":selected").val();
-			var actionType = $('#actionType').find(":selected").val();
-			var prefix = $('#prefix').val();
-			
+		 
 			
 			$.ajax({
 				
@@ -396,6 +421,37 @@ function editOPCUA(){
 	
 }
 
+function validateUsername(username) {
+    var regex = /^[a-zA-Z][a-zA-Z0-9.@_-]*$/;
+
+    if (!regex.test(username)) {
+        return 'Invalid username; the allowed symbols are @_-';
+    }
+
+    return null; // Validation passed
+}
+
+// Validation for first name
+function validatePrefix(prefix) {
+var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+if (!regex.test(prefix)) {
+    return 'Invalid prefix; symbols not allowed';
+}
+
+return null; // Validation passed
+}
+
+function validateIPaddr(ipaddr) {
+    var regex = /^opc\.tcp:\/\/[a-zA-Z0-9@_./:-]{1,100}(?:\.[a-zA-Z0-9@_./:-]{1,100}){0,3}$/;
+
+    if (!regex.test(ipaddr)) {
+        return 'Invalid IP Address. Please enter a valid IP address starting with opc.tcp://';
+    }
+
+    return null; // Validation passed
+}
+
 
 function addOPCUA(){
 	
@@ -405,6 +461,30 @@ function addOPCUA(){
 	var security = $('#security').find(":selected").val();
 	var actionType = $('#actionType').find(":selected").val();
 	var prefix = $('#prefix').val();
+	
+	 $('#field_user_Error').text('');
+	    $('#field_url_Error').text('');
+	    $('#field_prefix_Error').text('');
+
+	
+	    var urlError = validateIPaddr(endURL);
+	    if (urlError) {
+	        $('#field_url_Error').text(urlError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
+	    // Validate username
+	    var usernameError = validateUsername(username);
+	    if (usernameError) {
+	        $('#field_user_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    var prefixError = validatePrefix(prefix);
+	    if (prefixError) {
+	        $('#field_prefix_Error').text(prefixError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
 	
 	$.ajax({
 		
@@ -634,19 +714,17 @@ $(document).ready(function() {
 					<table class="bordered-table" style="margin-top: -1px;">
 					
 					<tr>
-					<td>End URL</td>
-					<td><input type="text" id="endURL" name="endURL" maxlength="31" style="height: 10px; max-width: 200px;"/>
+					<td>End point URL</td>
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="endURL" name="endURL" maxlength="31" style="height: 10px; max-width: 200px;"/>
+					<span id="field_url_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					<td>Username</td>
 					<td><input type="text" id="username" name="username" maxlength="31" style="height: 10px; max-width: 200px;"/>
+					<span id="field_user_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					<td>Password</td>
 					
-					<!-- <td style="width: 200px;"><input type="password" id="password" name="password" maxlength="31" style="height: 10px; max-width: 200px;" />
-					<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
-							</td> -->
-							
-							
 							<td><div class="password-container">
     <input type="password" id="password" name="password" maxlength="31"/>
     <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
@@ -655,9 +733,8 @@ $(document).ready(function() {
 					
 					<tr>
 					<td>Security</td>
-					<td>
-					<!-- <input type="text" id="security" name="security" maxlength="31"/>
-							<p id="security_error" style="color: red;"></p> -->
+				<td style="height: 50px; width: 230px;">
+					
 							
 							<select class="textBox" id="security" name="security">
 								
@@ -677,6 +754,7 @@ $(document).ready(function() {
 							</td>
 					<td>Prefix</td>
 					<td><input type="text" id="prefix" name="prefix" maxlength="31"/>
+					<span id="field_prefix_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					</tr>
 					</table>

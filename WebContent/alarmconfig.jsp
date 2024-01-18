@@ -148,6 +148,7 @@ margin-top: 68px;
 	
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 var tagVariableValues = {};
 
@@ -179,10 +180,16 @@ var tagVariableValues = {};
       }
       
       function loadTagList() {
+    	  
+    	  var csrfToken = document.getElementById('csrfToken').value;
+    	  
     	    $.ajax({
     	      url: "alarmConfigTagListServlet",
     	      type: "GET",
     	      dataType: "json",
+    	      data: {
+  				csrfToken: csrfToken
+  	        },
     	      success: function (data) {
     	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
     	          var datalist = $(".variable");
@@ -208,11 +215,16 @@ var tagVariableValues = {};
        function loadAlarmSettings() {
     	// Display loader when the request is initiated
    	    showLoader();
+    	
+   	   var csrfToken = document.getElementById('csrfToken').value;
     	   
   		$.ajax({
   			url : 'alarmConfigServlet',
   			type : 'GET',
   			dataType : 'json',
+  			data: {
+  				csrfToken: csrfToken
+  	         },
   			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -332,17 +344,7 @@ var tagVariableValues = {};
 	   	    });
 	   	    cell3.append(deleteBtn);
 	   	    
-	   	    
-    	    
-    	   /*  var deleteDataCell = $('<td>').append($('<input>', {
-    	        type: 'button',
-    	        value: 'X',
-    	        class: 'deleteBtn',
-    	        style: 'height: 22px;',
-    	        title: 'Remove subject alternative name'
-    	    })); */
-
-    	    dataRow.append(dataCell1, dataCell2, cell3);
+	   	   	dataRow.append(dataCell1, dataCell2, cell3);
     	    table.append(dataRow);
 
     	    // Iterate over the rest of the keys and values of the commandTag
@@ -376,14 +378,7 @@ var tagVariableValues = {};
     	   	    });
     	   	    cell3.append(deleteBtn);
     	        
-    	     /*    var deleteCell = $('<td>').append($('<input>', {
-    	            type: 'button',
-    	            value: 'X',
-    	            class: 'deleteBtn',
-    	            style: 'height: 22px;',
-    	            title: 'Remove subject alternative name'
-    	        })); */
-    	        newRow.append(cell1, cell2, cell3);
+    	       	newRow.append(cell1, cell2, cell3);
     	        table.append(newRow);
     	    });
 
@@ -408,6 +403,8 @@ var tagVariableValues = {};
        
        
        function deleteAlarm() {
+    	   var csrfToken = document.getElementById('csrfToken').value;
+    	   
  		  // Display the custom modal dialog
  		  var modal = document.getElementById('custom-modal-delete');
  		  modal.style.display = 'block';
@@ -420,6 +417,9 @@ var tagVariableValues = {};
  		      url: 'alarmConfigServlet',
  		      type: 'DELETE',
  		     dataType : 'json',
+ 		    data: {
+				csrfToken: csrfToken
+	        },
  		      success: function (data) {
  		    	  
  		        // Close the modal
@@ -607,7 +607,12 @@ var tagVariableValues = {};
     	
     	roleValue = '<%= roleValue %>'; 
     	
-    	
+    	<%// Access the session variable
+		HttpSession csrfToken = request.getSession();
+		String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+		csrfTokenValue = '<%=csrfTokenValue%>';
+			
     	  
     	  if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
     		  
@@ -715,6 +720,32 @@ function editAlarmConfig() {
 		    // Clear any previous error messages
 		    errorSpanStatus.text("");
 		    
+		    var tagData = updateTagVariableValues();
+			var unit_id = $('#unit_id').val();
+		    var asset_id = $('#asset_id').val();
+		    var broker_type = $('#broker_type').find(":selected").val();
+		    var interval = $('#interval').find(":selected").val();
+		    var status = $('#status').find(":selected").val();
+		    var csrfToken = document.getElementById('csrfToken').value;
+		    
+		 // Clear previous error messages
+		    $('#field_unitid_Error').text('');
+		    $('#field_assetid_Error').text('');
+		 
+			 // Validate username
+		    var unitIdError = validateUnitId(unit_id);
+		    if (unitIdError) {
+		        $('#field_unitid_Error').text(unitIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		    // Validate first name
+		    var assetIdError = validateAssetId(asset_id);
+		    if (assetIdError) {
+		        $('#field_assetid_Error').text(assetIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -723,12 +754,8 @@ function editAlarmConfig() {
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 
-		  var tagData = updateTagVariableValues();
-			var unit_id = $('#unit_id').val();
-		    var asset_id = $('#asset_id').val();
-		    var broker_type = $('#broker_type').find(":selected").val();
-		    var interval = $('#interval').find(":selected").val();
-		    var status = $('#status').find(":selected").val();
+		  
+
 		   
 		    $.ajax({
 				url : 'alarmConfigServlet',
@@ -741,6 +768,7 @@ function editAlarmConfig() {
 					interval : interval,
 					status : status,
 					tagData: JSON.stringify(tagVariableValues),
+					csrfToken: csrfToken,
 					action: 'update'
 					
 				},
@@ -776,6 +804,28 @@ function editAlarmConfig() {
 	  };
 }
 
+//Validation for first name
+function validateUnitId(unitid) {
+var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+if (!regex.test(unitid)) {
+    return 'Invalid unit id; symbols not allowed';
+}
+
+return null; // Validation passed
+}
+
+//Validation for first name
+function validateAssetId(assetId) {
+var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+if (!regex.test(assetId)) {
+    return 'Invalid Asset id; symbols not allowed';
+}
+
+return null; // Validation passed
+}
+
 function addAlarmConfig() {
 
 	 var tagData = updateTagVariableValues();
@@ -786,7 +836,7 @@ function addAlarmConfig() {
     var broker_name = $('#broker_name').find(":selected").val();
     var interval = $('#interval').find(":selected").val();
     var status = $('#status').find(":selected").val();    
-
+    var csrfToken = document.getElementById('csrfToken').value;
     var errorSpanStatus = $('#brokerIPAddressError'); // Assuming you have a <span> element for error messages
 	  
 	// Check if the selected status is "Select status"
@@ -799,6 +849,26 @@ function addAlarmConfig() {
 	    // Clear any previous error messages
 	    errorSpanStatus.text("");
   
+	    // Clear previous error messages
+	    $('#field_unitid_Error').text('');
+	    $('#field_assetid_Error').text('');
+	 
+		 // Validate username
+	    var unitIdError = validateUnitId(unit_id);
+	    if (unitIdError) {
+	        $('#field_unitid_Error').text(unitIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var assetIdError = validateAssetId(asset_id);
+	    if (assetIdError) {
+	        $('#field_assetid_Error').text(assetIdError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	  
+	    
 	$.ajax({
 		url : 'alarmConfigServlet',
 		type : 'POST',
@@ -810,6 +880,7 @@ function addAlarmConfig() {
 			interval : interval,
 			status : status,
 			tagData: JSON.stringify(tagVariableValues),
+			csrfToken: csrfToken,
 			action: 'add'
 			
 		},
@@ -859,6 +930,7 @@ function addAlarmConfig() {
 			<form id="alarmConfigForm">
 			
 			<input type="hidden" id="action" name="action" value="">
+				<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			
 			<div id="loader-overlay">
     <div id="loader">
@@ -871,10 +943,13 @@ function addAlarmConfig() {
 			
 			<tr>
 			<td>Unit ID</td>
-			<td style="padding: 5px;"><input type="text" id="unit_id" name="unit_id" required style="height: 10px; " maxlength="31"/>
+			<td style="padding: 5px; height: 50px; width: 230px;">
+			<input type="text" id="unit_id" name="unit_id" required style="height: 10px; " maxlength="31"/>
+			<span id="field_unitid_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 			<td>Asset ID</td>
 			<td><input type="text" id="asset_id" name="asset_id" required style="height: 10px" maxlength="31"/>
+			<span id="field_assetid_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 			</tr>
 			

@@ -29,6 +29,10 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		if (check_username != null) {
 
@@ -37,6 +41,7 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 
 			try {
 
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "get_Tag_list");
 				json.put("user", check_username);
 				json.put("token", check_token);
@@ -63,6 +68,9 @@ public class AlarmConfigTagListServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting tag list : " + e);

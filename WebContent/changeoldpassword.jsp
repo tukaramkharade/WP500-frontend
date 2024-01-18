@@ -203,7 +203,9 @@ function updateOldPassword() {
 							modal.style.display = 'none';
 						
 						if(data.status === "success"){
-							 window.location.href = 'login.jsp';
+							  window.location.href = 'login.jsp'; 
+							 
+							/*  window.location.replace('login.jsp'); */
 						}else if(data.status === "fail"){
 							 $("#popupMessage").text(data.message);
 			      			$("#customPopup").show(); 

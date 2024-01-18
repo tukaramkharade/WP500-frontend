@@ -134,9 +134,6 @@ public class CPUMetrics extends HttpServlet {
 			    out.print(jsonObject.toString());
 			    out.flush();
 				
-				
-			
-				
 			}catch(Exception e){
 				
 			}

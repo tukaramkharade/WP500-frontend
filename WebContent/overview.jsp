@@ -1,6 +1,7 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 %>
 
 <!DOCTYPE html>
@@ -91,12 +92,17 @@ var csrfTokenValue;
 	function getOverviewData() {
 		// Display loader when the request is initiated
 	    showLoader();
+		
+	    var csrfToken = document.getElementById('csrfToken').value;
 
 		$.ajax({
 
 			url : 'overviewGetData',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 			},

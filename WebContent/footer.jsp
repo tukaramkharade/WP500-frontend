@@ -22,7 +22,7 @@
 
 <body>
   <footer>
-    <span>WP500 version 0.1.0</span>
+    <span>WP500 version 1.1.0</span>
     <span>copyright© TAS INDIA PVT LTD, 2023</span>
   </footer>
 </body>

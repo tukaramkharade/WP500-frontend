@@ -418,6 +418,24 @@ var tokenValue;
 	
 	
 	function editJsonBuilder() {
+		
+		var json_string_name = $('#json_string_name').val();
+		var json_interval = $('#json_interval').find(":selected").val();
+		var broker_type = $('#broker_type').find(":selected").val();
+		var broker_name = $('#broker_name').find(":selected").val();
+		var publishing_status = $('#publishing_status').find(":selected").val();
+		var storeAndForward = $('#storeAndForward').find(":selected").val();
+		 json_string_text = $('#json_string_validate').val();
+
+		 $('#field_string_Error').text('');
+		   
+			 // Validate username
+		    var stringnameError = validateStringName(json_string_name);
+		    if (stringnameError) {
+		        $('#field_string_Error').text(stringnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		    
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
 		  modal.style.display = 'block';
@@ -425,16 +443,7 @@ var tokenValue;
 		// Handle the confirm button click
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
-			  
-			  var json_string_name = $('#json_string_name').val();
-				var json_interval = $('#json_interval').find(":selected").val();
-				var broker_type = $('#broker_type').find(":selected").val();
-				var broker_name = $('#broker_name').find(":selected").val();
-			//	var publish_topic = $('#publish_topic').val();
-				var publishing_status = $('#publishing_status').find(":selected").val();
-				var storeAndForward = $('#storeAndForward').find(":selected").val();
-				 json_string_text = $('#json_string_validate').val();
-				 
+			  			 
 				 $
 					.ajax({
 						url : 'jsonBuilderServlet',
@@ -507,6 +516,16 @@ var tokenValue;
 		  };	
 	}
 	
+	function validateStringName(stringName) {
+	    var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+	    if (!regex.test(stringName)) {
+	        return 'Invalid JSON string name; symbols not allowed';
+	    }
+
+	    return null; // Validation passed
+	}
+	
 
 	// Function to handle form submission and add a new user
 	function addJsonBuilder() {
@@ -519,6 +538,16 @@ var tokenValue;
 		var storeAndForward = $('#storeAndForward').find(":selected").val();
 		 json_string_text = $('#json_string_validate').val();
 
+		 $('#field_string_Error').text('');
+		   
+			 // Validate username
+		    var stringnameError = validateStringName(json_string_name);
+		    if (stringnameError) {
+		        $('#field_string_Error').text(stringnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+ 
+		    
 		$.ajax({
 					url : 'jsonBuilderServlet',
 					type : 'POST',
@@ -869,7 +898,9 @@ var tokenValue;
 				
 				<tr>
 				<td>JSON string name</td>
-				<td><input type="text" id="json_string_name" name="json_string_name" required style="height: 17px;" maxlength="31" />
+				<td style="height: 50px; width: 230px;">
+				<input type="text" id="json_string_name" name="json_string_name" required style="height: 17px;" maxlength="31" />
+				<span id="field_string_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 						
 						</td>
 				<td>Interval</td>

@@ -30,6 +30,14 @@ public class ActiveThreatServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
+		System.out.println("csrf req: " + csrfTokenFromRequest);
+		System.out.println("csrf session : " + csrfTokenFromSession);
 
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
@@ -37,6 +45,8 @@ public class ActiveThreatServlet extends HttpServlet {
 
 			try {
 
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
 				json.put("operation", "get_active_threats");
 				json.put("user", check_username);
 				json.put("token", check_token);
@@ -61,6 +71,10 @@ public class ActiveThreatServlet extends HttpServlet {
 			    response.setContentType("application/json");
 			    response.setHeader("X-Content-Type-Options", "nosniff");
 			    response.getWriter().print(finalJsonObj.toString());
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -73,6 +87,17 @@ public class ActiveThreatServlet extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
+		System.out.println("csrf req: " + csrfTokenFromRequest);
+		System.out.println("csrf session : " + csrfTokenFromSession);
+
+		
 		
 		ArrayList<String> stringList = new ArrayList<>();
 		String threat_id = request.getParameter("threat_id");
@@ -90,6 +115,9 @@ public class ActiveThreatServlet extends HttpServlet {
 				String formattedDate = dateFormat.format(currentDate);
 
 				try {
+					
+					if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+											
 					TCPClient client = new TCPClient();
 					JSONObject json = new JSONObject();
 
@@ -99,6 +127,8 @@ public class ActiveThreatServlet extends HttpServlet {
 					json.put("ack_by", check_username);
 					json.put("user", check_username);
 					json.put("token", check_token);
+					json.put("role", check_role);
+
 
 					String respStr = client.sendMessage(json.toString());
 
@@ -112,6 +142,9 @@ public class ActiveThreatServlet extends HttpServlet {
 					PrintWriter out = response.getWriter();
 					out.print(jsonObject.toString());
 					out.flush();
+					}else {
+						logger.error("CSRF token validation failed");	
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -136,6 +169,10 @@ public class ActiveThreatServlet extends HttpServlet {
 
 				}
 				try {
+					
+					if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+						
+					
 					TCPClient client = new TCPClient();
 					JSONObject json = new JSONObject();
 
@@ -145,6 +182,8 @@ public class ActiveThreatServlet extends HttpServlet {
 					json.put("end_time", formattedEndDate);
 					json.put("user", check_username);
 					json.put("token", check_token);
+					json.put("role", check_role);
+
 
 					String respStr = client.sendMessage(json.toString());
 
@@ -190,7 +229,9 @@ public class ActiveThreatServlet extends HttpServlet {
 					response.setContentType("application/json");
 					response.setHeader("X-Content-Type-Options", "nosniff");
 					response.getWriter().print(resJsonArray.toString());
-
+					}else {
+						logger.error("CSRF token validation failed");	
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

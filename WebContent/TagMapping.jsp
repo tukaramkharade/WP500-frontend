@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
 <script src="jquery-3.6.0.min.js"></script>
-
+<script src="xlsx.full.min.js"></script>
 
 
 <style>
@@ -331,89 +331,6 @@ margin-top: 70px;
 		  
 	}
 	
-/* 	function fetchDataAndExportToExcel() {
-	    $.ajax({
-	        url: 'ExportExcelServlet',
-	        type: 'GET',
-	        dataType: 'json',
-	        beforeSend: function (xhr) {
-	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-	        },
-	        success: function (data) {
-	        	
-	        	if (data.status == 'fail') {
-					
-					 var modal1 = document.getElementById('custom-modal-session-timeout');
-					  modal1.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
-					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-					  
-					  // Handle the confirm button click
-					  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-					  confirmButton1.onclick = function () {
-						  
-						// Close the modal
-					        modal1.style.display = 'none';
-					        window.location.href = 'login.jsp';
-					  };			  
-				} 
-	        	
-	        	alert(JSON.stringify(data));
-	        	
-	        	 var excelData = [];
-	        	data.result.forEach(function(tag) {
-	        		
-	        	        // Iterate through the data and push to excelData array
-	        	      
-	        	            var rowData = [tag.tag_name, tag.pv_address];
-	        	        alert(tag.tag_name);
-	        	            excelData.push(rowData);
-	        	});  
-
-	        	        // Create a new workbook and add a worksheet
-	        	        var ws = XLSX.utils.aoa_to_sheet([['Tag Name', 'PV Address']].concat(excelData));
-	        	        var wb = XLSX.utils.book_new();
-	        	        XLSX.utils.book_append_sheet(wb, ws, 'TAG Mapping List');
-
-	        	        // Save the workbook to an Excel file
-	        	        XLSX.writeFile(wb, 'tag_mapping_list.xlsx');
-	        	    
-
-	        	
-	        	
-	        	 if (data && data.length > 0) {
-	                exportToExcel(data);
-	            } else {
-	                console.error('No data to export.');
-	            } 
-	        },
-	        error: function (xhr, status, error) {
-	            console.log('Error loading tag data: ' + error);
-	        }
-	    });
-	} */
-	
-	/* function exportToExcel(data) {
-        var excelData = [];
-        // Iterate through the data and push to excelData array
-        data.forEach(function (tag) {
-            var rowData = [tag.tag_name, tag.pv_address];
-            excelData.push(rowData);
-        });
-
-        // Create a new workbook and add a worksheet
-        var ws = XLSX.utils.aoa_to_sheet([['Tag Name', 'PV Address']].concat(excelData));
-        var wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'TAG Mapping List');
-
-        // Save the workbook to an Excel file
-        XLSX.writeFile(wb, 'tag_mapping_list.xlsx');
-    }
- */
- 
  
  function fetchDataAndExportToExcel() {
 	    $.ajax({
@@ -428,19 +345,29 @@ margin-top: 70px;
 	        	if (data && data.length > 0) {
 	                exportToExcel(data);
 	            } else {
-	                console.error('No data to export.');
+	            	
+	            	$("#popupMessage").text('No data to export.');
+	      			$("#customPopup").show();
+	      			
+	                
 	            }
 	        },
 	        error: function (xhr, status, error) {
 	            console.log('Error loading tag data: ' + error);
 	        }
 	    });
+	    
+	    $("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
 	}
+ 
 	function exportToExcel(data) {
      var excelData = [];
      // Iterate through the data and push to excelData array
      data.forEach(function (tag) {
          var rowData = [tag.tag_name, tag.pv_address];
+         console.log(rowData);
          excelData.push(rowData);
      });
 
@@ -455,6 +382,28 @@ margin-top: 70px;
 
  
  function editTag(){
+	 
+	  
+	  var tag_name = $('#tag_name').val();
+		var pv_address = $('#pv_address').val();
+		
+		$('#field_tag_Error').text('');
+	    $('#field_pv_Error').text('');
+	    
+	    // Validate username
+	    var tagnameError = validateTagName(tag_name);
+	    if (tagnameError) {
+	        $('#field_tag_Error').text(tagnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var pvError = validatePVaddr(pv_address);
+	    if (pvError) {
+	        $('#field_pv_Error').text(pvError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -462,9 +411,7 @@ margin-top: 70px;
 	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
-		  
-		  var tag_name = $('#tag_name').val();
-			var pv_address = $('#pv_address').val();
+	
 						
 			$.ajax({
 				url : 'tagMapping',
@@ -521,11 +468,51 @@ margin-top: 70px;
 	 
  }
  
+ 
+//Validation for username
+	function validatePVaddr(pv) {
+	    var regex = /^[a-zA-Z][a-zA-Z0-9.$_-]*$/;
+
+	    if (!regex.test(pv)) {
+	        return 'Invalid PV address; the allowed symbols are $_-';
+	    }
+
+	    return null; // Validation passed
+	}
+
+	// Validation for first name
+	function validateTagName(tagName) {
+ var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+
+ if (!regex.test(tagName)) {
+     return 'Invalid tag name; symbols not allowed';
+ }
+
+ return null; // Validation passed
+}
+ 
 	// Function to handle form submission and add a new tag
 	function addTag() {		
 		
 		var tag_name = $('#tag_name').val();
 		var pv_address = $('#pv_address').val();
+		
+		$('#field_tag_Error').text('');
+	    $('#field_pv_Error').text('');
+	    
+	    // Validate username
+	    var tagnameError = validateTagName(tag_name);
+	    if (tagnameError) {
+	        $('#field_tag_Error').text(tagnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    // Validate first name
+	    var pvError = validatePVaddr(pv_address);
+	    if (pvError) {
+	        $('#field_pv_Error').text(pvError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
 	
 		$.ajax({
 			url : 'tagMapping',
@@ -655,6 +642,7 @@ margin-top: 70px;
 	    }
 	}
 
+		
 	function addNewTag(dataArray) {
 	    $.ajax({
 	        url: 'tagMapping',
@@ -819,14 +807,15 @@ margin-top: 70px;
 
 					<tr>
 					<td>Tag Name</td>
-					<td><input type="text" id="tag_name" maxlength="31" name="tag_name" required style="width: 200px;"/>
+					<td style="height: 50px; width: 230px;">
+					<input type="text" id="tag_name" maxlength="31" name="tag_name" required style="width: 200px;"/>
+					<span id="field_tag_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							
 					</td>	
 					
 					<td>PV address</td>
-					<td><input type="text" id="pv_address" name="pv_address" maxlength="31" required style="width: 200px;"/> <span style="color: red; font-size: 12px;"
-								id="portNoError"></span>
-							</td>
+					<td><input type="text" id="pv_address" name="pv_address" maxlength="31" required style="width: 200px;"/> 
+				<span id="field_pv_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 					
 					</tr>
 					

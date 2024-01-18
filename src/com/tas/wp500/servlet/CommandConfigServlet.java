@@ -35,13 +35,17 @@ public class CommandConfigServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
 
-		JSONObject disObj = new JSONObject();
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 			try {
-				JSONArray resJsonArray = new JSONArray();
-
+				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -88,7 +92,9 @@ public class CommandConfigServlet extends HttpServlet {
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
-			    
+				}else {
+					logger.error("CSRF token validation failed");	
+				}  
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting command data : " + e);
@@ -105,6 +111,11 @@ public class CommandConfigServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		String unit_id = null;
 		String asset_id = null;
@@ -147,6 +158,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 					try {
 
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -184,6 +196,9 @@ public class CommandConfigServlet extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -212,6 +227,7 @@ public class CommandConfigServlet extends HttpServlet {
 
 					try {
 
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -248,6 +264,9 @@ public class CommandConfigServlet extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+							}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating command :"+e);
@@ -266,9 +285,16 @@ public class CommandConfigServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 
 		if (check_username != null) {
 			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
@@ -299,7 +325,10 @@ public class CommandConfigServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
+				
+			}else {
+				logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error deleting command data : " + e);
