@@ -31,13 +31,18 @@ public class TagMappingServelt extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 		TCPClient client = new TCPClient();
 		JSONObject json = new JSONObject();
 
 		if (check_username != null) {
 
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "get_all_tags");
 				json.put("user", check_username);
 				json.put("token", check_token);
@@ -70,7 +75,10 @@ public class TagMappingServelt extends HttpServlet {
 			    response.getWriter().print(finalJsonObj.toString());
 				
 
-				
+
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -86,6 +94,11 @@ public class TagMappingServelt extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		String tag_name = null;
 		String pv_address = null;
@@ -104,7 +117,7 @@ public class TagMappingServelt extends HttpServlet {
 					pv_address = request.getParameter("pv_address");
 					
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -137,6 +150,9 @@ public class TagMappingServelt extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding mqtt : " + e);
@@ -148,7 +164,7 @@ public class TagMappingServelt extends HttpServlet {
 					pv_address = request.getParameter("pv_address");
 					
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -181,6 +197,9 @@ public class TagMappingServelt extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating mqtt : " + e);
@@ -192,7 +211,7 @@ public class TagMappingServelt extends HttpServlet {
 					tag_name = request.getParameter("tag_name");
 					
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -223,6 +242,9 @@ public class TagMappingServelt extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in deleting mqtt : " + e);
@@ -239,7 +261,7 @@ public class TagMappingServelt extends HttpServlet {
 				        
 				        TCPClient client = new TCPClient();
 				        JSONObject json = new JSONObject();
-
+				        if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				        json.put("operation", "insert_bulk_tag");
 				        json.put("user", check_username);
 				        json.put("token", check_token);
@@ -268,6 +290,9 @@ public class TagMappingServelt extends HttpServlet {
 				        out.print(jsonObject.toString());
 				        out.flush();
 
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding mqtt : " + e);

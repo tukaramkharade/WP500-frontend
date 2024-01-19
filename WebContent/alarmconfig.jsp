@@ -403,7 +403,7 @@ var tagVariableValues = {};
        
        
        function deleteAlarm() {
-    	   var csrfToken = document.getElementById('csrfToken').value;
+    	 
     	   
  		  // Display the custom modal dialog
  		  var modal = document.getElementById('custom-modal-delete');
@@ -417,9 +417,7 @@ var tagVariableValues = {};
  		      url: 'alarmConfigServlet',
  		      type: 'DELETE',
  		     dataType : 'json',
- 		    data: {
-				csrfToken: csrfToken
-	        },
+ 		    
  		      success: function (data) {
  		    	  
  		        // Close the modal

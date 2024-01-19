@@ -33,8 +33,15 @@ import com.tas.wp500.utils.TCPClient;
 				String check_username = (String) session.getAttribute("username");
 				String check_token = (String) session.getAttribute("token");
 				String check_role = (String) session.getAttribute("role");
-		
+				
+				String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+				// Retrieve CSRF token from the session
+				String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+				
 			try{
+				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 				
@@ -83,6 +90,9 @@ import com.tas.wp500.utils.TCPClient;
 			    // Write the JSON object to the response
 			    out.print(jsonObject.toString());
 			    out.flush();
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -99,6 +109,11 @@ import com.tas.wp500.utils.TCPClient;
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
 			
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+			
 			if(check_username != null){
 			String ntpIntervalValue = null;
 			
@@ -109,7 +124,7 @@ import com.tas.wp500.utils.TCPClient;
 			 ntpIntervalValue = IntervalMapper.getIntervalByString(ntp_interval);
 
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 				
@@ -144,7 +159,9 @@ import com.tas.wp500.utils.TCPClient;
 			    // Write the JSON object to the response
 			    out.print(jsonObject.toString());
 			    out.flush();
-				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

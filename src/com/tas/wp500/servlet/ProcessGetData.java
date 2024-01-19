@@ -37,6 +37,12 @@ public class ProcessGetData extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
+		
 		String processType = request.getParameter("process_type");
 		if (check_username != null) {	
 
@@ -44,6 +50,7 @@ public class ProcessGetData extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "get_process_list");
 				json.put("process_type", processType);
 				json.put("user", check_username);
@@ -90,6 +97,9 @@ public class ProcessGetData extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

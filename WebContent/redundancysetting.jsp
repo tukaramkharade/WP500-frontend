@@ -224,6 +224,7 @@ button {
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function validateIPAddress(inputId, spanId) {
     var ipAddress = document.getElementById(inputId).value;
@@ -242,11 +243,15 @@ function validateIPAddress(inputId, spanId) {
 function getRedundancySettings(){
 	// Display loader when the request is initiated
     showLoader();
-	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 		url : 'redundancyServlet',
 		type : 'GET',
 		dataType : 'json',
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -320,6 +325,7 @@ function updateRedundancySettings(){
 	var common_subnet_1 = $('#common_subnet_1').val();	
 	var common_ip_2 = $('#common_ip_2').val();	
 	var common_subnet_2 = $('#common_subnet_2').val();
+	 var csrfToken = document.getElementById('csrfToken').value;
 	
 	$.ajax({
 		
@@ -334,8 +340,8 @@ function updateRedundancySettings(){
 			common_ip_1 : common_ip_1,			
 			common_subnet_1 : common_subnet_1,			
 			common_ip_2 : common_ip_2,
-			common_subnet_2 : common_subnet_2
-			
+			common_subnet_2 : common_subnet_2,
+			csrfToken: csrfToken			
 			
 		},
 		success : function(data) {
@@ -400,6 +406,11 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
 	
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 		$('#applyBtn').prop('disabled', true);
@@ -422,7 +433,7 @@ roleValue = '<%=roleValue%>';
 	            // Close the modal
 	            modal.style.display = 'none';
 	            window.location.href = 'login.jsp';
-		
+	        };
 	}else{
 		<%// Access the session variable
 		HttpSession token = request.getSession();
@@ -465,6 +476,7 @@ roleValue = '<%=roleValue%>';
 			<h3>REDUNDANCY SETTINGS</h3>
 			<hr>
 			<div class="container">
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

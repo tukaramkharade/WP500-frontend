@@ -105,9 +105,10 @@ margin-top: 68px;
 
 var roleValue;	
 var tokenValue;
+var csrfTokenValue;
 
 	function reboot() {
-
+		  var csrfToken = document.getElementById('csrfToken').value;
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
 		  modal.style.display = 'block';
@@ -120,6 +121,9 @@ var tokenValue;
 					url : 'reboot',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -166,7 +170,7 @@ var tokenValue;
 	
 	
 	function factoryReset() {
-
+		  var csrfToken = document.getElementById('csrfToken').value;
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-factoryreset');
 		  modal.style.display = 'block';
@@ -179,6 +183,9 @@ var tokenValue;
 					url : 'factoryResetServlet',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -259,6 +266,12 @@ var tokenValue;
     	
     	roleValue = '<%= roleValue %>';
     	
+    	<%// Access the session variable
+		HttpSession csrfToken = request.getSession();
+		String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+		csrfTokenValue = '<%=csrfTokenValue%>';
+    	
     	
     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
   		  
@@ -315,6 +328,7 @@ var tokenValue;
 	</div>
 
 	<div class="content">
+	<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 		<section style="margin-left: 1em">
 		<h3>REBOOT</h3>
 		<hr>

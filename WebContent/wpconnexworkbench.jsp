@@ -147,15 +147,20 @@ h3 {
 <script>
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 	function loadStratonLiveDataList() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 			url : 'stratonLiveDataServlet',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -292,11 +297,16 @@ var tokenValue;
 			    $("#customPopup").hide();
 			  });
 	    }
+	  
 	  function loadStratonFiles() {
+		  var csrfToken = document.getElementById('csrfToken').value;
 		    $.ajax({
 		        url: "stratonListServelt",
 		        type: "GET",
 		        dataType: "json",
+		        data: {
+					csrfToken: csrfToken
+		        },
 		        success: function (data) {
 		            
 		                var table = $("#straton_list_table tbody");
@@ -333,8 +343,9 @@ var tokenValue;
 		        },
 		    });
 		}
+	  
 	  function deleteStratonFile(file){
-			
+		  var csrfToken = document.getElementById('csrfToken').value;
 			// Display the custom modal dialog
 			  var modal = document.getElementById('custom-straton-modal-delete');
 			  modal.style.display = 'block';
@@ -347,7 +358,8 @@ var tokenValue;
 						url : 'stratonListServelt',
 						type : 'POST',
 						data : {
-							file : file
+							file : file,
+							csrfToken: csrfToken
 						},
 						success : function(data) {
 							
@@ -375,11 +387,17 @@ var tokenValue;
 				  });
 			
 		}
+	  
 	  function fetchStatusData() {
+		  var csrfToken = document.getElementById('csrfToken').value;
+		  
 		    $.ajax({
 		        url: 'stratonStatusData',
 		        type: 'GET',
 		        dataType: 'json',
+		        data: {
+					csrfToken: csrfToken
+		        },
 		        success: function(data) {
 		            // Handle the JSON response here
 		            console.log('sys_cyclecount:', data.sys_cyclecount);
@@ -396,14 +414,19 @@ var tokenValue;
 		        }
 		    });
 		}
+	  
 	  function downloadStratonFile() {
 		    var selectedFileName = $("#fileName").val();
+		    var csrfToken = document.getElementById('csrfToken').value;
 
 		    if (selectedFileName !== "") {
 		        $.ajax({
 		            type: "POST", // Use POST method to send data
 		            url: "downloadSratonFile",
-		            data: { userFileName: selectedFileName },
+		            data: { 
+		            	userFileName: selectedFileName,
+		            	csrfToken: csrfToken
+		            	},
 		            success: function (data, textStatus, xhr) {
 		            	 var filename = "";
 		                 var disposition = xhr.getResponseHeader('Content-Disposition');
@@ -504,6 +527,12 @@ var tokenValue;
 
 	roleValue = '<%=roleValue%>';
 	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
+	
 	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 		
 		$('#stratonUpdateButton').prop('disabled', true);
@@ -557,6 +586,8 @@ var tokenValue;
     </div>
     <div class="content">
         <section style="margin-left: 1em">
+        <input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
+        
             <div class="container" style="margin-left: -22px;">
             <div id="loader-overlay">
     <div id="loader">

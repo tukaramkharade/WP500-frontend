@@ -348,6 +348,7 @@ $(document).ready(function() {
     		
     		var tag_name = $('#tag_name').val();
     		var pv_address = $('#node').val();
+    		 var csrfToken = document.getElementById('csrfToken').value;
     		
     		if (tag_name === '' || pv_address === '') {
     	      
@@ -378,6 +379,7 @@ $(document).ready(function() {
     			data : {
     				tag_name : tag_name,
     				pv_address : pv_address,
+    				csrfToken: csrfToken,
     				action: 'add'
     				
     			},

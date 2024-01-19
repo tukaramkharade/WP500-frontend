@@ -137,16 +137,20 @@ margin-top: 68px;
 <script>
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 	function loadThreatLogs() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
 		
 		$.ajax({
 			url : 'threatLogsServlet',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -224,52 +228,6 @@ var tokenValue;
 					 
 				 });
 				
-
-				/* $.each(data,function(index, threatLogs) {
-
-									var row = $('<tr>');
-									row.append($('<td>').text(
-											threatLogs.timestamp + ""));
-
-									if (threatLogs.priority == '1') {
-										row.append($('<td>').append(
-												$('<div>').addClass('red-box')
-														.text('high')));
-									} else if (threatLogs.priority == '2') {
-										row.append($('<td>').append(
-												$('<div>').addClass(
-														'orange-box').text(
-														'medium')));
-									} else if (threatLogs.priority == '3') {
-										row.append($('<td>').append(
-												$('<div>').addClass(
-														'yellow-box').text(
-														'low')));
-									}
-
-									row.append($('<td>').text(
-											threatLogs.threat_id + ""));
-									row.append($('<td>').text(
-											threatLogs.alert_message + ""));
-									row.append($('<td>').text(
-											threatLogs.src_ip + ""));
-									row.append($('<td>').text(
-											threatLogs.src_port + ""));
-									row.append($('<td>').text(
-											threatLogs.dest_ip + ""));
-									row.append($('<td>').text(
-											threatLogs.dest_port + ""));
-									row.append($('<td>').text(
-											threatLogs.protocol_type + ""));
-									row.append($('<td>').text(
-											threatLogs.ack_at + ""));
-									row.append($('<td>').text(
-											threatLogs.ack_by + ""));
-
-									threatLogsTable.append(row);
-
-								});
- */
 			},
 			error : function(xhr, status, error) {
 				// Hide loader when the response has arrived
@@ -284,13 +242,15 @@ var tokenValue;
 		// Get the values of startdatetime and enddatetime elements
 		var startdatetime = $('#startdatetime').val();
 		var enddatetime = $('#enddatetime').val();
-
+		var csrfToken = document.getElementById('csrfToken').value;
+		
 		$.ajax({
 			url : 'threatLogsServlet',
 			type : 'POST',
 			data : {
 				startdatetime : startdatetime,
-				enddatetime : enddatetime
+				enddatetime : enddatetime,
+				csrfToken: csrfToken
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
@@ -461,6 +421,11 @@ var tokenValue;
 	
 	roleValue = '<%=roleValue%>';
 	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
 		
 		
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
@@ -519,6 +484,7 @@ var tokenValue;
 		<section style="margin-left: 1em">
 		<h3>THREAT LOGS</h3>
 		<hr />
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 		
 			<div id="loader-overlay">
     <div id="loader">

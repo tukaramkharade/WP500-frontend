@@ -32,6 +32,11 @@ public class SystemLogData extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		if (check_username != null) {
 			
 			String log_type = "load_system_log";
@@ -40,6 +45,8 @@ public class SystemLogData extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			try {
+				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "get_log_file_data");
 				 json.put("user", check_username);
 				 json.put("token", check_token);
@@ -72,7 +79,9 @@ public class SystemLogData extends HttpServlet {
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
-				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -92,6 +101,11 @@ public class SystemLogData extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		if (check_username != null) {
 
 			String start_date_time = request.getParameter("startdatetime");
@@ -103,6 +117,7 @@ public class SystemLogData extends HttpServlet {
 			SimpleDateFormat outputFormatTime = new SimpleDateFormat("HH:mm");
 
 			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				Date startDate = inputFormat.parse(start_date_time);
 				String startDate1 = outputFormatMonth.format(startDate);
 
@@ -156,6 +171,10 @@ public class SystemLogData extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
+				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

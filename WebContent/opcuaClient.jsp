@@ -153,6 +153,7 @@ button {
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function togglePassword() {
     var passwordInput = $('#password');
@@ -171,12 +172,16 @@ function togglePassword() {
 function loadOPCUAClientList(){
 	// Display loader when the request is initiated
     showLoader();
-	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 
 		url : 'OPCUAClientServlet',
 		type : 'GET',
 		dataType : 'json',
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -217,14 +222,12 @@ function loadOPCUAClientList(){
 					
 					var endUrl = opcuaClient.endUrl; 
 					var Username = opcuaClient.Username; 
-					var Password = opcuaClient.Password; 
 					var Security = opcuaClient.Security; 
 					var ActionType = opcuaClient.ActionType; 
 					var prefix = opcuaClient.prefix; 
 					
 					var row = $("<tr>").append($("<td>").text(endUrl),
 							$("<td>").text(Username),
-							$("<td>").text(Password),
 							$("<td>").text(Security),
 							$("<td>").text(ActionType),
 							$("<td>").text(prefix));
@@ -266,14 +269,12 @@ function loadOPCUAClientList(){
 				data.result.forEach(function(opcuaClient) {
 					var endUrl = opcuaClient.endUrl; 
 					var Username = opcuaClient.Username; 
-					var Password = opcuaClient.Password; 
 					var Security = opcuaClient.Security; 
 					var ActionType = opcuaClient.ActionType; 
 					var prefix = opcuaClient.prefix; 
 					
 					var row = $("<tr>").append($("<td>").text(endUrl),
 							$("<td>").text(Username),
-							$("<td>").text(Password),
 							$("<td>").text(Security),
 							$("<td>").text(ActionType),
 							$("<td>").text(prefix));
@@ -329,6 +330,7 @@ function editOPCUA(){
 		var security = $('#security').find(":selected").val();
 		var actionType = $('#actionType').find(":selected").val();
 		var prefix = $('#prefix').val();
+		  var csrfToken = document.getElementById('csrfToken').value;
 		
 		$('#field_user_Error').text('');
 	    $('#field_url_Error').text('');
@@ -362,8 +364,6 @@ function editOPCUA(){
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 		  
-		 
-			
 			$.ajax({
 				
 				url : 'OPCUAClientServlet',
@@ -375,7 +375,8 @@ function editOPCUA(){
 					password : password,
 					security : security,
 					actionType : actionType,
-					prefix : prefix,		
+					prefix : prefix,	
+					csrfToken: csrfToken,
 					action: 'update'		
 				},
 				success : function(data) {
@@ -424,12 +425,17 @@ function editOPCUA(){
 function validateUsername(username) {
     var regex = /^[a-zA-Z][a-zA-Z0-9.@_-]*$/;
 
+    if (username.trim() === '') {
+        return null; // Empty field, validation passed
+    }
+
     if (!regex.test(username)) {
         return 'Invalid username; the allowed symbols are @_-';
     }
 
     return null; // Validation passed
 }
+
 
 // Validation for first name
 function validatePrefix(prefix) {
@@ -461,6 +467,7 @@ function addOPCUA(){
 	var security = $('#security').find(":selected").val();
 	var actionType = $('#actionType').find(":selected").val();
 	var prefix = $('#prefix').val();
+	  var csrfToken = document.getElementById('csrfToken').value;
 	
 	 $('#field_user_Error').text('');
 	    $('#field_url_Error').text('');
@@ -497,7 +504,8 @@ function addOPCUA(){
 			password : password,
 			security : security,
 			actionType : actionType,
-			prefix : prefix,		
+			prefix : prefix,	
+			csrfToken: csrfToken,
 			action: 'add'		
 		},
 		success : function(data) {
@@ -540,6 +548,8 @@ function addOPCUA(){
 
 
 function deleteOpcuaClient(prefix){
+	  var csrfToken = document.getElementById('csrfToken').value;
+	  
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-delete');
 	  modal.style.display = 'block';
@@ -552,6 +562,7 @@ function deleteOpcuaClient(prefix){
 				type : 'POST',
 				data : {
 					prefix : prefix,
+					csrfToken: csrfToken,
 					action: 'delete'
 				},
 				success : function(data) {
@@ -613,6 +624,12 @@ $(document).ready(function() {
 	String roleValue = (String) session.getAttribute("role");%>
 
 	roleValue = '<%=roleValue%>';
+	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
 
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -703,6 +720,7 @@ $(document).ready(function() {
 				<form id="opcuaClientForm">
 				
 				<input type="hidden" id="action" name="action" value="">
+				<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 				
 				<div id="loader-overlay">
     <div id="loader">
@@ -805,7 +823,6 @@ $(document).ready(function() {
 						<tr>
 						<th>End URL</th>
 							<th>User name</th>
-							<th>Password</th>
 							<th>Security</th>
 							<th>Action type</th>
 							<th>Prefix</th>

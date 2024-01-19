@@ -27,8 +27,16 @@ public class RedundancyServlet extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
+			
+
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 	
 		try{
+			
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 			
@@ -88,6 +96,9 @@ public class RedundancyServlet extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -103,7 +114,11 @@ public class RedundancyServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
-		
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		if (check_username != null) {
 			
 			String toggle_redundancy_enable = request.getParameter("toggle_redundancy_enable");		
@@ -117,7 +132,7 @@ public class RedundancyServlet extends HttpServlet {
 			String common_subnet_2 = request.getParameter("common_subnet_2");
 
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -161,6 +176,9 @@ public class RedundancyServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

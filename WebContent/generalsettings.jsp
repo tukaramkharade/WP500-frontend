@@ -114,15 +114,21 @@ button {
 
 var roleValue;	
 var tokenValue;
+var csrfTokenValue;
 
 function getSettings(){
 	// Display loader when the request is initiated
     showLoader();
 	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 		url : 'updateSettings',
 		type : 'GET',
 		dataType : 'json',
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -168,6 +174,7 @@ function getSettings(){
 }
 
 	function updateSettings() {
+		 
 		// Display the custom modal dialog
 		var modal = document.getElementById('custom-modal-edit');
 		modal.style.display = 'block';
@@ -180,7 +187,8 @@ function getSettings(){
 			var toggle_enable_ssh = $("#toggle_enable_ssh").prop("checked") ? "1": "0";
 			var toggle_enable_usbtty = $("#toggle_enable_usbtty").prop("checked") ? "1" : "0";
 			var lan_type = 'general';
-
+			var csrfToken = document.getElementById('csrfToken').value;
+			
 			$.ajax({
 
 				url : 'updateSettings',
@@ -189,7 +197,8 @@ function getSettings(){
 					toggle_enable_ftp : toggle_enable_ftp,
 					toggle_enable_ssh : toggle_enable_ssh,
 					toggle_enable_usbtty : toggle_enable_usbtty,
-					lan_type : lan_type
+					lan_type : lan_type,
+					csrfToken: csrfToken
 
 				},
 				success : function(data) {
@@ -266,6 +275,12 @@ function getSettings(){
 
 roleValue = '<%=roleValue%>';
 
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
+
 if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 	$('#applyBtn').prop('disabled', true);
@@ -317,6 +332,8 @@ $('#applyBtn').click(function() {
 		<section style="margin-left: 1em">
 			<h3>GENERAL SETTINGS</h3>
 			<hr>
+				<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
+				
 			<div class="container">
 <div id="loader-overlay">
     <div id="loader">

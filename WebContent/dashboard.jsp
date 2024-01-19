@@ -229,6 +229,7 @@ var chart = null;
 var barChart = null;
 var tokenValue;
 var roleValue;
+var csrfTokenValue;
 
 function latestActiveThreats(){
 	// Display loader when the request is initiated

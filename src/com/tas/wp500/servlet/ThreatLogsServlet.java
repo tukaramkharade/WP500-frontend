@@ -30,6 +30,12 @@ public class ThreatLogsServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 
@@ -37,7 +43,7 @@ public class ThreatLogsServlet extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "get_threat_logs");
 				json.put("user", check_username);
 				json.put("token", check_token);
@@ -50,10 +56,7 @@ public class ThreatLogsServlet extends HttpServlet {
 				String message = respJson.getString("msg");
 
 			
-
 				logger.info("Threat Logs response : " + respJson.toString());
-
-				
 
 				JSONObject finalJsonObj = new JSONObject();
 				if(status.equals("success")){
@@ -71,6 +74,9 @@ public class ThreatLogsServlet extends HttpServlet {
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting threat logs :" + e);
@@ -86,6 +92,12 @@ public class ThreatLogsServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 
@@ -109,6 +121,7 @@ public class ThreatLogsServlet extends HttpServlet {
 
 			}
 			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -173,7 +186,9 @@ public class ThreatLogsServlet extends HttpServlet {
 
 				// Write the JSON data to the response
 				response.getWriter().print(resJsonArray.toString());
-
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting active threats :" + e);

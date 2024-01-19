@@ -105,9 +105,11 @@ margin-top: 68px;
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 	function searchSystemLogData() {
 		var searchQuery = document.getElementById("search_query").value.trim();
+		var csrfToken = document.getElementById('csrfToken').value;
 
 		var startdatetime = $('#startdatetime').val();
 		var enddatetime = $('#enddatetime').val();
@@ -126,7 +128,8 @@ var tokenValue;
 			data : {
 				search_query : searchQuery,
 				startdatetime : startdatetime,
-				enddatetime : enddatetime
+				enddatetime : enddatetime,
+				csrfToken: csrfToken
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
@@ -185,13 +188,16 @@ var tokenValue;
 		var startdatetime = $('#startdatetime').val();
 		var enddatetime = $('#enddatetime').val();
 		var tableBody = $("#log_table_body");
+		var csrfToken = document.getElementById('csrfToken').value;
+
 		tableBody.empty();
 		$.ajax({
 			url : 'loadSystemLog',
 			type : 'POST',
 			data : {
 				startdatetime : startdatetime,
-				enddatetime : enddatetime
+				enddatetime : enddatetime,
+				csrfToken: csrfToken
 
 			},
 			beforeSend: function(xhr) {
@@ -243,12 +249,17 @@ var tokenValue;
 	function loadSystemLog() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
-		var tableBody = $("#log_table_body");
+	    var csrfToken = document.getElementById('csrfToken').value;
+
+	    var tableBody = $("#log_table_body");
 
 		$.ajax({
 			url : "loadSystemLog", // Replace this with the appropriate server-side URL to handle the AJAX GET
 			type : "GET", // Change the request method to GET
+			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -345,23 +356,7 @@ var tokenValue;
 	    // Debugging: Log both calculated times to the console
 	    console.log('Current IST time:', formattedCurrentTime);
 	    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
-	}
-	function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
-	
-	
+	}	
 	
 	function changeButtonColor(isDisabled) {
         var $load_button = $('#loadLogSysFileButton');       
@@ -394,6 +389,13 @@ var tokenValue;
 		String roleValue = (String) session.getAttribute("role");%>
 	
 	roleValue = '<%=roleValue%>';
+	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
+	
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 		$('#loadLogSysFileButton').prop('disabled', true);
@@ -457,6 +459,7 @@ var tokenValue;
 		<section style="margin-left: 1em">
 		<h3>SYSTEM LOGS</h3>
 		<hr />
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

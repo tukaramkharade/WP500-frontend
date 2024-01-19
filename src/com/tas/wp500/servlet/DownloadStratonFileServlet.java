@@ -1,5 +1,6 @@
 package com.tas.wp500.servlet;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,12 +19,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/downloadSratonFile")
 public class DownloadStratonFileServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(DownloadStratonFileServlet.class);
+
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		
 	    String userProvidedFileName = request.getParameter("userFileName");
-	    System.out.println("userProvidedFileName: " + userProvidedFileName);
+	    String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
+		
+		if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 	    if (userProvidedFileName == null || userProvidedFileName.equals("")) {
 	        throw new ServletException("File Name can't be null or empty");
 	    }
@@ -69,6 +82,9 @@ public class DownloadStratonFileServlet extends HttpServlet {
 	        System.out.println("File not found or not available for download");
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found or not available for download");
 	    }
+		}else {
+			logger.error("CSRF token validation failed");	
+		}
 	}
 	private String getFileExtension(String fileName) {
 	    int lastDotIndex = fileName.lastIndexOf('.');

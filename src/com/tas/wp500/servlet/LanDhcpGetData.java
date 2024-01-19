@@ -10,12 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/lanDhcpGetData1")
 public class LanDhcpGetData extends HttpServlet {
+	final static Logger logger = Logger.getLogger(LanDhcpGetData.class);
+
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -32,6 +35,11 @@ public class LanDhcpGetData extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		
 		if(check_username != null){
 			
@@ -40,7 +48,7 @@ public class LanDhcpGetData extends HttpServlet {
 		String dhcp_type = request.getParameter("dhcp_type");
 		
 		try {
-
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
@@ -77,6 +85,9 @@ public class LanDhcpGetData extends HttpServlet {
 			// Write the JSON object to the response
 			out.print(jsonObject.toString());
 			out.flush();
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

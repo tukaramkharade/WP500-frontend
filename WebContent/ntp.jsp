@@ -376,13 +376,18 @@ margin-top: 68px;
 <script>
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 	// Function to fetch current time from the server and update the button text
 	function getCurrentTime() {
+		 var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
 			url : "ntpLiveTime", // Replace with your server endpoint to get the current time
 			type : "GET",
 			dataType : "json",
+			data: {
+				csrfToken: csrfToken
+	        },
 			success : function(data) {
 				// Update the <p> tags with the fetched time data
 				$("#ist_time").text("IST Time: " + data.IST_Time);
@@ -397,12 +402,15 @@ var tokenValue;
 	
 	
 	function getNtpDetails() {
-
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 			$.ajax({
 				url: 'ntp',
 				type: 'GET',
 				dataType: 'json',
+				data: {
+					csrfToken: csrfToken
+		        },
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				},
@@ -452,12 +460,15 @@ var tokenValue;
 
 		}
 	function getOverviewData() {
-
+		 var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
 
 			url : 'overviewGetData',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 			},
@@ -506,13 +517,14 @@ var tokenValue;
 		function updatentp() {
 		
 		var ntp_client = $("#ntp_client").prop("checked") ? "1" : "0";
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 		$.ajax({
 			url : "ntp",
 			type : "POST",
 			data : {
-				ntp_client : ntp_client
-				
+				ntp_client : ntp_client,
+				csrfToken: csrfToken
 			},
 			success : function(data) {
 				
@@ -557,11 +569,15 @@ var tokenValue;
 	function loadNtpSettings() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 			url : 'ntpDataUpadate',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -656,6 +672,7 @@ var tokenValue;
 	    var ntp_server3 = $('#ntp_server3').val();
 	    var ntp_interval = $('#ntp_interval_1').val();
 	    var isValid=true;
+	    var csrfToken = document.getElementById('csrfToken').value;
 	   
 	    // Clear previous error messages
 	    $('#field_ntp1_Error').text('');
@@ -708,7 +725,8 @@ var tokenValue;
 			            ntp_server1: ntp_server1,
 			            ntp_server2: ntp_server2,
 			            ntp_server3: ntp_server3,
-			            ntp_interval: ntp_interval
+			            ntp_interval: ntp_interval,
+			            csrfToken: csrfToken
 			        },
 			        success: function (data) {
 			        	
@@ -783,12 +801,14 @@ var tokenValue;
 	        return; // Prevent the AJAX request
 	    }
 
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$.ajax({
 			url : 'dateTimeServlet',
 			type : 'POST',
 			data : {
-				datetime : datetime
-
+				datetime : datetime,
+				csrfToken: csrfToken
 			},
 			success : function(data) {
 				
@@ -869,6 +889,11 @@ var tokenValue;
 		    	
 		    	roleValue = '<%=roleValue%>';
 		    	
+		    	<%// Access the session variable
+				HttpSession csrfToken = request.getSession();
+				String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+				csrfTokenValue = '<%=csrfTokenValue%>';
 		    	
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -950,8 +975,10 @@ var tokenValue;
 		<section style="margin-left: 1em">
 			<h3>NTP SETTINGS</h3>
 			<hr>
+			
 			<div class="form-container">
 				<form id="updateNtp" method="post">
+				<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 <div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

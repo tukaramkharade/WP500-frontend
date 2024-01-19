@@ -156,6 +156,7 @@ margin-top: -30px;
 <script>
 var roleValue; 
 var tokenValue;
+var csrfTokenValue;
 
 function togglePassword() {
     var passwordInput = $('#password');
@@ -174,11 +175,15 @@ function getSMTPSettings() {
 	// Display loader when the request is initiated
     showLoader();
 	
-
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 		url : "SMTPServlet",
 		type : "GET",
 		dataType : "json",
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -262,6 +267,8 @@ function addSMTPSettings() {
 	var to_email_id = $('#to_email_id').val();
 	var email_cc = $('#email_cc').val();
 	var email_bcc = $('#email_bcc').val();
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	if (from_email_id && !validateEmails(from_email_id)) {
         return; // Exit the function if email_cc is not blank and is invalid
     }
@@ -302,6 +309,7 @@ function addSMTPSettings() {
 			to_email_id : to_email_id,
 			email_cc : email_cc,
 			email_bcc : email_bcc, 
+			csrfToken: csrfToken,
 			action: 'add'
 
 		},
@@ -355,6 +363,7 @@ function editSMTPSettings() {
 			var to_email_id = $('#to_email_id').val();
 			var email_cc = $('#email_cc').val();
 			var email_bcc = $('#email_bcc').val();
+			 var csrfToken = document.getElementById('csrfToken').value;
 			
 			if (from_email_id && !validateEmails(from_email_id)) {
 		        return; // Exit the function if email_cc is not blank and is invalid
@@ -395,6 +404,7 @@ function editSMTPSettings() {
 					to_email_id : to_email_id,
 					email_cc : email_cc,
 					email_bcc : email_bcc,
+					csrfToken: csrfToken,
 					action: 'update'
 
 				},
@@ -462,6 +472,7 @@ function validatePortLength(port) {
     }
     return true;
 }
+
 function validateEmails(emails) {
 	
     var emailArray = emails.split(',').map(function (email) {
@@ -531,8 +542,10 @@ function isValidEmail(email) {
 
     return isValid;
 }
+
 function deleteSMTPSettings() {
-		
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -544,6 +557,9 @@ function deleteSMTPSettings() {
 					url : 'SMTPServlet',
 					type : 'DELETE',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					success : function(data) {
 						// Close the modal
 				        modal.style.display = 'none';
@@ -619,20 +635,7 @@ function changeButtonColor(isDisabled) {
     }
    
 }
-function handleStatus(status) {
-    if (status === 'fail') {
-        var modal = document.getElementById('custom-modal-session-timeout');
-        modal.style.display = 'block';
 
-        // Handle the confirm button click
-        var confirmButton = document.getElementById('confirm-button-session-timeout');
-        confirmButton.onclick = function () {
-            // Close the modal
-            modal.style.display = 'none';
-            window.location.href = 'login.jsp';
-        };
-    }
-}
 
 //Function to show the loader
 function showLoader() {
@@ -652,6 +655,12 @@ $(document).ready(function() {
 			String roleValue = (String) session.getAttribute("role");%>
 
 roleValue = '<%=roleValue%>';
+
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
 
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -840,6 +849,7 @@ roleValue = '<%=roleValue%>';
 		<form id="smtpForm">
 
 				<input type="hidden" id="action" name="action" value="">
+					<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 					<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

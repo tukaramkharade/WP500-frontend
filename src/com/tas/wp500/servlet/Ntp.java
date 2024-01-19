@@ -23,11 +23,6 @@ public class Ntp extends HttpServlet {
 	
 	final static Logger logger = Logger.getLogger(Ntp.class);
 
-	public Ntp() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 	TCPClient client = new TCPClient();
 	JSONObject json = new JSONObject();
 	JSONObject respJson = null;
@@ -42,13 +37,16 @@ public class Ntp extends HttpServlet {
 				String check_username = (String) session.getAttribute("username");
 				String check_token = (String) session.getAttribute("token");
 				String check_role = (String) session.getAttribute("role");
+				
+				String csrfTokenFromRequest = request.getParameter("csrfToken");
 
-				JSONObject jsonObject = new JSONObject();
-	 
+				// Retrieve CSRF token from the session
+				String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 				if (check_username != null) {
 	 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 	 
@@ -87,7 +85,9 @@ public class Ntp extends HttpServlet {
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
-	 				
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (JSONException e) {
 
 						// TODO Auto-generated catch block
@@ -108,12 +108,19 @@ public class Ntp extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 			
 		String ntp_client = request.getParameter("ntp_client");
 
 		try {
+			
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
@@ -145,7 +152,9 @@ public class Ntp extends HttpServlet {
 			// Write the JSON object to the response
 			out1.print(jsonObject.toString());
 			out1.flush();
-
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

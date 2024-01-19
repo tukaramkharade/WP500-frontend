@@ -30,6 +30,10 @@ public class WireguardKeysServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 
@@ -44,7 +48,7 @@ public class WireguardKeysServlet extends HttpServlet {
 				case "get":
 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						json.put("operation", "get_wireguard_keys");
 						json.put("user", check_username);
 						json.put("token", check_token);
@@ -82,7 +86,9 @@ public class WireguardKeysServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in getting keys: " + e);
@@ -91,7 +97,7 @@ public class WireguardKeysServlet extends HttpServlet {
 
 				case "generate_keys":
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						json.put("operation", "genrate_wireguard_keys");
 						json.put("user", check_username);
 						json.put("token", check_token);
@@ -128,7 +134,9 @@ public class WireguardKeysServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in generating keys: " + e);
@@ -139,7 +147,7 @@ public class WireguardKeysServlet extends HttpServlet {
 				case "activate_wireguard":
 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						json.put("operation", "activate_wireguard");
 						json.put("user", check_username);
 						json.put("token", check_token);
@@ -170,7 +178,9 @@ public class WireguardKeysServlet extends HttpServlet {
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in activating wireguard: " + e);
@@ -181,7 +191,7 @@ public class WireguardKeysServlet extends HttpServlet {
 				case "deactivate_wireguard":
 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						json.put("operation", "deactivate_wireguard");
 						json.put("user", check_username);
 						json.put("token", check_token);
@@ -212,7 +222,9 @@ public class WireguardKeysServlet extends HttpServlet {
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in deactivating wireguard: " + e);
@@ -222,7 +234,7 @@ public class WireguardKeysServlet extends HttpServlet {
 					
 				case "wireguard_status":
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						json.put("operation", "get_wireguard_info");
 						json.put("user", check_username);
 						json.put("token", check_token);
@@ -254,7 +266,9 @@ public class WireguardKeysServlet extends HttpServlet {
 
 					    // Write the JSON data to the response
 					    response.getWriter().print(finalJsonObj.toString());
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in getting wireguard info: " + e);

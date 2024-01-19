@@ -181,10 +181,14 @@ var tagVariableValues = {};
 	}
 	
 	 function loadTagList() {
+		 var csrfToken = document.getElementById('csrfToken').value;
  	    $.ajax({
  	      url: "alarmConfigTagListServlet",
  	      type: "GET",
  	      dataType: "json",
+ 	     data: {
+				csrfToken: csrfToken
+	        },
  	      success: function (data) {
  	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
  	          var datalist = $(".variable");
@@ -401,7 +405,7 @@ var tagVariableValues = {};
 
  
  	       	function deleteCommand(){
- 	       	 var csrfToken = document.getElementById('csrfToken').value;
+ 	       	
  	       	 
 	       	// Display the custom modal dialog
 	   		  var modal = document.getElementById('custom-modal-delete');
@@ -415,9 +419,7 @@ var tagVariableValues = {};
 	   		      url: 'commandConfigServlet',
 	   		      type: 'DELETE',
 	   		     dataType : 'json',
-	   		  data: {
-					csrfToken: csrfToken
-		        },
+	   		 
 	   		      success: function (data) {
 	   		    	  
 	   		        // Close the modal

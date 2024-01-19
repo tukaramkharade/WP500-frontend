@@ -186,9 +186,12 @@ button {
 <script type="text/javascript">
 
 var roleValue;
+var csrfTokenValue;
+
 
 function deleteFile(file){
-	
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-delete');
 	  modal.style.display = 'block';
@@ -202,7 +205,8 @@ function deleteFile(file){
 				type : 'POST',
 				data : {
 					file : file,
-					action : 'delete' 
+					action : 'delete',
+					csrfToken: csrfToken
 				},
 				success : function(data) {
 					
@@ -225,7 +229,9 @@ function deleteFile(file){
 	
 	
 }
-function updateFirmwareFile(file){	
+function updateFirmwareFile(file){
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-update');
 	  modal.style.display = 'block';
@@ -237,7 +243,8 @@ function updateFirmwareFile(file){
 				type : 'POST',
 				data : {
 					file : file,
-					action : 'update' 
+					action : 'update',
+					csrfToken: csrfToken
 				},
 				success : function(data) {
 					
@@ -269,11 +276,15 @@ function loadFirmwareFiles() {
 	
 	// Display loader when the request is initiated
     showLoader();
-	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
     $.ajax({
         url: "FirmwareListServlet",
         type: "GET",
         dataType: "json",
+        data: {
+			csrfToken: csrfToken
+        },
         success: function (data) {
         	
         	// Hide loader when the response has arrived
@@ -489,6 +500,168 @@ function firmwareDownload() {
                 $('#progress-bar').text('');	
             });
         }   
+        
+// JavaScript function to redirect to 'firmwareUpdate.jsp'
+function redirectToFirmwareUpdate() {
+    window.location.href = 'firmwareUpdate.jsp';
+}
+
+
+
+function changeButtonColor(isDisabled) {
+    var $file_upload_button = $('#file_upload');       
+    var $firmware_update_button = $('#firmwareUpdateButton');
+    var $firmware_download = $('#firmware_download');
+    
+     if (isDisabled) {
+        $file_upload_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $file_upload_button.css('background-color', '#2b3991'); // Reset to original color
+    }
+    
+    if (isDisabled) {
+        $firmware_update_button.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+    
+    if (isDisabled) {
+        $firmware_download.css('background-color', 'gray'); // Change to your desired color
+    } else {
+        $firmware_download.css('background-color', '#2b3991'); // Reset to original color
+    } 
+    
+}
+
+
+function getFirmwareStatus(){
+	 var csrfToken = document.getElementById('csrfToken').value;
+
+	 
+	$.ajax({
+		url : "firmwareStatusServlet",
+		type : "GET",
+		dataType : "json",
+		data: {
+			csrfToken: csrfToken
+        },
+		success : function(data) {
+			
+			if (data.status == 'fail') {
+				
+				 var modal = document.getElementById('custom-modal-session-timeout');
+				  modal.style.display = 'block';
+				  
+				// Update the session-msg content with the message from the server
+				    var sessionMsg = document.getElementById('session-msg');
+				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+				  
+				  // Handle the confirm button click
+				  var confirmButton = document.getElementById('confirm-button-session-timeout');
+				  confirmButton.onclick = function () {
+					  
+					// Close the modal
+				        modal.style.display = 'none';
+				        window.location.href = 'login.jsp';
+				  };
+					  
+			} 
+			// Assuming data.banner_text_data is an array, join it to create a string
+           var textToShow = data.firmware_status_data.join('\n');
+			
+        // Clear the existing content in the textarea
+           $('#firmware_status').val('');
+
+           // Set the text in the textarea
+           $('#firmware_status').val(textToShow);
+
+		},
+		error : function(xhr, status, error) {
+			// Handle the error response, if needed
+			console.log("Error getting firmware status: " + error);
+		},
+	});
+}
+
+// Function to show the loader
+ function showLoader() {
+     // Show the loader overlay
+     $('#loader-overlay').show();
+ }
+
+ // Function to hide the loader
+ function hideLoader() {
+     // Hide the loader overlay
+     $('#loader-overlay').hide();
+ }
+ 
+
+$(document).ready(function() {
+	<%// Access the session variable
+	HttpSession role = request.getSession();
+	String roleValue = (String) session.getAttribute("role");%>
+
+roleValue = '<%=roleValue%>';
+	
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
+
+	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
+		
+		$('#file_upload').prop('disabled', true);
+		$('#crt_file_upload').prop('disabled', true);		
+		$('#fileInput').prop('disabled', true); 
+		$('#firmwareUpdateButton').prop('disabled', true);
+		$('#firmware_download').prop('disabled', true);
+		
+		
+		changeButtonColor(true);
+	}
+	
+	if (roleValue === "null") {
+        var modal = document.getElementById('custom-modal-session-timeout');
+        modal.style.display = 'block';
+        // Update the session-msg content with the message from the server
+	    var sessionMsg = document.getElementById('session-msg');
+	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
+	    
+        // Handle the confirm button click
+        var confirmButton = document.getElementById('confirm-button-session-timeout');
+        confirmButton.onclick = function() {
+            // Close the modal
+            modal.style.display = 'none';
+            window.location.href = 'login.jsp';
+        };
+    }
+	
+	else{
+		<%// Access the session variable
+		HttpSession token = request.getSession();
+		String tokenValue = (String) session.getAttribute("token");%>
+
+		tokenValue = '<%=tokenValue%>';
+		
+		$('#firmwareUpdateButton').click(function(event) {
+           event.preventDefault(); // Prevent the form from submitting
+           validateAndUpload('fileInput', '.swu');
+       });	
+		$('#firmware_download').click(function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            firmwareDownload();
+        });
+    	
+    	loadFirmwareFiles();
+    	
+		
+	}
+	
+});
+
 </script>
 <body>
 
@@ -503,6 +676,7 @@ function firmwareDownload() {
 		<section style="margin-left: 1em">
 			<h3>FIRMWARE UPDATE</h3>
 			<hr>
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			
 			<div class="container">
 			<div id="loader-overlay">
@@ -594,157 +768,9 @@ function firmwareDownload() {
   				<button id="closePopup">OK</button>
 			</div>
     
-    <script>
+ <!--    <script> -->
     
- // JavaScript function to redirect to 'firmwareUpdate.jsp'
-    function redirectToFirmwareUpdate() {
-        window.location.href = 'firmwareUpdate.jsp';
-    }
- 
-    
- 
-    function changeButtonColor(isDisabled) {
-        var $file_upload_button = $('#file_upload');       
-        var $firmware_update_button = $('#firmwareUpdateButton');
-        var $firmware_download = $('#firmware_download');
-        
-         if (isDisabled) {
-            $file_upload_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $file_upload_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-        
-        if (isDisabled) {
-            $firmware_update_button.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
-        } 
-        
-        
-        if (isDisabled) {
-            $firmware_download.css('background-color', 'gray'); // Change to your desired color
-        } else {
-            $firmware_download.css('background-color', '#2b3991'); // Reset to original color
-        } 
-        
-    }
-    
-    
-    function getFirmwareStatus(){
-    	$.ajax({
-    		url : "firmwareStatusServlet",
-    		type : "GET",
-    		dataType : "json",
-    		success : function(data) {
-    			
-    			if (data.status == 'fail') {
-    				
-   				 var modal = document.getElementById('custom-modal-session-timeout');
-   				  modal.style.display = 'block';
-   				  
-   				// Update the session-msg content with the message from the server
-   				    var sessionMsg = document.getElementById('session-msg');
-   				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
 
-   				  
-   				  // Handle the confirm button click
-   				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-   				  confirmButton.onclick = function () {
-   					  
-   					// Close the modal
-   				        modal.style.display = 'none';
-   				        window.location.href = 'login.jsp';
-   				  };
-   					  
-   			} 
-   			// Assuming data.banner_text_data is an array, join it to create a string
-               var textToShow = data.firmware_status_data.join('\n');
-   			
-            // Clear the existing content in the textarea
-               $('#firmware_status').val('');
-
-               // Set the text in the textarea
-               $('#firmware_status').val(textToShow);
-
-    		},
-    		error : function(xhr, status, error) {
-    			// Handle the error response, if needed
-    			console.log("Error getting firmware status: " + error);
-    		},
-    	});
-    }
-    
- // Function to show the loader
-	 function showLoader() {
-	     // Show the loader overlay
-	     $('#loader-overlay').show();
-	 }
-
-	 // Function to hide the loader
-	 function hideLoader() {
-	     // Hide the loader overlay
-	     $('#loader-overlay').hide();
-	 }
-	 
- 
-    $(document).ready(function() {
-    	<%// Access the session variable
-		HttpSession role = request.getSession();
-		String roleValue = (String) session.getAttribute("role");%>
-	
-	roleValue = '<%=roleValue%>';
-    	
-   
-    	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-    		
-    		$('#file_upload').prop('disabled', true);
-			$('#crt_file_upload').prop('disabled', true);		
-			$('#fileInput').prop('disabled', true); 
-			$('#firmwareUpdateButton').prop('disabled', true);
-			$('#firmware_download').prop('disabled', true);
-			
-			
-			changeButtonColor(true);
-    	}
-    	
-    	if (roleValue === "null") {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-	        // Update the session-msg content with the message from the server
-		    var sessionMsg = document.getElementById('session-msg');
-		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-		    
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function() {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-    	
-    	else{
-    		<%// Access the session variable
-			HttpSession token = request.getSession();
-			String tokenValue = (String) session.getAttribute("token");%>
-
-			tokenValue = '<%=tokenValue%>';
-    		
-    		$('#firmwareUpdateButton').click(function(event) {
-               event.preventDefault(); // Prevent the form from submitting
-               validateAndUpload('fileInput', '.swu');
-           });	
-    		$('#firmware_download').click(function(event) {
-                event.preventDefault(); // Prevent the form from submitting
-                firmwareDownload();
-            });
-        	
-        	loadFirmwareFiles();
-        	
-    		
-    	}
-    	
-   });
-    </script>
+    <!-- </script> -->
 </body>
 </html>

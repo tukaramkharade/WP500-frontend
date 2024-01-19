@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/lanUpdateServlet")
 public class LanUpdateServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(LanUpdateServlet.class);
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -33,6 +35,11 @@ public class LanUpdateServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		if(check_username != null){
 		
 		String eth1_ipaddr = request.getParameter("eth1_ipaddr");
@@ -45,7 +52,7 @@ public class LanUpdateServlet extends HttpServlet {
 		
 
 		try {
-
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			System.out.println("eth1_ipaddr-->: "+eth1_ipaddr);
 			System.out.println("eth1_subnet-->: "+eth1_subnet);
 			System.out.println("eth1_type-->: "+eth1_type);
@@ -109,6 +116,9 @@ public class LanUpdateServlet extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
