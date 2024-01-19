@@ -27,13 +27,21 @@ public class OPCUAClientServlet extends HttpServlet {
 		
 		try {
 			
+			
 			HttpSession session = request.getSession(false);
 
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
 			
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+			
 			if (check_username != null) {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					
 				
 				json.put("operation", "get_opc_client_settings");
 				json.put("user", check_username);
@@ -65,7 +73,9 @@ public class OPCUAClientServlet extends HttpServlet {
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
 			}
-			
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 	}catch (Exception e) {
 		e.printStackTrace();
 		logger.error("Error in getting mqtt data: " + e);
@@ -81,6 +91,10 @@ public class OPCUAClientServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		String endUrl = null;
 		String Username = null;
@@ -106,6 +120,8 @@ public class OPCUAClientServlet extends HttpServlet {
 					prefix = request.getParameter("prefix");
 					
 					try{
+						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
@@ -145,7 +161,9 @@ public class OPCUAClientServlet extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 						
-						
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error in adding OPCUA client : " + e);
@@ -163,7 +181,7 @@ public class OPCUAClientServlet extends HttpServlet {
 					prefix = request.getParameter("prefix");
 					
 					try{
-						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -203,7 +221,9 @@ public class OPCUAClientServlet extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 						
-						
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error in adding OPCUA client : " + e);
@@ -215,7 +235,7 @@ public class OPCUAClientServlet extends HttpServlet {
 					prefix = request.getParameter("prefix");
 					
 					try{
-						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 						
@@ -243,7 +263,9 @@ public class OPCUAClientServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-						
+						}else {
+							logger.error("CSRF token validation failed");	
+						}	
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error in deleting opcua client : " + e);

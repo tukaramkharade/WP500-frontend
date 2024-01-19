@@ -92,15 +92,20 @@ margin-top: 68px;
 	var total_pages = 0;
 	var tokenValue;
 	var roleValue;
-
+	var csrfTokenValue;
+	
 	function getStoreForwardData() {
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 			url : 'storeForwardDataServlet',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -165,11 +170,14 @@ margin-top: 68px;
 	}
 
 	function getStoreForward(currentPage) {
+		  var csrfToken = document.getElementById('csrfToken').value;
+		  
 		$.ajax({
 			url : 'storeForwardDataServlet',
 			type : 'POST', // Use POST method
 			data : {
-				currentPage : currentPage
+				currentPage : currentPage,
+				csrfToken: csrfToken
 			}, // Pass current page number
 			dataType : 'json',
 			beforeSend: function(xhr) {
@@ -208,20 +216,6 @@ margin-top: 68px;
 		});
 	}
 	
-	function handleStatus(status) {
-	    if (status === 'fail') {
-	        var modal = document.getElementById('custom-modal-session-timeout');
-	        modal.style.display = 'block';
-
-	        // Handle the confirm button click
-	        var confirmButton = document.getElementById('confirm-button-session-timeout');
-	        confirmButton.onclick = function () {
-	            // Close the modal
-	            modal.style.display = 'none';
-	            window.location.href = 'login.jsp';
-	        };
-	    }
-	}
 
 	function clearTable() {
 		$('#data-table tbody').empty();
@@ -249,6 +243,13 @@ margin-top: 68px;
 		String roleValue = (String) session.getAttribute("role");%>
 
 	roleValue = '<%=roleValue%>';
+	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
+		
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
@@ -306,6 +307,8 @@ margin-top: 68px;
 	<div class="header"><%@ include file="header.jsp"%></div>
 	<div class="content">
 		<section style="margin-left: 1em">
+		
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 		
 		<div id="loader-overlay">
     <div id="loader">

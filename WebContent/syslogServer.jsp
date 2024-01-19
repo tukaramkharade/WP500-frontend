@@ -113,16 +113,21 @@ margin-top: 68px;
 
 var roleValue;	
 var tokenValue;
+var csrfTokenValue;
 
 function getSysLog(){
 	
 	// Display loader when the request is initiated
     showLoader();
-	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 		url : "syslogConf",
 		type : "GET",
 		dataType : "json",
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -195,6 +200,7 @@ function updateSysLog(){
 	
 	 var hostname = $('#hostname').val();
 		var port_number = $('#port_number').val();
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 		 $('#field_host_Error').text('');
 		    $('#field_port_Error').text('');
@@ -226,8 +232,8 @@ function updateSysLog(){
 				type : 'POST',
 				data : {
 					hostname : hostname,
-					port_number : port_number
-					
+					port_number : port_number,
+					csrfToken: csrfToken				
 
 				},
 				success : function(data) {
@@ -279,10 +285,15 @@ function updateSysLog(){
 }
 
 function getSysLogStatus(){
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	$.ajax({
 		url : "syslogStatus",
 		type : "GET",
 		dataType : "json",
+		data: {
+			csrfToken: csrfToken
+        },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
@@ -333,13 +344,14 @@ function updateSysLogStatus(){
 	  confirmButton.onclick = function () {
 		  
 		  var status = $('#status').find(":selected").val();
+		  var csrfToken = document.getElementById('csrfToken').value;
 		  
 			$.ajax({
 				url : 'syslogStatus',
 				type : 'POST',
 				data : {
-					status : status
-					
+					status : status,
+					csrfToken: csrfToken					
 				},
 				success : function(data) {
 					if (data.status == 'fail') {
@@ -424,6 +436,12 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
+
 if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 	$('#applyButton').prop('disabled', true);
@@ -486,6 +504,7 @@ $('#applyButton').click(function() {
 			<hr>
 
 			<div class="container">
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

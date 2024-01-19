@@ -165,14 +165,18 @@ position: relative;
 	var tokenValue;
 	var roleValue;
 	var dhcpType;
+	var csrfTokenValue;
 	
 	function getDhcpSettings(dhcpType) {
 		var dhcp_type = dhcpType;
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		  $.ajax({
 		    url: 'lanDhcpGetData1', 
 		    type : 'POST', 
 		    data: { 
-		    	dhcp_type: dhcp_type 
+		    	dhcp_type: dhcp_type,
+		    	csrfToken: csrfToken
 		    	},
 		    success: function(data) {
 		    	if (data.status === 'success') {
@@ -203,11 +207,15 @@ position: relative;
 		
 		// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
+	    
 		$.ajax({
 			url : 'lan',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -298,10 +306,15 @@ position: relative;
 		});
 	}
 	function loadLanSettingsIfDhcpNot() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$.ajax({
 			url : 'lan',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
@@ -369,6 +382,7 @@ position: relative;
 		var eth1_ipaddr = $('#ip_addr_eth1').val();
 		var eth1_subnet = $('#subnet_mask_eth1').val();   
 		 var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
+		 var csrfToken = document.getElementById('csrfToken').value;
         
 	if (!eth1_ipaddr && !eth1_subnet && eth1_dhcp1 == 0) {
         // Display the custom popup message
@@ -403,7 +417,8 @@ position: relative;
 						eth1_dhcp1 : eth1_dhcp1,
 						lan_type : lan_type,
 						eth1_gateway : eth1_gateway,
-						eth1_dns : eth1_dns
+						eth1_dns : eth1_dns,
+						csrfToken: csrfToken
 					},
 					success : function(data) {
 						// Close the modal
@@ -439,6 +454,7 @@ position: relative;
 		var lan1_ipaddr = $('#ip_addr_lan1').val();
 		var lan1_subnet = $('#subnet_mask_lan1').val();
 		var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
+		 var csrfToken = document.getElementById('csrfToken').value;
         
 	if (!lan1_subnet && !lan1_ipaddr && lan1_dhcp1 == 0) {
         // Display the custom popup message
@@ -474,7 +490,8 @@ position: relative;
 						lan1_type : lan1_type,
 						lan1_gateway : lan1_gateway,
 						lan1_dns : lan1_dns,
-						toggle_enable_lan1 : toggle_enable_lan1
+						toggle_enable_lan1 : toggle_enable_lan1,
+						csrfToken: csrfToken
 						
 					},
 					success : function(data) {					
@@ -511,7 +528,7 @@ position: relative;
 		 var lan2_ipaddr = $('#ip_addr_lan2').val();
 	        var lan2_subnet = $('#subnet_mask_lan2').val();
 	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
-	        
+	        var csrfToken = document.getElementById('csrfToken').value;
 	       
 			if (!lan2_subnet && !lan2_ipaddr && lan1_dhcp2 == 0) {
 				// Display the custom popup message
@@ -556,7 +573,8 @@ position: relative;
 	                lan2_type: lan2_type,
 	                lan2_gateway: lan2_gateway,
 	                lan2_dns: lan2_dns,
-	                toggle_enable_lan2: toggle_enable_lan2
+	                toggle_enable_lan2: toggle_enable_lan2,
+	                csrfToken: csrfToken
 	            },
 	            success: function (data) {
 	                // Close the modal
@@ -747,6 +765,12 @@ position: relative;
 		String roleValue = (String) session.getAttribute("role");%>
 	
 	roleValue = '<%=roleValue%>';
+	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
 		
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 			
@@ -856,6 +880,7 @@ position: relative;
 		<section style="margin-left: 1em">
 			<h3>LAN SETTINGS</h3>
 			<hr>
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div class="container">
 			<div id="loader-overlay">
     <div id="loader">

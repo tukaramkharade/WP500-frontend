@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/upadateLan2")
 public class Lan2UpdateServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	final static Logger logger = Logger.getLogger(Lan2UpdateServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -31,6 +32,10 @@ public class Lan2UpdateServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		if(check_username != null){
 			
@@ -43,7 +48,7 @@ public class Lan2UpdateServlet extends HttpServlet {
 		String toggle_enable_lan2 = request.getParameter("toggle_enable_lan2");
 
 		try {
-
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 
@@ -106,6 +111,9 @@ public class Lan2UpdateServlet extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

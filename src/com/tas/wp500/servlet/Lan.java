@@ -29,8 +29,13 @@ public class Lan extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 			
 		try{
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 			
@@ -124,6 +129,9 @@ public class Lan extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -140,11 +148,17 @@ public class Lan extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		
 		int eth_type = Integer.parseInt(request.getParameter("eth_type"));
 		
 		try {
+			
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 			
@@ -187,7 +201,9 @@ public class Lan extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
-			
+			}else {
+				logger.error("CSRF token validation failed");	
+			}	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

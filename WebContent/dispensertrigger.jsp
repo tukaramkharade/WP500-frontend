@@ -176,11 +176,16 @@ var csrfTokenValue;
 	}
 	
 	function loadTagListTriggerTag() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {
@@ -205,11 +210,16 @@ var csrfTokenValue;
 	}
 
 	function loadTagListStartPressure() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {
@@ -234,11 +244,16 @@ var csrfTokenValue;
 	}
 
 	function loadTagListEndPressure() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {
@@ -263,11 +278,16 @@ var csrfTokenValue;
 	}
 
 	function loadTagListTemperature() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {
@@ -292,11 +312,16 @@ var csrfTokenValue;
 	}
 
 	function loadTagListTotal() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {
@@ -321,11 +346,16 @@ var csrfTokenValue;
 	}
 
 	function loadTagListQuantity() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {
@@ -350,11 +380,16 @@ var csrfTokenValue;
 	}
 
 	function loadTagListUnitPrice() {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		$
 				.ajax({
 					url : "alarmConfigTagListServlet",
 					type : "GET",
 					dataType : "json",
+					 data: {
+							csrfToken: csrfToken
+				        },
 					success : function(data) {
 						if (data.tag_list_result
 								&& Array.isArray(data.tag_list_result)) {

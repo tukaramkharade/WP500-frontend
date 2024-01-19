@@ -27,6 +27,12 @@ public class SyslogConf extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 
 		if (check_username != null) {
 
@@ -36,6 +42,8 @@ public class SyslogConf extends HttpServlet {
 			JSONObject jsonObject = new JSONObject();
 
 			try {
+				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "rsyslog_manager");
 				json.put("operation_type", "get_rsyslog");
 				json.put("user", check_username);
@@ -74,7 +82,9 @@ public class SyslogConf extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting syslog config data : " + e);
@@ -91,6 +101,12 @@ public class SyslogConf extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 
 		String hostname = null;
 		String port_number = null;
@@ -102,6 +118,7 @@ public class SyslogConf extends HttpServlet {
 			port_number = request.getParameter("port_number");
 					
 					try {
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -132,7 +149,9 @@ public class SyslogConf extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating general settings : " + e);

@@ -27,6 +27,10 @@ public class StratonListServelt extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		if (check_username != null) {
 			
@@ -34,7 +38,7 @@ public class StratonListServelt extends HttpServlet {
 			JSONObject json = new JSONObject();
 			
 			try{
-				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "file_manager");				
 				json.put("operation_type", "straton_file_list");
 				json.put("user", check_username);
@@ -63,7 +67,9 @@ public class StratonListServelt extends HttpServlet {
 				out.print(jsonObject.toString());
 				out.flush();
 				
-				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("Error in getting firmware files : "+e);
@@ -80,13 +86,17 @@ public class StratonListServelt extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		if (check_username != null) {
 			
 			String file = request.getParameter("file");
 			
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -115,7 +125,9 @@ public class StratonListServelt extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in deleting mqtt : " + e);

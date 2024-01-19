@@ -105,8 +105,11 @@ margin-top: 68px;
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 	function searchLogData() {
+		var csrfToken = document.getElementById('csrfToken').value;
+
 		var searchQuery = document.getElementById("search_query").value.trim();
 		var selectedLogFile = document.getElementById("log_file").value;
 		if (selectedLogFile === "") {
@@ -133,6 +136,7 @@ var tokenValue;
 			data : {
 				search_query : searchQuery,
 				log_file : selectedLogFile,
+				csrfToken: csrfToken
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
@@ -183,11 +187,15 @@ var tokenValue;
 	function loadLogFileList() {
 		// Display loader when the request is initiated
 	    showLoader();
+	    var csrfToken = document.getElementById('csrfToken').value;
 		
 		$.ajax({
 					url : "logs",
 					type : "GET",
 					dataType : "json",
+					data: {
+						csrfToken: csrfToken
+			        },
 					success : function(data) {
 						
 						// Hide loader when the response has arrived
@@ -238,6 +246,7 @@ var tokenValue;
 					},
 				});
 	}
+	
 	function downloadLogFile() {
 	    var selectedLogFile = $("#log_file").val();
 	    var token = '<%= session.getAttribute("token") %>';
@@ -365,6 +374,12 @@ var tokenValue;
 	    	    	
 	    	    	roleValue = '<%= roleValue %>';
 	    	    	
+	    	    	<%// Access the session variable
+	    			HttpSession csrfToken = request.getSession();
+	    			String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	    			csrfTokenValue = '<%=csrfTokenValue%>';
+	    	    	
 	    	    	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 		  	    		  
 		  	    		$('#loadLogFileButton').prop('disabled', true);
@@ -420,6 +435,7 @@ var tokenValue;
 		// Get the selected log file value from the dropdown
 		var selectedLogFile = document.getElementById("log_file").value;
 		var tableBody = $("#log_table_body");
+		var csrfToken = document.getElementById('csrfToken').value;
 		
 		tableBody.empty();
 		if (selectedLogFile !== "") {
@@ -429,6 +445,7 @@ var tokenValue;
 						type : "POST",
 						data : {
 							log_file : selectedLogFile,
+							csrfToken: csrfToken
 						}, // Send the selected log file name as POST data
 						//dataType : "json",
 						success : function(data) {
@@ -524,6 +541,7 @@ var tokenValue;
 		<section style="margin-left: 1em">
 		<h3>LOGS</h3>
 		<hr />
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

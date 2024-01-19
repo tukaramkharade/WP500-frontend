@@ -26,8 +26,15 @@ public class UpdateSettings extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
+			
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 	
 		try{
+			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
 			
@@ -73,6 +80,9 @@ public class UpdateSettings extends HttpServlet {
 		    // Write the JSON object to the response
 		    out.print(jsonObject.toString());
 		    out.flush();
+			}else {
+				logger.error("CSRF token validation failed");	
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -89,6 +99,12 @@ public class UpdateSettings extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
+		
 		if (check_username != null) {
 			
 			String toggle_enable_ftp = request.getParameter("toggle_enable_ftp");
@@ -97,7 +113,7 @@ public class UpdateSettings extends HttpServlet {
 			String lan_type = request.getParameter("lan_type");
 			
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -133,6 +149,9 @@ public class UpdateSettings extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

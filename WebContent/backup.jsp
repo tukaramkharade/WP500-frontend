@@ -122,6 +122,7 @@ margin-top: 68px;
 var roleValue;	
 var tokenValue;
 var progressInterval;
+var csrfTokenValue;
 
 function validateAndUpload(fileInputId, allowedExtension) {
     var fileInput = document.getElementById(fileInputId);
@@ -295,11 +296,14 @@ function downloadZipFile() {
 
 
 function createBackupFile() {
+	   var csrfToken = document.getElementById('csrfToken').value;
+	   
 	$.ajax({
 		url : 'downloadBackupFile',
 		type : 'POST',
 		data : {
-			action: 'createBackupFile'
+			action: 'createBackupFile',
+			csrfToken: csrfToken
 		},
 		success : function(data) {
 			
@@ -337,11 +341,14 @@ function createBackupFile() {
 	
 }	
 function restoreBackupFile() {
+	   var csrfToken = document.getElementById('csrfToken').value;
+	   
 	$.ajax({
 		url : 'downloadBackupFile',
 		type : 'POST',
 		data : {
-			action: 'restoreBackupFile'
+			action: 'restoreBackupFile',
+			csrfToken: csrfToken
 		},
 		success : function(data) {	
 			
@@ -414,7 +421,12 @@ function changeButtonColor(isDisabled) {
     	
     	roleValue = '<%= roleValue %>';
     	
-    	
+    	<%// Access the session variable
+		HttpSession csrfToken = request.getSession();
+		String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+		csrfTokenValue = '<%=csrfTokenValue%>';
+		
     	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
   		  
     		$('#downloadZipFile').prop('disabled', true);
@@ -482,7 +494,7 @@ function changeButtonColor(isDisabled) {
 		<section style="margin-left: 1em">
 			<h3>BACKUP</h3>
 			<hr>
-
+<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div class="container">				
 					<input style="margin-left: 5px;" type="submit" value="Start Backup" id="generateBackupFile" title="Click to begin backup process" />
 				

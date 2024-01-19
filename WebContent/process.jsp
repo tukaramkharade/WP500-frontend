@@ -178,16 +178,20 @@ h3 {
 
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function getProcessData() {
 	// Display loader when the request is initiated
     showLoader();
 	
-	
+    var csrfToken = document.getElementById('csrfToken').value;
 	$.ajax({
         url: "processGetData", // URL to your servlet or server endpoint
         type: "POST", // Change the request type to POST
-        data: { process_type: "process_list" }, // Pass the process_type parameter
+        data: {
+        	process_type: "process_list" ,
+        	csrfToken: csrfToken
+        	}, // Pass the process_type parameter
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
         },
@@ -310,6 +314,12 @@ function getProcessData() {
 	    	    	
 	    	    	roleValue = '<%=roleValue%>'; 
 	    	    	
+	    	    	<%// Access the session variable
+	    			HttpSession csrfToken = request.getSession();
+	    			String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	    			csrfTokenValue = '<%=csrfTokenValue%>';
+	    	    	
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
 							$('#loadLogFileButton').prop('disabled', true);
@@ -361,6 +371,7 @@ function getProcessData() {
         <p>Loading...</p>
     </div>
 </div>
+<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 		
 		<div class="button-container">
         <button onClick="window.location.reload();" style="color:white; background-color: #2b3991">Reload</button>

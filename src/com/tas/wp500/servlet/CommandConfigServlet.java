@@ -286,15 +286,11 @@ public class CommandConfigServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
-		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
-		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-
+		
 
 		if (check_username != null) {
 			try {
-				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+			
 
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
@@ -326,9 +322,7 @@ public class CommandConfigServlet extends HttpServlet {
 				out.print(jsonObject.toString());
 				out.flush();
 				
-			}else {
-				logger.error("CSRF token validation failed");	
-				}
+			
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error deleting command data : " + e);

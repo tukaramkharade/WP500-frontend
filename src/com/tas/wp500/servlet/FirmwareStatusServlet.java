@@ -28,10 +28,14 @@ public class FirmwareStatusServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		if (check_username != null) {			
 			try{
-				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -64,7 +68,9 @@ public class FirmwareStatusServlet extends HttpServlet {
 
 			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
-//				
+//				}else {
+				logger.error("CSRF token validation failed");	
+			}
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("Error in applying traffic rules : "+e);

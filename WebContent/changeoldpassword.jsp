@@ -204,8 +204,8 @@ function updateOldPassword() {
 						
 						if(data.status === "success"){
 							  window.location.href = 'login.jsp'; 
-							 
-							/*  window.location.replace('login.jsp'); */
+							  
+							
 						}else if(data.status === "fail"){
 							 $("#popupMessage").text(data.message);
 			      			$("#customPopup").show(); 
@@ -237,6 +237,23 @@ function updateOldPassword() {
 	}
 }
 
+/* function logout(){
+	$.ajax({
+		type : "GET",
+		url : "logout",
+		dataType : 'json',
+		success : function(response) {
+			
+			// Handle the response, e.g., redirect to login page
+			window.location.href = "login.jsp";
+		},
+		error : function(xhr, status, error) {
+			console.log("Error: " + error);
+		}
+	});
+}
+ */
+ 
 function toggleOldPassword() {
     var passwordInput = $('#old_password');
     var passwordToggle = $('#old_password_toggle');

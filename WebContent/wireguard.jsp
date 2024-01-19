@@ -160,17 +160,20 @@ button {
 <script>
 var roleValue;
 var tokenValue;
+var csrfTokenValue;
 
 function getKeys(){
 	// Display loader when the request is initiated
     showLoader();
-	
+    var csrfToken = document.getElementById('csrfToken').value;
+    
 	$.ajax({
 		url : "wireguardKeysServlet",
 		type : "GET",
 		dataType : "json",
 		 data: {
-	            action: "get"
+	            action: "get",
+	            csrfToken: csrfToken
 	        },
 		success : function(data) {
 			
@@ -191,10 +194,15 @@ function getKeys(){
 }
 
 function readWireguardFile(){
+	var csrfToken = document.getElementById('csrfToken').value;
+	
 	$.ajax({
 		url : "wireguardServlet",
 		type : "GET",
 		dataType : "json",
+		data: {
+			csrfToken: csrfToken
+        },
 		success : function(data) {
 			
 			if (data.status == 'fail') {
@@ -232,12 +240,15 @@ function readWireguardFile(){
 }
 
 function generateWireguardKeys(){
+	var csrfToken = document.getElementById('csrfToken').value;
+	
 	$.ajax({
 		url : "wireguardKeysServlet",
 		type : "GET",
 		dataType : "json",
 		 data: {
-	            action: "generate_keys"
+	            action: "generate_keys",
+	            csrfToken: csrfToken
 	        },
 		success : function(data) {
 			if (data.status == 'fail') {
@@ -273,12 +284,15 @@ function generateWireguardKeys(){
 }
 
 function activateWireguard() {
+	var csrfToken = document.getElementById('csrfToken').value;
+	
     $.ajax({
         url: "wireguardKeysServlet",
         type: "GET",
         dataType: "json",
         data: {
-            action: "activate_wireguard"
+            action: "activate_wireguard",
+            csrfToken: csrfToken
         },
         success: function (data) {
         	if (data.status == 'fail') {
@@ -327,12 +341,15 @@ function activateWireguard() {
 }
 
 function deActivateWireguard(){
+	var csrfToken = document.getElementById('csrfToken').value;
+	
 	$.ajax({
         url: "wireguardKeysServlet",
         type: "GET",
         dataType: "json",
         data: {
-            action: "deactivate_wireguard"
+            action: "deactivate_wireguard",
+            csrfToken: csrfToken
         },
         success: function (data) {
         	if (data.status == 'fail') {
@@ -381,12 +398,15 @@ function deActivateWireguard(){
 }
 
 function wireguardStatus() {
+	var csrfToken = document.getElementById('csrfToken').value;
+	
     $.ajax({
         url: "wireguardKeysServlet",
         type: "GET",
         dataType: "json",
         data: {
-            action: "wireguard_status"
+            action: "wireguard_status",
+            csrfToken: csrfToken
         },
         success: function (data) {
         	if (data.status == 'fail') {
@@ -439,6 +459,7 @@ function wireguardStatus() {
 }
 
 function updateWireguardFile() {
+	var csrfToken = document.getElementById('csrfToken').value;
 	
 	 var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
@@ -464,9 +485,14 @@ function updateWireguardFile() {
        url: "wireguardServlet",
        type: "POST",
       
-       data: JSON.stringify({
+       /* data: JSON.stringify({
            lines: linesJson
-       }), // Send as a JSON object
+       }), */ // Send as a JSON object
+       
+       data: {
+       	lines: linesJson,
+			csrfToken: csrfToken
+       },
        success: function(response) {
     	   if (response.status == 'fail') {
 				
@@ -573,6 +599,13 @@ $(document).ready(function() {
 
 roleValue = '<%=roleValue%>';
 
+<%// Access the session variable
+HttpSession csrfToken = request.getSession();
+String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+csrfTokenValue = '<%=csrfTokenValue%>';
+	
+
 if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 	  
 	$('#update').prop('disabled', true);
@@ -651,6 +684,8 @@ else{
 				<form id="wireguardForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
+					
 					<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>

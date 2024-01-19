@@ -149,6 +149,7 @@ margin-top: 70px;
 
 	var roleValue;	
 	var tokenValue;
+	var csrfTokenValue;
 	var existingData = [];
 	//var nodeid;
 	
@@ -162,11 +163,14 @@ margin-top: 70px;
 	
 	// Display loader when the request is initiated
 	    showLoader();
-		
+	    var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
 					url : 'tagMapping',
 					type : 'GET',
 					dataType : 'json',
+					data: {
+						csrfToken: csrfToken
+			        },
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
@@ -274,6 +278,8 @@ margin-top: 70px;
 
 	
 	function deleteTag(tag_name) {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
@@ -286,6 +292,7 @@ margin-top: 70px;
 					type : 'POST',
 					data : {
 						tag_name : tag_name,
+						csrfToken: csrfToken,
 						action: 'delete'
 					},
 					success : function(data) {
@@ -333,10 +340,15 @@ margin-top: 70px;
 	
  
  function fetchDataAndExportToExcel() {
+	 var csrfToken = document.getElementById('csrfToken').value;
+	 
 	    $.ajax({
 	        url: 'ExportExcelServlet',
 	        type: 'GET',
 	        dataType: 'json',
+	        data: {
+				csrfToken: csrfToken
+	        },
 	        beforeSend: function (xhr) {
 	            xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	        },
@@ -382,10 +394,10 @@ margin-top: 70px;
 
  
  function editTag(){
-	 
-	  
+	 	  
 	  var tag_name = $('#tag_name').val();
 		var pv_address = $('#pv_address').val();
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 		$('#field_tag_Error').text('');
 	    $('#field_pv_Error').text('');
@@ -419,6 +431,7 @@ margin-top: 70px;
 				data : {
 					tag_name : tag_name,
 					pv_address : pv_address,
+					csrfToken: csrfToken,
 					action: 'update'
 
 				},
@@ -496,6 +509,7 @@ margin-top: 70px;
 		
 		var tag_name = $('#tag_name').val();
 		var pv_address = $('#pv_address').val();
+		 var csrfToken = document.getElementById('csrfToken').value;
 		
 		$('#field_tag_Error').text('');
 	    $('#field_pv_Error').text('');
@@ -520,6 +534,7 @@ margin-top: 70px;
 			data : {
 				tag_name : tag_name,
 				pv_address : pv_address,
+				csrfToken: csrfToken,
 				action: 'add'
 				
 			},
@@ -644,11 +659,13 @@ margin-top: 70px;
 
 		
 	function addNewTag(dataArray) {
+		 var csrfToken = document.getElementById('csrfToken').value;
 	    $.ajax({
 	        url: 'tagMapping',
 	        type: 'POST',
 	        data: {
 	            bulk_data: JSON.stringify(dataArray), // Pass the array directly
+	            csrfToken: csrfToken,
 	            action: 'add_bulk'
 	        },
 	        traditional: true, // Use traditional serialization to handle arrays
@@ -709,6 +726,12 @@ margin-top: 70px;
 			String roleValue = (String) session.getAttribute("role");%>
     	
     	roleValue = '<%=roleValue%>';
+    	
+    	<%// Access the session variable
+		HttpSession csrfToken = request.getSession();
+		String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+		csrfTokenValue = '<%=csrfTokenValue%>';
     	
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 
@@ -795,6 +818,7 @@ margin-top: 70px;
 				<form id="tagForm">
 
 					<input type="hidden" id="action" name="action" value="">
+					<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 					
 					<div id="loader-overlay">
     <div id="loader">

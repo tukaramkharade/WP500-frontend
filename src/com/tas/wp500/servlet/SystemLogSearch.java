@@ -44,6 +44,11 @@ public class SystemLogSearch extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		if (check_username != null) {
 
 			String start_date_time = request.getParameter("startdatetime");
@@ -56,6 +61,7 @@ public class SystemLogSearch extends HttpServlet {
 			SimpleDateFormat outputFormatTime = new SimpleDateFormat("HH:mm");
 
 			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				Date startDate = inputFormat.parse(start_date_time);
 				String startDate1 = outputFormatMonth.format(startDate);
 
@@ -110,6 +116,9 @@ public class SystemLogSearch extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

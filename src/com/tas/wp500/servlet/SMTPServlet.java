@@ -27,6 +27,11 @@ public class SMTPServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 
@@ -45,7 +50,7 @@ public class SMTPServlet extends HttpServlet {
 			String email_bcc = "";
 
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				json.put("operation", "protocol");
 				json.put("protocol_type", "smtp");
 				json.put("operation_type", "get_query");
@@ -124,7 +129,9 @@ public class SMTPServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error while getting SMTP Settings : " + e);
@@ -141,6 +148,11 @@ public class SMTPServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 
 		String ssl_socket_factory_port = null;
 		String tls_port = null;
@@ -178,7 +190,7 @@ public class SMTPServlet extends HttpServlet {
 					email_cc = request.getParameter("email_cc");
 					email_bcc = request.getParameter("email_bcc");
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -225,7 +237,9 @@ public class SMTPServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding SMTP settings: " + e);
@@ -249,7 +263,7 @@ public class SMTPServlet extends HttpServlet {
 					email_bcc = request.getParameter("email_bcc");
 
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -296,7 +310,9 @@ public class SMTPServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating SMTP settings: " + e);
@@ -319,9 +335,14 @@ public class SMTPServlet extends HttpServlet {
 			String check_username = (String) session.getAttribute("username");
 			String check_token = (String) session.getAttribute("token");
 			String check_role = (String) session.getAttribute("role");
+			String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+			// Retrieve CSRF token from the session
+			String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+
 
 			try {
-
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -350,7 +371,9 @@ public class SMTPServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in deleting SMTP Settings : " + e);

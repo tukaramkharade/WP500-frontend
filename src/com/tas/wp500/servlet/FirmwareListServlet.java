@@ -28,6 +28,11 @@ public class FirmwareListServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		if (check_username != null) {
 			
 			TCPClient client = new TCPClient();
@@ -85,6 +90,10 @@ public class FirmwareListServlet extends HttpServlet {
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");	
 		String check_role = (String) session.getAttribute("role");
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
 		if (check_username != null) {
 
@@ -98,7 +107,7 @@ public class FirmwareListServlet extends HttpServlet {
 					 file = request.getParameter("file");
 					
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -127,7 +136,9 @@ public class FirmwareListServlet extends HttpServlet {
 						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding mqtt : " + e);
@@ -137,7 +148,7 @@ public class FirmwareListServlet extends HttpServlet {
 				case "update":
 					 file = request.getParameter("file");					
 					try {
-
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
 
@@ -160,7 +171,9 @@ public class FirmwareListServlet extends HttpServlet {
 						PrintWriter out = response.getWriter();						
 						out.print(jsonObject.toString());
 						out.flush();
-
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating firmware file : " + e);

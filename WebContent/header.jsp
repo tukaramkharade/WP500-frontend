@@ -231,6 +231,7 @@ button {
 </style>
 <script>
 var roleValue1;
+var csrfTokenValue1;
 
 	function loadConfig() {
 		
@@ -297,10 +298,15 @@ var roleValue1;
 	} 
 	
 	function getProcessData1() {
-		$.ajax({
+		 var csrfToken = document.getElementById('csrfToken').value;
+
+			$.ajax({
 			url : "processGetData",
 			type : "POST", // Change the request type to POST
-			data : { process_type: "process_count" },
+			data : { 
+				process_type: "process_count",
+				csrfToken: csrfToken				
+				},
 			success : function(data) {
 				var blackListCount = data.black_list_process_count;
 				$('#notification-bell-count').text(blackListCount); // Update the notification bell count inside the span
@@ -387,6 +393,12 @@ var roleValue1;
 	
 	roleValue1 = '<%=roleValue1%>';
 	
+	<%// Access the session variable
+	
+	String csrfTokenValue1 = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue1 = '<%=csrfTokenValue1%>';
+	
 	if (roleValue1 == 'OPERATOR' || roleValue1 == 'Operator') {
 
 		
@@ -420,8 +432,9 @@ var roleValue1;
 							confirmButton.onclick = function() {
 
 								$.ajax({
-									type : "POST",
+									type : "GET",
 									url : "logout",
+									dataType : 'json',
 									success : function(response) {
 										// Close the modal
 										modal.style.display = 'none';
@@ -479,6 +492,7 @@ var roleValue1;
  
 
 	<div class="row" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 0.5%">
+	<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue1 %>" />
 	
 	 <div id="helpDropdown">
     <a href="https://support.tasind.com/" target="_blank" title="Help" style="text-decoration: none; color: inherit;">
