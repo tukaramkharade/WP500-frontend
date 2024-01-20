@@ -274,7 +274,6 @@ function getActiveThreats() {
 			// Hide loader when the response has arrived
             hideLoader();
 			
-			console.log('Error loading active threats data: ' + error);
 		}
 	});
 }
@@ -356,7 +355,7 @@ function getSearchThreats() {
 		
         },
         error: function (xhr, status, error) {
-            console.log('Error acknowledging threats: ' + error);
+            
         }
     });
 }
@@ -388,7 +387,7 @@ function ackThreats(threat_id){
 					
 				},
 				error : function(xhr, status, error) {
-					console.log('Error acknowledging threats: ' + error);
+					
 				}
 			});
 		  location.reload();
@@ -448,10 +447,7 @@ function getCurrentTimeInIndia() {
 
     // Set the IST time 24 hours ago as the value of the "startdatetime" input field
     document.getElementById('startdatetime').value = formattedTime24HoursAgo;
-
-    // Debugging: Log both calculated times to the console
-    console.log('Current IST time:', formattedCurrentTime);
-    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
+    
 }
 
 function changeButtonColor(isDisabled) {

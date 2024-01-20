@@ -229,7 +229,6 @@ var chart = null;
 var barChart = null;
 var tokenValue;
 var roleValue;
-var csrfTokenValue;
 
 function latestActiveThreats(){
 	// Display loader when the request is initiated
@@ -933,41 +932,6 @@ function updateBarChartMonth(){
      });	
 }
  
- /* function getCurrentTimeInIndia() {
-	    // Get the current date in local time
-	    const date = new Date();
-
-	    // Set date to the beginning of today in local time
-	    date.setHours(0, 0, 0, 0);
-
-	    // Get the offset in minutes for IST (Indian Standard Time)
-	    const ISTOffset = 330; // IST is UTC+5:30
-
-	    // Calculate the total offset in milliseconds
-	    const offset = ISTOffset * 60 * 1000;
-
-	    // Convert the local date to IST by adding the offset
-	    const ISTTime = new Date(date.getTime() + offset);
-
-	    // Subtract 24 hours from ISTTime to get the beginning of yesterday in IST
-	    const ISTTimeYesterday = new Date(ISTTime.getTime() - (24 * 60 * 60 * 1000));
-
-	    // Format both ISTTimeYesterday and current ISTTime as strings in "yyyy-MM-ddTHH:mm" format
-	    const formattedYesterday = ISTTimeYesterday.toISOString().slice(0, 16);
-	    const formattedToday = ISTTime.toISOString().slice(0, 16);
-
-	    // Set yesterday's IST time as the value of the "startdatetime" input field
-	    document.getElementById('start_time').value = formattedYesterday;
-
-	    // Set today's IST time as the value of the "enddatetime" input field
-	    document.getElementById('end_time').value = formattedToday;
-
-	    // Debugging: Log both calculated times to the console
-	    console.log('Yesterday\'s IST time:', formattedYesterday);
-	    console.log('Today\'s IST time:', formattedToday);
-	}
- */ 
- 
  function snortDetails() {
      var snort_type = $('#snort_type').val();
      
@@ -995,7 +959,7 @@ function updateBarChartMonth(){
 
 					},
 					error : function(xhr, status, error) {
-						console.log('Error updating snort details: ' + error);
+						
 					}
 				});
 			  
@@ -1033,7 +997,7 @@ function updateBarChartMonth(){
 
 					},
 					error : function(xhr, status, error) {
-						console.log('Error updating snort details: ' + error);
+						
 					}
 				});
 			  

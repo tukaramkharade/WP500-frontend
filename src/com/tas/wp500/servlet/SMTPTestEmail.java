@@ -45,21 +45,7 @@ import com.tas.wp500.utils.TCPClient;
 				
 				logger.info("res : "+new JSONObject(respStr));
 
-				//String IST_Time = new JSONObject(respStr).getString("IST_Time");
 				
-//				JSONObject jsonObject = new JSONObject();
-//				//jsonObject.put("IST_Time", IST_Time1);
-//				
-//
-//				// Set the content type of the response to application/json
-//				response.setContentType("application/json");
-//
-//				// Get the response PrintWriter
-//				PrintWriter out = response.getWriter();
-//
-//				// Write the JSON object to the response
-//				out.print(jsonObject.toString());
-//				out.flush();
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting live date and time : "+e);

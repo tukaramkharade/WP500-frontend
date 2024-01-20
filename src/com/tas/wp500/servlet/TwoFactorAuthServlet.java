@@ -16,9 +16,9 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-@WebServlet("/TOTPServlet")
-public class TOTPServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(TOTPServlet.class);
+@WebServlet("/twoFactorAuthServlet")
+public class TwoFactorAuthServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(TwoFactorAuthServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -33,6 +33,11 @@ public class TOTPServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		String action = request.getParameter("action");
 		
 		if (check_username != null) {
@@ -41,7 +46,7 @@ public class TOTPServlet extends HttpServlet {
 				case "getTOTPDetails":
 					
 					try{
-						
+						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						json.put("operation", "get_totp_details");
 						json.put("username", check_username);
 						json.put("user", check_username);
@@ -88,7 +93,9 @@ public class TOTPServlet extends HttpServlet {
 						out.print(finalJsonObj.toString());
 						out.flush();
 						
-						
+						}else {
+							logger.error("CSRF token validation failed");	
+						}
 					}catch(Exception e){
 						e.printStackTrace();
 						logger.error("Error in getting totp details : "+e);
@@ -112,12 +119,17 @@ public class TOTPServlet extends HttpServlet {
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 		
+		String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+		// Retrieve CSRF token from the session
+		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+		
 		if (check_username != null) {
 			
 			String totp_authenticator = request.getParameter("totp_authenticator");
 			
 			try{
-				
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
 
@@ -147,7 +159,9 @@ public class TOTPServlet extends HttpServlet {
 				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-				
+				}else {
+					logger.error("CSRF token validation failed");	
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("Error updating totp authenticator : "+e);

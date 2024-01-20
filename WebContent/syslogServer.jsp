@@ -164,8 +164,6 @@ function getSysLog(){
 			// Hide loader when the response has arrived
             hideLoader();
 			
-			// Handle the error response, if needed
-			console.log("Error loading rsyslog configuration: " + error);
 		},
 	});
 
@@ -269,7 +267,7 @@ function updateSysLog(){
 
 				},
 				error : function(xhr, status, error) {
-					console.log('Error editing syslog configuration setting: ' + error);
+					
 				}
 			});
 				
@@ -325,8 +323,7 @@ function getSysLogStatus(){
 			
 		},
 		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error loading rsyslog configuration: " + error);
+			
 		},
 	});
 
@@ -384,7 +381,7 @@ function updateSysLogStatus(){
 					
 				},
 				error : function(xhr, status, error) {
-					console.log('Error editing syslog configuration setting: ' + error);
+					
 				}
 			});
 				

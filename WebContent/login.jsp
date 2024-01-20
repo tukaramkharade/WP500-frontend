@@ -49,13 +49,17 @@
 
         	            if(json.status === 'success' && json.first_login === 'true'){
         	            	
-        	            	window.location.href = 'changeoldpassword.jsp';
+        	            	//window.location.href = 'changeoldpassword.jsp';
+        	            	
+        	            	window.location.replace('resetpasswordfirsttime.jsp');
         	            	
         	            }else if (json.status === 'success' && json.first_login === 'false' && json.totp_authenticator === 'enable') {
         	                // Login successful
         	                $('#loginMessage').text('Login Successful').css('color', 'green');
         	                
-        	                window.location.href = 'totp.jsp';
+        	                //window.location.href = 'totp.jsp';
+        	                window.location.replace('twofactorAuthOTP.jsp');
+        	                
         	                
         	            } 
         	            
@@ -72,11 +76,9 @@
                                 }
                             });
                             
-        	                 window.location.href = 'overview.jsp'; 
-                           /*  window.location.replace('overview.jsp'); */
-        	            	   
-        	                
-        	            	
+        	               //  window.location.href = 'overview.jsp'; 
+                             window.location.replace('overview.jsp'); 
+        	             	
         	            }
         	            
         	            else {
@@ -86,7 +88,7 @@
         	            }
         	        },
         	        error: function(xhr, status, error) {
-        	            console.log('Error showing login data: ' + error);
+        	            
         	        }
         	    });
         	}
@@ -109,7 +111,6 @@
         	    // Get the user's input
         	    const userInput = $('#userInputNumber').val();
         	  
-        	    console.log(userInput+" "+$('#captchaLabel').text());
         	    // Check if the user's input matches the stored random number
         	    if (userInput.trim() === $('#captchaLabel').text().trim()) {
         	        // Call your checkLogin function or do whatever you want
@@ -136,7 +137,7 @@
         	            $('#banner_text').text(textToShow);
         			},
         			error : function(xhr, status, error) {
-        				console.log("Error showing banner text data : " + error);
+        				
         			},
         		});
         	}

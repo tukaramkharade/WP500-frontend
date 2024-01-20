@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Base64;
 
-@WebServlet("/imageServlet")
-public class ImageServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(ImageServlet.class);
+@WebServlet("/qrcodeServlet")
+public class QRCodeServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(QRCodeServlet.class);
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	
@@ -29,12 +29,18 @@ public class ImageServlet extends HttpServlet {
             String check_token = (String) session.getAttribute("token");
             String check_role = (String) session.getAttribute("role");
             
+            String csrfTokenFromRequest = request.getParameter("csrfToken");
+
+    		// Retrieve CSRF token from the session
+    		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
+            
             String action = request.getParameter("action");
             
             if (action != null) {
             	switch (action) {
             	case "generate":
             		try {
+            			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
                         TCPClient client = new TCPClient();
                         JSONObject json = new JSONObject();
 
@@ -73,6 +79,9 @@ public class ImageServlet extends HttpServlet {
                         } else {
                             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                         }
+            			}else {
+        					logger.error("CSRF token validation failed");	
+        				}
                     } catch (Exception e) {
                         e.printStackTrace();
                         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -82,6 +91,8 @@ public class ImageServlet extends HttpServlet {
             		
             	case "get":
             		try {
+            			
+            			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
                         TCPClient client = new TCPClient();
                         JSONObject json = new JSONObject();
 
@@ -127,6 +138,9 @@ public class ImageServlet extends HttpServlet {
                         } else {
                             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                         }
+            			}else {
+        					logger.error("CSRF token validation failed");	
+        				}
                     } catch (Exception e) {
                         e.printStackTrace();
                         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -169,9 +183,7 @@ public class ImageServlet extends HttpServlet {
 						JSONObject json = new JSONObject();
 
 						json.put("operation", "totp_authenticator");
-						
 						json.put("otp", otp);
-					//	json.put("token", check_token);
 						json.put("user", check_username);
 						json.put("username", check_username);
 						json.put("role", check_role);

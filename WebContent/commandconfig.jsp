@@ -175,7 +175,7 @@ var tagVariableValues = {};
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error showing broker ip list : " + error);
+				
 			},
 		});
 	}
@@ -208,7 +208,7 @@ var tagVariableValues = {};
  	        }
  	      },
  	      error: function (xhr, status, error) {
- 	        console.log("Error showing tag list: " + error);
+ 	       
  	      },
  	    });
  	  } 
@@ -290,9 +290,6 @@ var tagVariableValues = {};
 			error : function(xhr, status, error) {
 				// Hide loader when the response has arrived
 	            hideLoader();
-				
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
 			}
 		});
 	
@@ -430,8 +427,7 @@ var tagVariableValues = {};
 	   		        location.reload();
 	   		      },
 	   		      error: function (xhr, status, error) {
-	   		        // Handle the error response, if needed
-	   		        console.log('Error deleting command settings: ' + error);
+	   		        
 	   		        // Close the modal
 	   		        modal.style.display = 'none';
 	   		      }
@@ -599,7 +595,7 @@ var tagVariableValues = {};
 
 	         // Log or use the updated tagVariableValues as needed
 	         var jsonString = JSON.stringify(tagVariableValues);
-	         console.log(jsonString);
+	         
 	     });
 	   	}
  
@@ -798,7 +794,7 @@ var tagVariableValues = {};
 							location.reload();
 						},
 						error : function(xhr, status, error) {
-							console.log('Error updating command settings: ' + error);
+							
 						}
 					});
 				    
@@ -840,7 +836,6 @@ var tagVariableValues = {};
 		function addCommandConfig() {
 
 		 var tagData = updateTagVariableValues();
-		 console.log('tag data: '+tagData);
 		
 		    var unit_id = $('#unit_id').val();
 		    var asset_id = $('#asset_id').val();
@@ -916,7 +911,7 @@ var tagVariableValues = {};
 					
 				},
 				error : function(xhr, status, error) {
-					console.log('Error adding command config settings: ' + error);
+					
 				}
 			});
 			$("#closePopup").click(function () {

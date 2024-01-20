@@ -243,7 +243,7 @@ position: relative;
 				}
 								
 				eth1_dhcp = data.eth1_dhcp;
-				console.log('eth1_dhcp-->:', eth1_dhcp);
+				
 				if(eth1_dhcp == 1){
 					dhcpType=0;
 					getDhcpSettings(dhcpType);
@@ -300,8 +300,6 @@ position: relative;
 				// Hide loader when the response has arrived
 	            hideLoader();
 				
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
 			}
 		});
 	}
@@ -339,8 +337,7 @@ position: relative;
 				}
 								
 				eth1_dhcp = data.eth1_dhcp;
-				console.log('eth1_dhcp-->:', eth1_dhcp);
-				
+			
 				$('#ip_addr_dis_0').val(data.eth1_ipaddr);
 				$('#subnet_mask_dis_0').val(data.eth1_subnet);
 				$('#gateway_dis_0').val(data.eth1_gateway);
@@ -369,8 +366,7 @@ position: relative;
 				toggle2InputFields();				
 			},
 			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
+				
 			}
 		});
 	}
@@ -400,8 +396,6 @@ position: relative;
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
 			  
-			 
-				console.log('eth1_dhcp1:', eth1_dhcp1);
 				var lan_type = 'lan0';
 				
 				var eth1_gateway = $('#gateway_eth1').val();
@@ -434,7 +428,7 @@ position: relative;
 					
 					},
 					error : function(xhr, status, error) {
-						console.log('Error updating lan : ' + error);
+						
 					}
 				});
 			  
@@ -508,7 +502,7 @@ position: relative;
 							$('#dns_ip_lan1').val('');
 					},
 					error : function(xhr, status, error) {
-						console.log('Error updating lan : ' + error);
+						
 					}
 				});
 				
@@ -589,7 +583,7 @@ position: relative;
 	                $('#dns_ip_lan2').val('');
 	            },
 	            error: function (xhr, status, error) {
-	                console.log('Error updating lan : ' + error);
+	              
 	            }
 	        });
 	 

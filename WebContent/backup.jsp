@@ -176,7 +176,7 @@ function validateAndUpload(fileInputId, allowedExtension) {
                 },
                 error: function(xhr, status, error) {
                     clearInterval(progressInterval); // Stop the progress interval on error
-                    console.log('Error uploading file: ' + error);
+                    
                 }
             });
 
@@ -197,13 +197,13 @@ function validateAndUpload(fileInputId, allowedExtension) {
     });
 }
 function updateProgress() {
-	 console.log('updateProgress');
+	 
     $.ajax({
         url: 'UploadServlet', // Replace with your servlet URL
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-        	console.log('updateProgress'+data.progress);
+        	
             var progress = data.progress;
             
             $('#progress-bar').css('width', progress + '%');
@@ -332,7 +332,7 @@ function createBackupFile() {
   			$("#customPopup").show();			
 		},
 		error : function(xhr, status, error) {
-			console.log('Error adding tag: '+ error);
+			
 		}
 	});
 	$("#closePopup").click(function () {
@@ -373,7 +373,7 @@ function restoreBackupFile() {
 			}		
 		},
 		error : function(xhr, status, error) {
-			console.log('Error adding tag: '+ error);
+		
 		}
 	});	
 	

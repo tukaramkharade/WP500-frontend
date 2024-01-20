@@ -260,7 +260,6 @@ margin-top: 70px;
 						// Hide loader when the response has arrived
 			            hideLoader();
 						
-						console.log('Error loading tag data: ' + error);
 					}
 				});
 	}
@@ -323,8 +322,7 @@ margin-top: 70px;
 						 location.reload();
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log('Error deleting tag: ' + error);
+						
 					}
 				});
 			  
@@ -365,7 +363,7 @@ margin-top: 70px;
 	            }
 	        },
 	        error: function (xhr, status, error) {
-	            console.log('Error loading tag data: ' + error);
+	            
 	        }
 	    });
 	    
@@ -379,7 +377,7 @@ margin-top: 70px;
      // Iterate through the data and push to excelData array
      data.forEach(function (tag) {
          var rowData = [tag.tag_name, tag.pv_address];
-         console.log(rowData);
+         
          excelData.push(rowData);
      });
 
@@ -465,7 +463,7 @@ margin-top: 70px;
 					$('#pv_address').val('');
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating tag: ' + error);
+					
 				}
 			});
 			$('#registerBtn').val('Add');
@@ -574,7 +572,7 @@ margin-top: 70px;
 				
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding tag: '+ error);
+				
 			}
 		});
 		$("#closePopup").click(function () {
@@ -645,9 +643,9 @@ margin-top: 70px;
 	                };
 	            });	            
 	            formattedDataArray.forEach(function(obj) {
-	                console.log("Tag Name: " + obj.tag_name + ", PV Address: " + obj.pv_address);
+	               
 	            });
-	            console.log("formattedDataArray"+formattedDataArray);
+	           
 	            addNewTag(formattedDataArray);
 	        });
 	    };
@@ -695,7 +693,7 @@ margin-top: 70px;
       			loadTagList();      			
 	        },
 	        error: function(xhr, status, error) {
-	            console.log('Error adding tags: ' + error);
+	          
 	        }	        
 	    });
 

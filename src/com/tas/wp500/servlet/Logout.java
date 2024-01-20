@@ -66,6 +66,7 @@ public class Logout extends HttpServlet {
 				e.printStackTrace();
 				logger.error("Error in rebooting system :"+e);
 			}
+			
 		} 
 
 
@@ -73,12 +74,7 @@ public class Logout extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-//		HttpSession session = request.getSession();
-//        session.invalidate(); // Invalidate the session
-//
-//        // Send a success response
-//        response.setContentType("text/plain");
-//        response.getWriter().write("Logged out successfully");
+
 		
 		
 			}

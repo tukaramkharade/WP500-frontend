@@ -361,7 +361,7 @@ function togglePassword() {
 					error : function(xhr, status, error) {
 						// Hide loader when the response has arrived
 			            hideLoader();
-						console.log('Error loading user data: ' + error);
+						
 					}
 				});
 	}
@@ -532,7 +532,7 @@ function togglePassword() {
 
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding user: ' + error);
+				
 			}
 		});
 		
@@ -646,8 +646,7 @@ function togglePassword() {
 		        location.reload();
 		      },
 		      error: function (xhr, status, error) {
-		        // Handle the error response, if needed
-		        console.log('Error deleting user: ' + error);
+		      
 		        // Close the modal
 		        modal.style.display = 'none';
 		      }
@@ -764,7 +763,7 @@ function togglePassword() {
 						$("#username").prop("disabled", false);
 					},
 					error : function(xhr, status, error) {
-						console.log('Error updating user: ' + error);
+						
 						 modal.style.display = 'none';
 					}
 				});
@@ -837,7 +836,7 @@ function togglePassword() {
 						$("#role").prop("disabled", false);
 					},
 					error : function(xhr, status, error) {
-						console.log('Error updating password: ' + error);
+						
 						 modal.style.display = 'none';
 					}
 				});
@@ -933,7 +932,7 @@ function togglePassword() {
 			    			
 			    		},
 			    		error : function(xhr, status, error) {
-			    			console.log('Error updating password policy: ' + error);
+			    			
 			    		}
 			        	
 			        });
@@ -990,8 +989,7 @@ function togglePassword() {
 					
 				},
 				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log("Error resetting password policy: " + error);
+					
 				},
 		  });
 		 
@@ -1108,8 +1106,7 @@ function togglePassword() {
 						
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log("Error loading password policy: " + error);
+						
 					},
 			  });
 			 }

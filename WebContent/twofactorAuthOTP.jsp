@@ -81,7 +81,7 @@
         	$.ajax({
 
     			type : "GET",
-    			url : "TOTPOTPServlet", // URL of your servlet 
+    			url : "twofacorAuthOTPServlet", // URL of your servlet 
     			dataType : 'json',
     			success : function(data) {
     				
@@ -98,10 +98,9 @@
         function sendOTP() {
             // Get the OTP value from the input field
             var otpValue = document.getElementById("otp").value;
-            console.log("OTP -->"+otpValue);
           
             $.ajax({
-    			url : "imageServlet",
+    			url : "qrcodeServlet",
     			type : "POST",
     			data : {
     				otp: otpValue,
@@ -141,7 +140,7 @@
         	 
         	 if (validateEmailFormat(to_email_id)) {
                  $.ajax({
-                     url: 'TOTPOTPServlet',
+                     url: 'twofacorAuthOTPServlet',
                      type: 'POST',
                      data: {
                          to_email_id: to_email_id
@@ -153,7 +152,7 @@
                          
                      },
                      error: function (xhr, status, error) {
-                         console.log('Error getting OTP: ' + error);
+                         
                      }
                  });
              } else {
@@ -166,22 +165,18 @@
         
         
         function validateEmailOTP(){
-        	
-        	
+        	        	
         	var emailOtpValue = document.getElementById("email_otp").value;
-            console.log("OTP -->"+emailOtpValue);
-          
+                     
             $.ajax({
-    			url : "imageServlet",
+    			url : "qrcodeServlet",
     			type : "POST",
     			data : {
     				email_otp: emailOtpValue,
     				action: 'totp-authentication-email'
     			},
                 success: function (response) {
-                    // Handle the response from the server, if needed
-                    console.log("OTP -->"+response.status);
-                   
+                    
                     if(response.status === 'success'){
                     	window.location.href = 'overview.jsp';
                     }else{

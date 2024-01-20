@@ -56,7 +56,12 @@ public class OverviewGetData extends HttpServlet {
 				JSONObject jsonObject = new JSONObject();
 				if(status.equals("success")){
 					String HW_REV = new JSONObject(respStr).getString("HW_REV");
-					String TAS_SERIAL_NO = new JSONObject(respStr).getString("TAS_SERIAL_NO");
+					//String TAS_SERIAL_NO = new JSONObject(respStr).getString("TAS_SERIAL_NO");
+					String TAS_SERIAL_NO = "";
+					if (new JSONObject(respStr).has("TAS_SERIAL_NO")) {
+					    TAS_SERIAL_NO = new JSONObject(respStr).getString("TAS_SERIAL_NO");
+					}
+
 					String FW_REV = new JSONObject(respStr).getString("FW_REV");
 					String SEC_PATCH_LVL = new JSONObject(respStr).getString("SEC_PATCH_LVL");
 					String NTP_SYNC_STATUS = new JSONObject(respStr).getString("NTP_SYNC_STATUS");

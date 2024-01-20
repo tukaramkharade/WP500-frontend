@@ -16,9 +16,9 @@ import org.json.JSONObject;
 import com.tas.wp500.utils.TCPClient;
 
 
-@WebServlet("/TOTPOTPServlet")
-public class TOTPOTPServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(TOTPOTPServlet.class);
+@WebServlet("/twofacorAuthOTPServlet")
+public class TwofacorAuthOTPServlet extends HttpServlet {
+	final static Logger logger = Logger.getLogger(TwofacorAuthOTPServlet.class);
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		

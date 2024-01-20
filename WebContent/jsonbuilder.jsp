@@ -137,6 +137,9 @@ margin-top: 68px;
     border-radius: 5px;
 }
 
+.footer{
+margin-top: 20px;
+}
 </style>
 <script>
 
@@ -169,7 +172,7 @@ var csrfTokenValue;
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error showing broker ip list : " + error);
+				
 			},
 		});
 	}
@@ -307,8 +310,6 @@ var csrfTokenValue;
 						// Hide loader when the response has arrived
 			            hideLoader();
 						
-						console.log('Error loading jsonBuilderTable data: '
-								+ error);
 					}
 				});
 	}
@@ -404,9 +405,7 @@ var csrfTokenValue;
 					location.reload();
 				},
 				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting json builder settings: '
-							+ error);
+					
 				}
 			});  
 	  };
@@ -504,8 +503,7 @@ var csrfTokenValue;
 							$("#json_string_name").prop("disabled", false);
 						},
 						error : function(xhr, status, error) {
-							console.log('Error updating json builder settings: '
-									+ error);
+							
 						}
 					});
 				 $('#registerBtn').val('Add');
@@ -611,7 +609,7 @@ var csrfTokenValue;
 						$('#json_string_validate').val('');
 					},
 					error : function(xhr, status, error) {
-						console.log('Error adding json builder: ' + error);
+						
 					}
 				});
 		
@@ -667,8 +665,7 @@ var csrfTokenValue;
 	}
 	
 	function isJsonStringEmpty(jsonString) {
-	    console.log("Input JSON string:", jsonString);
-	    
+	   
 	    // Parse the JSON string into an object
 	    const jsonObject = JSON.parse(jsonString);
 	    
@@ -829,9 +826,7 @@ var csrfTokenValue;
 
 								});
 
-								//console.log(is_json({name: 'Robert'}));
-								// Handle form submission
-								$('#jsonBuilderForm').submit(function(event) {
+													$('#jsonBuilderForm').submit(function(event) {
 													event.preventDefault();
 													var buttonText = $('#registerBtn').val();
 

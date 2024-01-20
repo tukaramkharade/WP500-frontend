@@ -75,10 +75,9 @@ function loadEventData() {
 			 handleStatus(json.status);
         	
                 total_pages = data.total_page; // Access the total_pages value
-                console.log("totalPageNo: " + total_pages);
-           		
+          
                 var count = data.event_log_result.length;
-                console.log("count: " + count);
+                
             if (data.event_log_result && Array.isArray(data.event_log_result)) {
              //   tableBody.empty();
 	
@@ -97,16 +96,11 @@ function loadEventData() {
                     tableBody.append(row);
                 });
 
-               
-
-              //  var totalPages = Math.ceil(count / 100);
-               // console.log("Per page records: " + totalPages);
-
                 $("#log_table").show();
             }
         },
         error: function(xhr, status, error) {
-            console.log("Error logs: " + error);
+            
         },
     });
 }
@@ -120,10 +114,9 @@ function getEventData(currentPage) {
         success: function (data) {
         	
         	  total_pages = data.total_page; // Access the total_pages value
-              console.log("totalPageNo: " + total_pages);
-         		
+             	
               var count = data.event_log_result.length;
-              console.log("count: " + count);
+           
           if (data.event_log_result && Array.isArray(data.event_log_result)) {
            //   tableBody.empty();
 	
@@ -142,16 +135,11 @@ function getEventData(currentPage) {
                   tableBody.append(row);
               });
 
-                
-
-               // var totalPages = Math.ceil(count / 100);
-               // console.log("Per page records: " + totalPages);
-
                 $("#log_table").show();
             }
         },
         error: function(xhr, status, error) {
-            console.log("Error logs: " + error);
+           
         },
     });
 }

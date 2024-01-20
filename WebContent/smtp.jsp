@@ -233,8 +233,7 @@ function getSMTPSettings() {
 			$('#to_email_id').val(data.to_email_id);
 			$('#email_cc').val(data.email_cc);
 		    $('#email_bcc').val(data.email_bcc);
-		    console.log("Email BCC Value:", data.email_bcc);
-		    
+		   		    
 			if ($('#from_email_id').val(data.from_email_id) != null) {
 				$('#addBtn').val('Update');
 			} else {
@@ -245,8 +244,7 @@ function getSMTPSettings() {
 		error : function(xhr, status, error) {
 			// Hide loader when the response has arrived
             hideLoader();
-			// Handle the error response, if needed
-			console.log("Error loading SMTP Settings: " + error);
+			
 		},
 	});
 
@@ -334,7 +332,7 @@ function addSMTPSettings() {
 
 		},
 		error : function(xhr, status, error) {
-			console.log('Error adding SMTP setting: ' + error);
+			
 		}
 	});
 
@@ -435,7 +433,7 @@ function editSMTPSettings() {
 
 				},
 				error : function(xhr, status, error) {
-					console.log('Error editing SMTP setting: ' + error);
+					
 				}
 				
 			});
@@ -482,8 +480,7 @@ function validateEmails(emails) {
     var emailArray1 = emails.split(',').map(function (email) {
         return email.trim(); // Remove leading/trailing spaces
     });
-    console.log("emailArray:", emailArray + " "+emailArray.length);
-    console.log("emailArray1:", emailArray1 + " "+emailArray1.length);
+   
     if (emails.includes(' ')) {
      
      // Display the custom popup message
@@ -498,8 +495,7 @@ function validateEmails(emails) {
     for (var i = 0; i < emailArray1.length; i++) {
         if (!isValidEmail(emailArray1[i])) {
         	if (emails.includes(',') && !emailArray.length > 1) {
-                console.log("comma " + emailArray.length + " " + emails.length);    
-               
+                              
                // Display the custom popup message
 	     			$("#popupMessage").text('Comma is required between email addresses:1' + emailArray1[i]);
 	      			$("#customPopup").show();
@@ -507,8 +503,7 @@ function validateEmails(emails) {
                 return false; // Comma is required between multiple emails
             }
         	else if(!emails.includes(',') && emails.includes('@')){
-        		console.log("comma " + emailArray.length + " " + emails.length);
-            
+        		            
             // Display the custom popup message
 	     			$("#popupMessage").text('Comma is required between email addresses:2' + emailArray1[i]);
 	      			$("#customPopup").show();
@@ -535,9 +530,9 @@ function isValidEmail(email) {
 
     // Log whether the email is considered valid or not
     if (isValid) {
-        console.log("Email is valid: " + email);
+       
     } else {
-        console.log("Email is NOT valid: " + email);
+       
     }
 
     return isValid;
@@ -569,8 +564,6 @@ function deleteSMTPSettings() {
 						location.reload();
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log('Error deleting SMTP settings: '+ error);
 						modal.style.display = 'none';
 					}
 				});
@@ -600,8 +593,7 @@ function testEmail() {
 				getSMTPSettings();
 			},
 			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error testing email: '+ error);
+				
 			}
 		});
 	$("#closePopup").click(function () {

@@ -210,7 +210,6 @@ var csrfTokenValue;
 				// Hide loader when the response has arrived
 	            hideLoader();
 				
-				console.log('Error loading straton live data: ' + error);
 			}
 		});
 	}
@@ -280,8 +279,7 @@ var csrfTokenValue;
 	                        }
 	                    },
 	                    error: function(xhr, status, error) {
-	                        // Handle error response, if needed
-	                        console.log('Error uploading file: ' + error);
+	                        
 	                    }
 	                });
 	                
@@ -339,7 +337,7 @@ var csrfTokenValue;
 		                
 		        },
 		        error: function (xhr, status, error) {
-		            console.log("Error loading firmware files list: " + error);
+		           
 		        },
 		    });
 		}
@@ -367,8 +365,7 @@ var csrfTokenValue;
 							loadStratonFiles();
 						},
 						error : function(xhr, status, error) {
-							// Handle the error response, if needed
-							console.log('Error deleting firmware file: ' + error);
+							
 						}
 					});
 				  $("#closePopup").click(function () {
@@ -399,15 +396,7 @@ var csrfTokenValue;
 					csrfToken: csrfToken
 		        },
 		        success: function(data) {
-		            // Handle the JSON response here
-		            console.log('sys_cyclecount:', data.sys_cyclecount);
-		            console.log('sys_flags:', data.sys_flags);
-		            console.log('sys_cycletime:', data.sys_cycletime);
-		            console.log('sys_appname:', data.sys_appname);
-		            console.log('sys_cyclemax:', data.sys_cyclemax);
-		            console.log('sys_appversion:', data.sys_appversion);
-		            console.log('message:', data.message);
-		            console.log('sys_cycleoverflows:', data.sys_cycleoverflows);
+		           
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            console.error('AJAX request failed: ' + textStatus, errorThrown);

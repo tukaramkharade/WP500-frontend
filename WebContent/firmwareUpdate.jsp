@@ -214,8 +214,7 @@ function deleteFile(file){
 					loadFirmwareFiles();
 				},
 				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error deleting firmware file: ' + error);
+					
 				}
 			});
 		  
@@ -256,8 +255,7 @@ function updateFirmwareFile(file){
 	      			
 				},
 				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error updating firmware file: ' + error);
+					
 				}
 			});		  
 	  };	  
@@ -360,7 +358,6 @@ function loadFirmwareFiles() {
         	// Hide loader when the response has arrived
             hideLoader();
         	
-            console.log("Error loading firmware files list: " + error);
         },
     });
 }
@@ -399,7 +396,7 @@ function validateAndUpload(fileInputId, allowedExtension) {
                 },
                 error: function(xhr, status, error) {
                     clearInterval(progressInterval); // Stop the progress interval on error
-                    console.log('Error uploading file: ' + error);
+                    
                 }
             });
 
@@ -420,13 +417,13 @@ function validateAndUpload(fileInputId, allowedExtension) {
     });
 }
 function updateProgress() {
-	 console.log('updateProgress');
+	
     $.ajax({
         url: 'UploadServlet', // Replace with your servlet URL
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-        	console.log('updateProgress'+data.progress);
+        	
             var progress = data.progress;
             
             $('#progress-bar').css('width', progress + '%');
@@ -442,13 +439,13 @@ function updateProgress() {
     });
 }
 function firmwareProgress() {
-	 console.log('updateProgress');
+	
    $.ajax({
        url: 'firmwareFileDownloadURL', // Replace with your servlet URL
        type: 'GET',
        dataType: 'json',
        success: function(data) {
-       	console.log('updateProgress'+data.progress);
+       
            var progress = data.progress;
            
            $('#progress-bar').css('width', progress + '%');
@@ -488,7 +485,7 @@ function firmwareDownload() {
                 },
                 error: function(xhr, status, error) {
                     clearInterval(progressInterval); // Stop the progress interval on error
-                    console.log('Error uploading file: ' + error);
+                    
                 }
             });
 
@@ -579,8 +576,7 @@ function getFirmwareStatus(){
 
 		},
 		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error getting firmware status: " + error);
+			
 		},
 	});
 }

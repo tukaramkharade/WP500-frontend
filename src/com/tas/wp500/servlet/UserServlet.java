@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.tas.wp500.utils.PasswordHasher;
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/userServlet")

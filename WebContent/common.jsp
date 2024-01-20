@@ -275,7 +275,7 @@
                   <a href="twofactorAuth.jsp">2 Factor Auth</a>
                 </li>
                 <li class="nav-item">
-                  <a href="changeoldpassword.jsp">Reset Password</a>
+                  <a href="resetpassword.jsp">Reset Password</a>
                 </li>
                 
               </ul>
