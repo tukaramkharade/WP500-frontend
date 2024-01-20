@@ -144,7 +144,7 @@ var csrfTokenValue;
 			error : function(xhr, status, error) {
 				// Hide loader when the response has arrived
 	            hideLoader();
-				console.log('Error loading opcua client data: ' + error);
+				
 			}
 
 		});
@@ -199,6 +199,16 @@ var csrfTokenValue;
 
 		tokenValue = '<%=tokenValue%>';
 		getOverviewData();
+		
+		// Add an entry to the browser history
+        window.history.pushState(null, null, window.location.href);
+
+        // Listen for the user trying to navigate back
+        window.addEventListener('popstate', function (event) {
+            // If the user tries to go back, push another state to keep them on the current page
+            window.history.pushState(null, null, window.location.href);
+        });
+        
 	    }
 	});
 </script>

@@ -179,7 +179,11 @@ font-size: 17px;
   cursor: pointer;
 }
 
-
+.button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px; /* Add margin as needed */
+        }
  
 </style>
 
@@ -444,8 +448,6 @@ function loadCPURunningTaskInfo(){
 				},
 				error : function(xhr, status, error) {
 					
-					
-					console.log('Error loading cpu runnig task data: ' + error);
 				}
 			});
 }
@@ -515,7 +517,6 @@ function loadDiskInfo(){
 					// Hide loader when the response has arrived
 		            hideLoader();
 					
-					console.log('Error loading disk data: ' + error);
 				}
 			});
 }
@@ -593,6 +594,10 @@ $(document).ready(function() {
         <p>Loading...</p>
     </div>
 </div>
+ 
+ 	 <div class="button-container">
+        <button onClick="window.location.reload();" style="color:white; background-color: #2b3991">Reload</button>
+    </div>
  
             <div class="row" style="display: flex; flex-wrap: wrap; margin-top: 10px; margin-left: -10px;">
                 <div class="ram_info" style="flex: 1; margin-right: 10px;">

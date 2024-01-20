@@ -37,9 +37,6 @@ public class WP500Login extends HttpServlet {
 		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 
-		System.out.println("csrf req: " + csrfTokenFromRequest);
-		System.out.println("csrf session : " + csrfTokenFromSession);
-
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
@@ -68,6 +65,7 @@ public class WP500Login extends HttpServlet {
 				if (status.equals("success") && first_login.equals("true") && totp_authenticator.equals("disable")) {
 					
 					session.setAttribute("username", username);
+					session.setAttribute("first_login", first_login);
 					
 					userObj.put("status", status);
 					userObj.put("first_login", first_login);
@@ -81,8 +79,8 @@ public class WP500Login extends HttpServlet {
 					session.setAttribute("username", username);
 					session.setAttribute("role", role);
 					session.setAttribute("totp_authenticator", totp_authenticator);
+					session.setAttribute("first_login", first_login);
 					
-
 					userObj.put("status", status);
 					userObj.put("first_login", first_login);
 					userObj.put("totp_authenticator", totp_authenticator);
@@ -97,6 +95,7 @@ public class WP500Login extends HttpServlet {
 					session.setAttribute("username", username);
 					session.setAttribute("role", role);
 					session.setAttribute("token", token);
+					session.setAttribute("first_login", first_login);
 
 					userObj.put("status", status);
 					userObj.put("first_login", first_login);
@@ -113,7 +112,7 @@ public class WP500Login extends HttpServlet {
 			} else {
 				// CSRF token is invalid, reject the request
 				userObj.put("status", "fail");
-				userObj.put("msg", "CSRF token validation failed");
+				userObj.put("msg", "Token validation failed");
 			}
 
 		} catch (Exception e) {

@@ -135,10 +135,9 @@ margin-top: 68px;
 				} 
 				 
 				 total_pages = data.total_page; // Access the total_pages value
-				//         console.log("totalPageNo: " + total_pages);
 
 				var count = data.event_log_result.length;
-				//          console.log("count: " + count);
+			
 				if (data.event_log_result
 						&& Array.isArray(data.event_log_result)) {
 					//   tableBody.empty();
@@ -164,7 +163,6 @@ margin-top: 68px;
 				// Hide loader when the response has arrived
 	            hideLoader();
 				
-				console.log('Error loading store forward data: ' + error);
 			}
 		});
 	}
@@ -185,10 +183,9 @@ margin-top: 68px;
 		    },
 			success : function(data) {
 				total_pages = data.total_page; // Access the total_pages value
-				//         console.log("totalPageNo: " + total_pages);
-
+			
 				var count = data.event_log_result.length;
-				//          console.log("count: " + count);
+			
 				if (data.event_log_result
 						&& Array.isArray(data.event_log_result)) {
 					//   tableBody.empty();
@@ -211,7 +208,7 @@ margin-top: 68px;
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log('Error loading store forward data: ' + error);
+				
 			}
 		});
 	}
@@ -286,7 +283,6 @@ margin-top: 68px;
 
 		$('#nextPage').on('click', function() {
 
-			console.log("totalPageNo: " + total_pages);
 			if (currentPage < total_pages) {
 				currentPage++;
 				clearTable();

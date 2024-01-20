@@ -94,8 +94,7 @@ var tokenValue;
 
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log('Error: ' + error);
+						
 					}
 				});
 				

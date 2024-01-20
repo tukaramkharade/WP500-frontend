@@ -198,14 +198,19 @@ margin-left: -39px;
 	var secretKey;
 	var roleValue;
 	var tokenValue;
+	var csrfTokenValue;
 	
 	function ntpSyncStatus(){
-		
+		   var csrfToken = document.getElementById('csrfToken').value;
+		   
 		$.ajax({
 
 			url : 'overviewGetData',
 			type : 'GET',
 			dataType : 'json',
+			data: {
+				csrfToken: csrfToken
+	        },
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 			},
@@ -255,7 +260,7 @@ margin-left: -39px;
 			},
 
 			error : function(xhr, status, error) {
-				console.log('Error loading opcua client data: ' + error);
+				
 			}
 
 		});
@@ -333,11 +338,14 @@ margin-left: -39px;
 
 
 	function sendDataToServlet(totp_authenticator) {
+		 var csrfToken = document.getElementById('csrfToken').value;
+		 
 	    $.ajax({
 	        type: "POST",
-	        url: "TOTPServlet",
+	        url: "twoFactorAuthServlet",
 	        data: {
-	            totp_authenticator: totp_authenticator
+	            totp_authenticator: totp_authenticator,
+	            csrfToken: csrfToken
 	        },
 	        success: function(response) {
 	        	
@@ -354,14 +362,16 @@ margin-left: -39px;
 	function getTOTPDetails() {
 		// Display loader when the request is initiated
 	//    showLoader();
-
+ var csrfToken = document.getElementById('csrfToken').value;
+ 
 		$.ajax({
 			type : "GET",
-			url : "TOTPServlet", // Replace with the actual URL to retrieve TOTP details
+			url : "twoFactorAuthServlet", // Replace with the actual URL to retrieve TOTP details
 			dataType : "json",
 			
 			data: {
-	            action: 'getTOTPDetails'
+	            action: 'getTOTPDetails',
+	            	csrfToken: csrfToken
 	        },
 			success : function(data) {
 				// Hide loader when the response has arrived
@@ -403,13 +413,14 @@ margin-left: -39px;
         	container.removeChild(container.firstChild);
     	}
 
-
+    	 var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
 
 			type : "GET",
-			url : "imageServlet", // URL of your servlet    
+			url : "qrcodeServlet", // URL of your servlet    
 			 data: {
-		            action: "generate"
+		            action: "generate",
+		            csrfToken: csrfToken
 		        },
 			success : function(data) {
 				// Handle the response data (data.qr_image and data.secret_key)
@@ -433,13 +444,14 @@ margin-left: -39px;
 	
 	
 	function getQRCode() {
- 
+		 var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
 
 			type : "GET",
-			url : "imageServlet", // URL of your servlet 
+			url : "qrcodeServlet", // URL of your servlet 
 			 data: {
-		            action: "get"
+		            action: "get",
+		            csrfToken: csrfToken
 		        },
 			success : function(data) {
 				// Handle the response data (data.qr_image and data.secret_key)
@@ -472,9 +484,9 @@ margin-left: -39px;
 	function sendOTP() {
         // Get the OTP value from the input field
         var otpValue = document.getElementById("otp").value;
-        console.log("OTP -->"+otpValue);
+       
         $.ajax({
-			url : "imageServlet",
+			url : "qrcodeServlet",
 			type : "POST",
 			data : {
 				otp: otpValue,
@@ -527,6 +539,15 @@ margin-left: -39px;
 			String roleValue = (String) session.getAttribute("role");%>
 
 	roleValue = '<%=roleValue%>';
+	
+	
+	
+	<%// Access the session variable
+	HttpSession csrfToken = request.getSession();
+	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
+
+	csrfTokenValue = '<%=csrfTokenValue%>';
+		
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
@@ -590,7 +611,7 @@ margin-left: -39px;
 		<section style="margin-left: 1em">
 			<h3>2 FACTOR AUTHENTICATION</h3>
 			<hr>
-
+<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div class="container">
 			
 				<div id="loader-overlay">

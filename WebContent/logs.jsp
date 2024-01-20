@@ -128,7 +128,7 @@ var csrfTokenValue;
 			return;
 		}
 		var tableBody = $("#log_table_body");
-		console.log("Clearing table body"); // Debug statement
+		
 		tableBody.empty(); // Clear the table body before adding search results
 		$.ajax({
 			url : "search_logs", // Replace this with the appropriate server-side URL to handle the search
@@ -165,16 +165,14 @@ var csrfTokenValue;
 					});
 
 					var count = data.log_search_result.length;
-					console.log("count : " + count);
-
+					
 					var totalPages = Math.ceil(count / 100);
-					console.log("Per page records : " + totalPages);
-
+					
 					$("#log_table").show();
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error logs: " + error);
+				
 			},
 		});
 		
@@ -242,7 +240,6 @@ var csrfTokenValue;
 						// Hide loader when the response has arrived
 			            hideLoader();
 						
-						console.log("Error logs: " + error);
 					},
 				});
 	}
@@ -421,7 +418,7 @@ var csrfTokenValue;
 			$(document).on("click", "#loadLogFileButton", function() {
 				var searchQuery = $("#search_query").val().trim();
 				if (searchQuery !== "") {
-					console.log("searchQuery: " + searchQuery.length);
+					
 					searchLogData();
 				} else {
 					loadLogFile();
@@ -502,17 +499,15 @@ var csrfTokenValue;
 								});
 
 								var count = data.log_file_data.length;
-								console.log("count : " + count);
-
+								
 								var totalPages = Math.ceil(count / 100);
-								console.log("Per page records : " + totalPages);
-
+								
 								// Show the table
 								$("#log_table").show();
 							}
 						},
 						error : function(xhr, status, error) {
-							console.log("Error logs: " + error);
+							
 						},
 					});
 		} else {

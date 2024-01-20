@@ -173,6 +173,9 @@ margin-top: 70px;
     border-radius: 5px;
 }
 
+.footer{
+margin-top: 20px;
+}
 </style>
 
 <script>
@@ -209,7 +212,7 @@ margin-top: 70px;
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error showing crt files list : " + error);
+				
 			},
 		});
 	}
@@ -261,7 +264,7 @@ margin-top: 70px;
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error showing crt files list : " + error);
+				
 			},
 		});
 	}
@@ -422,8 +425,7 @@ margin-top: 70px;
 					error : function(xhr, status, error) {
 						// Hide loader when the response has arrived
 			            hideLoader();
-						console.log('Error loading mqtt data: ' + error);
-					}
+											}
 				});
 	}
 
@@ -523,8 +525,7 @@ margin-top: 70px;
 				
 			},
 			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error retrieving MQTT status: ' + error);
+				
 			}
 		});
 		
@@ -579,8 +580,7 @@ margin-top: 70px;
 						location.reload();
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log('Error deleting mqtt settings: ' + error);
+						
 					}
 				});
 			  
@@ -844,7 +844,7 @@ margin-top: 70px;
 					
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating mqtt: ' + error);
+					
 				}
 			});
 			
@@ -1004,7 +1004,7 @@ margin-top: 70px;
 
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding mqtt settings: ' + error);
+				
 			}
 		});
 		

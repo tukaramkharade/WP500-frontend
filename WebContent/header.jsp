@@ -257,8 +257,7 @@ var csrfTokenValue1;
 		      			
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log('Error: ' + error);
+						
 					}
 				});
 		  };
@@ -289,8 +288,7 @@ var csrfTokenValue1;
 		            $(".project_name p").text("Project Name - " + projectName);
 				},
 				error : function(xhr, status, error) {
-					// Handle the error response, if needed
-					console.log('Error: ' + error);
+					
 				}
 			    
 		 });
@@ -364,7 +362,10 @@ var csrfTokenValue1;
 
 	        if (timeDiff <= 0) {
 	            // Redirect to "login.jsp" when the timer reaches 00:00
-	            window.location.href = 'login.jsp';
+	           // window.location.href = 'login.jsp';
+	        
+	        	  window.location.replace('login.jsp'); 
+	        
 	        } else {
 	            var minutes = Math.floor(timeDiff / 60000); // Calculate minutes directly from timeDiff
 	            var seconds = Math.floor((timeDiff % 60000) / 1000);
@@ -439,10 +440,12 @@ var csrfTokenValue1;
 										// Close the modal
 										modal.style.display = 'none';
 										// Handle the response, e.g., redirect to login page
-										window.location.href = "login.jsp";
+										//window.location.href = "login.jsp";
+										
+										  window.location.replace('login.jsp'); 
 									},
 									error : function(xhr, status, error) {
-										console.log("Error: " + error);
+										
 									}
 								});
 

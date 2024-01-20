@@ -167,8 +167,6 @@ function getSettings(){
 	    	// Hide loader when the response has arrived
             hideLoader();
 	    	
-			// Handle the error response, if needed
-			console.log('Error: ' + error);
 		}
 	});
 }
@@ -231,7 +229,7 @@ function getSettings(){
 
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating settings : ' + error);
+					
 				}
 			});
 

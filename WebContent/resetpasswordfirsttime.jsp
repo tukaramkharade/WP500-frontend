@@ -167,6 +167,7 @@ margin-top: 68px;
 <script>
 
 var user;
+var tokenValue;
 
 function updateOldPassword() {
 	
@@ -203,9 +204,9 @@ function updateOldPassword() {
 							modal.style.display = 'none';
 						
 						if(data.status === "success"){
-							  window.location.href = 'login.jsp'; 
-							  
 							
+							window.location.replace('login.jsp');
+					        							
 						}else if(data.status === "fail"){
 							 $("#popupMessage").text(data.message);
 			      			$("#customPopup").show(); 
@@ -214,7 +215,7 @@ function updateOldPassword() {
 						
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating password: ' + error);
+					
 					modal.style.display = 'none';
 				}
 			});
@@ -237,23 +238,6 @@ function updateOldPassword() {
 	}
 }
 
-/* function logout(){
-	$.ajax({
-		type : "GET",
-		url : "logout",
-		dataType : 'json',
-		success : function(response) {
-			
-			// Handle the response, e.g., redirect to login page
-			window.location.href = "login.jsp";
-		},
-		error : function(xhr, status, error) {
-			console.log("Error: " + error);
-		}
-	});
-}
- */
- 
 function toggleOldPassword() {
     var passwordInput = $('#old_password');
     var passwordToggle = $('#old_password_toggle');
@@ -310,8 +294,7 @@ function getPasswordInfo(){
 	            
 			},
 			error : function(xhr, status, error) {
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
+							
 			}
 		    
 	 });
@@ -319,6 +302,13 @@ function getPasswordInfo(){
 
 
 $(document).ready(function () {
+	<%// Access the session variable
+	HttpSession token = request.getSession();
+	String tokenValue = (String) session.getAttribute("token");%>
+
+	 tokenValue = '<%=tokenValue%>'; 
+	
+	
 	<%// Access the session variable
 	
 	String user = (String) session.getAttribute("username");%>

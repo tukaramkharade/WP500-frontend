@@ -174,7 +174,7 @@ var tagVariableValues = {};
             }
           },
           error: function (xhr, status, error) {
-            console.log("Error showing broker ip list : " + error);
+           
           },
         });
       }
@@ -207,7 +207,7 @@ var tagVariableValues = {};
     	        }
     	      },
     	      error: function (xhr, status, error) {
-    	        console.log("Error showing tag list: " + error);
+    	        
     	      },
     	    });
     	  }
@@ -288,10 +288,7 @@ var tagVariableValues = {};
   				
   			// Hide loader when the response has arrived
 	            hideLoader();
-  			
-  				// Handle the error response, if needed
-  				console.log('Error: ' + error);
-  			}
+   			}
   		});
   	
   	} 
@@ -428,8 +425,7 @@ var tagVariableValues = {};
  		        location.reload();
  		      },
  		      error: function (xhr, status, error) {
- 		        // Handle the error response, if needed
- 		        console.log('Error deleting alarm settings: ' + error);
+ 		        		      
  		        // Close the modal
  		        modal.style.display = 'none';
  		      }
@@ -591,7 +587,7 @@ var tagVariableValues = {};
 
 	         // Log or use the updated tagVariableValues as needed
 	         var jsonString = JSON.stringify(tagVariableValues);
-	         console.log(jsonString);
+	         
 	     });
 	   	}
 	
@@ -786,7 +782,7 @@ function editAlarmConfig() {
 					location.reload();
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating alarm settings: ' + error);
+					
 				}
 			});
 		    
@@ -899,7 +895,7 @@ function addAlarmConfig() {
 			location.reload();
 		},
 		error : function(xhr, status, error) {
-			console.log('Error adding alarm settings: ' + error);
+			
 		}
 	});
 	$("#closePopup").click(function () {

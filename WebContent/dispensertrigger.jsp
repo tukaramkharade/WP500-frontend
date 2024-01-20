@@ -137,6 +137,10 @@ margin-top: 68px;
     border-radius: 5px;
 }
 
+.footer{
+margin-top: 20px;
+}
+
 </style>
 
 <script>
@@ -170,7 +174,7 @@ var csrfTokenValue;
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error showing broker ip list : " + error);
+				
 			},
 		});
 	}
@@ -204,7 +208,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -238,7 +242,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -272,7 +276,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -306,7 +310,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -340,7 +344,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -374,7 +378,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -408,7 +412,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						console.log("Error showing tag list: " + error);
+						
 					},
 				});
 	}
@@ -549,8 +553,6 @@ var csrfTokenValue;
 						// Hide loader when the response has arrived
 			            hideLoader();
 						
-						console.log('Error loading dispenser trigger data: '
-								+ error);
 					}
 				});
 	}
@@ -755,8 +757,7 @@ var csrfTokenValue;
 					$("#side").prop("disabled", false);
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating dispenser trigger settings: '
-							+ error);
+					
 				}
 			});
 			$('#registerBtn').val('Add');		
@@ -919,7 +920,7 @@ var csrfTokenValue;
 
 			},
 			error : function(xhr, status, error) {
-				console.log('Error adding dispenser trigger: ' + error);
+				
 			}
 		});
 
@@ -980,9 +981,7 @@ var csrfTokenValue;
 						location.reload();
 					},
 					error : function(xhr, status, error) {
-						// Handle the error response, if needed
-						console.log('Error deleting dispenser trigger settings: '
-								+ error);
+						
 					}
 				});
 		  };

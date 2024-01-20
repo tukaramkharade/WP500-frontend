@@ -188,7 +188,7 @@ function getKeys(){
 		error : function(xhr, status, error) {
 			// Hide loader when the response has arrived
             hideLoader();
-			console.log("Error showing wireguard keys data : " + error);
+			
 		},
 	});
 }
@@ -233,7 +233,7 @@ function readWireguardFile(){
             
 		},
 		error : function(xhr, status, error) {
-			console.log("Error showing wireguard file data : " + error);
+			
 		},
 		
 	});
@@ -278,7 +278,7 @@ function generateWireguardKeys(){
             
 		},
 		error : function(xhr, status, error) {
-			console.log("Error generating wireguard keys data : " + error);
+			
 		},
 	});
 }
@@ -326,11 +326,11 @@ function activateWireguard() {
                 // Show the popup
                 $("#customPopup").show();
             } else {
-                console.log("Invalid data format for activate_wireguard_result");
+               
             }
         },
         error: function (xhr, status, error) {
-            console.log("Error activating wireguard data: " + error);
+           
         },
     });
 
@@ -383,11 +383,11 @@ function deActivateWireguard(){
                 // Show the popup
                 $("#customPopup").show();
             } else {
-                console.log("Invalid data format for deactivate_wireguard_result");
+                
             }
         },
         error: function (xhr, status, error) {
-            console.log("Error deactivating wireguard data: " + error);
+           
         },
     });
 
@@ -448,7 +448,7 @@ function wireguardStatus() {
             }
         },
         error: function (xhr, status, error) {
-            console.log("Error getting wireguard status: " + error);
+           
         },
     });
 
@@ -474,10 +474,7 @@ function updateWireguardFile() {
    // Split the textarea value into an array using the newline character ("\n")
    var lines = textareaValue.split('\n');
 
-   // Display the array in the console (you can replace this with your update logic)
-   console.log("Lines Array:", lines);
-
-   // Convert the lines array to a JSON string
+     // Convert the lines array to a JSON string
    var linesJson = JSON.stringify(lines);
 
    // Use $.ajax to send the data to the servlet
@@ -524,7 +521,7 @@ function updateWireguardFile() {
 	        readWireguardFile();
        },
        error: function(error) {
-           console.log("Error updating data:", error);
+           
        }
    });
    

@@ -137,7 +137,7 @@ function readBannerText(){
 		error : function(xhr, status, error) {
 			// Hide loader when the response has arrived
             hideLoader();
-			console.log("Error showing banner text data : " + error);
+			
 		},
 	});
 }
@@ -158,9 +158,6 @@ function updateBannerText() {
 
     // Split the textarea value into an array using the newline character ("\n")
     var lines = textareaValue.split('\n');
-
-    // Display the array in the console (you can replace this with your update logic)
-    console.log("Lines Array:", lines);
 
     // Convert the lines array to a JSON string
     var linesJson = JSON.stringify(lines);
@@ -188,7 +185,7 @@ function updateBannerText() {
             readBannerText();
         },
         error: function(error) {
-            console.log("Error updating data:", error);
+            
         }
     });
 };

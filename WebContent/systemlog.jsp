@@ -165,16 +165,14 @@ var csrfTokenValue;
 					});
 
 					var count = data.system_log_result.length;
-					console.log("count : " + count);
-
+					
 					var totalPages = Math.ceil(count / 100);
-					console.log("Per page records : " + totalPages);
-
+					
 					$("#log_table").show();
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log("Error logs: " + error);
+				
 			},
 		});
 		$("#closePopup").click(function () {
@@ -231,16 +229,14 @@ var csrfTokenValue;
 					});
 
 					var count = data.system_log_result.length;
-					console.log("count : " + count);
-
+					
 					var totalPages = Math.ceil(count / 100);
-					console.log("Per page records : " + totalPages);
-
+					
 					$("#log_table").show();
 				}
 			},
 			error : function(xhr, status, error) {
-				console.log('Error setting manual time: ' + error);
+				
 			}
 		});
 
@@ -318,18 +314,16 @@ var csrfTokenValue;
 					});
 
 					var count = data.system_log_result.length;
-					console.log("count : " + count);
-
+					
 					var totalPages = Math.ceil(count / 100);
-					console.log("Per page records : " + totalPages);
-
+					
 					$("#log_table").show();
 				}
 			},
 			error : function(xhr, status, error) {
 				// Hide loader when the response has arrived
 	            hideLoader();
-				console.log("Error logs: " + error);
+				
 			},
 		});
 	}
@@ -352,10 +346,6 @@ var csrfTokenValue;
 
 	    // Set the IST time 24 hours ago as the value of the "startdatetime" input field
 	    document.getElementById('startdatetime').value = formattedTime24HoursAgo;
-
-	    // Debugging: Log both calculated times to the console
-	    console.log('Current IST time:', formattedCurrentTime);
-	    console.log('IST time 24 hours ago:', formattedTime24HoursAgo);
 	}	
 	
 	function changeButtonColor(isDisabled) {
@@ -430,9 +420,7 @@ var csrfTokenValue;
 		$(document).on("click", "#loadLogSysFileButton", function() {
 			var searchQuery = $("#search_query").val().trim();
 			if (searchQuery !== "") {
-				//var tableBody = $("#log_table_body");
-				//	tableBody.empty();
-				console.log("searchQuery: " + searchQuery.length);
+				
 				searchSystemLogData();
 
 			} else {

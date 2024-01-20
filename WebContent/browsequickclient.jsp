@@ -393,7 +393,7 @@ $(document).ready(function() {
     				
     			},
     			error : function(xhr, status, error) {
-    				console.log('Error adding tag: '+ error);
+    				
     			}
     		});
     		
@@ -472,14 +472,11 @@ $(document).ready(function() {
     						
     					},
     					error : function(xhr, status, error) {
-    						console.log('Error loading user data: ' + error);
+    						
     					}
     				});
     	}
-
-
-        
-      
+ 
         function loadopcList() {
         	
         	// Display loader when the request is initiated
@@ -543,15 +540,14 @@ $(document).ready(function() {
     		                        ul.appendChild(li);
     		                    });
     		                } else {
-    		                    console.log('Element with ID "root" not found');
+    		                    
     		                }
     			            
     					},
     					error : function(xhr, status, error) {
     						// Hide loader when the response has arrived
     			            hideLoader();
-    						
-    						console.log('Error loading user data: ' + error);
+    						    						
     					}
     				});
     	}

@@ -320,7 +320,7 @@ function generateCertificate(){
 
 		},
 		error : function(xhr, status, error) {
-			console.log('Error generating certificate: ' + error);
+			
 		}
 	});
 	

@@ -454,7 +454,7 @@ var csrfTokenValue;
 				},
 
 				error : function(xhr, status, error) {
-					console.log('Error: ' + error);
+					
 				}
 			});
 
@@ -506,7 +506,7 @@ var csrfTokenValue;
 			},
 
 			error : function(xhr, status, error) {
-				console.log('Error loading opcua client data: ' + error);
+				
 			}
 
 		});
@@ -559,7 +559,7 @@ var csrfTokenValue;
 	
 			},
 			error : function(xhr, status, error) {
-				console.log("Error adding ntp: " + error);
+				
 			},
 		});
 
@@ -626,8 +626,7 @@ var csrfTokenValue;
 			error : function(xhr, status, error) {
 				// Hide loader when the response has arrived
 	            hideLoader();
-				// Handle the error response, if needed
-				console.log('Error: ' + error);
+				
 			}
 		});
 	}
@@ -756,7 +755,7 @@ var csrfTokenValue;
 
 			        },
 			        error: function (xhr, status, error) {
-			            console.log('Error updating lan: ' + error);
+			            
 			        }
 			    });
 			  
@@ -822,7 +821,7 @@ var csrfTokenValue;
 
 			},
 			error : function(xhr, status, error) {
-				console.log('Error setting manual time: ' + error);
+				
 			}
 		});
 

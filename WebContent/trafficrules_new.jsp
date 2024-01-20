@@ -290,7 +290,6 @@ function getBasicConfiguration(){
 			// Hide loader when the response has arrived
             hideLoader();
 			
-			console.log("Error loading basic configuration data: "+ error);
 		},
 	 		});
 	
@@ -359,7 +358,7 @@ function sendToServer(dataArray) {
             getBasicConfiguration();
         },
         error: function(xhr, status, error) {
-            console.log("Error sending global data: " + error);
+          
         }
     });
     
@@ -443,8 +442,7 @@ function getGeneralSettingsLan0(){
 
 		},
 		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error loading general Settings: " + error);
+			
 		},
 	});
 
@@ -489,8 +487,7 @@ function getGeneralSettingsLan1(){
 
 		},
 		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error loading general Settings: " + error);
+			
 		},
 	});
 }
@@ -534,8 +531,7 @@ function getGeneralSettingsLan2(){
 
 		},
 		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error loading general Settings: " + error);
+			
 		},
 	});
 }
@@ -603,7 +599,7 @@ function updateGeneralSettingsLan0(){
 
 				},
 				error : function(xhr, status, error) {
-					console.log('Error editing general setting: ' + error);
+					
 				}
 			});
 				
@@ -680,7 +676,7 @@ function updateGeneralSettingsLan1(){
 
 				},
 				error : function(xhr, status, error) {
-					console.log('Error editing general setting: ' + error);
+					
 				}
 			});
 				
@@ -757,7 +753,7 @@ function updateGeneralSettingsLan2(){
 
 				},
 				error : function(xhr, status, error) {
-					console.log('Error editing general setting: ' + error);
+					
 				}
 			});
 				
@@ -887,8 +883,7 @@ function loadTrafficRulesListLan0() {
 			}
 		},
 		error : function(xhr, status, error) {
-			console.log("Error loading traffic rules data: "
-					+ error);
+			
 		},
 	});
 	
@@ -1009,8 +1004,7 @@ function loadTrafficRulesListLan1() {
 			}
 		},
 		error : function(xhr, status, error) {
-			console.log("Error loading traffic rules data: "
-					+ error);
+			
 		},
 	});
 }
@@ -1129,8 +1123,7 @@ function loadTrafficRulesListLan2() {
 			}
 		},
 		error : function(xhr, status, error) {
-			console.log("Error loading traffic rules data: "
-					+ error);
+			
 		},
 	});
 }
@@ -1409,7 +1402,7 @@ function addTrafficRulesLan0() {
 			$('#macAddress_lan0').prop('disabled', false);
 		},
 		error : function(xhr, status, error) {
-			console.log("Error adding traffic rules: " + error);
+			
 		},
 	});
 	
@@ -1515,7 +1508,7 @@ function addTrafficRulesLan1() {
 			$('#macAddress_lan1').prop('disabled', false);
 		},
 		error : function(xhr, status, error) {
-			console.log("Error adding traffic rules: " + error);
+			
 		},
 	});
 	
@@ -1620,7 +1613,7 @@ function addTrafficRulesLan2() {
 			$('#macAddress_lan2').prop('disabled', false);
 		},
 		error : function(xhr, status, error) {
-			console.log("Error adding traffic rules: " + error);
+			
 		},
 	});
 	
@@ -1682,8 +1675,7 @@ function deleteTrafficRulesLan0(trafficRulesId) {
 			        location.reload();
 			      },
 			      error: function (xhr, status, error) {
-			        // Handle the error response, if needed
-			        console.log('Error deleting traffic rules: ' + error);
+			        
 			        // Close the modal
 			        modal.style.display = 'none';
 			      }
@@ -1749,8 +1741,7 @@ function deleteTrafficRulesLan1(trafficRulesId) {
 			        location.reload();
 			      },
 			      error: function (xhr, status, error) {
-			        // Handle the error response, if needed
-			        console.log('Error deleting traffic rules: ' + error);
+			        
 			        // Close the modal
 			        modal.style.display = 'none';
 			      }
@@ -1816,8 +1807,7 @@ function deleteTrafficRulesLan2(trafficRulesId) {
 			        location.reload();
 			      },
 			      error: function (xhr, status, error) {
-			        // Handle the error response, if needed
-			        console.log('Error deleting traffic rules: ' + error);
+			        
 			        // Close the modal
 			        modal.style.display = 'none';
 			      }
@@ -1944,7 +1934,7 @@ function editTrafficRulesLan0() {
 					$('#macAddress_lan0').prop('disabled', false);
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating traffic rule: ' + error);
+					
 				}
 			});
 			$('#registerBtn_lan0').val('Add');
@@ -2070,7 +2060,7 @@ function editTrafficRulesLan1() {
 					$('#macAddress_lan1').prop('disabled', false);
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating traffic rule: ' + error);
+					
 				}
 			});
 			$('#registerBtn_lan1').val('Add');
@@ -2195,7 +2185,7 @@ function editTrafficRulesLan2() {
 					$('#macAddress_lan2').prop('disabled', false);
 				},
 				error : function(xhr, status, error) {
-					console.log('Error updating traffic rule: ' + error);
+					
 				}
 			});
 			$('#registerBtn_lan2').val('Add');
@@ -2235,8 +2225,7 @@ function applyTrafficRules() {
 
 		},
 		error : function(xhr, status, error) {
-			// Handle the error response, if needed
-			console.log("Error applying traffic rules: " + error);
+			
 		},
 	});
 	

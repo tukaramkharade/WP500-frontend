@@ -289,9 +289,7 @@ function loadOPCUAClientList(){
 		error : function(xhr, status, error) {
 			// Hide loader when the response has arrived
             hideLoader();
-			
-			console.log('Error loading opcua client data: ' + error);
-		}
+			}
 		
 	});
 	
