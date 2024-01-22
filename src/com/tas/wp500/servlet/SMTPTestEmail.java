@@ -44,11 +44,28 @@ import com.tas.wp500.utils.TCPClient;
 				String respStr = client.sendMessage(json.toString());
 				
 				logger.info("res : "+new JSONObject(respStr));
+				String message = new JSONObject(respStr).getString("msg");
+				String status = new JSONObject(respStr).getString("status");
+				
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", message);
+				jsonObject.put("status", status);
 
+				// Set the content type of the response to application/json
+				response.setContentType("application/json");
+				 response.setHeader("X-Content-Type-Options", "nosniff");
+
+				// Get the response PrintWriter
+				PrintWriter out = response.getWriter();
+
+				// Write the JSON object to the response
+				out.print(jsonObject.toString());
+				out.flush();
+				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in getting live date and time : "+e);
+				logger.error("Error in sending test email : "+e);
 			}
 			}
 		}

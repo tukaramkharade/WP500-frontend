@@ -85,7 +85,6 @@ public class WP500Login extends HttpServlet {
 					userObj.put("first_login", first_login);
 					userObj.put("totp_authenticator", totp_authenticator);
 					
-			
 				} else if (status.equals("success") && first_login.equals("false")
 						&& totp_authenticator.equals("disable")) {
 
@@ -100,8 +99,7 @@ public class WP500Login extends HttpServlet {
 					userObj.put("status", status);
 					userObj.put("first_login", first_login);
 					userObj.put("totp_authenticator", totp_authenticator);
-					
-				
+								
 				}
 
 				else if (status.equals("fail")) {
@@ -120,23 +118,15 @@ public class WP500Login extends HttpServlet {
 			e.printStackTrace();
 			logger.error("Error in login : " + e);
 
-			try {
-				userObj.put("status", "error");
-				userObj.put("msg", "Invalid user.");
-
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}
 		}
-
 		
 		// Set the content type of the response to application/json
 		response.setContentType("application/json");
-		
+		response.setHeader("Content-Security-Policy", "script-src *;");
+
 		response.setHeader("X-Content-Type-Options", "nosniff");
-
-
-		// Get the response PrintWriter
+		
+			// Get the response PrintWriter
 		PrintWriter out = response.getWriter();
 
 		// Write the JSON object to the response
@@ -145,7 +135,5 @@ public class WP500Login extends HttpServlet {
 
 	}
 	
-
-
 }
 

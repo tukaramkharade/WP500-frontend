@@ -89,11 +89,10 @@ public class CPUMetrics extends HttpServlet {
 					JSONObject cpu_running_task_info = respJson.getJSONObject("cpu_running_task_information");
 					
 					JSONArray cpu_running_task_jsArray = new JSONArray(cpu_running_task_info.getJSONArray("cpuRunningOperations").toString());
-					
+					System.out.println("cpu running task: "+cpu_running_task_jsArray.toString());
 					
 					JSONObject disk_info = respJson.getJSONObject("disk_information");
-					System.out.println("disk info :"+disk_info.toString());
-					
+										
 					JSONArray disk_info_jsArray = new JSONArray(disk_info.getJSONArray("diskInfo").toString());
 					
 					jsonObject.put("UsedMemory", UsedMemory);

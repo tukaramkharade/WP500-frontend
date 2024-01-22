@@ -57,16 +57,18 @@
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
  }
  
-.overview{	
-	width: 45%;
+
+ 
+ .overview{	
+	max-width: 45%;
   
     color: black;
     font-size: 15px;
-    /* Border properties */
-    border: 2px solid #e74c3c; /* Border width, style, and color */
-    border-radius: 10px; /* Border radius for rounded corners */
+   
+    border: 2px solid #e74c3c; 
+    border-radius: 10px; 
 }
-
+ 
 .overview h5{
 font-size: 13px;
 margin-left:5px;
@@ -76,14 +78,14 @@ p{
 margin-left: 2%;
 }
 
-.last_threats {
-    width: 100%; /* Use 100% for full width on all screens */
-    max-width: 800px; /* Set a maximum width for larger screens if needed */
-    margin: 0 auto; /* Center the container */
+ .last_threats {
+    
+    max-width: 45%; 
+    margin: 0 auto; 
     color: black;
     border: 2px solid #e74c3c;
     border-radius: 10px;
-}
+} 
 
 #dataList li {
     display: flex;
@@ -149,7 +151,7 @@ font-size:14px;
     color: red;
 }
 
-.threats_count{
+ .threats_count{
     width: 45%; 
     height: 375px;
     color: black;
@@ -165,24 +167,27 @@ height:460px;
      margin-left: 25px; 
     
 }
-
+ 
 .overviewText{
 font-size: 17px;
 }
 
 .alert-high{
-margin-top: 18px;
-margin-left: -325px;
+margin-top: 17px;
+margin-left: 1px;
+position: fixed;
 }
 
 .alert-medium{
-margin-top: 18px;
-margin-left: -325px;
+margin-top: 17px;
+margin-left: 1px;
+position: fixed;
 }
 
 .alert-low{
-margin-top: 18px;
-margin-left: -325px;
+margin-top: 17px;
+margin-left: 1px;
+position: fixed;
 }
 
 #confirm-button-ids,
@@ -200,6 +205,10 @@ margin-left: -325px;
 
 h3{
 margin-top: 68px;
+}
+
+hr{
+margin-top: 14px;
 }
 
 #loader-overlay {
@@ -1179,9 +1188,9 @@ if (roleValue === "null") {
 				</div>
 				
 				<div class="row"
-					style="display: flex; flex-content: space-between; margin-top: 10px; height:25%; margin-left: -10px;">
+					style="display: flex; flex-wrap: wrap; margin-top: 10px; height:25%; margin-left: -10px;">
 					
-					<div class="overview">
+					<div class="overview" style="flex: 1;">
 						<h5>Overview</h5>
 						<p id="status"></p>
 						<p id="last_update"></p>
@@ -1191,7 +1200,7 @@ if (roleValue === "null") {
 						<p id="unack_count"></p>
 					</div>
 					
-					<div class="last_threats">
+					<div class="last_threats" style="flex: 1;">
 						<h5>Last Threats</h5>
 						<ul id="dataList">
         					<!-- List items will be populated here -->

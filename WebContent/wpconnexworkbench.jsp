@@ -624,23 +624,35 @@ var csrfTokenValue;
         <div class="container">
 
             <form action="UploadServlet" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="fileInput">
-                <input type="submit" value="Upload" id="stratonUpdateButton">
+                             
 
-                <!-- <input type="button" value="Straton update" id="firmware_update"> -->
-                <div id="custom-straton-modal-delete" class="modal-delete">
-				
-			  </div>
+              <table>
+              <tr>
+              <td style="width:13%"><input type="file" name="file" id="fileInput"></td>
+              <td><input type="submit" value="Upload" id="stratonUpdateButton"></td>
+              </tr>
+              </table>
+              
+              
             </form>
-            <div class="form-container">
             
-            <label for="fileUrl">Enter File Name</label>
-            <input type="text" id="fileName" name="fileName" required style="width: 200px;">
+            <table>
+            <tr>
+            <td style="width:13%">Enter File Name</td>
+            <td style="width:17%"><input type="text" id="fileName" name="fileName" required style="width: 200px;"></td>
+            <td><input type="button" value="Download Straton File" id="straton_download"></td>
+            </tr>
+            </table>
+            <!-- <div class="form-container">
+            
+            
+            <label for="fileUrl"></label>
+            
            <div>
-              <input type="button" value="Download Straton File" id="straton_download" >
+              
            </div>
             
-            </div>
+            </div> -->
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
