@@ -2,6 +2,8 @@
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -15,6 +17,7 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 <link rel="stylesheet" type="text/css" href="nav-bar.css">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 </head>
 <script src="jquery-3.6.0.min.js"></script>
 

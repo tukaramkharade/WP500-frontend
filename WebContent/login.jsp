@@ -6,10 +6,9 @@
    
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-
+response.setHeader("X-Content-Type-Options", "nosniff");
 
 %>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +32,6 @@
         	    var password = $('#password').val();
         	    var csrfToken = document.getElementById('csrfToken').value;
 
-			
         	    
         	    $.ajax({
         	        url: 'WP500Login',
@@ -284,9 +282,8 @@
             String csrfToken = generateCSRFToken();
             session.setAttribute("csrfToken", csrfToken);
             
+            //response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfToken + "; HttpOnly; Secure; SameSite=Strict");
             
-      //      response.setHeader("Set-Cookie", "CSRF_TOKEN=" + csrfToken + "; HttpOnly; Secure; SameSite=Strict");
-
         %>
 
         <input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfToken %>" />

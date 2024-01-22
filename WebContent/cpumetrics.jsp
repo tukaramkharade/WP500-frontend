@@ -655,11 +655,11 @@ $(document).ready(function() {
 							<th>%CPU</th>
 							<th>S</th>
 							<th>PID</th>
-							<th>COMMAND<th>
+							<th>COMMAND</th>
 							<th>NI</th>
 							<th>USER</th>
 							<th>SHR</th>
-							<th>TIME+<th>
+							<th>TIME+</th>
 							<th>VIRT</th>
 							
 						</tr>
