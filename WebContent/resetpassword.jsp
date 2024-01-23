@@ -336,11 +336,13 @@ $(document).ready(function () {
 	// Set the value of the 'username' input field to the 'user' variable
     $('#username').val(user);
 	
- // Add a "keyup" event listener to the new_password input field
+  // Add a "keyup" event listener to the new_password input field
     $('#new_password').on('keyup', function() {
         var new_password = $(this).val();
         var old_password = $('#old_password').val();
+        var confirm_password = $('#confirm_password').val();
         var messageSpan = $('#newPasswordMessage');
+
         
         if (new_password === old_password) {
             // Display a message in the message span
@@ -351,7 +353,11 @@ $(document).ready(function () {
             messageSpan.text('');
             $(this).css('border', ''); // Remove the red border
         }
-    });
+    }); 
+    
+    
+
+
 	
     getPasswordInfo();
  
@@ -432,7 +438,7 @@ $(document).ready(function () {
 				<input required type="password" id="confirm_password" name="confirm_password" style="padding-left: 5px;"> 
 				 <span class="confirm_password_toggle" id="confirm_password_toggle"><i class="fa fa-eye"></i></span> 
 				<p id="field_Confirm_Pass_Error" style="color: red;"></p>
-					
+										
 				<input type="submit" value="Submit" id="change_password">
 
 			</form>

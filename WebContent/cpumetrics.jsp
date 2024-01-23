@@ -223,12 +223,12 @@ function getRAMInfo() {
 					  
 			} 
 			
-			$("#UsedMemory").html("Used memory: <span class='overviewText'>" + data.UsedMemory + "</span>");
-			$("#TotalMemory").html("Total memory: <span class='overviewText'>" + data.TotalMemory + "</span>");
-			$("#SharedMemory").html("Shared memory: <span class='overviewText'>" + data.SharedMemory + "</span>");
-			$("#AvailableMemory").html("Available memory: <span class='overviewText'>" + data.AvailableMemory + "</span>");
-			$("#BufferCache").html("Buffer cache: <span class='overviewText'>" + data.BufferCache + "</span>");
-			$("#FreeMemory").html("Free memory: <span class='overviewText'>" + data.FreeMemory + "</span>");
+			$("#UsedMemory").html("Used memory: <span class='overviewText'>" + data.UsedMemory + " MB" + "</span>");
+			$("#TotalMemory").html("Total memory: <span class='overviewText'>" + data.TotalMemory + " MB" + "</span>");
+			$("#SharedMemory").html("Shared memory: <span class='overviewText'>" + data.SharedMemory + " MB" + "</span>");
+			$("#AvailableMemory").html("Available memory: <span class='overviewText'>" + data.AvailableMemory + " MB" + "</span>");
+			$("#BufferCache").html("Buffer cache: <span class='overviewText'>" + data.BufferCache + " MB" + "</span>");
+			$("#FreeMemory").html("Free memory: <span class='overviewText'>" + data.FreeMemory + " MB" + "</span>");
 		},
 		error : function(xhr, status, error) {
 			
@@ -315,11 +315,11 @@ function getMemoryInfo() {
 					  
 			} 
 			
-			$("#TotalSwapSpaceSize").html("Architecture: <span class='overviewText'>" + data.TotalSwapSpaceSize + "</span>");
-			$("#AvailableSwapSpaceSize").html("Version: <span class='overviewText'>" + data.AvailableSwapSpaceSize + "</span>");
-			$("#CommittedVirtualMemorySize").html("Available Processors: <span class='overviewText'>" + data.CommittedVirtualMemorySize + "</span>");
-			$("#AvailablePhysicalMemory").html("System load Average: <span class='overviewText'>" + data.AvailablePhysicalMemory + "</span>");
-			$("#TotalPhysicalMemory").html("Name: <span class='overviewText'>" + data.TotalPhysicalMemory + "</span>");
+			$("#TotalSwapSpaceSize").html("Total Swap Space Size: <span class='overviewText'>" + data.TotalSwapSpaceSize + "</span>");
+			$("#AvailableSwapSpaceSize").html("Available Swap Space Size: <span class='overviewText'>" + data.AvailableSwapSpaceSize + "</span>");
+			$("#CommittedVirtualMemorySize").html("Committed Virtual Memory Size: <span class='overviewText'>" + data.CommittedVirtualMemorySize + "</span>");
+			$("#AvailablePhysicalMemory").html("Available Physical Memory: <span class='overviewText'>" + data.AvailablePhysicalMemory + "</span>");
+			$("#TotalPhysicalMemory").html("Total Physical Memory: <span class='overviewText'>" + data.TotalPhysicalMemory + "</span>");
 			
 		},
 		error : function(xhr, status, error) {

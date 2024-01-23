@@ -63,11 +63,11 @@
 
 .form-container {
 	margin: 0 auto;
-	width: 80%;
-	border-collapse: collapse;
+	max-width: 750px;
+	/* border-collapse: collapse;
 	background-color: #f2f2f2;
-	border-radius: 5px;
-	padding: 20px;
+	border-radius: 5px; */
+	
 }
 
 .form-container td {
@@ -193,7 +193,8 @@
     background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
-        
+    
+     
 </style>
 
 <script>
@@ -2838,7 +2839,7 @@ function applyTrafficRules() {
 									<table class="bordered-table" style="margin-top: -1px;">
 
 										<tr>
-											<td>Name</td>
+											<td>From IP</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="name_lan0" name="name_lan0"
 												maxlength="31" style="height: 10px;" required/>
@@ -2846,17 +2847,29 @@ function applyTrafficRules() {
 												
 												</td>
 										
-											<td>Type</td>
-											<td><select class="textBox" id="type_lan0" name="type_lan0"
-												style="height: 33px;">
-													
-													<option value="IP" selected>IP</option>
-													<option value="MAC">MAC</option>
-											</select></td>
-											<td>Source MAC address</td>
-											<td><input type="text" id="macAddress_lan0" name="macAddress_lan0"
-												maxlength="31" style="height: 10px;" />
+											
+											<td>From port</td>
+											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
+												maxlength="6" required/>
+												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
+												
+												
+												<td>To IP</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="name_lan0" name="name_lan0"
+												maxlength="31" style="height: 10px;" required/>
+												<span id="field_name_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+												<tr>
+												
+												<td>To port</td>
+											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
+												maxlength="6" required/>
+												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+											
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan0"
@@ -2865,23 +2878,18 @@ function applyTrafficRules() {
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
-										</tr>
+										
 
-										<tr>
 											
-											
-											<td>Source IP address</td>
+											<td>Comment</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="ip_addr_lan0" name="ip_addr_lan0"
 												maxlength="31" style="height: 10px;"/>
 												<span id="field_ipaddr_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
-
-											<td>Port</td>
-											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
+</tr>
+<tr>
+										
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan0" name="action_lan0"
 												style="height: 33px;">
@@ -3029,24 +3037,37 @@ function applyTrafficRules() {
 									<table class="bordered-table" style="margin-top: -1px;">
 
 										<tr>
-											<td>Name</td>
+											<td>From IP</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="name_lan1" name="name_lan1"
 												maxlength="31" style="height: 10px;" required/>
-													<span id="field_name_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												<span id="field_name_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+										
+											
+											<td>From port</td>
+											<td><input type="text" id="portNumber_lan1" name="portNumber_lan1"
+												maxlength="6" required/>
+												<span id="field_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+												
+												
+												<td>To IP</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="name_lan1" name="name_lan1"
+												maxlength="31" style="height: 10px;" required/>
+												<span id="field_name_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+												<tr>
+												
+												<td>To port</td>
+											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
+												maxlength="6" required/>
+												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											
-											<td>Type</td>
-											<td><select class="textBox" id="type_lan1" name="type_lan1"
-												style="height: 33px;">
-													
-													<option value="IP" selected>IP</option>
-													<option value="MAC">MAC</option>
-											</select></td>
-											<td>Source MAC address</td>
-											<td><input type="text" id="macAddress_lan1" name="macAddress_lan1"
-												maxlength="31" style="height: 10px;" />
-												</td>
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan1"
@@ -3055,29 +3076,27 @@ function applyTrafficRules() {
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
-										</tr>
+										
 
-										<tr>
 											
-											<td>Source IP address</td>
-											<td><input type="text" id="ip_addr_lan1" name="ip_addr_lan1"
-												maxlength="31" />
-													<span id="field_ipaddr_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+											<td>Comment</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="ip_addr_lan1" name="ip_addr_lan1"
+												maxlength="31" style="height: 10px;"/>
+												<span id="field_ipaddr_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
-
-											<td>Port</td>
-											<td><input type="text" id="portNumber_lan1" name="portNumber_lan1"
-												maxlength="6" required/>
-													<span id="field_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
+</tr>
+<tr>
+										
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan1" name="action_lan1"
 												style="height: 33px;">
-													<option value="ACCEPT">ACCEPT</option>
+													<option value="ACCEPT" selected>ACCEPT</option>
 													<option value="REJECT">REJECT</option>
 											</select></td>
 										</tr>
 
+										
 									</table>
 
 									<div class="row"
@@ -3215,56 +3234,66 @@ function applyTrafficRules() {
 									<table class="bordered-table" style="margin-top: -1px;">
 
 										<tr>
-											<td>Name</td>
+											<td>From IP</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="name_lan2" name="name_lan2"
 												maxlength="31" style="height: 10px;" required/>
-													<span id="field_name_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												<span id="field_name_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+										
+											
+											<td>From port</td>
+											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
+												maxlength="6" required/>
+												<span id="field_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+												
+												
+												<td>To IP</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="name_lan2" name="name_lan2"
+												maxlength="31" style="height: 10px;" required/>
+												<span id="field_name_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+												<tr>
+												
+												<td>To port</td>
+											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
+												maxlength="6" required/>
+												<span id="field_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											
-											<td>Type</td>
-											<td><select class="textBox" id="type_lan2" name="type_lan2"
-												style="height: 33px;">
-													
-													<option value="IP" selected>IP</option>
-													<option value="MAC">MAC</option>
-											</select></td>
-											<td>Source MAC address</td>
-											<td><input type="text" id="macAddress_lan2" name="macAddress_lan2"
-												maxlength="31" style="height: 10px;" />
-												</td>
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan2"
 												name="protocol_lan2" style="height: 33px;">
-												
+													
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
-										</tr>
+										
 
-										<tr>
 											
-											<td>Source IP address</td>
-											<td><input type="text" id="ip_addr_lan2" name="ip_addr_lan2"
-												maxlength="31" />
-													<span id="field_ipaddr_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+											<td>Comment</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="ip_addr_lan2" name="ip_addr_lan2"
+												maxlength="31" style="height: 10px;"/>
+												<span id="field_ipaddr_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
-
-											<td>Port</td>
-											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
-												maxlength="6" required/>
-													<span id="field_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
+</tr>
+<tr>
+										
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan2" name="action_lan2"
 												style="height: 33px;">
-													<option value="ACCEPT">ACCEPT</option>
+													<option value="ACCEPT" selected>ACCEPT</option>
 													<option value="REJECT">REJECT</option>
 											</select></td>
 										</tr>
 
-									</table>
+																			</table>
 
 									<div class="row"
 										style="display: flex; justify-content: center; margin-top: 1%;">

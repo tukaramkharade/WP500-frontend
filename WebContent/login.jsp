@@ -79,7 +79,7 @@ response.setHeader("X-Content-Type-Options", "nosniff");
         	             	
         	            }
         	            
-        	            else {
+        	            else if(json.status === 'error'){
         	                // Login failed
         	                $('#loginMessage').text(json.msg).css('color', 'red');
         	               

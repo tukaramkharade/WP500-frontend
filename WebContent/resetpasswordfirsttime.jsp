@@ -322,6 +322,7 @@ $(document).ready(function () {
     $('#new_password').on('keyup', function() {
         var new_password = $(this).val();
         var old_password = $('#old_password').val();
+        var confirm_password = $('#confirm_password').val();
         var messageSpan = $('#newPasswordMessage');
         
         if (new_password === old_password) {
@@ -334,7 +335,11 @@ $(document).ready(function () {
             $(this).css('border', ''); // Remove the red border
         }
     });
-	
+	 
+	 
+	 
+
+	 
     getPasswordInfo();
  
     	$('#changePasswordForm').submit(function(event) {

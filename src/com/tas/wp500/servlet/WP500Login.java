@@ -107,16 +107,25 @@ public class WP500Login extends HttpServlet {
 					userObj.put("status", status);
 				}
 
-			} else {
-				// CSRF token is invalid, reject the request
-				userObj.put("status", "fail");
-				userObj.put("msg", "Token validation failed");
-			}
+			} //else {
+//				// CSRF token is invalid, reject the request
+//				userObj.put("status", "fail");
+//				userObj.put("msg", "Token validation failed");
+//			}
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			logger.error("Error in login : " + e);
+			
+			 try {
+     	        userObj.put("status", "error");
+     	        userObj.put("msg", "Invalid user.");
+     	        
+     	    } catch (JSONException e1) {
+     	        e1.printStackTrace();
+     	    }
+
 
 		}
 		
