@@ -98,6 +98,12 @@
         function sendOTP() {
             // Get the OTP value from the input field
             var otpValue = document.getElementById("otp").value;
+            
+         // Check if OTP is blank
+            if (otpValue.trim() === '') {
+                document.getElementById("error-message").innerHTML = "Please enter the OTP.";
+                return; // Exit the function if OTP is blank
+            }
           
             $.ajax({
     			url : "qrcodeServlet",
@@ -138,6 +144,13 @@
         	
         	 var to_email_id = $('#to_email_id').val();
         	 
+        	// Check if the email address is blank
+        	    if (to_email_id.trim() === '') {
+        	        $("#popupMessage").text('Please enter an email address.');
+        	        $("#customPopup").show();
+        	        return; // Exit the function if the email address is blank
+        	    }
+        	 
         	 if (validateEmailFormat(to_email_id)) {
                  $.ajax({
                      url: 'twofacorAuthOTPServlet',
@@ -167,6 +180,12 @@
         function validateEmailOTP(){
         	        	
         	var emailOtpValue = document.getElementById("email_otp").value;
+        	
+        	// Check if OTP is blank
+            if (emailOtpValue.trim() === '') {
+                document.getElementById("error-message-email").innerHTML = "Please enter the OTP.";
+                return; // Exit the function if OTP is blank
+            }
                      
             $.ajax({
     			url : "qrcodeServlet",
@@ -259,7 +278,7 @@
     				<label for="enter_otp" style="display: inline-block; margin-top: 20px;">Enter OTP</label>
     				<input type="password" id="email_otp" style="width: 10%; margin-top: 20px; margin-left: 10px;">
     				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 5.5%; height: 30px; margin-top: 20px;">
-					<div id="error-message-email" style="color: red; margin-left: 2%;"></div>
+					<div id="error-message-email" style="color: red; margin-left: 2%; margin-top: 27px;"></div>
 				</div>
     			
 			</div>

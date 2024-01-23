@@ -288,7 +288,7 @@ var csrfTokenValue;
 
 						<tr>
 							<td>Web app version</td>
-							<td>1.0</td>
+							<td>1.1.0</td>
 						</tr>
 					</table>
 				</div>

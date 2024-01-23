@@ -1219,6 +1219,9 @@ function togglePassword() {
 				    $('#role').val('ADMIN');
 				    $("#role").prop("disabled", false);
 				    $('#registerBtn').val('Add');
+				    $('#field_User_Error').text('');
+				    $('#field_FirstName_Error').text('');
+				    $('#field_LastName_Error').text('');
 				});
 
 				
