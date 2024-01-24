@@ -269,7 +269,11 @@ function getBasicConfiguration(){
 									}
 
 									// Set the selected option based on the value of basicConfig.action
-									select.val(basicConfig.action);
+									select.val(basicConfig.action.toUpperCase());
+
+									
+									// Set the selected option based on the value of basicConfig.action
+									//select.val(basicConfig.action);
 
 									// Create the <td> element and append the <select> element
 									var td = $("<td>").append(select);
@@ -402,7 +406,6 @@ function setValueInTable(basicConfigId, value) {
     var cell = $("td[data-basic-config-id='" + basicConfigId + "']");
     cell.text(value);
 }
-
 
 function getGeneralSettingsLan0(){
 	
@@ -808,78 +811,84 @@ function loadTrafficRulesListLan0() {
 				 
 				data.result.forEach(function(trafficrules) {
 					
-					var name = trafficrules.name; 
-				var protocol = trafficrules.protocol; 
-				var ipAddress = trafficrules.ipAddress; 
-				var macAddress = trafficrules.macAddress; 
-				var portNum = trafficrules.portNum; 
-				var action = trafficrules.action; 
-				var type = trafficrules.type; 
+					if(trafficrules.iface === 'lan0'){
+						
+						var name = trafficrules.name; 
+						var protocol = trafficrules.protocol; 
+						var fromIPAddress = trafficrules.fromIp; 
+						var toIPAddress = trafficrules.toIp;
+						var fromPortNum = trafficrules.fromPort; 
+						var toPortNum = trafficrules.toPort; 
+						var action = trafficrules.action; 
+						
+						var row = $("<tr>").append($("<td>").text(name),
+								$("<td>").text(protocol),
+								$("<td>").text(fromIPAddress),
+								$("<td>").text(fromPortNum),
+								$("<td>").text(toIPAddress),
+								$("<td>").text(toPortNum),
+								$("<td>").text(action));
+						
+						var actions = $("<td>");
+
+						var editButton = $(
+								'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
+								.html('<i class="fas fa-edit"></i>')
+								.click(
+										function() {
+											setName_lan0(trafficrules.name);
+											setProtocol_lan0(trafficrules.protocol);
+											setFromPort_lan0(trafficrules.fromPort);
+											setToPort_lan0(trafficrules.toPort);
+											setFromIP_lan0(trafficrules.fromIp);
+											setToIP_lan0(trafficrules.toIp);
+											setAction_lan0(trafficrules.action);
+
+										});
+
+						var deleteButton = $(
+								'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
+								.html('<i class="fas fa-trash-alt"></i>')
+								.click(
+										function() {
+											
+											deleteTrafficRulesLan0(trafficrules.name);
+										});
+
+						
+						actions.append(editButton);
+						actions.append(deleteButton);
+
+						row.append(actions);
+
+						trafficRulesTable.append(row);
+
+					}
+					
 				
-				var row = $("<tr>").append($("<td>").text(name),
-						$("<td>").text(protocol),
-						$("<td>").text(ipAddress),
-						$("<td>").text(macAddress),
-						$("<td>").text(portNum),
-						$("<td>").text(action),
-						$("<td>").text(type));
-				
-				var actions = $("<td>");
-
-				var editButton = $(
-						'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Edit" style="color: #35449a;">')
-						.html('<i class="fas fa-edit"></i>')
-						.click(
-								function() {
-									setName_lan0(trafficrules.name);
-									
-									setProtocol_lan0(trafficrules.protocol);
-									setPortNumber_lan0(trafficrules.portNum);
-									setMacAddress_lan0(trafficrules.macAddress);
-									setIPAddress_lan0(trafficrules.ipAddress);
-									setType_lan0(trafficrules.type);
-									setAction_lan0(trafficrules.action);
-
-								});
-
-				var deleteButton = $(
-						'<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red">')
-						.html('<i class="fas fa-trash-alt"></i>')
-						.click(
-								function() {
-									
-									deleteTrafficRulesLan0(trafficrules.name);
-								});
-
-				
-				actions.append(editButton);
-				actions.append(deleteButton);
-
-				row.append(actions);
-
-				trafficRulesTable.append(row);
-
 				});
 			
 			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				data.result.forEach(function(trafficrules) {
+					if(trafficrules.iface === 'lan0'){
 					var name = trafficrules.name; 
 					var protocol = trafficrules.protocol; 
-					var ipAddress = trafficrules.ipAddress; 
-					var macAddress = trafficrules.macAddress; 
-					var portNum = trafficrules.portNum; 
+					var fromIPAddress = trafficrules.fromIp; 
+					var toIPAddress = trafficrules.toIp;
+					var fromPortNum = trafficrules.fromPort; 
+					var toPortNum = trafficrules.toPort; 
 					var action = trafficrules.action; 
-					var type = trafficrules.type; 
 					
 					var row = $("<tr>").append($("<td>").text(name),
 							$("<td>").text(protocol),
-							$("<td>").text(ipAddress),
-							$("<td>").text(macAddress),
-							$("<td>").text(portNum),
-							$("<td>").text(action),
-							$("<td>").text(type));
+							$("<td>").text(fromIPAddress),
+							$("<td>").text(fromPortNum),
+							$("<td>").text(toIPAddress),
+							$("<td>").text(toPortNum),
+							$("<td>").text(action));
 					
 					trafficRulesTable.append(row);
+					}
 				});
 			}
 		},
@@ -893,7 +902,7 @@ function loadTrafficRulesListLan0() {
 function loadTrafficRulesListLan1() {
 	
 	$.ajax({
-		url : "trafficRulesServlet",
+		url : "trafficRulesServletLan1",
 		type : "GET",
 		dataType : "json",
 		beforeSend: function(xhr) {
@@ -929,21 +938,23 @@ function loadTrafficRulesListLan1() {
 				 
 				data.result.forEach(function(trafficrules) {
 					
+					if(trafficrules.iface === 'lan1'){
+						
 					var name = trafficrules.name; 
-				var protocol = trafficrules.protocol; 
-				var ipAddress = trafficrules.ipAddress; 
-				var macAddress = trafficrules.macAddress; 
-				var portNum = trafficrules.portNum; 
-				var action = trafficrules.action; 
-				var type = trafficrules.type; 
+					var protocol = trafficrules.protocol; 
+					var fromIPAddress = trafficrules.fromIp; 
+					var toIPAddress = trafficrules.toIp;
+					var fromPortNum = trafficrules.fromPort; 
+					var toPortNum = trafficrules.toPort; 
+					var action = trafficrules.action; 
 				
 				var row = $("<tr>").append($("<td>").text(name),
 						$("<td>").text(protocol),
-						$("<td>").text(ipAddress),
-						$("<td>").text(macAddress),
-						$("<td>").text(portNum),
-						$("<td>").text(action),
-						$("<td>").text(type));
+						$("<td>").text(fromIPAddress),
+						$("<td>").text(fromPortNum),
+						$("<td>").text(toIPAddress),
+						$("<td>").text(toPortNum),
+						$("<td>").text(action));
 				
 				var actions = $("<td>");
 
@@ -953,12 +964,11 @@ function loadTrafficRulesListLan1() {
 						.click(
 								function() {
 									setName_lan1(trafficrules.name);
-									
 									setProtocol_lan1(trafficrules.protocol);
-									setPortNumber_lan1(trafficrules.portNum);
-									setMacAddress_lan1(trafficrules.macAddress);
-									setIPAddress_lan1(trafficrules.ipAddress);
-									setType_lan1(trafficrules.type);
+									setFromPort_lan1(trafficrules.fromPort);
+									setToPort_lan1(trafficrules.toPort);
+									setFromIP_lan1(trafficrules.fromIp);
+									setToIP_lan1(trafficrules.toIp);
 									setAction_lan1(trafficrules.action);
 
 								});
@@ -979,28 +989,32 @@ function loadTrafficRulesListLan1() {
 				row.append(actions);
 
 				trafficRulesTable.append(row);
-
+					}
 				});
+				
 			
 			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				data.result.forEach(function(trafficrules) {
+					
+					if(trafficrules.iface === 'lan1'){
 					var name = trafficrules.name; 
-					var protocol = trafficrules.protocol;  
-					var ipAddress = trafficrules.ipAddress; 
-					var macAddress = trafficrules.macAddress; 
-					var portNum = trafficrules.portNum; 
+					var protocol = trafficrules.protocol; 
+					var fromIPAddress = trafficrules.fromIp; 
+					var toIPAddress = trafficrules.toIp;
+					var fromPortNum = trafficrules.fromPort; 
+					var toPortNum = trafficrules.toPort; 
 					var action = trafficrules.action; 
-					var type = trafficrules.type; 
 					
 					var row = $("<tr>").append($("<td>").text(name),
 							$("<td>").text(protocol),
-							$("<td>").text(ipAddress),
-							$("<td>").text(macAddress),
-							$("<td>").text(portNum),
-							$("<td>").text(action),
-							$("<td>").text(type));
+							$("<td>").text(fromIPAddress),
+							$("<td>").text(fromPortNum),
+							$("<td>").text(toIPAddress),
+							$("<td>").text(toPortNum),
+							$("<td>").text(action));
 					
 					trafficRulesTable.append(row);
+					}
 				});
 			}
 		},
@@ -1013,7 +1027,7 @@ function loadTrafficRulesListLan1() {
 function loadTrafficRulesListLan2() {
 	
 	$.ajax({
-		url : "trafficRulesServlet",
+		url : "trafficRulesServletLan2",
 		type : "GET",
 		dataType : "json",
 		beforeSend: function(xhr) {
@@ -1049,21 +1063,23 @@ function loadTrafficRulesListLan2() {
 				 
 				data.result.forEach(function(trafficrules) {
 					
+					if(trafficrules.iface === 'lan2'){
+					
 					var name = trafficrules.name; 
-				var protocol = trafficrules.protocol;  
-				var ipAddress = trafficrules.ipAddress; 
-				var macAddress = trafficrules.macAddress; 
-				var portNum = trafficrules.portNum; 
-				var action = trafficrules.action; 
-				var type = trafficrules.type; 
+					var protocol = trafficrules.protocol; 
+					var fromIPAddress = trafficrules.fromIp; 
+					var toIPAddress = trafficrules.toIp;
+					var fromPortNum = trafficrules.fromPort; 
+					var toPortNum = trafficrules.toPort; 
+					var action = trafficrules.action; 
 				
 				var row = $("<tr>").append($("<td>").text(name),
 						$("<td>").text(protocol),
-						$("<td>").text(ipAddress),
-						$("<td>").text(macAddress),
-						$("<td>").text(portNum),
-						$("<td>").text(action),
-						$("<td>").text(type));
+						$("<td>").text(fromIPAddress),
+						$("<td>").text(fromPortNum),
+						$("<td>").text(toIPAddress),
+						$("<td>").text(toPortNum),
+						$("<td>").text(action));
 				
 				var actions = $("<td>");
 
@@ -1074,10 +1090,10 @@ function loadTrafficRulesListLan2() {
 								function() {
 									setName_lan2(trafficrules.name);							
 									setProtocol_lan2(trafficrules.protocol);
-									setPortNumber_lan2(trafficrules.portNum);
-									setMacAddress_lan2(trafficrules.macAddress);
-									setIPAddress_lan2(trafficrules.ipAddress);
-									setType_lan2(trafficrules.type);
+									setFromPort_lan2(trafficrules.fromPort);
+									setToPort_lan2(trafficrules.toPort);
+									setFromIP_lan2(trafficrules.fromIp);
+									setToIP_lan2(trafficrules.toIp);
 									setAction_lan2(trafficrules.action);
 
 								});
@@ -1091,35 +1107,37 @@ function loadTrafficRulesListLan2() {
 									deleteTrafficRulesLan2(trafficrules.name);
 								});
 
-				
 				actions.append(editButton);
 				actions.append(deleteButton);
 
 				row.append(actions);
 
 				trafficRulesTable.append(row);
-
+					}
 				});
 			
 			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				data.result.forEach(function(trafficrules) {
+					
+					if(trafficrules.iface === 'lan2'){
 					var name = trafficrules.name; 
 					var protocol = trafficrules.protocol; 
-					var ipAddress = trafficrules.ipAddress; 
-					var macAddress = trafficrules.macAddress; 
-					var portNum = trafficrules.portNum; 
+					var fromIPAddress = trafficrules.fromIp; 
+					var toIPAddress = trafficrules.toIp;
+					var fromPortNum = trafficrules.fromPort; 
+					var toPortNum = trafficrules.toPort; 
 					var action = trafficrules.action; 
-					var type = trafficrules.type; 
 					
 					var row = $("<tr>").append($("<td>").text(name),
 							$("<td>").text(protocol),
-							$("<td>").text(ipAddress),
-							$("<td>").text(macAddress),
-							$("<td>").text(portNum),
-							$("<td>").text(action),
-							$("<td>").text(type));
+							$("<td>").text(fromIPAddress),
+							$("<td>").text(fromPortNum),
+							$("<td>").text(toIPAddress),
+							$("<td>").text(toPortNum),
+							$("<td>").text(action));
 					
 					trafficRulesTable.append(row);
+					}
 				});
 			}
 		},
@@ -1143,33 +1161,25 @@ function setProtocol_lan0(trafficRulesId) {
 	$('#protocol_lan0').val(trafficRulesId);
 }
 
-function setPortNumber_lan0(trafficRulesId) {
+function setFromPort_lan0(trafficRulesId) {
 
-	$('#portNumber_lan0').val(trafficRulesId);
+	$('#from_port_lan0').val(trafficRulesId);
 }
 
-function setMacAddress_lan0(trafficRulesId) {
-$('#macAddress_lan0').val(trafficRulesId);
+function setToPort_lan0(trafficRulesId) {
+
+	$('#to_port_lan0').val(trafficRulesId);
+}
+
+function setFromIP_lan0(trafficRulesId) {
+
+	$('#from_ip_lan0').val(trafficRulesId);
 
 }
 
-function setIPAddress_lan0(trafficRulesId) {
+function setToIP_lan0(trafficRulesId) {
 
-	$('#ip_addr_lan0').val(trafficRulesId);
-
-}
-
-function setType_lan0(trafficRulesId) {
-
-	$('#type_lan0').val(trafficRulesId);
-	
-	if(trafficRulesId == 'IP'){
-		
-		$("#macAddress_lan0").prop("disabled", true);
-	}else if(trafficRulesId == 'MAC'){
-		
-		$("#ip_addr_lan0").prop("disabled", true);
-	}
+	$('#to_ip_lan0').val(trafficRulesId);
 }
 
 function setAction_lan0(trafficRulesId) {
@@ -1191,33 +1201,27 @@ function setProtocol_lan1(trafficRulesId) {
 	$('#protocol_lan1').val(trafficRulesId);
 }
 
-function setPortNumber_lan1(trafficRulesId) {
+function setFromPort_lan1(trafficRulesId) {
 
-	$('#portNumber_lan1').val(trafficRulesId);
+	$('#from_port_lan1').val(trafficRulesId);
 }
 
-function setMacAddress_lan1(trafficRulesId) {
-$('#macAddress_lan1').val(trafficRulesId);
+function setToPort_lan1(trafficRulesId) {
+
+	$('#to_port_lan1').val(trafficRulesId);
+}
+
+
+function setFromIP_lan1(trafficRulesId) {
+
+	$('#from_ip_lan1').val(trafficRulesId);
 
 }
 
-function setIPAddress_lan1(trafficRulesId) {
+function setToIP_lan1(trafficRulesId) {
 
-	$('#ip_addr_lan1').val(trafficRulesId);
+	$('#to_ip_lan1').val(trafficRulesId);
 
-}
-
-function setType_lan1(trafficRulesId) {
-
-	$('#type_lan1').val(trafficRulesId);
-	
-	if(trafficRulesId == 'IP'){
-		
-		$("#macAddress_lan1").prop("disabled", true);
-	}else if(trafficRulesId == 'MAC'){
-		
-		$("#ip_addr_lan1").prop("disabled", true);
-	}
 }
 
 function setAction_lan1(trafficRulesId) {
@@ -1239,33 +1243,27 @@ function setProtocol_lan2(trafficRulesId) {
 	$('#protocol_lan2').val(trafficRulesId);
 }
 
-function setPortNumber_lan2(trafficRulesId) {
+function setFromPort_lan2(trafficRulesId) {
 
-	$('#portNumber_lan2').val(trafficRulesId);
+	$('#from_port_lan2').val(trafficRulesId);
 }
 
-function setMacAddress_lan2(trafficRulesId) {
-$('#macAddress_lan2').val(trafficRulesId);
+function setToPort_lan2(trafficRulesId) {
+
+	$('#to_port_lan2').val(trafficRulesId);
+}
+
+
+function setFromIP_lan2(trafficRulesId) {
+
+	$('#from_ip_lan2').val(trafficRulesId);
 
 }
 
-function setIPAddress_lan2(trafficRulesId) {
+function setToIP_lan2(trafficRulesId) {
 
-	$('#ip_addr_lan2').val(trafficRulesId);
+	$('#to_ip_lan2').val(trafficRulesId);
 
-}
-
-function setType_lan2(trafficRulesId) {
-
-	$('#type_lan2').val(trafficRulesId);
-	
-	if(trafficRulesId == 'IP'){
-		
-		$("#macAddress_lan2").prop("disabled", true);
-	}else if(trafficRulesId == 'MAC'){
-		
-		$("#ip_addr_lan2").prop("disabled", true);
-	}
 }
 
 function setAction_lan2(trafficRulesId) {
@@ -1276,7 +1274,7 @@ function setAction_lan2(trafficRulesId) {
 function validateIPAddr(ipAddr) {
     var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
 
-    if (!regex.test(ipAddr)) {
+    if (ipAddr !== '' && !regex.test(ipAddr)) {
         return 'Invalid IP Address. Please enter a valid IP address.';
     }
 
@@ -1311,37 +1309,47 @@ function validatePortNumber(portNumber) {
 
 function addTrafficRulesLan0() {
 	var name = $('#name_lan0').val();
-	var portNumber = $('#portNumber_lan0').val();
-	var macAddress = $('#macAddress_lan0').val();
 	var protocol = $('#protocol_lan0').find(":selected").val();
-	var ip_addr = $('#ip_addr_lan0').val();
-	var type = $('#type_lan0').find(":selected").val();
+	var from_ip_addr = $('#from_ip_lan0').val();
+	var to_ip_addr = $('#to_ip_lan0').val();
+	var from_port = $('#from_port_lan0').val();
+	var to_port = $('#to_port_lan0').val();
 	var action = $('#action_lan0').find(":selected").val();
-	  var csrfToken = document.getElementById('csrfToken').value;
+	var csrfToken = document.getElementById('csrfToken').value;
 
 	$('#field_name_Error_lan0').text('');
-    $('#field_ipaddr_Error_lan0').text('');
-    $('#field_port_Error_lan0').text('');
+    $('#field_from_ip_Error_lan0').text('');
+    $('#field_from_port_Error_lan0').text('');
+    $('#field_to_ip_Error_lan0').text('');
+    $('#field_to_port_Error_lan0').text('');
 
-
-	 // Validate username
-    var nameError = validateName(name);
+	var nameError = validateName(name);
     if (nameError) {
         $('#field_name_Error_lan0').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
 
-    // Validate first name
-    var ipAddrError = validateIPAddr(ip_addr);
-    if (ipAddrError) {
-        $('#field_ipaddr_Error_lan0').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+    var fromIPAddrError = validateIPAddr(from_ip_addr);
+    if (fromIPAddrError) {
+        $('#field_from_ip_Error_lan0').text(fromIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
 
-    // Validate last name
-    var portError = validatePortNumber(portNumber);
-    if (portError) {
-        $('#field_port_Error_lan0').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+    var fromPortError = validatePortNumber(from_port);
+    if (fromPortError) {
+        $('#field_from_port_Error_lan0').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
+    var toIPAddrError = validateIPAddr(to_ip_addr);
+    if (toIPAddrError) {
+        $('#field_to_ip_Error_lan0').text(toIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    var toPortError = validatePortNumber(to_port);
+    if (toPortError) {
+        $('#field_to_port_Error_lan0').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
     
@@ -1350,11 +1358,11 @@ function addTrafficRulesLan0() {
 		type : "POST",
 		data : {
 			name : name,
-			portNumber : portNumber,
-			macAddress : macAddress,
+			from_port : from_port,
+			to_port : to_port,
 			protocol : protocol,
-			ip_addr : ip_addr,
-			type : type,
+			from_ip_addr : from_ip_addr,
+			to_ip_addr : to_ip_addr,
 			action : action,
 			csrfToken: csrfToken,
 			operation_action_lan0: 'add'
@@ -1391,16 +1399,13 @@ function addTrafficRulesLan0() {
 
 			// Clear form fields
 			$('#name_lan0').val('');
-			
-			$('#portNumber_lan0').val('');
-			$('#macAddress_lan0').val('');
+			$('#from_port_lan0').val('');
+			$('#to_port_lan0').val('');
 			$('#protocol_lan0').val('TCP');
-			$('#ip_addr_lan0').val('');
-			$('#type_lan0').val('IP');
+			$('#from_ip_lan0').val('');
+			$('#to_ip_lan0').val('');
 			$('#action_lan0').val('ACCEPT');
 
-			$('#ip_addr_lan0').prop('disabled', false);
-			$('#macAddress_lan0').prop('disabled', false);
 		},
 		error : function(xhr, status, error) {
 			
@@ -1414,146 +1419,164 @@ function addTrafficRulesLan0() {
 	$("#registerBtn_lan0").val("Add");
 	
 }
-
-function addTrafficRulesLan1() {
-	
-	var name = $('#name_lan1').val();
-	var portNumber = $('#portNumber_lan1').val();
-	var macAddress = $('#macAddress_lan1').val();
-	var protocol = $('#protocol_lan1').find(":selected").val();
-	var ip_addr = $('#ip_addr_lan1').val();
-	var type = $('#type_lan1').find(":selected").val();
-	var action = $('#action_lan1').find(":selected").val();
-	var csrfToken = document.getElementById('csrfToken').value;
-	
-	$('#field_name_Error_lan1').text('');
-    $('#field_ipaddr_Error_lan1').text('');
-    $('#field_port_Error_lan1').text('');
-
-
-	 // Validate username
-    var nameError = validateName(name);
-    if (nameError) {
-        $('#field_name_Error_lan1').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
-        return;
-    }
-
-    // Validate first name
-    var ipAddrError = validateIPAddr(ip_addr);
-    if (ipAddrError) {
-        $('#field_ipaddr_Error_lan1').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
-        return;
-    }
-
-    // Validate last name
-    var portError = validatePortNumber(portNumber);
-    if (portError) {
-        $('#field_port_Error_lan1').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
-        return;
-    }
-    
-	$.ajax({
-		url : "trafficRulesServletLan1",
-		type : "POST",
-		data : {
-			name : name,
-			portNumber : portNumber,
-			macAddress : macAddress,
-			protocol : protocol,
-			ip_addr : ip_addr,
-			type : type,
-			action : action,
-			csrfToken: csrfToken,
-			operation_action_lan1: 'add'
-		},
-		success : function(data) {
-			
-			if (data.status == 'fail') {
-				
-				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
-				        modal.style.display = 'none';
-				        window.location.href = 'login.jsp';
-				  };
-					  
-			} 
+ 
+ function addTrafficRulesLan1() {
 		
-			// Display the custom popup message
- 			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();
+		var name = $('#name_lan1').val();
+		var from_port = $('#from_port_lan1').val();
+		var to_port = $('#to_port_lan1').val();
+		var protocol = $('#protocol_lan1').find(":selected").val();
+		var from_ip_addr = $('#from_ip_lan1').val();
+		var to_ip_addr = $('#to_ip_lan1').val();
+		var action = $('#action_lan1').find(":selected").val();
+		var csrfToken = document.getElementById('csrfToken').value;
+		
+		$('#field_name_Error_lan1').text('');
+	    $('#field_from_ip_Error_lan1').text('');
+	    $('#field_from_port_Error_lan1').text('');
+	    $('#field_to_ip_Error_lan1').text('');
+	    $('#field_to_port_Error_lan1').text('');
 
-  			
-			loadTrafficRulesListLan1();
+		var nameError = validateName(name);
+	    if (nameError) {
+	        $('#field_name_Error_lan1').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
 
-			// Clear form fields
-			$('#name_lan1').val('');
-			$('#portNumber_lan1').val('');
-			$('#macAddress_lan1').val('');
-			$('#protocol_lan1').val('TCP');
-			$('#ip_addr_lan1').val('');
-			$('#type_lan1').val('IP');
-			$('#action_lan1').val('ACCEPT');
+	    var fromIPAddrError = validateIPAddr(from_ip_addr);
+	    if (fromIPAddrError) {
+	        $('#field_from_ip_Error_lan1').text(fromIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
 
-			$('#ip_addr_lan1').prop('disabled', false);
-			$('#macAddress_lan1').prop('disabled', false);
-		},
-		error : function(xhr, status, error) {
+	    var fromPortError = validatePortNumber(from_port);
+	    if (fromPortError) {
+	        $('#field_from_port_Error_lan1').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
+	    var toIPAddrError = validateIPAddr(to_ip_addr);
+	    if (toIPAddrError) {
+	        $('#field_to_ip_Error_lan1').text(toIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    var toPortError = validatePortNumber(to_port);
+	    if (toPortError) {
+	        $('#field_to_port_Error_lan1').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+		$.ajax({
+			url : "trafficRulesServletLan1",
+			type : "POST",
+			data : {
+				name : name,
+				from_port : from_port,
+				to_port : to_port,
+				protocol : protocol,
+				from_ip_addr : from_ip_addr,
+				to_ip_addr : to_ip_addr,
+				action : action,
+				csrfToken: csrfToken,
+				operation_action_lan1: 'add'
+			},
+			success : function(data) {
+				
+				if (data.status == 'fail') {
+					
+					 var modal = document.getElementById('custom-modal-session-timeout');
+					  modal.style.display = 'block';
+					  
+					// Update the session-msg content with the message from the server
+					    var sessionMsg = document.getElementById('session-msg');
+					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+
+					  
+					  // Handle the confirm button click
+					  var confirmButton = document.getElementById('confirm-button-session-timeout');
+					  confirmButton.onclick = function () {
+						  
+						// Close the modal
+					        modal.style.display = 'none';
+					        window.location.href = 'login.jsp';
+					  };
+						  
+				} 
 			
-		},
-	});
-	
-	$("#closePopup").click(function () {
-	    $("#customPopup").hide();
-	  });
+				// Display the custom popup message
+	 			$("#popupMessage").text(data.message);
+	  			$("#customPopup").show();
 
-	$("#registerBtn_lan1").val("Add");
-}
+	  			
+				loadTrafficRulesListLan2();
 
-function addTrafficRulesLan2() {
+				// Clear form fields
+				$('#name_lan1').val('');
+				$('#from_port_lan1').val('');
+				$('#to_port_lan1').val('');
+				$('#protocol_lan1').val('TCP');
+				$('#from_ip_lan1').val('');
+				$('#to_ip_lan1').val('');
+				$('#action_lan1').val('ACCEPT');
+
+			},
+			error : function(xhr, status, error) {
+				
+			},
+		});
+		
+		$("#closePopup").click(function () {
+		    $("#customPopup").hide();
+		  });
+
+		$("#registerBtn_lan1").val("Add");
+	}
+
+ function addTrafficRulesLan2() {
 	
 	var name = $('#name_lan2').val();
-	var portNumber = $('#portNumber_lan2').val();
-	var macAddress = $('#macAddress_lan2').val();
+	var from_port = $('#from_port_lan2').val();
+	var to_port = $('#to_port_lan2').val();
 	var protocol = $('#protocol_lan2').find(":selected").val();
-	var ip_addr = $('#ip_addr_lan2').val();
-	var type = $('#type_lan2').find(":selected").val();
+	var from_ip_addr = $('#from_ip_lan2').val();
+	var to_ip_addr = $('#to_ip_lan2').val();
 	var action = $('#action_lan2').find(":selected").val();
 	var csrfToken = document.getElementById('csrfToken').value;
 	
 	$('#field_name_Error_lan2').text('');
-    $('#field_ipaddr_Error_lan2').text('');
-    $('#field_port_Error_lan2').text('');
+    $('#field_from_ip_Error_lan2').text('');
+    $('#field_from_port_Error_lan2').text('');
+    $('#field_to_ip_Error_lan2').text('');
+    $('#field_to_port_Error_lan2').text('');
 
-
-	 // Validate username
-    var nameError = validateName(name);
+	var nameError = validateName(name);
     if (nameError) {
         $('#field_name_Error_lan2').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
 
-    // Validate first name
-    var ipAddrError = validateIPAddr(ip_addr);
-    if (ipAddrError) {
-        $('#field_ipaddr_Error_lan2').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+    var fromIPAddrError = validateIPAddr(from_ip_addr);
+    if (fromIPAddrError) {
+        $('#field_from_ip_Error_lan2').text(fromIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
 
-    // Validate last name
-    var portError = validatePortNumber(portNumber);
-    if (portError) {
-        $('#field_port_Error_lan2').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+    var fromPortError = validatePortNumber(from_port);
+    if (fromPortError) {
+        $('#field_from_port_Error_lan2').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+    
+    var toIPAddrError = validateIPAddr(to_ip_addr);
+    if (toIPAddrError) {
+        $('#field_to_ip_Error_lan2').text(toIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+        return;
+    }
+
+    var toPortError = validatePortNumber(to_port);
+    if (toPortError) {
+        $('#field_to_port_Error_lan2').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
 
@@ -1562,11 +1585,11 @@ function addTrafficRulesLan2() {
 		type : "POST",
 		data : {
 			name : name,
-			portNumber : portNumber,
-			macAddress : macAddress,
+			from_port : from_port,
+			to_port : to_port,
 			protocol : protocol,
-			ip_addr : ip_addr,
-			type : type,
+			from_ip_addr : from_ip_addr,
+			to_ip_addr : to_ip_addr,
 			action : action,
 			csrfToken: csrfToken,
 			operation_action_lan2: 'add'
@@ -1603,15 +1626,13 @@ function addTrafficRulesLan2() {
 
 			// Clear form fields
 			$('#name_lan2').val('');
-			$('#portNumber_lan2').val('');
-			$('#macAddress_lan2').val('');
+			$('#from_port_lan2').val('');
+			$('#to_port_lan2').val('');
 			$('#protocol_lan2').val('TCP');
-			$('#ip_addr_lan2').val('');
-			$('#type_lan2').val('IP');
+			$('#from_ip_lan2').val('');
+			$('#to_ip_lan2').val('');
 			$('#action_lan2').val('ACCEPT');
 
-			$('#ip_addr_lan2').prop('disabled', false);
-			$('#macAddress_lan2').prop('disabled', false);
 		},
 		error : function(xhr, status, error) {
 			
@@ -1826,46 +1847,48 @@ function deleteTrafficRulesLan2(trafficRulesId) {
 
 function editTrafficRulesLan0() {
 	
-	 var name = $('#name_lan0').val();
-		var portNumber = $('#portNumber_lan0').val();
-		var macAddress = $('#macAddress_lan0').val();
+	 	var name = $('#name_lan0').val();
+		var from_port = $('#from_port_lan0').val();
+		var to_port = $('#to_port_lan0').val();
 		var protocol = $('#protocol_lan0').find(":selected").val();
-		var ip_addr = $('#ip_addr_lan0').val();
-		var type = $('#type_lan0').find(":selected").val();
+		var from_ip_addr = $('#from_ip_lan0').val();
+		var to_ip_addr = $('#to_ip_lan0').val();
 		var action = $('#action_lan0').find(":selected").val();
 		var csrfToken = document.getElementById('csrfToken').value;
-		
-		if(type == 'IP'){
-			
-			$("#macAddress_lan0").prop("disabled", true);
-		}else if(type == 'MAC'){
-			
-			$("#ip_addr_lan0").prop("disabled", true);
-		}
-		
+				
 		$('#field_name_Error_lan0').text('');
-	    $('#field_ipaddr_Error_lan0').text('');
-	    $('#field_port_Error_lan0').text('');
+	    $('#field_from_ip_Error_lan0').text('');
+	    $('#field_from_port_Error_lan0').text('');
+	    $('#field_to_ip_Error_lan0').text('');
+	    $('#field_to_port_Error_lan0').text('');
 
-
-		 // Validate username
-	    var nameError = validateName(name);
+		var nameError = validateName(name);
 	    if (nameError) {
 	        $('#field_name_Error_lan0').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
 
-	    // Validate first name
-	    var ipAddrError = validateIPAddr(ip_addr);
-	    if (ipAddrError) {
-	        $('#field_ipaddr_Error_lan0').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	    var fromIPAddrError = validateIPAddr(from_ip_addr);
+	    if (fromIPAddrError) {
+	        $('#field_from_ip_Error_lan0').text(fromIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
 
-	    // Validate last name
-	    var portError = validatePortNumber(portNumber);
-	    if (portError) {
-	        $('#field_port_Error_lan0').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	    var fromPortError = validatePortNumber(from_port);
+	    if (fromPortError) {
+	        $('#field_from_port_Error_lan0').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+	    
+	    var toIPAddrError = validateIPAddr(to_ip_addr);
+	    if (toIPAddrError) {
+	        $('#field_to_ip_Error_lan0').text(toIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    var toPortError = validatePortNumber(to_port);
+	    if (toPortError) {
+	        $('#field_to_port_Error_lan0').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
 
@@ -1877,19 +1900,17 @@ function editTrafficRulesLan0() {
 	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit_lan0');
 	  confirmButton.onclick = function () {
-		  
-		 
-		    
+		   
 			$.ajax({
 				url : 'trafficRulesServletLan0',
 				type : 'POST',
 				data : {
 					name : name,
-					portNumber : portNumber,
-					macAddress : macAddress,
+					from_port : from_port,
+					to_port : to_port,
 					protocol : protocol,
-					ip_addr : ip_addr,
-					type : type,
+					from_ip_addr : from_ip_addr,
+					to_ip_addr : to_ip_addr,
 					action : action,
 					csrfToken: csrfToken,
 					operation_action_lan0: 'update'
@@ -1923,16 +1944,15 @@ function editTrafficRulesLan0() {
 
 					// Clear form fields
 					$('#name_lan0').val('');
-					$('#portNumber_lan0').val('');
-					$('#macAddress_lan0').val('');
+					$('#from_port_lan0').val('');
+					$('#to_port_lan0').val('');
 					$('#protocol_lan0').val('TCP');
-					$('#ip_addr_lan0').val('');
-					$('#type_lan0').val('IP');
+					$('#from_ip_lan0').val('');
+					$('#to_ip_lan0').val('');
 					$('#action_lan0').val('ACCEPT');
 
 					$("#name_lan0").prop("disabled", false);
-					$('#ip_addr_lan0').prop('disabled', false);
-					$('#macAddress_lan0').prop('disabled', false);
+					
 				},
 				error : function(xhr, status, error) {
 					
@@ -1953,49 +1973,50 @@ function editTrafficRulesLan0() {
 
 function editTrafficRulesLan1() {
 	
-	 var name = $('#name_lan1').val();
-		var portNumber = $('#portNumber_lan1').val();
-		var macAddress = $('#macAddress_lan1').val();
+		var name = $('#name_lan1').val();
+		var from_port = $('#from_port_lan1').val();
+		var to_port = $('#to_port_lan1').val();
 		var protocol = $('#protocol_lan1').find(":selected").val();
-		var ip_addr = $('#ip_addr_lan1').val();
-		var type = $('#type_lan1').find(":selected").val();
+		var from_ip_addr = $('#from_ip_lan1').val();
+		var to_ip_addr = $('#to_ip_lan1').val();
 		var action = $('#action_lan1').find(":selected").val();
 		var csrfToken = document.getElementById('csrfToken').value;
-		
-		if(type == 'IP'){
-			
-			$("#macAddress_lan1").prop("disabled", true);
-		}else if(type == 'MAC'){
-			
-			$("#ip_addr_lan1").prop("disabled", true);
-		}
-		
+					
 		$('#field_name_Error_lan1').text('');
-	    $('#field_ipaddr_Error_lan1').text('');
-	    $('#field_port_Error_lan1').text('');
+	    $('#field_from_ip_Error_lan1').text('');
+	    $('#field_from_port_Error_lan1').text('');
+	    $('#field_to_ip_Error_lan1').text('');
+	    $('#field_to_port_Error_lan1').text('');
 
-
-		 // Validate username
-	    var nameError = validateName(name);
+		var nameError = validateName(name);
 	    if (nameError) {
 	        $('#field_name_Error_lan1').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
 
-	    // Validate first name
-	    var ipAddrError = validateIPAddr(ip_addr);
-	    if (ipAddrError) {
-	        $('#field_ipaddr_Error_lan1').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	    var fromIPAddrError = validateIPAddr(from_ip_addr);
+	    if (fromIPAddrError) {
+	        $('#field_from_ip_Error_lan1').text(fromIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
 
-	    // Validate last name
-	    var portError = validatePortNumber(portNumber);
-	    if (portError) {
-	        $('#field_port_Error_lan1').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	    var fromPortError = validatePortNumber(from_port);
+	    if (fromPortError) {
+	        $('#field_from_port_Error_lan1').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
 
+	    var toIPAddrError = validateIPAddr(to_ip_addr);
+	    if (toIPAddrError) {
+	        $('#field_to_ip_Error_lan1').text(toIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+
+	    var toPortError = validatePortNumber(to_port);
+	    if (toPortError) {
+	        $('#field_to_port_Error_lan1').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
 	    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit_lan1');
@@ -2011,11 +2032,11 @@ function editTrafficRulesLan1() {
 				type : 'POST',
 				data : {
 					name : name,
-					portNumber : portNumber,
-					macAddress : macAddress,
+					from_port : from_port,
+					to_port : to_port,
 					protocol : protocol,
-					ip_addr : ip_addr,
-					type : type,
+					from_ip_addr : from_ip_addr,
+					to_ip_addr : to_ip_addr,
 					action : action,
 					csrfToken: csrfToken,
 					operation_action_lan1: 'update'
@@ -2049,16 +2070,15 @@ function editTrafficRulesLan1() {
 
 					// Clear form fields
 					$('#name_lan1').val('');
-					$('#portNumber_lan1').val('');
-					$('#macAddress_lan1').val('');
+					$('#from_port_lan1').val('');
+					$('#to_port_lan1').val('');
 					$('#protocol_lan1').val('TCP');
-					$('#ip_addr_lan1').val('');
-					$('#type_lan1').val('IP');
+					$('#from_ip_lan1').val('');
+					$('#to_ip_lan1').val('');
 					$('#action_lan1').val('ACCEPT');
 
 					$("#name_lan1").prop("disabled", false);
-					$('#ip_addr_lan1').prop('disabled', false);
-					$('#macAddress_lan1').prop('disabled', false);
+					
 				},
 				error : function(xhr, status, error) {
 					
@@ -2078,49 +2098,50 @@ function editTrafficRulesLan1() {
 
 function editTrafficRulesLan2() {
 	
-	 var name = $('#name_lan2').val();
-		var portNumber = $('#portNumber_lan2').val();
-		var macAddress = $('#macAddress_lan2').val();
+	 	var name = $('#name_lan2').val();
+		var from_port = $('#from_port_lan2').val();
+		var to_port = $('#to_port_lan2').val();
 		var protocol = $('#protocol_lan2').find(":selected").val();
-		var ip_addr = $('#ip_addr_lan2').val();
-		var type = $('#type_lan2').find(":selected").val();
+		var from_ip_addr = $('#from_ip_lan2').val();
+		var to_ip_addr = $('#to_ip_lan2').val();
 		var action = $('#action_lan2').find(":selected").val();
 		var csrfToken = document.getElementById('csrfToken').value;
-		
-		if(type == 'IP'){
-			
-			$("#macAddress_lan2").prop("disabled", true);
-		}else if(type == 'MAC'){
-			
-			$("#ip_addr_lan2").prop("disabled", true);
-		}
-		
+	
 		$('#field_name_Error_lan2').text('');
-	    $('#field_ipaddr_Error_lan2').text('');
-	    $('#field_port_Error_lan2').text('');
+	    $('#field_from_ip_Error_lan2').text('');
+	    $('#field_from_port_Error_lan2').text('');
+	    $('#field_to_ip_Error_lan2').text('');
+	    $('#field_to_port_Error_lan2').text('');
 
-
-		 // Validate username
-	    var nameError = validateName(name);
+		var nameError = validateName(name);
 	    if (nameError) {
 	        $('#field_name_Error_lan2').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
-
-	    // Validate first name
-	    var ipAddrError = validateIPAddr(ip_addr);
-	    if (ipAddrError) {
-	        $('#field_ipaddr_Error_lan2').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	    
+	    var fromIPAddrError = validateIPAddr(from_ip_addr);
+	    if (fromIPAddrError) {
+	        $('#field_from_ip_Error_lan2').text(fromIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
-
-	    // Validate last name
-	    var portError = validatePortNumber(portNumber);
-	    if (portError) {
-	        $('#field_port_Error_lan2').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+  
+	    var fromPortError = validatePortNumber(from_port);
+	    if (fromPortError) {
+	        $('#field_from_port_Error_lan2').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
-
+	    
+	    var toIPAddrError = validateIPAddr(to_ip_addr);
+	    if (toIPAddrError) {
+	        $('#field_to_ip_Error_lan2').text(toIPAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
+  
+	    var toPortError = validatePortNumber(to_port);
+	    if (toPortError) {
+	        $('#field_to_port_Error_lan2').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
 	    
 	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit_lan2');
@@ -2136,11 +2157,11 @@ function editTrafficRulesLan2() {
 				type : 'POST',
 				data : {
 					name : name,
-					portNumber : portNumber,
-					macAddress : macAddress,
+					from_port : from_port,
+					to_port : to_port,
 					protocol : protocol,
-					ip_addr : ip_addr,
-					type : type,
+					from_ip_addr : from_ip_addr,
+					to_ip_addr : to_ip_addr,
 					action : action,
 					csrfToken: csrfToken,
 					operation_action_lan2: 'update'
@@ -2174,16 +2195,15 @@ function editTrafficRulesLan2() {
 
 					// Clear form fields
 					$('#name_lan2').val('');
-					$('#portNumber_lan2').val('');
-					$('#macAddress_lan2').val('');
+					$('#from_port_lan2').val('');
+					$('#to_port_lan2').val('');
 					$('#protocol_lan2').val('TCP');
-					$('#ip_addr_lan2').val('');
-					$('#type_lan2').val('IP');
+					$('#from_ip_lan2').val('');
+					$('#to_ip_lan2').val('');
 					$('#action_lan2').val('ACCEPT');
 
 					$("#name_lan2").prop("disabled", false);
-					$('#ip_addr_lan2').prop('disabled', false);
-					$('#macAddress_lan2').prop('disabled', false);
+					
 				},
 				error : function(xhr, status, error) {
 					
@@ -2323,8 +2343,7 @@ function applyTrafficRules() {
 		 var $updateBtnBasicConf = $('#updateBtnBasicConf'); 
 		 
 		 var $applyBtn = $('#applyBtn'); 
-		
-		 
+				 
 		 var $clearBtn_lan0 = $('#clearBtn_lan0'); 
 		 var $clearBtn_lan1 = $('#clearBtn_lan1'); 
 		 var $clearBtn_lan2 = $('#clearBtn_lan2'); 
@@ -2365,7 +2384,6 @@ function applyTrafficRules() {
 	            $applyBtn.css('background-color', '#2b3991'); // Reset to original color
 	        }
 		 
-		 
 		 if (isDisabled) {
 	            $clearBtn_lan0.css('background-color', 'gray'); // Change to your desired color
 	        } else {
@@ -2400,30 +2418,7 @@ function applyTrafficRules() {
 	        }
 		
 	}
-	
-	function initializeFieldState(typeSelector, ipSelector, macSelector) {
-	    var isIP = $(typeSelector).val() === 'ip' || $(typeSelector).val() === 'IP';
-	    $(ipSelector).prop("disabled", !isIP);
-	    $(macSelector).prop("disabled", isIP);
-	    if (isIP) {
-	        $(macSelector).val('');
-	    } else {
-	        $(ipSelector).val('');
-	    }
-	}
-
-	// Function to handle type change
-	function handleTypeChange(typeSelector, ipSelector, macSelector) {
-	    var isIP = $(typeSelector).val() === 'ip' || $(typeSelector).val() === 'IP';
-	    $(ipSelector).prop("disabled", !isIP);
-	    $(macSelector).prop("disabled", isIP);
-	    if (isIP) {
-	        $(macSelector).val('');
-	    } else {
-	        $(ipSelector).val('');
-	    }
-	}
-	
+		
 	// Function to show the loader
 	 function showLoader() {
 	     // Show the loader overlay
@@ -2458,8 +2453,7 @@ function applyTrafficRules() {
 					$('#updateBtnBasicConf').prop('disabled', true);
 					
 					$('#applyBtn').prop('disabled', true);
-					
-					
+										
 					$('#clearBtn_lan0').prop('disabled', true);
 					$('#clearBtn_lan1').prop('disabled', true);
 					$('#clearBtn_lan2').prop('disabled', true);
@@ -2503,32 +2497,7 @@ function applyTrafficRules() {
 		    	loadTrafficRulesListLan0();
 		    	loadTrafficRulesListLan1();
 		    	loadTrafficRulesListLan2();
-		    	
-
- $("#type_lan0").val('IP'); // Replace 'ip' with your default value
- $("#type_lan1").val('IP'); // Replace 'ip' with your default value
- $("#type_lan2").val('IP'); // Replace 'ip' with your default value
-
- // Set initial disabled state based on default values
- initializeFieldState("#type_lan0", "#ip_addr_lan0", "#macAddress_lan0");
- initializeFieldState("#type_lan1", "#ip_addr_lan1", "#macAddress_lan1");
- initializeFieldState("#type_lan2", "#ip_addr_lan2", "#macAddress_lan2");
-
- // Existing change event handlers...
- $("#type_lan0").change(function(event) {
-     handleTypeChange("#type_lan0", "#ip_addr_lan0", "#macAddress_lan0");
- });
-
- $("#type_lan1").change(function(event) {
-     handleTypeChange("#type_lan1", "#ip_addr_lan1", "#macAddress_lan1");
- });
-
- $("#type_lan2").change(function(event) {
-     handleTypeChange("#type_lan2", "#ip_addr_lan2", "#macAddress_lan2");
- });
-
-
-		    	
+		    			    	
 		    	$("#updateBtnBasicConf").click(function() {
 		   		 var newData = []; // Create an array to store the current data
 
@@ -2548,9 +2517,7 @@ function applyTrafficRules() {
 		   	    
 		   	    sendAccumulatedData();
 		   	});
-		    	
-		    	
-		    	
+		    			    		    	
 		    	$('#generalSettingsForm_lan0').submit(function(event) {
 		    		event.preventDefault(); 		
 		    		updateGeneralSettingsLan0();
@@ -2607,49 +2574,41 @@ function applyTrafficRules() {
 					applyTrafficRules();
 
 				});
-				
-			
-		    	
-		    	$('#clearBtn_lan0').click(function() {
+						
+		        	$('#clearBtn_lan0').click(function() {
 		    		$('#name_lan0').val('');
-		    		$('#portNumber_lan0').val('');
-		    		$('#macAddress_lan0').val('');
+		    		$('#from_port_lan0').val('');
+		    		$('#to_port_lan0').val('');
 		    		$('#protocol_lan0').val('TCP');
-		    		$('#ip_addr_lan0').val('');
-		    		$('#type_lan0').val('IP');
+		    		$('#from_ip_lan0').val('');
+		    		$('#to_ip_lan0').val('');
 		    		$('#action_lan0').val('ACCEPT');
-		    		 $('#registerBtn_lan0').val('Add');
-		    		$('#ip_addr_lan0').prop('disabled', false);
-		    		$('#macAddress_lan0').prop('disabled', false);
-
+		    		$('#registerBtn_lan0').val('Add');
+		    		
 		    	});
 		    	
 		    	$('#clearBtn_lan1').click(function() {
 		    		$('#name_lan1').val('');
-		    		$('#portNumber_lan1').val('');
-		    		$('#macAddress_lan1').val('');
+		    		$('#from_port_lan1').val('');
+		    		$('#to_port_lan1').val('');
 		    		$('#protocol_lan1').val('TCP');
-		    		$('#ip_addr_lan1').val('');
-		    		$('#type_lan1').val('IP');
+		    		$('#from_ip_lan1').val('');
+		    		$('#to_ip_lan1').val('');
 		    		$('#action_lan1').val('ACCEPT');
-		    		 $('#registerBtn_lan1').val('Add');
-		    		$('#ip_addr_lan1').prop('disabled', false);
-		    		$('#macAddress_lan1').prop('disabled', false);
-
+		    		$('#registerBtn_lan1').val('Add');
+		    		
 		    	});
 		    	
 		    	$('#clearBtn_lan2').click(function() {
 		    		$('#name_lan2').val('');
-		    		$('#portNumber_lan2').val('');
-		    		$('#macAddress_lan2').val('');
+		    		$('#from_port_lan2').val('');
+		    		$('#to_port_lan2').val('');
 		    		$('#protocol_lan2').val('TCP');
-		    		$('#ip_addr_lan2').val('');
-		    		$('#type_lan2').val('IP');
+		    		$('#from_ip_lan2').val('');
+		    		$('#to_ip_lan2').val('');
 		    		$('#action_lan2').val('ACCEPT');
-		    		 $('#registerBtn_lan2').val('Add');
-		    		$('#ip_addr_lan2').prop('disabled', false);
-		    		$('#macAddress_lan2').prop('disabled', false);
-
+		    		$('#registerBtn_lan2').val('Add');
+		    	
 		    	});
 				}
 	});
@@ -2789,7 +2748,6 @@ function applyTrafficRules() {
 											<th>Comment</th>
 											<th>Action</th>
 
-
 										</tr>
 									</thead>
 
@@ -2797,10 +2755,7 @@ function applyTrafficRules() {
 
 									</tbody>
 
-
 								</table>
-
-
 
 								<div class="row"
 									style="display: flex; justify-content: right; margin-top: 2%;">
@@ -2839,62 +2794,64 @@ function applyTrafficRules() {
 									<table class="bordered-table" style="margin-top: -1px;">
 
 										<tr>
-											<td>From IP</td>
-											<td style="height: 50px; width: 230px;">
-											<input type="text" id="name_lan0" name="name_lan0"
-												maxlength="31" style="height: 10px;" required/>
-												<span id="field_name_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
-												</td>
 										
-											
-											<td>From port</td>
-											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
-												
-												
-												<td>To IP</td>
+										<td>Name</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="name_lan0" name="name_lan0"
-												maxlength="31" style="height: 10px;" required/>
+												maxlength="21" required style="height: 10px;"/>
 												<span id="field_name_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
-												</td>
-												<tr>
-												
-												<td>To port</td>
-											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 											
-												
-												<td>Protocol</td>
+											<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan0"
 												name="protocol_lan0" style="height: 33px;">
 													
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
-										
-
-											
-											<td>Comment</td>
+												
+												
+											<td>From IP</td>
 											<td style="height: 50px; width: 230px;">
-											<input type="text" id="ip_addr_lan0" name="ip_addr_lan0"
+											<input type="text" id="from_ip_lan0" name="from_ip_lan0"
 												maxlength="31" style="height: 10px;"/>
-												<span id="field_ipaddr_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												<span id="field_from_ip_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
 												</td>
-</tr>
-<tr>
+										</tr>
+										<tr>
+											
+											<td>From port</td>
+											<td><input type="text" id="from_port_lan0" name="from_port_lan0"
+												maxlength="6" required/>
+												<span id="field_from_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+												
+												
+												<td>To IP</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="to_ip_lan0" name="to_ip_lan0"
+												maxlength="31" style="height: 10px;"/>
+												<span id="field_to_ip_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+												
+												
+												<td>To port</td>
+											<td><input type="text" id="to_port_lan0" name="portNumber_lan0"
+												maxlength="6" required/>
+												<span id="field_to_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+											
+												
+												</tr>
+												<tr>
 										
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan0" name="action_lan0"
 												style="height: 33px;">
 													<option value="ACCEPT" selected>ACCEPT</option>
-													<option value="REJECT">REJECT</option>
+													<option value="DROP">DROP</option>
 											</select></td>
 										</tr>
 
@@ -2938,11 +2895,11 @@ function applyTrafficRules() {
 										<tr>
 											<th>Name</th>
 											<th>Protocol</th>
-											<th>Source IP address</th>
-											<th>MAC address</th>
-											<th>Destination port</th>
+											<th>From IP</th>
+											<th>From port</th>
+											<th>To IP</th>
+											<th>To port</th>
 											<th>Action</th>
-											<th>Type</th>
 											<th id="actions_lan0">Actions</th>
 										</tr>
 									</thead>
@@ -3037,37 +2994,12 @@ function applyTrafficRules() {
 									<table class="bordered-table" style="margin-top: -1px;">
 
 										<tr>
-											<td>From IP</td>
+										<td>Name</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="name_lan1" name="name_lan1"
-												maxlength="31" style="height: 10px;" required/>
+												maxlength="21" required style="height: 10px;"/>
 												<span id="field_name_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
 												</td>
-										
-											
-											<td>From port</td>
-											<td><input type="text" id="portNumber_lan1" name="portNumber_lan1"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
-												
-												
-												<td>To IP</td>
-											<td style="height: 50px; width: 230px;">
-											<input type="text" id="name_lan1" name="name_lan1"
-												maxlength="31" style="height: 10px;" required/>
-												<span id="field_name_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
-												</td>
-												<tr>
-												
-												<td>To port</td>
-											<td><input type="text" id="portNumber_lan0" name="portNumber_lan0"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
-											
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan1"
@@ -3076,23 +3008,49 @@ function applyTrafficRules() {
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
-										
-
 											
-											<td>Comment</td>
+											<td>From IP</td>
 											<td style="height: 50px; width: 230px;">
-											<input type="text" id="ip_addr_lan1" name="ip_addr_lan1"
+											<input type="text" id="from_ip_lan1" name="from_ip_lan1"
 												maxlength="31" style="height: 10px;"/>
-												<span id="field_ipaddr_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												<span id="field_from_ip_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
 												</td>
-</tr>
-<tr>
+																				
+											</tr>
+											
+											<tr>
+																						
+											<td>From port</td>
+											<td><input type="text" id="from_port_lan1" name="from_port_lan1"
+												maxlength="6" required/>
+												<span id="field_from_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+												
+												
+												<td>To IP</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="to_ip_lan1" name="to_ip_lan1"
+												maxlength="31" style="height: 10px;"/>
+												<span id="field_to_ip_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+												
+												
+												<td>To port</td>
+											<td><input type="text" id="to_port_lan1" name="to_port_lan1"
+												maxlength="6" required/>
+												<span id="field_to_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+											
+											</tr>
+											<tr>
 										
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan1" name="action_lan1"
 												style="height: 33px;">
 													<option value="ACCEPT" selected>ACCEPT</option>
-													<option value="REJECT">REJECT</option>
+													<option value="DROP">DROP</option>
 											</select></td>
 										</tr>
 
@@ -3138,11 +3096,11 @@ function applyTrafficRules() {
 										<tr>
 											<th>Name</th>
 											<th>Protocol</th>
-											<th>Source IP address</th>
-											<th>MAC address</th>
-											<th>Destination port</th>
+											<th>From IP</th>
+											<th>From Port</th>
+											<th>To IP</th>
+											<th>To Port</th>
 											<th>Action</th>
-											<th>Type</th>
 											<th id="actions_lan1">Actions</th>
 										</tr>
 									</thead>
@@ -3152,10 +3110,8 @@ function applyTrafficRules() {
 								</table>
 							</div>
 
-
 						</div>
 					
-
 				</div>
 
 				<div id="lan2" class="tab" style="display: block; margin-left: 3px;">
@@ -3234,37 +3190,13 @@ function applyTrafficRules() {
 									<table class="bordered-table" style="margin-top: -1px;">
 
 										<tr>
-											<td>From IP</td>
-											<td style="height: 50px; width: 230px;">
-											<input type="text" id="name_lan2" name="name_lan2"
-												maxlength="31" style="height: 10px;" required/>
-												<span id="field_name_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
-												</td>
 										
-											
-											<td>From port</td>
-											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
-												
-												
-												<td>To IP</td>
+											<td>Name</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="name_lan2" name="name_lan2"
-												maxlength="31" style="height: 10px;" required/>
+												maxlength="21" required style="height: 10px;"/>
 												<span id="field_name_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
 												</td>
-												<tr>
-												
-												<td>To port</td>
-											<td><input type="text" id="portNumber_lan2" name="portNumber_lan2"
-												maxlength="6" required/>
-												<span id="field_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
-												</td>
-											
 												
 												<td>Protocol</td>
 											<td><select class="textBox" id="protocol_lan2"
@@ -3273,23 +3205,46 @@ function applyTrafficRules() {
 													<option value="TCP" selected="selected">TCP</option>
 													<option value="UDP">UDP</option>
 											</select></td>
-										
-
-											
-											<td>Comment</td>
+												
+											<td>From IP</td>
 											<td style="height: 50px; width: 230px;">
-											<input type="text" id="ip_addr_lan2" name="ip_addr_lan2"
+											<input type="text" id="from_ip_lan2" name="from_ip_lan2"
 												maxlength="31" style="height: 10px;"/>
-												<span id="field_ipaddr_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												<span id="field_from_ip_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
 												</td>
-</tr>
-<tr>
+										</tr>
+										<tr>
+											
+											<td>From port</td>
+											<td><input type="text" id="from_port_lan2" name="from_port_lan2"
+												maxlength="6" required/>
+												<span id="field_from_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+												
+												
+												<td>To IP</td>
+											<td style="height: 50px; width: 230px;">
+											<input type="text" id="to_ip_lan2" name="to_ip_lan2"
+												maxlength="31" style="height: 10px;"/>
+												<span id="field_to_ip_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												
+												</td>
+												
+												<td>To port</td>
+											<td><input type="text" id="to_port_lan2" name="to_port_lan2"
+												maxlength="6" required/>
+												<span id="field_to_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
+												</td>
+											
+											</tr>
+											<tr>
 										
 											<td>Action</td>
 											<td><select class="textBox" id="action_lan2" name="action_lan2"
 												style="height: 33px;">
 													<option value="ACCEPT" selected>ACCEPT</option>
-													<option value="REJECT">REJECT</option>
+													<option value="DROP">DROP</option>
 											</select></td>
 										</tr>
 
@@ -3332,11 +3287,11 @@ function applyTrafficRules() {
 										<tr>
 											<th>Name</th>
 											<th>Protocol</th>
-											<th>Source IP address</th>
-											<th>MAC address</th>
-											<th>Destination port</th>
+											<th>From IP</th>
+											<th>From Port</th>
+											<th>To IP</th>
+											<th>To Port</th>
 											<th>Action</th>
-											<th>Type</th>
 											<th id="actions_lan2">Actions</th>
 										</tr>
 									</thead>
@@ -3345,7 +3300,6 @@ function applyTrafficRules() {
 									</tbody>
 								</table>
 							</div>
-
 
 						</div>
 					

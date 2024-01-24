@@ -87,11 +87,11 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		String name = null;
-		String portNumber = null;
-		String macAddress = null;
+		String from_port = null;
+		String to_port = null;
 		String protocol = null;
-		String ip_addr = null;
-		String type = null;
+		String from_ip_addr = null;
+		String to_ip_addr = null;
 		String action = null;
 		
 		if (check_username != null) {
@@ -103,11 +103,11 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 				
 				case "add":
 					name = request.getParameter("name");
-					 portNumber = request.getParameter("portNumber");
-					 macAddress = request.getParameter("macAddress");
+					from_port = request.getParameter("from_port");
+					to_port = request.getParameter("to_port");
 					 protocol = request.getParameter("protocol");
-					 ip_addr = request.getParameter("ip_addr");
-					 type = request.getParameter("type");
+					 from_ip_addr = request.getParameter("from_ip_addr");
+					 to_ip_addr = request.getParameter("to_ip_addr");
 					 action = request.getParameter("action");
 
 					try {
@@ -120,13 +120,14 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 						json.put("operation_type", "add_ip");
 						json.put("user", check_username);
 						json.put("name", name);
-						json.put("interface", "lan0");
+						json.put("iface", "lan0");
 						json.put("protocol", protocol);
-						json.put("ipAddress", ip_addr);
-						json.put("macAddress", macAddress);
-						json.put("portNum", portNumber);
+						json.put("fromIp", from_ip_addr);
+						json.put("toIp", to_ip_addr);
+						json.put("fromPort", from_port);
+						json.put("toPort", to_port);
 						json.put("action", action);
-						json.put("type", type);
+					
 						json.put("token", check_token);
 						json.put("role", check_role);
 
@@ -152,7 +153,7 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 						out.print(jsonObject.toString());
 						out.flush();
 						}else {
-							logger.error("CSRF token validation failed");	
+							logger.error("Token validation failed");	
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -163,11 +164,11 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 					
 				case "update":
 					 name = request.getParameter("name");
-					 portNumber = request.getParameter("portNumber");
-					 macAddress = request.getParameter("macAddress");
+					 from_port = request.getParameter("from_port");
+					 to_port = request.getParameter("to_port");
 					 protocol = request.getParameter("protocol");
-					 ip_addr = request.getParameter("ip_addr");
-					 type = request.getParameter("type");
+					 from_ip_addr = request.getParameter("from_ip_addr");
+					 to_ip_addr = request.getParameter("to_ip_addr");
 					 action = request.getParameter("action");
 
 					try {
@@ -179,13 +180,14 @@ public class TrafficRulesServletLan0 extends HttpServlet {
 						json.put("operation_type", "update_ip");
 						json.put("user", check_username);
 						json.put("name", name);
-						json.put("interface", "lan0");
+						json.put("iface", "lan0");
 						json.put("protocol", protocol);
-						json.put("ipAddress", ip_addr);
-						json.put("macAddress", macAddress);
-						json.put("portNum", portNumber);
+						json.put("fromIp", from_ip_addr);
+						json.put("toIp", to_ip_addr);
+						json.put("fromPort", from_port);
+						json.put("toPort", to_port);
 						json.put("action", action);
-						json.put("type", type);
+						
 						json.put("token", check_token);
 						json.put("role", check_role);
 						

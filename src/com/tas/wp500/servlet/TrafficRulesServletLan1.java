@@ -87,11 +87,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 	
 	String name = null;
-	String portNumber = null;
-	String macAddress = null;
+	String from_port = null;
+	String to_port = null;
 	String protocol = null;
-	String ip_addr = null;
-	String type = null;
+	String from_ip_addr = null;
+	String to_ip_addr = null;
 	String action = null;
 	
 	if (check_username != null) {
@@ -103,11 +103,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			
 			case "add":
 				name = request.getParameter("name");
-				 portNumber = request.getParameter("portNumber");
-				 macAddress = request.getParameter("macAddress");
+				from_port = request.getParameter("from_port");
+				to_port = request.getParameter("to_port");
 				 protocol = request.getParameter("protocol");
-				 ip_addr = request.getParameter("ip_addr");
-				 type = request.getParameter("type");
+				 from_ip_addr = request.getParameter("from_ip_addr");
+				 to_ip_addr = request.getParameter("to_ip_addr");
 				 action = request.getParameter("action");
 
 				try {
@@ -121,16 +121,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 					json.put("operation_type", "add_ip");
 					json.put("user", check_username);
 					json.put("name", name);
-					json.put("interface", "lan1");
+					json.put("iface", "lan1");
 					json.put("protocol", protocol);
-					json.put("ipAddress", ip_addr);
-					json.put("macAddress", macAddress);
-					json.put("portNum", portNumber);
+					json.put("fromIp", from_ip_addr);
+					json.put("toIp", to_ip_addr);
+					json.put("fromPort", from_port);
+					json.put("toPort", to_port);
 					json.put("action", action);
-					json.put("type", type);
 					json.put("token", check_token);
 					json.put("role", check_role);
-
+					
 					String respStr = client.sendMessage(json.toString());
 
 					logger.info("res " + new JSONObject(respStr));
@@ -160,15 +160,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 					logger.error("Error in adding traffic rules : " + e);
 				}
 				
-				break;
-				
+				break;				
 			case "update":
 				 name = request.getParameter("name");
-				 portNumber = request.getParameter("portNumber");
-				 macAddress = request.getParameter("macAddress");
+				 from_port = request.getParameter("from_port");
+				 to_port = request.getParameter("to_port");
 				 protocol = request.getParameter("protocol");
-				 ip_addr = request.getParameter("ip_addr");
-				 type = request.getParameter("type");
+				 from_ip_addr = request.getParameter("from_ip_addr");
+				 to_ip_addr = request.getParameter("to_ip_addr");
 				 action = request.getParameter("action");
 
 				try {
@@ -180,13 +179,13 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 					json.put("operation_type", "update_ip");
 					json.put("user", check_username);
 					json.put("name", name);
-					json.put("interface", "lan1");
+					json.put("iface", "lan1");
 					json.put("protocol", protocol);
-					json.put("ipAddress", ip_addr);
-					json.put("macAddress", macAddress);
-					json.put("portNum", portNumber);
+					json.put("fromIp", from_ip_addr);
+					json.put("toIp", to_ip_addr);
+					json.put("fromPort", from_port);
+					json.put("toPort", to_port);
 					json.put("action", action);
-					json.put("type", type);
 					json.put("token", check_token);
 					json.put("role", check_role);
 					
@@ -228,8 +227,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 				try {
 					
 					if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
-						
-					
+											
 					TCPClient client = new TCPClient();
 					JSONObject json = new JSONObject();
 
