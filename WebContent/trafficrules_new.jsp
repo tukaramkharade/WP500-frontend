@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -246,10 +248,9 @@ function getBasicConfiguration(){
 				var basicConfigTable = $("#basic-config-table tbody");
 				basicConfigTable.empty();
 			
-				
- 								data.result_basic.forEach(function(basicConfig) {
+									data.result_basic.forEach(function(basicConfig) {
 	 
- 									 var row = $("<tr>");
+ 									var row = $("<tr>");
  									row.attr("data-basic-config-id", basicConfig.basicConfigId);
  									row.append($("<td>").text(basicConfig.id));
 									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.direction).prop("disabled", true)));
@@ -258,30 +259,21 @@ function getBasicConfiguration(){
 									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.to_port).prop("disabled", true)));
 									row.append($("<td>").append($("<input>").attr("type", "text").val(basicConfig.comment).prop("disabled", true)));
 									
-									// Assuming you have a table row (row) and a variable basicConfig with a property: action
-									var actionOptions = ["ACCEPT", "REJECT"];
+									var actionOptions = ["ACCEPT", "DROP"];
 									var select = $("<select>");
-
-									// Loop through the options and create <option> elements
+							
 									for (var i = 0; i < actionOptions.length; i++) {
 									    var option = $("<option>").text(actionOptions[i]);
 									    select.append(option);
 									}
-
-									// Set the selected option based on the value of basicConfig.action
+								
 									select.val(basicConfig.action.toUpperCase());
-
-									
-									// Set the selected option based on the value of basicConfig.action
-									//select.val(basicConfig.action);
-
-									// Create the <td> element and append the <select> element
 									var td = $("<td>").append(select);
 									
 									 select.on("change", function() {
 									    globalAction = $(this).val();
-									    globalId = basicConfig.id; // Get the associated id from basicConfig
-									  //  alert("Selected value: " + globalAction + " for id: " + globalId);
+									    globalId = basicConfig.id; 
+									  
 									}); 
 									row.append(td);
 
@@ -291,10 +283,7 @@ function getBasicConfiguration(){
 		    
 					    },
 		error : function(xhr, status, error) {
-			
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+			    hideLoader();
 		},
 	 		});
 	
@@ -302,11 +291,9 @@ function getBasicConfiguration(){
 
 var globalData = [];
 
-// This function sends the accumulated data when you call it
 function sendAccumulatedData() {
     if (globalData && globalData.length > 0) {
         sendToServer(globalData);
-        // Clear the globalData array after sending the data if needed
         globalData = [];
     }
 }
@@ -320,8 +307,7 @@ function sendToServer(dataArray) {
 	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit-basic-conf');
 	  confirmButton.onclick = function () {
-		  
-	  
+		  	  
     var requestData = {
         data: dataArray
     };
@@ -395,20 +381,16 @@ function addSelectedAction(id, action) {
 }
 
 function getValueFromTable(basicConfigId) {
-    // Assuming each row has a data-basic-config-id attribute
     var cell = $("td[data-basic-config-id='" + basicConfigId + "']");
     return cell.text();
 }
 
-
 function setValueInTable(basicConfigId, value) {
-    // Assuming each row has a data-basic-config-id attribute
     var cell = $("td[data-basic-config-id='" + basicConfigId + "']");
     cell.text(value);
 }
 
 function getGeneralSettingsLan0(){
-	
 	$.ajax({
 		url : "generalSettingsServletLan0",
 		type : "GET",
@@ -423,25 +405,19 @@ function getGeneralSettingsLan0(){
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
 				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
+				    sessionMsg.textContent = data.message; 
+			  
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
 					  
-					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };
 					  
 			} 
 
-			$('#input_lan0').val(data.input);
-			$('#output_lan0').val(data.output);
-			$('#forward_lan0').val(data.forword);
+			$('#input_lan0').val(data.input);			
 			$('#rule_drop_lan0').val(data.rule_drop); 
 
 		},
@@ -468,25 +444,19 @@ function getGeneralSettingsLan1(){
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
 				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+				    sessionMsg.textContent = data.message; 
 
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
 					  
-					// Close the modal
-				        modal.style.display = 'none';
+					    modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };
 					  
 			} 
 
 			$('#input_lan1').val(data.input);
-			$('#output_lan1').val(data.output);
-			$('#forward_lan1').val(data.forword);
 			$('#rule_drop_lan1').val(data.rule_drop);
 
 		},
@@ -511,17 +481,13 @@ function getGeneralSettingsLan2(){
 				
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
+				  			
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
+				    sessionMsg.textContent = data.message; 
+			
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				  confirmButton.onclick = function () {			  
+					
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };
@@ -529,8 +495,6 @@ function getGeneralSettingsLan2(){
 			} 
 
 			$('#input_lan2').val(data.input);
-			$('#output_lan2').val(data.output);
-			$('#forward_lan2').val(data.forword);
 			$('#rule_drop_lan2').val(data.rule_drop);
 
 		},
@@ -544,26 +508,20 @@ function updateGeneralSettingsLan0(){
 	
 	 var csrfToken = document.getElementById('csrfToken').value;
 	 
-	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-gen-lan0');
 	  modal.style.display = 'block';
 	  
-	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit-gen-lan0');
 	  confirmButton.onclick = function () {
 		  
 		  var input = $('#input_lan0').val();
-			var output = $('#output_lan0').val();
-			var forward = $('#forward_lan0').val();
 			var rule_drop = $('#rule_drop_lan0').val();
 			
 			$.ajax({
 				url : 'generalSettingsServletLan0',
 				type : 'POST',
 				data : {
-					input : input,
-					output : output,
-					forward : forward,
+					input : input,		
 					rule_drop : rule_drop,
 					csrfToken: csrfToken,
 					operation_action_lan0: 'update'
@@ -575,31 +533,23 @@ function updateGeneralSettingsLan0(){
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
 						  modal1.style.display = 'block';
 						  
-						// Update the session-msg content with the message from the server
 						    var sessionMsg = document.getElementById('session-msg');
-						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-						  
-						  // Handle the confirm button click
+						    sessionMsg.textContent = data.message; 
+						
 						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
 						  confirmButton1.onclick = function () {
 							  
-							// Close the modal
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
 						  };
 							  
 					} 
-					// Close the modal
+					
 			        modal.style.display = 'none';
 			        getGeneralSettingsLan0();
 
-					// Clear form fields
-
-					$('#input_lan0').val('');
-					$('#output_lan0').val('');
-					$('#forward_lan0').val('');
-					$('#rule_drop_lan0').val('');
+					$('#input_lan0').val('ACCEPT');				
+					$('#rule_drop_lan0').val('ON');
 
 				},
 				error : function(xhr, status, error) {
@@ -621,26 +571,20 @@ function updateGeneralSettingsLan0(){
 function updateGeneralSettingsLan1(){
 	 var csrfToken = document.getElementById('csrfToken').value;
 	 
-	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-gen-lan1');
 	  modal.style.display = 'block';
 	  
-	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit-gen-lan1');
 	  confirmButton.onclick = function () {
 		  
 		  var input = $('#input_lan1').val();
-			var output = $('#output_lan1').val();
-			var forward = $('#forward_lan1').val();
 			var rule_drop = $('#rule_drop_lan1').val();
 			
 			$.ajax({
 				url : 'generalSettingsServletLan1',
 				type : 'POST',
 				data : {
-					input : input,
-					output : output,
-					forward : forward,
+					input : input,			
 					rule_drop : rule_drop,
 					csrfToken: csrfToken,
 					operation_action_lan1: 'update'
@@ -652,31 +596,23 @@ function updateGeneralSettingsLan1(){
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
 						  modal1.style.display = 'block';
 						  
-						// Update the session-msg content with the message from the server
 						    var sessionMsg = document.getElementById('session-msg');
-						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+						    sessionMsg.textContent = data.message; 
 
-						  
-						  // Handle the confirm button click
 						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
 						  confirmButton1.onclick = function () {
 							  
-							// Close the modal
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
 						  };
 							  
 					} 
-					// Close the modal
+					
 			        modal.style.display = 'none';
 			        getGeneralSettingsLan1();
 
-					// Clear form fields
-
-					$('#input_lan1').val('');
-					$('#output_lan1').val('');
-					$('#forward_lan1').val('');
-					$('#rule_drop_lan1').val('');
+					$('#input_lan1').val('ACCEPT');			
+					$('#rule_drop_lan1').val('ON');
 
 				},
 				error : function(xhr, status, error) {
@@ -688,7 +624,7 @@ function updateGeneralSettingsLan1(){
 	  
 	  var cancelButton = document.getElementById('cancel-button-edit-gen-lan1');
 	  cancelButton.onclick = function () {
-	    // Close the modal
+	   
 	    modal.style.display = 'none';
 	   
 	  };
@@ -698,7 +634,7 @@ function updateGeneralSettingsLan1(){
 function updateGeneralSettingsLan2(){
 	 var csrfToken = document.getElementById('csrfToken').value;
 	 
-	// Display the custom modal dialog
+	
 	  var modal = document.getElementById('custom-modal-edit-gen-lan2');
 	  modal.style.display = 'block';
 	  
@@ -706,18 +642,14 @@ function updateGeneralSettingsLan2(){
 	  var confirmButton = document.getElementById('confirm-button-edit-gen-lan2');
 	  confirmButton.onclick = function () {
 		  
-		  var input = $('#input_lan2').val();
-			var output = $('#output_lan2').val();
-			var forward = $('#forward_lan2').val();
+		  var input = $('#input_lan2').val();		
 			var rule_drop = $('#rule_drop_lan2').val();
 			
 			$.ajax({
 				url : 'generalSettingsServletLan2',
 				type : 'POST',
 				data : {
-					input : input,
-					output : output,
-					forward : forward,
+					input : input,			
 					rule_drop : rule_drop,
 					csrfToken: csrfToken,
 					operation_action_lan2: 'update'
@@ -729,31 +661,22 @@ function updateGeneralSettingsLan2(){
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
 						  modal1.style.display = 'block';
 						  
-						// Update the session-msg content with the message from the server
 						    var sessionMsg = document.getElementById('session-msg');
-						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
+						    sessionMsg.textContent = data.message; 
 						  
-						  // Handle the confirm button click
 						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
 						  confirmButton1.onclick = function () {
 							  
-							// Close the modal
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
 						  };
 							  
 					} 
-					// Close the modal
-			        modal.style.display = 'none';
+					 modal.style.display = 'none';
 			        getGeneralSettingsLan2();
 
-					// Clear form fields
-
-					$('#input_lan2').val('');
-					$('#output_lan2').val('');
-					$('#forward_lan2').val('');
-					$('#rule_drop_lan2').val('');
+					$('#input_lan2').val('ACCEPT');			
+					$('#rule_drop_lan2').val('ON');
 
 				},
 				error : function(xhr, status, error) {
@@ -862,10 +785,8 @@ function loadTrafficRulesListLan0() {
 						row.append(actions);
 
 						trafficRulesTable.append(row);
-
 					}
 					
-				
 				});
 			
 			}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
@@ -2584,6 +2505,11 @@ function applyTrafficRules() {
 		    		$('#to_ip_lan0').val('');
 		    		$('#action_lan0').val('ACCEPT');
 		    		$('#registerBtn_lan0').val('Add');
+		    		$('#field_name_Error_lan0').text('');
+		    	    $('#field_from_ip_Error_lan0').text('');
+		    	    $('#field_from_port_Error_lan0').text('');
+		    	    $('#field_to_ip_Error_lan0').text('');
+		    	    $('#field_to_port_Error_lan0').text('');
 		    		
 		    	});
 		    	
@@ -2596,6 +2522,11 @@ function applyTrafficRules() {
 		    		$('#to_ip_lan1').val('');
 		    		$('#action_lan1').val('ACCEPT');
 		    		$('#registerBtn_lan1').val('Add');
+		    		$('#field_name_Error_lan1').text('');
+		    	    $('#field_from_ip_Error_lan1').text('');
+		    	    $('#field_from_port_Error_lan1').text('');
+		    	    $('#field_to_ip_Error_lan1').text('');
+		    	    $('#field_to_port_Error_lan1').text('');
 		    		
 		    	});
 		    	
@@ -2608,6 +2539,11 @@ function applyTrafficRules() {
 		    		$('#to_ip_lan2').val('');
 		    		$('#action_lan2').val('ACCEPT');
 		    		$('#registerBtn_lan2').val('Add');
+		    		$('#field_name_Error_lan2').text('');
+		    	    $('#field_from_ip_Error_lan2').text('');
+		    	    $('#field_from_port_Error_lan2').text('');
+		    	    $('#field_to_ip_Error_lan2').text('');
+		    	    $('#field_to_port_Error_lan2').text('');
 		    	
 		    	});
 				}
@@ -2650,39 +2586,18 @@ function applyTrafficRules() {
 
 					<h3>GENERAL SETTINGS</h3>
 					<hr>
-
-
 					<div class="form-container" style="width: 40%;">
 						<form id="generalSettingsForm_lan0" style="width: 100%;">
 							<input type="hidden" id="operation_action_lan0" name="operation_action_lan0" value="">
-							
-
-							<table>
+								<table>
 								<tr>
-
 									<td>Input</td>
 									<td><select class="textBox" id="input_lan0"
 										name="input_lan0" style="height: 33px; width: 120px;">
 											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
+											<option value="DROP">DROP</option>
 									</select> <span id="inputError_lan0" style="color: red;"></span></td>
-
-									<td>Output</td>
-									<td><select class="textBox" id="output_lan0"
-										name="output_lan0" style="height: 33px; width: 120px;">
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
-									</select> <span id="outputError_lan0" style="color: red;"></span></td>
-								</tr>
-
-								<tr>
-									<td>Forward</td>
-									<td><select class="textBox" id="forward_lan0"
-										name="forward_lan0" style="height: 33px; width: 120px;">
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
-									</select> <span id="forwardError_lan0" style="color: red;"></span></td>
-
+									
 									<td>Drop invalid packets</td>
 									<td><select class="textBox" id="rule_drop_lan0"
 										name="rule_drop_lan0" style="height: 33px; width: 120px;">
@@ -2823,7 +2738,7 @@ function applyTrafficRules() {
 											
 											<td>From port</td>
 											<td><input type="text" id="from_port_lan0" name="from_port_lan0"
-												maxlength="6" required/>
+												maxlength="6"/>
 												<span id="field_from_port_Error_lan0" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 												
@@ -2934,24 +2849,8 @@ function applyTrafficRules() {
 									<td><select class="textBox" id="input_lan1"
 										name="input_lan1" style="height: 33px; width: 120px;">
 											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
+											<option value="DROP">DROP</option>
 									</select> <span id="inputError_lan1" style="color: red;"></span></td>
-
-									<td>Output</td>
-									<td><select class="textBox" id="output_lan1"
-										name="output_lan1" style="height: 33px; width: 120px;">
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
-									</select> <span id="outputError_lan1" style="color: red;"></span></td>
-								</tr>
-
-								<tr>
-									<td>Forward</td>
-									<td><select class="textBox" id="forward_lan1"
-										name="forward_lan1" style="height: 33px; width: 120px;">
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
-									</select> <span id="forwardError_lan1" style="color: red;"></span></td>
 
 									<td>Drop invalid packets</td>
 									<td><select class="textBox" id="rule_drop_lan1"
@@ -2962,18 +2861,13 @@ function applyTrafficRules() {
 								</tr>
 							</table>
 
-
 							<div class="row"
 								style="display: flex; justify-content: center; margin-top: 1%;">
-
 								<input type="submit" value="Update"
 									id="registerBtnGenSettings_lan1" style="margin-left: 5px;" />
-
 							</div>
-
 						</form>
-						
-			  
+									  
 			  <div id="custom-modal-edit-gen-lan1" class="modal-edit-gen-lan1">
 				<div class="modal-content-edit-gen-lan1">
 				  <p>Are you sure you want to modify this general setting?</p>
@@ -2982,7 +2876,6 @@ function applyTrafficRules() {
 				</div>
 			  </div>
 					</div>
-
 						<div id="user-config-lan1" style="margin-left: 5px;">
 							<h3 style="margin-top: 15px;">ADD TRAFFIC RULES</h3>
 							<hr />
@@ -2992,7 +2885,6 @@ function applyTrafficRules() {
 										name="operation_action_lan1" value="">
 
 									<table class="bordered-table" style="margin-top: -1px;">
-
 										<tr>
 										<td>Name</td>
 											<td style="height: 50px; width: 230px;">
@@ -3013,21 +2905,17 @@ function applyTrafficRules() {
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="from_ip_lan1" name="from_ip_lan1"
 												maxlength="31" style="height: 10px;"/>
-												<span id="field_from_ip_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
-												
-												</td>
-																				
-											</tr>
-											
+												<span id="field_from_ip_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>									
+												</td>																			
+											</tr>											
 											<tr>
 																						
 											<td>From port</td>
 											<td><input type="text" id="from_port_lan1" name="from_port_lan1"
-												maxlength="6" required/>
+												maxlength="6"/>
 												<span id="field_from_port_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
-												
-												
+																								
 												<td>To IP</td>
 											<td style="height: 50px; width: 230px;">
 											<input type="text" id="to_ip_lan1" name="to_ip_lan1"
@@ -3035,8 +2923,7 @@ function applyTrafficRules() {
 												<span id="field_to_ip_Error_lan1" class="error-message" style="display: block; margin-top: 5px;"></span>
 												
 												</td>
-												
-												
+																							
 												<td>To port</td>
 											<td><input type="text" id="to_port_lan1" name="to_port_lan1"
 												maxlength="6" required/>
@@ -3053,7 +2940,6 @@ function applyTrafficRules() {
 													<option value="DROP">DROP</option>
 											</select></td>
 										</tr>
-
 										
 									</table>
 
@@ -3086,8 +2972,7 @@ function applyTrafficRules() {
 								</div>
 							</div>
 
-
-							<h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
+						<h3 style="margin-top: 15px;">TRAFFIC RULES LIST</h3>
 							<hr>
 							<div class="table-container">
 								<table id="trafficRulesListTable_lan1"
@@ -3126,29 +3011,12 @@ function applyTrafficRules() {
 
 							<table>
 								<tr>
-
 									<td>Input</td>
 									<td><select class="textBox" id="input_lan2"
 										name="input_lan2" style="height: 33px; width: 120px;">
 											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
+											<option value="DROP">DROP</option>
 									</select> <span id="inputError_lan2" style="color: red;"></span></td>
-
-									<td>Output</td>
-									<td><select class="textBox" id="output_lan2"
-										name="output_lan2" style="height: 33px; width: 120px;">
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
-									</select> <span id="outputError_lan2" style="color: red;"></span></td>
-								</tr>
-
-								<tr>
-									<td>Forward</td>
-									<td><select class="textBox" id="forward_lan2"
-										name="forward_lan2" style="height: 33px; width: 120px;">
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
-									</select> <span id="forwardError_lan2" style="color: red;"></span></td>
 
 									<td>Drop invalid packets</td>
 									<td><select class="textBox" id="rule_drop_lan2"
@@ -3159,7 +3027,6 @@ function applyTrafficRules() {
 								</tr>
 							</table>
 
-
 							<div class="row"
 								style="display: flex; justify-content: center; margin-top: 1%;">
 
@@ -3167,9 +3034,7 @@ function applyTrafficRules() {
 									id="registerBtnGenSettings_lan2" style="margin-left: 5px;" />
 
 							</div>
-
-						</form>
-						
+						</form>					
 						<div id="custom-modal-edit-gen-lan2" class="modal-edit-gen-lan2">
 				<div class="modal-content-edit-gen-lan2">
 				  <p>Are you sure you want to modify this general setting?</p>
@@ -3218,7 +3083,7 @@ function applyTrafficRules() {
 											
 											<td>From port</td>
 											<td><input type="text" id="from_port_lan2" name="from_port_lan2"
-												maxlength="6" required/>
+												maxlength="6"/>
 												<span id="field_from_port_Error_lan2" class="error-message" style="display: block; margin-top: 5px;"></span>
 												</td>
 												

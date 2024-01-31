@@ -53,14 +53,10 @@ public class GeneralSettingsServletLan2 extends HttpServlet {
 
 				for (int i = 0; i < respJson.length(); i++) {
 					
-					String output = respJson.getString("output");
-					String forword = respJson.getString("forword");
 					String input = respJson.getString("input");
 					String rule_drop = respJson.getString("rule_drop");
 					
 					try {
-						jsonObject.put("output", output);
-						jsonObject.put("forword", forword);
 						jsonObject.put("input", input);
 						jsonObject.put("rule_drop", rule_drop);
 						
@@ -102,8 +98,6 @@ public class GeneralSettingsServletLan2 extends HttpServlet {
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
 		String input = null;
-		String output = null;
-		String forward = null;
 		String rule_drop = null;
 
 		if (check_username != null) {
@@ -115,9 +109,7 @@ public class GeneralSettingsServletLan2 extends HttpServlet {
 
 				case "update":
 
-					 input = request.getParameter("input");
-					 output = request.getParameter("output");
-					 forward = request.getParameter("forward");
+					 input = request.getParameter("input");					
 					 rule_drop = request.getParameter("rule_drop");
 
 					try {
@@ -128,8 +120,7 @@ public class GeneralSettingsServletLan2 extends HttpServlet {
 						json.put("operation", "genral_settings");
 						json.put("operation_type", "update");
 						json.put("input", input);
-						json.put("output", output);
-						json.put("forword", forward);
+						
 						json.put("rule_drop", rule_drop);
 						json.put("user", check_username);
 						json.put("token", check_token);

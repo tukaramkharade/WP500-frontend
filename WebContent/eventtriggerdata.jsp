@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -423,7 +425,7 @@ var csrfTokenValue;
 	    var csrfToken = document.getElementById('csrfToken').value;
 	    
 		$.ajax({
-					url : 'dispenserTriggerServlet',
+					url : 'eventTriggerdataServlet',
 					type : 'GET',
 					dataType : 'json',
 					data: {
@@ -688,7 +690,7 @@ var csrfTokenValue;
 		 
 			
 			$.ajax({
-				url : 'dispenserTriggerServlet',
+				url : 'eventTriggerdataServlet',
 				type : 'POST',
 				data : {
 					station_name : station_name,
@@ -853,7 +855,7 @@ var csrfTokenValue;
 	    
 
 		$.ajax({
-			url : 'dispenserTriggerServlet',
+			url : 'eventTriggerdataServlet',
 			type : 'POST',
 			data : {
 				station_name : station_name,
@@ -943,7 +945,7 @@ var csrfTokenValue;
 		  var confirmButton = document.getElementById('confirm-button-delete');
 		  confirmButton.onclick = function () {
 			  $.ajax({
-					url : 'dispenserTriggerServlet',
+					url : 'eventTriggerdataServlet',
 					type : 'POST',
 					data : {
 						serial_number : dispenserTriggerId1,
@@ -1274,8 +1276,10 @@ var csrfTokenValue;
 								$('#unit_price').val('Select unit price');
 								$('#status').val('Enable');
 								$('#unit_id').val('');
-								
 								$('#registerBtn').val('Add');
+								  $('#field_name_Error').text('');
+								    $('#field_serial_num_Error').text('');
+								    $('#field_unitid_Error').text('');
 
 							});
 					    }					

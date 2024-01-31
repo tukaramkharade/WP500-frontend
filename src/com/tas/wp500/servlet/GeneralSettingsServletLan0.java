@@ -36,6 +36,8 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 			JSONObject json = new JSONObject();
 
 			JSONObject jsonObject = new JSONObject();
+			
+			System.out.println("role: "+check_role);
 
 			try {
 				json.put("operation", "genral_settings");
@@ -53,20 +55,16 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 
 				for (int i = 0; i < respJson.length(); i++) {
 					
-					String output = respJson.getString("output");
-					String forword = respJson.getString("forword");
 					String input = respJson.getString("input");
 					String rule_drop = respJson.getString("rule_drop");
 					
-					try {
-						jsonObject.put("output", output);
-						jsonObject.put("forword", forword);
+					try {					
 						jsonObject.put("input", input);
 						jsonObject.put("rule_drop", rule_drop);
 						
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error in putting SMTP settings in json object: " + e);
+						logger.error("Error in general settings in json object: " + e);
 					}
 					
 				}
@@ -99,9 +97,7 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
 		
-		String input = null;
-		String output = null;
-		String forward = null;
+		String input = null;	
 		String rule_drop = null;
 
 		if (check_username != null) {
@@ -113,9 +109,7 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 
 				case "update":
 
-					 input = request.getParameter("input");
-					 output = request.getParameter("output");
-					 forward = request.getParameter("forward");
+					 input = request.getParameter("input");			 
 					 rule_drop = request.getParameter("rule_drop");
 
 					try {
@@ -125,9 +119,7 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 
 						json.put("operation", "genral_settings");
 						json.put("operation_type", "update");
-						json.put("input", input);
-						json.put("output", output);
-						json.put("forword", forward);
+						json.put("input", input);				
 						json.put("rule_drop", rule_drop);
 						json.put("user", check_username);
 						json.put("token", check_token);
@@ -142,8 +134,6 @@ public class GeneralSettingsServletLan0 extends HttpServlet {
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 
-						// Set the content type of the response to
-						// application/json
 						response.setContentType("application/json");
 						 response.setHeader("X-Content-Type-Options", "nosniff");
 

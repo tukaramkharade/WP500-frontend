@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -689,6 +691,9 @@ $(document).ready(function() {
     		$('#prefix').val('');
     		$("#prefix").prop("disabled", false);
     		$('#registerBtn').val('Add');
+    		$('#field_user_Error').text('');
+    	    $('#field_url_Error').text('');
+    	    $('#field_prefix_Error').text('');
    	});
     	
     	$('#password-toggle').click(function () {
@@ -732,7 +737,7 @@ $(document).ready(function() {
 					<tr>
 					<td>End point URL</td>
 					<td style="height: 50px; width: 230px;">
-					<input type="text" id="endURL" name="endURL" maxlength="31" style="height: 10px; max-width: 200px;"/>
+					<input type="text" id="endURL" name="endURL" maxlength="31" required style="height: 10px; max-width: 200px;"/>
 					<span id="field_url_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
 					<td>Username</td>
