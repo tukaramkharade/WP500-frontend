@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -784,6 +786,8 @@ margin-top: 70px;
 								$('#tag_name').val('');
 								$('#pv_address').val('');
 								$('#registerBtn').val('Add');
+								$('#field_tag_Error').text('');
+							    $('#field_pv_Error').text('');
 							});
 							$('#exportButton').on('click', function() {							
 							    fetchDataAndExportToExcel();

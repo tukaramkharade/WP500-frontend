@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -250,6 +252,16 @@ function getSMTPSettings() {
 
 }
 
+function validateIPaddr(ipaddr) {
+    var regex = /^([a-zA-Z0-9@_.-]{1,100}\.){0,3}[a-zA-Z0-9@_.-]{1,100}$/;
+
+    if (!regex.test(ipaddr)) {
+        return 'Invalid IP Address. Please enter a valid IP address.';
+    }
+
+    return null; // Validation passed
+}
+
 function addSMTPSettings() {
 
 	var from_email_id = $('#from_email_id').val();
@@ -288,6 +300,14 @@ function addSMTPSettings() {
 	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
         return;
     }
+	
+	$('#field_ipaddr_Error').text('');
+	
+	  var ipAddrError = validateIPaddr(host);
+	    if (ipAddrError) {
+	        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+	        return;
+	    }
     
     
 	$.ajax({
@@ -385,6 +405,14 @@ function editSMTPSettings() {
 		        return;
 		    }
 			
+			$('#field_ipaddr_Error').text('');
+			
+			  var ipAddrError = validateIPaddr(host);
+			    if (ipAddrError) {
+			        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+			        return;
+			    }
+			    
 			$.ajax({
 				url : 'SMTPServlet',
 				type : 'POST',
@@ -806,6 +834,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 												$('#to_email_id').val('');
 												$('#email_cc').val('');
 												$('#email_bcc').val('');
+												$('#field_ipaddr_Error').text('');
 											});
 
 											$("#delBtn").click(function() {
@@ -870,7 +899,9 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 				
 				<tr>
 				<td>Host</td>
-				<td><input type="text" id="host" name="host" style="height: 10px; width: 10%;" required /></td>
+				<td><input type="text" id="host" name="host" style="height: 10px; width: 10%;" required />
+				<span id="field_ipaddr_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
+				</td>
 				</tr>
 				
 				<tr>

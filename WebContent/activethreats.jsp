@@ -1,6 +1,6 @@
 <%  
-    // Add X-Frame-Options header to prevent clickjacking
-    response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
 
 %>
 
@@ -113,14 +113,13 @@
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  text-align: center; /* Center-align the content */
+  text-align: center; 
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
-  display: block; /* Display as to center horizontally */
-  margin-top: 30px; /* Adjust the top margin as needed */
+  display: block; 
+  margin-top: 30px; 
   background-color: #4caf50;
   color: #fff;
   border: none;
@@ -140,8 +139,8 @@ margin-top: 68px;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
-    z-index: 1000; /* Ensure the loader is on top of other elements */
+    background: rgba(255, 255, 255, 0.7); 
+    z-index: 1000; 
     justify-content: center;
     align-items: center;
 }
@@ -149,7 +148,7 @@ margin-top: 68px;
 #loader {
     text-align: center;
    margin-left: 120px;
-    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
+    background: rgba(255, 255, 255, 0.2); 
     border-radius: 5px;
 }
 
@@ -162,7 +161,7 @@ var tokenValue;
 var csrfTokenValue;
 
 function getActiveThreats() {
-	// Display loader when the request is initiated
+	
     showLoader();
     var csrfToken = document.getElementById('csrfToken').value;
     
@@ -177,7 +176,7 @@ function getActiveThreats() {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
 		success : function(data) {
-			// Hide loader when the response has arrived
+			
             hideLoader();
 			
 			if (data.status == 'fail') {
@@ -185,17 +184,13 @@ function getActiveThreats() {
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
 				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
+				    sessionMsg.textContent = data.message; 
+			 
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
 					  
-					// Close the modal
-				        modal.style.display = 'none';
+				       modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };
 					  
@@ -203,8 +198,7 @@ function getActiveThreats() {
 			
 			var activeThreatsTable = $('#data-table tbody');
 			activeThreatsTable.empty();
-			
-			 
+						 
 			 if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 				 
 				 data.result.forEach(function(activeThreats) {
@@ -237,13 +231,10 @@ function getActiveThreats() {
 												});
 						
 						actions.append(ackButton);
-					
 						row.append(actions);
-											
 						activeThreatsTable.append(row);
 				 });
 				 
-				
 			 }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				 data.result.forEach(function(activeThreats) {
 					 var row = $('<tr>');
@@ -256,7 +247,6 @@ function getActiveThreats() {
 						}else if(activeThreats.priority == '3'){
 							row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
 						}
-						
 						row.append($('<td>').text(activeThreats.threat_id + ""));
 						row.append($('<td>').text(activeThreats.alert_message + ""));						
 						row.append($('<td>').text(activeThreats.src_ip + ""));
@@ -267,14 +257,10 @@ function getActiveThreats() {
 											
 						activeThreatsTable.append(row);
 				 });
-				 
 			 }		
-				
 		},
 		error : function(xhr, status, error) {
-			// Hide loader when the response has arrived
             hideLoader();
-			
 		}
 	});
 }
@@ -312,9 +298,7 @@ function getSearchThreats() {
 				}
 			} 
 
-				$.each(data, function(index, activeThreats) {
-					
-					
+				$.each(data, function(index, activeThreats) {			
 						var row = $('<tr>');
 						row.append($('<td>').text(activeThreats.timestamp + ""));
 						
@@ -346,30 +330,21 @@ function getSearchThreats() {
 												});
 						
 						actions.append(ackButton);
-					
 						row.append(actions);
-											
 						activeThreatsTable.append(row);
-					
-				});
-
-		
+					});	
         },
         error: function (xhr, status, error) {
-            
         }
     });
 }
 
-
 function ackThreats(threat_id){
 	 var csrfToken = document.getElementById('csrfToken').value;
 	
-	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-ack');
 	  modal.style.display = 'block';
 	  
-	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-ack');
 	  confirmButton.onclick = function () {
 		  $.ajax({
@@ -383,16 +358,12 @@ function ackThreats(threat_id){
 				},
 				success : function(data) {
 					
-					// Close the modal
-			        modal.style.display = 'none';
-					
-				},
+					  modal.style.display = 'none';
+			},
 				error : function(xhr, status, error) {
-					
-				}
+			}
 			});
 		  location.reload();
-		  
 	  };
 	  
 	  var cancelButton = document.getElementById('cancel-button-ack');
@@ -408,92 +379,67 @@ function checkDateField() {
     var enddatetime = $('#enddatetime').val();
     var errorMessage = '';
 
-    // Check if startdatetime is empty
     if (startdatetime.trim() === '') {
         errorMessage += 'Start Date/Time is required.\n';
     }
 
-    // Check if enddatetime is empty
     if (enddatetime.trim() === '') {
         errorMessage += 'End Date/Time is required.\n';
     }
 
-    // Check if both startdatetime and enddatetime are not empty
     if (errorMessage === '' && startdatetime !== '' && enddatetime !== '') {
-        getSearchThreats(); // Call the function when both fields have content
+        getSearchThreats(); 
     } else {
       
-    	// Display the custom popup message
-			$("#popupMessage").text(errorMessage);
+    		$("#popupMessage").text(errorMessage);
 			$("#customPopup").show();
-         
-    }
+         }
 }
 
 function getCurrentTimeInIndia() {
     const date = new Date();
-    var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes
+    var ISTOffset = 330;
     var offset = ISTOffset * 60 * 1000;
     var ISTTime = new Date(date.getTime() + offset);
-
-    // Subtract 24 hours (24 hours * 60 minutes * 60 seconds * 1000 milliseconds) from ISTTime
     var ISTTime24HoursAgo = new Date(ISTTime.getTime() - (24 * 60 * 60 * 1000));
- 
-    // Format both current ISTTime and ISTTime24HoursAgo as strings in "yyyy-MM-ddTHH:mm" format
     var formattedCurrentTime = ISTTime.toISOString().slice(0, 16);
     var formattedTime24HoursAgo = ISTTime24HoursAgo.toISOString().slice(0, 16);
-
-    // Set the current IST time as the value of the "enddatetime" input field
     document.getElementById('enddatetime').value = formattedCurrentTime;
-
-    // Set the IST time 24 hours ago as the value of the "startdatetime" input field
-    document.getElementById('startdatetime').value = formattedTime24HoursAgo;
-    
+    document.getElementById('startdatetime').value = formattedTime24HoursAgo;   
 }
 
 function changeButtonColor(isDisabled) {
     var $loadThreatsbutton = $('#loadThreats');      
     
      if (isDisabled) {
-        $loadThreatsbutton.css('background-color', 'gray'); // Change to your desired color
+        $loadThreatsbutton.css('background-color', 'gray'); 
     } else {
-        $loadThreatsbutton.css('background-color', '#2b3991'); // Reset to original color
+        $loadThreatsbutton.css('background-color', '#2b3991');
     }
 }
 
-//Function to show the loader
 function showLoader() {
-    // Show the loader overlay
     $('#loader-overlay').show();
 }
 
-// Function to hide the loader
 function hideLoader() {
-    // Hide the loader overlay
-    $('#loader-overlay').hide();
+	$('#loader-overlay').hide();
 }
 
-$(document).ready(function() {
-	
-	<%// Access the session variable
+$(document).ready(function() {	
+	<%
 	HttpSession role = request.getSession();
 	String roleValue = (String) session.getAttribute("role");%>
+	roleValue = '<%=roleValue%>';
 
-roleValue = '<%=roleValue%>';
-
-<%// Access the session variable
+<%
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
-
-
 	
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 		$("#acknowledge").hide();
-		
 		$('#loadThreats').prop('disabled', true);
-		
 		changeButtonColor(true);
 	}
 	
@@ -501,11 +447,9 @@ csrfTokenValue = '<%=csrfTokenValue%>';
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
 
-        // Update the session-msg content with the message from the server
 	    var sessionMsg = document.getElementById('session-msg');
 	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
       
-        // Handle the confirm button click
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function() {
             // Close the modal
@@ -513,21 +457,18 @@ csrfTokenValue = '<%=csrfTokenValue%>';
             window.location.href = 'login.jsp';
         };
     }else{
-    	<%// Access the session variable
+    	<%
     	HttpSession token = request.getSession();
     	String tokenValue = (String) session.getAttribute("token");%>
-
     	tokenValue = '<%=tokenValue%>';
     		
     		getActiveThreats();
-    		
     		getCurrentTimeInIndia();
     		$(document).on("click", "#loadThreats", function() {
             checkDateField();
         });
     	setInterval(getCurrentTimeInIndia, 60000);
     	
-
     	$("#closePopup").click(function () {
     	    $("#customPopup").hide();
     	  });
@@ -548,9 +489,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 		<section style="margin-left: 1em">
 		<h3>ACTIVE THREATS</h3>
 		<hr />
-		
 		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-		
 			<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>
@@ -560,7 +499,6 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 
 		<div class="row"
 			style="display: flex; flex-content: space-between; margin-top: 5px;">
-			
 			
 			<div style="width: 20%;">
 				<label for="choose_date">Choose a date:</label>
@@ -606,7 +544,6 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 			  </div>
 			
 		<div class="container">
-
 				<table id="data-table">
 				<thead>
 						<tr>
@@ -620,14 +557,11 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							<th>Dest port</th>
 							<th>Protocol type</th>
 							<th id="acknowledge">Acknowledge</th>
-							
 						</tr>
 					</thead>
 					<tbody>
-						<!-- Table rows will be dynamically generated here -->
 					</tbody>
 				</table>
-				
 				</div>
 		</section>
 		</div>

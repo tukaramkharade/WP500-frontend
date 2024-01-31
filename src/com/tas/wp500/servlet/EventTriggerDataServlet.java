@@ -17,10 +17,10 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-@WebServlet("/dispenserTriggerServlet")
-public class DispenserTriggerServlet extends HttpServlet {
+@WebServlet("/eventTriggerdataServlet")
+public class EventTriggerDataServlet extends HttpServlet {
 
-	final static Logger logger = Logger.getLogger(DispenserTriggerServlet.class);
+	final static Logger logger = Logger.getLogger(EventTriggerDataServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

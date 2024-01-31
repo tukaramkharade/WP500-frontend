@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -599,7 +601,6 @@ var tagVariableValues = {};
 	     });
 	   	}
  
- 
 
 	    	 $(document).ready(function () {
 	    		 
@@ -608,11 +609,8 @@ var tagVariableValues = {};
 	    	    	HttpSession role = request.getSession();
 	    	    	String roleValue = (String) session.getAttribute("role");
 	    	    	%>
-	    	    	
 	    	    	roleValue = '<%= roleValue %>'; // This will insert the session value into the JavaScript code
-	    	    	
-	    	    	
-
+	    	    		    	    	
 	    	    	<%// Access the session variable
 	    			HttpSession csrfToken = request.getSession();
 	    			String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
@@ -696,6 +694,8 @@ var tagVariableValues = {};
  			$('#broker_name').val('Select broker IP address');
  			$('#interval').val('1 min');	  
  			$('#addBtn').val('Add'); 
+ 			 $('#field_unitid_Error').text('');
+			    $('#field_assetid_Error').text('');
    	});
       	 
       	$("#delBtn").click(function () {
@@ -875,9 +875,7 @@ var tagVariableValues = {};
 			        return;
 			    }
 
-			   
-			
-		   
+			   					   
 			$.ajax({
 				url : 'commandConfigServlet',
 				type : 'POST',

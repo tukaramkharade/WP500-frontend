@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -872,6 +874,7 @@ var csrfTokenValue;
 													$('#json_string_text').val('{"unit_id":"UNIT1","asset_id":"ASSET1","TAG1":"var1","TAG2":"var2"}');
 													$('#json_string_validate').val('');
 													$('#registerBtn').val('Add');
+													 $('#field_string_Error').text('');
 												});
 																
 					    }		

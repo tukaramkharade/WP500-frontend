@@ -124,7 +124,7 @@
                 </li>
                 
                 <li class="nav-item">
-                <a href="dispensertrigger.jsp">Dispenser Trigger</a>
+                <a href="eventtriggerdata.jsp">Event Trigger Data</a>
               </li>
                 
                 <li class="nav-item">

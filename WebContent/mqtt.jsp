@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -915,6 +917,46 @@ margin-top: 20px;
 	        }
 	    }
 		
+
+		$('#field_ipaddr_Error').text('');
+	    $('#field_user_Error').text('');
+	    $('#field_pub_Error').text('');
+	    $('#field_sub_Error').text('');
+	    $('#field_prefix_Error').text('');
+		
+		 var usernameError = validateUserName(username);
+		    if (usernameError) {
+		        $('#field_user_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		    
+		    var ipAddrError = validateIPaddr(broker_ip_address);
+		    if (ipAddrError) {
+		        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		   
+		    var pubTopicError = validatePubTopic(pub_topic);
+		    if (pubTopicError) {
+		        $('#field_pub_Error').text(pubTopicError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		    
+		    var subTopicError = validateSubTopic(sub_topic);
+		    if (subTopicError) {
+		        $('#field_sub_Error').text(subTopicError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+
+		  
+		    var prefixError = validatePrefix(prefix);
+		    if (prefixError) {
+		        $('#field_prefix_Error').text(prefixError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
+		        return;
+		    }
+		
 		$.ajax({
 			url : 'mqttServlet',
 			type : 'POST',
@@ -1314,6 +1356,11 @@ margin-top: 20px;
 					    							$('#file_name').val('Select crt file');
 					    							$('#enable').val('Disable');
 					    							$('#registerBtn').val('Add');
+					    							$('#field_ipaddr_Error').text('');
+					    						    $('#field_user_Error').text('');
+					    						    $('#field_pub_Error').text('');
+					    						    $('#field_sub_Error').text('');
+					    						    $('#field_prefix_Error').text('');
 					    						});
 					    						
 					    						$('#password-toggle').click(function () {

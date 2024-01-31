@@ -1,6 +1,8 @@
 <%  
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
+
 %>
 
 <!DOCTYPE html>
@@ -610,7 +612,7 @@ if (roleValue === "null") {
 										<td>Common name</td>
 										<td style="height: 50px;">
 										<input type="text" id="common_name"
-											name="common_name" style="height: 10px;" />
+											name="common_name" style="height: 10px;" required/>
 											<span id="field_name_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
@@ -619,17 +621,17 @@ if (roleValue === "null") {
 										<td>Organization</td>
 										<td style="height: 50px;">
 										<input type="text" id="organization"
-											name="organization" style="height: 10px;" />
+											name="organization" style="height: 10px;" required/>
 											<span id="field_org_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
 
 									<tr>
 
-										<td>Organizationl unit</td>
+										<td>Organizational unit</td>
 										<td style="height: 50px;">
 										<input type="text" id="organizational_unit"
-											name="organizational_unit" style="height: 10px;" />
+											name="organizational_unit" style="height: 10px;" required/>
 											<span id="field_orgunit_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 											
@@ -638,7 +640,7 @@ if (roleValue === "null") {
 									<tr>
 										<td>Location</td>
 										<td style="height: 50px;">
-										<input type="text" id="location" name="location" style="height: 10px;" />
+										<input type="text" id="location" name="location" style="height: 10px;" required/>
 										<span id="field_loc_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
@@ -646,7 +648,7 @@ if (roleValue === "null") {
 									<tr>
 										<td>State</td>
 										<td style="height: 50px;">
-										<input type="text" id="state" name="state" style="height: 10px;" />
+										<input type="text" id="state" name="state" style="height: 10px;" required/>
 										<span id="field_state_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
@@ -654,7 +656,7 @@ if (roleValue === "null") {
 									<tr>
 										<td>Country</td>
 										<td style="height: 50px;">
-										<input type="text" id="country" name="country" style="height: 10px;" />
+										<input type="text" id="country" name="country" style="height: 10px;" required/>
 										<span id="field_country_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
@@ -667,7 +669,7 @@ if (roleValue === "null") {
 										<td>Validity not after</td>
 										<td style="height: 50px;">
 										<input type="text" id="validity" name="validity"
-											style="height: 10px; width: 20%;" /> (in days)
+											style="height: 10px; width: 20%;" required/> (in days)
 											
 											<span id="field_validity_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>

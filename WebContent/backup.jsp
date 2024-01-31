@@ -1,6 +1,6 @@
 <%  
-    // Add X-Frame-Options header to prevent clickjacking
-    response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Frame-Options", "DENY");
+response.setHeader("X-Content-Type-Options", "nosniff");
 %>
 
 <!DOCTYPE html>
@@ -16,7 +16,6 @@
 <script src="jquery-3.6.0.min.js"></script>
 
 <style>
-
 .modal-edit,
 .modal-session-timeout {
   display: none;
@@ -98,8 +97,8 @@ margin-top: 68px;
     transition: width 0.3s ease-in-out;
 }
 #closePopup {
-  display: block; /* Display as to center horizontally */
-  margin-top: 30px; /* Adjust the top margin as needed */
+  display: block; 
+  margin-top: 30px; 
   background-color: #4caf50;
   color: #fff;
   border: none;
@@ -115,10 +114,8 @@ margin-top: 68px;
 	color: red;
 	margin-top: 5%;
 }
-
 </style>
 <script>
-
 var roleValue;	
 var tokenValue;
 var progressInterval;
@@ -127,15 +124,12 @@ var csrfTokenValue;
 function validateAndUpload(fileInputId, allowedExtension) {
     var fileInput = document.getElementById(fileInputId);
     var file = fileInput.files[0];
-
     if (file) {
         var fileName = file.name;
         var fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-
         if (fileExtension === allowedExtension) {
             var formData = new FormData();
             formData.append('file', file);
-
             $.ajax({
                 url: 'UploadServlet',
                 type: 'POST',
@@ -143,44 +137,33 @@ function validateAndUpload(fileInputId, allowedExtension) {
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    clearInterval(progressInterval); // Stop the progress interval
+                    clearInterval(progressInterval); l
                     if (data.status === 'success') {
-                        // File uploaded successfully logic
                         $("#popupMessage").text('File uploaded successfully.');
                         $("#customPopup").show();
-                        loadStratonFiles();  // Refresh the Straton file list
+                        loadStratonFiles();  
                     } else {
-                    	if (data.status == 'error') {
-							
+                    	if (data.status == 'error') {					
 							 var modal1 = document.getElementById('custom-modal-session-timeout');
 							  modal1.style.display = 'block';
 							  
-							// Update the session-msg content with the message from the server
 							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+							    sessionMsg.textContent = data.message; 
 
-							  
-							  // Handle the confirm button click
 							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
+							  confirmButton1.onclick = function () {							  
 							        modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };			  
 						} 
-                        // Error uploading file logic
                         $("#popupMessage").text('Error uploading file: ' + data.message);
                         $("#customPopup").show();
                     }
                 },
                 error: function(xhr, status, error) {
-                    clearInterval(progressInterval); // Stop the progress interval on error
-                    
+                    clearInterval(progressInterval);                 
                 }
             });
-
-            // Start the progress interval only if a file is being uploaded
             progressInterval = setInterval(updateProgress, 1000);
         } else {
             $("#popupMessage").text('Invalid file extension. Please select a file with ' + allowedExtension + ' extension.');
@@ -196,16 +179,14 @@ function validateAndUpload(fileInputId, allowedExtension) {
         $('#progress-bar').text('');	
     });
 }
-function updateProgress() {
-	 
+
+function updateProgress() {	 
     $.ajax({
-        url: 'UploadServlet', // Replace with your servlet URL
+        url: 'UploadServlet', 
         type: 'GET',
         dataType: 'json',
-        success: function(data) {
-        	
-            var progress = data.progress;
-            
+        success: function(data) {       	
+            var progress = data.progress;          
             $('#progress-bar').css('width', progress + '%');
             $('#progress-bar').text(progress + '%');
             if (progress === 100) {
@@ -229,31 +210,22 @@ function downloadZipFile() {
             tokenValue: tokenValue
         },
         success: function (data, status, xhr) {
-            // Handle success
             var filename = "";
             var disposition = xhr.getResponseHeader('Content-Disposition');
-
-            // Access custom headers
             var customStatus = xhr.getResponseHeader('X-Status');
             var customMessage = xhr.getResponseHeader('X-Message');
-
-            // Handle custom headers
             if (customStatus === 'success') {
-                // File download was successful
                 if (disposition && disposition.indexOf('attachment') !== -1) {
                     var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
                     var matches = filenameRegex.exec(disposition);
                     if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
                 }
-
                 var blob = new Blob([data], { type: 'application/octet-stream' });
-
                 if (typeof window.navigator.msSaveBlob !== 'undefined') {
                     window.navigator.msSaveBlob(blob, filename);
                 } else {
                     var URL = window.URL || window.webkitURL;
                     var downloadUrl = URL.createObjectURL(blob);
-
                     if (filename) {
                         var a = document.createElement("a");
                         a.href = downloadUrl;
@@ -264,26 +236,18 @@ function downloadZipFile() {
                     } else {
                         window.location.href = downloadUrl;
                     }
-
                     setTimeout(function () {
                         URL.revokeObjectURL(downloadUrl);
                     }, 100);
                 }
-            } else {
-                // Display the custom popup message for error
+            } else {                
                 $("#popupMessage").text(customMessage || "Error initiating file download");
                 $("#customPopup").show();
             }
         },
-        error: function (xhr, status, error) {
-            // Handle errors
-            console.error("Error initiating file download: " + error);
-
-            // Display the custom popup message for errors
+        error: function (xhr, status, error) {                     
             var customStatus = xhr.getResponseHeader('X-Status');
             var customMessage = xhr.getResponseHeader('X-Message');
-
-            // Display the custom popup message for error
             $("#popupMessage").text(customMessage || "Error initiating file download");
             $("#customPopup").show();
         }
@@ -294,10 +258,8 @@ function downloadZipFile() {
     });
 }
 
-
 function createBackupFile() {
-	   var csrfToken = document.getElementById('csrfToken').value;
-	   
+	   var csrfToken = document.getElementById('csrfToken').value;	   
 	$.ajax({
 		url : 'downloadBackupFile',
 		type : 'POST',
@@ -305,44 +267,31 @@ function createBackupFile() {
 			action: 'createBackupFile',
 			csrfToken: csrfToken
 		},
-		success : function(data) {
-			
-			if (data.status == 'fail') {
-				
+		success : function(data) {		
+			if (data.status == 'fail') {			
 				 var modal1 = document.getElementById('custom-modal-session-timeout');
-				  modal1.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
+				  modal1.style.display = 'block';			  
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
+				    sessionMsg.textContent = data.message; 			  
 				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-				  confirmButton1.onclick = function () {
-					  
-					// Close the modal
+				  confirmButton1.onclick = function () {						
 				        modal1.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };			  
-			} 
-			
-			// Display the custom popup message
+			} 		
  			$("#popupMessage").text(data.message);
   			$("#customPopup").show();			
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {			
 		}
 	});
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
-	
 }	
+
 function restoreBackupFile() {
-	   var csrfToken = document.getElementById('csrfToken').value;
-	   
+	   var csrfToken = document.getElementById('csrfToken').value;	   
 	$.ajax({
 		url : 'downloadBackupFile',
 		type : 'POST',
@@ -350,69 +299,53 @@ function restoreBackupFile() {
 			action: 'restoreBackupFile',
 			csrfToken: csrfToken
 		},
-		success : function(data) {	
-			
-			if (data.status == 'fail') {
-				
+		success : function(data) {				
+			if (data.status == 'fail') {				
 				 var modal1 = document.getElementById('custom-modal-session-timeout');
-				  modal1.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
+				  modal1.style.display = 'block';			  
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
+				    sessionMsg.textContent = data.message; 
 				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-				  confirmButton1.onclick = function () {
-					  
-					// Close the modal
+				  confirmButton1.onclick = function () {					  
 				        modal1.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };			  
 			}		
 		},
-		error : function(xhr, status, error) {
-		
+		error : function(xhr, status, error) {		
 		}
-	});	
-	
+	});		
 }	
-
 
 function changeButtonColor(isDisabled) {
     var $download_button = $('#downloadZipFile');       
     var $restore_button = $('#restoreButton');
     var $generate_button = $('#generateBackupFile');
-    var $restore_backup_button = $('#restoreBackupFile');
-    
-     if (isDisabled) {
-        $download_button.css('background-color', 'gray'); // Change to your desired color
-    } else {
-        $download_button.css('background-color', '#2b3991'); // Reset to original color
-    }
+    var $restore_backup_button = $('#restoreBackupFile');   
     
     if (isDisabled) {
-        $restore_button.css('background-color', 'gray'); // Change to your desired color
+        $download_button.css('background-color', 'gray'); 
     } else {
-        $restore_button.css('background-color', '#2b3991'); // Reset to original color
-    } 
-    
+        $download_button.css('background-color', '#2b3991'); 
+    }  
     if (isDisabled) {
-        $generate_button.css('background-color', 'gray'); // Change to your desired color
+        $restore_button.css('background-color', 'gray'); 
     } else {
-        $generate_button.css('background-color', '#2b3991'); // Reset to original color
-    } 
-    
+        $restore_button.css('background-color', '#2b3991'); 
+    }    
     if (isDisabled) {
-        $restore_backup_button.css('background-color', 'gray'); // Change to your desired color
+        $generate_button.css('background-color', 'gray'); 
     } else {
-        $restore_backup_button.css('background-color', '#2b3991'); // Reset to original color
+        $generate_button.css('background-color', '#2b3991'); 
+    }    
+    if (isDisabled) {
+        $restore_backup_button.css('background-color', 'gray'); 
+    } else {
+        $restore_backup_button.css('background-color', '#2b3991');
     } 
-    
 }
-	$(document).ready(function() {
 
+	$(document).ready(function() {
 		<%
     	// Access the session variable
     	HttpSession role = request.getSession();
