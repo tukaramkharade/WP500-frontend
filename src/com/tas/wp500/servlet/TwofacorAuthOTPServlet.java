@@ -40,7 +40,7 @@ public class TwofacorAuthOTPServlet extends HttpServlet {
 				json.put("username", check_username);
 				json.put("user", check_username);
 				json.put("role", check_role);
-			//	json.put("token", check_token);
+				json.put("hardCorePassword", "S3cureP@ss!2024");
 				
 				String respStr = client.sendMessage(json.toString());
 
@@ -98,9 +98,9 @@ public class TwofacorAuthOTPServlet extends HttpServlet {
 				json.put("operation", "send_otp_email");
 				json.put("username", check_username);
 				json.put("user", check_username);
-		//		json.put("token", check_token);
 				json.put("to_email_id", to_email_id);
 				json.put("role", check_role);
+				json.put("hardCorePassword", "S3cureP@ss!2024");
 				
 				String respStr = client.sendMessage(json.toString());
 

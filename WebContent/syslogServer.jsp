@@ -1,8 +1,21 @@
-<%  
+<%
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("X-Content-Type-Options", "nosniff");
 
+    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
+    HttpSession session1 = request.getSession();
+
+    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -379,7 +392,7 @@ function updateSysLogStatus(){
 
 					// Clear form fields
 
-					$('#status').val('Select status');
+					$('#status').val('ENABLE');
 					
 				},
 				error : function(xhr, status, error) {
@@ -518,8 +531,8 @@ $('#applyButton').click(function() {
 							<td>Status</td>
 							<td><select class="textBox" id="status" name="status" style="height: 33px; max-width: 220px;">
 							
-							<option value="Enable" selected>Enable</option>
-							<option value="Disable">Disable</option>
+							<option value="ENABLE" selected>ENABLE</option>
+							<option value="DISABLE">DISABLE</option>
 						</select>
 						
 						</td>

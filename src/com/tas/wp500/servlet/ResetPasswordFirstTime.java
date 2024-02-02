@@ -15,9 +15,9 @@ import org.json.JSONObject;
 
 import com.tas.wp500.utils.TCPClient;
 
-@WebServlet("/ChangePasswordServlet")
-public class ChangePasswordServlet extends HttpServlet {
-	final static Logger logger = Logger.getLogger(ChangePasswordServlet.class);
+@WebServlet("/resetPasswordFirstTime")
+public class ResetPasswordFirstTime extends HttpServlet {
+	final static Logger logger = Logger.getLogger(ResetPasswordFirstTime.class);
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,6 +37,7 @@ public class ChangePasswordServlet extends HttpServlet {
 				json.put("operation_type", "get_password_info");
 				json.put("user", check_username);
 				json.put("role", check_role);
+				json.put("hardCorePassword", "S3cureP@ss!2024");
 				
 				String respStr = client.sendMessage(json.toString());
 				JSONObject respJson = new JSONObject(respStr);
@@ -112,6 +113,7 @@ public class ChangePasswordServlet extends HttpServlet {
 					json.put("old_password", old_password);
 					json.put("new_password", new_password);
 					json.put("role", check_role);
+					json.put("hardCorePassword", "S3cureP@ss!2024");
 					
 					String respStr = client.sendMessage(json.toString());
 

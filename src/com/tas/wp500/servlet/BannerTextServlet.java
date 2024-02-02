@@ -36,6 +36,7 @@ public class BannerTextServlet extends HttpServlet {
 				
 				json.put("operation", "read_banner_file");
 				json.put("user", check_username);
+				json.put("hardCorePassword", "S3cureP@ss!2024");
 				
 				String respStr = client.sendMessage(json.toString());
 

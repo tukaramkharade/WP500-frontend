@@ -55,14 +55,8 @@ public class Lan2UpdateServlet extends HttpServlet {
 			json.put("operation", "update_lan_setting");
 			json.put("user", check_username);
 			json.put("role", check_role);
-//			json.put("lan_type", lan2_type);
-//			json.put("lan2_dhcp", lan2_dhcp);
-//			json.put("lan2_ipaddr", lan2_ipaddr);
-//			json.put("lan2_subnet", lan2_subnet);
-//			json.put("lan2_gateway", lan2_gateway);
-//			json.put("lan2_dns", lan2_dns);
-//			json.put("lan2_enable", toggle_enable_lan2);
 			json.put("token", check_token);
+			
 			if (!lan2_type.isEmpty()) {
 			    json.put("lan_type", lan2_type);
 			}

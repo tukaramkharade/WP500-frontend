@@ -1,8 +1,14 @@
-<%  
-    // Add X-Frame-Options header to prevent clickjacking
+<%
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    HttpSession session1 = request.getSession();
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -15,10 +21,7 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 <link rel="stylesheet" href="nav-bar.css" />
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
-
 <script src="jquery-3.6.0.min.js"></script>
-
-
 <style>
 .modal-delete,
 .modal-edit,
@@ -57,8 +60,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
-
-/* Style for buttons */
 button {
   margin: 5px;
   padding: 10px 20px;
@@ -99,7 +100,6 @@ button {
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -157,7 +157,6 @@ margin-top: 18px;
   
   }
   
-  
   .password-toggle {
    margin-right: -5px;
     margin-top: -10px;    
@@ -175,7 +174,6 @@ margin-top: 18px;
         }
         
         .tab-button {
-          
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -186,13 +184,11 @@ margin-top: 18px;
             color: white;
         }
         
-        .tab-content {
-           
+        .tab-content {       
             border: 1px solid #ccc;
         }
         
-        .tab-container{
-       
+        .tab-container{     
         margin-left: -18px;
         }
         
@@ -218,7 +214,6 @@ margin-top: 18px;
 
 </style>
 <script>
-
 var roleValue;
 var tokenValue;
 var csrfTokenValue;
@@ -226,7 +221,6 @@ var csrfTokenValue;
 function togglePassword() {
     var passwordInput = $('#password');
     var passwordToggle = $('#password-toggle');
-
     if (passwordInput.attr('type') === 'password') {
         passwordInput.attr('type', 'text');
         passwordToggle.html('<i class="fa fa-eye-slash"></i>'); // Change to eye-slash icon
@@ -236,15 +230,10 @@ function togglePassword() {
     }
 }
 
-
-	// Function to load user data and populate the user list table
 	function loadUserList() {
-		// Display loader when the request is initiated
 	    showLoader();
-	    var csrfToken = document.getElementById('csrfToken').value;
-	    
-		$.ajax({
-					
+	    var csrfToken = document.getElementById('csrfToken').value;    
+		$.ajax({				
 					url : 'userServlet',
 					type : 'GET',
 					dataType : 'json',
@@ -255,48 +244,32 @@ function togglePassword() {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
 					success : function(data) {
-						// Hide loader when the response has arrived
-			            hideLoader();
-						
-						if (data.status == 'fail') {
-							
+			            hideLoader();	
+						if (data.status == 'fail') {				
 							 var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-							  
-							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
-								  
-								// Close the modal
+							 modal.style.display = 'block';							  
+							 var sessionMsg = document.getElementById('session-msg');
+							 sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+							 var confirmButton = document.getElementById('confirm-button-session-timeout');
+							 confirmButton.onclick = function () {						  
 							        modal.style.display = 'none';
 							        window.location.href = 'login.jsp';
-							  };
-								  
-						} 
-						
-						// Clear existing table rows
+							 };						  
+						} 						
 						var userTable = $('#userListTable tbody');
-						userTable.empty();
-						
+						userTable.empty();						
 						if(roleValue == 'ADMIN' || roleValue == 'Admin'){
 							data.result.forEach(function(user) {
 								if (user.username !== 'wp500') {
-								var username = user.username; // Accessing the date_time property
-								var first_name = user.first_name; // Accessing the event_name property
-								var last_name = user.last_name; // Accessing the event_type property
-								var role = user.role; // Accessing the msg property
-
+								var username = user.username; 
+								var first_name = user.first_name; 
+								var last_name = user.last_name; 
+								var role = user.role; 
 								var row = $("<tr>").append($("<td>").text(username),
 										$("<td>").text(first_name),
 										$("<td>").text(last_name),
-										$("<td>").text(role));
-								
-								var actions = $('<td>');
-								
+										$("<td>").text(role));							
+								var actions = $('<td>');								
 								var editButton = $(
 	                            '<button data-toggle="tooltip" data-placement="top" title="Edit" style="color: #35449a;">'
 	                            )
@@ -307,39 +280,29 @@ function togglePassword() {
 	                                setLastName(user.last_name);
 	                                setRole(user.role);
 	                            });
-
 	                        var deleteButton = $(
 	                            '<button data-toggle="tooltip" data-placement="top" title="Delete" style="color: red;">')
 	                            .html('<i class="fas fa-trash-alt"></i>')
 	                            .click(function() {
 	                                deleteUser(user.username);
 	                            });
-
 	                        var changePasswordButton = $(
 	                            '<button data-toggle="tooltip" data-placement="top" title="Change password" style="color: #35449a;">')
 	                            .html('<i class="fas fa-key"></i>')
 	                            .click(function() {
-	                            	// Check if the password field is disabled
 	                    		    var isPasswordDisabled = $("#password").is(":disabled");
-
-	                    		    // If it is disabled, enable it before proceeding
 	                    		    if (isPasswordDisabled) {
 	                    		        $("#password").prop("disabled", false);
-	                    		    }
-	                    		    
+	                    		    }            		    
 	                                setUserForChangingPassword(user.username);
 	                            });
-
 						actions.append(editButton);
 						actions.append(deleteButton);
 						actions.append(changePasswordButton);
-
 						row.append(actions);
 								userTable.append(row);
 								}
 							});
- 
- 
 						}else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 							data.result.forEach(function(user) {
 								if (user.username !== 'wp500') {
@@ -347,23 +310,17 @@ function togglePassword() {
 									var first_name = user.first_name; 
 									var last_name = user.last_name; 
 									var role = user.role; 
-
 									var row = $("<tr>").append($("<td>").text(username),
 											$("<td>").text(first_name),
 											$("<td>").text(last_name),
-											$("<td>").text(role));
-									
+											$("<td>").text(role));								
 									userTable.append(row);
 								}
-							});
-							
-						}
-						
+							});						
+						}					
 					},
 					error : function(xhr, status, error) {
-						// Hide loader when the response has arrived
-			            hideLoader();
-						
+			            hideLoader();						
 					}
 				});
 	}
@@ -378,65 +335,45 @@ function togglePassword() {
 	}
 
 	function settUser(userId) {
-		// Make an AJAX GET request to retrieve user details for editing
-
 		$("#password").prop("disabled", true);
 		$('#username').val(userId);
 		$("#username").prop("disabled", true);
 		$('#registerBtn').val('Update');
-
 	}
 
 	function setFirstName(userId) {
-
 		$('#first_name').val(userId);
 	}
-
 	function setLastName(userId) {
-
 		$('#last_name').val(userId);
 	}
-
 	function setRole(userId) {
-
 		$('#role').val(userId);
-	}
-
-	
-	// Validation for username
+	}	
 	function validateUsername(username) {
 	    var regex = /^[a-zA-Z][a-zA-Z0-9.@_-]*$/;
-
 	    if (!regex.test(username)) {
 	        return 'Invalid username; the allowed symbols are @_-';
 	    }
-
-	    return null; // Validation passed
+	    return null; 
 	}
 
-	// Validation for first name
 	function validateFirstName(firstName) {
     var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
     if (!regex.test(firstName)) {
         return 'Invalid First name; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
-	// Validation for last name
 	function validateLastName(lastName) {
 		var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
 	    if (!regex.test(lastName)) {
 	        return 'Invalid Last name; symbols not allowed';
 	    }
-
-	    return null; // Validation passed
+	    return null; 
 	}
 	
-	// Function to handle form submission and add a new user
 	function addUser() {
 
 		var username = $('#username').val();
@@ -446,27 +383,20 @@ function togglePassword() {
 		var user_role = $('#role').find(":selected").val();
 		 var csrfToken = document.getElementById('csrfToken').value;
 		
-		 // Clear previous error messages
 	    $('#field_User_Error').text('');
 	    $('#field_FirstName_Error').text('');
 	    $('#field_LastName_Error').text('');
 
-
-		 // Validate username
 	    var usernameError = validateUsername(username);
 	    if (usernameError) {
 	        $('#field_User_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
-
-	    // Validate first name
 	    var firstNameError = validateFirstName(first_name);
 	    if (firstNameError) {
 	        $('#field_FirstName_Error').text(firstNameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
-
-	    // Validate last name
 	    var lastNameError = validateLastName(last_name);
 	    if (lastNameError) {
 	        $('#field_LastName_Error').text(lastNameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
@@ -485,67 +415,42 @@ function togglePassword() {
 				csrfToken: csrfToken,
 				action: 'add'
 			},
-			success : function(data) {
-				
-				if (data.status == 'fail') {
-					
+			success : function(data) {				
+				if (data.status == 'fail') {			
 					 var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
-					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-					  
-					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
+					 modal.style.display = 'block';				  
+					 var sessionMsg = document.getElementById('session-msg');
+					 sessionMsg.textContent = data.message; // Assuming data.message contains the server message				  
+					 var confirmButton = document.getElementById('confirm-button-session-timeout');
+					 confirmButton.onclick = function () {					  
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-						  
+					 };				  
 				}
 				
-				// Display the custom popup message
      			$("#popupMessage").text(data.message);
-      			$("#customPopup").show();
-      			
+      			$("#customPopup").show();      			
 				loadUserList();
-
-				if(data.status === "success"){
-					// Clear form fields
-					
-					 var passwordInput = $('#password');
+				if(data.status === "success"){				
+					var passwordInput = $('#password');
 				    var passwordToggle = $('#password-toggle');
-
-				    // Reset password input first
 				    passwordInput.attr('type', 'password');
-				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
-				    
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon			    
 					$('#username').val('');
 				    $('#password').val('');
 				    $('#first_name').val('');
 				    $('#last_name').val('');
 				    $('#role').val('ADMIN');
-				}
-				
-
+				}				
 			},
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {				
 			}
-		});
-		
+		});	
 		$("#closePopup").click(function () {
 		    $("#customPopup").hide();
 		  });
-
 		$('#registerBtn').val('Add');
 	}
-
-
 
 	function changeButtonColor(isDisabled) {
         var $add_button = $('#registerBtn');       
@@ -553,24 +458,21 @@ function togglePassword() {
         var $reset_password_button = $('#resetPasswordPolicy');
         var $apply_button = $('#applyPassword');
            
-         if (isDisabled) {
+        if (isDisabled) {
             $add_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $add_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-        
+        }     
         if (isDisabled) {
             $clear_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $clear_button.css('background-color', '#2b3991'); // Reset to original color
-        } 
-        
+        }       
         if (isDisabled) {
             $reset_password_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $reset_password_button.css('background-color', '#2b3991'); // Reset to original color
-        } 
-        
+        }        
         if (isDisabled) {
             $apply_button.css('background-color', 'gray'); // Change to your desired color
         } else {
@@ -583,33 +485,25 @@ function togglePassword() {
         for (var i = 0; i < tabs.length; i++) {
             tabs[i].style.display = "none";
         }
-
         var tab = document.getElementById(tabId);
         if (tab) {
             tab.style.display = "block";
         }
-
         var tabButtons = document.getElementsByClassName("tab-button");
         for (var i = 0; i < tabButtons.length; i++) {
             tabButtons[i].classList.remove("active");
         }
-
         if (button) {
             button.classList.add("active");
         }
     }
 	
 	function deleteUser(userId) {
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
-		  // Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal-delete');
-		  modal.style.display = 'block';
-
-		  // Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-delete');
-		  confirmButton.onclick = function () {
-		    // Make the AJAX call to delete the user
+		 var csrfToken = document.getElementById('csrfToken').value;	 
+		 var modal = document.getElementById('custom-modal-delete');
+		 modal.style.display = 'block';
+		 var confirmButton = document.getElementById('confirm-button-delete');
+		 confirmButton.onclick = function () {
 		    $.ajax({
 		      url: 'userServlet',
 		      type: 'POST',
@@ -618,95 +512,62 @@ function togglePassword() {
 		        csrfToken: csrfToken,
 		        action: 'delete'
 		      },
-		      success: function (data) {
-		       
-		    	  if (data.status == 'fail') {
-						
+		      success: function (data) {	       
+		    	  if (data.status == 'fail') {					
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
-						  modal1.style.display = 'block';
-						  
-						// Update the session-msg content with the message from the server
-						    var sessionMsg = document.getElementById('session-msg');
-						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-						  
-						  // Handle the confirm button click
-						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-						  confirmButton1.onclick = function () {
-							  
-							// Close the modal
+						 modal1.style.display = 'block';					  
+						 var sessionMsg = document.getElementById('session-msg');
+						 sessionMsg.textContent = data.message; // Assuming data.message contains the server message					  
+						 var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						 confirmButton1.onclick = function () {						  
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
-						  };
-							  
+						 };					  
 					}
-		    	  
-		        // Close the modal
-		        modal.style.display = 'none';
-
-		        // Refresh the user list
+		    	    modal.style.display = 'none';
 		        loadUserList();
 		        location.reload();
 		      },
-		      error: function (xhr, status, error) {
-		      
-		        // Close the modal
+		      error: function (xhr, status, error) {		      
 		        modal.style.display = 'none';
 		      }
 		    });
 		  };
-
-		  // Handle the cancel button click
 		  var cancelButton = document.getElementById('cancel-button-delete');
 		  cancelButton.onclick = function () {
-		    // Close the modal
 		    modal.style.display = 'none';
 		  };
 		}
 	
-	
 	 function editUser() {
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
+		 var csrfToken = document.getElementById('csrfToken').value;		 
 		 var username = $('#username').val();
 			var first_name = $('#first_name').val();
 			var last_name = $('#last_name').val();
-			var user_role = $('#role').find(":selected").val();
-			
-			 // Clear previous error messages
+			var user_role = $('#role').find(":selected").val();			
 		    $('#field_User_Error').text('');
 		    $('#field_FirstName_Error').text('');
 		    $('#field_LastName_Error').text('');
 
-
-			 // Validate username
 		    var usernameError = validateUsername(username);
 		    if (usernameError) {
 		        $('#field_User_Error').text(usernameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 		        return;
 		    }
-
-		    // Validate first name
 		    var firstNameError = validateFirstName(first_name);
 		    if (firstNameError) {
 		        $('#field_FirstName_Error').text(firstNameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 		        return;
 		    }
-
-		    // Validate last name
 		    var lastNameError = validateLastName(last_name);
 		    if (lastNameError) {
 		        $('#field_LastName_Error').text(lastNameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 		        return;
 		    }
-
-		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
+		  modal.style.display = 'block';		  
 		  var confirmButton = document.getElementById('confirm-button-edit');
-		  confirmButton.onclick = function () {
-			  
+		  confirmButton.onclick = function () {			  
 			  $.ajax({
 					url : 'userServlet',
 					type : 'POST',
@@ -718,39 +579,23 @@ function togglePassword() {
 						csrfToken: csrfToken,
 						action: 'update'
 					},
-					success : function(data) {
-					
-						if (data.status == 'fail') {
-							
+					success : function(data) {				
+						if (data.status == 'fail') {						
 							 var modal1 = document.getElementById('custom-modal-session-timeout');
-							  modal1.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-							  
-							  // Handle the confirm button click
-							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
+							 modal1.style.display = 'block';						  
+							 var sessionMsg = document.getElementById('session-msg');
+							 sessionMsg.textContent = data.message; // Assuming data.message contains the server message					  
+							 var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+							 confirmButton1.onclick = function () {						  
 							        modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
-							  };
-								  
-						}
-						
-						
-						modal.style.display = 'none';
-						
+							 };						  
+						}					
+						modal.style.display = 'none';					
 						loadUserList();
-
-						// Clear form fields
 						
-						 var passwordInput = $('#password');
-				    var passwordToggle = $('#password-toggle');
-
-				    // Reset password input first
+						var passwordInput = $('#password');
+				    	var passwordToggle = $('#password-toggle');
 				    passwordInput.attr('type', 'password');
 				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
 				    
@@ -759,40 +604,30 @@ function togglePassword() {
 			    $('#first_name').val('');
 			    $('#last_name').val('');
 			    $('#role').val('ADMIN');
-
 						$("#password").prop("disabled", false);
-
 						$("#username").prop("disabled", false);
 					},
-					error : function(xhr, status, error) {
-						
+					error : function(xhr, status, error) {					
 						 modal.style.display = 'none';
 					}
 				});
 			  $('#registerBtn').val('Add');		  
 		  };
-
 		  var cancelButton = document.getElementById('cancel-button-edit');
 		  cancelButton.onclick = function () {
-		    // Close the modal
 		    modal.style.display = 'none';
 		    $('#registerBtn').val('Update');
 		  };		
 	} 
 	 
 	 function editPassword() {
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
+		 var csrfToken = document.getElementById('csrfToken').value;	 
 		 var modal = document.getElementById('custom-modal-edit-password');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-edit-password');
-		  confirmButton.onclick = function () {
-			  
+		 modal.style.display = 'block';		  
+		 var confirmButton = document.getElementById('confirm-button-edit-password');
+		 confirmButton.onclick = function () {			  
 			  var username = $('#username').val();
-			  var password = $('#password').val();
-			  
+			  var password = $('#password').val();			  
 			  $.ajax({
 					url : 'userServlet',
 					type : 'POST',
@@ -802,93 +637,65 @@ function togglePassword() {
 						csrfToken: csrfToken,
 						action: 'update_user_password'
 					},
-					success : function(data) {
-					
-						if (data.status == 'fail') {
-							
+					success : function(data) {				
+						if (data.status == 'fail') {						
 							 var modal1 = document.getElementById('custom-modal-session-timeout');
 							  modal1.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-							  
-							  // Handle the confirm button click
+							  var sessionMsg = document.getElementById('session-msg');
+							  sessionMsg.textContent = data.message;							  
 							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
-							        modal1.style.display = 'none';
+							  confirmButton1.onclick = function () {						  
+								    modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
 							  };	  
-						}
-						
-						// Close the modal
-				        modal.style.display = 'none';
-						
+						}						
+				        modal.style.display = 'none';					
 						loadUserList();
-
-						// Clear form fields
-					$('#username').val('');
-			    $('#password').val('');
-			    
+						var passwordInput = $('#password');
+				    	var passwordToggle = $('#password-toggle');
+				    passwordInput.attr('type', 'password');
+				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon			    
+						$('#username').val('');
+			    		$('#password').val('');		    
 						$("#username").prop("disabled", false);
 						$("#first_name").prop("disabled", false);
 						$("#last_name").prop("disabled", false);
 						$("#role").prop("disabled", false);
 					},
-					error : function(xhr, status, error) {
-						
+					error : function(xhr, status, error) {					
 						 modal.style.display = 'none';
 					}
 				});
-			  $('#registerBtn').val('Add');
-				
-		  };
-		  
+			  $('#registerBtn').val('Add');			
+		  };  
 		  var cancelButton = document.getElementById('cancel-button-edit-password');
 		  cancelButton.onclick = function () {
-		    // Close the modal
 		    modal.style.display = 'none';
 		    $('#registerBtn').val('Update Password');
-		  };
-		  
+		  };		  
 	 }
 	 
 	 function updatePasswordPolicy(){
 		 var csrfToken = document.getElementById('csrfToken').value;
-		 
 		 var modal = document.getElementById('custom-modal-updatePasswordPolicy');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-updatePasswordPolicy');
-		  confirmButton.onclick = function () {
-			  
-			  event.preventDefault();
-			  
+		 modal.style.display = 'block';		  
+		 var confirmButton = document.getElementById('confirm-button-updatePasswordPolicy');
+		 confirmButton.onclick = function () {		  
+			  event.preventDefault();	  
 				var min_asccii_char_count = $('#min_asccii_char_count').val();
 				var min_mix_char_count = $('#min_mix_char_count').val();
 				var min_num_count = $('#min_num_count').val();
 				var min_spl_char_count = $('#min_spl_char_count').val();
 				var allowed_spl_char = $('#allowed_spl_char').val();
-				var min_char_count = $('#min_char_count').val();
-				
-				
-				 var password_blocked_list = [];
-				 
-				// Find all input fields with name "blocked_password" in the table
+				var min_char_count = $('#min_char_count').val();			
+				var password_blocked_list = [];				 
 				  $('#block-list input[name="blocked_password"]').each(function(index, input) {
 				    var value = $(input).val();
-
 				    if (value) {
 				      password_blocked_list.push(value);
 				    }
-				  });
-
-			        
-			        var blockedPasswordJson = JSON.stringify(password_blocked_list);
-			        
+				  });		        
+			      var blockedPasswordJson = JSON.stringify(password_blocked_list);		        
 			        $.ajax({
 			        	url : 'PasswordPolicyServlet',
 			    		type : 'POST',
@@ -901,60 +708,37 @@ function togglePassword() {
 			    			min_char_count : min_char_count,
 			    			password_blocked_list : blockedPasswordJson,
 			    			csrfToken: csrfToken,
-			    			password_policy_action : 'updatePassword'
-			    						
-			    		},
-			    		
-			    		
-			    		success : function(data) {
-			    			
-			    			if (data.status == 'fail') {
-								
+			    			password_policy_action : 'updatePassword'	    						
+			    		},	    			    		
+			    		success : function(data) {		    			
+			    			if (data.status == 'fail') {							
 								 var modal1 = document.getElementById('custom-modal-session-timeout');
-								  modal1.style.display = 'block';
-								  
-								// Update the session-msg content with the message from the server
-								    var sessionMsg = document.getElementById('session-msg');
-								    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-								  
-								  // Handle the confirm button click
-								  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-								  confirmButton1.onclick = function () {
-									  
-									// Close the modal
+								 modal1.style.display = 'block';						  
+								 var sessionMsg = document.getElementById('session-msg');
+								 sessionMsg.textContent = data.message; // Assuming data.message contains the server message							  
+								 var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+								 confirmButton1.onclick = function () {								  
 								        modal1.style.display = 'none';
 								        window.location.href = 'login.jsp';
-								  };	  
-							}
-			    			
-			    			// Close the modal
-					        modal.style.display = 'none';
-			    			
-			    			getPasswordPolicy();
-			    			
+								 };	  
+							}	    			
+					        modal.style.display = 'none';	    			
+			    			getPasswordPolicy();	    			
 			    		},
-			    		error : function(xhr, status, error) {
-			    			
-			    		}
-			        	
+			    		error : function(xhr, status, error) {	    			
+			    		}	        	
 			        });
-		  };
-		  
+		  };		  
 		  var cancelButton = document.getElementById('cancel-button-updatePasswordPolicy');
 		  cancelButton.onclick = function () {
-			  event.preventDefault();
-		    // Close the modal
-		    modal.style.display = 'none';
-		    
-		    window.location.reload();
-		   
-		  };
-			
+			  event.preventDefault();		   
+		    modal.style.display = 'none';		    
+		    window.location.reload();		   
+		  };		
 	 }
 	 
 	 function resetPasswordPolicy(){
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
+		 var csrfToken = document.getElementById('csrfToken').value;	 
 		 $.ajax({
 			  url : 'ResetPasswordPolicyServlet',
 				type : 'GET',
@@ -962,66 +746,41 @@ function togglePassword() {
 				data: {
 					csrfToken: csrfToken
 		        },
-				success : function(data) {
-					
-					if (data.status == 'fail') {
-						
+				success : function(data) {		
+					if (data.status == 'fail') {					
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
-						  modal1.style.display = 'block';
-						  
-						// Update the session-msg content with the message from the server
-						    var sessionMsg = document.getElementById('session-msg');
-						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-						  
-						  // Handle the confirm button click
-						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-						  confirmButton1.onclick = function () {
-							  
-							// Close the modal
+						 modal1.style.display = 'block';						  
+						 var sessionMsg = document.getElementById('session-msg');
+						 sessionMsg.textContent = data.message; // Assuming data.message contains the server message						  
+						 var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+						 confirmButton1.onclick = function () {							  
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
-						  };	  
-					}
-					
-					getPasswordPolicy();
-					
-					// Display the custom popup message
+						 };	  
+					}				
+					getPasswordPolicy();	
 	     			$("#popupMessage").text(data.message);
-	      			$("#customPopup").show();
-					
+	      			$("#customPopup").show();					
 				},
-				error : function(xhr, status, error) {
-					
+				error : function(xhr, status, error) {				
 				},
-		  });
-		 
+		  });		 
 		 $("#closePopup").click(function () {
 			    $("#customPopup").hide();
-			  });
+		});
 	 }
 	 
-	  
-	 
-	
 	  function addRow() {
-		    var table = document.getElementById('block-list');
-		    
-		    // Create a new row
+		    var table = document.getElementById('block-list');	    
 		    var newRow = table.insertRow(table.rows.length - 1);
-
-		    // Create cells for the new row
 		    var cell1 = newRow.insertCell(0);
 		    var cell2 = newRow.insertCell(1);
 		    var cell3 = newRow.insertCell(2);
-
-		    // Create input element for the new row
 		    var input = document.createElement('input');
 		    input.type = 'text';
 		    input.name = 'blocked_password';
 		    input.style.height = '10px';
 		    input.style.width = '900px';
-
-		    // Create delete button for the new row
 		    var deleteBtn = document.createElement('input');
 		    deleteBtn.type = 'button';
 		    deleteBtn.value = 'X';
@@ -1030,15 +789,10 @@ function togglePassword() {
 		    deleteBtn.title = 'Remove block list entry';
 		    deleteBtn.onclick = function () {
 		        removeRow(this);
-		    };
-
-		    // Append input and delete button to cells
+		    };  
 		    cell1.appendChild(input);
 		    cell2.appendChild(document.createTextNode('')); // Empty cell
 		    cell3.appendChild(deleteBtn);
-
-		    // Move the "+" button row to the end
-		 //   table.appendChild(table.rows[table.rows.length - 1]);
 		}
 
 		  function removeRow(button) {
@@ -1048,46 +802,33 @@ function togglePassword() {
 		  
 		  function populateBlockList(passwordBlockedList) {
 			    var table = document.getElementById('block-list');
-
-			    // Clear existing rows and header
-			    while (table.rows.length > 0) {
-			        table.deleteRow(0);
+				while (table.rows.length > 0) {
+			    table.deleteRow(0);
 			    }
-
-			    // Add header row
 			    var headerRow = table.insertRow(0);
 			    var headerCell1 = headerRow.insertCell(0);
 			    var headerCell2 = headerRow.insertCell(1);
-			    var headerCell3 = headerRow.insertCell(2);
-			   
+			    var headerCell3 = headerRow.insertCell(2);	   
 			    headerRow.style.backgroundColor = '#e2e6f9';
 			    headerCell1.innerHTML = '<b style="color: #283587;">Block Passwords</b>';
 			    headerCell2.innerHTML = ''; // Empty cell
 			    headerCell3.innerHTML = '<b style="color: #283587;">Actions</b>';
-
-			    // Populate with new rows
 			    for (var i = 0; i < passwordBlockedList.length; i++) {
 			        var newRow = table.insertRow(i + 1);
 			        var cell1 = newRow.insertCell(0);
 			        var cell2 = newRow.insertCell(1);
 			        var cell3 = newRow.insertCell(2);
-
 			        cell1.innerHTML = '<input type="text" name="blocked_password" style="width: 900px; height: 10px;" value="' + passwordBlockedList[i] + '" />';
 			        cell2.innerHTML = ''; // Empty cell
 			        cell3.innerHTML = '<input type="button" value="X" class="deleteBtn" style="height: 22px;" title="Remove block list entry" onclick="removeRow(this)" />';
-			    }
-
-			    // Add an additional row with the "+" button
+			    }	    
 			    var addButtonRow = table.insertRow(table.rows.length);
 			    var addButtonCell = addButtonRow.insertCell(0);
 			    addButtonCell.innerHTML = '<input type="button" value="+" style="height: 22px;" title="Add block list entry" onclick="addRow()" />';
 			}
 
-
-		  
 		  function getPasswordPolicy() {
-			  var csrfToken = document.getElementById('csrfToken').value;
-			  
+			  var csrfToken = document.getElementById('csrfToken').value;		  
 			  $.ajax({
 				  url : 'PasswordPolicyServlet',
 					type : 'GET',
@@ -1095,8 +836,7 @@ function togglePassword() {
 					data: {
 						csrfToken: csrfToken
 			        },
-					success : function(data) {
-						
+					success : function(data) {					
 						$('#min_char_count').val(data.characters_count);
 						$('#min_asccii_char_count').val(data.ascii_ch_count);
 						$('#min_num_count').val(data.number_count);
@@ -1104,64 +844,48 @@ function togglePassword() {
 						$('#allowed_spl_char').val(data.allowed_special_ch);
 						$('#min_spl_char_count').val(data.special_ch_count);
 						 var passwordBlockedList = data.password_blocked_list;
-				            populateBlockList(passwordBlockedList);
-						
+				            populateBlockList(passwordBlockedList);					
 					},
-					error : function(xhr, status, error) {
-						
+					error : function(xhr, status, error) {				
 					},
 			  });
 			 }
 		  
-		// Function to show the loader
-			 function showLoader() {
-			     // Show the loader overlay
+			 function showLoader() {			     
 			     $('#loader-overlay').show();
-			 }
-
-			 // Function to hide the loader
-			 function hideLoader() {
-			     // Hide the loader overlay
+			 }		
+			 function hideLoader() {		     
 			     $('#loader-overlay').hide();
 			 }
 	
-	// Function to execute on page load
 	$(document).ready(function() {
 		
 		<%// Access the session variable
 		HttpSession role = request.getSession();
 		String roleValue = (String) session.getAttribute("role");%>
-	
 	roleValue = '<%=roleValue%>';
 	
 	<%// Access the session variable
 	HttpSession csrfToken = request.getSession();
 	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 	csrfTokenValue = '<%=csrfTokenValue%>';
 	
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-
 			$("#actions").hide();
 			$('#registerBtn').prop('disabled', true);
 			$('#clearBtn').prop('disabled', true);
 			$('#resetPasswordPolicy').prop('disabled', true);
-			$('#applyPassword').prop('disabled', true);		
-			
+			$('#applyPassword').prop('disabled', true);				
 			changeButtonColor(true);
 		}
 		
 		if (roleValue === "null") {
 	        var modal = document.getElementById('custom-modal-session-timeout');
 	        modal.style.display = 'block';
-
 	        var sessionMsg = document.getElementById('session-msg');
-		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-		    
-		    // Handle the confirm button click
+		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 	    
 	        var confirmButton = document.getElementById('confirm-button-session-timeout');
 	        confirmButton.onclick = function() {
-	            // Close the modal
 	            modal.style.display = 'none';
 	            window.location.href = 'login.jsp';
 	        };
@@ -1170,13 +894,14 @@ function togglePassword() {
 			<%// Access the session variable
 			HttpSession token = request.getSession();
 			String tokenValue = (String) session.getAttribute("token");%>
-
 			 tokenValue = '<%=tokenValue%>'; 
 			
-				// Load user list
-				loadUserList();
+				loadUserList();				
+				var passwordField = $('#password');
+			    passwordField.on('paste', function(e) {
+			        e.preventDefault();
+			    });
 				
-				// Handle form submission
 				$('#userForm').submit(function(event) {
 					event.preventDefault();
 					var buttonText = $('#registerBtn').val();
@@ -1185,14 +910,8 @@ function togglePassword() {
 					var user_name = $('#username').val();
 					var firstname = $('#first_name').val();
 					var lastname = $('#last_name').val();
-
-
-					 var isDisabledRole = $("#role").prop("disabled");
-					 
-					
-					
-				 var isDisabled = $("#password").prop("disabled");
-									
+					var isDisabledRole = $("#role").prop("disabled");					 										
+				 	var isDisabled = $("#password").prop("disabled");						
 					if (buttonText == 'Add') {
 						addUser();
 					} else if(buttonText == 'Update'){
@@ -1205,11 +924,8 @@ function togglePassword() {
 				$('#clearBtn').click(function() {
 				    var passwordInput = $('#password');
 				    var passwordToggle = $('#password-toggle');
-
-				    // Reset password input first
 				    passwordInput.attr('type', 'password');
 				    passwordToggle.html('<i class="fa fa-eye"></i>'); // Change to eye icon
-
 				    $('#username').val('');
 				    $("#username").prop("disabled", false);
 				    $('#password').val('');
@@ -1224,35 +940,22 @@ function togglePassword() {
 				    $('#field_User_Error').text('');
 				    $('#field_FirstName_Error').text('');
 				    $('#field_LastName_Error').text('');
-				});
-
-				
-				  
+				});			  
 				  $('#applyPassword').click(function() {
 					  updatePasswordPolicy();
-				  });
-				  
-				 
-				  getPasswordPolicy();
-				  
-				  
+				  });			 
+				  getPasswordPolicy();		  			  
 				  $('#resetPasswordPolicy').click(function() {
-					  resetPasswordPolicy();
-					  
-				  });
-				  
+					  resetPasswordPolicy();				  
+				  });			  
 				  $('#password-toggle').click(function () {
 		                togglePassword();
-		            });
+		          });
 		}
-
-		
 	});
-	  
 </script>
 
 <body>
-
 	 <div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
@@ -1260,70 +963,52 @@ function togglePassword() {
 		<%@ include file="header.jsp"%>
 	</div>
 	<div class="content">
-		<section style="margin-left: 1em">
-				
+		<section style="margin-left: 1em">			
 		<div class="tab-container">
-		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-		
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />	
 		 <button class="tab-button active" onclick="openTab('add-user', this)" style="margin-left: 16px; margin-top: 10px;">Add User</button>
-    <button class="tab-button" onclick="openTab('password-policy', this)">Password Policy</button>
-		
-		<div id="add-user" class="tab" style="display: block; margin-left: 15px;">
-		
+    <button class="tab-button" onclick="openTab('password-policy', this)">Password Policy</button>	
+		<div id="add-user" class="tab" style="display: block; margin-left: 15px;">		
 		 <h3>ADD USER</h3>
-			<hr />
-			
+			<hr />		
 			<div class="container">
-				<form id="userForm">
-				
-   
-				<input type="hidden" id="action" name="action" value="">
-				
+				<form id="userForm">				
+				<input type="hidden" id="action" name="action" value="">			
 					<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>
         <p>Loading...</p>
     </div>
 </div>
-		
-		
 				<table class="bordered-table" style="margin-top: -1px;">
 					<tr>
 						<td>Username</td>
 						<td style="height: 50px; width: 230px;">
 						<input type="text" id="username" name="username" required maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<span id="field_User_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-        
-						</td>
-					
+						</td>			
 						<td>Password</td>
 						<td>
 						<input type="password" id="password" name="password" required maxlength="31" style="height: 10px; max-width: 200px;">
-						 <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>
-																
+						 <span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span>													
 						</td>
-					</tr>
-					
+					</tr>			
 					<tr>			
 						<td>First name</td>
 						<td style="height: 50px; width: 230px;">
 						<input type="text" id="first_name" name="first_name" maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<span id="field_FirstName_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-						</td>
-						
-						
+						</td>						
 						<td>Last name</td>
 						<td>
 						<input type="text" id="last_name" name="last_name"  maxlength="31" style="height: 10px; max-width: 200px;"/>
 								<span id="field_LastName_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 						</td>
-					</tr>
-							
+					</tr>						
 					<tr>	
 						<td>Role</td>
 						<td>
-						<select class="role" id="role" name="role" style="height: 33px; max-width: 200px;">
-								
+						<select class="role" id="role" name="role" style="height: 33px; max-width: 200px;">					
 								<option value="ADMIN" selected>ADMIN</option>
 								<option value="OPERATOR">OPERATOR</option>
 						</select> 
@@ -1331,16 +1016,12 @@ function togglePassword() {
 						<td></td>
 						<td></td>
 					</tr>
-				</table>
-					
-				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-					
+				</table>		
+				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">		
 					<input style="height: 26px;" type="button" value="Clear" id="clearBtn"/> 
 					<input style="margin-left: 5px; height: 26px;" type="submit" value="Add" id="registerBtn" />
-				</div>
-				
-				</form>
-			
+				</div>		
+				</form>		
 			<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
 				  <p>Are you sure you want to delete this user?</p>
@@ -1348,39 +1029,33 @@ function togglePassword() {
 				  <button id="cancel-button-delete">No</button>
 				</div>
 			  </div>
-			  
 			  <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modify this user?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
-			  </div>
-			  
+			  </div>	  
 			   <div id="custom-modal-edit-password" class="modal-edit-password">
 				<div class="modal-content-edit-password">
 				  <p>Are you sure you want to change the password?</p>
 				  <button id="confirm-button-edit-password">Yes</button>
 				  <button id="cancel-button-edit-password">No</button>
 				</div>
-			  </div>
-			  
+			  </div>		  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
-			  </div>
-			  
+			  </div>		  
 			   <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
 			  </div>
-
 </div>
 <div class="table-container">
-			<h3 style="margin-top: 15px;">USER LIST</h3>
-			
+			<h3 style="margin-top: 15px;">USER LIST</h3>		
 			<hr />
 				<table id="userListTable" style="width: 100%; margin-top: 5px;">
 					<thead>
@@ -1392,69 +1067,53 @@ function togglePassword() {
 							<th id="actions">Actions</th>
 						</tr>
 					</thead>
-					<tbody>
-						
+					<tbody>					
 					</tbody>
 				</table>
-			</div>
-			 
-		</div>
-		
-		 <div id="password-policy" class="tab">
-		 
+			</div>	 
+		</div>		
+		 <div id="password-policy" class="tab">		 
 		 <div class="policy-container" style="width: 97%;">
 		 <h3>Password Policy</h3>
-		 <hr>
-		 
-		 <form id="passwordPolicyForm"  onsubmit="return false;">
-		 
-		 <input type="hidden" id="password_policy_action" name="password_policy_action" value="">
-		 
-		 <table class="bordered-table">
-		 		
+		 <hr>	 
+		 <form id="passwordPolicyForm"  onsubmit="return false;">	 
+		 <input type="hidden" id="password_policy_action" name="password_policy_action" value=""> 
+		 <table class="bordered-table"> 		
 				<tr>
 				<th colspan="3">Password Complexity rules</th>
-				</tr>
-				
+				</tr>			
 				<tr>
 				<td>Minimum alphabet characters count</td>
 				<td><input type="text" id="min_asccii_char_count" name="min_asccii_char_count" style="height: 10px;"/></td>
 				<td>Number of alphabet characters a new password must at least contain.</td>
-				</tr>
-				
+				</tr>			
 				<tr>
 				<td>Minimum mixed characters count (uppercase/lowercase)</td>
 				<td><input type="text" id="min_mix_char_count" name="min_mix_char_count" style="height: 10px;"/></td>
 				<td>Number of mixed-case characters a new password must at least contain. (uppercase/lowercase)</td>
-				</tr>
-				
+				</tr>			
 				<tr>
 				<td>Minimum numbers count</td>
 				<td><input type="text" id="min_num_count" name="min_num_count" style="height: 10px;"/></td>
 				<td>Number count a new password must at least contain.</td>
-				</tr>
-				
+				</tr>				
 				<tr>
 				<td>Minimum special characters count</td>
 				<td><input type="text" id="min_spl_char_count" name="min_spl_char_count" style="height: 10px;"/></td>
 				<td>Number of special characters a new password must at least contain.</td>
-				</tr>
-				
+				</tr>			
 				<tr>
 				<td>Allowed special characters</td>
 				<td><input type="text" id="allowed_spl_char" name="allowed_spl_char" style="height: 10px;"/></td>
 				<td>ASCII special characters that are allowed for the special character count rule.</td>
-				</tr>
-				
+				</tr>			
 				<tr>
 				<td>Minimum characters count</td>
 				<td><input type="text" id="min_char_count" name="min_char_count" style="height: 10px;"/></td>
 				<td>Number of characters a new password must at least contain in general.</td>
 				</tr>
-				 </table>
-				
+		</table>				
 	<table id="block-list" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-
 	<tr>
 	<th colspan="3">Blocked passwords</th>
 	</tr>
@@ -1462,38 +1121,29 @@ function togglePassword() {
     <td colspan="2"><input type="text" name="blocked_password" style="width: 900px; height: 10px;" /></td>
     <td><input type="button" value="X" class="deleteBtn" style="height: 22px;" title="Remove block list entry" onclick="removeRow(this)" /></td>
   </tr>
-
   <tr>
     <td><input type="button" value="+" style="height: 22px;" title="Add block list entry" onclick="addRow()" /></td>
   </tr>
 </table>
-
-	<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-					
+	<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">				
 					 <input style="height: 26px;" type="button" value="Reset" id="resetPasswordPolicy"/> 
 					<input style="margin-left: 5px; height: 26px;" type="submit" value="Apply" id="applyPassword" />
 				</div>
-
 		 </form>
-		 </div>
-		 
+		 </div>	 
 		 <div id="custom-modal-updatePasswordPolicy" class="modal-updatePasswordPolicy">
 				<div class="modal-content-updatePasswordPolicy">
 				  <p>Are you sure you want to modify this password policy?</p>
 				  <button id="confirm-button-updatePasswordPolicy">Yes</button>
 				  <button id="cancel-button-updatePasswordPolicy">No</button>
 				</div>
-			  </div>
-			  
+			  </div>		  
 		 </div>
-		</div>
-			 
+		</div>		 
 		</section>
 	</div> 
-	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
-
 </body>
 </html>

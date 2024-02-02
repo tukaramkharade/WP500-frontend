@@ -47,9 +47,7 @@ public class LanUpdateServlet extends HttpServlet {
 		String eth1_type = request.getParameter("lan_type");
 		String eth1_dhcp = request.getParameter("eth1_dhcp1");
 		String eth1_gateway = request.getParameter("eth1_gateway");
-		String eth1_dns = request.getParameter("eth1_dns");
-//		String toggle_enable_lan1 = request.getParameter("toggle_enable_lan1");
-		
+		String eth1_dns = request.getParameter("eth1_dns");		
 
 		try {
 			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
@@ -57,22 +55,14 @@ public class LanUpdateServlet extends HttpServlet {
 			System.out.println("eth1_subnet-->: "+eth1_subnet);
 			System.out.println("eth1_type-->: "+eth1_type);
 			System.out.println("eth1_dhcp-->: "+eth1_dhcp);
-//			System.out.println("toggle_enable_lan1-->: "+toggle_enable_lan1);
 			
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-//{"operation":"update_lan_setting","lan_type":"eth1","eth1_dhcp":"0","eth1_ipaddr":"192.168.1.50","eth1_subnet":"255.255.255.0"}
 			json.put("operation", "update_lan_setting");
 			json.put("user", check_username);
 			json.put("token", check_token);
 			json.put("role", check_role);
-//			json.put("lan_type", eth1_type);
-//			json.put("lan0_dhcp", eth1_dhcp);
-//			json.put("lan0_ipaddr", eth1_ipaddr);
-//			json.put("lan0_subnet", eth1_subnet);
-//			json.put("lan0_gateway", eth1_gateway);
-//			json.put("lan0_dns", eth1_dns);
-//			json.put("toggle_enable_lan1", toggle_enable_lan1);
+
 			if (!eth1_type.isEmpty()) {
 			    json.put("lan_type", eth1_type);
 			}

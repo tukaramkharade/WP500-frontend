@@ -1,8 +1,7 @@
-<%  
+<%
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
 %>
 
 <!DOCTYPE html>

@@ -1,8 +1,14 @@
-<%  
-    // Add X-Frame-Options header to prevent clickjacking
+<%
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    HttpSession session1 = request.getSession();
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -14,7 +20,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="jquery-3.6.0.min.js"></script>
-    
 <style>
 
 .container.center label {
@@ -38,7 +43,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -53,11 +57,9 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 .note {
     color: red;
     text-align: left;
-    
 }
 
-   .email-container {
-        
+   .email-container {    
         align-items: center;
         justify-content: center;
         height: 10vh; /* Optional: Set a height to center vertically within the viewport */
@@ -81,32 +83,24 @@ response.setHeader("X-Content-Type-Options", "nosniff");
    
         function getSecretKey(){
         	$.ajax({
-
     			type : "GET",
     			url : "twofacorAuthOTPServlet", // URL of your servlet 
     			dataType : 'json',
-    			success : function(data) {
-    				
-    					secretKey = data.totp_key;
-    					
+    			success : function(data) { 				
+    					secretKey = data.totp_key;				
     			},
     			error : function() {
-    				// Handle errors here
     				console.error("Ajax request failed");
     			}
     		});
         }
         
         function sendOTP() {
-            // Get the OTP value from the input field
-            var otpValue = document.getElementById("otp").value;
-            
-         // Check if OTP is blank
+            var otpValue = document.getElementById("otp").value;            
             if (otpValue.trim() === '') {
                 document.getElementById("error-message").innerHTML = "Please enter the OTP.";
                 return; // Exit the function if OTP is blank
-            }
-          
+            }         
             $.ajax({
     			url : "qrcodeServlet",
     			type : "POST",
@@ -115,44 +109,32 @@ response.setHeader("X-Content-Type-Options", "nosniff");
     				secretKey: secretKey,
     				action: 'totp-authentication'
     			},
-                success: function (response) {
-                   
-                   
+                success: function (response) {                           
                     if(response.status === 'success'){
                     	window.location.href = 'overview.jsp';
-                    }else{
-                    	
-                    	// Display an error message on the same page
+                    }else{           	
                         document.getElementById("error-message").innerHTML = "Incorrect OTP. Please try again.";
-                        $('#otp').val('');
-                    	
-                    }
-                    
+                        $('#otp').val('');         	
+                    }            
                 },
                 error: function () {
-                    // Handle errors here
                     console.error("totp authentication failed");
                 }
             });
         }
         
         function validateEmailFormat(email) {
-            // Regular expression for basic email validation
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
         
-        function sendEmailOTP(){
-        	
-        	 var to_email_id = $('#to_email_id').val();
-        	 
-        	// Check if the email address is blank
+        function sendEmailOTP(){   	
+        	 var to_email_id = $('#to_email_id').val();    	 
         	    if (to_email_id.trim() === '') {
         	        $("#popupMessage").text('Please enter an email address.');
         	        $("#customPopup").show();
         	        return; // Exit the function if the email address is blank
-        	    }
-        	 
+     	    }      	 
         	 if (validateEmailFormat(to_email_id)) {
                  $.ajax({
                      url: 'twofacorAuthOTPServlet',
@@ -160,35 +142,25 @@ response.setHeader("X-Content-Type-Options", "nosniff");
                      data: {
                          to_email_id: to_email_id
                      },
-                     success: function (data) {
-                    	 
+                     success: function (data) {                  	 
                     	 $("#popupMessage").text(data.message);
-               			$("#customPopup").show();
-                         
+               			$("#customPopup").show();                   
                      },
-                     error: function (xhr, status, error) {
-                         
+                     error: function (xhr, status, error) {                   
                      }
                  });
-             } else {
-                 
+             } else {            
             	 $("#popupMessage").text('Invalid email format. Please enter a valid email address.');
-       			$("#customPopup").show();
-       			
+       			$("#customPopup").show();		
              }
-        }
+        }    
         
-        
-        function validateEmailOTP(){
-        	        	
-        	var emailOtpValue = document.getElementById("email_otp").value;
-        	
-        	// Check if OTP is blank
+        function validateEmailOTP(){     	        	
+        	var emailOtpValue = document.getElementById("email_otp").value;        	
             if (emailOtpValue.trim() === '') {
                 document.getElementById("error-message-email").innerHTML = "Please enter the OTP.";
                 return; // Exit the function if OTP is blank
-            }
-                     
+            }                  
             $.ajax({
     			url : "qrcodeServlet",
     			type : "POST",
@@ -196,54 +168,38 @@ response.setHeader("X-Content-Type-Options", "nosniff");
     				email_otp: emailOtpValue,
     				action: 'totp-authentication-email'
     			},
-                success: function (response) {
-                    
+                success: function (response) {            
                     if(response.status === 'success'){
                     	window.location.href = 'overview.jsp';
-                    }else{
-                    	
-                    	// Display an error message on the same page
+                    }else{                    	
                         document.getElementById("error-message-email").innerHTML = "Incorrect OTP. Please try again.";
-                        $('#email_otp').val('');
-                    	
-                    }
-                    
+                        $('#email_otp').val('');            	
+                    }              
                 },
                 error: function () {
-                    // Handle errors here
                     console.error("totp authentication failed");
                 }
-            });
-        	
-        	
+            });  	
         }
         
-        $(document).ready(function() {
-        	
-        	getSecretKey();
-        	
+        $(document).ready(function() {    	
+        	getSecretKey();  	
         	$("#closePopup").click(function () {
     		    $("#customPopup").hide();
-    		  });
-        	
+    		  });  	
         	 $('#get_otp').click(function() {
-        		 sendEmailOTP();
-				  
-			  });
-        	
+        		 sendEmailOTP();				  
+			  });  	
         });
         
-    </script>
-   
+    </script> 
 </head>
 <body>
-
 	<div class="content1">
 		<section style="margin-left: 1em">
 			<h3 style="margin-top: 68px;">TWO FACTOR AUTHENTICATION</h3>
 				<hr>
-			<div class="container-wrapper">
-			
+			<div class="container-wrapper">		
 		<div class="mobile-container" style="display: flex; flex-direction: column; align-items: left;">
     <h3>Authenticator App OTP</h3>
     <div class="row" style="display: flex; justify-content: left; align-items: left;">
@@ -252,50 +208,33 @@ response.setHeader("X-Content-Type-Options", "nosniff");
         <input type="button" id="sendOTP" onclick="sendOTP();" value="Validate OTP" style="margin-left: 15px; margin-top: -35px; height: 30px;">
         <div id="error-message" style="color: red; margin-left: 2%;"></div>
     </div>
-</div>
-			
-			
-			
-			
-			</div>
-			
+</div>		
+			</div>	
 			<h3>EMAIL OTP</h3>
-			<hr>
-			
+			<hr>			
 			 <div class="container1">
-
                 <label for="to_email_id" style="display: inline-block; margin-top: 10px;">To email id</label>
 <input required type="text" id="to_email_id" name="to_email_id" style="display: inline-block; padding-left: 5px; width: 15%; margin-top: 10px;">
-<input type="button" value="Get OTP" id="get_otp" style="display: inline-block; margin-left: 10px;">
-                
-
+<input type="button" value="Get OTP" id="get_otp" style="display: inline-block; margin-left: 10px;">            
             </div>
             
-            <div class="email-container">
-				
-				<div class="row" style="display: flex;   justify-content: left; align-items: left;">
-					
-    				 <input type="hidden" id="action" name="action" value="">
-    				
+            <div class="email-container">			
+				<div class="row" style="display: flex;   justify-content: left; align-items: left;">				
+    				 <input type="hidden" id="action" name="action" value=""> 				
     				<label for="enter_otp" style="display: inline-block; margin-top: 20px;">Enter OTP</label>
     				<input type="password" id="email_otp" style="width: 10%; margin-top: 20px; margin-left: 10px;">
     				<input type="button" id="email_sendOTP" value="Validate OTP" onclick="validateEmailOTP();" style="margin-left: 5.5%; height: 30px; margin-top: 20px;">
 					<div id="error-message-email" style="color: red; margin-left: 2%; margin-top: 27px;"></div>
-				</div>
-    			
-			</div>
-			
+				</div>    			
+			</div>		
 			<div class="note">
 					<p>Note: Email OTP is valid upto 5 minutes</p>
-				</div>
-			
+				</div>		
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
-			  </div>
-			
+			  </div>		
 	</section>
 	</div>
-    
 </body>
 </html>

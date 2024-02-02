@@ -187,6 +187,7 @@ public class QRCodeServlet extends HttpServlet {
 						json.put("user", check_username);
 						json.put("username", check_username);
 						json.put("role", check_role);
+						json.put("hardCorePassword", "S3cureP@ss!2024");
 
 						String respStr = client.sendMessage(json.toString());
 
@@ -238,6 +239,7 @@ public class QRCodeServlet extends HttpServlet {
 			//			json.put("token", check_token);
 						json.put("user", check_username);
 						json.put("role", check_role);
+						json.put("hardCorePassword", "S3cureP@ss!2024");
 
 						String respStr = client.sendMessage(json.toString());
 

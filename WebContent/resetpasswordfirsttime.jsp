@@ -1,8 +1,21 @@
-<%  
+<%
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("X-Content-Type-Options", "nosniff");
 
+    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
+    HttpSession session1 = request.getSession();
+
+    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -192,7 +205,7 @@ function updateOldPassword() {
 			var new_password = $('#new_password').val();
 
 			$.ajax({
-				url : 'ChangePasswordServlet',
+				url : 'resetPasswordFirstTime',
 				type : 'POST',
 				data : {
 					username : username,
@@ -232,11 +245,9 @@ function updateOldPassword() {
 			// Close the modal
 			modal.style.display = 'none';
 		};
-	} else {
-		
+	} else {		
 		$("#popupMessage").text('New password and confirm password do not match.');
-			$("#customPopup").show();
-		
+			$("#customPopup").show();	
 	}
 }
 
@@ -280,28 +291,22 @@ function toggleConfirmPassword() {
 }
 
 function getPasswordInfo(){
-	$.ajax({
-		 
-		 url : 'ChangePasswordServlet',
+	$.ajax({		 
+		 url : 'resetPasswordFirstTime',
 			type : 'GET',
 			dataType : 'json',
-			success : function(data) {
-				
+			success : function(data) {			
 	            $("#characters_count").text("1. Minimum "+data.characters_count+" character count");
 	            $("#ascii_ch_count").text("2. Minumum "+data.ascii_ch_count+" alphabet count");
 	            $("#number_count").text("3. Minimum "+data.number_count+" number count");
 	            $("#mixed_ch_count").text("4. Minimum "+data.mixed_ch_count+" mixed character count");
 	            $("#special_ch_count").text("5. Minimum "+data.special_ch_count+" special character count");
-	            $("#allowed_special_ch").text("6. "+data.allowed_special_ch+" allowed special characters");
-	            
+	            $("#allowed_special_ch").text("6. "+data.allowed_special_ch+" allowed special characters");	            
 			},
-			error : function(xhr, status, error) {
-							
-			}
-		    
+			error : function(xhr, status, error) {							
+			}		    
 	 });
 }
-
 
 $(document).ready(function () {
 	<%// Access the session variable
@@ -310,6 +315,23 @@ $(document).ready(function () {
 
 	 tokenValue = '<%=tokenValue%>'; 
 	
+	 var oldPasswordField = $('#old_password');
+
+	 oldPasswordField.on('paste', function(e) {
+       e.preventDefault();
+     });
+     
+     var newPasswordField = $('#new_password');
+
+     newPasswordField.on('paste', function(e) {
+       e.preventDefault();
+     });
+     
+     var confirmPasswordField = $('#confirm_password');
+
+     confirmPasswordField.on('paste', function(e) {
+       e.preventDefault();
+     });
 	
 	<%// Access the session variable
 	
