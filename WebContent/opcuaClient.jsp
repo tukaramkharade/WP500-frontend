@@ -1,8 +1,21 @@
-<%  
+<%
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("X-Content-Type-Options", "nosniff");
 
+    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
+    HttpSession session1 = request.getSession();
+
+    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -233,8 +246,7 @@ function loadOPCUAClientList(){
 							$("<td>").text(Security),
 							$("<td>").text(ActionType),
 							$("<td>").text(prefix));
-					
-					
+										
 					var actions = $('<td>');
 					
 					var editButton = $(
@@ -256,9 +268,7 @@ function loadOPCUAClientList(){
                     .click(function() {
                         deleteOpcuaClient(opcuaClient.prefix);
                     });
-
-               
-
+          
 			actions.append(editButton);
 			actions.append(deleteButton);									
 
@@ -285,16 +295,12 @@ function loadOPCUAClientList(){
 				});
 			}
 			
-		
-			
 		},
 		error : function(xhr, status, error) {
 			// Hide loader when the response has arrived
             hideLoader();
-			}
-		
+			}		
 	});
-	
 }
 
 function setEndUrl(opcuaClientId){
@@ -426,18 +432,16 @@ function validateUsername(username) {
     var regex = /^[a-zA-Z][a-zA-Z0-9.@_-]*$/;
 
     if (username.trim() === '') {
-        return null; // Empty field, validation passed
+        return null; 
     }
 
     if (!regex.test(username)) {
         return 'Invalid username; the allowed symbols are @_-';
     }
 
-    return null; // Validation passed
+    return null;
 }
 
-
-// Validation for first name
 function validatePrefix(prefix) {
 var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
 
@@ -445,7 +449,7 @@ if (!regex.test(prefix)) {
     return 'Invalid prefix; symbols not allowed';
 }
 
-return null; // Validation passed
+return null; 
 }
 
 function validateIPaddr(ipaddr) {
@@ -455,9 +459,8 @@ function validateIPaddr(ipaddr) {
         return 'Invalid IP Address. Please enter a valid IP address starting with opc.tcp://';
     }
 
-    return null; // Validation passed
+    return null; 
 }
-
 
 function addOPCUA(){
 	
@@ -663,6 +666,13 @@ $(document).ready(function() {
     	tokenValue = '<%=tokenValue%>';
     	
     	loadOPCUAClientList();
+    	
+    	var passwordField = $('#password');
+
+	      passwordField.on('paste', function(e) {
+	        e.preventDefault();
+	      });
+		
     	
     	$('#opcuaClientForm').submit(function(event) {
     		event.preventDefault();

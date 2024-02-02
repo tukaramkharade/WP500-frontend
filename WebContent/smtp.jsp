@@ -1,8 +1,21 @@
-<%  
+<%
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("X-Content-Type-Options", "nosniff");
 
+    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
+    HttpSession session1 = request.getSession();
+
+    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -35,7 +48,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 	width: 25%;
 }
 
-/* Style for the close button */
 #closePopup {
 	display: block; /* Display as to center horizontally */
 	margin-top: 30px; /* Adjust the top margin as needed */
@@ -87,7 +99,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 	color: white;
 }
 
-/* Style for buttons */
 button {
 	margin: 5px;
 	padding: 10px 20px;
@@ -114,7 +125,7 @@ margin-top: -30px;
 
 }
   .container th, .container td {
-    border: 1px solid #ccc; /* Light gray border */
+    border: 1px solid #ccc; 
     
     text-align: left;
     
@@ -140,8 +151,8 @@ margin-top: -30px;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
-    z-index: 1000; /* Ensure the loader is on top of other elements */
+    background: rgba(255, 255, 255, 0.7); 
+    z-index: 1000; 
     justify-content: center;
     align-items: center;
 }
@@ -149,7 +160,7 @@ margin-top: -30px;
 #loader {
     text-align: center;
    margin-left: 120px;
-    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
+    background: rgba(255, 255, 255, 0.2); 
     border-radius: 5px;
 }
 
@@ -210,8 +221,7 @@ function getSMTPSettings() {
 					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				  };					  
 			} 
 
 			$('#from_email_id').val(data.from_email_id);
@@ -241,12 +251,9 @@ function getSMTPSettings() {
 			} else {
 				$('#addBtn').val('Add');
 			}
-
 		},
 		error : function(xhr, status, error) {
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+            hideLoader();		
 		},
 	});
 
@@ -254,16 +261,13 @@ function getSMTPSettings() {
 
 function validateIPaddr(ipaddr) {
     var regex = /^([a-zA-Z0-9@_.-]{1,100}\.){0,3}[a-zA-Z0-9@_.-]{1,100}$/;
-
     if (!regex.test(ipaddr)) {
         return 'Invalid IP Address. Please enter a valid IP address.';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function addSMTPSettings() {
-
 	var from_email_id = $('#from_email_id').val();
 	var password = $('#password').val();
 	var host = $('#host').val();
@@ -308,8 +312,7 @@ function addSMTPSettings() {
 	        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
 	    }
-    
-    
+        
 	$.ajax({
 		url : 'SMTPServlet',
 		type : 'POST',
@@ -329,12 +332,9 @@ function addSMTPSettings() {
 			email_bcc : email_bcc, 
 			csrfToken: csrfToken,
 			action: 'add'
-
 		},
 		success : function(data) {
 	
-			// Clear form fields
-
 			$('#from_email_id').val('');
 			$('#password').val('');
 			$('#host').val('');
@@ -349,23 +349,17 @@ function addSMTPSettings() {
 			$('#email_cc').val('');
 			$('#email_bcc').val('');
 			location.reload();
-
 		},
-		error : function(xhr, status, error) {
-			
+			error : function(xhr, status, error) {		
 		}
 	});
-
 	$('#addBtn').val('Add');
 }
 
 function editSMTPSettings() {
-	
-	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
+
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 		  var from_email_id = $('#from_email_id').val();
@@ -436,14 +430,9 @@ function editSMTPSettings() {
 				},
 				success : function(data) {
 					
-					// Close the modal
-			        modal.style.display = 'none';
-					
+			        modal.style.display = 'none';				
 			        getSMTPSettings();		        
 			        
-
-					// Clear form fields
-
 					$('#from_email_id').val('');
 					$('#password').val('');
 					$('#host').val('');
@@ -458,24 +447,19 @@ function editSMTPSettings() {
 					$('#email_cc').val('');
 					$('#email_bcc').val('');
 					location.reload();
-
 				},
-				error : function(xhr, status, error) {
-					
-				}
-				
-			});
-			
-	  };
-	  
+				error : function(xhr, status, error) {					
+				}				
+			});			
+	  };  
 	  var cancelButton = document.getElementById('cancel-button-edit');
 	  cancelButton.onclick = function () {
 	    // Close the modal
 	    modal.style.display = 'none';
 	    $('#addBtn').val('Update');
 	  };	
-	
 }
+
 function validatePortLength(port) {
     // Check if port is a number
     if (isNaN(port)) {
@@ -715,35 +699,31 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 					    	tokenValue = '<%=tokenValue%>';
 
 					    							getSMTPSettings();
-					    							$("#smtp_type")
-													.change(
-															function(event) {
+					    							
+					    							var passwordField = $('#password');
 
-																if ($(this).val() == 'ssl'
-																		|| $(this).val() == 'SSL') {
+					    						      passwordField.on('paste', function(e) {
+					    						        e.preventDefault();
+					    						      });
+					    							
+					    						      
+					    							$("#smtp_type").change(function(event) {
 
-																	$("#tls_port").prop("disabled",
-																			true);
+																if ($(this).val() == 'ssl'|| $(this).val() == 'SSL') {
 
-																	$("#tls_auth").prop("disabled",
-																			true);
-																	$("#tls_enable").prop(
-																			"disabled", true);
+																	$("#tls_port").prop("disabled",true);
+																	$("#tls_auth").prop("disabled",true);
+																	$("#tls_enable").prop("disabled", true);
 
 																	$("#tls_port").val('');
 																	$("#tls_auth").val('False');
 																	$("#tls_enable").val('False');
 																	$('#ssl_smtp_type').val('True');
 
-																	var isDisabled1 = $(
-																			'#ssl_socket_factory_port')
-																			.prop('disabled');
+																	var isDisabled1 = $('#ssl_socket_factory_port').prop('disabled');
 
 																	if (isDisabled1) {
-																		$(
-																				"#ssl_socket_factory_port")
-																				.prop("disabled",
-																						false);
+																		$("#ssl_socket_factory_port").prop("disabled",false);
 																	}
 
 																	var isDisabled2 = $('#ssl_port')
@@ -849,8 +829,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 											
 											 $('#password-toggle').click(function () {
 									                togglePassword();
-									            });
-					    							
+									            });				  					
 					    }
 
 					});

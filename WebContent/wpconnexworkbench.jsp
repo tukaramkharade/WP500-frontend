@@ -1,8 +1,14 @@
-<%  
-    // Add X-Frame-Options header to prevent clickjacking
+<%
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    HttpSession session1 = request.getSession();
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; 
+    String cookieValue = session1.getId();
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -49,7 +55,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
   margin: 0;
 }
 
-/* Style for buttons */
 #confirm-button-session-timeout,
 #confirm-button-delete1 {
 	background-color: #4caf50;
@@ -95,7 +100,6 @@ h3 {
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -152,7 +156,6 @@ var tokenValue;
 var csrfTokenValue;
 
 	function loadStratonLiveDataList() {
-		// Display loader when the request is initiated
 	    showLoader();
 	    var csrfToken = document.getElementById('csrfToken').value;
 	    
@@ -167,51 +170,34 @@ var csrfTokenValue;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				// Hide loader when the response has arrived
 	            hideLoader();
 				
-				if (data.status == 'fail') {
-					
+				if (data.status == 'fail') {					
 					 var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
-					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-					  
-					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
+					 modal.style.display = 'block';				  
+					 var sessionMsg = document.getElementById('session-msg');
+					 sessionMsg.textContent = data.message; // Assuming data.message contains the server message			  
+					 var confirmButton = document.getElementById('confirm-button-session-timeout');
+					 confirmButton.onclick = function () {				  
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-						  
-				} 
-				
+					 };				  
+				} 				
 				var stratonLiveTable = $('#data-table tbody');
 				stratonLiveTable.empty();
 
-				// Iterate through the user data and add rows to the table
 				data.result.forEach(function(stratonLiveData) {
-
-					var row = $('<tr>');
+				var row = $('<tr>');
 					row.append($('<td>').text(stratonLiveData.tag_name + ""));
 					row.append($('<td>').text(stratonLiveData.value + ""));
 					row.append($('<td>').text(stratonLiveData.extError + ""));
 					row.append($('<td>').text(stratonLiveData.access + ""));
 					row.append($('<td>').text(stratonLiveData.error + ""));
-
 					stratonLiveTable.append(row);
-
 				});
 			},
 			error : function(xhr, status, error) {
-				// Hide loader when the response has arrived
-	            hideLoader();
-				
+	            hideLoader();				
 			}
 		});
 	}
@@ -220,19 +206,17 @@ var csrfTokenValue;
            for (var i = 0; i < tabContents.length; i++) {
                tabContents[i].style.display = 'none';
            }
-
            var tabButtons = document.querySelectorAll('.tab-button');
            for (var i = 0; i < tabButtons.length; i++) {
                tabButtons[i].classList.remove('active');
            }
-
            button.classList.add('active');
-
            var tabContent = document.getElementById(tabName);
            if (tabContent) {
                tabContent.style.display = 'block';
            }
        }
+	   
 	function myFunction() {
 		var input, filter, table, tr, td, i, txtValue;
 		input = document.getElementById("searchInput");
@@ -251,16 +235,14 @@ var csrfTokenValue;
 			}
 		}
 	}
+	
 	  function validateAndUpload(fileInputId, allowedExtension) {
 	        var fileInput = document.getElementById(fileInputId);
 	        var file = fileInput.files[0];
-
 	        if (file) {
 	            var fileName = file.name;
 	            var fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-
 	            if (fileExtension === allowedExtension) {
-	                // Valid file extension, perform upload logic
 	                var formData = new FormData();
 	                formData.append('file', file);
 
@@ -280,8 +262,7 @@ var csrfTokenValue;
 	                  			$("#customPopup").show();
 	                        }
 	                    },
-	                    error: function(xhr, status, error) {
-	                        
+	                    error: function(xhr, status, error) {                       
 	                    }
 	                });
 	                
@@ -307,15 +288,11 @@ var csrfTokenValue;
 		        data: {
 					csrfToken: csrfToken
 		        },
-		        success: function (data) {
-		            
+		        success: function (data) {		            
 		                var table = $("#straton_list_table tbody");
-
-		                // Clear any existing rows in the table
 		                table.empty();
 		                
 		                if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-		                	 // Loop through the data and add rows to the table
 			                data.firmware_files_result.forEach(function (file) {
 			                    var row = $("<tr>");
 			                    row.append($("<td>").text(file));
@@ -335,22 +312,17 @@ var csrfTokenValue;
 			                    
 			                    table.append(row);
 		                });
-		                }
-		                
+		                }	              
 		        },
-		        error: function (xhr, status, error) {
-		           
+		        error: function (xhr, status, error) {		           
 		        },
 		    });
 		}
 	  
 	  function deleteStratonFile(file){
 		  var csrfToken = document.getElementById('csrfToken').value;
-			// Display the custom modal dialog
 			  var modal = document.getElementById('custom-straton-modal-delete');
 			  modal.style.display = 'block';
-
-			  // Handle the confirm button click
 			  var confirmButton = document.getElementById('confirm-button-delete1');
 			  confirmButton.onclick = function () {
 				  
@@ -361,35 +333,28 @@ var csrfTokenValue;
 							file : file,
 							csrfToken: csrfToken
 						},
-						success : function(data) {
-							
+						success : function(data) {						
 							modal.style.display = 'none';
 							loadStratonFiles();
 						},
-						error : function(xhr, status, error) {
-							
+						error : function(xhr, status, error) {							
 						}
 					});
 				  $("#closePopup").click(function () {
 					    $("#customPopup").hide();
-					  });
-				  
-			  };
-			  
+					  });			  
+			  };			  
 			  var cancelButton = document.getElementById('cancel-button-delete1');
 			  cancelButton.onclick = function () {
-			    // Close the modal
 			    modal.style.display = 'none';
 			  };
 			  $("#closePopup").click(function () {
 				    $("#customPopup").hide();
-				  });
-			
+			});		
 		}
 	  
 	  function fetchStatusData() {
-		  var csrfToken = document.getElementById('csrfToken').value;
-		  
+		  var csrfToken = document.getElementById('csrfToken').value;		  
 		    $.ajax({
 		        url: 'stratonStatusData',
 		        type: 'GET',
@@ -397,8 +362,7 @@ var csrfTokenValue;
 		        data: {
 					csrfToken: csrfToken
 		        },
-		        success: function(data) {
-		           
+		        success: function(data) {		           
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            console.error('AJAX request failed: ' + textStatus, errorThrown);
@@ -409,7 +373,6 @@ var csrfTokenValue;
 	  function downloadStratonFile() {
 		    var selectedFileName = $("#fileName").val();
 		    var csrfToken = document.getElementById('csrfToken').value;
-
 		    if (selectedFileName !== "") {
 		        $.ajax({
 		            type: "POST", // Use POST method to send data
@@ -421,28 +384,21 @@ var csrfTokenValue;
 		            success: function (data, textStatus, xhr) {
 		            	 var filename = "";
 		                 var disposition = xhr.getResponseHeader('Content-Disposition');
-
-		                 // Access custom headers
 		                 var customStatus = xhr.getResponseHeader('X-Status');
 		                 var customMessage = xhr.getResponseHeader('X-Message');
 
-		                 // Handle custom headers
 		                 if (customStatus === 'success') {
-		                     // File download was successful
 		                     if (disposition && disposition.indexOf('attachment') !== -1) {
 		                         var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 		                         var matches = filenameRegex.exec(disposition);
 		                         if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
 		                     }
-
 		                     var blob = new Blob([data], { type: 'application/octet-stream' });
-
 		                     if (typeof window.navigator.msSaveBlob !== 'undefined') {
 		                         window.navigator.msSaveBlob(blob, filename);
 		                     } else {
 		                         var URL = window.URL || window.webkitURL;
 		                         var downloadUrl = URL.createObjectURL(blob);
-
 		                         if (filename) {
 		                             var a = document.createElement("a");
 		                             a.href = downloadUrl;
@@ -453,7 +409,6 @@ var csrfTokenValue;
 		                         } else {
 		                             window.location.href = downloadUrl;
 		                         }
-
 		                         setTimeout(function () {
 		                             URL.revokeObjectURL(downloadUrl);
 		                         }, 100);
@@ -461,93 +416,71 @@ var csrfTokenValue;
 		                     }
 		            },
 		            error: function (xhr, textStatus, errorThrown) {
-		                // Handle AJAX error
 		                $("#popupMessage").text("Error: " + errorThrown);
 		                $("#customPopup").show();
 		            }
 		        });
 		    } else {
-		        // Handle the case when no file name is entered
 		        $("#popupMessage").text("Please enter a file name first.");
 		        $("#customPopup").show();
 		    }
-
 		    $("#closePopup").click(function () {
 		        $("#customPopup").hide();
 		    });
 		}
-	  
-	  
-	  
+	  	  	  
 	  function changeButtonColor(isDisabled) {
 	        var $stratonUpdateButton = $('#stratonUpdateButton');       
-	        var $straton_download = $('#straton_download');
-	       
-	        
-	         if (isDisabled) {
+	        var $straton_download = $('#straton_download');       	        
+	        if (isDisabled) {
 	            $stratonUpdateButton.css('background-color', 'gray'); // Change to your desired color
 	        } else {
 	            $stratonUpdateButton.css('background-color', '#2b3991'); // Reset to original color
-	        }
-	        
+	        }	        
 	        if (isDisabled) {
 	            $straton_download.css('background-color', 'gray'); // Change to your desired color
 	        } else {
 	            $straton_download.css('background-color', '#2b3991'); // Reset to original color
-	        } 
-	        
-	        
+	        } 	        	        
 	    }
 
-	// Function to show the loader
 		 function showLoader() {
-		     // Show the loader overlay
 		     $('#loader-overlay').show();
 		 }
 
-		 // Function to hide the loader
 		 function hideLoader() {
-		     // Hide the loader overlay
 		     $('#loader-overlay').hide();
 		 }
 		 
 	$(document).ready(function() {
-		<%// Access the session variable
+		<%
 		HttpSession role = request.getSession();
 		String roleValue = (String) session.getAttribute("role");%>
-
 	roleValue = '<%=roleValue%>';
 	
-	<%// Access the session variable
+	<%
 	HttpSession csrfToken = request.getSession();
 	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 	csrfTokenValue = '<%=csrfTokenValue%>';
 	
-	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-		
+	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){	
 		$('#stratonUpdateButton').prop('disabled', true);
-		$('#straton_download').prop('disabled', true);
-		
+		$('#straton_download').prop('disabled', true);	
 		changeButtonColor(true);
 	}
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
-
         var sessionMsg = document.getElementById('session-msg');
-	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-	    
-        // Handle the confirm button click
+	    sessionMsg.textContent = 'You are not allowed to redirect like this !!';     
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function() {
-            // Close the modal
             modal.style.display = 'none';
             window.location.href = 'login.jsp';
         };
     } else{
-    	<%// Access the session variable
+    	<%
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
 
@@ -586,7 +519,6 @@ var csrfTokenValue;
         <p>Loading...</p>
     </div>
 </div>
-
                 <div class="tab-container" style="margin-top: -15px;">
                     <button class="tab-button active" onclick="openTab('straton-live-data-content', this)" style="margin-left: 5px;">STRATON LIVE DATA</button>
                     <button class="tab-button" onclick="openTab('straton-update', this)">STRATON UPDATE</button>
@@ -625,19 +557,15 @@ var csrfTokenValue;
 
         <div class="container">
 
-            <form action="UploadServlet" method="post" enctype="multipart/form-data">
-                             
-
+            <form action="UploadServlet" method="post" enctype="multipart/form-data">                            
               <table>
               <tr>
               <td style="width:13%"><input type="file" name="file" id="fileInput"></td>
               <td><input type="submit" value="Upload" id="stratonUpdateButton"></td>
               </tr>
-              </table>
-              
-              
-            </form>
-            
+              </table>                      
+            </form>  
+                   
             <table>
             <tr>
             <td style="width:13%">Enter File Name</td>
@@ -645,16 +573,7 @@ var csrfTokenValue;
             <td><input type="button" value="Download Straton File" id="straton_download"></td>
             </tr>
             </table>
-            <!-- <div class="form-container">
             
-            
-            <label for="fileUrl"></label>
-            
-           <div>
-              
-           </div>
-            
-            </div> -->
             <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
@@ -665,13 +584,10 @@ var csrfTokenValue;
 				  <button id="confirm-button-delete1">Yes</button>
 				  <button id="cancel-button-delete1">No</button>
 				</div>
-			  </div>
-			
+			  </div>			
         </div>        
-
         <h3>STRATON FILE LIST</h3>
         <hr />
-
         <div class="container">
             <table id="straton_list_table" style="margin-left: -17px;">
                 <thead>
@@ -685,18 +601,14 @@ var csrfTokenValue;
                     <!-- Table rows for firmware files will go here -->
                 </tbody>
             </table>
-        </div>
-                    
+        </div>                 
                     </div>
                 </div>
             </div>
         </section>
-    </div>
-       
-    	
+    </div>        	
    <div class="footer">
         <%@ include file="footer.jsp"%>
     </div>       
- 
 </body>
 </html>

@@ -1,8 +1,14 @@
-<%  
-    // Add X-Frame-Options header to prevent clickjacking
+<%
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    HttpSession session1 = request.getSession();
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; 
+    String cookieValue = session1.getId();
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -11,7 +17,6 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
@@ -65,15 +70,11 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 
 .form-container {
 	margin: 0 auto;
-	max-width: 750px;
-	/* border-collapse: collapse;
-	background-color: #f2f2f2;
-	border-radius: 5px; */
-	
+	max-width: 750px;	
 }
 
 .form-container td {
-	border: 1px solid #ccc; /* Light gray border */
+	border: 1px solid #ccc; 
 }
 
 .modal-edit-basic-conf, 
@@ -122,11 +123,10 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 	text-align: center;
 	position: relative;
 	width: 300px;
-	transform: translate(0, -50%); /* Center vertically */
-	top: 50%; /* Center vertically */
-	left: 50%; /* Center horizontally */
+	transform: translate(0, -50%); 
+	top: 50%; 
+	left: 50%; 
 	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
 }
 
  button {
@@ -173,18 +173,18 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 .button-container {
             display: flex;
             justify-content: flex-end;
-            margin: 10px; /* Add margin as needed */
+            margin: 10px; 
         }
         
-        #loader-overlay {
+   #loader-overlay {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.7); /* Transparent white background */
-    z-index: 1000; /* Ensure the loader is on top of other elements */
+    background: rgba(255, 255, 255, 0.7); 
+    z-index: 1000; 
     justify-content: center;
     align-items: center;
 }
@@ -192,15 +192,12 @@ response.setHeader("X-Content-Type-Options", "nosniff");
 #loader {
     text-align: center;
    margin-left: 120px;
-    background: rgba(255, 255, 255, 0.2); /* Transparent white background */
+    background: rgba(255, 255, 255, 0.2); 
     border-radius: 5px;
 }
     
-     
 </style>
-
 <script>
-
 var roleValue; 
 var tokenValue;
 var globalId;
@@ -208,9 +205,7 @@ var globalAction;
 var globalData = [];
 var csrfTokenValue;
 
-function getBasicConfiguration(){
-	
-	// Display loader when the request is initiated
+function getBasicConfiguration(){	
     showLoader();
 	
 	$.ajax({
@@ -220,21 +215,15 @@ function getBasicConfiguration(){
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
-	    success : function(data) {
-	    	// Hide loader when the response has arrived
-            hideLoader();
-	    	
-	    	if (data.status == "fail") {
-				
+	    success : function(data) {    	
+            hideLoader(); 	
+	    	if (data.status == "fail") {			
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
 				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
+				    sessionMsg.textContent = data.message; 
 
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
 					  
@@ -745,12 +734,12 @@ function loadTrafficRulesListLan0() {
 						var action = trafficrules.action; 
 						
 						var row = $("<tr>").append($("<td>").text(name),
-								$("<td>").text(protocol),
+								$("<td>").text(protocol.toUpperCase()),
 								$("<td>").text(fromIPAddress),
 								$("<td>").text(fromPortNum),
 								$("<td>").text(toIPAddress),
 								$("<td>").text(toPortNum),
-								$("<td>").text(action));
+								$("<td>").text(action.toUpperCase()));
 						
 						var actions = $("<td>");
 
@@ -870,12 +859,12 @@ function loadTrafficRulesListLan1() {
 					var action = trafficrules.action; 
 				
 				var row = $("<tr>").append($("<td>").text(name),
-						$("<td>").text(protocol),
+						$("<td>").text(protocol.toUpperCase()),
 						$("<td>").text(fromIPAddress),
 						$("<td>").text(fromPortNum),
 						$("<td>").text(toIPAddress),
 						$("<td>").text(toPortNum),
-						$("<td>").text(action));
+						$("<td>").text(action.toUpperCase()));
 				
 				var actions = $("<td>");
 
@@ -995,12 +984,12 @@ function loadTrafficRulesListLan2() {
 					var action = trafficrules.action; 
 				
 				var row = $("<tr>").append($("<td>").text(name),
-						$("<td>").text(protocol),
+						$("<td>").text(protocol.toUpperCase()),
 						$("<td>").text(fromIPAddress),
 						$("<td>").text(fromPortNum),
 						$("<td>").text(toIPAddress),
 						$("<td>").text(toPortNum),
-						$("<td>").text(action));
+						$("<td>").text(action.toUpperCase()));
 				
 				var actions = $("<td>");
 
@@ -1212,7 +1201,7 @@ function validateName(name) {
     return null; // Validation passed
 }
 
-function validatePortNumber(portNumber) {
+function validateToPortNumber(portNumber) {
     // Check if it contains only numbers
     if (!/^\d+$/.test(portNumber)) {
         return 'Port number should contain only numbers.';
@@ -1223,9 +1212,25 @@ function validatePortNumber(portNumber) {
         return 'Port number should have a maximum of 5 digits.';
     }
 
-    // Validation passed
+
     return null;
 }
+
+function validateFromPortNumber(portNumber) {
+	if (portNumber !== '' && !/^\d+$/.test(portNumber)) {
+        return 'Port number should contain only numbers.';
+    }
+
+
+    // Check if it has a maximum length of 5 digits
+    if (portNumber.length > 5) {
+        return 'Port number should have a maximum of 5 digits.';
+    }
+
+
+    return null;
+}
+
 
 
 function addTrafficRulesLan0() {
@@ -1256,7 +1261,7 @@ function addTrafficRulesLan0() {
         return;
     }
 
-    var fromPortError = validatePortNumber(from_port);
+    var fromPortError = validateFromPortNumber(from_port);
     if (fromPortError) {
         $('#field_from_port_Error_lan0').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
@@ -1268,7 +1273,7 @@ function addTrafficRulesLan0() {
         return;
     }
 
-    var toPortError = validatePortNumber(to_port);
+    var toPortError = validateToPortNumber(to_port);
     if (toPortError) {
         $('#field_to_port_Error_lan0').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
@@ -1370,7 +1375,7 @@ function addTrafficRulesLan0() {
 	        return;
 	    }
 
-	    var fromPortError = validatePortNumber(from_port);
+	    var fromPortError = validateFromPortNumber(from_port);
 	    if (fromPortError) {
 	        $('#field_from_port_Error_lan1').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -1382,7 +1387,7 @@ function addTrafficRulesLan0() {
 	        return;
 	    }
 
-	    var toPortError = validatePortNumber(to_port);
+	    var toPortError = validateToPortNumber(to_port);
 	    if (toPortError) {
 	        $('#field_to_port_Error_lan1').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -1483,7 +1488,7 @@ function addTrafficRulesLan0() {
         return;
     }
 
-    var fromPortError = validatePortNumber(from_port);
+    var fromPortError = validateFromPortNumber(from_port);
     if (fromPortError) {
         $('#field_from_port_Error_lan2').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
@@ -1495,7 +1500,7 @@ function addTrafficRulesLan0() {
         return;
     }
 
-    var toPortError = validatePortNumber(to_port);
+    var toPortError = validateToPortNumber(to_port);
     if (toPortError) {
         $('#field_to_port_Error_lan2').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
@@ -1795,7 +1800,7 @@ function editTrafficRulesLan0() {
 	        return;
 	    }
 
-	    var fromPortError = validatePortNumber(from_port);
+	    var fromPortError = validateFromPortNumber(from_port);
 	    if (fromPortError) {
 	        $('#field_from_port_Error_lan0').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -1807,7 +1812,7 @@ function editTrafficRulesLan0() {
 	        return;
 	    }
 
-	    var toPortError = validatePortNumber(to_port);
+	    var toPortError = validateToPortNumber(to_port);
 	    if (toPortError) {
 	        $('#field_to_port_Error_lan0').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -1921,7 +1926,7 @@ function editTrafficRulesLan1() {
 	        return;
 	    }
 
-	    var fromPortError = validatePortNumber(from_port);
+	    var fromPortError = validateFromPortNumber(from_port);
 	    if (fromPortError) {
 	        $('#field_from_port_Error_lan1').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -1933,7 +1938,7 @@ function editTrafficRulesLan1() {
 	        return;
 	    }
 
-	    var toPortError = validatePortNumber(to_port);
+	    var toPortError = validateToPortNumber(to_port);
 	    if (toPortError) {
 	        $('#field_to_port_Error_lan1').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -1945,8 +1950,7 @@ function editTrafficRulesLan1() {
 	  
 	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit_lan1');
-	  confirmButton.onclick = function () {
-		  
+	  confirmButton.onclick = function () {		  
 		 
 			$.ajax({
 				url : 'trafficRulesServletLan1',
@@ -2046,7 +2050,7 @@ function editTrafficRulesLan2() {
 	        return;
 	    }
   
-	    var fromPortError = validatePortNumber(from_port);
+	    var fromPortError = validateFromPortNumber(from_port);
 	    if (fromPortError) {
 	        $('#field_from_port_Error_lan2').text(fromPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;
@@ -2058,7 +2062,7 @@ function editTrafficRulesLan2() {
 	        return;
 	    }
   
-	    var toPortError = validatePortNumber(to_port);
+	    var toPortError = validateToPortNumber(to_port);
 	    if (toPortError) {
 	        $('#field_to_port_Error_lan2').text(toPortError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 	        return;

@@ -1,9 +1,23 @@
-<%  
+<%
     // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("X-Content-Type-Options", "nosniff");
 
+    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
+    HttpSession session1 = request.getSession();
+
+    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+
+    response.setHeader(headerKey, headerValue);
 %>
+
 
 <!DOCTYPE html>
 <html>
@@ -182,7 +196,7 @@ position: relative;
 		    	},
 		    success: function(data) {
 		    	if (data.status === 'success') {
-	                if (data.eth0_dhcp === '0') {
+	                if (data.eth1_dhcp === '0') {
 	                    $('#ip_addr_dis_0').val(data.eth1_ipaddr);
 	                    $('#subnet_mask_dis_0').val(data.eth1_subnet);
 	                } else if (data.eth0_dhcp === '1') {
@@ -445,120 +459,79 @@ position: relative;
     }
 	}
 	
-	function editLan1() {
-		
+	function editLan1() {	
 		var lan1_ipaddr = $('#ip_addr_lan1').val();
-		var lan1_subnet = $('#subnet_mask_lan1').val();
-		var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
-		 var csrfToken = document.getElementById('csrfToken').value;
-        
-	if (!lan1_subnet && !lan1_ipaddr && lan1_dhcp1 == 0) {
-        // Display the custom popup message
-        $("#popupMessage").text("Please provide both subnet and ipaddr.");
-        $("#customPopup").show();
-        return; // Don't proceed further if fields are blank
-        
-    }else{
-	
-		// Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal-edit');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
-		  var confirmButton = document.getElementById('confirm-button-edit');
-		  confirmButton.onclick = function () {
-			  
-			  
-				var lan1_type = 'lan1';
-				
-				var lan1_gateway = $('#gateway_lan1').val();
-				var lan1_dns = $('#dns_ip_lan1').val();
-				 var toggle_enable_lan1 = $("#toggle_enable_lan1").prop("checked") ? "1" : "0";
-				
-				$.ajax({
-					
-					url : 'upadateLan1', 
-					type : 'POST',
-					data : {
-						lan1_ipaddr : lan1_ipaddr,
-						lan1_subnet : lan1_subnet,
-						lan1_dhcp1 : lan1_dhcp1,
-						lan1_type : lan1_type,
-						lan1_gateway : lan1_gateway,
-						lan1_dns : lan1_dns,
-						toggle_enable_lan1 : toggle_enable_lan1,
-						csrfToken: csrfToken
-						
-					},
-					success : function(data) {					
-							
-						// Close the modal
-				        modal.style.display = 'none';
-						
-				        loadLanSettings();
-						
-							//clear fields
-							$('#ip_addr_lan1').val('');
-							$('#subnet_mask_lan1').val('');
-							$('#gateway_lan1').val('');
-							$('#dns_ip_lan1').val('');
-					},
-					error : function(xhr, status, error) {
-						
-					}
-				});
-				
-		  };
-		  
-		  var cancelButton = document.getElementById('cancel-button-edit');
-		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		    
-		  };
-    }
+        var lan1_subnet = $('#subnet_mask_lan1').val();
+        var lan1_dhcp1 = $("#toggle_lan1").prop("checked") ? "1" : "0";
+        var csrfToken = document.getElementById('csrfToken').value;     
+		if (!lan1_subnet && !lan1_ipaddr && lan1_dhcp1 == 0) {
+            $("#popupMessage").text("Please provide both subnet and ipaddr.");
+            $("#customPopup").show();        
+            $("#toggle_enable_lan1").closest("td").hide();   
+		return;
+		}else {		
+    var modal = document.getElementById('custom-modal-edit');
+    modal.style.display = 'block';
+    var confirmButton = document.getElementById('confirm-button-edit');
+    confirmButton.onclick = function () {
+        var lan1_type = 'lan1';
+        var lan1_gateway = $('#gateway_lan1').val();
+        var lan1_dns = $('#dns_ip_lan2').val();
+        var toggle_enable_lan1 = $("#toggle_enable_lan1").prop("checked") ? "1" : "0";
+ 
+        $.ajax({
+            url: 'upadateLan1',
+            type: 'POST',
+            data: {
+                lan1_ipaddr: lan1_ipaddr,
+                lan1_subnet: lan1_subnet,
+                lan1_dhcp1: lan1_dhcp1,
+                lan1_type: lan1_type,
+                lan1_gateway: lan1_gateway,
+                lan1_dns: lan1_dns,
+                toggle_enable_lan1: toggle_enable_lan1,
+                csrfToken: csrfToken
+            },
+            success: function (data) {            
+                modal.style.display = 'none';          
+                loadLanSettings();
+                $('#ip_addr_lan1').val('');
+                $('#subnet_mask_lan1').val('');
+                $('#gateway_lan1').val('');
+                $('#dns_ip_lan1').val('');
+            },
+            error: function (xhr, status, error) {          
+            }
+        });
+    };
+ 
+    var cancelButton = document.getElementById('cancel-button-edit');
+    cancelButton.onclick = function () {
+        modal.style.display = 'none';
+    };
+    }        
 	}
-	
 	
 	function editLan2() {
 		 var lan2_ipaddr = $('#ip_addr_lan2').val();
 	        var lan2_subnet = $('#subnet_mask_lan2').val();
 	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
-	        var csrfToken = document.getElementById('csrfToken').value;
-	       
+	        var csrfToken = document.getElementById('csrfToken').value;	       
 			if (!lan2_subnet && !lan2_ipaddr && lan1_dhcp2 == 0) {
-				// Display the custom popup message
 	            $("#popupMessage").text("Please provide both subnet and ipaddr.");
-	            $("#customPopup").show();
-	            
-	         // Hide the toggle switch
-	            $("#toggle_enable_lan1").closest("td").hide();
-	            
-			
-			
-			return;
-             // Don't proceed further if fields are blank
-            
+	            $("#customPopup").show();            
+	            $("#toggle_enable_lan1").closest("td").hide();         
+			return;            
 			}
-			else {
-				
-	    // Display the custom modal dialog
+			else {			
 	    var modal = document.getElementById('custom-modal-edit');
 	    modal.style.display = 'block';
-	 
-	    // Handle the confirm button click
 	    var confirmButton = document.getElementById('confirm-button-edit');
-	    confirmButton.onclick = function () {
-	 
-	        var lan1_dhcp2 = $("#toggle_lan2").prop("checked") ? "1" : "0";
-	       
-	        
-	        var lan2_type = 'lan2';
-	       
+	    confirmButton.onclick = function () {	
+	        var lan2_type = 'lan2';	       
 	        var lan2_gateway = $('#gateway_lan2').val();
 	        var lan2_dns = $('#dns_ip_lan2').val();
-	        var toggle_enable_lan2 = $("#toggle_enable_lan2").prop("checked") ? "1" : "0";
-	 
+	        var toggle_enable_lan2 = $("#toggle_enable_lan2").prop("checked") ? "1" : "0"; 
 	        $.ajax({
 	            url: 'upadateLan2',
 	            type: 'POST',
@@ -573,41 +546,30 @@ position: relative;
 	                csrfToken: csrfToken
 	            },
 	            success: function (data) {
-	                // Close the modal
-	                modal.style.display = 'none';
-	                
-	                loadLanSettings();
-	 
-	                // Clear fields
+	                modal.style.display = 'none';                
+	                loadLanSettings(); 
 	                $('#ip_addr_lan2').val('');
 	                $('#subnet_mask_lan2').val('');
 	                $('#gateway_lan2').val('');
 	                $('#dns_ip_lan2').val('');
 	            },
-	            error: function (xhr, status, error) {
-	              
+	            error: function (xhr, status, error) {             
 	            }
-	        });
-	 
-	    };
-	 
+	        }); 
+	    }; 
 	    var cancelButton = document.getElementById('cancel-button-edit');
 	    cancelButton.onclick = function () {
-	        // Close the modal
 	        modal.style.display = 'none';
 	    };
-        }
-	    
-      
+        }      
 	}	
-	
+		
 	function toggle0InputFields() {
         const toggle0 = document.getElementById("toggle_lan0");
         const ipInput0 = document.getElementById("ip_addr_eth1");
         const subnetInput0 = document.getElementById("subnet_mask_eth1");
         const gatway0 = document.getElementById("gateway_eth1");
-        const dns0 = document.getElementById("dns_ip_eth1"); 
-        
+        const dns0 = document.getElementById("dns_ip_eth1");       
         if (toggle0.checked) {
         	 ipInput0.setAttribute("disabled", "disabled");
              subnetInput0.setAttribute("disabled", "disabled");
@@ -617,8 +579,7 @@ position: relative;
         	ipInput0.removeAttribute("disabled");
             subnetInput0.removeAttribute("disabled");
             gatway0.removeAttribute("disabled");
-            dns0.removeAttribute("disabled");
-           
+            dns0.removeAttribute("disabled");       
         }
     }
 	function toggle1InputFields() {
@@ -626,8 +587,7 @@ position: relative;
         const ipInput1 = document.getElementById("ip_addr_lan1");
         const subnetInput1 = document.getElementById("subnet_mask_lan1");
         const gatway1 = document.getElementById("gateway_lan1");
-        const dns1 = document.getElementById("dns_ip_lan1");
-        
+        const dns1 = document.getElementById("dns_ip_lan1");      
         if (toggle1.checked) {
         	 ipInput1.setAttribute("disabled", "disabled");
              subnetInput1.setAttribute("disabled", "disabled");
@@ -637,8 +597,7 @@ position: relative;
         	ipInput1.removeAttribute("disabled");
             subnetInput1.removeAttribute("disabled");
             gatway1.removeAttribute("disabled");
-            dns1.removeAttribute("disabled");
-           
+            dns1.removeAttribute("disabled");       
         }
     }
 	function toggle2InputFields() {
@@ -646,8 +605,7 @@ position: relative;
         const ipInput2 = document.getElementById("ip_addr_lan2");
         const subnetInput2 = document.getElementById("subnet_mask_lan2");
         const gatway2 = document.getElementById("gateway_lan2");
-        const dns2 = document.getElementById("dns_ip_lan2");
-        
+        const dns2 = document.getElementById("dns_ip_lan2");       
         if (toggle2.checked) {
         	ipInput2.setAttribute("disabled", "disabled");
             subnetInput2.setAttribute("disabled", "disabled");
@@ -657,8 +615,7 @@ position: relative;
         	ipInput2.removeAttribute("disabled");
             subnetInput2.removeAttribute("disabled");
             gatway2.removeAttribute("disabled");
-            dns2.removeAttribute("disabled");
-            
+            dns2.removeAttribute("disabled");           
         }
     }
 
@@ -667,40 +624,31 @@ position: relative;
 	    var $lan1button = $('#lan1_button');
 	    var $lan2button = $('#lan2_button');
 	   
-	    var $discard1button = $('#discard1');  
-	    var $discard2button = $('#discard2');
-	    var $discard3button = $('#discard3');
-	    
 	     if (isDisabled) {
 	        $eth1button.css('background-color', 'gray'); // Change to your desired color
 	    } else {
 	        $eth1button.css('background-color', '#2b3991'); // Reset to original color
-	    }
-	     
+	    }     
 	     if (isDisabled) {
 		        $lan1button.css('background-color', 'gray'); // Change to your desired color
 		    } else {
 		        $lan1button.css('background-color', '#2b3991'); // Reset to original color
-		    }
-	     
+		    }     
 	     if (isDisabled) {
 		        $discard1button.css('background-color', 'gray'); // Change to your desired color
 		    } else {
 		        $discard1button.css('background-color', '#2b3991'); // Reset to original color
-		    }
-	     
+		    }     
 	     if (isDisabled) {
 		        $lan2button.css('background-color', 'gray'); // Change to your desired color
 		    } else {
 		        $lan2button.css('background-color', '#2b3991'); // Reset to original color
-		    }
-		     
+		    }	     
 		     if (isDisabled) {
 			        $discard2button.css('background-color', 'gray'); // Change to your desired color
 			    } else {
 			        $discard2button.css('background-color', '#2b3991'); // Reset to original color
-			    }
-		     
+			    }	     
 		     if (isDisabled) {
 			        $discard3button.css('background-color', 'gray'); // Change to your desired color
 			    } else {
@@ -712,7 +660,6 @@ position: relative;
 	    var ipAddress = document.getElementById(inputId).value;
 	    var ipRegex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
 	    var validationMessageSpan = document.getElementById(spanId);
-
 	    if (ipRegex.test(ipAddress)) {
 	        validationMessageSpan.innerHTML = "";
 	        return true; // IP address is valid
@@ -723,9 +670,7 @@ position: relative;
 	}
 
 	function validateIPAddressOrBlank(inputId, spanId) {
-	    var value = document.getElementById(inputId).value.trim();
-	    
-	    // Allow blank value or validate IP address
+	    var value = document.getElementById(inputId).value.trim();    
 	    if (value === "" || /^(\d{1,3}\.){0,3}\d{1,3}$/.test(value)) {
 	        document.getElementById(spanId).innerHTML = "";
 	        return true;
@@ -735,49 +680,34 @@ position: relative;
 	    }
 	}
 	
-	// Function to show the loader
 	 function showLoader() {
-	     // Show the loader overlay
 	     $('#loader-overlay').show();
 	 }
-
-	 // Function to hide the loader
 	 function hideLoader() {
-	     // Hide the loader overlay
 	     $('#loader-overlay').hide();
-	 }
-	 
+	 } 
 	
 	$(document).ready(function() {
 		
 		$("#closePopup").click(function () {
 	        $("#customPopup").hide();
-	     // Show the toggle switch
             $("#toggle_enable_lan1").closest("td").show();
 	    });
 		
 		<%// Access the session variable
 		HttpSession role = request.getSession();
 		String roleValue = (String) session.getAttribute("role");%>
-	
 	roleValue = '<%=roleValue%>';
 	
 	<%// Access the session variable
 	HttpSession csrfToken = request.getSession();
 	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 	csrfTokenValue = '<%=csrfTokenValue%>';
 		
-	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-			
+	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {		
 			$('#eth1_button').prop('disabled', true);
 			$('#lan1_button').prop('disabled', true);
-			$('#lan2_button').prop('disabled', true);
-			
-			$('#discard1').prop('disabled', true);
-			$('#discard2').prop('disabled', true);
-			$('#discard3').prop('disabled', true);
-			
+			$('#lan2_button').prop('disabled', true);							
 			changeButtonColor(true);
 		}
 	
@@ -800,16 +730,13 @@ position: relative;
     	<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
-
 		tokenValue = '<%=tokenValue%>';
-
-		loadLanSettings();
-		
+		loadLanSettings();		
 		$('#get_dhcp_0').click(function(){		
 			getDhcpSettings();
 	 });	
 	
-		$('#eth1_button').click(function () {
+		$('#eth1_button').click(function () {				 
 		    if (!isFieldDisabled('ip_addr_eth1') &&
 		        !isFieldDisabled('subnet_mask_eth1') &&
 		        !isFieldDisabled('gateway_eth1') &&
@@ -818,10 +745,11 @@ position: relative;
 		        validateIPAddress('subnet_mask_eth1', 'validationMessage1') &&
 		        validateIPAddressOrBlank('gateway_eth1', 'validationMessage2') &&
 		        validateIPAddressOrBlank('dns_ip_eth1', 'validationMessage3')) {
-		        editEth1();
+		        editEth1();		       
+		    }else{
+		    	editEth1();
 		    }
 		});
-
 		$('#lan1_button').click(function () {
 		    if (!isFieldDisabled('ip_addr_lan1') &&
 		        !isFieldDisabled('subnet_mask_lan1') &&
@@ -832,9 +760,10 @@ position: relative;
 		        validateIPAddressOrBlank('gateway_lan1', 'validationMessage7') &&
 		        validateIPAddressOrBlank('dns_ip_lan1', 'validationMessage8')) {
 		        editLan1();
+		    }else{
+		    	editLan1();
 		    }
 		});
-
 		$('#lan2_button').click(function () {
 		     if (!isFieldDisabled('ip_addr_lan2') &&
 		        !isFieldDisabled('subnet_mask_lan2') &&
@@ -848,19 +777,12 @@ position: relative;
 		        editLan2();
 		    }else{
 		    	editLan2();
-		    }
-		    
-		     
+		    }	    		     
 		});
-
 		function isFieldDisabled(fieldId) {
 		    return $('#' + fieldId).prop('disabled');
-		}
-
-		
-		
-    }
-		
+		}	
+    }		
 	});
 </script>
 </head>
@@ -907,76 +829,55 @@ position: relative;
     						</td>
 						</tag>
 					</tr>
-
 					<tr>
 						<td>IP address</td>
-
-						<td><input id="ip_addr_dis_0" class="status" disabled
-							type='text' name="ip_addr_dis_0" style="width: 30%;"></td>
-							
+						<td><input id="ip_addr_dis_0" class="status" disabled type='text' name="ip_addr_dis_0" style="width: 30%;"></td>							
 						<td>
 						 <div class="validation-container">
                     <input id="ip_addr_eth1" class="config" type='text' name="ip_addr_eth1" style="width: 42%;" required>
                     <span id="validationMessage" class="validation-message" style="margin-left: 10px;"></span>
-                </div>
-            
+                </div>           
 					</td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
-						<td><input id="subnet_mask_dis_0" class="status" disabled
-							type='text' name="subnet_mask_dis_0" style="width: 30%;"></td>
-							
-						<td>
-							
+						<td><input id="subnet_mask_dis_0" class="status" disabled type='text' name="subnet_mask_dis_0" style="width: 30%;"></td>
+						
+						<td>						
 					<div class="validation-container">
                     <input id="subnet_mask_eth1" class="config" type='text' name="subnet_mask_eth1" style="width: 42%;" required>
                     <span id="validationMessage1" class="validation-message" style="margin-left: 10px;"></span>
                 </div>		
 							</td>
-					</tr>
-					
+					</tr>				
 					<tr>
 						<td>Gateway</td>
-
 						<td><input id="gateway_dis_0" class="status" disabled
-							type='text' name="gateway_dis_0" style="width: 30%;"></td>
-							
+							type='text' name="gateway_dis_0" style="width: 30%;"></td>							
 						<td>
-						
 						<div class="validation-container">
                     <input id="gateway_eth1" class="config" type='text' name="gateway_eth1" style="width: 42%;">
                     <span id="validationMessage2" class="validation-message" style="margin-left: 10px;"></span>
-                </div>			
-							
+                </div>								
 							</td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
-
 						<td><input id="dns_dis_0" class="status" disabled
-							type='text' name="dns_dis_0" style="width: 30%;"></td>
-							
-						<td>
-						
+							type='text' name="dns_dis_0" style="width: 30%;"></td>						
+						<td>					
 							<div class="validation-container">
                     <input id="dns_ip_eth1" class="config" type='text' name="dns_ip_eth1" style="width: 42%;">
                     <span id="validationMessage3" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-							
+                </div>							
 							</td>
 					</tr>
 
-
 				</table>
-				<div style="margin-top: 1%;">
-					
-						<input type="button"
-						value="Apply changes" id="eth1_button">
+				<div style="margin-top: 1%;">			
+						<input type="button" value="Apply changes" id="eth1_button">
 				</div>
 			</div>
-
-
 			<div class="container" style="margin-top: 1%;">
 				<table>
 					<tr>
@@ -991,92 +892,63 @@ position: relative;
 								class="toggle-label" data-off="OFF" data-on="ON"></span> <span
 								class="toggle-handle"></span>
 						</label></td>
-						<td><input type="button" value="DHCP IP 1" id="get_dhcp_1"></td>
-						
+						<td><input type="button" value="DHCP IP 1" id="get_dhcp_1"></td>					
 					</tr>
-
 					<tr>
 						<td>IP address</td>
-
-						<td><input id="ip_addr_dis_1" class="status" disabled
-							type='text' name="ip_addr_dis_1" style="width: 30%;"></td>
-						
-						
-						<td>
-					
+						<td><input id="ip_addr_dis_1" class="status" disabled type='text' name="ip_addr_dis_1" style="width: 30%;"></td>											
+						<td>				
 						<div class="validation-container">
                     <input id="ip_addr_lan1" class="config" type='text' name="ip_addr_lan1" style="width: 42%;" required>
                     <span id="validationMessage5" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-                	
-							</td>
+                </div>	           	
+						</td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
 						<td>
 						<input id="subnet_mask_dis_1" class="status" disabled
-							type='text' name="subnet_mask_dis_1" style="width: 30%;"></td>
-							
-						<td>
-						
+							type='text' name="subnet_mask_dis_1" style="width: 30%;"></td>					
+						<td>					
 							<div class="validation-container">
                     <input id="subnet_mask_lan1" class="config" type='text' name="subnet_mask_lan1" style="width: 42%;" required>
                     <span id="validationMessage6" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-							
+                </div>							
 							</td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
-
-						<td><input id="gateway_dis_1" class="status" disabled
-							type='text' name="gateway_dis_1" style="width: 30%;"></td>
-							
-						<td>
-						
+						<td><input id="gateway_dis_1" class="status" disabled type='text' name="gateway_dis_1" style="width: 30%;"></td>						
+						<td>					
 							<div class="validation-container">
                     <input id="gateway_lan1" class="config" type='text' name="gateway_lan1" style="width: 42%;">
                     <span id="validationMessage7" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-							
+                </div>							
 							</td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
-
-						<td><input id="dns_dis_1" class="status" disabled
-							type='text' name="dns_dis_1" style="width: 30%;"></td>
-							
-						<td>
-						
+						<td><input id="dns_dis_1" class="status" disabled type='text' name="dns_dis_1" style="width: 30%;"></td>						
+						<td>					
 							<div class="validation-container">
                     <input id="dns_ip_lan1" class="config" type='text' name="dns_ip_lan1" style="width: 42%;">
                     <span id="validationMessage8" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-							
-							
+                </div>						
 							</td>
-					</tr>
-					
+					</tr>				
 					<tr>
 						<td>Enable Port</td>
-
 						<td><label class="toggle"> <input id="toggle_enable_lan1" name="toggle_enable_lan1"
 								class="toggle-input" type="checkbox" > <span
 								class="toggle-label" data-off="OFF" data-on="ON"></span> <span
 								class="toggle-handle"></span>
 						</label></td>
 					</tr>
-
-
 				</table>
-
 				<div style="margin-top: 1%;">
-					<input type="button"
-						value="Apply changes" id="lan1_button">
+					<input type="button" value="Apply changes" id="lan1_button">
 				</div>
 			</div>
-
 			<div class="container" style="margin-top: 1%;">
 				<table>
 					<tr>
@@ -1093,106 +965,76 @@ position: relative;
 						</label></td>
 						<td><input type="button" value="DHCP IP 2" id="get_dhcp_2"></td>
 					</tr>
-
 					<tr>
 						<td>IP address</td>
-
-						<td><input id="ip_addr_dis_2" class="status" disabled
-							type='text' name="ip_addr_dis_2" style="width: 30%;"></td>
-							
+						<td><input id="ip_addr_dis_2" class="status" disabled type='text' name="ip_addr_dis_2" style="width: 30%;"></td>						
 						<td>
 						<div class="validation-container">
                     <input id="ip_addr_lan2" class="config" type='text' name="ip_addr_lan2" style="width: 42%;" required>
                     <span id="validationMessage9" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-							
+                </div>						
 							</td>
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
-						<td><input id="subnet_mask_dis_2" class="status" disabled
-							type='text' name="subnet_mask_dis_2" style="width: 30%;"></td>
-							
-						<td>
-						
+						<td><input id="subnet_mask_dis_2" class="status" disabled type='text' name="subnet_mask_dis_2" style="width: 30%;"></td>					
+						<td>				
 							<div class="validation-container">
                     <input id="subnet_mask_lan2" class="config" type='text' name="subnet_mask_lan2" style="width: 42%;" required>
                     <span id="validationMessage10" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-                
+                </div>	     
 							</td>
 					</tr>
 					<tr>
 						<td>Gateway</td>
-
-						<td><input id="gateway_dis_2" class="status" disabled
-							type='text' name="gateway_dis_2" style="width: 30%;"></td>
-							
-						<td>
-						
+						<td><input id="gateway_dis_2" class="status" disabled type='text' name="gateway_dis_2" style="width: 30%;"></td>					
+						<td>					
 						<div class="validation-container">
                     <input id="gateway_lan2" class="config" type='text' name="gateway_lan2" style="width: 42%;">
                     <span id="validationMessage11" class="validation-message" style="margin-left: 10px;"></span>
-                </div>	
-                	
+                </div>	       	
 							</td>
 					</tr>
 					<tr>
 						<td>DNS address</td>
-
-						<td><input id="dns_dis_2" class="status" disabled
-							type='text' name="dns_dis_2" style="width: 30%;"></td>
-							
-						<td>
-						
+					<td><input id="dns_dis_2" class="status" disabled type='text' name="dns_dis_2" style="width: 30%;"></td>					
+						<td>					
 							<div class="validation-container">
                     <input id="dns_ip_lan2" class="config" type='text' name="dns_ip_lan2" style="width: 42%;">
                     <span id="validationMessage12" class="validation-message" style="margin-left: 10px;"></span>
                 </div>	
 							</td>
-					</tr>
-					
+					</tr>			
 					<tr>
 						<td>Enable Port</td>
-
 						<td><label class="toggle"> <input id="toggle_enable_lan2" name="toggle_enable_lan2"
 								class="toggle-input" type="checkbox" > <span
 								class="toggle-label" data-off="OFF" data-on="ON"></span> <span
 								class="toggle-handle"></span>
 						</label></td>
 					</tr>
-
-
 				</table>
-
-
 				<div style="margin-top: 1%; margin-bottom: 5px;">
-					 <input type="button"
-						value="Apply changes" id="lan2_button">
+					 <input type="button" value="Apply changes" id="lan2_button">
 				</div>
-
-			</div>
-			
+			</div>		
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modfiy this lan setting?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
-			</div>
-			
+			</div>		
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				 <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
-		
 		<div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
-			  </div>
-			  
+			  </div>		  
 		</section>
 	</div>
 	<div class="footer">

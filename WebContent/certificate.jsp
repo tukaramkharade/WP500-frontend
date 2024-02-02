@@ -1,8 +1,14 @@
-<%  
-    // Add X-Frame-Options header to prevent clickjacking
+<%
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    HttpSession session1 = request.getSession();
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
+    String cookieValue = session1.getId();
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
@@ -50,7 +56,6 @@ h3 {
 	width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
 	display: block; /* Display as to center horizontally */
 	margin-top: 30px; /* Adjust the top margin as needed */
@@ -113,59 +118,48 @@ button {
 </style>
 
 <script>
-
 var roleValue;
 var tokenValue;
 var csrfTokenValue;
 
 function validateName(name) {
     var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
     if (!regex.test(name)) {
         return 'Invalid common name; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function validateOrg(org) {
     var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
     if (!regex.test(org)) {
         return 'Invalid organization name; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function validateOrgUnit(orgUnit) {
     var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
     if (!regex.test(orgUnit)) {
         return 'Invalid organizational unit; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function validateLocation(location) {
     var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
     if (!regex.test(location)) {
         return 'Invalid location; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function validateState(state) {
     var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
     if (!regex.test(state)) {
         return 'Invalid state; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function validateCountry(country) {
@@ -174,26 +168,19 @@ function validateCountry(country) {
     if (!regex.test(country)) {
         return 'Invalid country; symbols not allowed';
     }
-
-    return null; // Validation passed
+    return null; 
 }
 
 function validateNumbers(number) {
 	const
 	numberPattern = /\b\d{1,10}\b/g;
 	if (!numberPattern.test(number)) {
-		return "Enter validity";
-
-		
+		return "Enter validity";	
 	} 
-		return null;
-	
+		return null;	
 }
 
-
-
-function generateCertificate(){
-	
+function generateCertificate(){	
 	var common_name = $('#common_name').val();
 	var organization = $('#organization').val();
 	var organizational_unit = $('#organizational_unit').val();
@@ -201,9 +188,7 @@ function generateCertificate(){
 	var state = $('#state').val();
 	var country = $('#country').val();
 	var validity = $('#validity').val();
-	 var csrfToken = document.getElementById('csrfToken').value;
-	
-	// Collect IP addresses and DNS names into arrays
+	var csrfToken = document.getElementById('csrfToken').value;	
     var ipAddresses = [];
     var dnsNames = [];
     
@@ -216,9 +201,7 @@ function generateCertificate(){
         } else if (selectValue === 'DNS name' && input) {
             dnsNames.push(input);
         }
-    });
-    
-    // Clear previous error messages
+    });    
     $('#field_name_Error').text('');
     $('#field_org_Error').text('');
     $('#field_orgunit_Error').text('');
@@ -232,45 +215,36 @@ function generateCertificate(){
         $('#field_name_Error').text(nameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
-
     var orgError = validateOrg(organization);
     if (orgError) {
         $('#field_org_Error').text(orgError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
-
     var orgUnitError = validateOrgUnit(organizational_unit);
     if (orgUnitError) {
         $('#field_orgunit_Error').text(orgUnitError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
-    }
-    
+    }    
     var locError = validateLocation(location);
     if (locError) {
         $('#field_loc_Error').text(locError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
-
     var stateError = validateState(state);
     if (stateError) {
         $('#field_state_Error').text(stateError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
     }
-
     var countryError = validateCountry(country);
     if (countryError) {
         $('#field_country_Error').text(countryError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
-    }
-    
+    }  
     var validityError = validateNumbers(validity);
     if (validityError) {
         $('#field_validity_Error').text(validityError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
         return;
-    }
-    
-    
- // Convert IP addresses and DNS names arrays to JSON strings
+    }   
     var ipAddressesJson = JSON.stringify(ipAddresses);
     var dnsNamesJson = JSON.stringify(dnsNames);
 	
@@ -287,20 +261,12 @@ function generateCertificate(){
 			validity : validity,
 			csrfToken: csrfToken,
 			ipAddresses: ipAddressesJson,
-            dnsNames: dnsNamesJson
-			
-			
+            dnsNames: dnsNamesJson				
 		},
-		dataType: 'json', // Specify the expected data type as JSON
-		 
-		success : function(data) {
-			
-			
-			// Display the custom popup message
+		dataType: 'json', // Specify the expected data type as JSON		 
+		success : function(data) {					
  			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();
-	
-	        
+  			$("#customPopup").show();		        
 			$('#common_name').val('');
 		    $('#organization').val('');
 		    $('#organizational_unit').val('');
@@ -309,86 +275,53 @@ function generateCertificate(){
 		    $('#country').val('');
 		    $('#validity').val('');
 		    $('input[name="alt-name"]').val('');
-	        $('select[name="sub-alt-type"]').val('Select type of subject alternative name');
-
-	        
-	     // Remove extra rows for IP addresses except the first one
+	        $('select[name="sub-alt-type"]').val('Select type of subject alternative name');	        
 	        $('tr:has(td:has(select[name="sub-alt-type"][value="IP address"])):gt(0)').remove();
-
-	        // Remove extra rows for DNS names except the first one
-	        $('tr:has(td:has(select[name="sub-alt-type"][value="DNS name"])):gt(0)').remove();
-	    
-	        
-
+	        $('tr:has(td:has(select[name="sub-alt-type"][value="DNS name"])):gt(0)').remove();	    	        
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {			
 		}
-	});
-	
+	});	
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
-	  });
-	
+	  });	
 }
 
-function applyCertificate(){
-	
-	// Display the custom modal dialog
+function applyCertificate(){	
 	  var modal = document.getElementById('custom-modal-apply-certificate');
-	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
+	  modal.style.display = 'block';	  
 	  var confirmButton = document.getElementById('confirm-button-apply-certificate');
-	  confirmButton.onclick = function () {
-		  
-	$.ajax({
-		
+	  confirmButton.onclick = function () {		  
+	$.ajax({	
 		type : "GET",
 		url : "CertificateServlet", // Replace with the actual URL to retrieve TOTP details
 		dataType : "json",
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
-	    success : function(data) {
-			
+	    success : function(data) {		
 			var json1 = JSON.stringify(data);
-
 			var json = JSON.parse(json1);
-
-			if (json.status == 'fail') {
-				
+			if (json.status == 'fail') {			
 				 var modal1 = document.getElementById('custom-modal-session-timeout');
-				  modal1.style.display = 'block';
-				  
-				  // Handle the confirm button click
-				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-				  confirmButton1.onclick = function () {
-					  
-					// Close the modal
+				 modal1.style.display = 'block';			  
+				 var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+				 confirmButton1.onclick = function () {				  
 				        modal1.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
-			}
-			
-			 modal.style.display = 'none';
-			
+				 };					  
+			}			
+			 modal.style.display = 'none';		
 	    },
 	    error : function(xhr, textStatus, errorThrown) {
 			console.error("Error appying certificate: " + errorThrown);
-		}
-	    
+		}    
 	});
-	  };
-	  
+	  };	  
 	  var cancelButton = document.getElementById('cancel-button-apply-certificate');
 	  cancelButton.onclick = function () {
-	    // Close the modal
-	    modal.style.display = 'none';
-	    
-	  };	
-	  
+	    modal.style.display = 'none';	    
+	  };		  
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });

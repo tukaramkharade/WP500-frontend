@@ -55,7 +55,10 @@ public class SyslogConf extends HttpServlet {
 				JSONObject respJson = new JSONObject(respStr);
 
 				logger.info("res " + respJson.toString());
+				String message = respJson.getString("msg");
+				String status = respJson.getString("status");
 
+				if(status.equals("success")){
 				for (int i = 0; i < respJson.length(); i++) {
 					
 					String rsyslog_ip = respJson.getString("rsyslog_ip");
@@ -71,7 +74,10 @@ public class SyslogConf extends HttpServlet {
 						e.printStackTrace();
 						logger.error("Error in putting syslog in json object: " + e);
 					}
-					
+				}
+				}else if(status.equals("fail")){
+					jsonObject.put("message", message);
+					jsonObject.put("status", status);
 				}
 				
 				 response.setHeader("X-Content-Type-Options", "nosniff");

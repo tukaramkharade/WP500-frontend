@@ -1,22 +1,26 @@
-<%  
-    // Add X-Frame-Options header to prevent clickjacking
+<%
     response.setHeader("X-Frame-Options", "DENY");
-response.setHeader("X-Content-Type-Options", "nosniff");
-
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    HttpSession session1 = request.getSession();
+    String secureFlag = "Secure";
+    String httpOnlyFlag = "HttpOnly";
+    String sameSiteFlag = "SameSite=None"; 
+    String cookieValue = session1.getId();
+    String headerKey = "Set-Cookie";
+    String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
+    response.setHeader(headerKey, headerValue);
 %>
 
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
 <link rel="stylesheet" href="nav-bar.css" />
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
-
 <script src="jquery-3.6.0.min.js"></script>
 
 <style>
@@ -55,10 +59,8 @@ h3 {
 	top: 50%; /* Center vertically */
 	left: 50%; /* Center horizontally */
 	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
 }
 
-/* Style for buttons */
 button {
 	margin: 5px;
 	padding: 10px 20px;
@@ -102,7 +104,6 @@ button {
 	top: 50%; /* Center vertically */
 	left: 50%; /* Center horizontally */
 	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
 }
 
 #confirm-button-session-timeout {
@@ -125,7 +126,6 @@ button {
     width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
 	display: block; /* Display as to center horizontally */
 	margin-top: 30px; /* Adjust the top margin as needed */
@@ -165,10 +165,8 @@ var tokenValue;
 var csrfTokenValue;
 
 function getKeys(){
-	// Display loader when the request is initiated
     showLoader();
     var csrfToken = document.getElementById('csrfToken').value;
-    
 	$.ajax({
 		url : "wireguardKeysServlet",
 		type : "GET",
@@ -177,20 +175,13 @@ function getKeys(){
 	            action: "get",
 	            csrfToken: csrfToken
 	        },
-		success : function(data) {
-			
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+		success : function(data) {			
+            hideLoader();			
 			$('#private_key').val(data.private_key);
-			$('#public_key').val(data.public_key);
-
-            
+			$('#public_key').val(data.public_key);           
 		},
 		error : function(xhr, status, error) {
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+            hideLoader();		
 		},
 	});
 }
@@ -205,39 +196,23 @@ function readWireguardFile(){
 		data: {
 			csrfToken: csrfToken
         },
-		success : function(data) {
-			
-			if (data.status == 'fail') {
-				
+		success : function(data) {			
+			if (data.status == 'fail') {				
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';				  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message				  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {					  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
-			} 
-			
-			// Assuming data.banner_text_data is an array, join it to create a string
+				 };					  
+			} 		
             var textToShow = data.wireguard_file_data.join('\n');
-            // Set the text in the textarea
-            $('#wireguard_file').val(textToShow);
-            
+            $('#wireguard_file').val(textToShow);            
 		},
-		error : function(xhr, status, error) {
-			
-		},
-		
+		error : function(xhr, status, error) {			
+		},		
 	});
 }
 
@@ -253,34 +228,21 @@ function generateWireguardKeys(){
 	            csrfToken: csrfToken
 	        },
 		success : function(data) {
-			if (data.status == 'fail') {
-				
+			if (data.status == 'fail') {				
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';			  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message		  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {					  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
-			} 
-			
+				 };					  
+			} 			
 			$('#private_key').val(data.private_key);
-			$('#public_key').val(data.public_key);
-
-            
+			$('#public_key').val(data.public_key);          
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {			
 		},
 	});
 }
@@ -297,54 +259,34 @@ function activateWireguard() {
             csrfToken: csrfToken
         },
         success: function (data) {
-        	if (data.status == 'fail') {
-				
+        	if (data.status == 'fail') {				
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';				  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message			  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {					  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				 };				  
 			} 
-            // Check if the result is an array
             if (Array.isArray(data.activate_wireguard_result)) {
-                // Join array elements with HTML line breaks
-                var resultMessage = data.activate_wireguard_result.join('<br>');
-                
-                // Set the result message in the popup with HTML
+                var resultMessage = data.activate_wireguard_result.join('<br>');              
                 $("#popupMessage").html(resultMessage);
-
-                // Show the popup
                 $("#customPopup").show();
-            } else {
-               
+            } else {            
             }
         },
-        error: function (xhr, status, error) {
-           
+        error: function (xhr, status, error) {          
         },
     });
-
     $("#closePopup").click(function () {
-        // Hide the popup on close button click
         $("#customPopup").hide();
     });
 }
 
 function deActivateWireguard(){
 	var csrfToken = document.getElementById('csrfToken').value;
-	
 	$.ajax({
         url: "wireguardKeysServlet",
         type: "GET",
@@ -354,54 +296,34 @@ function deActivateWireguard(){
             csrfToken: csrfToken
         },
         success: function (data) {
-        	if (data.status == 'fail') {
-				
+        	if (data.status == 'fail') {			
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message			  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {					  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				 };				  
 			} 
-            // Check if the result is an array
             if (Array.isArray(data.deactivate_wireguard_result)) {
-                // Join array elements with HTML line breaks
-                var resultMessage = data.deactivate_wireguard_result.join('<br>');
-                
-                // Set the result message in the popup with HTML
+                var resultMessage = data.deactivate_wireguard_result.join('<br>');              
                 $("#popupMessage").html(resultMessage);
-
-                // Show the popup
                 $("#customPopup").show();
-            } else {
-                
+            } else {              
             }
         },
-        error: function (xhr, status, error) {
-           
+        error: function (xhr, status, error) {           
         },
     });
-
     $("#closePopup").click(function () {
-        // Hide the popup on close button click
         $("#customPopup").hide();
     });
 }
 
 function wireguardStatus() {
 	var csrfToken = document.getElementById('csrfToken').value;
-	
     $.ajax({
         url: "wireguardKeysServlet",
         type: "GET",
@@ -411,119 +333,68 @@ function wireguardStatus() {
             csrfToken: csrfToken
         },
         success: function (data) {
-        	if (data.status == 'fail') {
-				
+        	if (data.status == 'fail') {			
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';				  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message				  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {					  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				 };					  
 			} 
-            // Check if the result is an array and not empty
             if (Array.isArray(data.wireguard_status_result) && data.wireguard_status_result.length > 0) {
-                // Join array elements with HTML line breaks
-                var resultMessage = data.wireguard_status_result.join('<br>');
-                
-                // Set the result message in the popup with HTML
+                var resultMessage = data.wireguard_status_result.join('<br>');               
                 $("#popupMessage").html(resultMessage);
-
-                // Show the popup
                 $("#customPopup").show();
             } else {
-                // Handle empty array case or any other specific behavior
                 $("#popupMessage").html("No data available.");
-
-                // Show the popup
                 $("#customPopup").show();
             }
         },
-        error: function (xhr, status, error) {
-           
+        error: function (xhr, status, error) {           
         },
     });
-
     $("#closePopup").click(function () {
-        // Hide the popup on close button click
         $("#customPopup").hide();
     });
 }
 
 function updateWireguardFile() {
 	var csrfToken = document.getElementById('csrfToken').value;
-	
 	 var modal = document.getElementById('custom-modal-edit');
-	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
-	  var confirmButton = document.getElementById('confirm-button-edit');
-	  confirmButton.onclick = function () {
-		  
-   // Get the textarea value
-   var textareaValue = $('#wireguard_file').val();
-
-   // Split the textarea value into an array using the newline character ("\n")
-   var lines = textareaValue.split('\n');
-
-     // Convert the lines array to a JSON string
-   var linesJson = JSON.stringify(lines);
-
-   // Use $.ajax to send the data to the servlet
+	 modal.style.display = 'block';  
+	 var confirmButton = document.getElementById('confirm-button-edit');
+	 confirmButton.onclick = function () {		  
+     var textareaValue = $('#wireguard_file').val();
+     var lines = textareaValue.split('\n');
+     var linesJson = JSON.stringify(lines);
    $.ajax({
        url: "wireguardServlet",
-       type: "POST",
-      
-       /* data: JSON.stringify({
-           lines: linesJson
-       }), */ // Send as a JSON object
-       
+       type: "POST",          
        data: {
        	lines: linesJson,
 			csrfToken: csrfToken
        },
        success: function(response) {
-    	   if (response.status == 'fail') {
-				
+    	   if (response.status == 'fail') {				
 				 var modal1 = document.getElementById('custom-modal-session-timeout');
-				  modal1.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = response.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
-				  confirmButton1.onclick = function () {
-					  
-					// Close the modal
+				 modal1.style.display = 'block';				  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = response.message; // Assuming data.message contains the server message			  
+				 var confirmButton1 = document.getElementById('confirm-button-session-timeout');
+				 confirmButton1.onclick = function () {				  
 				        modal1.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				 };				  
 			} 
-       	// Close the modal
-	        modal.style.display = 'none';
-       	
+	        modal.style.display = 'none';     	
 	        $("#popupMessage").text(response.message);
-  			$("#customPopup").show();
-  			
-       	
+  			$("#customPopup").show();			       	
 	        readWireguardFile();
        },
-       error: function(error) {
-           
+       error: function(error) {         
        }
    });
    
@@ -534,7 +405,6 @@ function updateWireguardFile() {
 
 var cancelButton = document.getElementById('cancel-button-edit');
 cancelButton.onclick = function () {
- // Close the modal
  modal.style.display = 'none';
  location.reload();
 };	
@@ -551,26 +421,22 @@ function changeButtonColor(isDisabled) {
         $update_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $update_button.css('background-color', '#2b3991'); // Reset to original color
-    }
-    
+    }    
     if (isDisabled) {
         $generate_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $generate_button.css('background-color', '#2b3991'); // Reset to original color
-    } 
-    
+    }    
     if (isDisabled) {
         $activate_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $activate_button.css('background-color', '#2b3991'); // Reset to original color
-    } 
-    
+    }    
     if (isDisabled) {
         $deactivate_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $deactivate_button.css('background-color', '#2b3991'); // Reset to original color
-    } 
-    
+    }   
     if (isDisabled) {
         $status_button.css('background-color', 'gray'); // Change to your desired color
     } else {
@@ -578,15 +444,11 @@ function changeButtonColor(isDisabled) {
     } 
 }
 
-//Function to show the loader
 function showLoader() {
-    // Show the loader overlay
     $('#loader-overlay').show();
 }
 
-// Function to hide the loader
 function hideLoader() {
-    // Hide the loader overlay
     $('#loader-overlay').hide();
 }
 
@@ -595,16 +457,13 @@ $(document).ready(function() {
 	<%// Access the session variable
 			HttpSession role = request.getSession();
 			String roleValue = (String) session.getAttribute("role");%>
-
 roleValue = '<%=roleValue%>';
 
 <%// Access the session variable
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
 	
-
 if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 	  
 	$('#update').prop('disabled', true);
@@ -612,21 +471,16 @@ if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 	$('#activate').prop('disabled', true);
 	$('#deactivate').prop('disabled', true);
 	$('#status').prop('disabled', true);
-	
-	  changeButtonColor(true);
+	changeButtonColor(true);
 }
 
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');
     modal.style.display = 'block';
-
     var sessionMsg = document.getElementById('session-msg');
-    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-    
-        // Handle the confirm button click
+    sessionMsg.textContent = 'You are not allowed to redirect like this !!';    
     var confirmButton = document.getElementById('confirm-button-session-timeout');
     confirmButton.onclick = function() {
-        // Close the modal
         modal.style.display = 'none';
         window.location.href = 'login.jsp';
     };
@@ -635,34 +489,26 @@ else{
 	<%// Access the session variable
 			HttpSession token = request.getSession();
 			String tokenValue = (String) session.getAttribute("token");%>
-
 	 tokenValue = '<%=tokenValue%>';
 
 							getKeys();
 							readWireguardFile();
-
 							$('#update').click(function() {
 								updateWireguardFile();
-							});
-							
+							});							
 							$('#generate_new_key').click(function() {
 								generateWireguardKeys();
-							});
-							
+							});							
 							$('#activate').click(function() {
 								activateWireguard();
-							});
-							
+							});							
 							$('#deactivate').click(function() {
 								deActivateWireguard();
-							});
-							
+							});						
 							$('#status').click(function() {
 								wireguardStatus();
-							});
-							
+							});						
 						}
-
 					});
 </script>
 <body>
@@ -673,15 +519,12 @@ else{
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>WIREGUARD</h3>
 			<hr>
 			<div class="container">
-
 				<form id="wireguardForm">
-
 					<input type="hidden" id="action" name="action" value="">
 					<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 					
@@ -691,20 +534,16 @@ else{
         <p>Loading...</p>
     </div>
 </div>
-
 					<table class="bordered-table">
 						<tr>
 							<td style="width: 10%;">Private key:</td>
 							<td><input type="text" id="private_key" disabled></td>
 						</tr>
-
 						<tr>
 							<td style="width: 10%;">Public key:</td>
 							<td><input type="text" id="public_key" disabled></td>
 						</tr>
 					</table>
-
-
 					<div class="row"
 						style="display: flex; justify-content: right; margin-bottom: 2%; margin-top: 1%;">
 
@@ -712,17 +551,13 @@ else{
 							value="Generate new key" id="generate_new_key" />
 
 					</div>
-
 					<table class="bordered-table">
 						<tr>
 							<td colspan="2"><textarea id="wireguard_file"
 									name="wireguard_file" rows="10" cols="100" required
 									style="height: 500px;"></textarea></td>
 						</tr>
-
-
 					</table>
-
 					<div class="row"
 						style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
 
@@ -733,11 +568,9 @@ else{
 							value="Deactivate" id="deactivate" /> <input
 							style="height: 26px; margin-left: 10px;" type="button"
 							value="Status" id="status" />
-
 					</div>
 				</form>
 			</div>
-
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 					<p>Are you sure you want to modify this wireguard file?</p>
@@ -745,21 +578,17 @@ else{
 					<button id="cancel-button-edit">No</button>
 				</div>
 			</div>
-
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 					 <p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
-
 			<div id="customPopup" class="popup">
 				<span class="popup-content" id="popupMessage"></span>
 				<button id="closePopup">OK</button>
 			</div>
-
 		</section>
 	</div>
-
 </body>
 </html>
