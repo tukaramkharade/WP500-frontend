@@ -7,7 +7,6 @@ public class User {
     private String last_name;
     private String role;
     
-    // Default constructor
     public User() {
     }
 
@@ -59,6 +58,4 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-    
 }

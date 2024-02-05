@@ -91,5 +91,4 @@ public class JSONBuilder {
 	public void setJson_string(String json_string) {
 		this.json_string = json_string;
 	}
-
 }

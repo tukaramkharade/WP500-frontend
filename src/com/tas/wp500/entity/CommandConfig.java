@@ -73,8 +73,4 @@ public class CommandConfig {
 	public void setCommand_tag(JSONObject command_tag) {
 		this.command_tag = command_tag;
 	}
-	
-	
-	
-	
 }

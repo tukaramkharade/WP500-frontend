@@ -12,7 +12,6 @@ public class StoreForwardData {
 		this.dataString = dataString;
 		this.publishTopic = publishTopic;
 		this.brokerIp = brokerIp;
-
 	}
 
 	public StoreForwardData() {
@@ -50,5 +49,4 @@ public class StoreForwardData {
 	public void setDataString(String dataString) {
 		this.dataString = dataString;
 	}
-
 }
