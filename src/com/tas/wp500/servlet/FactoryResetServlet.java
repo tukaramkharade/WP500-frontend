@@ -20,65 +20,45 @@ public class FactoryResetServlet extends HttpServlet {
 	final static Logger logger = Logger.getLogger(FactoryResetServlet.class);
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
 
 		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-
 		if (check_username != null) {
 			try {
 				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
-
 				json.put("operation", "factory_reset");
 				json.put("user", check_username);
 				json.put("token", check_token);
 				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
-				System.out.println("response : " + respStr);
-
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
 				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
 				String message = new JSONObject(respStr).getString("msg");
-				String status = new JSONObject(respStr).getString("status");
-				
+				String status = new JSONObject(respStr).getString("status");				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
 				jsonObject.put("status", status);
-
-				// Set the content type of the response to application/json
 				response.setContentType("application/json");
 				response.setHeader("X-Content-Type-Options", "nosniff");
-
-				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
 				}else {
-					logger.error("CSRF token validation failed");	
+					logger.error("Token validation failed");	
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in factory reset :"+e);
 			}
-		} 
-		
+		} 	
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 	}
-
 }

@@ -20,8 +20,7 @@ import com.tas.wp500.utils.TCPClient;
 public class TrafficRulesServletLan0 extends HttpServlet {
 	final static Logger logger = Logger.getLogger(TrafficRulesServletLan0.class);
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");

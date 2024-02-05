@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -24,7 +17,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
@@ -79,7 +71,6 @@
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -117,33 +108,24 @@ margin-top: 68px;
 
 </style>
 <script>
-
 var roleValue;
 var tokenValue;
 var csrfTokenValue;
-
 	function searchLogData() {
 		var csrfToken = document.getElementById('csrfToken').value;
-
 		var searchQuery = document.getElementById("search_query").value.trim();
 		var selectedLogFile = document.getElementById("log_file").value;
-		if (selectedLogFile === "") {
-			
-			// Display the custom popup message
+		if (selectedLogFile === "") {			
      			$("#popupMessage").text("Please select a log file first.");
       			$("#customPopup").show();
 			return;
 		}
-
-		if (searchQuery === "") {
-		
+		if (searchQuery === "") {	
 			$("#popupMessage").text("Please enter a search query.");
-      			$("#customPopup").show();
-      			
+      			$("#customPopup").show();    			
 			return;
 		}
-		var tableBody = $("#log_table_body");
-		
+		var tableBody = $("#log_table_body");		
 		tableBody.empty(); // Clear the table body before adding search results
 		$.ajax({
 			url : "search_logs", // Replace this with the appropriate server-side URL to handle the search
@@ -157,11 +139,8 @@ var csrfTokenValue;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				if (data.log_search_result
-						&& Array.isArray(data.log_search_result)) {
+				if (data.log_search_result && Array.isArray(data.log_search_result)) {
 					var tableBody = $("#log_table_body");
-					//	tableBody.empty();
-
 					data.log_search_result.forEach(function(log) {
 						var myArray = log.split(",");
 						var split_log0 = myArray[0];
@@ -169,7 +148,6 @@ var csrfTokenValue;
 						var split_log2 = myArray[2];
 						var split_log4 = myArray[4];
 						var split_log5 = myArray[5];
-
 						var row = $("<tr>").append(
 								$('<td style="width: 20%;">').text(split_log0),
 								$("<td>").text(split_log1),
@@ -178,30 +156,22 @@ var csrfTokenValue;
 								$("<td>").text(split_log5));
 						tableBody.append(row);
 					});
-
-					var count = data.log_search_result.length;
-					
-					var totalPages = Math.ceil(count / 100);
-					
+					var count = data.log_search_result.length;					
+					var totalPages = Math.ceil(count / 100);					
 					$("#log_table").show();
 				}
 			},
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {			
 			},
-		});
-		
+		});	
 		$("#closePopup").click(function () {
 		    $("#customPopup").hide();
 		  });
-
 	}
 
 	function loadLogFileList() {
-		// Display loader when the request is initiated
 	    showLoader();
-	    var csrfToken = document.getElementById('csrfToken').value;
-		
+	    var csrfToken = document.getElementById('csrfToken').value;		
 		$.ajax({
 					url : "logs",
 					type : "GET",
@@ -209,39 +179,22 @@ var csrfTokenValue;
 					data: {
 						csrfToken: csrfToken
 			        },
-					success : function(data) {
-						
-						// Hide loader when the response has arrived
-			            hideLoader();
-						
-						if (data.status == 'fail') {
-							
+					success : function(data) {						
+			            hideLoader();					
+						if (data.status == 'fail') {						
 							 var modal = document.getElementById('custom-modal-session-timeout');
-							  modal.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
-							    var sessionMsg = document.getElementById('session-msg');
-							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-							  
-							  // Handle the confirm button click
-							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-							  confirmButton.onclick = function () {
-								  
-								// Close the modal
+							 modal.style.display = 'block';							  
+							 var sessionMsg = document.getElementById('session-msg');
+							 sessionMsg.textContent = data.message; // Assuming data.message contains the server message							  
+							 var confirmButton = document.getElementById('confirm-button-session-timeout');
+							 confirmButton.onclick = function () {								  
 							        modal.style.display = 'none';
 							        window.location.href = 'login.jsp';
-							  };
-								  
-						} 
-							
-						if (data.log_file_result
-								&& Array.isArray(data.log_file_result)) {
+							  };						  
+						} 				
+						if (data.log_file_result && Array.isArray(data.log_file_result)) {
 							var selectElement = $("#log_file");
-							// Clear any existing options
-							selectElement.empty();
-							
-							// Loop through the data and add options to the select element
+							selectElement.empty();							
 							data.log_file_result.forEach(function(filename) {
 								var option = $("<option>", {
 									value : filename,
@@ -252,9 +205,7 @@ var csrfTokenValue;
 						}
 					},
 					error : function(xhr, status, error) {
-						// Hide loader when the response has arrived
-			            hideLoader();
-						
+			            hideLoader();						
 					},
 				});
 	}
@@ -262,13 +213,9 @@ var csrfTokenValue;
 	function downloadLogFile() {
 	    var selectedLogFile = $("#log_file").val();
 	    var token = '<%= session.getAttribute("token") %>';
-
 	    if (selectedLogFile !== "") {
-	        // Encode the log file name and token
 	        var sanitizedLogFile = encodeURIComponent(selectedLogFile);
 	        var sanitizedToken = encodeURIComponent(token);
-
-	        // Make an AJAX POST request
 	        $.ajax({
 	            type: "POST",
 	            url: "DownloadLogServlet",
@@ -281,22 +228,18 @@ var csrfTokenValue;
 	                var customMessage = xhr.getResponseHeader('X-Message');
 	                var filename = "";
 	                var disposition = xhr.getResponseHeader('Content-Disposition');
-	                // Display the custom popup message based on the status
 	                if (downloadStatus === 'success') {
 	                	if (disposition && disposition.indexOf('attachment') !== -1) {
 	                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 	                        var matches = filenameRegex.exec(disposition);
 	                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
 	                    }
-
 	                    var blob = new Blob([data], { type: 'application/octet-stream' });
-
 	                    if (typeof window.navigator.msSaveBlob !== 'undefined') {
 	                        window.navigator.msSaveBlob(blob, filename);
 	                    } else {
 	                        var URL = window.URL || window.webkitURL;
 	                        var downloadUrl = URL.createObjectURL(blob);
-
 	                        if (filename) {
 	                            var a = document.createElement("a");
 	                            a.href = downloadUrl;
@@ -307,7 +250,6 @@ var csrfTokenValue;
 	                        } else {
 	                            window.location.href = downloadUrl;
 	                        }
-
 	                        setTimeout(function () {
 	                            URL.revokeObjectURL(downloadUrl);
 	                        }, 100);
@@ -317,27 +259,19 @@ var csrfTokenValue;
 	                    }
 	                    $("#popupMessage").text("File download initiated.");
 	                } else {
-	                    // Error case
 	                    $("#popupMessage").text(customMessage || "Error initiating file download");
 	                }
-
 	                $("#customPopup").show();
 	            },
 	            error: function (xhr, status, error) {
-	                // Handle errors
-	                console.error("Error initiating file download: " + error);
-
-	                // Display the custom popup message for errors
 	                $("#popupMessage").text("Error initiating file download. Please try again.");
 	                $("#customPopup").show();
 	            }
 	        });
 	    } else {
-	        // Handle the case when no log file is selected
 	        $("#popupMessage").text("Please select a log file first.");
 	        $("#customPopup").show();
 	    }
-
 	    $("#closePopup").click(function () {
 	        $("#customPopup").hide();
 	    });
@@ -345,15 +279,12 @@ var csrfTokenValue;
 
 	function changeButtonColor(isDisabled) {
         var $load_button = $('#loadLogFileButton');
-        var $export_button = $('#exportButton');
-        
-        
+        var $export_button = $('#exportButton');      
         if (isDisabled) {
             $load_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $load_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-        
+        }       
         if (isDisabled) {
             $export_button.css('background-color', 'gray'); // Change to your desired color
         } else {
@@ -361,57 +292,39 @@ var csrfTokenValue;
         }
 	}
 	
-	// Function to show the loader
 	 function showLoader() {
-	     // Show the loader overlay
 	     $('#loader-overlay').show();
 	 }
 
-	 // Function to hide the loader
 	 function hideLoader() {
-	     // Hide the loader overlay
 	     $('#loader-overlay').hide();
 	 }
 	 
-	
-	//Function to execute on page load
-	$(document).ready(function() {
-		// Load log file list
-		
+	$(document).ready(function() {	
 		<%
-	    	    	// Access the session variable
 	    	    	HttpSession role = request.getSession();
 	    	    	String roleValue = (String) session.getAttribute("role");
-	    	    	%>
-	    	    	
+	    	    	%>	    	    	
 	    	    	roleValue = '<%= roleValue %>';
 	    	    	
 	    	    	<%// Access the session variable
 	    			HttpSession csrfToken = request.getSession();
 	    			String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 	    			csrfTokenValue = '<%=csrfTokenValue%>';
 	    	    	
-	    	    	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-		  	    		  
+	    	    	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){		  	    		  
 		  	    		$('#loadLogFileButton').prop('disabled', true);
-		  	    		$('#exportButton').prop('disabled', true);
-		  	    		
+		  	    		$('#exportButton').prop('disabled', true);		  	    		
 		  	    		  changeButtonColor(true);
 		  	    	  }
 	    	    	
 	    	    	if (roleValue === "null") {
 	    		        var modal = document.getElementById('custom-modal-session-timeout');
 	    		        modal.style.display = 'block';
-
-	    		        // Update the session-msg content with the message from the server
 	    			    var sessionMsg = document.getElementById('session-msg');
-	    			    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-	    			    
-	    		        // Handle the confirm button click
+	    			    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 	    			    
 	    		        var confirmButton = document.getElementById('confirm-button-session-timeout');
 	    		        confirmButton.onclick = function() {
-	    		            // Close the modal
 	    		            modal.style.display = 'none';
 	    		            window.location.href = 'login.jsp';
 	    		        };
@@ -419,118 +332,78 @@ var csrfTokenValue;
 	    		    	<%// Access the session variable
 		    	    	HttpSession token = request.getSession();
 		    	    	String tokenValue = (String) session.getAttribute("token");%>
-
-		    	    	tokenValue = '<%=tokenValue%>';
+		    	    	tokenValue = '<%=tokenValue%>';		    	    	
 		    	    	
-		    	    	
-		    	    	
-			loadLogFileList();
-			
+			loadLogFileList();			
 			$("#exportButton").click(function() {
 		       downloadLogFile();
-		    });		
-			
+		    });					
 			$(document).on("click", "#loadLogFileButton", function() {
 				var searchQuery = $("#search_query").val().trim();
-				if (searchQuery !== "") {
-					
+				if (searchQuery !== "") {				
 					searchLogData();
 				} else {
 					loadLogFile();
 				}
 			});
-	    		    }
-	  	    	
+	    		    }  	    	
 	});
 
 	function loadLogFile() {
-		// Get the selected log file value from the dropdown
 		var selectedLogFile = document.getElementById("log_file").value;
 		var tableBody = $("#log_table_body");
-		var csrfToken = document.getElementById('csrfToken').value;
-		
+		var csrfToken = document.getElementById('csrfToken').value;		
 		tableBody.empty();
 		if (selectedLogFile !== "") {
-			// Make an AJAX POST request to fetch the log data
 			$.ajax({
 						url : "logs", // Replace this with the appropriate server-side URL to handle the AJAX POST
 						type : "POST",
 						data : {
 							log_file : selectedLogFile,
 							csrfToken: csrfToken
-						}, // Send the selected log file name as POST data
-						//dataType : "json",
-						success : function(data) {
-							
-							if (data.status == 'fail') {
-								
+						}, 
+						success : function(data) {						
+							if (data.status == 'fail') {							
 								 var modal = document.getElementById('custom-modal-session-timeout');
-								  modal.style.display = 'block';
-								  
-								// Update the session-msg content with the message from the server
-								    var sessionMsg = document.getElementById('session-msg');
-								    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-								  
-								  // Handle the confirm button click
-								  var confirmButton = document.getElementById('confirm-button-session-timeout');
-								  confirmButton.onclick = function () {
-									  
-									// Close the modal
+								 modal.style.display = 'block';								  
+								 var sessionMsg = document.getElementById('session-msg');
+								 sessionMsg.textContent = data.message; // Assuming data.message contains the server message								  
+								 var confirmButton = document.getElementById('confirm-button-session-timeout');
+								 confirmButton.onclick = function () {								  
 								        modal.style.display = 'none';
 								        window.location.href = 'login.jsp';
-								  };
-									  
-							} 
-							
-							// Data is the JSON array returned from the server
-							if (data.log_file_data
-									&& Array.isArray(data.log_file_data)) {
+								  };							  
+							} 						
+							if (data.log_file_data && Array.isArray(data.log_file_data)) {
 								var tableBody = $("#log_table_body");
-								tableBody.empty(); // Clear any existing data
-
-								// Loop through the log data and add rows to the table
+								tableBody.empty(); 
 								data.log_file_data.forEach(function(log) {
-
-									//let text = "How are you doing today?";
 									var myArray = log.split(",");
 									var split_log0 = myArray[0];
 									var split_log1 = myArray[1];
 									var split_log2 = myArray[2];
 									var split_log4 = myArray[4];
 									var split_log5 = myArray[5];
-
 									var row = $("<tr>").append(
-											$('<td style="width: 20%;">').text(
-													split_log0),
+											$('<td style="width: 20%;">').text(split_log0),
 											$("<td>").text(split_log1),
 											$("<td>").text(split_log2),
 											$("<td>").text(split_log4),
 											$("<td>").text(split_log5)
-									/*  $("<td>").text(sub_log2),
-									 $("<td>").text(sub_log3) */
 									);
 									tableBody.append(row);
 								});
-
-								var count = data.log_file_data.length;
-								
-								var totalPages = Math.ceil(count / 100);
-								
-								// Show the table
+								var count = data.log_file_data.length;								
+								var totalPages = Math.ceil(count / 100);								
 								$("#log_table").show();
 							}
 						},
-						error : function(xhr, status, error) {
-							
+						error : function(xhr, status, error) {							
 						},
 					});
 		} else {
-			
-			// Display the custom popup message
  			$("#popupMessage").text("Please select a log file first.");
-  			$("#customPopup").show();
-  			
+  			$("#customPopup").show();			
   			$("#closePopup").click(function () {
   			    $("#customPopup").hide();
   			  });
@@ -538,7 +411,6 @@ var csrfTokenValue;
 	}
 	
 </script>
-
 </head>
 <body>
 	<div class="sidebar">
@@ -579,24 +451,18 @@ var csrfTokenValue;
 			<div>
     			<input style="margin-left: 10%; margin-top: 5%;flex-content: space-between;" type="button" id="exportButton" value="Export log file">
 			</div>
-
-		</div>
-		
+		</div>		
 		<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
-		</div>
-		
+		</div>		
 		 <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
-			  </div>
-		
-	<!-- Table to display the log data -->
+			  </div>		
 	<div class="container" style="margin-top: 1%;">
-	
 		<table id="log_table">
 			<thead>
 				<tr>
@@ -605,17 +471,13 @@ var csrfTokenValue;
 					<th style="width: 15%">Line number</th>
 					<th>Class</th>
 					<th style="width: 55%">Message</th>
-
 				</tr>
 			</thead>
 			<tbody id="log_table_body"></tbody>
 		</table>
-
 	</div>
-
 	</section>
 	</div>
-	
 	</div>
 	<div class="footer">
 		<%@ include file="footer.jsp"%>

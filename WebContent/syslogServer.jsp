@@ -1,28 +1,19 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
-
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32"
-	href="images/WP_Connex_logo_favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 	
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
@@ -31,9 +22,7 @@
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
 <script src="jquery-3.6.0.min.js"></script>
-
 <style>
-
 .bordered-table {
 	border-collapse: collapse; /* Optional: To collapse table borders */
 	margin: 0 auto; /* Center the table horizontally */
@@ -79,7 +68,6 @@
 	top: 50%; /* Center vertically */
 	left: 50%; /* Center horizontally */
 	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
 }
 
 #confirm-button-session-timeout,
@@ -89,14 +77,12 @@
 	color: white;
 }
 
-
 #cancel-button-edit,
 #cancel-button-edit-status
  {
   background-color: #f44336;
   color: white;
 }
-
 
 h3{
 margin-top: 68px;
@@ -121,21 +107,14 @@ margin-top: 68px;
     background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
-
 </style>
-
 <script>
-
 var roleValue;	
 var tokenValue;
 var csrfTokenValue;
-
 function getSysLog(){
-	
-	// Display loader when the request is initiated
-    showLoader();
-    var csrfToken = document.getElementById('csrfToken').value;
-    
+	showLoader();
+    var csrfToken = document.getElementById('csrfToken').value;   
 	$.ajax({
 		url : "syslogConf",
 		type : "GET",
@@ -147,99 +126,65 @@ function getSysLog(){
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
 		success : function(data) {
-			// Hide loader when the response has arrived
-            hideLoader();
-			
-			if (data.status == 'fail') {
-				
+            hideLoader();		
+			if (data.status == 'fail') {				
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
 				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
-					  
-					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				  };				  
 			} 
-
 			$('#hostname').val(data.rsyslog_ip);
-			$('#port_number').val(data.rsyslog_port);
-			
+			$('#port_number').val(data.rsyslog_port);		
 		},
 		error : function(xhr, status, error) {
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+            hideLoader();			
 		},
 	});
-
 }
 
 function validateHost(ipaddr) {
     var regex = /^([a-zA-Z0-9@_.-]{1,100}\.){0,3}[a-zA-Z0-9@_.-]{1,100}$/;
-
     if (!regex.test(ipaddr)) {
         return 'Invalid host name. Please enter a valid IP address.';
     }
-
     return null; // Validation passed
 }
 
-function validatePortNumber(portNumber) {
-    // Check if it contains only numbers
+function validatePortNumber(portNumber) {   
     if (!/^\d+$/.test(portNumber)) {
         return 'Port number should contain only numbers.';
     }
-
-    // Check if it has a maximum length of 5 digits
     if (portNumber.length > 5) {
         return 'Port number should have a maximum of 5 digits.';
     }
-
-    // Validation passed
     return null;
 }
 
-function updateSysLog(){
-	
+function updateSysLog(){	
 	 var hostname = $('#hostname').val();
 		var port_number = $('#port_number').val();
-		 var csrfToken = document.getElementById('csrfToken').value;
-		
+		 var csrfToken = document.getElementById('csrfToken').value;		
 		 $('#field_host_Error').text('');
-		    $('#field_port_Error').text('');
-		   
-			 // Validate username
+		    $('#field_port_Error').text('');		 
 		    var hostnameError = validateHost(hostname);
 		    if (hostnameError) {
 		        $('#field_host_Error').text(hostnameError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 		        return;
 		    }
-
-		    // Validate first name
 		    var portError = validatePortNumber(port_number);
 		    if (portError) {
 		        $('#field_port_Error').text(portError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 		        return;
-		    }
-		    
-	// Display the custom modal dialog
+		    }		    	
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit');
-	  confirmButton.onclick = function () {
-		  
+	  confirmButton.onclick = function () {		  
 			$.ajax({
 				url : 'syslogConf',
 				type : 'POST',
@@ -247,59 +192,36 @@ function updateSysLog(){
 					hostname : hostname,
 					port_number : port_number,
 					csrfToken: csrfToken				
-
 				},
 				success : function(data) {
-					if (data.status == 'fail') {
-						
+					if (data.status == 'fail') {					
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
 						  modal1.style.display = 'block';
-						  
-						// Update the session-msg content with the message from the server
 						    var sessionMsg = document.getElementById('session-msg');
 						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-						  
-						  // Handle the confirm button click
 						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
 						  confirmButton1.onclick = function () {
-							  
-							// Close the modal
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
-						  };
-							  
-					} 
-					// Close the modal
+						  };							  
+					} 					
 			        modal.style.display = 'none';
 			        getSysLog();
-
-					// Clear form fields
-
 					$('#hostname').val('');
 					$('#port_number').val('');
-					
-
-				},
-				error : function(xhr, status, error) {
-					
+					},
+				error : function(xhr, status, error) {					
 				}
-			});
-				
-	  };
-	  
+			});				
+	  };	  
 	  var cancelButton = document.getElementById('cancel-button-edit');
 	  cancelButton.onclick = function () {
-	    // Close the modal
-	    modal.style.display = 'none';
-	   
-	  };
-	
+	    modal.style.display = 'none';	   
+	  };	
 }
 
 function getSysLogStatus(){
-	 var csrfToken = document.getElementById('csrfToken').value;
-	 
+	 var csrfToken = document.getElementById('csrfToken').value;	 
 	$.ajax({
 		url : "syslogStatus",
 		type : "GET",
@@ -310,54 +232,32 @@ function getSysLogStatus(){
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
-		success : function(data) {
-			
-			if (data.status == 'fail') {
-				
+		success : function(data) {		
+			if (data.status == 'fail') {				
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
 				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
-					  
-					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				  };				  
 			} 
-
 			$('#status').val(data.rsyslog_status);
-			
-			
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {			
 		},
 	});
-
-	
 }
 
 function updateSysLogStatus(){
-	
-	// Display the custom modal dialog
 	  var modal = document.getElementById('custom-modal-edit-status');
 	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-edit-status');
-	  confirmButton.onclick = function () {
-		  
+	  confirmButton.onclick = function () {		  
 		  var status = $('#status').find(":selected").val();
-		  var csrfToken = document.getElementById('csrfToken').value;
-		  
+		  var csrfToken = document.getElementById('csrfToken').value;		  
 			$.ajax({
 				url : 'syslogStatus',
 				type : 'POST',
@@ -366,62 +266,39 @@ function updateSysLogStatus(){
 					csrfToken: csrfToken					
 				},
 				success : function(data) {
-					if (data.status == 'fail') {
-						
+					if (data.status == 'fail') {					
 						 var modal1 = document.getElementById('custom-modal-session-timeout');
 						  modal1.style.display = 'block';
-						  
-						// Update the session-msg content with the message from the server
 						    var sessionMsg = document.getElementById('session-msg');
 						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-						  
-						  // Handle the confirm button click
 						  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
 						  confirmButton1.onclick = function () {
-							  
-							// Close the modal
 						        modal1.style.display = 'none';
 						        window.location.href = 'login.jsp';
-						  };
-							  
-					} 
-					// Close the modal
+						  };							  
+					} 				
 			        modal.style.display = 'none';
 			        getSysLogStatus();
-
-					// Clear form fields
-
-					$('#status').val('ENABLE');
-					
+					$('#status').val('ENABLE');					
 				},
-				error : function(xhr, status, error) {
-					
+				error : function(xhr, status, error) {					
 				}
-			});
-				
-	  };
-	  
+			});				
+	  };	  
 	  var cancelButton = document.getElementById('cancel-button-edit-status');
 	  cancelButton.onclick = function () {
-	    // Close the modal
-	    modal.style.display = 'none';
-	   
-	  };
-	
+	    modal.style.display = 'none';	   
+	  };	
 }
-
 
 function changeButtonColor(isDisabled) {
     var $applyBtn = $('#applyButton');   
-    var $addBtn = $('#saveBtn');   
-    
+    var $addBtn = $('#saveBtn');      
     if (isDisabled) {
         $applyBtn.css('background-color', 'gray'); // Change to your desired color
     } else {
         $applyBtn.css('background-color', '#2b3991'); // Reset to original color
-    }   
-    
+    }       
     if (isDisabled) {
         $addBtn.css('background-color', 'gray'); // Change to your desired color
     } else {
@@ -429,15 +306,11 @@ function changeButtonColor(isDisabled) {
     }  
 }
 
-//Function to show the loader
 function showLoader() {
-    // Show the loader overlay
     $('#loader-overlay').show();
 }
 
-// Function to hide the loader
 function hideLoader() {
-    // Hide the loader overlay
     $('#loader-overlay').hide();
 }
 
@@ -445,35 +318,26 @@ $(document).ready(function() {
 	<%// Access the session variable
 	HttpSession role = request.getSession();
 	String roleValue = (String) session.getAttribute("role");%>
-
 roleValue = '<%=roleValue%>';
 
 <%// Access the session variable
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
 
 if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-
 	$('#applyButton').prop('disabled', true);
-	$('#saveBtn').prop('disabled', true);
-	
+	$('#saveBtn').prop('disabled', true);	
 	changeButtonColor(true);
 }
 
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');
     modal.style.display = 'block';
-
     var sessionMsg = document.getElementById('session-msg');
     sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-    
-    
-    // Handle the confirm button click
     var confirmButton = document.getElementById('confirm-button-session-timeout');
     confirmButton.onclick = function() {
-        // Close the modal
         modal.style.display = 'none';
         window.location.href = 'login.jsp';
     };
@@ -481,40 +345,30 @@ if (roleValue === "null") {
 	<%// Access the session variable
 	HttpSession token = request.getSession();
 	String tokenValue = (String) session.getAttribute("token");%>
-
 tokenValue = '<%=tokenValue%>';
-
 getSysLog();
-
 $('#saveBtn').click(function() {
 	updateSysLog();
 });
-
 getSysLogStatus();
-
 $('#applyButton').click(function() {
 	updateSysLogStatus();
 });
-
-
 }
 });
-	
+
 </script>
 <body>
-
 	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>SYSLOG CONFIGURATION</h3>
 			<hr>
-
 			<div class="container">
 			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 			<div id="loader-overlay">
@@ -523,66 +377,53 @@ $('#applyButton').click(function() {
         <p>Loading...</p>
     </div>
 </div>
-
 				<form id="settingsForm">
-					<table class="bordered-table" style="margin-top: -1px;">
-					
+					<table class="bordered-table" style="margin-top: -1px;">				
 					<tr>
 							<td>Status</td>
 							<td><select class="textBox" id="status" name="status" style="height: 33px; max-width: 220px;">
 							
 							<option value="ENABLE" selected>ENABLE</option>
 							<option value="DISABLE">DISABLE</option>
-						</select>
-						
+						</select>						
 						</td>
 						<td><input type="button" id="applyButton" value="Apply"/></td>
 						</tr>
-					
-					
 						<tr>
 							<td>Hostname</td>
 							<td style="height: 50px; width: 230px;">
 							<input type="text" id="hostname" maxlength="31" name="hostname" required style="max-width: 200px;" />
 							<span id="field_host_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
-							</tr>
-							
+							</tr>							
 						<tr>
 							<td>Port</td>
 							<td style="height: 50px; width: 230px;">
 							<input type="text" id="port_number" name="port_number" maxlength="6" required style="max-width: 200px;"/>
 							<span id="field_port_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 							</td>
-						</tr>
-						
+						</tr>					
 						<tr>
 						<td colspan="2" style="text-align: center;"><input style="height: 26px;" type="button" value="Save"
 							id="saveBtn" /></td>
 						</tr>
-						
-						
 					</table>
-
 				</form>
-			</div>
-			
+			</div>			
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modify this rsyslog configuration?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
-			  </div>
-			  
+			  </div>			  
 			  <div id="custom-modal-edit-status" class="modal-edit-status">
 				<div class="modal-content-edit-status">
 				  <p>Are you sure you want to modify this rsyslog status?</p>
 				  <button id="confirm-button-edit-status">Yes</button>
 				  <button id="cancel-button-edit-status">No</button>
 				</div>
-			  </div>
-			
+			  </div>			
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 					<p id="session-msg"></p>
@@ -591,6 +432,5 @@ $('#applyButton').click(function() {
 			</div>
 		</section>
 	</div>
-
 </body>
 </html>

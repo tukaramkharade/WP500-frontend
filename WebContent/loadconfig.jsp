@@ -1,36 +1,24 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700"
-	rel="stylesheet" type="text/css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
+<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -86,15 +74,10 @@ button {
 var tokenValue;
 
 	function loadConfig() {
-		
-		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
+		  modal.style.display = 'block';		  
 		  var confirmButton = document.getElementById('confirm-button-edit');
-		  confirmButton.onclick = function () {
-			  
+		  confirmButton.onclick = function () {		  
 			  $.ajax({
 					url : 'loadConfigurationServlet',
 					type : 'GET',
@@ -102,76 +85,53 @@ var tokenValue;
 					beforeSend: function(xhr) {
 				        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				    },
-					success : function(data) {
-					
-						// Close the modal
+					success : function(data) {					
 				        modal.style.display = 'none';
-
 					},
-					error : function(xhr, status, error) {
-						
+					error : function(xhr, status, error) {					
 					}
-				});
-				
-		  };
-		
+				});			
+		  };		
 		  var cancelButton = document.getElementById('cancel-button-edit');
 		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		   
-		  };	
-		
+		    modal.style.display = 'none';		   
+		  };		
 	}
 
 	$(document).ready(function() {
-
 		<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
-
-		tokenValue = '<%=tokenValue%>';
-		
+		tokenValue = '<%=tokenValue%>';		
 		 $('#loadConfig').click(function(){		
 			 loadConfig();
-
 		 });
-
 	});
 </script>
 </head>
 <body>
-
 	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-
 	<div class="content">
 		<section style="margin-left: 1em">
 		<h3>Load Configuration</h3>
 		<hr>
-
 		<div class="container">
-
 			<input type="button" id="loadConfig" value="Load Configuration" />
-		</div>
-		
+		</div>		
 		 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to load the configuration?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
-			  </div>
-			  
+			  </div>			  
 		</section>
 	</div>
-	
-	
-
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>

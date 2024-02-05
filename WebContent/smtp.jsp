@@ -1,30 +1,21 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WP500 Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
@@ -89,7 +80,6 @@
 	top: 50%; /* Center vertically */
 	left: 50%; /* Center horizontally */
 	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
 }
 
 #confirm-button-session-timeout,
@@ -125,21 +115,16 @@ margin-top: -30px;
 
 }
   .container th, .container td {
-    border: 1px solid #ccc; 
-    
-    text-align: left;
-    
+    border: 1px solid #ccc;    
+    text-align: left;   
   }
 
  .container th{
  background-color: #e2e6f9;
-
  }
  
- .password-toggle {
-        
-    margin-right: -5px;
-   
+ .password-toggle {        
+    margin-right: -5px;   
     cursor: pointer;
     margin-left: 10px;
     }
@@ -165,7 +150,6 @@ margin-top: -30px;
 }
 
 </style>
-
 <script>
 var roleValue; 
 var tokenValue;
@@ -174,7 +158,6 @@ var csrfTokenValue;
 function togglePassword() {
     var passwordInput = $('#password');
     var passwordToggle = $('#password-toggle');
-
     if (passwordInput.attr('type') === 'password') {
         passwordInput.attr('type', 'text');
         passwordToggle.html('<i class="fa fa-eye-slash"></i>'); // Change to eye-slash icon
@@ -185,11 +168,8 @@ function togglePassword() {
 }
 
 function getSMTPSettings() {
-	// Display loader when the request is initiated
     showLoader();
-	
-    var csrfToken = document.getElementById('csrfToken').value;
-    
+    var csrfToken = document.getElementById('csrfToken').value;   
 	$.ajax({
 		url : "SMTPServlet",
 		type : "GET",
@@ -201,29 +181,18 @@ function getSMTPSettings() {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
 		success : function(data) {
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+            hideLoader();		
 			if (data.status == 'fail') {
-				
 				 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
 				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
-					  
-					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };					  
 			} 
-
 			$('#from_email_id').val(data.from_email_id);
 			$('#password').val(data.password);
 			$('#host').val(data.host);
@@ -237,15 +206,13 @@ function getSMTPSettings() {
 	            $('#tls_port, #tls_auth, #tls_enable').prop('disabled', false);
 			}
 			$('#ssl_socket_factory_port').val(data.ssl_socket_factory_port);
-			$('#ssl_port').val(data.ssl_port);
-			
+			$('#ssl_port').val(data.ssl_port);			
 			$('#tls_port').val(data.tls_port);
 			$('#tls_auth').val(data.tls_auth);
 			$('#tls_enable').val(data.tls_enable);
 			$('#to_email_id').val(data.to_email_id);
 			$('#email_cc').val(data.email_cc);
-		    $('#email_bcc').val(data.email_bcc);
-		   		    
+		    $('#email_bcc').val(data.email_bcc);		   		    
 			if ($('#from_email_id').val(data.from_email_id) != null) {
 				$('#addBtn').val('Update');
 			} else {
@@ -256,7 +223,6 @@ function getSMTPSettings() {
             hideLoader();		
 		},
 	});
-
 }
 
 function validateIPaddr(ipaddr) {
@@ -286,27 +252,19 @@ function addSMTPSettings() {
 	if (from_email_id && !validateEmails(from_email_id)) {
         return; // Exit the function if email_cc is not blank and is invalid
     }
-	// Check validation for email_cc if it is not blank
     if (email_cc && !validateEmails(email_cc)) {
         return; // Exit the function if email_cc is not blank and is invalid
     }
-
-    // Check validation for email_bcc if it is not blank
     if (email_bcc && !validateEmails(email_bcc)) {
         return; // Exit the function if email_bcc is not blank and is invalid
     }
-
-    // Check validation for to_email_id
     if (!validateEmails(to_email_id)) {
         return; // Exit the function if to_email_id is invalid
-    }
-	
+    }	
 	if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
         return;
-    }
-	
-	$('#field_ipaddr_Error').text('');
-	
+    }	
+	$('#field_ipaddr_Error').text('');	
 	  var ipAddrError = validateIPaddr(host);
 	    if (ipAddrError) {
 	        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
@@ -333,8 +291,7 @@ function addSMTPSettings() {
 			csrfToken: csrfToken,
 			action: 'add'
 		},
-		success : function(data) {
-	
+		success : function(data) {	
 			$('#from_email_id').val('');
 			$('#password').val('');
 			$('#host').val('');
@@ -359,7 +316,6 @@ function addSMTPSettings() {
 function editSMTPSettings() {
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block';
-
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
 		  var from_email_id = $('#from_email_id').val();
@@ -375,38 +331,28 @@ function editSMTPSettings() {
 			var to_email_id = $('#to_email_id').val();
 			var email_cc = $('#email_cc').val();
 			var email_bcc = $('#email_bcc').val();
-			 var csrfToken = document.getElementById('csrfToken').value;
-			
+			 var csrfToken = document.getElementById('csrfToken').value;			
 			if (from_email_id && !validateEmails(from_email_id)) {
 		        return; // Exit the function if email_cc is not blank and is invalid
 		    }
-			// Check validation for email_cc if it is not blank
 		    if (email_cc && !validateEmails(email_cc)) {
 		        return; // Exit the function if email_cc is not blank and is invalid
 		    }
-
-		    // Check validation for email_bcc if it is not blank
 		    if (email_bcc && !validateEmails(email_bcc)) {
 		        return; // Exit the function if email_bcc is not blank and is invalid
 		    }
-
-		    // Check validation for to_email_id
 		    if (!validateEmails(to_email_id)) {
 		        return; // Exit the function if to_email_id is invalid
-		    }
-			
+		    }			
 			if (!validatePortLength(ssl_socket_factory_port) || !validatePortLength(ssl_port) || !validatePortLength(tls_port)) {
 		        return;
-		    }
-			
-			$('#field_ipaddr_Error').text('');
-			
+		    }			
+			$('#field_ipaddr_Error').text('');			
 			  var ipAddrError = validateIPaddr(host);
 			    if (ipAddrError) {
 			        $('#field_ipaddr_Error').text(ipAddrError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
 			        return;
-			    }
-			    
+			    }			    
 			$.ajax({
 				url : 'SMTPServlet',
 				type : 'POST',
@@ -426,13 +372,10 @@ function editSMTPSettings() {
 					email_bcc : email_bcc,
 					csrfToken: csrfToken,
 					action: 'update'
-
 				},
-				success : function(data) {
-					
+				success : function(data) {					
 			        modal.style.display = 'none';				
-			        getSMTPSettings();		        
-			        
+			        getSMTPSettings();		        			        
 					$('#from_email_id').val('');
 					$('#password').val('');
 					$('#host').val('');
@@ -454,124 +397,78 @@ function editSMTPSettings() {
 	  };  
 	  var cancelButton = document.getElementById('cancel-button-edit');
 	  cancelButton.onclick = function () {
-	    // Close the modal
 	    modal.style.display = 'none';
 	    $('#addBtn').val('Update');
 	  };	
 }
 
 function validatePortLength(port) {
-    // Check if port is a number
     if (isNaN(port)) {
-       
-       // Display the custom popup message
-	     			$("#popupMessage").text('Port must be a number.');
-	      			$("#customPopup").show();
-	      			
-	      			
+         			$("#popupMessage").text('Port must be a number.');
+	      			$("#customPopup").show();	      			      			
         return false;
     }
     if (port.length > 5) {
-
-       
-       // Display the custom popup message
 	     			$("#popupMessage").text('Port must not exceed 5 digits in length.');
-	      			$("#customPopup").show();
-	      			
+	      			$("#customPopup").show();	      			
         return false;
     }
     return true;
 }
 
-function validateEmails(emails) {
-	
+function validateEmails(emails) {	
     var emailArray = emails.split(',').map(function (email) {
         return email; // Remove leading/trailing spaces
-    });
-    
+    });    
     var emailArray1 = emails.split(',').map(function (email) {
         return email.trim(); // Remove leading/trailing spaces
-    });
-   
+    });  
     if (emails.includes(' ')) {
-     
-     // Display the custom popup message
-	     			$("#popupMessage").text('Space is not allowed between email addresses: ' + emails);
+     			$("#popupMessage").text('Space is not allowed between email addresses: ' + emails);
 	      			$("#customPopup").show();
-	      			
-	      			
         return false; // Space is not allowed between email addresses
     }
-
     
     for (var i = 0; i < emailArray1.length; i++) {
         if (!isValidEmail(emailArray1[i])) {
         	if (emails.includes(',') && !emailArray.length > 1) {
-                              
-               // Display the custom popup message
-	     			$("#popupMessage").text('Comma is required between email addresses:1' + emailArray1[i]);
-	      			$("#customPopup").show();
-	      			
+                 	$("#popupMessage").text('Comma is required between email addresses:1' + emailArray1[i]);
+	      			$("#customPopup").show();      			
                 return false; // Comma is required between multiple emails
             }
-        	else if(!emails.includes(',') && emails.includes('@')){
-        		            
-            // Display the custom popup message
+        	else if(!emails.includes(',') && emails.includes('@')){		        
 	     			$("#popupMessage").text('Comma is required between email addresses:2' + emailArray1[i]);
-	      			$("#customPopup").show();
-	      			
-	      			
+	      			$("#customPopup").show();	      			
                 return false; // Comma is required between multiple emails
         	}    	
-        	
-        	// Display the custom popup message
-	     			$("#popupMessage").text('Invalid email address: ' + emailArray1[i]);
-	      			$("#customPopup").show();
-	      			
+ 	     			$("#popupMessage").text('Invalid email address: ' + emailArray1[i]);
+	      			$("#customPopup").show();	      			
             return false; // Stop and show an showCustomPopup for the first invalid email
-        	
-            
         }
-    }
-    
+    }    
     return true; // All emails are valid
 }
+
 function isValidEmail(email) {
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     var isValid = emailRegex.test(email);
-
-    // Log whether the email is considered valid or not
-    if (isValid) {
-       
-    } else {
-       
+    if (isValid) {      
+    } else {       
     }
-
     return isValid;
 }
 
 function deleteSMTPSettings() {
-	 var csrfToken = document.getElementById('csrfToken').value;
-	 
-		// Display the custom modal dialog
-		  var modal = document.getElementById('custom-modal-delete');
+	 	  var modal = document.getElementById('custom-modal-delete');
 		  modal.style.display = 'block';
-
-		  // Handle the confirm button click
 		  var confirmButton = document.getElementById('confirm-button-delete');
 		  confirmButton.onclick = function () {
 			  $.ajax({
 					url : 'SMTPServlet',
 					type : 'DELETE',
 					dataType : 'json',
-					data: {
-						csrfToken: csrfToken
-			        },
 					success : function(data) {
-						// Close the modal
 				        modal.style.display = 'none';
-
-						// Refresh the user list
 						getSMTPSettings();
 						location.reload();
 					},
@@ -581,10 +478,8 @@ function deleteSMTPSettings() {
 				});
 			  $('#addBtn').val('Add');
 		  };
-		// Handle the cancel button click
 		  var cancelButton = document.getElementById('cancel-button-delete');
 		  cancelButton.onclick = function () {
-		    // Close the modal
 		    modal.style.display = 'none';
 		    $('#addBtn').val('Update');
 		  };
@@ -596,60 +491,44 @@ function testEmail() {
 			type : 'GET',
 			dataType : 'json',
 			success : function(data) {
-			
-				// Display the custom popup message
-     			$("#popupMessage").text(data.message);
+				$("#popupMessage").text(data.message);
       			$("#customPopup").show();
-
-				// Refresh the user list
 				getSMTPSettings();
 			},
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {			
 			}
 		});
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
-	
 }
-
 
 function changeButtonColor(isDisabled) {
     var $add_button = $('#addBtn');
     var $delete_button = $('#delBtn');
-    var $clear_button = $('#clearBtn');    
-    
+    var $clear_button = $('#clearBtn');       
     if (isDisabled) {
         $add_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $add_button.css('background-color', '#2b3991'); // Reset to original color
-    }
-    
+    }    
     if (isDisabled) {
         $delete_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $delete_button.css('background-color', '#2b3991'); // Reset to original color
-    }
-    
+    }    
     if (isDisabled) {
         $clear_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $clear_button.css('background-color', '#2b3991'); // Reset to original color
-    }
-   
+    } 
 }
 
-
-//Function to show the loader
 function showLoader() {
-    // Show the loader overlay
     $('#loader-overlay').show();
 }
 
-// Function to hide the loader
 function hideLoader() {
-    // Hide the loader overlay
     $('#loader-overlay').hide();
 }
 
@@ -657,149 +536,93 @@ $(document).ready(function() {
 	<%// Access the session variable
 			HttpSession role = request.getSession();
 			String roleValue = (String) session.getAttribute("role");%>
-
 roleValue = '<%=roleValue%>';
 
 <%// Access the session variable
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
 
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-
 							$('#addBtn').prop('disabled', true);
 							$('#clearBtn').prop('disabled', true);
 							$('#delBtn').prop('disabled', true);
-
 							changeButtonColor(true);
 						}
 						
 						if (roleValue === "null") {
 					        var modal = document.getElementById('custom-modal-session-timeout');
 					        modal.style.display = 'block';
-
 					        var sessionMsg = document.getElementById('session-msg');
 						    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-						    
-						    
-					        // Handle the confirm button click
 					        var confirmButton = document.getElementById('confirm-button-session-timeout');
 					        confirmButton.onclick = function() {
-					            // Close the modal
 					            modal.style.display = 'none';
 					            window.location.href = 'login.jsp';
 					        };
 					    }else{
-
 					    	<%// Access the session variable
 					    				HttpSession token = request.getSession();
 					    				String tokenValue = (String) session.getAttribute("token");%>
-
 					    	tokenValue = '<%=tokenValue%>';
-
-					    							getSMTPSettings();
-					    							
+					    							getSMTPSettings();					    							
 					    							var passwordField = $('#password');
-
 					    						      passwordField.on('paste', function(e) {
 					    						        e.preventDefault();
-					    						      });
-					    							
-					    						      
+					    						      });					    												    						      
 					    							$("#smtp_type").change(function(event) {
-
 																if ($(this).val() == 'ssl'|| $(this).val() == 'SSL') {
-
 																	$("#tls_port").prop("disabled",true);
 																	$("#tls_auth").prop("disabled",true);
 																	$("#tls_enable").prop("disabled", true);
-
 																	$("#tls_port").val('');
 																	$("#tls_auth").val('False');
 																	$("#tls_enable").val('False');
 																	$('#ssl_smtp_type').val('True');
-
 																	var isDisabled1 = $('#ssl_socket_factory_port').prop('disabled');
-
 																	if (isDisabled1) {
 																		$("#ssl_socket_factory_port").prop("disabled",false);
 																	}
-
-																	var isDisabled2 = $('#ssl_port')
-																			.prop('disabled');
-
+																	var isDisabled2 = $('#ssl_port').prop('disabled');
 																	if (isDisabled2) {
-																		$("#ssl_port").prop(
-																				"disabled", false);
+																		$("#ssl_port").prop("disabled", false);
 																	}
-
-																	var isDisabled3 = $(
-																			'#ssl_smtp_type').prop(
-																			'disabled');
-
-																	if (isDisabled3) {
-																		$("#ssl_smtp_type").prop(
-																				"disabled", false);
-																	}
-
-																} else if ($(this).val() == 'tls'
-																		|| $(this).val() == 'TLS') {
-																	$("#ssl_socket_factory_port")
-																			.prop("disabled", true);
-																	$("#ssl_port").prop("disabled",
-																			true);
-																	$("#ssl_smtp_type").prop(
-																			"disabled", true);
-
-																	$("#ssl_socket_factory_port")
-																			.val('');
+																	var isDisabled3 = $('#ssl_smtp_type').prop('disabled');
+																	if (isDisabled3) {$("#ssl_smtp_type").prop("disabled", false);
+																}
+																} else if ($(this).val() == 'tls' || $(this).val() == 'TLS') {
+																	$("#ssl_socket_factory_port").prop("disabled", true);
+																	$("#ssl_port").prop("disabled",true);
+																	$("#ssl_smtp_type").prop("disabled", true);
+																	$("#ssl_socket_factory_port").val('');
 																	$("#ssl_port").val('');
-																	$('#ssl_smtp_type')
-																			.val('False');
+																	$('#ssl_smtp_type').val('False');
 																	$("#tls_auth").val('True');
 																	$("#tls_enable").val('True');
-
-																	var isDisabled1 = $('#tls_port')
-																			.prop('disabled');
-
+																	var isDisabled1 = $('#tls_port').prop('disabled');
 																	if (isDisabled1) {
-																		$("#tls_port").prop(
-																				"disabled", false);
+																		$("#tls_port").prop("disabled", false);
 																	}
-
-																	var isDisabled2 = $('#tls_auth')
-																			.prop('disabled');
-
+																	var isDisabled2 = $('#tls_auth').prop('disabled');
 																	if (isDisabled2) {
-																		$("#tls_auth").prop(
-																				"disabled", false);
+																		$("#tls_auth").prop("disabled", false);
 																	}
-
 																	var isDisabled3 = $(
-																			'#tls_enable').prop(
-																			'disabled');
-
+																			'#tls_enable').prop('disabled');
 																	if (isDisabled3) {
-																		$("#tls_enable").prop(
-																				"disabled", false);
+																		$("#tls_enable").prop("disabled", false);
 																	}
-
 																}
 															});
-
 											$('#smtpForm').submit(function(event) {
 												event.preventDefault();
 												var buttonText = $('#addBtn').val();
-
 												if (buttonText == 'Add') {
 													addSMTPSettings();
 												} else {
 													editSMTPSettings();
 												}
-
 											});
-
 											$('#clearBtn').click(function() {
 												$('#from_email_id').val('');
 												$('#password').val('');
@@ -816,7 +639,6 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 												$('#email_bcc').val('');
 												$('#field_ipaddr_Error').text('');
 											});
-
 											$("#delBtn").click(function() {
 												deleteSMTPSettings();
 											});
@@ -825,29 +647,23 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 											});
 											$("#closePopup").click(function() {
 												$("#customPopup").hide();
-											});		
-											
+											});													
 											 $('#password-toggle').click(function () {
 									                togglePassword();
 									            });				  					
 					    }
-
 					});
 </script>
-
 </head>
 <body>
 	<div class="sidebar"><%@ include file="common.jsp"%></div>
 	<div class="header"><%@ include file="header.jsp"%></div>
-
 	<div class="content">
 		<section style="margin-left: 1em">
 		<h3>SMTP SETTINGS</h3>
 	<hr />
-
 		<div class="container">
 		<form id="smtpForm">
-
 				<input type="hidden" id="action" name="action" value="">
 					<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
 					<div id="loader-overlay">
@@ -855,34 +671,26 @@ csrfTokenValue = '<%=csrfTokenValue%>';
         <i class="fas fa-spinner fa-spin fa-3x"></i>
         <p>Loading...</p>
     </div>
-</div>
-				
-				<table>
-				
+</div>			
+				<table>			
 				<tr>
 					<th  colspan="2">Email Configuration</th>
-				</tr>
-				
-				<tr>
-				
+				</tr>				
+				<tr>				
 				<td>From Email ID</td>
-				<td><input type="text" id="from_email_id" name="from_email_id" style="height: 10px; width: 30%;" required /></td>
-				
-				</tr>
-				
+				<td><input type="text" id="from_email_id" name="from_email_id" style="height: 10px; width: 30%;" required /></td>				
+				</tr>				
 				<tr>
 				<td>Password</td>
 				<td><input type="password" id="password" name="password" style="height: 10px; width: 20%;" required />
 				<span class="password-toggle" id="password-toggle"><i class="fa fa-eye"></i></span></td>
-				</tr>
-				
+				</tr>				
 				<tr>
 				<td>Host</td>
 				<td><input type="text" id="host" name="host" style="height: 10px; width: 10%;" required />
 				<span id="field_ipaddr_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 				</td>
-				</tr>
-				
+				</tr>				
 				<tr>
 				<td>SMTP Type</td>
 				<td><select class="smtp_type" id="smtp_type" name="smtp_type" style="height: 31px; width: 15%;" required>
@@ -890,51 +698,39 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							<option value="SSL">SSL</option>
 							<option value="TLS">TLS</option>
 						</select></td>
-				</tr>
-				
+				</tr>				
 				<tr>
 					<th  colspan="2">SSL Configuration</th>
-				</tr>
-				
-				<tr>
-				
+				</tr>				
+				<tr>				
 				<td>SSL Socket Factory Port</td>
-				<td><input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 10px; width: 20%;" required /></td>
-				
-				</tr>
-				
+				<td><input type="text" id="ssl_socket_factory_port" name="ssl_socket_factory_port" style="height: 10px; width: 20%;" required /></td>				
+				</tr>				
 				<tr>
 				<td>SSL Port</td>
 				<td><input type="text" id="ssl_port" name="ssl_port" style="height: 10px; width: 20%;" required /></td>
-				</tr>
-				
+				</tr>				
 				<tr>
 				<td>SSL SMTP Type</td>
 				<td><select class="ssl_smtp_type" id="ssl_smtp_type" name="ssl_smtp_type" style="height: 31px; width: 20%;" required>
 								<option value="True" selected>True</option>
 								<option value="False">False</option>
 						</select></td>
-				</tr>
-				
+				</tr>			
 				<tr>
 					<th  colspan="2">TLS Configuration</th>
-				</tr>
-				
-				<tr>
-				
+				</tr>				
+				<tr>				
 				<td>TLS Port</td>
-				<td><input type="text" id="tls_port" name="tls_port" style="height: 10px; width: 8%;" required /></td>
-				
-				</tr>
-				
+				<td><input type="text" id="tls_port" name="tls_port" style="height: 10px; width: 8%;" required /></td>				
+				</tr>				
 				<tr>
 				<td>TLS Auth</td>
 				<td><select class="tls_auth" id="tls_auth" name="tls_auth" style="height: 31px; width: 15%;" required>
 								<option value="True">True</option>
 								<option value="False" selected>False</option>
 						</select></td>
-				</tr>
-				
+				</tr>				
 				<tr>
 				<td>TLS Enable</td>
 				<td><select class="tls_enable" id="tls_enable" name="tls_enable" style="height: 31px; width: 15%;" required>
@@ -942,48 +738,32 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 								<option value="False" selected>False</option>
 						</select></td>
 				</tr>
-				
-				
-				
 				<tr>
 					<th  colspan="2">Email Recipients</th>
-				</tr>
-				
-				<tr>
-				
+				</tr>			
+				<tr>			
 				<td>To Email ID</td>
-				<td><input type="text" id="to_email_id" name="to_email_id" required style="height: 10px; width: 60%;" /></td>
-				
+				<td><input type="text" id="to_email_id" name="to_email_id" required style="height: 10px; width: 60%;" /></td>				
 				</tr>
-				
 				<tr>
 				<td>CC</td>
 				<td><input type="text" id="email_cc" name="email_cc" style="height: 10px; width: 60%;" /></td>
-				</tr>
-				
+				</tr>				
 				<tr>
 				<td>BCC</td>
 				<td><input type="text" id="email_bcc" name="email_bcc" style="height: 10px; width: 60%;" /></td>
 				</tr>
-				
-				
-				
-				</table>
-				
+				</table>				
 				<div class="row" style="display: flex; justify-content: right; margin-bottom: 2%;">
 					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Clear" id="clearBtn" /> 
 					<input style="margin-top: 10px; margin-left: 5px" type="submit" value="Add" id="addBtn" /> 
 					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Delete" id="delBtn" />
 					<input style="margin-top: 10px; margin-left: 5px" type="button" value="Test Email" id="testEmailBtn" />
-				</div>
-				
+				</div>				
 				</form>
 		</div>
-		
-		
 		</section>
 	</div>
-
 	<div id="custom-modal-delete" class="modal-delete">
 		<div class="modal-content-delete">
 			<p>Are you sure you want to delete this SMTP setting?</p>
@@ -991,7 +771,6 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 			<button id="cancel-button-delete">No</button>
 		</div>
 	</div>
-
 	<div id="custom-modal-edit" class="modal-edit">
 		<div class="modal-content-edit">
 			<p>Are you sure you want to modify this SMTP setting?</p>
@@ -999,19 +778,16 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 			<button id="cancel-button-edit">No</button>
 		</div>
 	</div>
-	
 	<div id="custom-modal-session-timeout" class="modal-session-timeout">
 		<div class="modal-content-session-timeout">
 			<p id="session-msg"></p>
 			<button id="confirm-button-session-timeout">OK</button>
 		</div>
 	</div>
-
 	<div id="customPopup" class="popup">
 		<span class="popup-content" id="popupMessage"></span>
 		<button id="closePopup">OK</button>
 	</div>
-
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>

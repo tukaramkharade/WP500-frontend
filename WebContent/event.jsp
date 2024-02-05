@@ -84,11 +84,10 @@ function loadEventData() {
              //   tableBody.empty();
 	
                 data.event_log_result.forEach(function(log) {
-                    var dateTime = log.date_time; // Accessing the date_time property
-                    var EventName = log.event_name; // Accessing the event_name property
-                    var EventType = log.event_type; // Accessing the event_type property
-                    var message = log.msg; // Accessing the msg property
-
+                    var dateTime = log.date_time; 
+                    var EventName = log.event_name;
+                    var EventType = log.event_type;
+                    var message = log.msg; 
                     var row = $("<tr>").append(
                         $("<td>").text(dateTime),
                         $("<td>").text(EventName),
@@ -97,12 +96,10 @@ function loadEventData() {
                     );
                     tableBody.append(row);
                 });
-
                 $("#log_table").show();
             }
         },
-        error: function(xhr, status, error) {
-            
+        error: function(xhr, status, error) {            
         },
     });
 }
@@ -113,21 +110,15 @@ function getEventData(currentPage) {
         type: 'POST', // Use POST method
         data: { currentPage: currentPage }, // Pass current page number
         dataType: 'json',
-        success: function (data) {
-        	
-        	  total_pages = data.total_page; // Access the total_pages value
-             	
-              var count = data.event_log_result.length;
-           
+        success: function (data) {       	
+        	  total_pages = data.total_page; // Access the total_pages value             	
+              var count = data.event_log_result.length;           
           if (data.event_log_result && Array.isArray(data.event_log_result)) {
-           //   tableBody.empty();
-	
               data.event_log_result.forEach(function(log) {
                   var dateTime = log.date_time; // Accessing the date_time property
                   var EventName = log.event_name; // Accessing the event_name property
                   var EventType = log.event_type; // Accessing the event_type property
                   var message = log.msg; // Accessing the msg property
-
                   var row = $("<tr>").append(
                       $("<td>").text(dateTime),
                       $("<td>").text(EventName),
@@ -136,12 +127,10 @@ function getEventData(currentPage) {
                   );
                   tableBody.append(row);
               });
-
                 $("#log_table").show();
             }
         },
-        error: function(xhr, status, error) {
-           
+        error: function(xhr, status, error) {         
         },
     });
 }
@@ -149,11 +138,8 @@ function handleStatus(status) {
     if (status === 'fail') {
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
-
-        // Handle the confirm button click
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function () {
-            // Close the modal
             modal.style.display = 'none';
             window.location.href = 'login.jsp';
         };
@@ -166,12 +152,10 @@ function handleStatus(status) {
 	function clearTable() {
         $('#log_table_body').empty();
     }
-	$(document).ready(function() {
-		
+	$(document).ready(function() {		
 		<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
-
 		tokenValue = '<%=tokenValue%>';
 		
 		clearTable();
@@ -184,7 +168,6 @@ function handleStatus(status) {
 				updatePageInfo();
 			}
 		});
-
 		$('#nextPage').on('click', function() {
 			if(currentPage < total_pages){
 			currentPage++;
@@ -192,8 +175,7 @@ function handleStatus(status) {
 			getEventData(currentPage);
 			updatePageInfo();
 			}
-		});
-		
+		});	
 });
 </script>
 
@@ -211,45 +193,32 @@ function handleStatus(status) {
 		<hr />
 		<div class="row"
 			style="display: flex; flex-content: space-between; margin-top: 5px;">
-			
-
-		</div>
-		
-		<div class="pagination" id="pagination">
-					<!-- Ensure the ID is "pagination" -->
+		</div>		
+		<div class="pagination" id="pagination">				
 					<a href="#" id="prevPage">Previous</a> <span id="pageInfo">Page1</span> 
 					<a href="#" id="nextPage">Next</a>
 		</div>
-		
-		<div id="custom-modal-session-timeout" class="modal-session-timeout">
+				<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				  <p>Your session is timeout. Please login again</p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 	   </div>	   
-	  		
-	<!-- Table to display the log data -->
 	<div class="container" style="margin-top: 1%;">
-	
 		<table id="log_table">
 			<thead>
 				<tr>
 					<th style="width: 2%">DateTime</th>
 					<th style="width: 2%">Event Name</th>
 					<th style="width: 2%">Event type</th>
-					<th style="width: 15%">Event Message</th>
-				
-
+					<th style="width: 15%">Event Message</th>			
 				</tr>
 			</thead>
 			<tbody id="log_table_body"></tbody>
 		</table>
-
 	</div>
-
 	</section>
-	</div>
-	
+	</div>	
 	</div>
 	<div class="footer">
 		<%@ include file="footer.jsp"%>

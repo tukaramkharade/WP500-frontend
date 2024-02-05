@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -22,13 +15,11 @@
 <html>
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="jquery-3.6.0.min.js"></script>
-
 <style>
 ul.tree {
 	list-style: none;
@@ -55,7 +46,6 @@ margin-top: 10px;
     background-color: #f2f2f2;
 }
 
-/* Add the following style to clear the float and prevent overlapping content */
 .clearfix::after {
     content: "";
     clear: both;
@@ -76,13 +66,11 @@ textarea {
         button {
             cursor: pointer;
             border-radius: 5px;
-            border: none;
-         
+            border: none;      
             font-size: small;
             margin-right: 10px;
              padding: 10px 20px;
-        }
-        
+        }   
         
   .popup {
   display: none;
@@ -99,7 +87,6 @@ textarea {
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -166,10 +153,7 @@ textarea {
         
 </style>
 </head>
-
-	
 <body>
-
 <script>
 var csrfTokenValue;
 
@@ -177,88 +161,65 @@ $(document).ready(function() {
 	<%// Access the session variable
 	HttpSession csrfToken = request.getSession();
 	String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 	csrfTokenValue = '<%=csrfTokenValue%>';
 });
 
 </script>
-
 <div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-	
-	<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-	
+	<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />	
 	<div class="content">
-		<section style="margin-left: 1em">
-		
+		<section style="margin-left: 1em">		
 		<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>
         <p>Loading...</p>
     </div>
 </div>
-
 		 <div class="button-container">
         <button onClick="window.location.reload();" style="color:white; background-color: #2b3991">Reload</button>
-    </div>
-    
-		
-		<div class="quickclient_container">
-		
+    </div> 		
+		<div class="quickclient_container">		
 		<h3>QUICK CLIENT</h3>
-		<hr/>
-		
-		
+		<hr/>			
 	<ul id="tree" class="tree">
 		<li class="expandable" id="root">OPC Servers</li>
 	</ul>
-
 	<button id="addNodeButton" style="display: none;"></button>
-	
-	</div>
-	
-	<div class="status-container">
-	
+	</div>	
+	<div class="status-container">	
 	<h3>STATUS INFORMATION</h3>
-	<hr/>
-	
+	<hr/>	
 	<table class="bordered-table" style="margin-top: -1px;">
-	
-	
 	<tr>
 	<td>Node</td>
 	<td><textarea id="node"></textarea></td>
 	<td></td>
 	</tr>
-	
 	<tr>
 	<td>Value:</td>
 	<td><p id="value"></p></td>
 	<td></td>
 	</tr>
-	
 	<tr>
 	<td>Quality:</td>
 	<td><p id="quality"></p></td>
 	<td></td>
 	</tr>
-	
 	<tr>
 	<td>Data Type:</td>
 	<td><p id="datatype"></p></td>
 	<td></td>
 	</tr>
-	
 	<tr>
 	<td>Timestamp:</td>
 	<td><p id="timestamp"></p></td>
 	<td></td>
 	</tr>
-	
 	<tr>
 	<td>Add tag name</td>
 	<td><input type="text" id="tag_name" name="tag_name" maxlength="31" style="width: 200px; margin-bottom: 10px;" required/>
@@ -267,30 +228,23 @@ $(document).ready(function() {
 	<td><input style="height: 26px;" type="button" value="Add Tag" id="addTag"/></td>
 	</tr>
 	</table>
-	
 	</div>
-	
 	<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				  <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
 			  </div>
-	
 	 <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
 			  </div>
-	
 	</section>
 	</div>
-
 	<script>
-	
+
 	var roleValue;
 	var tokenValue;
-	
-	
         document.getElementById('addNodeButton').addEventListener('click', function(event) {
             const newNodeText = document.getElementById('newNodeName').value;
             if (newNodeText) {
@@ -301,7 +255,6 @@ $(document).ready(function() {
                         const newUl = document.createElement('ul');
                         selectedNode.appendChild(newUl);
                     }
-
                     const li = document.createElement('li');
                     li.textContent = newNodeText;
                     li.classList.add('expandable');
@@ -313,81 +266,54 @@ $(document).ready(function() {
         const tree = document.getElementById('tree');
         tree.addEventListener('click', function(event) {
             if (event.target.tagName === 'LI') {
-                // Toggle the 'collapsed' class
                 event.target.classList.toggle('collapsed');
-                // Remove the 'selected' class from all nodes
                 const nodes = document.querySelectorAll('.selected');
                 nodes.forEach((node) => {
                     node.classList.remove('selected');
                 });
-                // Add the 'selected' class to the clicked node
-                event.target.classList.add('selected');
-                
-                const clickedNodeName = event.target.textContent;
-                //alert('Clicked node name: ' + clickedNodeName);
-          
+                event.target.classList.add('selected');            
+                const clickedNodeName = event.target.textContent;      
                 const nodeid = event.target.dataset.nodeid;
                 const opcname = event.target.dataset.opcname;
                 const type = event.target.dataset.type;
-                const browsename = event.target.dataset.browsename;
-                
+                const browsename = event.target.dataset.browsename;              
                 loadopcnodesList(nodeid,opcname,type,browsename);
                 event.target.classList.toggle('collapsed');
-            }
-            
+            }         
         });
         
         function changeButtonColor(isDisabled) {
-            var $add_tag_button = $('#addTag');       
-           
+            var $add_tag_button = $('#addTag');               
              if (isDisabled) {
                 $add_tag_button.css('background-color', 'gray'); // Change to your desired color
             } else {
                 $add_tag_button.css('background-color', '#2b3991'); // Reset to original color
-            }
-            
+            }          
         }
         
-     // Validation for first name
     	function validateTag(tag) {
         var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
         if (!regex.test(tag)) {
             return 'Invalid Tag name; symbols not allowed';
         }
-
-        return null; // Validation passed
+        return null; /
     }
         
-        function addTag() {		
-    		
+        function addTag() {		   		
     		var tag_name = $('#tag_name').val();
     		var pv_address = $('#node').val();
-    		 var csrfToken = document.getElementById('csrfToken').value;
-    		
-    		if (tag_name === '' || pv_address === '') {
-    	      
+    		 var csrfToken = document.getElementById('csrfToken').value; 		
+    		if (tag_name === '' || pv_address === '') { 	      
     	       $("#popupMessage").text('Tag name and PV address are required!');
-          			$("#customPopup").show();
-          			
+          			$("#customPopup").show();       			
     	        return;
-    	    }
-    	
-    		// Clear previous error messages
-    	  
-    	    $('#field_tag_Error').text('');
-    	   
-    		
-
-    	    // Validate first name
+    	    }    	  
+    	    $('#field_tag_Error').text('');   	   		
     	    var tagError = validateTag(tag_name);
     	    if (tagError) {
     	        $('#field_tag_Error').text(tagError).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
     	        return;
-    	    }
-
-    	    
-    	    
+    	    }   
     		$.ajax({
     			url : 'tagMapping',
     			type : 'POST',
@@ -395,30 +321,20 @@ $(document).ready(function() {
     				tag_name : tag_name,
     				pv_address : pv_address,
     				csrfToken: csrfToken,
-    				action: 'add'
-    				
+    				action: 'add'  				
     			},
-    			success : function(data) {
-    				
-    				// Display the custom popup message
+    			success : function(data) {  				
          			$("#popupMessage").text(data.message);
           			$("#customPopup").show();
-
-    				$('#tag_name').val('');
-    				
+    				$('#tag_name').val('');   				
     			},
-    			error : function(xhr, status, error) {
-    				
+    			error : function(xhr, status, error) { 				
     			}
-    		});
-    		
-
+    		});   		
     	}	
  
- function loadopcnodesList(nodeid,opcname,type,browsename) {
-        	
-	 var csrfToken = document.getElementById('csrfToken').value;
-	 
+ function loadopcnodesList(nodeid,opcname,type,browsename) {     	
+	 var csrfToken = document.getElementById('csrfToken').value; 
     		$.ajax({
     					url : 'BrowseQuickCLient',
     					type : 'POST',
@@ -430,103 +346,69 @@ $(document).ready(function() {
     						browsename : browsename,
     						csrfToken: csrfToken
     					},
-    					success : function(response) {
-    						
-    						if (type === "Variable") {
-    							
+    					success : function(response) {						
+    						if (type === "Variable") { 							
     							const nodeid = response.nodeid;
     					        const status = response.status;
     					        const value = response.value;
     					        const timestamp = response.timestamp;
     					        const dataType = response.dataType;
-    					        const quality = response.quality;
-    					        
-    					       // alert('nodeid: '+nodeid);
-    					       
-    					     // Update the HTML elements with the retrieved values
+    					        const quality = response.quality;    					          					       
     					        $('#node').val(nodeid);
     					        $('#read_status').text(status);    					        
     					        $('#value').text(value !== "null" ? value : '');
     					        $('#timestamp').text(timestamp);
     					        $('#datatype').text(dataType);
-    					        $('#quality').text(status);
-    							
-    						}else{
-    							
+    					        $('#quality').text(status);							
+    						}else{						
     							const selectedNode = document.querySelector('.selected');
 				                if (selectedNode) {
-				                    const ul = selectedNode.querySelector('ul');
-				                    
+				                    const ul = selectedNode.querySelector('ul');				                    
 				                    if (!ul) {
 				                        const newUl = document.createElement('ul');
 				                        selectedNode.appendChild(newUl);
 				                    }else {
-				                        // Clear the existing <ul> by removing its child nodes
 				                        while (ul.firstChild) {
 				                            ul.removeChild(ul.firstChild);
 				                        }
-				                    }
-				
-				                    $.each(response.data,function(index, node) {
-		 		                      ///  alert(node.nodeid); // For debugging
-		 		                        
+				                    }				
+				                    $.each(response.data,function(index, node) {		 		                        
 		 		                       const li = document.createElement('li');
 					                    li.textContent = node.browsename;
 					                    li.dataset.opcname = node.opcname; // Store nodeid as a data attribute
 					                    li.dataset.browsename = node.browsename;
 					                    li.dataset.type = node.type;
-					                    li.dataset.nodeid = node.nodeid;
-         
+					                    li.dataset.nodeid = node.nodeid;       
 					                    li.classList.add('expandable');
-					                    ul.appendChild(li);
-					                    
-		 		                    });
-				                    
+					                    ul.appendChild(li);					                    
+		 		                    });			                    
 				                }
-    						}
-    						
+    						}  						
     					},
-    					error : function(xhr, status, error) {
-    						
+    					error : function(xhr, status, error) {  						
     					}
     				});
     	}
  
-        function loadopcList() {
-        	
-        	// Display loader when the request is initiated
-    	    showLoader();
-        	
+        function loadopcList() {   	
+    	    showLoader();     	
     		$.ajax({
     					url : 'BrowseQuickCLient',
     					type : 'GET',
-    					dataType : 'json',
-    					
+    					dataType : 'json',  					
     					success : function(response) {
-    						// Hide loader when the response has arrived
-    			            hideLoader();
-    						
-    						if (response.status == 'fail') {
-    							
+    			            hideLoader();  						
+    						if (response.status == 'fail') {  							
    							 var modal = document.getElementById('custom-modal-session-timeout');
-   							  modal.style.display = 'block';
-   							  
-   							// Update the session-msg content with the message from the server
+   							  modal.style.display = 'block';						  
    							    var sessionMsg = document.getElementById('session-msg');
-   							    sessionMsg.textContent = response.message; // Assuming data.message contains the server message
-
-   							  
-   							  // Handle the confirm button click
+   							    sessionMsg.textContent = response.message; // Assuming data.message contains the server message							  
    							  var confirmButton = document.getElementById('confirm-button-session-timeout');
-   							  confirmButton.onclick = function () {
-   								  
-   								// Close the modal
+   							  confirmButton.onclick = function () {							  
    							        modal.style.display = 'none';
    							        window.location.href = 'login.jsp';
-   							  };
-   								  
-   						} 
-    						
+  							  };								  
+   						}  						
     						const root = document.getElementById('root');
     		                if (root) {
     		                    let ul = root.querySelector('ul');
@@ -534,79 +416,55 @@ $(document).ready(function() {
     		                        ul = document.createElement('ul');
     		                        root.appendChild(ul);
     		                    }else {
-    		                        // Clear the existing <ul> by removing its child nodes
     		                        while (ul.firstChild) {
     		                            ul.removeChild(ul.firstChild);
     		                        }
     		                    }
 
     		                    response.data.forEach(function(displayName) {
-    		                     //   alert(displayName); // For debugging
     		                        const li = document.createElement('li');
-    		                        li.textContent = displayName;
-    		                        
-    		                        li.classList.add('expandable');
-    		                        
+    		                        li.textContent = displayName;  		                        
+    		                        li.classList.add('expandable'); 		                        
     		                        li.dataset.opcname = displayName; // Store nodeid as a data attribute
 				                    li.dataset.browsename = displayName;
 				                    li.dataset.type = 'server';
-				                    li.dataset.nodeid = 'server';
-    		                       
+				                    li.dataset.nodeid = 'server';		                       
     		                        ul.appendChild(li);
     		                    });
-    		                } else {
-    		                    
-    		                }
-    			            
+    		                } else {  		                    
+    		                }  			            
     					},
     					error : function(xhr, status, error) {
-    						// Hide loader when the response has arrived
-    			            hideLoader();
-    						    						
+    			            hideLoader();   						    						
     					}
     				});
     	}
 
-     // Function to show the loader
    	 function showLoader() {
-   	     // Show the loader overlay
    	     $('#loader-overlay').show();
    	 }
 
-   	 // Function to hide the loader
    	 function hideLoader() {
-   	     // Hide the loader overlay
    	     $('#loader-overlay').hide();
    	 }
         
-        $(document).ready(function() {
-        	
+        $(document).ready(function() {        	
         	<%// Access the session variable
 			HttpSession role = request.getSession();
 			String roleValue = (String) session.getAttribute("role");%>
-
-		roleValue = '<%=roleValue%>';
-		
-		
+		roleValue = '<%=roleValue%>';				
 		
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-
 			$('#addTag').prop('disabled', true);
 			changeButtonColor(true);
-		}
-        	
+		}      	
         	if (roleValue === "null") {
     	        var modal = document.getElementById('custom-modal-session-timeout');
-    	        modal.style.display = 'block';
-    	        
-    	        // Update the session-msg content with the message from the server
+    	        modal.style.display = 'block'; 	        
     		    var sessionMsg = document.getElementById('session-msg');
-    		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-    		    
-    	        // Handle the confirm button click
+    		    sessionMsg.textContent = 'You are not allowed to redirect like this !!';  		    
     	        var confirmButton = document.getElementById('confirm-button-session-timeout');
     	        confirmButton.onclick = function() {
-    	            // Close the modal
     	            modal.style.display = 'none';
     	            window.location.href = 'login.jsp';
     	        };
@@ -614,16 +472,12 @@ $(document).ready(function() {
     	    	<%// Access the session variable
     			HttpSession token = request.getSession();
     			String tokenValue = (String) session.getAttribute("token");%>
-
     		tokenValue = '<%=tokenValue%>';
     		
     		$("#closePopup").click(function () {
     		    $("#customPopup").hide();
-    		  });
-    		
-    		
-    		loadopcList();
-        	
+    		  });   		    		
+    		loadopcList();        	
       	  $('#addTag').click(function() {
       		  addTag();
  		  }); 

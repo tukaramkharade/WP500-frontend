@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -24,7 +17,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
@@ -32,7 +24,6 @@
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">	
 <script src="jquery-3.6.0.min.js"></script>
-
 <style type="text/css">
 .modal-session-timeout,
 .modal-ack{
@@ -72,7 +63,6 @@
     color: white;
     text-align: center;
     line-height: 20px;
-    
 }
 
 .orange-box {
@@ -83,7 +73,6 @@
     color: white;
     text-align: center;
     line-height: 20px;
-    
 }
 
 .yellow-box {
@@ -93,8 +82,7 @@
     background-color: yellow;
     color: white;
     text-align: center;
-    line-height: 20px;
-   
+    line-height: 20px; 
 }
 
 #confirm-button-ack,
@@ -165,20 +153,15 @@ margin-top: 68px;
     background: rgba(255, 255, 255, 0.2); 
     border-radius: 5px;
 }
-
 </style>
-
 <script>
 
 var roleValue;
 var tokenValue;
 var csrfTokenValue;
-
-function getActiveThreats() {
-	
-    showLoader();
-    var csrfToken = document.getElementById('csrfToken').value;
-    
+function getActiveThreats() {	
+   showLoader();
+    var csrfToken = document.getElementById('csrfToken').value;  
 	$.ajax({
 		url : 'activeThreatServlet',
 		type : 'GET',
@@ -189,52 +172,39 @@ function getActiveThreats() {
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 	    },
-		success : function(data) {
-			
-            hideLoader();
-			
-			if (data.status == 'fail') {
-				
+		success : function(data) {		
+            hideLoader();		
+			if (data.status == 'fail') {			
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; 
-			 
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
+				 modal.style.display = 'block';			  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; 			 
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {				  
 				       modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
-			} 
-			
+				 };				  
+			} 			
 			var activeThreatsTable = $('#data-table tbody');
-			activeThreatsTable.empty();
-						 
-			 if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-				 
+			activeThreatsTable.empty();						 
+			 if(roleValue == 'ADMIN' || roleValue == 'Admin'){				 
 				 data.result.forEach(function(activeThreats) {
 					 var row = $('<tr>');
-						row.append($('<td>').text(activeThreats.timestamp + ""));
-						
+						row.append($('<td>').text(activeThreats.timestamp + ""));						
 						if(activeThreats.priority == '1'){							
 							row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
 						}else if(activeThreats.priority == '2'){
 							row.append($('<td>').append($('<div>').addClass('orange-box').text('medium')));
 						}else if(activeThreats.priority == '3'){
 							row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
-						}
-						
+						}						
 						row.append($('<td>').text(activeThreats.threat_id + ""));
 						row.append($('<td>').text(activeThreats.alert_message + ""));						
 						row.append($('<td>').text(activeThreats.src_ip + ""));
 						row.append($('<td>').text(activeThreats.src_port + ""));
 						row.append($('<td>').text(activeThreats.dest_ip + ""));
 						row.append($('<td>').text(activeThreats.dest_port + ""));
-						row.append($('<td>').text(activeThreats.protocol_type + ""));
-						
+						row.append($('<td>').text(activeThreats.protocol_type + ""));						
 						var actions = $('<td>')
 						var ackButton = $(
 										'<button data-toggle="tooltip" class="editBtn" data-placement="top" title="Acknowledge" style="color: #35449a;">')
@@ -242,18 +212,15 @@ function getActiveThreats() {
 										.click(
 												function() {
 													ackThreats(activeThreats.threat_id);
-												});
-						
+												});					
 						actions.append(ackButton);
 						row.append(actions);
 						activeThreatsTable.append(row);
-				 });
-				 
+				 });			 
 			 }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
 				 data.result.forEach(function(activeThreats) {
 					 var row = $('<tr>');
-						row.append($('<td>').text(activeThreats.timestamp + ""));
-						
+						row.append($('<td>').text(activeThreats.timestamp + ""));					
 						if(activeThreats.priority == '1'){							
 							row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
 						}else if(activeThreats.priority == '2'){
@@ -267,8 +234,7 @@ function getActiveThreats() {
 						row.append($('<td>').text(activeThreats.src_port + ""));
 						row.append($('<td>').text(activeThreats.dest_ip + ""));
 						row.append($('<td>').text(activeThreats.dest_port + ""));
-						row.append($('<td>').text(activeThreats.protocol_type + ""));
-											
+						row.append($('<td>').text(activeThreats.protocol_type + ""));										
 						activeThreatsTable.append(row);
 				 });
 			 }		
@@ -280,11 +246,9 @@ function getActiveThreats() {
 }
 
 function getSearchThreats() {
-    // Get the values of startdatetime and enddatetime elements
     var startdatetime = $('#startdatetime').val();
     var enddatetime = $('#enddatetime').val();
-    var csrfToken = document.getElementById('csrfToken').value;
-    
+    var csrfToken = document.getElementById('csrfToken').value;  
     $.ajax({
         url: 'activeThreatServlet',
         type: 'POST',
@@ -299,31 +263,25 @@ function getSearchThreats() {
 	    },
         success: function (data) {
 			var activeThreatsTable = $('#data-table tbody');
-			activeThreatsTable.empty();
-			
+			activeThreatsTable.empty();			
 			 var json1 = JSON.stringify(data);
-
 			var json = JSON.parse(json1);
-
 			if (json.status == 'fail') {
 				var confirmation = confirm(json.msg);
 				if (confirmation) {
 					window.location.href = 'login.jsp';
 				}
 			} 
-
 				$.each(data, function(index, activeThreats) {			
 						var row = $('<tr>');
-						row.append($('<td>').text(activeThreats.timestamp + ""));
-						
+						row.append($('<td>').text(activeThreats.timestamp + ""));						
 						if(activeThreats.priority == '1'){							
 							row.append($('<td>').append($('<div>').addClass('red-box').text('high')));
 						}else if(activeThreats.priority == '2'){
 							row.append($('<td>').append($('<div>').addClass('orange-box').text('medium')));
 						}else if(activeThreats.priority == '3'){
 							row.append($('<td>').append($('<div>').addClass('yellow-box').text('low')));
-						}
-						
+						}					
 						row.append($('<td>').text(activeThreats.threat_id + ""));
 						row.append($('<td>').text(activeThreats.alert_message + ""));						
 						row.append($('<td>').text(activeThreats.src_ip + ""));
@@ -332,8 +290,7 @@ function getSearchThreats() {
 						row.append($('<td>').text(activeThreats.dest_port + ""));
 						row.append($('<td>').text(activeThreats.protocol_type + ""));
 						row.append($('<td>').text(activeThreats.ack_at + ""));
-						row.append($('<td>').text(activeThreats.ack_by + ""));
-						
+						row.append($('<td>').text(activeThreats.ack_by + ""));					
 						var actions = $('<td>')
 						var ackButton = $(
 										'<button style="background-color: #35449a; border: none; border-radius: 5px; margin-left: 5px; color: white">')
@@ -341,8 +298,7 @@ function getSearchThreats() {
 										.click(
 												function() {
 													ackThreats(activeThreats.threat_id);
-												});
-						
+												});				
 						actions.append(ackButton);
 						row.append(actions);
 						activeThreatsTable.append(row);
@@ -355,10 +311,8 @@ function getSearchThreats() {
 
 function ackThreats(threat_id){
 	 var csrfToken = document.getElementById('csrfToken').value;
-	
 	  var modal = document.getElementById('custom-modal-ack');
-	  modal.style.display = 'block';
-	  
+	  modal.style.display = 'block';	  
 	  var confirmButton = document.getElementById('confirm-button-ack');
 	  confirmButton.onclick = function () {
 		  $.ajax({
@@ -367,11 +321,9 @@ function ackThreats(threat_id){
 				data : {
 					threat_id : threat_id,
 					csrfToken: csrfToken,
-					 action : 'get_ack_threats'
-					
+					 action : 'get_ack_threats'				
 				},
-				success : function(data) {
-					
+				success : function(data) {				
 					  modal.style.display = 'none';
 			},
 				error : function(xhr, status, error) {
@@ -382,7 +334,6 @@ function ackThreats(threat_id){
 	  
 	  var cancelButton = document.getElementById('cancel-button-ack');
 	  cancelButton.onclick = function () {
-	    // Close the modal
 	    modal.style.display = 'none';
 	    location.reload();
 	  };
@@ -392,15 +343,12 @@ function checkDateField() {
     var startdatetime = $('#startdatetime').val();
     var enddatetime = $('#enddatetime').val();
     var errorMessage = '';
-
     if (startdatetime.trim() === '') {
         errorMessage += 'Start Date/Time is required.\n';
     }
-
     if (enddatetime.trim() === '') {
         errorMessage += 'End Date/Time is required.\n';
     }
-
     if (errorMessage === '' && startdatetime !== '' && enddatetime !== '') {
         getSearchThreats(); 
     } else {
@@ -423,8 +371,7 @@ function getCurrentTimeInIndia() {
 }
 
 function changeButtonColor(isDisabled) {
-    var $loadThreatsbutton = $('#loadThreats');      
-    
+    var $loadThreatsbutton = $('#loadThreats');        
      if (isDisabled) {
         $loadThreatsbutton.css('background-color', 'gray'); 
     } else {
@@ -445,7 +392,6 @@ $(document).ready(function() {
 	HttpSession role = request.getSession();
 	String roleValue = (String) session.getAttribute("role");%>
 	roleValue = '<%=roleValue%>';
-
 <%
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
@@ -460,13 +406,10 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
-
 	    var sessionMsg = document.getElementById('session-msg');
-	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-      
+	    sessionMsg.textContent = 'You are not allowed to redirect like this !!';      
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function() {
-            // Close the modal
             modal.style.display = 'none';
             window.location.href = 'login.jsp';
         };
@@ -481,13 +424,11 @@ csrfTokenValue = '<%=csrfTokenValue%>';
     		$(document).on("click", "#loadThreats", function() {
             checkDateField();
         });
-    	setInterval(getCurrentTimeInIndia, 60000);
-    	
+    	setInterval(getCurrentTimeInIndia, 60000);   	
     	$("#closePopup").click(function () {
     	    $("#customPopup").hide();
     	  });
     }
-	
 });
 
 </script>
@@ -510,53 +451,41 @@ csrfTokenValue = '<%=csrfTokenValue%>';
         <p>Loading...</p>
     </div>
 </div>
-
-		<div class="row"
-			style="display: flex; flex-content: space-between; margin-top: 5px;">
-			
+		<div class="row" style="display: flex; flex-content: space-between; margin-top: 5px;">			
 			<div style="width: 20%;">
 				<label for="choose_date">Choose a date:</label>
-			</div>
-			
+			</div>		
 			<div style="width: 25%; margin-left: -11%;margin-top: 5px;">
 				<input type="datetime-local" id="startdatetime" name="startdatetime" >
-			</div>
-			
+			</div>		
 			<div style="width: 10%; margin-left: -10%;">
 				<label for="to">  to  </label>
-			</div>
-			
+			</div>		
 			<div style="width: 25%; margin-left: -8%;margin-top: 5px;">
 				<input type="datetime-local" id="enddatetime" name="enddatetime" >
-			</div>
-			
+			</div>		
 			<div>
 				<input style="margin-left: 1%; margin-top: 5%;" type="button"
 					id="loadThreats" value="Load threats">
-			</div>
-			
-			</div>
-			
+			</div>		
+			</div>			
 			<div id="custom-modal-ack" class="modal-ack">
 				<div class="modal-content-ack">
 				  <p>Are you sure you want to acknowledge this threat?</p>
 				  <button id="confirm-button-ack">Yes</button>
 				  <button id="cancel-button-ack">No</button>
 				</div>
-			</div>
-			
+			</div>		
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				   <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
-			</div>
-			
+			</div>			
 			 <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
-			  </div>
-			
+			  </div>		
 		<div class="container">
 				<table id="data-table">
 				<thead>
@@ -579,7 +508,6 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 				</div>
 		</section>
 		</div>
-
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>

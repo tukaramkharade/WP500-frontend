@@ -1,22 +1,17 @@
 <!DOCTYPE html>
-
 <head>
  <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
 <link rel="stylesheet" href="css_files/font-awesome.min.css">
-
   <link rel="stylesheet" href="nav-bar.css" />
   <script src="jquery-3.6.0.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>WPConnex Web Configuration</title>
   <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 </head>
-
 <style>
-
 .sidebar-nav>ul>li>a:after {
 	  content: ">";
 	  font-family: ionicons;
@@ -31,7 +26,6 @@
 </style>
 
 <body>
-  
   <section class="app">
     <aside class="sidebar">
       <header>
@@ -49,34 +43,26 @@
             </a>
             <div class="dropdown-container">
               <ul id="tabs1">
-
                 <li class="nav-item">
                   <a href="overview.jsp">Overview</a>
-                </li>
-                
+                </li>             
                 <li class="nav-item">
                   <a href="user.jsp">User List</a>
-                </li>
-               
+                </li>              
                  <li class="nav-item">
                   <a href="firmwareUpdate.jsp">Firmware Update</a>
-                </li>
-                
+                </li>               
                 <li class="nav-item">
                   <a href="backup.jsp">Backup and Restore</a>
-                </li> 
-                
+                </li>               
                 <li class="nav-item">
                   <a href="cpumetrics.jsp">CPU Metrics</a>
-                </li>
-                
+                </li>              
                 <li class="nav-item">
                   <a href="reboot.jsp">Reset</a>
-                </li>
-              
+               </li>             
               </ul>
             </div>
-
           </li>
 
           <li class="nav-item">
@@ -121,12 +107,10 @@
                 </li>
                 <li class="nav-item">
                   <a href="jsonbuilder.jsp">JSON Builder</a>
-                </li>
-                
+                </li>              
                 <li class="nav-item">
                 <a href="eventtriggerdata.jsp">Event Trigger Data</a>
-              </li>
-                
+              </li>            
                 <li class="nav-item">
                   <a href="alarmconfig.jsp">Alarm Config</a>
                 </li>
@@ -135,82 +119,57 @@
                 </li>
                 <li class="nav-item">
                   <a href="storeforward.jsp">Store and Forward</a>
-                </li>
-                
-                 <li class="nav-item">
-               
-              </li>
-              
+                </li>              
+                 <li class="nav-item">            
+              </li>           
                 <li class="nav-item" style="color: white; font-size: 16px;"><b>
                 OPC</b>
-              </li>
-                
+              </li>               
                 <li class="nav-item">
                 <a href="opcuaClient.jsp">OPCUA Clients</a>
-              </li>
-              
-              
+              </li>                        
               <li class="nav-item">
                 <a href="browsequickclient.jsp">Quick Client</a>
-              </li>
-              
+              </li>            
                <li class="nav-item">
                 <a href="TagMapping.jsp">Tags</a>
-              </li>
-              
-              <li class="nav-item">
-               
-              </li>
-              
+              </li>           
+              <li class="nav-item">             
+              </li>             
               <li class="nav-item" style="color: white; font-size: 16px;"><b>
                 Certificate</b>
-              </li>
-              
-              
+              </li>                          
                <li class="nav-item">
                 <a href="certificate.jsp">Certificate</a>
-              </li>
-              
-               <li class="nav-item">
-               
-              </li>
-              
+              </li>            
+               <li class="nav-item">             
+              </li>            
               <li class="nav-item" style="color: white; font-size: 16px;"><b>
                 Settings</b>
-              </li>
-              
+              </li>             
               <li class="nav-item">
                 <a href="generalsettings.jsp">General Settings</a>
-              </li>
-              
+              </li>            
                <li class="nav-item">
                 <a href="syslogServer.jsp">Syslog Configuration</a>
-              </li>
-              
+              </li>             
               <li class="nav-item">
                 <a href="bannertext.jsp">Banner Text</a>
-              </li>
-              
+              </li>              
               <li class="nav-item">
                 <a href="redundancysetting.jsp">Redundancy Settings</a>
-              </li>
-              
-              <li class="nav-item">
-               
-              </li>
-              
+              </li>             
+              <li class="nav-item">              
+              </li>             
               <li class="nav-item" style="color: white; font-size: 16px;"><b>
                 Workbench</b>
-              </li>
-              
+              </li>             
               <li class="nav-item">
                   <a href="wpconnexworkbench.jsp">Workbench</a>
-                </li>
-                
+                </li>              
               </ul>
             </div>
           </li>
-
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
@@ -225,14 +184,10 @@
                 </li>
                 <li class="nav-item">
                   <a href="systemlog.jsp">System Logs</a>
-                </li>
-                 <!-- <li class="nav-item">
-                <a href="event.jsp">Events</a>
-              </li>  -->
+                </li>               
               </ul>
             </div>
-          </li>
-          
+          </li>      
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
@@ -259,16 +214,14 @@
                 </li>
               </ul>
             </div>
-          </li>
-          
+          </li>        
           <li class="nav-item">
             <a class="dropdown-btn">
               <div class="sidebar-title">
                 <img src="icons/user_profile.png" />
                 <div class="sidebar-title">User Profile</div>
               </div>
-            </a> 
-            
+            </a>        
             <div class="dropdown-container">
               <ul>
               <li class="nav-item">
@@ -276,33 +229,25 @@
                 </li>
                 <li class="nav-item">
                   <a href="resetpassword.jsp">Reset Password</a>
-                </li>
-                
+                </li>               
               </ul>
-            </div>
-            
+            </div>            
             </li>
-
         </ul>
       </nav>
     </aside>
-  </section>
- 
+  </section> 
   <script>
 
     function openExtLink() {
-
       let url = window.location.protocol + "//" + window.location.host + "/webmon/index.html";
-
       window.open(url, '_blank').focus();
     }
-
     $(document).ready(function () {
       $("ul li > a").on("click", function () {
         $("ul").find(".active").removeClass("active");
         $(this).addClass("active");
       });
-
       $("ul li ul li> a").on("click", function () {
         $("ul").find(".active").addClass("active");
         $("ul li ul").find(".active").removeClass("active");
@@ -310,7 +255,6 @@
         $(this).parents("li").last().addClass("active");
       });
     });
-
     var dropdown = document.getElementsByClassName("dropdown-btn");
     var i;
     for (var j = 0; j < dropdown.length; j++) {
@@ -319,7 +263,6 @@
           var dropdownContent = dropdown[i].nextElementSibling;
           dropdownContent.style.display = "none";
         }
-
         var dropdownContent = this.nextElementSibling;
         if (dropdownContent.style.display === "block") {
           dropdownContent.style.display = "none";
@@ -328,7 +271,6 @@
         }
       });
     }
-
     var subdropdown = document.getElementsByClassName("dropdown-subbtn");
     for (var k = 0; k < subdropdown.length; k++) {
       subdropdown[k].addEventListener("click", function () {

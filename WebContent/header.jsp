@@ -1,23 +1,15 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
-
 <link rel="stylesheet" href="nav-bar.css" />
-
 <script src="jquery-3.6.0.min.js"></script>
-
-<link href="css_files/material.css"
-	rel="stylesheet">
-	
+<link href="css_files/material.css" rel="stylesheet">
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
-
 <style>
 .modal-logout,
 .modal-load-config,
@@ -76,7 +68,6 @@ button {
 	color: red;
 }
 
-
 .badge {
 	position: absolute;
 	top: -8px; /* Adjust this value to position the badge as needed */
@@ -93,7 +84,6 @@ button {
 	color: red;
 }
 
-
 .cyberguard-badge {
 	position: absolute;
 	top: -8px; /* Adjust this value to position the badge as needed */
@@ -108,14 +98,12 @@ button {
 
 .notification-container {
     position: relative;
-    display: inline-block;
-     
+    display: inline-block;     
 }
 
 .cyberguard-notification-container {
     position: relative;
     display: inline-block;
-     
 }
 
 #loadConfig {
@@ -217,7 +205,6 @@ button {
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -234,71 +221,49 @@ button {
 var roleValue1;
 var csrfTokenValue1;
 
-	function loadConfig() {
-		
-		// Display the custom modal dialog
+	function loadConfig() {		
 		  var modal = document.getElementById('custom-modal-load-config');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
+		  modal.style.display = 'block';		  
 		  var confirmButton = document.getElementById('confirm-button-load-config');
-		  confirmButton.onclick = function () {
-			  
+		  confirmButton.onclick = function () {		  
 			  $.ajax({
 					url : 'loadConfigurationServlet',
 					type : 'GET',
 					dataType : 'json',
-					success : function(data) {
-						
-						modal.style.display = 'none';
-						
+					success : function(data) {						
+						modal.style.display = 'none';						
 						$("#popupMessage").text(data.status);
-		      			$("#customPopup").show();
-		      			
-		      			
+		      			$("#customPopup").show();	      				      			
 					},
-					error : function(xhr, status, error) {
-						
+					error : function(xhr, status, error) {					
 					}
 				});
-		  };
-		  
+		  };	  
 		  $("#closePopup").click(function () {
 			    $("#customPopup").hide();
-			  });
-		  
+			  });		  
 		  var cancelButton = document.getElementById('cancel-button-load-config');
 		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		  
-		  };	
-		
+		    modal.style.display = 'none';		  
+		  };			
 	}
 	
 	 function getProjectName(){
-		 $.ajax({
-			 
+		 $.ajax({	 
 			 url : 'projectNameServlet',
 				type : 'GET',
 				dataType : 'json',
 				success : function(data) {
 					var projectName = data.sys_appname;
-
-		            // Update the content of the <p> element with the retrieved project name
 		            $(".project_name p").text("Project Name - " + projectName);
 				},
-				error : function(xhr, status, error) {
-					
-				}
-			    
-		 });
-		
+				error : function(xhr, status, error) {					
+				}		    
+		 });	
 	} 
 	
 	function getProcessData1() {
 		 var csrfToken = document.getElementById('csrfToken').value;
-
 			$.ajax({
 			url : "processGetData",
 			type : "POST", // Change the request type to POST
@@ -309,233 +274,147 @@ var csrfTokenValue1;
 			success : function(data) {
 				var blackListCount = data.black_list_process_count;
 				$('#notification-bell-count').text(blackListCount); // Update the notification bell count inside the span
-
 			},
 			error : function(xhr, status, error) {
 				console.error("Error occurred: " + error);
-				// Handle the error here (show error message to the user, etc.)
 			}
 		});
 	}
-	
-	
 	
 	function getActiveThreatsCount() {
 		$.ajax({
 			url : "countDetailsServlet",
 			type : "GET", // Change the request type to POST
-			dataType : "json",
-			
-			success : function(data) {
-				
+			dataType : "json",			
+			success : function(data) {				
 				var activeThreatsCount = data.active_threats_count;
-				$('#cyberguard-bell-count').text(activeThreatsCount); // Update the notification bell count inside the span
-				
+				$('#cyberguard-bell-count').text(activeThreatsCount); // Update the notification bell count inside the span				
 			},
 			error : function(xhr, status, error) {
 				console.error("Error occurred: " + error);
-				// Handle the error here (show error message to the user, etc.)
 			}
 		});
 	}
 	
-	
-	
 	function changeButtonColor1(isDisabled) {
-        var $load_conifg_button = $('#loadConfig'); 
-        
+        var $load_conifg_button = $('#loadConfig');      
          if (isDisabled) {
             $load_conifg_button.css('background-color', 'gray'); // Change to your desired color
         } else {
             $load_conifg_button.css('background-color', '#2b3991'); // Reset to original color
-        }
-         
+        }        
     }
 
 	 function startCountdown() {
 	    var countdownElement = document.getElementById('countdown');
 	    var currentTime = new Date();
 	    var logoutTime = new Date(currentTime.getTime() + 3599000); // Set logoutTime to 1 hour from the current time
-
 	    function updateCountdownDisplay() {
 	        var currentTime = new Date();
 	        var timeDiff = logoutTime - currentTime;
-
-	        if (timeDiff <= 0) {
-	            // Redirect to "login.jsp" when the timer reaches 00:00
-	           // window.location.href = 'login.jsp';
-	        
-	        	  window.location.replace('login.jsp'); 
-	        
+	        if (timeDiff <= 0) {	            
+	        	  window.location.replace('login.jsp'); 	        
 	        } else {
 	            var minutes = Math.floor(timeDiff / 60000); // Calculate minutes directly from timeDiff
 	            var seconds = Math.floor((timeDiff % 60000) / 1000);
-
 	            var countdownText = 'Logout in ' +
 	                (minutes < 10 ? '0' : '') + minutes + ':' +
 	                (seconds < 10 ? '0' : '') + seconds;
 	            countdownElement.textContent = countdownText;
 	        }
 	    }
-
-	    // Call updateCountdownDisplay immediately to avoid the "00:00" display
 	    updateCountdownDisplay();
-
-	    // Update the countdown every second
 	    setInterval(updateCountdownDisplay, 1000);
 	} 
 
-
-
-	$(document).ready(function() {
-		
-		<%// Access the session variable
-		
+	$(document).ready(function() {	
+		<%// Access the session variable	
 		String roleValue1 = (String) session.getAttribute("role");%>
-	
-	roleValue1 = '<%=roleValue1%>';
-	
+		roleValue1 = '<%=roleValue1%>';
 	<%// Access the session variable
 	
 	String csrfTokenValue1 = (String) session.getAttribute("csrfToken");%>
-
 	csrfTokenValue1 = '<%=csrfTokenValue1%>';
 	
-	if (roleValue1 == 'OPERATOR' || roleValue1 == 'Operator') {
-
-		
-		$('#loadConfig').prop('disabled', true);
-	
-		
+	if (roleValue1 == 'OPERATOR' || roleValue1 == 'Operator') {		
+		$('#loadConfig').prop('disabled', true);		
 		changeButtonColor1(true);
 	}
-	
 			startCountdown();
 				getProcessData1();
 				getProjectName();
 				getActiveThreatsCount();
-
 				$('#loadConfig').click(function() {
 					loadConfig();
-				});
-				
-				
-
-				$("#logoutBtn").click(
-						function() {
-
-							var modal = document
-									.getElementById('custom-modal-logout');
+				});					
+				$("#logoutBtn").click(function() {
+							var modal = document.getElementById('custom-modal-logout');
 							modal.style.display = 'block';
-
-							// Handle the confirm button click
-							var confirmButton = document
-									.getElementById('confirm-button-logout');
+							var confirmButton = document.getElementById('confirm-button-logout');
 							confirmButton.onclick = function() {
-
 								$.ajax({
 									type : "GET",
 									url : "logout",
 									dataType : 'json',
 									success : function(response) {
-										// Close the modal
-										modal.style.display = 'none';
-										// Handle the response, e.g., redirect to login page
-										//window.location.href = "login.jsp";
-										
+										modal.style.display = 'none';								
 										  window.location.replace('login.jsp'); 
 									},
-									error : function(xhr, status, error) {
-										
+									error : function(xhr, status, error) {									
 									}
 								});
-
 							};
-
-							// Handle the cancel button click
-							var cancelButton = document
-									.getElementById('cancel-button-logout');
+							var cancelButton = document.getElementById('cancel-button-logout');
 							cancelButton.onclick = function() {
-								// Close the modal
 								modal.style.display = 'none';
 							};
 						});
-	
 			});
-	
 	document.addEventListener("DOMContentLoaded", function() {
-		// Get the button element by its id
 		var redirectButton = document.getElementById("redirectButton");
-		// Add click event listener to the button
 		redirectButton.addEventListener("click", function() {
-			// Redirect the user to process.jsp page
 			window.location.href = "process.jsp";
 		});
 	});
-	setInterval(getProcessData1, 300000);
-	
-	
-
+	setInterval(getProcessData1, 300000);		
  document.addEventListener("DOMContentLoaded", function() {
-	// Get the button element by its id
 	var redirectButton = document.getElementById("redirectButtonCyberguard");
-	// Add click event listener to the button
 	redirectButton.addEventListener("click", function() {
-		// Redirect the user to process.jsp page
 		window.location.href = "dashboard.jsp";
 	});
 }); 
- setInterval(getActiveThreatsCount, 300000);
- 
- 
-	
+ setInterval(getActiveThreatsCount, 300000);	
 </script>
-
-
  <header>
- 
-
 	<div class="row" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 0.5%">
 	<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue1 %>" />
-	
 	 <div id="helpDropdown">
     <a href="https://support.tasind.com/" target="_blank" title="Help" style="text-decoration: none; color: inherit;">
         <button style="border: none;"><b>Help</b></button>
     </a>
-</div>
-
-        
+</div>    
 	<div class="center-container">
             <div class="project_name">
                 <p></p>
             </div>
-        </div>
-		
+        </div>		
 		<div class="cyberguard-notification-container">
     <button id="redirectButtonCyberguard" data-toggle="tooltip" class="editBtn"
-        data-placement="top" title="Cyberguard"
-        style="color: #35449a; height: 40px; padding: 0 10px;">
+        data-placement="top" title="Cyberguard" style="color: #35449a; height: 40px; padding: 0 10px;">
         <i class="material-icons" id="warning" style="font-size: 24px;">warning</i>
     </button>
-    <span id="cyberguard-bell-count" class="cyberguard-badge"
-        style="height: 15px;">0</span>
-    
-</div>
-		
+    <span id="cyberguard-bell-count" class="cyberguard-badge" style="height: 15px;">0</span>
+</div>	
 		<div class="notification-container">
-    <button id="redirectButton" data-toggle="tooltip" class="editBtn"
-        data-placement="top" title="Process"
+    <button id="redirectButton" data-toggle="tooltip" class="editBtn" data-placement="top" title="Process"
         style="color: #35449a; height: 40px; padding: 0 10px;">
         <i class="material-icons" id="notification-bell" style="font-size: 24px;">notifications</i>
     </button>
-    <span id="notification-bell-count" class="badge"
-        style="height: 15px;">0</span>
+    <span id="notification-bell-count" class="badge" style="height: 15px;">0</span>
 </div>
-
 <button style="height: 35px; margin-bottom: 10px;" id="loadConfig" title="Update Configuration">
     <i class="fa fa-upload" style="font-size: 20px; color: #35449a"></i>
 </button>
-	
 		<div class="user-info">
     <div style="font-size: 15px;"> 
         ${username}
@@ -545,34 +424,26 @@ var csrfTokenValue1;
         <div id="countdown" style="font-size: 13px;"></div>
         <i class="fa fa-sign-out" style="font-size: 20px; cursor: pointer;" id="logoutBtn" title="Logout"></i>
     </div>
-</div>
-		
-		
+</div>	
 	</div>
-
 	<div id="custom-modal-logout" class="modal-logout">
 		<div class="modal-content-logout">
 			<p>Are you sure you want to logout?</p>
 			<button id="confirm-button-logout">Yes</button>
 			<button id="cancel-button-logout">No</button>
 		</div>
-	</div>
-	
+	</div>	
 	<div id="custom-modal-load-config" class="modal-load-config">
 				<div class="modal-content-load-config">
 				  <p>Are you sure you want to load configuration?</p>
 				  <button id="confirm-button-load-config">Yes</button>
 				  <button id="cancel-button-load-config">No</button>
 				</div>
-	 </div>
-			  
+	 </div>		  
 			  <div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
 			  </div>
-	
 </header>
- 
 </head>
-
 </html>

@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -65,7 +58,6 @@ h3 {
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
 
-/* Style for buttons */
 button {
   margin: 5px;
   padding: 10px 20px;
@@ -113,180 +105,116 @@ var tokenValue;
 var csrfTokenValue;
 
 function readBannerText(){
-	// Display loader when the request is initiated
     showLoader();
-	
 	$.ajax({
 		url : "bannerTextServlet",
 		type : "GET",
 		dataType : "json",
 		success : function(data) {
-			// Hide loader when the response has arrived
             hideLoader();
-			if (data.status == 'fail') {
-				
+			if (data.status == 'fail') {			
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';			  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message		  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {				  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				  };			  
 			} 
-			// Assuming data.banner_text_data is an array, join it to create a string
             var textToShow = data.banner_text_data.join('\n');
-
-            // Set the text in the textarea
             $('#banner_text').val(textToShow);
 		},
 		error : function(xhr, status, error) {
-			// Hide loader when the response has arrived
-            hideLoader();
-			
+            hideLoader();		
 		},
 	});
 }
 
 function updateBannerText() {
-	var csrfToken = document.getElementById('csrfToken').value;
-//	alert(csrfToken);
-	 
+	var csrfToken = document.getElementById('csrfToken').value;	 
 	 var modal = document.getElementById('custom-modal-edit');
-	  modal.style.display = 'block';
-	  
-	// Handle the confirm button click
+	 modal.style.display = 'block';
 	  var confirmButton = document.getElementById('confirm-button-edit');
-	  confirmButton.onclick = function () {
-		  
-    // Get the textarea value
+	  confirmButton.onclick = function () { 
     var textareaValue = $('#banner_text').val();
-
-    // Split the textarea value into an array using the newline character ("\n")
     var lines = textareaValue.split('\n');
-
-    // Convert the lines array to a JSON string
     var linesJson = JSON.stringify(lines);
-
-    // Use $.ajax to send the data to the servlet
     $.ajax({
         url: "bannerTextServlet",
-        type: "POST",
-       
-         /* data: JSON.stringify({
-            lines: linesJson,
-            csrfToken: csrfToken
-        }),   */
-        
+        type: "POST",      
         data: {
         	lines: linesJson,
 			csrfToken: csrfToken
-        },
-      
-        
+        },     
         success: function(response) {
-        	// Close the modal
-	        modal.style.display = 'none';
-        	
+	        modal.style.display = 'none';      	
             readBannerText();
         },
-        error: function(error) {
-            
+        error: function(error) {          
         }
     });
 };
 
 var cancelButton = document.getElementById('cancel-button-edit');
 cancelButton.onclick = function () {
-  // Close the modal
   modal.style.display = 'none';
   location.reload();
 };	
 }
 
-
 function changeButtonColor(isDisabled) {
     var $update_button = $('#update');       
-   
     if (isDisabled) {
         $update_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $update_button.css('background-color', '#2b3991'); // Reset to original color
-    } 
-    
+    }    
 }
 
-//Function to show the loader
 function showLoader() {
-    // Show the loader overlay
     $('#loader-overlay').show();
 }
 
-// Function to hide the loader
 function hideLoader() {
-    // Hide the loader overlay
     $('#loader-overlay').hide();
 }
 
-$(document).ready(function() {
-	
+$(document).ready(function() {	
 	<%// Access the session variable
 	HttpSession role = request.getSession();
 	String roleValue = (String) session.getAttribute("role");%>
-
 roleValue = '<%=roleValue%>';
 
 <%// Access the session variable
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
 
-if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-	
-	$('#update').prop('disabled', true);
-	
+if(roleValue == 'OPERATOR' || roleValue == 'Operator'){	
+	$('#update').prop('disabled', true);	
 	changeButtonColor(true);
 }
 
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');
     modal.style.display = 'block';
-
-  
-    // Handle the confirm button click
     var confirmButton = document.getElementById('confirm-button-session-timeout');
     confirmButton.onclick = function() {
-        // Close the modal
         modal.style.display = 'none';
         window.location.href = 'login.jsp';
     };
-}
-
-else{
-	
+}else{	
 	<%// Access the session variable
 	HttpSession token = request.getSession();
 	String tokenValue = (String) session.getAttribute("token");%>
-
-	 tokenValue = '<%=tokenValue%>'; 
-	
-	 readBannerText();
-		
+	 tokenValue = '<%=tokenValue%>'; 	
+	 readBannerText();		
 		$('#update').click(function () {
 			updateBannerText();
 	    });
 }
-	
 });
 
 </script>
@@ -297,42 +225,32 @@ else{
 	<div class="header">
 		<%@ include file="header.jsp"%>
 	</div>
-	
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>BANNER TEXT</h3>
 			<hr>
-			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-			
-			<div class="container">
-			
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />			
+			<div class="container">			
 			<div id="loader-overlay">
     <div id="loader">
         <i class="fas fa-spinner fa-spin fa-3x"></i>
         <p>Loading...</p>
     </div>
-</div>
-			
+</div>			
 			<form id="bannerForm">
-			<textarea id="banner_text" name="banner_text" rows="10"
-							cols="100" required style="margin-top: -30px; margin-left: -19px; height: 500px;"></textarea>
-							
-			<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-					
-					 <input style="height: 26px;" type="button" value="Update" id="update"/> 
-					
+			<textarea id="banner_text" name="banner_text" rows="10" cols="100" required style="margin-top: -30px; margin-left: -19px; height: 500px;"></textarea>							
+			<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">			
+					 <input style="height: 26px;" type="button" value="Update" id="update"/> 				
 				</div>
 			</form>
-			</div>
-			
+			</div>		
 			 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modify this banner?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
-			  </div>
-			  
+			  </div>		  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				 <p id="session-msg"></p>
@@ -341,6 +259,5 @@ else{
 			  </div>
 			</section>
 			</div>
-
 </body>
 </html>

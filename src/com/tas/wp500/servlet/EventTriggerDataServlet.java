@@ -22,18 +22,14 @@ public class EventTriggerDataServlet extends HttpServlet {
 
 	final static Logger logger = Logger.getLogger(EventTriggerDataServlet.class);
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
-
 		if (check_username != null) {
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-
 			try {
 				json.put("operation", "protocol");
 				json.put("protocol_type", "dispenser");
@@ -43,13 +39,10 @@ public class EventTriggerDataServlet extends HttpServlet {
 				json.put("role", check_role);
 
 				String respStr = client.sendMessage(json.toString());
-
 				JSONObject respJson = new JSONObject(respStr);
 				String status = respJson.getString("status");
 				String message = respJson.getString("msg");
-
-				logger.info("Dispenser response : " + respJson.toString());
-				
+				logger.info("Dispenser response : " + respJson.toString());				
 				JSONObject finalJsonObj = new JSONObject();
 				if(status.equals("success")){
 					JSONArray resultArr = respJson.getJSONArray("result");
@@ -59,30 +52,21 @@ public class EventTriggerDataServlet extends HttpServlet {
 					finalJsonObj.put("status", status);
 				    finalJsonObj.put("message", message);
 				}
-
-			    // Set the response content type to JSON
 			    response.setContentType("application/json");
 			    response.setHeader("X-Content-Type-Options", "nosniff");
-
-			    // Write the JSON data to the response
 			    response.getWriter().print(finalJsonObj.toString());
-
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error getting dispenser trigger data :" + e);
 			}
-
 		} 
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");		
-
 		String broker_name = null;
 		String station_name = null;
 		String serial_number = null;
@@ -97,14 +81,10 @@ public class EventTriggerDataServlet extends HttpServlet {
 		String unit_price = null;
 		String status_req = null;
 		String unit_id = null;
-
 		if (check_username != null) {
-
 			String action = request.getParameter("action");
-
 			if (action != null) {
 				switch (action) {
-
 				case "add":
 					broker_name = request.getParameter("broker_name");
 					station_name = request.getParameter("station_name");
@@ -120,12 +100,9 @@ public class EventTriggerDataServlet extends HttpServlet {
 					unit_price = request.getParameter("unit_price");
 					status_req = request.getParameter("status");
 					unit_id = request.getParameter("unit_id");
-
 					try {
-
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-
 						json.put("operation", "protocol");
 						json.put("protocol_type", "dispenser");
 						json.put("operation_type", "add_query");
@@ -148,28 +125,17 @@ public class EventTriggerDataServlet extends HttpServlet {
 						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
-
 						logger.info("res " + new JSONObject(respStr));
-
 						String message = new JSONObject(respStr).getString("msg");
-						String status = new JSONObject(respStr).getString("status");
-						
+						String status = new JSONObject(respStr).getString("status");						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 						jsonObject.put("status", status);
-
-						// Set the content type of the response to
-						// application/json
 						response.setContentType("application/json");
 						response.setHeader("X-Content-Type-Options", "nosniff");
-
-						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in adding dispenser trigger : " + e);
@@ -177,7 +143,6 @@ public class EventTriggerDataServlet extends HttpServlet {
 					break;
 
 				case "update":
-
 					broker_name = request.getParameter("broker_name");
 					station_name = request.getParameter("station_name");
 					serial_number = request.getParameter("serial_number");
@@ -192,12 +157,9 @@ public class EventTriggerDataServlet extends HttpServlet {
 					unit_price = request.getParameter("unit_price");
 					status_req = request.getParameter("status");
 					unit_id = request.getParameter("unit_id");
-
 					try {
-
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-
 						json.put("operation", "protocol");
 						json.put("protocol_type", "dispenser");
 						json.put("operation_type", "update_query");
@@ -220,28 +182,17 @@ public class EventTriggerDataServlet extends HttpServlet {
 						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
-
 						logger.info("res " + new JSONObject(respStr));
-
 						String message = new JSONObject(respStr).getString("msg");
-						String status = new JSONObject(respStr).getString("status");
-						
+						String status = new JSONObject(respStr).getString("status");						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 						jsonObject.put("status", status);
-
-						// Set the content type of the response to
-						// application/json
 						response.setContentType("application/json");
 						response.setHeader("X-Content-Type-Options", "nosniff");
-
-						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in updating dispenser trigger : " + e);
@@ -251,12 +202,9 @@ public class EventTriggerDataServlet extends HttpServlet {
 				case "delete":
 					serial_number = request.getParameter("serial_number");
 					side = request.getParameter("side");
-
 					try {
-
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-
 						json.put("operation", "protocol");
 						json.put("protocol_type", "dispenser");
 						json.put("operation_type", "delete_query");
@@ -267,28 +215,17 @@ public class EventTriggerDataServlet extends HttpServlet {
 						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
-
 						logger.info("res " + new JSONObject(respStr));
-
 						String message = new JSONObject(respStr).getString("msg");
-						String status = new JSONObject(respStr).getString("status");
-						
+						String status = new JSONObject(respStr).getString("status");						
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
 						jsonObject.put("status", status);
-
-						// Set the content type of the response to
-						// application/json
 						response.setContentType("application/json");
 						response.setHeader("X-Content-Type-Options", "nosniff");
-
-						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
-
 					} catch (Exception e) {
 						e.printStackTrace();
 						logger.error("Error in deleting dispenser trigger : " + e);
@@ -298,6 +235,4 @@ public class EventTriggerDataServlet extends HttpServlet {
 			}
 		} 
 	}
-
-	
 }

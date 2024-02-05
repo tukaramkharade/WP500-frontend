@@ -28,18 +28,11 @@ public class WP500Login extends HttpServlet {
 		JSONObject userObj = new JSONObject();
 		try {
 			if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
-				// Increment the login attempt counter
 				int loginAttempts = (int) session.getAttribute("loginAttempts");
 				session.setAttribute("loginAttempts", loginAttempts + 1);
-
-				// Check if the maximum login attempts are reached
 				int maxLoginAttempts = 5;
-
 				if (loginAttempts >= maxLoginAttempts) {
-					// Set the blockedUser attribute in the session
 					session.setAttribute("blockedUser", System.currentTimeMillis() + (5 * 60 * 1000)); // 5 minutes
-
-					// Return a response indicating that the user is blocked
 					userObj.put("status", "blocked");
 					userObj.put("msg",
 							"You have reached the maximum number of login attempts. User is blocked for 5 minutes.");
@@ -89,8 +82,8 @@ public class WP500Login extends HttpServlet {
 						userObj.put("totp_authenticator", totp_authenticator);
 					} 
 						else if (status.equals("fail")) {
-//						userObj.put("msg", "Invalid user. Please login again");
-//						userObj.put("status", status);
+						userObj.put("msg", "Invalid user. Please login again");
+						userObj.put("status", status);
 					}
 				}
 			}

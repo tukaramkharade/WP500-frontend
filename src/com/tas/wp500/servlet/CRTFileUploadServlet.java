@@ -25,35 +25,22 @@ import javax.servlet.http.Part;
 @WebServlet("/CRTFileUploadServlet")
 public class CRTFileUploadServlet extends HttpServlet {
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-	//	String uploadPath = "D:\\crt files";
 		String uploadPath = "/usr/bin/crt_files/";
-        // Create the directory if it doesn't exist.
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-
         Part filePart = request.getPart("file"); // Get the uploaded file part.
-
-        // Get the filename from the filePart.
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-
-        // Save the file to the specified directory.
         try (InputStream input = filePart.getInputStream()) {
             Files.copy(input, Paths.get(uploadPath, fileName), StandardCopyOption.REPLACE_EXISTING);
         }
-
         response.getWriter().println("File uploaded successfully.");
-     
-        // Redirect to firmwarUpdate.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("/mqtt.jsp");
         dispatcher.forward(request, response);
 	}
-
 }

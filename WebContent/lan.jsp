@@ -1,36 +1,25 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
-
 <!DOCTYPE html>
 <html>
-
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
 <link rel="stylesheet" type="text/css" href="nav-bar.css">
 <script src="jquery-3.6.0.min.js"></script>
-
 <style>
 
 h3{
@@ -96,8 +85,7 @@ button {
             position: absolute;
             bottom: 0;
         }
-        
-        
+             
         .popup {
   display: block;
   position: absolute;
@@ -113,7 +101,6 @@ button {
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -124,7 +111,6 @@ button {
   cursor: pointer;
   margin-left: 40%;
 }
-   
    
    .toggle {
   position: relative;
@@ -168,12 +154,8 @@ position: relative;
     border-radius: 5px;
 }
 
-
 </style>
-
 <script>
-	// Function to load user data and populate the user list table
-
 	var eth1_dhcp;
 	var lan1_dhcp;
 	var lan2_dhcp;
@@ -185,8 +167,7 @@ position: relative;
 	
 	function getDhcpSettings(dhcpType) {
 		var dhcp_type = dhcpType;
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
+		 var csrfToken = document.getElementById('csrfToken').value;	 
 		  $.ajax({
 		    url: 'lanDhcpGetData1', 
 		    type : 'POST', 
@@ -199,10 +180,10 @@ position: relative;
 	                if (data.eth1_dhcp === '0') {
 	                    $('#ip_addr_dis_0').val(data.eth1_ipaddr);
 	                    $('#subnet_mask_dis_0').val(data.eth1_subnet);
-	                } else if (data.eth0_dhcp === '1') {
+	                } else if (data.eth1_dhcp === '1') {
 	                    $('#ip_addr_dis_1').val(data.eth1_ipaddr);
 	                    $('#subnet_mask_dis_1').val(data.eth1_subnet);
-	                } else if (data.eth0_dhcp === '2') {
+	                } else if (data.eth1_dhcp === '2') {
 	                    $('#ip_addr_dis_2').val(data.eth1_ipaddr);
 	                    $('#subnet_mask_dis_2').val(data.eth1_subnet);
 	                }else{
@@ -210,21 +191,16 @@ position: relative;
 	                }
 	            } else {
 	            	loadLanSettingsIfDhcpNot();
-	                console.error('Error: Data status is not success');
 	            }
 		    },
 		    error: function(xhr, status, error) {
-		      console.error('Error:', error);
 		    }
 		  });
 		}
 	
-	function loadLanSettings() {
-		
-		// Display loader when the request is initiated
+	function loadLanSettings() {		
 	    showLoader();
-	    var csrfToken = document.getElementById('csrfToken').value;
-	    
+	    var csrfToken = document.getElementById('csrfToken').value;    
 		$.ajax({
 			url : 'lan',
 			type : 'GET',
@@ -236,30 +212,19 @@ position: relative;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				// Hide loader when the response has arrived
-	            hideLoader();
-				
+	            hideLoader();			
 				if(data.status == 'fail'){
 					var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
-					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-					  
-					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
+					modal.style.display = 'block';			  
+					var sessionMsg = document.getElementById('session-msg');
+					sessionMsg.textContent = data.message; // Assuming data.message contains the server message				  
+					var confirmButton = document.getElementById('confirm-button-session-timeout');
+					confirmButton.onclick = function () {					  
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-				}
-								
-				eth1_dhcp = data.eth1_dhcp;
-				
+					};
+				}							
+				eth1_dhcp = data.eth1_dhcp;				
 				if(eth1_dhcp == 1){
 					dhcpType=0;
 					getDhcpSettings(dhcpType);
@@ -279,11 +244,9 @@ position: relative;
 					$('#ip_addr_dis_1').val(data.lan1_ipaddr);
 					$('#subnet_mask_dis_1').val(data.lan1_subnet);
 				}	
-
 				
 				$('#gateway_dis_1').val(data.lan1_gateway);
 				$('#dns_dis_1').val(data.lan1_dns);	
-				//$('#toggle_enable_lan1').val(data.lan1_enable);
 				$('#toggle_enable_lan1').prop('checked', data.lan1_enable == 1);
 				
 				lan2_dhcp = data.lan2_dhcp;
@@ -293,35 +256,25 @@ position: relative;
 				}else{
 					$('#ip_addr_dis_2').val(data.lan2_ipaddr);
 					$('#subnet_mask_dis_2').val(data.lan2_subnet);
-				}			
-				
+				}						
 				$('#gateway_dis_2').val(data.lan2_gateway);
-				$('#dns_dis_2').val(data.lan2_dns);
-				
-				 $('#toggle_enable_lan2').prop('checked', data.lan2_enable == 1);
-				 
-				//$('#toggle_enable_lan2').val(data.lan2_enable);
-				
-				
+				$('#dns_dis_2').val(data.lan2_dns);				
+				$('#toggle_enable_lan2').prop('checked', data.lan2_enable == 1);			 						
 				$("#toggle_lan0").prop("checked", data.eth1_dhcp === "1");
 	            $("#toggle_lan1").prop("checked", data.lan1_dhcp === "1");
-	            $("#toggle_lan2").prop("checked", data.lan2_dhcp === "1");
-				
+	            $("#toggle_lan2").prop("checked", data.lan2_dhcp === "1");			
 				toggle0InputFields();
 				toggle1InputFields();
-				toggle2InputFields();
-				
+				toggle2InputFields();			
 			},
 			error : function(xhr, status, error) {
-				// Hide loader when the response has arrived
-	            hideLoader();
-				
+	            hideLoader();			
 			}
 		});
 	}
+	
 	function loadLanSettingsIfDhcpNot() {
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
+		 var csrfToken = document.getElementById('csrfToken').value;		 
 		$.ajax({
 			url : 'lan',
 			type : 'GET',
@@ -335,25 +288,16 @@ position: relative;
 			success : function(data) {
 				if(data.status == 'fail'){
 					var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
-					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-					  
-					  // Handle the confirm button click
-					  var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
-						// Close the modal
+					modal.style.display = 'block';				  
+					var sessionMsg = document.getElementById('session-msg');
+					sessionMsg.textContent = data.message; // Assuming data.message contains the server message			  
+					var confirmButton = document.getElementById('confirm-button-session-timeout');
+					confirmButton.onclick = function () {					  
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-				}
-								
-				eth1_dhcp = data.eth1_dhcp;
-			
+					};
+				}							
+				eth1_dhcp = data.eth1_dhcp;		
 				$('#ip_addr_dis_0').val(data.eth1_ipaddr);
 				$('#subnet_mask_dis_0').val(data.eth1_subnet);
 				$('#gateway_dis_0').val(data.eth1_gateway);
@@ -366,8 +310,7 @@ position: relative;
 				$('#dns_dis_1').val(data.lan1_dns);	
 				$('#toggle_enable_lan1').val(data.lan1_enable);
 				
-				lan2_dhcp = data.lan2_dhcp;
-				
+				lan2_dhcp = data.lan2_dhcp;				
 				$('#ip_addr_dis_2').val(data.lan2_ipaddr);
 				$('#subnet_mask_dis_2').val(data.lan2_subnet);
 				$('#gateway_dis_2').val(data.lan2_gateway);
@@ -381,44 +324,30 @@ position: relative;
 				toggle1InputFields();
 				toggle2InputFields();				
 			},
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {			
 			}
 		});
 	}
 	
-	
-	
-	function editEth1() {
-		
+	function editEth1() {	
 		var eth1_ipaddr = $('#ip_addr_eth1').val();
 		var eth1_subnet = $('#subnet_mask_eth1').val();   
 		 var eth1_dhcp1 = $("#toggle_lan0").prop("checked") ? "1" : "0";
 		 var csrfToken = document.getElementById('csrfToken').value;
-        
+       
 	if (!eth1_ipaddr && !eth1_subnet && eth1_dhcp1 == 0) {
-        // Display the custom popup message
         $("#popupMessage").text("Please provide both subnet and ipaddr.");
         $("#customPopup").show();
-        return; // Don't proceed further if fields are blank
-        
-    }else{
-	
-		// Display the custom modal dialog
+        return; // Don't proceed further if fields are blank        
+    }else{	
 		  var modal = document.getElementById('custom-modal-edit');
-		  modal.style.display = 'block';
-		  
-		// Handle the confirm button click
+		  modal.style.display = 'block';		
 		  var confirmButton = document.getElementById('confirm-button-edit');
-		  confirmButton.onclick = function () {
-			  
-				var lan_type = 'lan0';
-				
+		  confirmButton.onclick = function () {		  
+				var lan_type = 'lan0';		
 				var eth1_gateway = $('#gateway_eth1').val();
-				var eth1_dns = $('#dns_ip_eth1').val();
-				
-				$.ajax({
-					
+				var eth1_dns = $('#dns_ip_eth1').val();			
+				$.ajax({				
 					url : 'lanUpdateServlet', 
 					type : 'POST',
 					data : {
@@ -431,30 +360,20 @@ position: relative;
 						csrfToken: csrfToken
 					},
 					success : function(data) {
-						// Close the modal
-				        modal.style.display = 'none';
-						
-				        loadLanSettings();
-							
-							//clear fields
+				        modal.style.display = 'none';						
+				        loadLanSettings();							
 							$('#ip_addr_eth1').val('');
 							$('#subnet_mask_eth1').val('');
 							$('#gateway_eth1').val('');
-							$('#dns_ip_eth1').val('');
-					
+							$('#dns_ip_eth1').val('');				
 					},
-					error : function(xhr, status, error) {
-						
+					error : function(xhr, status, error) {					
 					}
-				});
-			  
-		  };
-		  
+				});		  
+		  };		  
 		  var cancelButton = document.getElementById('cancel-button-edit');
 		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		    
+		    modal.style.display = 'none';	    
 		  };
     }
 	}
@@ -713,16 +632,11 @@ position: relative;
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
-        modal.style.display = 'block';
-        
-        // Update the session-msg content with the message from the server
+        modal.style.display = 'block';      
 	    var sessionMsg = document.getElementById('session-msg');
 	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-
-        // Handle the confirm button click
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function() {
-            // Close the modal
             modal.style.display = 'none';
             window.location.href = 'login.jsp';
         };
@@ -734,8 +648,7 @@ position: relative;
 		loadLanSettings();		
 		$('#get_dhcp_0').click(function(){		
 			getDhcpSettings();
-	 });	
-	
+	 	});	
 		$('#eth1_button').click(function () {				 
 		    if (!isFieldDisabled('ip_addr_eth1') &&
 		        !isFieldDisabled('subnet_mask_eth1') &&
@@ -841,8 +754,7 @@ position: relative;
 					</tr>
 					<tr>
 						<td>Subnet mask</td>
-						<td><input id="subnet_mask_dis_0" class="status" disabled type='text' name="subnet_mask_dis_0" style="width: 30%;"></td>
-						
+						<td><input id="subnet_mask_dis_0" class="status" disabled type='text' name="subnet_mask_dis_0" style="width: 30%;"></td>					
 						<td>						
 					<div class="validation-container">
                     <input id="subnet_mask_eth1" class="config" type='text' name="subnet_mask_eth1" style="width: 42%;" required>
@@ -872,7 +784,6 @@ position: relative;
                 </div>							
 							</td>
 					</tr>
-
 				</table>
 				<div style="margin-top: 1%;">			
 						<input type="button" value="Apply changes" id="eth1_button">

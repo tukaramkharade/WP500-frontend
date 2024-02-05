@@ -1,28 +1,19 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
-
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
@@ -30,7 +21,6 @@
 <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
 <script src="jquery-3.6.0.min.js"></script>
-
 <style>
 
 h3{
@@ -69,8 +59,6 @@ margin-top: 68px;
   transform: translate(-50%, -50%); /* Center horizontally and vertically */
 }
  
-
-/* Style for buttons */
 button {
   margin: 5px;
   padding: 10px 20px;
@@ -106,7 +94,6 @@ button {
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -194,27 +181,17 @@ button {
     background: rgba(255, 255, 255, 0.2); /* Transparent white background */
     border-radius: 5px;
 }
- 
-
 </style>
-
 <script type="text/javascript">
 
 var roleValue;
 var csrfTokenValue;
-
-
 function deleteFile(file){
-	 var csrfToken = document.getElementById('csrfToken').value;
-	 
-	// Display the custom modal dialog
+	 var csrfToken = document.getElementById('csrfToken').value;	 
 	  var modal = document.getElementById('custom-modal-delete');
 	  modal.style.display = 'block';
-
-	  // Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-delete');
-	  confirmButton.onclick = function () {
-		  
+	  confirmButton.onclick = function () {	  
 		  $.ajax({
 				url : 'FirmwareListServlet',
 				type : 'POST',
@@ -223,33 +200,24 @@ function deleteFile(file){
 					action : 'delete',
 					csrfToken: csrfToken
 				},
-				success : function(data) {
-					
+				success : function(data) {				
 					modal.style.display = 'none';
 					loadFirmwareFiles();
 				},
-				error : function(xhr, status, error) {
-					
+				error : function(xhr, status, error) {				
 				}
-			});
-		  
-	  };
-	  
+			});	  
+	  };	  
 	  var cancelButton = document.getElementById('cancel-button-delete');
 	  cancelButton.onclick = function () {
-	    // Close the modal
 	    modal.style.display = 'none';
 	  };
-	
-	
 }
+
 function updateFirmwareFile(file){
-	 var csrfToken = document.getElementById('csrfToken').value;
-	 
-	// Display the custom modal dialog
+	 var csrfToken = document.getElementById('csrfToken').value;	 
 	  var modal = document.getElementById('custom-modal-update');
 	  modal.style.display = 'block';
-	  // Handle the confirm button click
 	  var confirmButton = document.getElementById('confirm-button-update');
 	  confirmButton.onclick = function () {		  
 		  $.ajax({
@@ -260,37 +228,28 @@ function updateFirmwareFile(file){
 					action : 'update',
 					csrfToken: csrfToken
 				},
-				success : function(data) {
-					
+				success : function(data) {				
 					modal.style.display = 'none';
-					loadFirmwareFiles();
-					
+					loadFirmwareFiles();					
 					$("#popupMessage").text(data.message);
-	      			$("#customPopup").show();
-	      			
+	      			$("#customPopup").show();	      			
 				},
-				error : function(xhr, status, error) {
-					
+				error : function(xhr, status, error) {					
 				}
 			});		  
 	  };	  
 	  var cancelButton = document.getElementById('cancel-button-update');
 	  cancelButton.onclick = function () {
-	    // Close the modal
 	    modal.style.display = 'none';
-	  };
-	  
+	  };	  
 	  $("#closePopup").click(function () {
 		    $("#customPopup").hide();
 		  });
 }
 
 function loadFirmwareFiles() {
-	
-	// Display loader when the request is initiated
     showLoader();
-    var csrfToken = document.getElementById('csrfToken').value;
-    
+    var csrfToken = document.getElementById('csrfToken').value;  
     $.ajax({
         url: "FirmwareListServlet",
         type: "GET",
@@ -298,44 +257,26 @@ function loadFirmwareFiles() {
         data: {
 			csrfToken: csrfToken
         },
-        success: function (data) {
-        	
-        	// Hide loader when the response has arrived
-            hideLoader();
-        	
-        	if (data.status == 'fail') {
-				
+        success: function (data) {      	
+            hideLoader();        	
+        	if (data.status == 'fail') {				
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';			  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message				  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {				  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
-			} 
-			
+				  };				  
+			} 		
                 var table = $("#firmware_list_table tbody");
-
-                // Clear any existing rows in the table
-                table.empty();
-                
-             
+                table.empty();                       
                 if(roleValue == 'ADMIN' || roleValue == 'Admin'){
-                	// Loop through the data and add rows to the table
                     data.firmware_files_result.forEach(function (file) {
                         var row = $("<tr>");
                         row.append($("<td>").text(file));
-                        var actions = $('<td>');
-                        
+                        var actions = $('<td>');                      
                         var deleteButton = $('<button data-toggle="tooltip" class="delBtn" data-placement="top" title="Delete" style="color: red;">')
                             .html('<i class="fas fa-trash-alt"></i>')
                             .click(function() {
@@ -346,33 +287,22 @@ function loadFirmwareFiles() {
                         .click(function() {
                         	updateFirmwareFile(file);
                         	getFirmwareStatus();
-                        });                   
-                        
+                        });                                         
                         actions.append(deleteButton);
-    					actions.append(updateButton);
-    					
-
-    					row.append(actions);
-    					
+    					actions.append(updateButton);					
+    					row.append(actions);  					
                         table.append(row);
                     });
-
-                }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-                	
+                }else if(roleValue == 'OPERATOR' || roleValue == 'Operator'){              	
                 	data.firmware_files_result.forEach(function (file) {
                         var row = $("<tr>");
-                        row.append($("<td>").text(file));
-                                  
+                        row.append($("<td>").text(file));                                
                         table.append(row);
-                    });
-                	
-                }
-                             
+                    });              	
+                }                        
         },
         error: function (xhr, status, error) {
-        	// Hide loader when the response has arrived
-            hideLoader();
-        	
+            hideLoader();        	
         },
     });
 }
@@ -381,15 +311,12 @@ var progressInterval;
 function validateAndUpload(fileInputId, allowedExtension) {
     var fileInput = document.getElementById(fileInputId);
     var file = fileInput.files[0];
-
     if (file) {
         var fileName = file.name;
         var fileExtension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-
         if (fileExtension === allowedExtension) {
             var formData = new FormData();
             formData.append('file', file);
-
             $.ajax({
                 url: 'UploadServlet',
                 type: 'POST',
@@ -399,23 +326,18 @@ function validateAndUpload(fileInputId, allowedExtension) {
                 success: function(data) {
                     clearInterval(progressInterval); // Stop the progress interval
                     if (data.status === 'success') {
-                        // File uploaded successfully logic
                         $("#popupMessage").text('File uploaded successfully.');
                         $("#customPopup").show();
                         loadStratonFiles();  // Refresh the Straton file list
                     } else {
-                        // Error uploading file logic
                         $("#popupMessage").text('Error uploading file: ' + data.message);
                         $("#customPopup").show();
                     }
                 },
                 error: function(xhr, status, error) {
-                    clearInterval(progressInterval); // Stop the progress interval on error
-                    
+                    clearInterval(progressInterval); // Stop the progress interval on error                 
                 }
             });
-
-            // Start the progress interval only if a file is being uploaded
             progressInterval = setInterval(updateProgress, 1000);
         } else {
             $("#popupMessage").text('Invalid file extension. Please select a file with ' + allowedExtension + ' extension.');
@@ -431,16 +353,14 @@ function validateAndUpload(fileInputId, allowedExtension) {
         $('#progress-bar').text('');	
     });
 }
+
 function updateProgress() {
-	
     $.ajax({
         url: 'UploadServlet', // Replace with your servlet URL
         type: 'GET',
         dataType: 'json',
-        success: function(data) {
-        	
-            var progress = data.progress;
-            
+        success: function(data) {     	
+            var progress = data.progress;         
             $('#progress-bar').css('width', progress + '%');
             $('#progress-bar').text(progress + '%');
             if (progress === 100) {
@@ -449,20 +369,17 @@ function updateProgress() {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Error fetching progress:', error);
         }
     });
 }
+
 function firmwareProgress() {
-	
    $.ajax({
        url: 'firmwareFileDownloadURL', // Replace with your servlet URL
        type: 'GET',
        dataType: 'json',
-       success: function(data) {
-       
-           var progress = data.progress;
-           
+       success: function(data) {     
+           var progress = data.progress;         
            $('#progress-bar').css('width', progress + '%');
            $('#progress-bar').text(progress + '%');
            if (progress === 100) {
@@ -476,11 +393,8 @@ function firmwareProgress() {
    });
 }
 
-
-
 function firmwareDownload() {
 	 var fileUrl = $('#fileUrl').val();
-
      $.ajax({
          url: 'firmwareFileDownloadURL',
          type: 'POST',
@@ -488,23 +402,18 @@ function firmwareDownload() {
          success: function(data) {
                     clearInterval(progressInterval); // Stop the progress interval
                     if (data.status === 'success') {
-                        // File uploaded successfully logic
                         $("#popupMessage").text('File uploaded successfully.');
                         $("#customPopup").show();
                         loadStratonFiles();  // Refresh the Straton file list
                     } else {
-                        // Error uploading file logic
                         $("#popupMessage").text('Error uploading file: ' + data.message);
                         $("#customPopup").show();
                     }
                 },
                 error: function(xhr, status, error) {
-                    clearInterval(progressInterval); // Stop the progress interval on error
-                    
+                    clearInterval(progressInterval); // Stop the progress interval on error                    
                 }
             });
-
-            // Start the progress interval only if a file is being uploaded
             progressInterval = setInterval(firmwareProgress, 1000);
             $("#closePopup").click(function () {
                 $("#customPopup").hide();
@@ -513,44 +422,33 @@ function firmwareDownload() {
             });
         }   
         
-// JavaScript function to redirect to 'firmwareUpdate.jsp'
 function redirectToFirmwareUpdate() {
     window.location.href = 'firmwareUpdate.jsp';
 }
 
-
-
 function changeButtonColor(isDisabled) {
     var $file_upload_button = $('#file_upload');       
     var $firmware_update_button = $('#firmwareUpdateButton');
-    var $firmware_download = $('#firmware_download');
-    
+    var $firmware_download = $('#firmware_download');    
      if (isDisabled) {
         $file_upload_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $file_upload_button.css('background-color', '#2b3991'); // Reset to original color
-    }
-    
+    } 
     if (isDisabled) {
         $firmware_update_button.css('background-color', 'gray'); // Change to your desired color
     } else {
         $firmware_update_button.css('background-color', '#2b3991'); // Reset to original color
     } 
-    
-    
     if (isDisabled) {
         $firmware_download.css('background-color', 'gray'); // Change to your desired color
     } else {
         $firmware_download.css('background-color', '#2b3991'); // Reset to original color
     } 
-    
 }
 
-
 function getFirmwareStatus(){
-	 var csrfToken = document.getElementById('csrfToken').value;
-
-	 
+	 var csrfToken = document.getElementById('csrfToken').value; 
 	$.ajax({
 		url : "firmwareStatusServlet",
 		type : "GET",
@@ -558,105 +456,71 @@ function getFirmwareStatus(){
 		data: {
 			csrfToken: csrfToken
         },
-		success : function(data) {
-			
-			if (data.status == 'fail') {
-				
+		success : function(data) {		
+			if (data.status == 'fail') {			
 				 var modal = document.getElementById('custom-modal-session-timeout');
-				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
-				    var sessionMsg = document.getElementById('session-msg');
-				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
-				  var confirmButton = document.getElementById('confirm-button-session-timeout');
-				  confirmButton.onclick = function () {
-					  
-					// Close the modal
+				 modal.style.display = 'block';				  
+				 var sessionMsg = document.getElementById('session-msg');
+				 sessionMsg.textContent = data.message; // Assuming data.message contains the server message		  
+				 var confirmButton = document.getElementById('confirm-button-session-timeout');
+				 confirmButton.onclick = function () {					  
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				  };					  
 			} 
-			// Assuming data.banner_text_data is an array, join it to create a string
-           var textToShow = data.firmware_status_data.join('\n');
-			
-        // Clear the existing content in the textarea
+           var textToShow = data.firmware_status_data.join('\n');			
            $('#firmware_status').val('');
-
-           // Set the text in the textarea
            $('#firmware_status').val(textToShow);
-
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {			
 		},
 	});
 }
 
-// Function to show the loader
  function showLoader() {
-     // Show the loader overlay
      $('#loader-overlay').show();
  }
 
- // Function to hide the loader
  function hideLoader() {
-     // Hide the loader overlay
      $('#loader-overlay').hide();
- }
- 
+ } 
 
 $(document).ready(function() {
 	<%// Access the session variable
 	HttpSession role = request.getSession();
 	String roleValue = (String) session.getAttribute("role");%>
-
 roleValue = '<%=roleValue%>';
 	
 <%// Access the session variable
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
 
-	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){
-		
+	if(roleValue == 'OPERATOR' || roleValue == 'Operator'){		
 		$('#file_upload').prop('disabled', true);
 		$('#crt_file_upload').prop('disabled', true);		
 		$('#fileInput').prop('disabled', true); 
 		$('#firmwareUpdateButton').prop('disabled', true);
-		$('#firmware_download').prop('disabled', true);
-		
-		
+		$('#firmware_download').prop('disabled', true);				
 		changeButtonColor(true);
 	}
 	
 	if (roleValue === "null") {
         var modal = document.getElementById('custom-modal-session-timeout');
         modal.style.display = 'block';
-        // Update the session-msg content with the message from the server
 	    var sessionMsg = document.getElementById('session-msg');
-	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-	    
-        // Handle the confirm button click
+	    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 	    
         var confirmButton = document.getElementById('confirm-button-session-timeout');
         confirmButton.onclick = function() {
-            // Close the modal
             modal.style.display = 'none';
             window.location.href = 'login.jsp';
         };
-    }
-	
+    }	
 	else{
 		<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
-
-		tokenValue = '<%=tokenValue%>';
-		
+		tokenValue = '<%=tokenValue%>';		
 		$('#firmwareUpdateButton').click(function(event) {
            event.preventDefault(); // Prevent the form from submitting
            validateAndUpload('fileInput', '.swu');
@@ -664,31 +528,23 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 		$('#firmware_download').click(function(event) {
             event.preventDefault(); // Prevent the form from submitting
             firmwareDownload();
-        });
-    	
-    	loadFirmwareFiles();
-    	
-		
-	}
-	
+        });   	
+    	loadFirmwareFiles();   			
+	}	
 });
-
 </script>
 <body>
-
 <div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
-	</div>
-	
+	</div>	
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>FIRMWARE UPDATE</h3>
 			<hr>
-			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-			
+			<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />		
 			<div class="container">
 			<div id="loader-overlay">
     <div id="loader">
@@ -699,8 +555,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
     <div class="forms-container">
         <form action="UploadServlet" method="post" enctype="multipart/form-data" class="upload-form">
             <input type="file" name="file" id="fileInput">
-            <input type="submit" value="Upload" id="firmwareUpdateButton">
-            
+            <input type="submit" value="Upload" id="firmwareUpdateButton">          
         </form>
         <form id="downloadForm" class="download-form">
             <label for="fileUrl">Enter File URL:</label>
@@ -715,12 +570,8 @@ csrfTokenValue = '<%=csrfTokenValue%>';
         <div id="progress-bar-container">
             <div id="progress-bar"></div>
         </div>
-    </div>
-    
-    		
-</div>
-
-			
+    </div> 		
+</div>			
 			<div id="custom-modal-delete" class="modal-delete">
 				<div class="modal-content-delete">
 				  <p>Are you sure you want to delete this firmware file?</p>
@@ -734,18 +585,15 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 				  <button id="confirm-button-update">Yes</button>
 				  <button id="cancel-button-update">No</button>
 				</div>
-			  </div>
-			  
+			  </div>			  
 			  <div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				<p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
-			  </div>
-			
+			  </div>			
 			<h3 style="margin-top: -23px;">FIRMWARE FILE LIST</h3>
-			<hr />
-			
+			<hr />		
 			<div class="container">
 			<table id="firmware_list_table" style="margin-left: -17px;">
 			<thead>
@@ -753,35 +601,24 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 			<th style="width: 20%;">File</th>
 			<th>Action</th>
 			</tr>
-			</thead>
-			
+			</thead>		
 			<tbody>
 			</tbody>
-			</table>
-			
-			</div>
-			
+			</table>		
+			</div>		
 			<div class="firmware-status-container" style="width: 80%; margin-bottom: 20px;">
     <h3>Firmware Status</h3>
     <textarea id="firmware_status" name="firmware_status" 
 							 style="margin-left: 19px; height: 200px; width: 1000px;"></textarea>
-							</div>
-			
+							</div>		
 			</section>
 			</div>
-	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
-	
 			<div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
 			</div>
-    
- <!--    <script> -->
-    
-
-    <!-- </script> -->
 </body>
 </html>

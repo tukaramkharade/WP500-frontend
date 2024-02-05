@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -23,9 +16,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32"
-	href="images/WP_Connex_logo_favicon.png" />
-
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">
@@ -164,8 +155,7 @@ var json = {};
           dataType: "json",
           success: function (data) {
             if (data.broker_ip_result && Array.isArray(data.broker_ip_result)) {
-              var selectElement = $("#broker_name");
-             
+              var selectElement = $("#broker_name");          
               data.broker_ip_result.forEach(function (filename) {
                 var option = $("<option>", {
                   value: filename,
@@ -175,15 +165,13 @@ var json = {};
               });
             }
           },
-          error: function (xhr, status, error) {
-           
+          error: function (xhr, status, error) {         
           },
         });
       }
       
       function loadTagList() {
-    	var csrfToken = document.getElementById('csrfToken').value;
-    	  
+    	var csrfToken = document.getElementById('csrfToken').value;   	  
     	    $.ajax({
     	      url: "alarmConfigTagListServlet",
     	      type: "GET",
@@ -193,8 +181,7 @@ var json = {};
   	        },
     	      success: function (data) {
     	        if (data.tag_list_result && Array.isArray(data.tag_list_result)) {
-    	          var datalist = $(".variable");
-    	         
+    	          var datalist = $(".variable"); 	         
     	          data.tag_list_result.forEach(function (tag) {
     	            var option = $("<option>", {
     	              value: tag,
@@ -204,16 +191,14 @@ var json = {};
     	          });
     	        }
     	      },
-    	      error: function (xhr, status, error) {
-    	        
+    	      error: function (xhr, status, error) {   	        
     	      },
     	    });
     	  }
       
        function loadAlarmSettings() {
     		showLoader();
-   	   var csrfToken = document.getElementById('csrfToken').value;
-    	   
+   	   var csrfToken = document.getElementById('csrfToken').value;   	   
   		$.ajax({
   			url : 'alarmConfigServlet',
   			type : 'GET',
@@ -227,31 +212,24 @@ var json = {};
   			success : function(data) {
 	            hideLoader();
   	  				var interval = data.intervalString;			
-				if (data.status == 'fail') {
-					
+				if (data.status == 'fail') {				
 					 var modal = document.getElementById('custom-modal-session-timeout');
-					  modal.style.display = 'block';
-					  
-					    var sessionMsg = document.getElementById('session-msg');
-					    sessionMsg.textContent = data.message;
-
-					   var confirmButton = document.getElementById('confirm-button-session-timeout');
-					  confirmButton.onclick = function () {
-						  
+					 modal.style.display = 'block';				  
+					 var sessionMsg = document.getElementById('session-msg');
+					 sessionMsg.textContent = data.message;
+					 var confirmButton = document.getElementById('confirm-button-session-timeout');
+					 confirmButton.onclick = function () {					  
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-						  
+					  };						  
 				} 
   				var result = data.result;
   				var alarmTag = JSON.parse(result.alarm_tag);
-  	          initializeTable(alarmTag);
-  	             	        
+  	          initializeTable(alarmTag); 	             	        
   	          $('#unit_id').val(result.unit_id);
               $('#asset_id').val(result.asset_id);
               $('#broker_name').val(result.broker_ip);
-              $('#status').val(result.alarm_status);
-              
+              $('#status').val(result.alarm_status);             
               if (result.broker_type != null && result.intrval != null) {            
                   $('#broker_type').val(result.broker_type);
                   $('#interval').val(interval);
@@ -274,8 +252,7 @@ var json = {};
            function initializeTable(commandTag) {
     	    var table = $('.bordered-table1');
     	    table.empty();
-    	    var initialRow = $('<tr>');
-    	  
+    	    var initialRow = $('<tr>');  	  
     	    var cell1 = $('<th>').text('Tag List').css('width', '20%');
     	    var cell2 = $('<th>').text('Variable').css('width', '20%');
     	    var cell3 = $('<th>').text('Action').css('width', '10%');
@@ -308,11 +285,9 @@ var json = {};
 	   	    deleteBtn.on('click', function () {
 	   	    	dataRow.remove();
 	   	    });
-	   	    cell3.append(deleteBtn);
-	   	    
+	   	    cell3.append(deleteBtn);   	    
 	   	   	dataRow.append(dataCell1, dataCell2, cell3);
     	    table.append(dataRow);
-
     	    $.each(Object.entries(commandTag).slice(1), function (_, [key, value]) {
     	        var newRow = $('<tr>');
     	        var cell1 = $('<td style="width: 100px;">').append($('<input>', {
@@ -328,8 +303,7 @@ var json = {};
     	        }).append($('<option>', {
     	            value: value,
     	            text: value
-    	        })));
-    	        
+    	        })));  	        
     	        var cell3 = $('<td>');
     	   	    var deleteBtn = $('<input>', {
     	   	        type: 'button',
@@ -345,7 +319,6 @@ var json = {};
     	       	newRow.append(cell1, cell2, cell3);
     	        table.append(newRow);
     	    });
-
     	    var addButtonRow = $('<tr>');
     	    var addButtonCell = $('<td>').append($('<input>', {
     	        type: 'button',
@@ -364,14 +337,12 @@ var json = {};
        function deleteAlarm() { 	 
  		  var modal = document.getElementById('custom-modal-delete');
  		  modal.style.display = 'block';
-
  		  var confirmButton = document.getElementById('confirm-button-delete');
  		  confirmButton.onclick = function () {
  		    $.ajax({
  		      url: 'alarmConfigServlet',
  		      type: 'DELETE',
- 		     dataType : 'json',
- 		    
+ 		     dataType : 'json',		    
  		      success: function (data) {  
  		        modal.style.display = 'none';
  		       loadAlarmSettings();
@@ -383,7 +354,6 @@ var json = {};
  		    });
  		   $('#addBtn').val('Add');
  		  };
-
  		  var cancelButton = document.getElementById('cancel-button-delete');
  		  cancelButton.onclick = function () {
  		    modal.style.display = 'none';
@@ -395,26 +365,22 @@ var json = {};
         var $add_button = $('#addBtn');
         var $delete_button = $('#delBtn');
         var $clear_button = $('#clearBtn');
-        var $save_button = $('#saveBtn');
-       
+        var $save_button = $('#saveBtn');       
         if (isDisabled) {
             $add_button.css('background-color', 'gray'); 
         } else {
             $add_button.css('background-color', '#2b3991'); 
-        }
-        
+        }       
         if (isDisabled) {
             $delete_button.css('background-color', 'gray'); 
         } else {
             $delete_button.css('background-color', '#2b3991'); 
-        }
-        
+        }       
         if (isDisabled) {
             $clear_button.css('background-color', 'gray'); 
         } else {
             $clear_button.css('background-color', '#2b3991'); 
-        }
-        
+        }        
         if (isDisabled) {
             $save_button.css('background-color', 'gray'); 
         } else {
@@ -451,7 +417,6 @@ var json = {};
 	   	        style: 'height: 10px; width: 200px;'
 	   	    });
 	   	    cell1.append(input);
-
 	   	    var cell2 = $('<td>');
 	   	    var select = $('<select>', {
 	   	        class: 'variable',
@@ -465,7 +430,6 @@ var json = {};
 	   	    });
 	   	    select.append(option);
 	   	    cell2.append(select);
-
 	   	    var cell3 = $('<td>');
 	   	    var deleteBtn = $('<input>', {
 	   	        type: 'button',
@@ -478,13 +442,11 @@ var json = {};
 	   	        newRow.remove();
 	   	    });
 	   	    cell3.append(deleteBtn);
-
 	   	    newRow.append(cell1, cell2, cell3);
 	   	    var table = $('.bordered-table1');
 	   	    var lastRow = table.find('tr').last();
 	   	    newRow.insertBefore(lastRow);
 	   	    loadTagList();
-
 	   	 	input.on('blur', function () {
 	         updateTagVariableValues();
 	         var jsonString = JSON.stringify(tagVariableValues);      
@@ -509,8 +471,7 @@ String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
     		  $('#delBtn').prop('disabled', true);
     		  $('#saveBtn').prop('disabled', true);
     		  changeButtonColor(true);
-    	  }
-    	  
+    	  }    	  
     	  if (roleValue === "null") {
   	        var modal = document.getElementById('custom-modal-session-timeout');
   	        modal.style.display = 'block';
@@ -521,8 +482,7 @@ String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
   	            modal.style.display = 'none';
   	            window.location.href = 'login.jsp';
   	        };
-  	    } else{
-  	    	
+  	    } else{  	    	
   	    	<%
 HttpSession token = request.getSession();
 String tokenValue = (String) session.getAttribute("token");%>
@@ -530,12 +490,10 @@ String tokenValue = (String) session.getAttribute("token");%>
   	    	
   	    	  	loadAlarmSettings();
   	    		loadBrokerIPList();
-      	 		loadTagList(); 	  
-      	  
+      	 		loadTagList(); 	       	  
       	$('#saveBtn').on('click', function () {
      		 addRow();
-     	});
-       	  
+     	});      	  
         	$('#alarmConfigForm').submit(function(event) {
   			event.preventDefault();
   			var buttonText = $('#addBtn').val();
@@ -544,15 +502,13 @@ String tokenValue = (String) session.getAttribute("token");%>
   			var broker_name = $('#broker_name').find(":selected").val();
   			var unit_id = $('#unit_id').val();
   			var asset_id = $('#asset_id').val();
-  			var tag_name = $('#tag_name').val();
-  			
+  			var tag_name = $('#tag_name').val(); 			
   			if (buttonText == 'Add') {
   				addAlarmConfig();
   			} else {
   				editAlarmConfig();
   			}
-  		});
-        	  
+  		});       	  
         	$('#clearBtn').click(function(){
     		$('#unit_id').val('');
   			$('#asset_id').val('');
@@ -562,8 +518,7 @@ String tokenValue = (String) session.getAttribute("token");%>
   			$('#addBtn').val('Add'); 
   			$('#field_unitid_Error').text('');
 		    $('#field_assetid_Error').text('');
-		 });
-      	  
+		 });      	  
       	  $("#delBtn").click(function () {
       		  deleteAlarm();
       	  });
@@ -587,8 +542,7 @@ function editAlarmConfig() {
 		    var broker_type = $('#broker_type').find(":selected").val();
 		    var interval = $('#interval').find(":selected").val();
 		    var status = $('#status').find(":selected").val();
-		    var csrfToken = document.getElementById('csrfToken').value;
-		    
+		    var csrfToken = document.getElementById('csrfToken').value;	    
 		    $('#field_unitid_Error').text('');
 		    $('#field_assetid_Error').text('');	 
 		    var unitIdError = validateUnitId(unit_id);
@@ -600,13 +554,11 @@ function editAlarmConfig() {
 		    if (assetIdError) {
 		        $('#field_assetid_Error').text(assetIdError).css({'color': 'red', 'max-width': '200px'}); 
 		        return;
-		    }
-		    
+		    }		    
 	  var modal = document.getElementById('custom-modal-edit');
 	  modal.style.display = 'block'; 
 	  var confirmButton = document.getElementById('confirm-button-edit');
 	  confirmButton.onclick = function () {
-
 		    $.ajax({
 				url : 'alarmConfigServlet',
 				type : 'POST',
@@ -635,11 +587,9 @@ function editAlarmConfig() {
 				error : function(xhr, status, error) {				
 				}
 			});		       
-	  };
-	  
+	  };	  
 	  var cancelButton = document.getElementById('cancel-button-edit');
 	  cancelButton.onclick = function () {
-	    // Close the modal
 	    modal.style.display = 'none';
 	    location.reload();
 	    $('#addBtn').val('Update');
@@ -648,21 +598,17 @@ function editAlarmConfig() {
 
 function validateUnitId(unitid) {
 var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
 if (!regex.test(unitid)) {
     return 'Invalid unit id; symbols not allowed';
 }
-
 return null; 
 }
 
 function validateAssetId(assetId) {
 var regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-
 if (!regex.test(assetId)) {
     return 'Invalid Asset id; symbols not allowed';
 }
-
 return null; 
 }
 
@@ -675,17 +621,14 @@ function addAlarmConfig() {
     var interval = $('#interval').find(":selected").val();
     var status = $('#status').find(":selected").val();    
     var csrfToken = document.getElementById('csrfToken').value;
-    var errorSpanStatus = $('#brokerIPAddressError'); 
-	  
+    var errorSpanStatus = $('#brokerIPAddressError'); 	  
 	    if (broker_name === "Select broker IP address") {
 	        errorSpanStatus.text("Please select a valid IP address.");
 	        return;
 	    }
 	    errorSpanStatus.text("");
-  
 	    $('#field_unitid_Error').text('');
 	    $('#field_assetid_Error').text('');
-	
 	    var unitIdError = validateUnitId(unit_id);
 	    if (unitIdError) {
 	        $('#field_unitid_Error').text(unitIdError).css({'color': 'red', 'max-width': '200px'}); 
@@ -695,8 +638,7 @@ function addAlarmConfig() {
 	    if (assetIdError) {
 	        $('#field_assetid_Error').text(assetIdError).css({'color': 'red', 'max-width': '200px'}); 
 	        return;
-	    }  
-	    
+	    }  	    
 	$.ajax({
 		url : 'alarmConfigServlet',
 		type : 'POST',
@@ -713,30 +655,25 @@ function addAlarmConfig() {
 		},
 		success : function(data) {
  			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();
-						
+  			$("#customPopup").show();					
 			$('#unit_id').val('');
 			$('#asset_id').val('');
 			$('#broker_type').val('mqtt');
 			$('#broker_name').val('Select broker IP address');
 			$('#interval').val('5 sec');
-			$('#status').val('Enable');
-			
+			$('#status').val('Enable');		
 			location.reload();
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {		
 		}
 	});
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
-
 	$('#addBtn').val('Add');
 }
     </script>
 </head>
-
 <body>
 	<div class="sidebar">
 		<%@ include file="common.jsp"%>
@@ -836,7 +773,6 @@ function addAlarmConfig() {
 								class="saveBtn" style="height: 22px;" title="Add tags" /></td>
 						</tr>
 					</table>
-
 					<div class="row"
 						style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
 
