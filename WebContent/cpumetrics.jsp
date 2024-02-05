@@ -1,4 +1,3 @@
-
 <%
 response.setHeader("X-Frame-Options", "DENY");
 response.setHeader("X-Content-Type-Options", "nosniff");
@@ -410,7 +409,6 @@ function hideLoader() {
 }
 
 $(document).ready(function() {
-	
 <%
 HttpSession role = request.getSession();
 String roleValue = (String) session.getAttribute("role");%>

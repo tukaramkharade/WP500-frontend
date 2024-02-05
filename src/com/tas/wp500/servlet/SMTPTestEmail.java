@@ -13,66 +13,45 @@ import org.json.JSONObject;
 import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/smtpTESTEMAIL")
-	public class SMTPTestEmail extends HttpServlet {
-		final static Logger logger = Logger.getLogger(SMTPTestEmail.class);
+public class SMTPTestEmail extends HttpServlet {
+	final static Logger logger = Logger.getLogger(SMTPTestEmail.class);
+	TCPClient client = new TCPClient();
+	JSONObject json = new JSONObject();
+	JSONObject respJson = null;
 
-		TCPClient client = new TCPClient();
-		JSONObject json = new JSONObject();
-		JSONObject respJson = null;
-
-		protected void doGet(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-
-			HttpSession session = request.getSession(false);
-
-			String check_username = (String) session.getAttribute("username");
-			String check_token = (String) session.getAttribute("token");
-			String check_role = (String) session.getAttribute("role");
-
-			if (check_username != null) {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		String check_username = (String) session.getAttribute("username");
+		String check_token = (String) session.getAttribute("token");
+		String check_role = (String) session.getAttribute("role");
+		if (check_username != null) {
 			try {
 				TCPClient client = new TCPClient();
 				json = new JSONObject();
-
 				json.put("operation", "test_email");
 				json.put("user", check_username);
 				json.put("token", check_token);
 				json.put("role", check_role);
-				
-				System.out.println("test_email-->"+json);
+
 				String respStr = client.sendMessage(json.toString());
-				
-				logger.info("res : "+new JSONObject(respStr));
+				logger.info("res : " + new JSONObject(respStr));
 				String message = new JSONObject(respStr).getString("msg");
 				String status = new JSONObject(respStr).getString("status");
-				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
 				jsonObject.put("status", status);
-
-				// Set the content type of the response to application/json
 				response.setContentType("application/json");
-				 response.setHeader("X-Content-Type-Options", "nosniff");
-
-				// Get the response PrintWriter
+				response.setHeader("X-Content-Type-Options", "nosniff");
 				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in sending test email : "+e);
-			}
+				logger.error("Error in sending test email : " + e);
 			}
 		}
+	}
 
-		protected void doPost(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-
-				
-			}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	}
 }

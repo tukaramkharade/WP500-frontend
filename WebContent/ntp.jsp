@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -45,7 +38,6 @@
   width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
   display: block; /* Display as to center horizontally */
   margin-top: 30px; /* Adjust the top margin as needed */
@@ -234,7 +226,6 @@ h2 {
 	box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Transition*/
 .toggle-label, .toggle-handle {
 	transition: All 0.3s ease;
 	-webkit-transition: All 0.3s ease;
@@ -311,7 +302,6 @@ input:checked+.slider:before {
 	transform: translateX(26px);
 }
 
-/* Rounded sliders */
 .slider.round {
 	border-radius: 100px;
 	height: 25px;
@@ -321,10 +311,6 @@ input:checked+.slider:before {
 .slider.round:before {
 	border-radius: 50%;
 }
-/* p {
-    font-weight: bold;
-    font-size: 16px; 
- } */
 
 #confirm-button-session-timeout,
 #confirm-button-edit {
@@ -393,7 +379,6 @@ var roleValue;
 var tokenValue;
 var csrfTokenValue;
 
-	// Function to fetch current time from the server and update the button text
 	function getCurrentTime() {
 		 var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
@@ -404,21 +389,16 @@ var csrfTokenValue;
 				csrfToken: csrfToken
 	        },
 			success : function(data) {
-				// Update the <p> tags with the fetched time data
 				$("#ist_time").text("IST Time: " + data.IST_Time);
 				$("#utc_time").text("UTC Time: " + data.UTC_Time);
 			},
 			error : function(xhr, status, error) {
-				// Handle any errors that occur during the AJAX request
-				console.error("Error fetching current time:", status, error);
 			}
 		});
 	}
 	
-	
 	function getNtpDetails() {
-		 var csrfToken = document.getElementById('csrfToken').value;
-		
+		 var csrfToken = document.getElementById('csrfToken').value;	
 			$.ajax({
 				url: 'ntp',
 				type: 'GET',
@@ -429,55 +409,34 @@ var csrfTokenValue;
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 				},
-				success: function(data) {
-				
-					if (data.status == 'fail') {
-						
+				success: function(data) {			
+					if (data.status == 'fail') {					
 						 var modal = document.getElementById('custom-modal-session-timeout');
-						  modal.style.display = 'block';
-						  
-						// Update the session-msg content with the message from the server
+						  modal.style.display = 'block';						  
 						    var sessionMsg = document.getElementById('session-msg');
-						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-						  
-						  // Handle the confirm button click
+						    sessionMsg.textContent = data.message; // Assuming data.message contains the server message					  
 						  var confirmButton = document.getElementById('confirm-button-session-timeout');
-						  confirmButton.onclick = function () {
-							  
-							// Close the modal
+						  confirmButton.onclick = function () {						  
 						        modal.style.display = 'none';
 						        window.location.href = 'login.jsp';
-						  };
-							  
-						  
+						  };					  					  
 					} 
-					
-					
-					//document.getElementById('ntp-service-cell').textContent = data.ntp_service;	          
-					
 					var ntpServiceCell = document.getElementById('ntp-service-cell');
             ntpServiceCell.textContent = data.ntp_service;
-
-            // Set color based on the value of data.ntp_service
             if (data.ntp_service === 'active') {
                 ntpServiceCell.style.color = 'green';
             } else {
                 ntpServiceCell.style.color = 'red';
-            }
-					
-					
+            }								
 				},
-
-				error : function(xhr, status, error) {
-					
+				error : function(xhr, status, error) {					
 				}
 			});
-
 		}
+	
 	function getOverviewData() {
 		 var csrfToken = document.getElementById('csrfToken').value;
 		$.ajax({
-
 			url : 'overviewGetData',
 			type : 'GET',
 			dataType : 'json',
@@ -488,52 +447,31 @@ var csrfTokenValue;
 				xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 			},
 			success : function(data) {
-
 				if (data.status == 'fail') {
-					var modal = document
-							.getElementById('custom-modal-session-timeout');
+					var modal = document.getElementById('custom-modal-session-timeout');
 					modal.style.display = 'block';
-
-					// Handle the confirm button click
-					var confirmButton = document
-							.getElementById('confirm-button-session-timeout');
+					var confirmButton = document.getElementById('confirm-button-session-timeout');
 					confirmButton.onclick = function() {
-
-						// Close the modal
 						modal.style.display = 'none';
 						window.location.href = 'login.jsp';
 					};
 				} 
-			
-			//	document.getElementById('system-clock-cell').textContent = data.NTP_SYNC_STATUS;
-			
-			
 			var systemClockeCell = document.getElementById('system-clock-cell');
 			systemClockeCell.textContent = data.NTP_SYNC_STATUS;
-
-            // Set color based on the value of data.ntp_service
             if (data.NTP_SYNC_STATUS === 'yes') {
             	systemClockeCell.style.color = 'green';
             } else {
             	systemClockeCell.style.color = 'red';
-            }
-				
+            }			
 			},
-
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {				
 			}
-
 		});
-
 	}
 
-
-		function updatentp() {
-		
+		function updatentp() {		
 		var ntp_client = $("#ntp_client").prop("checked") ? "1" : "0";
-		 var csrfToken = document.getElementById('csrfToken').value;
-		
+		 var csrfToken = document.getElementById('csrfToken').value;	
 		$.ajax({
 			url : "ntp",
 			type : "POST",
@@ -541,51 +479,31 @@ var csrfTokenValue;
 				ntp_client : ntp_client,
 				csrfToken: csrfToken
 			},
-			success : function(data) {
-				
-				if (data.status == 'fail') {
-					
+			success : function(data) {			
+				if (data.status == 'fail') {					
 					 var modal = document.getElementById('custom-modal-session-timeout');
 					  modal.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
 					    var sessionMsg = document.getElementById('session-msg');
 					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-					  
-					  // Handle the confirm button click
 					  var confirmButton = document.getElementById('confirm-button-session-timeout');
 					  confirmButton.onclick = function () {
-						  
-						// Close the modal
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-						  
+					  };			  
 				} 
-				
-				// Display the custom popup message
-     			$("#popupMessage").text(data.message);
+				$("#popupMessage").text(data.message);
       			$("#customPopup").show();
-      			
-				
-			
-				// Clear form fields
-				$("#ntp_client").val("");
-	
+				$("#ntp_client").val("");	
 			},
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {			
 			},
 		});
-
 		$("#updatentp").val("Add");
 	}
 	
 	function loadNtpSettings() {
-		// Display loader when the request is initiated
 	    showLoader();
-	    var csrfToken = document.getElementById('csrfToken').value;
-	    
+	    var csrfToken = document.getElementById('csrfToken').value;   
 		$.ajax({
 			url : 'ntpDataUpadate',
 			type : 'GET',
@@ -597,139 +515,88 @@ var csrfTokenValue;
 		        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
 		    },
 			success : function(data) {
-				
-				// Hide loader when the response has arrived
-	            hideLoader();
-				
-				if (data.status == 'fail') {
-					
+	            hideLoader();			
+				if (data.status == 'fail') {				
 					 var modal = document.getElementById('custom-modal-session-timeout');
 					  modal.style.display = 'block';
-					  
-					// Update the session-msg content with the message from the server
 					    var sessionMsg = document.getElementById('session-msg');
 					    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-					  
-					  // Handle the confirm button click
 					  var confirmButton = document.getElementById('confirm-button-session-timeout');
 					  confirmButton.onclick = function () {
-						  
-						// Close the modal
 					        modal.style.display = 'none';
 					        window.location.href = 'login.jsp';
-					  };
-						  
-				} 
-				
+					  };					  
+				} 			
 				$('#ntp_server1').val(data.ntp_server1);
 				$('#ntp_server2').val(data.ntp_server2);
 				$('#ntp_server3').val(data.ntp_server3);
-				
-				
-				if (data.ntp_interval != null ) {
-	                  
-					$('#ntp_interval_1').val(data.ntp_interval);
-	                 
-	              } else {
-	                  
-	                  $('#ntp_interval_1').val('5 sec');
-	                 
-	              }
-
-			
+				if (data.ntp_interval != null ) {                  
+					$('#ntp_interval_1').val(data.ntp_interval);                 
+	              } else {	                  
+	                  $('#ntp_interval_1').val('5 sec');	                 
+	              }		
 			},
 			error : function(xhr, status, error) {
-				// Hide loader when the response has arrived
-	            hideLoader();
-				
+	            hideLoader();				
 			}
 		});
 	}
 
 	function validateNTPServer1(firstName) {
 	    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
-
 	    if (!regex.test(firstName)) {
 	        return 'Invalid IP Address. Please enter a valid IP address.';
 	    }
-
 	    return null; // Validation passed
 	}
 	
 	function validateNTPServer2(firstName) {
 	    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
-
 	    if (!regex.test(firstName)) {
 	        return 'Invalid IP Address. Please enter a valid IP address.';
 	    }
-
 	    return null; // Validation passed
 	}
-
 	
 	function validateNTPServer3(firstName) {
 	    var regex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
-
 	    if (!regex.test(firstName)) {
 	        return 'Invalid IP Address. Please enter a valid IP address.';
 	    }
-
 	    return null; // Validation passed
 	}
-
-
 	
-	function editNtpData() {
-		
+	function editNtpData() {		
 		var ntp_server1 = $('#ntp_server1').val();
 	    var ntp_server2 = $('#ntp_server2').val();
 	    var ntp_server3 = $('#ntp_server3').val();
 	    var ntp_interval = $('#ntp_interval_1').val();
 	    var isValid=true;
 	    var csrfToken = document.getElementById('csrfToken').value;
-	   
-	    // Clear previous error messages
 	    $('#field_ntp1_Error').text('');
 	    $('#field_ntp2_Error').text('');
 	    $('#field_ntp3_Error').text('');
-
-
 	    var ntp1Error = validateNTPServer1(ntp_server1);
 	    if (ntp1Error) {
-	        $('#field_ntp1_Error').text(ntp1Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
-	       
+	        $('#field_ntp1_Error').text(ntp1Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed	       
 	        return;
-	    }
-
-	    
+	    }	    
 	    var ntp2Error = validateNTPServer2(ntp_server2);
 	    if (ntp2Error) {
-	        $('#field_ntp2_Error').text(ntp2Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
-	    
+	        $('#field_ntp2_Error').text(ntp2Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed	    
 	        return;
-	    }
-
-	    
+	    }	    
 	    var ntp3Error = validateNTPServer3(ntp_server3);
 	    if (ntp3Error) {
-	        $('#field_ntp3_Error').text(ntp3Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed
-	      
+	        $('#field_ntp3_Error').text(ntp3Error).css({'color': 'red', 'max-width': '200px'}); // Adjust max-width as needed	      
 	        return;
 	    }
-	    
-	 // Validate ntp_interval
 	    if (ntp_interval.trim() === '') {
 	        $('#field_ntp_interval_Error').text('NTP Interval cannot be empty').css({'color': 'red', 'max-width': '200px'});
 	        return;
 	    }
-	    
-		// Display the custom modal dialog
 		  var modal = document.getElementById('custom-modal-edit');
 		  modal.style.display = 'block';
-		  
-		 
-		  
-		// Handle the confirm button click
 		  var confirmButton = document.getElementById('confirm-button-edit');
 		  confirmButton.onclick = function () {
 			 			    $.ajax({
@@ -742,55 +609,35 @@ var csrfTokenValue;
 			            ntp_interval: ntp_interval,
 			            csrfToken: csrfToken
 			        },
-			        success: function (data) {
-			        	
-			        	if (data.status == 'fail') {
-							
+			        success: function (data) {			        	
+			        	if (data.status == 'fail') {							
 							 var modal1 = document.getElementById('custom-modal-session-timeout');
 							  modal1.style.display = 'block';
-							  
-							// Update the session-msg content with the message from the server
 							    var sessionMsg = document.getElementById('session-msg');
 							    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-							  
-							  // Handle the confirm button click
 							  var confirmButton1 = document.getElementById('confirm-button-session-timeout');
 							  confirmButton1.onclick = function () {
-								  
-								// Close the modal
 							        modal1.style.display = 'none';
 							        window.location.href = 'login.jsp';
-							  };
-								  
-						} 
-			        	
-			        	modal.style.display = 'none';
-			        	
+							  };							  
+						} 		        	
+			        	modal.style.display = 'none';			        	
 			        	loadNtpSettings();
-
 			        },
-			        error: function (xhr, status, error) {
-			            
+			        error: function (xhr, status, error) {			            
 			        }
-			    });
-			  
-		  };
-		  
+			    });		  
+		  };	  
 		  var cancelButton = document.getElementById('cancel-button-edit');
 		  cancelButton.onclick = function () {
-		    // Close the modal
-		    modal.style.display = 'none';
-		   
-		  };	
-		
+		    modal.style.display = 'none';	   
+		  };		
 	}
-
 
 	function toggleNtpClient() {
 		var toggleButton = document.getElementById("ntp_client");
 		var ipField = document.getElementById("ntp_interval");
 		var serverField = document.getElementById("ntp_server");
-
 		if (toggleButton.checked) {
 			ipField.disabled = false;
 			serverField.disabled = false;
@@ -800,23 +647,17 @@ var csrfTokenValue;
 			serverField.disabled = true;
 			toggleButton.value = "0"; //ntp_client_disable
 		}
-
 		toggleDateTimeInput();
 	}
 
 	function setManualTime() {
-
 		var datetime = $('#datetime').val();
 		if (datetime === '') {
-			
-				// Display the custom popup message
      			$("#popupMessage").text('Please enter a valid date and time.');
       			$("#customPopup").show();
 	        return; // Prevent the AJAX request
 	    }
-
-		 var csrfToken = document.getElementById('csrfToken').value;
-		 
+		 var csrfToken = document.getElementById('csrfToken').value;		 
 		$.ajax({
 			url : 'dateTimeServlet',
 			type : 'POST',
@@ -825,31 +666,21 @@ var csrfTokenValue;
 				csrfToken: csrfToken
 			},
 			success : function(data) {
-				
-				// Display the custom popup message
      			$("#popupMessage").text(data.message);
       			$("#customPopup").show();
-
-				// Clear form fields
 				getCurrentTimeInIndia();
-				//$('#datetime').val('');
-
 			},
-			error : function(xhr, status, error) {
-				
+			error : function(xhr, status, error) {				
 			}
 		});
-
 	}
 
 	function toggleDateTimeInput() {
 		var ntpClientCheckbox = document.getElementById("ntp_client");
 		var datetimeInput = document.getElementById("datetime");
 		var dateTimeButton = document.getElementById("setDateTime");
-
 		datetimeInput.disabled = ntpClientCheckbox.checked;
-		dateTimeButton.disabled = ntpClientCheckbox.checked;
-		
+		dateTimeButton.disabled = ntpClientCheckbox.checked;		
 	}
 	
 	function getCurrentTimeInIndia() {
@@ -857,26 +688,18 @@ var csrfTokenValue;
 	    var ISTOffset = 330; // IST is 5:30; i.e., 60*5+30 = 330 in minutes 
 	    var offset = ISTOffset * 60 * 1000;
 	    var ISTTime = new Date(date.getTime() + offset); 
-
-	    // Format IST time as a string in "yyyy-MM-ddTHH:mm" format
 	    var formattedTime = ISTTime.toISOString().slice(0, 16);
-
-	    // Set the IST time as the value of the "datetime" input field
 	    document.getElementById('datetime').value = formattedTime;
-
 	  }
 
-	function changeButtonColor(isDisabled) {
-	    
+	function changeButtonColor(isDisabled) {	    
 	   var $updatentpbutton = $('#updatentp'); 
-	    var $savebutton = $('#saveButton'); 
-	    
+	    var $savebutton = $('#saveButton'); 	    
 	     if (isDisabled) {
 		        $updatentpbutton.css('background-color', 'gray'); // Change to your desired color
 		    } else {
 		        $updatentpbutton.css('background-color', '#2b3991'); // Reset to original color
-		    }
-	      
+		    }	      
 	     if (isDisabled) {
 		        $savebutton.css('background-color', 'gray'); // Change to your desired color
 		    } else {
@@ -884,52 +707,38 @@ var csrfTokenValue;
 		    }
 	}
 	
-	// Function to show the loader
 	 function showLoader() {
-	     // Show the loader overlay
 	     $('#loader-overlay').show();
 	 }
 
-	 // Function to hide the loader
 	 function hideLoader() {
-	     // Hide the loader overlay
 	     $('#loader-overlay').hide();
 	 }
 	
 	$(document).ready(function() {
 		<%// Access the session variable
 		HttpSession role = request.getSession();
-		String roleValue = (String) session.getAttribute("role");%>
-		    	
+		String roleValue = (String) session.getAttribute("role");%>		    	
 		    	roleValue = '<%=roleValue%>';
 		    	
 		    	<%// Access the session variable
 				HttpSession csrfToken = request.getSession();
 				String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 				csrfTokenValue = '<%=csrfTokenValue%>';
 		    	
 		if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-
 			$('#updatentp').prop('disabled', true);
-			$('#saveButton').prop('disabled', true);
-			
-			changeButtonColor(true);
-			
+			$('#saveButton').prop('disabled', true);			
+			changeButtonColor(true);			
 		}
 		
 		if (roleValue === "null") {
 	        var modal = document.getElementById('custom-modal-session-timeout');
 	        modal.style.display = 'block';
-
-	        // Update the session-msg content with the message from the server
 		    var sessionMsg = document.getElementById('session-msg');
 		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-	        
-	        // Handle the confirm button click
 	        var confirmButton = document.getElementById('confirm-button-session-timeout');
 	        confirmButton.onclick = function() {
-	            // Close the modal
 	            modal.style.display = 'none';
 	            window.location.href = 'login.jsp';
 	        };
@@ -937,46 +746,34 @@ var csrfTokenValue;
 	    	<%// Access the session variable
 	    	HttpSession token = request.getSession();
 	    	String tokenValue = (String) session.getAttribute("token");%>
-
 	    	tokenValue = '<%=tokenValue%>';
 	    	
 	loadNtpSettings();
 	getCurrentTimeInIndia();
 	getOverviewData();
-	getNtpDetails();
-	
+	getNtpDetails();	
 	toggleDateTimeInput();
 	$("#get_current_time").click(function() {
 		getCurrentTime();
 	});
-	//getntp();
-
 	$('#setDateTime').click(function() {
 		setManualTime();
 		toggleDateTimeInput();
 	});
-
-	// Handle form submission
 	$("#updateNtp").submit(function(event) {
 		event.preventDefault();
 		var buttonText = $("#updatentp").val();
-
 		if (buttonText == "Add") {
 			updatentp();
 		}
-	});
-	
+	});	
 	$("#closePopup").click(function () {
 	    $("#customPopup").hide();
 	  });
-	    }
-	
+	    }	
 	});
 	setInterval(getCurrentTimeInIndia, 60000);
-
 </script>
-
-
 </head>
 <body>
 	<div class="sidebar">
@@ -988,8 +785,7 @@ var csrfTokenValue;
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>NTP SETTINGS</h3>
-			<hr>
-			
+			<hr>		
 			<div class="form-container">
 				<form id="updateNtp" method="post">
 				<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
@@ -998,8 +794,7 @@ var csrfTokenValue;
         <i class="fas fa-spinner fa-spin fa-3x"></i>
         <p>Loading...</p>
     </div>
-</div>
-					
+</div>					
 					<table class="bordered-table" style="margin-top: -1px;">
 					<tr>
 					<td>Enable NTP Client</td>
@@ -1016,14 +811,12 @@ var csrfTokenValue;
 					<td style="height: 50px; width: 230px;">
 					<input type="text" id="ntp_server1" name="ntp_server1" maxlength="31" required/>
 					<span id="field_ntp1_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-					</td>
-					
+					</td>					
 					<td>NTP Server 2</td>
 					<td><input type="text" id="ntp_server2" name="ntp_server2" maxlength="31" required/>
 					<span id="field_ntp2_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 					</td>
-					</tr>
-					
+					</tr>				
 					<tr>
 					<td>NTP Server 3</td>
 					<td style="height: 50px; width: 230px;">
@@ -1032,8 +825,7 @@ var csrfTokenValue;
 					</td>
 					<td>NTP Interval</td>
 					<td><select class="ntp-interval-select" id="ntp_interval_1"
-									name="ntp_interval_1" style="height: 35px;" required>
-										
+									name="ntp_interval_1" style="height: 35px;" required>									
 										<option value="5 sec" selected>5 sec</option>
 										<option value="10 sec">10 sec</option>
 										<option value="15 sec">15 sec</option>
@@ -1043,28 +835,21 @@ var csrfTokenValue;
 										<option value="1 min">1 min</option>
 										<option value="5 min">5 min</option>
 										<option value="10 min">10 min</option>							
-
 						</select> 
-						<span id="field_ntp_interval_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-						
+						<span id="field_ntp_interval_Error" class="error-message" style="display: block; margin-top: 5px;"></span>						
 						</td>
-					</tr>
-					
+					</tr>					
 					<tr>
 						<td>NTP Service</td>
 						<td id="ntp-service-cell"></td>
 						<td >Clock Synchronized</td>
 						<td id="system-clock-cell"></td>
-					</tr>
-					
+					</tr>				
 				</table>
 				<div class="row" style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
 							<input type="button" id="saveButton" onclick="editNtpData()"
 								value="Save"/>
-
-						</div>
-					
-					
+						</div>								
 				</form>
 				<div id="custom-modal-session-timeout" class="modal-session-timeout">
 		<div class="modal-content-session-timeout">
@@ -1072,12 +857,10 @@ var csrfTokenValue;
 				  <button id="confirm-button-session-timeout">OK</button>
 		</div>
 	</div>
-	
 	<div id="customPopup" class="popup">
   				<span class="popup-content" id="popupMessage"></span>
   				<button id="closePopup">OK</button>
-			  </div>
-	
+			  </div>	
 	 <div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to edit this NTP?</p>
@@ -1086,30 +869,18 @@ var csrfTokenValue;
 				</div>
 			  </div>
 			</div>
-			
-			
-			
 			<h3></h3>
 			<hr>
 			<div class="container">
-
 				<input type="button" id="get_current_time" value="Get Current Time" />
 				<p id="ist_time" style="font-weight: bold; font-size: 16px;"></p>
 				<p id="utc_time" style="font-weight: bold; font-size: 16px;"></p>
-
-				<label for="datetime">Select Date-Time</label> <input
-					type="datetime-local" id="datetime" name="datetime" required
-					onchange="toggleDateTimeInput()">
-					<input type="button" id="setDateTime" 
-								value="Submit"/>
-				<!-- <button id="setDateTime">Submit</button> -->
-
+				<label for="datetime">Select Date-Time</label> 
+				<input type="datetime-local" id="datetime" name="datetime" required onchange="toggleDateTimeInput()">
+					<input type="button" id="setDateTime" value="Submit"/>
 			</div>
 		</section>
 	</div>
-	
-	
-	
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>

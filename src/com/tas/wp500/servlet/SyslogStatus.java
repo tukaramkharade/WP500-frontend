@@ -19,141 +19,89 @@ import com.tas.wp500.utils.TCPClient;
 public class SyslogStatus extends HttpServlet {
 	final static Logger logger = Logger.getLogger(SyslogStatus.class);
 
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		HttpSession session = request.getSession(false);
-
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
-
 		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-
 		if (check_username != null) {
-
 			TCPClient client = new TCPClient();
 			JSONObject json = new JSONObject();
-
 			JSONObject jsonObject = new JSONObject();
-
 			try {
-				
 				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
-				json.put("operation", "rsyslog_manager");
-				json.put("operation_type", "get_rsyslog_status");
-				json.put("user", check_username);
-				json.put("token", check_token);
-				json.put("role", check_role);
-				
-				String respStr = client.sendMessage(json.toString());
+					json.put("operation", "rsyslog_manager");
+					json.put("operation_type", "get_rsyslog_status");
+					json.put("user", check_username);
+					json.put("token", check_token);
+					json.put("role", check_role);
 
-				JSONObject respJson = new JSONObject(respStr);
-
-				logger.info("res " + respJson.toString());
-
-				for (int i = 0; i < respJson.length(); i++) {
-					
-					String rsyslog_status = respJson.getString("rsyslog_status");
-					
-					try {
-						jsonObject.put("rsyslog_status", rsyslog_status);
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in putting syslog status in json object: " + e);
+					String respStr = client.sendMessage(json.toString());
+					JSONObject respJson = new JSONObject(respStr);
+					logger.info("res " + respJson.toString());
+					for (int i = 0; i < respJson.length(); i++) {
+						String rsyslog_status = respJson.getString("rsyslog_status");
+						try {
+							jsonObject.put("rsyslog_status", rsyslog_status);
+						} catch (Exception e) {
+							e.printStackTrace();
+							logger.error("Error in putting syslog status in json object: " + e);
+						}
 					}
-					
-				}
-				
-				 response.setHeader("X-Content-Type-Options", "nosniff");
-				 
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-				}else {
-					logger.error("CSRF token validation failed");	
+					response.setHeader("X-Content-Type-Options", "nosniff");
+					PrintWriter out = response.getWriter();
+					out.print(jsonObject.toString());
+					out.flush();
+				} else {
+					logger.error("Token validation failed");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error in getting syslog config data : " + e);
 			}
-
-		} 
-
+		}
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		HttpSession session = request.getSession(false);
-
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
-		
 		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-
-
 		String syslog_status = null;
-		
 		if (check_username != null) {
-
 			syslog_status = request.getParameter("status");
-			
-					
-					try {
-						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
-						TCPClient client = new TCPClient();
-						JSONObject json = new JSONObject();
+			try {
+				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
+					TCPClient client = new TCPClient();
+					JSONObject json = new JSONObject();
+					json.put("operation", "rsyslog_manager");
+					json.put("operation_type", "update_rsyslog_status");
+					json.put("rsyslog_status", syslog_status);
+					json.put("user", check_username);
+					json.put("token", check_token);
+					json.put("role", check_role);
 
-						json.put("operation", "rsyslog_manager");
-						json.put("operation_type", "update_rsyslog_status");
-						json.put("rsyslog_status", syslog_status);
-						
-						json.put("user", check_username);
-						json.put("token", check_token);
-						json.put("role", check_role);
-
-						String respStr = client.sendMessage(json.toString());
-
-						logger.info("res " + new JSONObject(respStr));
-
-						String message = new JSONObject(respStr).getString("msg");
-						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("message", message);
-
-						// Set the content type of the response to
-						// application/json
-						response.setContentType("application/json");
-						 response.setHeader("X-Content-Type-Options", "nosniff");
-
-						// Get the response PrintWriter
-						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
-						out.print(jsonObject.toString());
-						out.flush();
-						}else {
-							logger.error("CSRF token validation failed");	
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.error("Error in updating general settings : " + e);
-					}
-
+					String respStr = client.sendMessage(json.toString());
+					logger.info("res " + new JSONObject(respStr));
+					String message = new JSONObject(respStr).getString("msg");
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("message", message);
+					response.setContentType("application/json");
+					response.setHeader("X-Content-Type-Options", "nosniff");
+					PrintWriter out = response.getWriter();
+					out.print(jsonObject.toString());
+					out.flush();
+				} else {
+					logger.error("Token validation failed");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Error in updating general settings : " + e);
+			}
+		}
 	}
-
-
-	}
-
 }

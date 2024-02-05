@@ -266,7 +266,8 @@ function generateCertificate(){
 		dataType: 'json', // Specify the expected data type as JSON		 
 		success : function(data) {					
  			$("#popupMessage").text(data.message);
-  			$("#customPopup").show();		        
+  			$("#customPopup").show();
+  			
 			$('#common_name').val('');
 		    $('#organization').val('');
 		    $('#organizational_unit').val('');
@@ -311,7 +312,9 @@ function applyCertificate(){
 				        window.location.href = 'login.jsp';
 				 };					  
 			}			
-			 modal.style.display = 'none';		
+			 modal.style.display = 'none';		 
+			 $("#popupMessage").text(data.message);
+   			$("#customPopup").show();		 
 	    },
 	    error : function(xhr, textStatus, errorThrown) {
 			console.error("Error appying certificate: " + errorThrown);
@@ -370,15 +373,10 @@ if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
 if (roleValue === "null") {
     var modal = document.getElementById('custom-modal-session-timeout');
     modal.style.display = 'block';
-
-    // Update the session-msg content with the message from the server
     var sessionMsg = document.getElementById('session-msg');
-    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-    
-    // Handle the confirm button click
+    sessionMsg.textContent = 'You are not allowed to redirect like this !!';    
     var confirmButton = document.getElementById('confirm-button-session-timeout');
     confirmButton.onclick = function() {
-        // Close the modal
         modal.style.display = 'none';
         window.location.href = 'login.jsp';
     };
@@ -386,42 +384,24 @@ if (roleValue === "null") {
 	<%// Access the session variable
 			HttpSession token = request.getSession();
 			String tokenValue = (String) session.getAttribute("token");%>
-
 	tokenValue = '<%=tokenValue%>';
 
-							$("#identity-store")
-									.change(
-											function() {
-												var selectedValue = $(this)
-														.val();
+							$("#identity-store").change(function() {
+												var selectedValue = $(this).val();
 												if (selectedValue === "OPC UA-self-signed") {
-													// If "OPC UA-self-signed" is selected, hide Self-signed HTTPS Certificate row
-													$(
-															"#self-signed-https-certificate-row")
-															.hide();
-													// Show the warning row
+													$("#self-signed-https-certificate-row").hide();
 													$("#warning-row").show();
 												} else if (selectedValue === "HTTPS-self-signed") {
-													// If "OPC UA-self-signed" is selected, hide Self-signed HTTPS Certificate row
-													$(
-															"#self-signed-https-certificate-row")
-															.show();
-													// Show the warning row
+													$("#self-signed-https-certificate-row").show();
 													$("#warning-row").show();
 												}
 											});
-
-							// Trigger the change event on page load to handle the initial selection
 							$("#identity-store").trigger("change");
-
 							var ipAddresses = [];
 							var dnsNames = [];
-
 							var addBtn = document.getElementById('addBtn');
 							addBtn.addEventListener('click',function() {
 												var newRow = document.createElement('tr');
-
-												// Create the first cell with an input element
 												var cell1 = document.createElement('td');
 												var input = document.createElement('input');
 												input.type = 'text';
@@ -429,39 +409,28 @@ if (roleValue === "null") {
 												input.name = 'alt-name';
 												input.style.height = '10px';
 												cell1.appendChild(input);
-
-												// Create the second cell with a select element
-												var cell2 = document
-														.createElement('td');
-												var select = document
-														.createElement('select');
+												var cell2 = document.createElement('td');
+												var select = document.createElement('select');
 												select.className = 'textbox';
 												select.id = 'sub-alt-type';
 												select.name = 'sub-alt-type';
 												select.style.height = '34px';
 												select.required = true;
-												var option1 = document
-														.createElement('option');
+												var option1 = document.createElement('option');
 												option1.value = 'Select type of subject alternative name';
 												option1.textContent = 'Select type of subject alternative name';
-												var option2 = document
-														.createElement('option');
+												var option2 = document.createElement('option');
 												option2.value = 'IP address';
 												option2.textContent = 'IP address';
-												var option3 = document
-														.createElement('option');
+												var option3 = document.createElement('option');
 												option3.value = 'DNS name';
 												option3.textContent = 'DNS name';
 												select.appendChild(option1);
 												select.appendChild(option2);
 												select.appendChild(option3);
 												cell2.appendChild(select);
-
-												// Create the third cell with a delete button
-												var cell3 = document
-														.createElement('td');
-												var deleteBtn = document
-														.createElement('input');
+												var cell3 = document.createElement('td');
+												var deleteBtn = document.createElement('input');
 												deleteBtn.type = 'button';
 												deleteBtn.value = 'X';
 												deleteBtn.className = 'deleteBtn';
@@ -472,34 +441,23 @@ if (roleValue === "null") {
 															newRow.remove();
 														});
 												cell3.appendChild(deleteBtn);
-
-												// Add the cells to the new row
 												newRow.appendChild(cell1);
 												newRow.appendChild(cell2);
 												newRow.appendChild(cell3);
-
-												// Insert the new row before the addBtn
 												var table = addBtn.parentNode.parentNode.parentNode;
 												table
-														.insertBefore(
-																newRow,
-																addBtn.parentNode.parentNode);
-
+														.insertBefore(newRow, addBtn.parentNode.parentNode);
 											});
-
 							$('#regenerateBtn').click(function() {
 								generateCertificate();
 							});
-
 							$('#apply').click(function() {
 								applyCertificate();
 							});
 						}
 					});
 </script>
-
 <body>
-
 	<div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
@@ -508,31 +466,24 @@ if (roleValue === "null") {
 	</div>
 	<div class="content">
 		<section style="margin-left: 1em">
-
 			<h3>GENERATE CERTIFICATE</h3>
 			<hr />
-		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-		
+		<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />	
 			<div class="container">
 				<form id="certificateForm" style="margin-top: 0">
-
 					<table class="bordered-table">
 						<tr>
 							<th colspan="2">Security Certificate</th>
 						</tr>
-
 						<tr>
 							<td>Identity Store</td>
 							<td><select class="identity-store" id="identity-store"
 								name="identity-store" style="height: 34px; width: 20%;" required>
-									<option value="Select identity store">Select identity
-										store</option>
+									<option value="Select identity store">Select identity store</option>
 									<option value="HTTPS-self-signed">HTTPS-self-signed</option>
-									<option value="OPC UA-self-signed" selected="selected">OPC
-										UA-self-signed</option>
+									<option value="OPC UA-self-signed" selected="selected">OPC UA-self-signed</option>
 							</select></td>
 						</tr>
-
 						<tr id="self-signed-https-certificate-row">
 							<td>Self-Signed HTTPS certificate</td>
 							<td>
@@ -540,91 +491,70 @@ if (roleValue === "null") {
 									<tr>
 										<th colspan="2">Distinguished name</th>
 									</tr>
-
 									<tr>
 										<td>Common name</td>
 										<td style="height: 50px;">
-										<input type="text" id="common_name"
-											name="common_name" style="height: 10px;" required/>
+										<input type="text" id="common_name" name="common_name" style="height: 10px;" required/>
 											<span id="field_name_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
-
 									<tr>
 										<td>Organization</td>
 										<td style="height: 50px;">
-										<input type="text" id="organization"
-											name="organization" style="height: 10px;" required/>
+										<input type="text" id="organization" name="organization" style="height: 10px;" required/>
 											<span id="field_org_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
-
 									<tr>
-
 										<td>Organizational unit</td>
 										<td style="height: 50px;">
-										<input type="text" id="organizational_unit"
-											name="organizational_unit" style="height: 10px;" required/>
+										<input type="text" id="organizational_unit" name="organizational_unit" style="height: 10px;" required/>
 											<span id="field_orgunit_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-											</td>
-											
+											</td>										
 									</tr>
-
 									<tr>
 										<td>Location</td>
 										<td style="height: 50px;">
 										<input type="text" id="location" name="location" style="height: 10px;" required/>
 										<span id="field_loc_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-											</td>
+										</td>
 									</tr>
-
 									<tr>
 										<td>State</td>
 										<td style="height: 50px;">
 										<input type="text" id="state" name="state" style="height: 10px;" required/>
 										<span id="field_state_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-											</td>
+										</td>
 									</tr>
-
 									<tr>
 										<td>Country</td>
 										<td style="height: 50px;">
 										<input type="text" id="country" name="country" style="height: 10px;" required/>
 										<span id="field_country_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
-											</td>
+										</td>
 									</tr>
-
 									<tr>
 										<th colspan="2">Validity</th>
 									</tr>
-
 									<tr>
 										<td>Validity not after</td>
 										<td style="height: 50px;">
-										<input type="text" id="validity" name="validity"
-											style="height: 10px; width: 20%;" required/> (in days)
-											
+										<input type="text" id="validity" name="validity" style="height: 10px; width: 20%;" required/> (in days)											
 											<span id="field_validity_Error" class="error-message" style="display: block; margin-top: 5px;"></span>
 											</td>
 									</tr>
-
 									<tr>
 										<th colspan="2">Subject alternative names</th>
 									</tr>
-
 									<tr>
 										<th>Subject alternative name</th>
 										<th>Type of subject alternative name</th>
 										<th></th>
 									</tr>
-
 									<tr>
-										<td><input type="text" id="alt-name" name="alt-name"
-											style="height: 10px;" /></td>
-										<td><select class="textbox" id="sub-alt-type"
-											name="sub-alt-type" style="height: 34px;" required>
-												<option value="Select type of subject alternative name">Select
-													type of subject alternative name</option>
+										<td><input type="text" id="alt-name" name="alt-name" style="height: 10px;" /></td>
+										<td><select class="textbox" id="sub-alt-type" name="sub-alt-type" style="height: 34px;" required>
+												<option value="Select type of subject alternative name">Select type of subject alternative name</option>
 												<option value="IP address">IP address</option>
 												<option value="DNS name">DNS name</option>
 										</select></td>
@@ -635,15 +565,12 @@ if (roleValue === "null") {
 										<td><input type="button" value="+" id="addBtn"
 											style="height: 22px;" title="Add subject alternative name" /></td>
 									</tr>
-
-
 									<tr>
 										<td colspan="3"><input
 											style="height: 26px; margin-top: 15px; margin-bottom: 15px;"
 											type="button" value="Re-generate HTTPS certificate"
 											id="regenerateBtn" /></td>
 									</tr>
-
 									<tr>
 										<td colspan="3">If you click the "Generate" button, the
 											self-signed HTTPS certificate is only regenerated. <br>
@@ -653,10 +580,8 @@ if (roleValue === "null") {
 										</td>
 									</tr>
 								</table>
-
 							</td>
 						</tr>
-
 						<tr id="warning-row" style="display: none;">
 							<td>Warning</td>
 							<td style="color: red;">Applying the configuration can
@@ -664,43 +589,33 @@ if (roleValue === "null") {
 								reconfiguration during productive operation!</td>
 						</tr>
 					</table>
-
 					<div class="row"
 						style="display: flex; justify-content: right; margin-top: 2%;">
-						<input type="button" value="Apply" id="apply"
-							style="margin-bottom: 10px;" />
-
+						<input type="button" value="Apply" id="apply" style="margin-bottom: 10px;" />
 					</div>
-
 				</form>
 			</div>
-
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 					<p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
-
 			<div id="customPopup" class="popup">
 				<span class="popup-content" id="popupMessage"></span>
 				<button id="closePopup">OK</button>
-			</div>
-			
+			</div>		
 			<div id="custom-modal-apply-certificate" class="modal-apply-certificate">
 				<div class="modal-content-apply-certificate">
 				  <p>Are you sure you want to apply certificate?</p>
 				  <button id="confirm-button-apply-certificate">Yes</button>
 				  <button id="cancel-button-apply-certificate">No</button>
 				</div>
-			  </div>
-			  
+			  </div>			  
 		</section>
 	</div>
-
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
-
 </body>
 </html>

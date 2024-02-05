@@ -8,8 +8,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <title>WPConnex Web Configuration</title>
     <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png">
         <link rel="stylesheet" href="css_files/ionicons.min.css">
@@ -57,7 +56,6 @@
         	            }
         	            else if(json.status === 'blocked'){
         	                $('#loginMessage').text(json.msg).css('color', 'red');    	               
-
         	            }
         	        },
         	        error: function(xhr, status, error) {       	            
@@ -79,8 +77,7 @@
 
          function checkUserInput() {
         	    const userInput = $('#userInputNumber').val();      	  
-        	    if (userInput.trim() === $('#captchaLabel').text().trim()) {
-        	        
+        	    if (userInput.trim() === $('#captchaLabel').text().trim()) {     	        
         	        $('#loginMessage').text('Captcha is correct. You may proceed.').css('color', 'green');
         	        checkLogin();
         	    } else {
@@ -227,28 +224,19 @@
     <form action="WP500Login" method="post" class="container" id="loginForm" autocomplete="off">
     <% 
             String csrfToken = generateCSRFToken();
-            session.setAttribute("csrfToken", csrfToken);     
-            
+            session.setAttribute("csrfToken", csrfToken);               
             if (session.getAttribute("blockedUser") != null) {
                 long blockTime = (long) session.getAttribute("blockedUser");
                 long currentTime = System.currentTimeMillis();
-
                 if (currentTime < blockTime) {
-                    // Display a message that the user is blocked
-                    out.println("<script>$('#loginMessage').text('User is blocked. Please try again later.').css('color', 'red');</script>");
-        	        
-
+                    out.println("<script>$('#loginMessage').text('User is blocked. Please try again later.').css('color', 'red');</script>");       	        
                     return;
                 } else {
-                    // If the block time has expired, remove the blockedUser attribute
                     session.removeAttribute("blockedUser");
-                    // Reset the login attempts counter
                     session.setAttribute("loginAttempts", 0);
                 }
             }
-
         %>
-
         <input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfToken %>" />        
         <div>
             <img src="images/WP_connex_logo_full.png" alt="Tasm2mLogo">
@@ -266,25 +254,18 @@
         <input required type="text" id="userInputNumber" placeholder="Enter the captcha" style="padding-left: 5px; margin-top: 10px;  font-family: Sans-serif;"><br>     
 		<input style="font-size: medium;" type="submit" value="Login" id="login">
         <div id="loginMessage" style="color: red;"></div>    
-        <div id="banner_text" style="font-size: 10.5px; margin-top: 20px; text-align: left;"></div>
-        
+        <div id="banner_text" style="font-size: 10.5px; margin-top: 20px; text-align: left;"></div>  
       <%
       int loginAttempts = 0;
-
       if (session.getAttribute("loginAttempts") != null) {
           loginAttempts = (int) session.getAttribute("loginAttempts");
       } else {
           session.setAttribute("loginAttempts", loginAttempts);
       }
-
       if (request.getAttribute("loginError") != null) {
           session.setAttribute("loginAttempts", loginAttempts + 1);
       }
-
-%>
-      
-    
-    
+%> 
         </form>  
 </body>
 </html>

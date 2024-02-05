@@ -20,42 +20,25 @@ import com.tas.wp500.utils.TCPClient;
 public class FirmwareListServlet extends HttpServlet {
 	final static Logger logger = Logger.getLogger(FirmwareListServlet.class);
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		HttpSession session = request.getSession(false);
-
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
-		String check_role = (String) session.getAttribute("role");
-		
-		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
-		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-		
-		if (check_username != null) {
-			
+		String check_role = (String) session.getAttribute("role");			
+		if (check_username != null) {			
 			TCPClient client = new TCPClient();
-			JSONObject json = new JSONObject();
-			
-			try{
-				
+			JSONObject json = new JSONObject();			
+			try{				
 				json.put("operation", "file_manager");				
 				json.put("operation_type", "firmware_file_list");
 				json.put("user", check_username);
 				json.put("token", check_token);
-				json.put("role", check_role);
-				
+				json.put("role", check_role);				
 				String respStr = client.sendMessage(json.toString());
-
 				logger.info("res " + new JSONObject(respStr));
-
-				JSONObject result = new JSONObject(respStr);
-				
+				JSONObject result = new JSONObject(respStr);				
 				String status = result.getString("status");
 				String message = result.getString("msg");
-
-
 				JSONObject finalJsonObj = new JSONObject();
 				if(status.equals("success")){
 					JSONArray firmware_files_result = result.getJSONArray("files");
@@ -65,52 +48,34 @@ public class FirmwareListServlet extends HttpServlet {
 					finalJsonObj.put("status", status);
 				    finalJsonObj.put("message", message);
 				}
-
-			    // Set the response content type to JSON
 			    response.setContentType("application/json");
 			    response.setHeader("X-Content-Type-Options", "nosniff");
-
-			    // Write the JSON data to the response
-			    response.getWriter().print(finalJsonObj.toString());
-				
-				
+			    response.getWriter().print(finalJsonObj.toString());							
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("Error in getting firmware files : "+e);
-			}
-			
+			}			
 		}
 	}
-
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");	
 		String check_role = (String) session.getAttribute("role");
 		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-
 		if (check_username != null) {
-
 			String action = request.getParameter("action");
 			String file ="";
 			if (action != null) {
 				switch (action) {
-
 				case "delete":
-
-					 file = request.getParameter("file");
-					
+					 file = request.getParameter("file");					
 					try {
 						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-
 						json.put("operation", "file_manager");
 						json.put("operation_type", "firmware_file_delete");
 						json.put("firmware_file_name", file);
@@ -119,29 +84,21 @@ public class FirmwareListServlet extends HttpServlet {
 						json.put("role", check_role);
 
 						String respStr = client.sendMessage(json.toString());
-
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
-
 						String message = new JSONObject(respStr).getString("msg");
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("message", message);
-
-						// Set the content type of the response to application/json
 						response.setContentType("application/json");
 						response.setHeader("X-Content-Type-Options", "nosniff");
-
-						// Get the response PrintWriter
 						PrintWriter out = response.getWriter();
-
-						// Write the JSON object to the response
 						out.print(jsonObject.toString());
 						out.flush();
 						}else {
-							logger.error("CSRF token validation failed");	
+							logger.error("Token validation failed");	
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						logger.error("Error in adding mqtt : " + e);
+						logger.error("Error in deleting firmware file : " + e);
 					}
 					break;
 
@@ -151,28 +108,23 @@ public class FirmwareListServlet extends HttpServlet {
 						if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
 						TCPClient client = new TCPClient();
 						JSONObject json = new JSONObject();
-
 						json.put("operation", "update_firmware");
 						json.put("file_name", file);						
 						json.put("token", check_token);
 						json.put("user", check_username);
-						System.out.println("json"+json);
+
 						String respStr = client.sendMessage(json.toString());
-
 						logger.info("res " + new JSONObject(respStr).getString("msg"));
-
 						String message = new JSONObject(respStr).getString("msg");
 						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("message", message);
-						
+						jsonObject.put("message", message);						
 						response.setContentType("application/json");
-						response.setHeader("X-Content-Type-Options", "nosniff");
-						
+						response.setHeader("X-Content-Type-Options", "nosniff");						
 						PrintWriter out = response.getWriter();						
 						out.print(jsonObject.toString());
 						out.flush();
 						}else {
-							logger.error("CSRF token validation failed");	
+							logger.error("Token validation failed");	
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -183,5 +135,4 @@ public class FirmwareListServlet extends HttpServlet {
 			}
 		} 
 	}
-
 }

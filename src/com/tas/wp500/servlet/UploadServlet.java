@@ -13,12 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import javax.servlet.annotation.MultipartConfig;
 
-//...
 @MultipartConfig(maxFileSize = 409715200, // 400MB in bytes
 		maxRequestSize = 409715200, // 400MB in bytes
 		fileSizeThreshold = 0)
@@ -28,133 +24,96 @@ public class UploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			Part filePart = request.getPart("file");
-
-			//String uploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder3";
-			String uploadPath = "";			
-			String fileName ="";
+			String uploadPath = "";
+			String fileName = "";
 			String filePath = "";
-			
+
 			String fileExtension = getFileExtension(filePart);
-			System.out.println("fileExtension-->"+fileExtension);
+			System.out.println("fileExtension-->" + fileExtension);
 			if (fileExtension != null && fileExtension.equalsIgnoreCase("swu")) {
 				String baseUploadPath = "/home/wp500/";
-//				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4";
 				String newFolderName = "firmware-file"; // Change this to the desired folder name
+				String newFolderPath = baseUploadPath + File.separator + newFolderName;
+				File newFolder = new File(newFolderPath);
+				boolean folderCreated = newFolder.mkdirs();
+				fileName = getFileName(filePart);
+				filePath = newFolderPath + File.separator + fileName;
+			} else if (fileExtension != null && fileExtension.equalsIgnoreCase("cod")) {
+				String baseUploadPath = "/etc/wp500cfg/";
+				String originalFileName;
+				String newFolderName = "t5cod";
+				String defaultFileName = "t5.cod";
+				String newFolderPath = baseUploadPath + File.separator + newFolderName;
+				File newFolder = new File(newFolderPath);
+				boolean folderCreated = newFolder.mkdirs();
+				originalFileName = getFileName(filePart);
+				if (originalFileName != null && !originalFileName.isEmpty()) {
+					fileName = defaultFileName; // Set the default file name
+				} else {
+					fileName = originalFileName; // Use the original file name
+				}
+				File existingFile = new File(newFolderPath + File.separator + defaultFileName);
+				if (existingFile.exists() && existingFile.isFile()) {
+					boolean deletionStatus = existingFile.delete();
+					if (deletionStatus) {
+						filePath = newFolderPath + File.separator + fileName;
+					} else {
+					}
+				} else {
+					filePath = newFolderPath + File.separator + fileName;
+				}
+			} else if (fileExtension != null && fileExtension.equalsIgnoreCase("zip")) {
+				String baseUploadPath = "/data/";
+				String originalFileName;
+				String newFolderName = "wp500_backup";
+				String defaultFileName = "backup.zip";
+				String newFolderPath = baseUploadPath + File.separator + newFolderName;
+				File newFolder = new File(newFolderPath);
+				boolean folderCreated = newFolder.mkdirs();
+				originalFileName = getFileName(filePart);
+				if (originalFileName != null && !originalFileName.isEmpty()) {
+					fileName = defaultFileName; // Set the default file name
+				} else {
+					fileName = originalFileName; // Use the original file name
+				}
 
-				
-				    // Create the path for the new folder
-				    String newFolderPath = baseUploadPath + File.separator + newFolderName;
-				    
-				    // Create the directory
-				    File newFolder = new File(newFolderPath);
-				    boolean folderCreated = newFolder.mkdirs();
-				     fileName = getFileName(filePart);
-		             filePath = newFolderPath + File.separator + fileName;
-			}else if (fileExtension != null && fileExtension.equalsIgnoreCase("cod")){
-//				/etc/wp500cfg
-				String  baseUploadPath = "/etc/wp500cfg/";
-				String originalFileName;
-//				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4";
-				String newFolderName = "t5cod"; 
-				String defaultFileName = "t5.cod"; 
-				    // Create the path for the new folder
-				    String newFolderPath = baseUploadPath + File.separator + newFolderName;				    
-				    // Create the directory
-				    File newFolder = new File(newFolderPath);
-				    boolean folderCreated = newFolder.mkdirs();
-				    originalFileName = getFileName(filePart);
-				     if (originalFileName != null && !originalFileName.isEmpty()) {
-				         fileName = defaultFileName; // Set the default file name
-				     } else {
-				         fileName = originalFileName; // Use the original file name
-				     }
-				    
-				     File existingFile = new File(newFolderPath + File.separator + defaultFileName);
-				     if (existingFile.exists() && existingFile.isFile()) {
-				         boolean deletionStatus = existingFile.delete();
-				         if (deletionStatus) {
-				             System.out.println("Existing file deleted successfully.");
-				             filePath = newFolderPath + File.separator + fileName;
-				         } else {
-				             System.out.println("Failed to delete the existing file.");
-				             // Handle the deletion failure scenario as needed
-				         }
-				     }else{
-				    	 filePath = newFolderPath + File.separator + fileName;
-				     }
-			}else if (fileExtension != null && fileExtension.equalsIgnoreCase("zip")){
-//				/etc/wp500cfg
-				String  baseUploadPath = "/data/";
-				String originalFileName;
-//				String baseUploadPath = "C:\\Users\\sanke\\Desktop\\DbFile\\New folder4\\";
-				String newFolderName = "wp500_backup"; 
-				String defaultFileName = "backup.zip"; 
-				    // Create the path for the new folder
-				    String newFolderPath = baseUploadPath + File.separator + newFolderName;				    
-				    // Create the directory
-				    File newFolder = new File(newFolderPath);
-				    boolean folderCreated = newFolder.mkdirs();
-				    originalFileName = getFileName(filePart);
-				     if (originalFileName != null && !originalFileName.isEmpty()) {
-				         fileName = defaultFileName; // Set the default file name
-				     } else {
-				         fileName = originalFileName; // Use the original file name
-				     }
-				    
-				     File existingFile = new File(newFolderPath + File.separator + defaultFileName);
-				     if (existingFile.exists() && existingFile.isFile()) {
-				         boolean deletionStatus = existingFile.delete();
-				         if (deletionStatus) {
-				             System.out.println("Existing file deleted successfully.");
-				             filePath = newFolderPath + File.separator + fileName;
-				         } else {
-				             System.out.println("Failed to delete the existing file.");
-				             // Handle the deletion failure scenario as needed
-				         }
-				     }else{
-				    	 filePath = newFolderPath + File.separator + fileName;
-				     }
+				File existingFile = new File(newFolderPath + File.separator + defaultFileName);
+				if (existingFile.exists() && existingFile.isFile()) {
+					boolean deletionStatus = existingFile.delete();
+					if (deletionStatus) {
+						filePath = newFolderPath + File.separator + fileName;
+					} else {
+					}
+				} else {
+					filePath = newFolderPath + File.separator + fileName;
+				}
 			}
 			HttpSession session = request.getSession();
 			long fileSize = filePart.getSize();
 			long uploadedBytes = 0;
 			byte[] buffer = new byte[8192]; // 8KB buffer
 			int bytesRead;
-
 			try (InputStream input = filePart.getInputStream()) {
 				while ((bytesRead = input.read(buffer)) != -1) {
-					// Write the data to the file
 					try (java.io.OutputStream out = new java.io.FileOutputStream(filePath, true)) {
 						out.write(buffer, 0, bytesRead);
 					}
 					uploadedBytes += bytesRead;
-
-					// Ensure uploadedBytes does not exceed fileSize
 					if (uploadedBytes > fileSize) {
 						uploadedBytes = fileSize;
 					}
-
-					// Calculate the progress
 					int progress = (int) ((uploadedBytes * 100) / fileSize);
-
-					// Set progress to 100% when upload is completed
 					if (uploadedBytes == fileSize) {
 						progress = 100;
 					}
-
-					// Update the progress attribute in session
 					session.setAttribute("uploadProgress", progress);
-				}			
+				}
 			}
-
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("status", "success");
 			jsonObject.put("message", "File uploaded successfully.");
-
 			response.setContentType("application/json");
-
 			PrintWriter out = response.getWriter();
-
 			out.print(jsonObject.toString());
 			out.flush();
 		} catch (IOException | JSONException e) {
@@ -165,12 +124,9 @@ public class UploadServlet extends HttpServlet {
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-
 			response.setContentType("application/json");
-			 response.setHeader("X-Content-Type-Options", "nosniff");
-
+			response.setHeader("X-Content-Type-Options", "nosniff");
 			PrintWriter out = response.getWriter();
-
 			out.print(jsonObject.toString());
 			out.flush();
 		}
@@ -184,45 +140,36 @@ public class UploadServlet extends HttpServlet {
 		}
 		return null;
 	}
-	private String getFileExtension(final Part part) {
-	    String contentDisposition = part.getHeader("content-disposition");
-	    if (contentDisposition != null) {
-	        for (String content : contentDisposition.split(";")) {
-	            if (content.trim().startsWith("filename")) {
-	                String fileName = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
-	                int lastDotIndex = fileName.lastIndexOf('.');
-	                if (lastDotIndex > 0) {
-	                    return fileName.substring(lastDotIndex + 1);
-	                }
-	            }
-	        }
-	    }
-	    return ""; // Return empty string if no extension is found or not applicable
-	}
 
+	private String getFileExtension(final Part part) {
+		String contentDisposition = part.getHeader("content-disposition");
+		if (contentDisposition != null) {
+			for (String content : contentDisposition.split(";")) {
+				if (content.trim().startsWith("filename")) {
+					String fileName = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+					int lastDotIndex = fileName.lastIndexOf('.');
+					if (lastDotIndex > 0) {
+						return fileName.substring(lastDotIndex + 1);
+					}
+				}
+			}
+		}
+		return "";
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		int progress = (int) session.getAttribute("uploadProgress");
-		
-		// Create a JSON object for progress response
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("progress", progress);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// Set the content type of the response to application/json
 		response.setContentType("application/json");
-		 response.setHeader("X-Content-Type-Options", "nosniff");
-
-		// Get the response PrintWriter
+		response.setHeader("X-Content-Type-Options", "nosniff");
 		PrintWriter out = response.getWriter();
-
-		// Write the JSON object to the response
 		out.print(jsonObject.toString());
 		out.flush();
 	}

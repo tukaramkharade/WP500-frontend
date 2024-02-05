@@ -21,36 +21,23 @@ import com.tas.wp500.utils.TCPClient;
 public class DateTimeServlet extends HttpServlet {
 	final static Logger logger = Logger.getLogger(DateTimeServlet.class);
 
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
-		String check_role = (String) session.getAttribute("role");
-		
+		String check_role = (String) session.getAttribute("role");		
 		if (check_username != null) {
-
 			String date_time = request.getParameter("datetime");
-
 			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 			SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 			try {
-
 				Date date = inputFormat.parse(date_time);
 				String formattedDateTime = outputFormat.format(date);
-
 				TCPClient client = new TCPClient();
 				JSONObject json = new JSONObject();
-
 				json.put("operation", "set_manul_time");
 				json.put("time", formattedDateTime);
 				json.put("user", check_username);
@@ -58,24 +45,15 @@ public class DateTimeServlet extends HttpServlet {
 				json.put("role", check_role);
 				
 				String respStr = client.sendMessage(json.toString());
-
 				logger.info("res " + new JSONObject(respStr));
-
 				String message = new JSONObject(respStr).getString("msg");
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", message);
-
-				// Set the content type of the response to application/json
 				response.setContentType("application/json");
 				response.setHeader("X-Content-Type-Options", "nosniff");
-
-				// Get the response PrintWriter
 				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
 				out.print(jsonObject.toString());
 				out.flush();
-
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Error setting date time :"+e);

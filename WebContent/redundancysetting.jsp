@@ -1,35 +1,24 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
-
 <!DOCTYPE html>
 <html>
 <title>WPConnex Web Configuration</title>
-<link rel="icon" type="image/png" sizes="32x32"
-	href="images/WP_Connex_logo_favicon.png" />
-	
+<link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
  <link rel="stylesheet" href="css_files/all.min.css">
 <link rel="stylesheet" href="css_files/fontawesome.min.css">
-
 <script src="jquery-3.6.0.min.js"></script>
 <style>
 h3 {
@@ -45,7 +34,6 @@ h3 {
   border-radius: 50px;
   cursor: pointer;
   font-size: small;
-  
 }
 
 .toggle-input-redundancy {
@@ -77,7 +65,6 @@ h3 {
 
 .toggle-label-redundancy:before {
   content: attr(data-off);
-  
   right: 5px;
   color: black;
   text-shadow: 0 1px rgba(255, 255, 255, 0.5);
@@ -129,7 +116,6 @@ h3 {
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Transition*/
 .toggle-label-redundancy,
 .toggle-handle-redundancy {
   transition: All 0.3s ease;
@@ -198,8 +184,7 @@ button {
 }
 
 .bordered-table td {
-	border: 1px solid #ccc; /* Light gray border */
-	
+	border: 1px solid #ccc; /* Light gray border */	
 }
 
 .validation-container {
@@ -234,9 +219,7 @@ button {
     border-radius: 5px;
 }
 </style>
-
 <script>
-
 var roleValue;
 var tokenValue;
 var csrfTokenValue;
@@ -245,7 +228,6 @@ function validateIPAddress(inputId, spanId) {
     var ipAddress = document.getElementById(inputId).value;
     var ipRegex = /^(\d{1,3}\.){0,3}\d{1,3}$/;
     var validationMessageSpan = document.getElementById(spanId);
-
     if (ipRegex.test(ipAddress)) {
         validationMessageSpan.innerHTML = "";
         return true; // IP address is valid
@@ -256,10 +238,8 @@ function validateIPAddress(inputId, spanId) {
 }
 
 function getRedundancySettings(){
-	// Display loader when the request is initiated
     showLoader();
     var csrfToken = document.getElementById('csrfToken').value;
-    
 	$.ajax({
 		url : 'redundancyServlet',
 		type : 'GET',
@@ -269,68 +249,45 @@ function getRedundancySettings(){
         },
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
-	    },
-	    
+	    },	    
 	    success : function(data) {
-	    	// Hide loader when the response has arrived
-            hideLoader();
-	    	
+            hideLoader();	    	
 			if(data.status == 'fail'){
 				var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
 				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
-					  
-					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
 				  };
-			}
-			
+			}			
 			var enableLabel = data.Redundancy_enable === 1 ? 'Enable' : 'Disable';
 			var roleLabel = data.Redundancy_Role === 1 ? 'Primary' : 'Secondary';
-
 			$('#toggle_redundancy_enable').prop('checked', data.Redundancy_enable == 1);
-			$('#toggle_redundancy_role').prop('checked', data.Redundancy_Role == 1);
-			
+			$('#toggle_redundancy_role').prop('checked', data.Redundancy_Role == 1);			
 			$('#partner_ip').val(data.partner_ip);	
 			$('#common_ip_0').val(data.common_ip0);			
 			$('#common_subnet_0').val(data.common_subnet0);		
 			$('#common_ip_1').val(data.common_ip1);		
 			$('#common_subnet_1').val(data.common_subnet1);	
 			$('#common_ip_2').val(data.common_ip2);		
-			$('#common_subnet_2').val(data.common_subnet2);	
-			
+			$('#common_subnet_2').val(data.common_subnet2);				
 	    },
 	    error : function(xhr, status, error) {
-	    	// Hide loader when the response has arrived
-            hideLoader();
-	    	
+            hideLoader();	    	
 		}
-	});
-		
+	});		
 }
 
 function updateRedundancySettings(){
-	
-	// Display the custom modal dialog
 	var modal = document.getElementById('custom-modal-edit');
 	modal.style.display = 'block';
-
-	// Handle the confirm button click
 	var confirmButton = document.getElementById('confirm-button-edit');
-	confirmButton.onclick = function() {
-	
+	confirmButton.onclick = function() {	
 	var toggle_redundancy_enable = $("#toggle_redundancy_enable").prop("checked") ? "1": "0";
-	var toggle_redundancy_role = $("#toggle_redundancy_role").prop("checked") ? "1": "0";
-	
+	var toggle_redundancy_role = $("#toggle_redundancy_role").prop("checked") ? "1": "0";	
 	var partner_ip = $('#partner_ip').val();
 	var common_ip_0 = $('#common_ip_0').val();	
 	var common_subnet_0 = $('#common_subnet_0').val();	
@@ -338,10 +295,8 @@ function updateRedundancySettings(){
 	var common_subnet_1 = $('#common_subnet_1').val();	
 	var common_ip_2 = $('#common_ip_2').val();	
 	var common_subnet_2 = $('#common_subnet_2').val();
-	 var csrfToken = document.getElementById('csrfToken').value;
-	
-	$.ajax({
-		
+	 var csrfToken = document.getElementById('csrfToken').value;	
+	$.ajax({		
 		url : 'redundancyServlet', 
 		type : 'POST',
 		data : {
@@ -354,96 +309,69 @@ function updateRedundancySettings(){
 			common_subnet_1 : common_subnet_1,			
 			common_ip_2 : common_ip_2,
 			common_subnet_2 : common_subnet_2,
-			csrfToken: csrfToken			
-			
+			csrfToken: csrfToken						
 		},
 		success : function(data) {
-			// Close the modal
-	        modal.style.display = 'none';
-				
-				getRedundancySettings();
-				
+	        modal.style.display = 'none';				
+				getRedundancySettings();				
 				$('#partner_ip').val('');
 				$('#common_ip_0').val('');
 				$('#common_subnet_0').val('');
 				$('#common_ip_1').val('');
 				$('#common_subnet_1').val('');
 				$('#common_ip_2').val('');
-				$('#common_subnet_2').val('');
-				
+				$('#common_subnet_2').val('');			
 		},
-		error : function(xhr, status, error) {
-			
+		error : function(xhr, status, error) {		
 		}
 	});
-	};
-	
+	};	
 	var cancelButton = document.getElementById('cancel-button-edit');
 	cancelButton.onclick = function() {
-		// Close the modal
 		modal.style.display = 'none';
-
 	};
 }
 
-//Function to show the loader
 function showLoader() {
-    // Show the loader overlay
     $('#loader-overlay').show();
 }
 
-// Function to hide the loader
 function hideLoader() {
-    // Hide the loader overlay
     $('#loader-overlay').hide();
 }
 
 function changeButtonColor(isDisabled) {
     var $applyBtn = $('#applyBtn');   
-    
     if (isDisabled) {
         $applyBtn.css('background-color', 'gray'); // Change to your desired color
     } else {
         $applyBtn.css('background-color', '#2b3991'); // Reset to original color
-    }   
-    
-    
+    }    
 }
 
-
-$(document).ready(function() {
-	
+$(document).ready(function() {	
 	<%// Access the session variable
 	HttpSession role = request.getSession();
 	String roleValue = (String) session.getAttribute("role");%>
-
 roleValue = '<%=roleValue%>';
 
 <%// Access the session variable
 HttpSession csrfToken = request.getSession();
 String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 csrfTokenValue = '<%=csrfTokenValue%>';
 	
 	if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-		$('#applyBtn').prop('disabled', true);
-		
-		
+		$('#applyBtn').prop('disabled', true);				
 		changeButtonColor(true);
 	}
 	
 	if (roleValue === "null") {
 		 var modal = document.getElementById('custom-modal-session-timeout');
 	        modal.style.display = 'block';
-
-	     // Update the session-msg content with the message from the server
 		    var sessionMsg = document.getElementById('session-msg');
 		    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-		    
-	        // Handle the confirm button click
 	        var confirmButton = document.getElementById('confirm-button-session-timeout');
 	        confirmButton.onclick = function() {
-	            // Close the modal
 	            modal.style.display = 'none';
 	            window.location.href = 'login.jsp';
 	        };
@@ -451,39 +379,29 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 		<%// Access the session variable
 		HttpSession token = request.getSession();
 		String tokenValue = (String) session.getAttribute("token");%>
-
-		tokenValue = '<%=tokenValue%>';
-		
-		getRedundancySettings();
-		
-		$('#applyBtn').click(function() {
-			
+		tokenValue = '<%=tokenValue%>';	
+		getRedundancySettings();		
+		$('#applyBtn').click(function() {			
 			if (validateIPAddress('partner_ip', 'validationMessage1') &&
 			        validateIPAddress('common_ip_0', 'validationMessage2') &&
 			        validateIPAddress('common_subnet_0', 'validationMessage3') &&
 			        validateIPAddress('common_ip_1', 'validationMessage4') &&
 			        validateIPAddress('common_subnet_1', 'validationMessage5') &&
 			        validateIPAddress('common_ip_2', 'validationMessage6') &&
-			        validateIPAddress('common_subnet_2', 'validationMessage7')) {
-				
+			        validateIPAddress('common_subnet_2', 'validationMessage7')) {				
 				updateRedundancySettings();
 			    }
 		});
-	}
-	
+	}	
 });
-
 </script>
-
 <body>
-
 <div class="sidebar">
 		<%@ include file="common.jsp"%>
 	</div>
 	<div class="header">
 		<%@ include file="header.jsp"%>
-	</div>
-	
+	</div>	
 	<div class="content">
 		<section style="margin-left: 1em">
 			<h3>REDUNDANCY SETTINGS</h3>
@@ -497,9 +415,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
     </div>
 </div>
 			<form id="redundancySettingsForm">
-			<table class="bordered-table" style="margin-top: -1px;">
-			
-			
+			<table class="bordered-table" style="margin-top: -1px;">			
 			<tr>
 							<td style="height: 50px;">Redundancy enable</td>
 							<td><label class="toggle-redundancy"> <input
@@ -508,8 +424,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 									class="toggle-label-redundancy" data-off="Disable" data-on="Enable"></span> <span
 									class="toggle-handle-redundancy"></span>
 							</label></td>
-							</tr>
-							
+							</tr>						
 							<tr>
 							<td style="height: 50px;">Redundancy role</td>
 							<td><label class="toggle-redundancy"> <input
@@ -517,12 +432,9 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 									class="toggle-input-redundancy" type="checkbox"> <span
 									class="toggle-label-redundancy" data-off="Secondary" data-on="Primary"></span> <span
 									class="toggle-handle-redundancy"></span>
-							</label></td>
-							
-							</tr>
-							
-							<tr>
-							
+							</label></td>							
+							</tr>						
+							<tr>							
 							<td>Partner IP</td>
 							<td>
 							 <div class="validation-container">
@@ -530,8 +442,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							 <span id="validationMessage1" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
-							</tr>
-							
+							</tr>						
 							<tr>
 							<td>Common IP 0</td>
 							<td>
@@ -540,8 +451,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							 <span id="validationMessage2" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
-							</tr>
-							
+							</tr>							
 							<tr>
 							<td>Common Subnet 0</td>
 							<td>
@@ -550,8 +460,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							 <span id="validationMessage3" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
-							</tr>
-							
+							</tr>							
 							<tr>
 							<td>Common IP 1</td>
 							<td>
@@ -570,8 +479,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							 <span id="validationMessage5" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
-							</tr>
-							
+							</tr>						
 							<tr>
 							<td>Common IP 2</td>
 							<td>
@@ -580,8 +488,7 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							 <span id="validationMessage6" class="validation-message" style="margin-left: 10px;"></span>
 							</div>
 							</td>
-							</tr>
-							
+							</tr>						
 							<tr>
 							<td>Common Subnet 2</td>
 							<td>
@@ -591,38 +498,27 @@ csrfTokenValue = '<%=csrfTokenValue%>';
 							</div>
 							</td>
 							</tr>
-							
-							
-							
-			</table>
-			
+							</table>		
 			<div class="row"
 						style="display: flex; justify-content: center; margin-bottom: 2%; margin-top: 1%;">
-						<input style="height: 26px;" type="button" value="Apply"
-							id="applyBtn" />
-
-					</div>
-			
+						<input style="height: 26px;" type="button" value="Apply" id="applyBtn" />
+					</div>		
 			</form>
-			</div>
-			
+			</div>			
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 				 <p id="session-msg"></p>
 				  <button id="confirm-button-session-timeout">OK</button>
 				</div>
-			</div>
-			
+			</div>			
 			<div id="custom-modal-edit" class="modal-edit">
 				<div class="modal-content-edit">
 				  <p>Are you sure you want to modfiy this lan setting?</p>
 				  <button id="confirm-button-edit">Yes</button>
 				  <button id="cancel-button-edit">No</button>
 				</div>
-			</div>
-			
+			</div>			
 			</section>
 			</div>
-
 </body>
 </html>

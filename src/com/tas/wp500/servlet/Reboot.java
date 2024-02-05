@@ -17,68 +17,48 @@ import com.tas.wp500.utils.TCPClient;
 
 @WebServlet("/reboot")
 public class Reboot extends HttpServlet {
-	
+
 	final static Logger logger = Logger.getLogger(Reboot.class);
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		String check_username = (String) session.getAttribute("username");
 		String check_token = (String) session.getAttribute("token");
 		String check_role = (String) session.getAttribute("role");
-		
 		String csrfTokenFromRequest = request.getParameter("csrfToken");
-
-		// Retrieve CSRF token from the session
 		String csrfTokenFromSession = (String) session.getAttribute("csrfToken");
-		
 		if (check_username != null) {
 			try {
 				if (csrfTokenFromRequest != null && csrfTokenFromRequest.equals(csrfTokenFromSession)) {
-				TCPClient client = new TCPClient();
-				JSONObject json = new JSONObject();
+					TCPClient client = new TCPClient();
+					JSONObject json = new JSONObject();
+					json.put("operation", "reboot");
+					json.put("user", check_username);
+					json.put("token", check_token);
+					json.put("role", check_role);
 
-				json.put("operation", "reboot");
-				json.put("user", check_username);
-				json.put("token", check_token);
-				json.put("role", check_role);
-				
-				String respStr = client.sendMessage(json.toString());
-				System.out.println("response : " + respStr);
-
-				System.out.println("res " + new JSONObject(respStr).getString("msg"));
-				logger.info("res " + new JSONObject(respStr).getString("msg"));
-
-				String message = new JSONObject(respStr).getString("msg");
-				String status = new JSONObject(respStr).getString("status");
-				
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("message", message);
-				jsonObject.put("status", status);
-
-				// Set the content type of the response to application/json
-				response.setContentType("application/json");
-				 response.setHeader("X-Content-Type-Options", "nosniff");
-
-				// Get the response PrintWriter
-				PrintWriter out = response.getWriter();
-
-				// Write the JSON object to the response
-				out.print(jsonObject.toString());
-				out.flush();
-				}else {
-					logger.error("CSRF token validation failed");	
+					String respStr = client.sendMessage(json.toString());
+					logger.info("res " + new JSONObject(respStr).getString("msg"));
+					String message = new JSONObject(respStr).getString("msg");
+					String status = new JSONObject(respStr).getString("status");
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("message", message);
+					jsonObject.put("status", status);
+					response.setContentType("application/json");
+					response.setHeader("X-Content-Type-Options", "nosniff");
+					PrintWriter out = response.getWriter();
+					out.print(jsonObject.toString());
+					out.flush();
+				} else {
+					logger.error("Token validation failed");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in rebooting system :"+e);
+				logger.error("Error in rebooting system :" + e);
 			}
-		} 
+		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 }

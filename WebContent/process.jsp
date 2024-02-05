@@ -1,20 +1,13 @@
 <%
-    // Add X-Frame-Options header to prevent clickjacking
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader("X-Content-Type-Options", "nosniff");
-
-    // Ensure that the session cookie has the 'Secure', 'HttpOnly', and 'SameSite' attributes
     HttpSession session1 = request.getSession();
-
-    // Set the 'Secure', 'HttpOnly', and 'SameSite' attributes for the session cookie
     String secureFlag = "Secure";
     String httpOnlyFlag = "HttpOnly";
     String sameSiteFlag = "SameSite=None"; // Add this line for SameSite attribute
     String cookieValue = session1.getId();
-
     String headerKey = "Set-Cookie";
     String headerValue = String.format("%s=%s; %s; %s; %s", session1.getId(), cookieValue, secureFlag, httpOnlyFlag, sameSiteFlag);
-
     response.setHeader(headerKey, headerValue);
 %>
 
@@ -24,13 +17,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>WPConnex Web Configuration</title>
 <link rel="icon" type="image/png" sizes="32x32" href="images/WP_Connex_logo_favicon.png" />
-
 <link rel="stylesheet" href="css_files/ionicons.min.css">
 <link rel="stylesheet" href="css_files/normalize.min.css">
 <link rel="stylesheet" href="css_files/fonts.txt" type="text/css">	
 <link rel="stylesheet" href="nav-bar.css" />
 <script src="jquery-3.6.0.min.js"></script>
-
 <style>
 .modal-session-timeout {
 	display: none;
@@ -58,7 +49,6 @@
 	top: 50%; /* Center vertically */
 	left: 50%; /* Center horizontally */
 	transform: translate(-50%, -50%);
-	/* Center horizontally and vertically */
 }
 
 #confirm-button-session-timeout {
@@ -81,7 +71,6 @@
 	width: 20%;
 }
 
-/* Style for the close button */
 #closePopup {
 	display: block; /* Display as to center horizontally */
 	margin-top: 30px; /* Adjust the top margin as needed */
@@ -117,12 +106,10 @@ h3 {
     /* margin-top: -22px; */
 }
 
-
  button {
             cursor: pointer;
             border-radius: 5px;
-            border: none;
-         
+            border: none;        
             font-size: small;
             margin-right: 10px;
              padding: 10px 20px;
@@ -132,7 +119,6 @@ h3 {
   flex-wrap: wrap;
 }
 
-/* Updated styles for individual tables */
 .white-list,
 .black-list {
   border: 0.5px solid black;
@@ -144,7 +130,6 @@ h3 {
   overflow-x: auto; /* Add horizontal scroll for small screens */
 }
 
-/* Adjust the width of each column */
 .white-list th,
 .white-list td,
 .black-list th,
@@ -196,9 +181,7 @@ var tokenValue;
 var csrfTokenValue;
 
 function getProcessData() {
-	// Display loader when the request is initiated
     showLoader();
-	
     var csrfToken = document.getElementById('csrfToken').value;
 	$.ajax({
         url: "processGetData", // URL to your servlet or server endpoint
@@ -211,48 +194,30 @@ function getProcessData() {
             xhr.setRequestHeader('Authorization', 'Bearer ' + tokenValue);
         },
         success: function(data) {
-        	// Hide loader when the response has arrived
-            hideLoader();
-        	
-        	if (data.status == 'fail') {
-				
-				 var modal = document.getElementById('custom-modal-session-timeout');
+            hideLoader();	
+        	if (data.status == 'fail') {				
+			 var modal = document.getElementById('custom-modal-session-timeout');
 				  modal.style.display = 'block';
-				  
-				// Update the session-msg content with the message from the server
 				    var sessionMsg = document.getElementById('session-msg');
 				    sessionMsg.textContent = data.message; // Assuming data.message contains the server message
-				  
-				  // Handle the confirm button click
 				  var confirmButton = document.getElementById('confirm-button-session-timeout');
 				  confirmButton.onclick = function () {
-					  
-					// Close the modal
 				        modal.style.display = 'none';
 				        window.location.href = 'login.jsp';
-				  };
-					  
+				  };				  
 			} 
-        	
-			
-            populateTable(data.white_list_process, "white_list_table");
-            populateTable(data.black_list_process, "black_list_table");
-            
+             populateTable(data.white_list_process, "white_list_table");
+            populateTable(data.black_list_process, "black_list_table");         
             if (roleValue === 'OPERATOR' || roleValue === 'Operator') {
                 $('#loadLogFileButton').prop('disabled', true);
                 changeButtonColor(true);
             }
         },
         error: function(xhr, status, error) {
-        	// Hide loader when the response has arrived
-            hideLoader();
-        	
-            console.error("Error occurred: " + error);
-            // Handle the error here (show error message to the user, etc.)
+            hideLoader();       	
         }
     });
 }
-
     $("#closePopup").click(function () {
         $("#customPopup").hide();
     });
@@ -261,16 +226,13 @@ function getProcessData() {
         var tableBody = $("#" + tableId + "_body");
         tableBody.empty();
         var textColorClass = (tableId === "white_list_table") ? "green-text" : "red-text";
-
         if (data && Array.isArray(data)) {
             data.forEach(function (row) {
                 var tableRow = $("<tr>");
                 Object.keys(row).forEach(function (key) {
                     var cellValue = row[key];
                     var cell;
-
                     if (key === "COMMAND") {
-                        // Modify the appearance of COMMAND based on table type
                         var modifiedCommand = cellValue;
                         if (tableId === "white_list_table" || tableId === "black_list_table") {
                         	 if (cellValue.length > 20 && cellValue.length <= 30) {
@@ -279,8 +241,7 @@ function getProcessData() {
                                  modifiedCommand = cellValue.substring(0, 30) + "..........";
                              }
                             modifiedCommand = modifiedCommand.replace(/^\[(.*?)\]$/, "$1");                          
-                            modifiedCommand = modifiedCommand.replace(/[{}]/g, ''); // Remove curly braces
-                            
+                            modifiedCommand = modifiedCommand.replace(/[{}]/g, ''); // Remove curly braces             
                         } else {
                             modifiedCommand = "[" + cellValue + "]";
                         }
@@ -289,7 +250,6 @@ function getProcessData() {
                     else {
                         cell = $("<td>").text(cellValue).addClass(textColorClass);
                     }
-
                     tableRow.append(cell);
                 });
                 tableBody.append(tableRow);
@@ -298,8 +258,7 @@ function getProcessData() {
     }
 
 	function changeButtonColor(isDisabled) {
-        var $load_button = $('#loadLogFileButton');
-        
+        var $load_button = $('#loadLogFileButton');       
         if (isDisabled) {
             $load_button.css('background-color', 'gray'); // Change to your desired color
         } else {
@@ -307,53 +266,36 @@ function getProcessData() {
         }
 	}
 	
-	// Function to show the loader
 	 function showLoader() {
-	     // Show the loader overlay
 	     $('#loader-overlay').show();
 	 }
 
-	 // Function to hide the loader
 	 function hideLoader() {
-	     // Hide the loader overlay
 	     $('#loader-overlay').hide();
 	 }
 	
-	//Function to execute on page load
-	$(document).ready(function() {
-		// Load log file list
-		
+	$(document).ready(function() {		
 		<%// Access the session variable
 			HttpSession role = request.getSession();
-			String roleValue = (String) session.getAttribute("role");%>
-	    	    	
+			String roleValue = (String) session.getAttribute("role");%>  	    	
 	    	    	roleValue = '<%=roleValue%>'; 
 	    	    	
 	    	    	<%// Access the session variable
 	    			HttpSession csrfToken = request.getSession();
 	    			String csrfTokenValue = (String) session.getAttribute("csrfToken");%>
-
 	    			csrfTokenValue = '<%=csrfTokenValue%>';
 	    	    	
 						if (roleValue == 'OPERATOR' || roleValue == 'Operator') {
-
 							$('#loadLogFileButton').prop('disabled', true);
-
 							changeButtonColor(true);
-						}
-						
+						}						
 						if (roleValue === "null") {
 					        var modal = document.getElementById('custom-modal-session-timeout');
-					        modal.style.display = 'block';
-					        
-					        // Update the session-msg content with the message from the server
+					        modal.style.display = 'block';					        
 						    var sessionMsg = document.getElementById('session-msg');
 						    sessionMsg.textContent = 'You are not allowed to redirect like this !!'; 
-
-					        // Handle the confirm button click
 					        var confirmButton = document.getElementById('confirm-button-session-timeout');
 					        confirmButton.onclick = function() {
-					            // Close the modal
 					            modal.style.display = 'none';
 					            window.location.href = 'login.jsp';
 					        };
@@ -361,9 +303,7 @@ function getProcessData() {
 					    	<%// Access the session variable
 							HttpSession token = request.getSession();
 							String tokenValue = (String) session.getAttribute("token");%>
-
-					    	    	tokenValue = '<%=tokenValue%>';
-					    	    	
+					    	    	tokenValue = '<%=tokenValue%>';					    	    	
 					    	    	getProcessData();
 					    }
 
@@ -386,43 +326,31 @@ function getProcessData() {
         <p>Loading...</p>
     </div>
 </div>
-<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />
-		
+<input type="hidden" name="csrfToken" id="csrfToken" value="<%= csrfTokenValue %>" />		
 		<div class="button-container">
         <button onClick="window.location.reload();" style="color:white; background-color: #2b3991">Reload</button>
     </div>
-    
 			<h3 style="margin-top: -8px;">Process</h3>
 			<hr />
-
 			<div id="custom-modal-session-timeout" class="modal-session-timeout">
 				<div class="modal-content-session-timeout">
 					<p id="session-msg"></p>
 					<button id="confirm-button-session-timeout">OK</button>
 				</div>
 			</div>
-
 			<div id="customPopup" class="popup">
 				<span class="popup-content" id="popupMessage"></span>
 				<button id="closePopup">OK</button>
 			</div>
-			
-			
-
-			<div class="table-container" style="display: flex;">
-				<!-- White List Table -->
+					<div class="table-container" style="display: flex;">
 				<div class="white-list">
 					<h3>White List Process</h3>
 					<table id="white_list_table">
 						<colgroup>
 							<col style="width: 10%;">
-							<!-- Adjust the width as needed -->
 							<col style="width: 20%;">
-							<!-- Adjust the width as needed -->
 							<col style="width: 30%;">
-							<!-- Adjust the width as needed -->
 							<col style="width: 10%;">
-							<!-- Adjust the width as needed -->
 						</colgroup>
 						<thead>
 							<tr>
@@ -434,22 +362,15 @@ function getProcessData() {
 						</thead>
 						<tbody id="white_list_table_body"></tbody>
 					</table>
-
 				</div>
-
-				<!-- Black List Table -->
 				<div class="black-list">
 					<h3>Black List Process</h3>
 					<table id="black_list_table">
 						<colgroup>
 							<col style="width: 10%;">
-							<!-- Adjust the width as needed -->
 							<col style="width: 20%;">
-							<!-- Adjust the width as needed -->
 							<col style="width: 30%;">
-							<!-- Adjust the width as needed -->
 							<col style="width: 10%;">
-							<!-- Adjust the width as needed -->
 						</colgroup>
 						<thead>
 							<tr>
@@ -465,11 +386,8 @@ function getProcessData() {
 			</div>
 		</section>
 	</div>
-
 	<div class="footer">
 		<%@ include file="footer.jsp"%>
 	</div>
 </body>
-
-
 </html>
